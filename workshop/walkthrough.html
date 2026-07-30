@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build &amp; Host an AI Tool — FCC Chemistry Walkthrough</title>
+<style>
+  :root{
+    --ink:#1a2332; --paper:#f7f5f0; --card:#ffffff; --accent:#0e7a5f;
+    --accent-soft:#e3f2ec; --warn:#b3261e; --warn-soft:#fdecea;
+    --line:#d8d4cc; --muted:#6b7280; --gold:#b98a1c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.55; padding-bottom:80px;}
+  header{background:var(--ink); color:#fff; padding:28px 20px 22px; text-align:center;}
+  header h1{font-size:1.5rem; font-weight:700;}
+  header p{color:#c9d2e0; font-size:.95rem; margin-top:6px; max-width:640px; margin-left:auto; margin-right:auto;}
+  .progress-wrap{position:sticky; top:0; z-index:50; background:var(--paper);
+    border-bottom:1px solid var(--line); padding:10px 20px;}
+  .progress-inner{max-width:760px; margin:0 auto; display:flex; align-items:center; gap:12px;}
+  .bar{flex:1; height:10px; background:#e5e1d8; border-radius:5px; overflow:hidden;}
+  .bar-fill{height:100%; width:0%; background:var(--accent); border-radius:5px; transition:width .3s;}
+  .bar-label{font-size:.85rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums;}
+  main{max-width:760px; margin:0 auto; padding:24px 16px;}
+
+  .you-box{background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px; margin-bottom:22px;}
+  .you-box h2{font-size:1.02rem; margin-bottom:4px;}
+  .you-box p{font-size:.88rem; color:var(--muted); margin-bottom:12px;}
+  .you-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media (max-width:520px){.you-grid{grid-template-columns:1fr;}}
+  .you-grid label{font-size:.8rem; font-weight:600; display:block; margin-bottom:4px;}
+  .you-grid input{width:100%; padding:9px 11px; border:1px solid var(--line);
+    border-radius:8px; font-size:.95rem; font-family:ui-monospace,Menlo,Consolas,monospace;}
+  .you-grid input:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+
+  details.phase{background:var(--card); border:1px solid var(--line); border-radius:12px;
+    margin-bottom:14px; overflow:hidden;}
+  details.phase[open]{box-shadow:0 2px 10px rgba(20,30,50,.06);}
+  summary{list-style:none; cursor:pointer; padding:16px 18px; display:flex;
+    align-items:center; gap:12px; user-select:none;}
+  summary::-webkit-details-marker{display:none;}
+  .ph-num{flex-shrink:0; width:34px; height:34px; border-radius:50%; background:var(--accent-soft);
+    color:var(--accent); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:.95rem;}
+  .ph-done .ph-num{background:var(--accent); color:#fff;}
+  .ph-title{flex:1;}
+  .ph-title h2{font-size:1.05rem;}
+  .ph-title span{font-size:.8rem; color:var(--muted);}
+  .chev{color:var(--muted); transition:transform .2s;}
+  details[open] .chev{transform:rotate(90deg);}
+  .ph-body{padding:0 18px 16px 18px; border-top:1px solid var(--line);}
+
+  .step{display:flex; gap:12px; padding:13px 0; border-bottom:1px dashed var(--line); align-items:flex-start;}
+  .step:last-child{border-bottom:none;}
+  .step input[type=checkbox]{margin-top:4px; width:19px; height:19px; accent-color:var(--accent); flex-shrink:0; cursor:pointer;}
+  .step-text{flex:1; font-size:.94rem;}
+  .step-text.done{color:var(--muted); text-decoration:line-through;}
+  .step-text b{font-weight:650;}
+  .step-text .sub{display:block; font-size:.85rem; color:var(--muted); margin-top:3px; text-decoration:none;}
+
+  .snippet{position:relative; background:#10161f; color:#d8e2f0; border-radius:8px;
+    padding:12px 88px 12px 14px; font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:.82rem; margin-top:8px; white-space:pre-wrap; word-break:break-word;}
+  .snippet .copy-btn{position:absolute; top:8px; right:8px; background:var(--accent); color:#fff;
+    border:none; border-radius:6px; padding:5px 11px; font-size:.78rem; cursor:pointer; font-weight:600;}
+  .snippet .copy-btn:active{transform:scale(.96);}
+  .live-url{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--accent); font-weight:600; word-break:break-all;}
+
+  .ferpa{background:var(--warn-soft); border:1.5px solid var(--warn); border-radius:12px;
+    padding:16px 18px; margin:20px 0;}
+  .ferpa h2{color:var(--warn); font-size:1rem; margin-bottom:8px;}
+  .ferpa ol{padding-left:20px; font-size:.92rem;}
+  .ferpa li{margin-bottom:6px;}
+
+  .tip{background:var(--accent-soft); border-radius:8px; padding:10px 13px;
+    font-size:.86rem; margin-top:8px;}
+  .tip b{color:var(--accent);}
+
+  details.trouble{margin-top:8px; font-size:.88rem;}
+  details.trouble summary{padding:6px 0; color:var(--gold); font-weight:600; font-size:.86rem;}
+  details.trouble .fix{padding:6px 0 4px 12px; border-left:3px solid var(--gold); margin-left:4px; color:var(--ink);}
+
+  .reset-row{text-align:center; margin-top:26px;}
+  .reset-row button{background:none; border:1px solid var(--line); color:var(--muted);
+    border-radius:8px; padding:8px 16px; font-size:.82rem; cursor:pointer;}
+  footer{text-align:center; color:var(--muted); font-size:.78rem; margin-top:30px; padding:0 20px;}
+  .celebrate{display:none; background:var(--accent); color:#fff; border-radius:12px;
+    padding:18px; text-align:center; font-size:1.02rem; font-weight:600; margin-bottom:16px;}
+  @media print{
+    .progress-wrap,.copy-btn,.reset-row{display:none;}
+    details.phase,details.trouble{border:none;}
+    details.phase:not([open]) .ph-body{display:block;}
+    body{background:#fff; padding-bottom:0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Build &amp; Host an AI Teaching Tool</h1>
+  <p>From zero to a live tool in your Canvas course — no coding, no installs, browser only. FCC Chemistry.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    <div class="bar-label" id="barLabel">0 of 18 steps</div>
+  </div>
+</div>
+
+<main>
+
+<div class="celebrate" id="celebrate">🎉 All 18 steps done — your tool is live, embedded, and on the department catalog.</div>
+
+<div class="you-box">
+  <h2>Make this page yours</h2>
+  <p>Type these two things once and every command and URL below rewrites itself for you.</p>
+  <div class="you-grid">
+    <div>
+      <label for="ghUser">Your GitHub username</label>
+      <input id="ghUser" placeholder="e.g. prof-smith" autocomplete="off" spellcheck="false">
+    </div>
+    <div>
+      <label for="toolName">Your tool's name (lowercase, hyphens)</label>
+      <input id="toolName" placeholder="e.g. molar-mass" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+</div>
+
+<div class="ferpa">
+  <h2>⚠️ The three rules — before anything else</h2>
+  <ol>
+    <li><b>No student PII into any AI tool.</b> No names, IDs, grades, or rosters — ever (CCCCO ISTI 25-300-02). Fake data only, even in demos.</li>
+    <li><b>These repos are public.</b> Nothing student-related goes in them. Deleting later does not undo it.</li>
+    <li><b>API tokens are credentials.</b> Never in a chat, never in a repo. (Token handling is Session 2.)</li>
+  </ol>
+</div>
+
+<!-- PHASE 0 -->
+<details class="phase" open id="phase0">
+  <summary><div class="ph-num">0</div><div class="ph-title"><h2>One-time setup</h2><span>~15 minutes · do this before the workshop</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="s1"><div class="step-text"><b>Create a GitHub account</b> at <b>github.com</b> with your school email — then <b>click the verification link</b> in your inbox.<span class="sub">Unverified accounts can't create projects, and it fails silently. This is the #1 setup trap.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="s2"><div class="step-text"><b>Confirm your AI access.</b> Go to <b>copilot.cloud.microsoft</b> (or open Copilot in Teams or Edge) and sign in with your district Microsoft&nbsp;365 account. Everyone at FCC already has this — no signup.<span class="sub">Signed in with your work account, Copilot has enterprise data protection — your chats aren't used to train models. The three rules above still apply in full. Claude or ChatGPT work fine too if you prefer.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="s3"><div class="step-text"><b>Accept the FCC-Chem invite</b> when the email arrives (needed only for Phase 4 — the department catalog). It expires, so click it when you see it.</div></div>
+  </div>
+</details>
+
+<!-- PHASE 1 -->
+<details class="phase" id="phase1">
+  <summary><div class="ph-num">1</div><div class="ph-title"><h2>Build the tool with Copilot</h2><span>~30 minutes · describing, not coding</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="s4"><div class="step-text"><b>Pick one small idea:</b> one screen, one job. A calculator, a converter, a practice widget.<span class="sub">No files, no email, no student data. Small scope is the difference between done-in-30-minutes and stuck.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="s5"><div class="step-text"><b>Paste the starter prompt</b> into Copilot chat and fill in your idea:
+      <div class="snippet" id="promptSnippet">Build me a complete single-file HTML page (all CSS and JavaScript inline, no external files except CDN libraries) that does: [DESCRIBE YOUR TOOL HERE]. It should work when I save it as index.html and open it in a browser. Show me the full file.<button class="copy-btn" data-copy="promptSnippet">Copy</button></div></div></div>
+    <div class="step"><input type="checkbox" data-step="s6"><div class="step-text"><b>Iterate by describing, not coding.</b> "The buttons are too small." "It calculated X wrong — the right answer is Y."<span class="sub">If it breaks, paste the error message or a screenshot back into Copilot. Don't debug by hand — the AI does the code, you do the describing. That's the whole skill.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="s7"><div class="step-text"><b>Test it in your browser.</b> Copilot won't run the page for you: copy the full code → paste into TextEdit (Mac: Format → Make Plain Text first) or Notepad → save as <b>index.html</b> → double-click it. Repeat after each change.
+      <div class="tip"><b>Ask for the full file every time.</b> If Copilot gives you a fragment, say: "Show me the complete updated index.html, whole file."</div>
+      <details class="trouble"><summary>Stuck? Common fixes</summary><div class="fix">Tool too ambitious → shrink to one input, one output, one screen.<br>Output broken → paste the exact error back into the chat.<br>Finished early → restyle it, or build a second tool.</div></details>
+    </div></div>
+  </div>
+</details>
+
+<!-- PHASE 2 -->
+<details class="phase" id="phase2">
+  <summary><div class="ph-num">2</div><div class="ph-title"><h2>Give it a home on GitHub</h2><span>~10 minutes · "free hosting for one file"</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="s8"><div class="step-text"><b>New repository:</b> on github.com click <b>+ → New repository</b> → name it <b class="tool-name-echo">your-tool-name</b> → <b>Public</b> → Create repository.</div></div>
+    <div class="step"><input type="checkbox" data-step="s9"><div class="step-text"><b>Add your file:</b> <b>Add file → Create new file</b> → name it exactly <b>index.html</b> → paste your code → <b>Commit changes</b>.</div></div>
+    <div class="step"><input type="checkbox" data-step="s10"><div class="step-text"><b>Turn on hosting:</b> <b>Settings → Pages</b> → Source: <i>Deploy from a branch</i> → Branch: <b>main</b>, folder <b>/ (root)</b> → Save.</div></div>
+    <div class="step"><input type="checkbox" data-step="s11"><div class="step-text"><b>Wait ~1 minute, then open your live URL:</b><br><span class="live-url" id="liveUrl">https://YOUR-USERNAME.github.io/YOUR-TOOL/</span>
+      <details class="trouble"><summary>404 or blank page?</summary><div class="fix">Settings → Pages → confirm branch is <b>main</b> and folder <b>/ (root)</b>. Then wait the <i>full</i> minute — it's not instant. Still down? Confirm the file is named exactly <b>index.html</b>.</div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="s12"><div class="step-text"><b>Know the update move</b> (for later): open <b>index.html</b> on github.com → <b>pencil icon</b> → paste the new version → Commit. That's the entire maintenance workflow.</div></div>
+  </div>
+</details>
+
+<!-- PHASE 3 -->
+<details class="phase" id="phase3">
+  <summary><div class="ph-num">3</div><div class="ph-title"><h2>Embed it in Canvas</h2><span>~5 minutes</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="s13"><div class="step-text"><b>Canvas page → Edit → <code>&lt;/&gt;</code> (HTML editor)</b> → paste:
+      <div class="snippet" id="iframeSnippet">&lt;iframe src="https://YOUR-USERNAME.github.io/YOUR-TOOL/" width="100%" height="600"&gt;&lt;/iframe&gt;<button class="copy-btn" data-copy="iframeSnippet">Copy</button></div></div></div>
+    <div class="step"><input type="checkbox" data-step="s14"><div class="step-text"><b>Save the page and check it renders.</b>
+      <details class="trouble"><summary>Iframe shows blank?</summary><div class="fix">Open your live URL by itself first — if the standalone page is broken, the iframe will be too. Fix the tool, then re-check the Canvas page.</div></details>
+    </div></div>
+  </div>
+</details>
+
+<!-- PHASE 4 -->
+<details class="phase" id="phase4">
+  <summary><div class="ph-num">4</div><div class="ph-title"><h2>Submit to the department catalog</h2><span>later, when a tool earns it · your account is the workshop, the dept repo is the trophy case</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="s15"><div class="step-text"><b>Check the four hard rules</b> one last time: no student data · no credentials · no answer keys · nothing copied from a publisher. <span class="sub">Public repos are permanently mirrored — deleting later does not undo it.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="s16"><div class="step-text"><b>Add your tool:</b> in <b>github.com/FCC-Chem/tools</b> → <b>Add file → Create new file</b> → type <b><span class="path-echo">yourlastname/your-tool/</span>index.html</b> (each <code>/</code> creates a folder) → paste your code → Commit.</div></div>
+    <div class="step"><input type="checkbox" data-step="s17"><div class="step-text"><b>Optional — better catalog card:</b> repeat for <b><span class="path-echo">yourlastname/your-tool/</span>meta.json</b>, copying the format from <b>_template/meta.json</b> (title, one-sentence description, course, tags).</div></div>
+    <div class="step"><input type="checkbox" data-step="s18"><div class="step-text"><b>Wait ~1 minute</b> → your tool appears on <b>fcc-chem.github.io/tools/</b>, credited to you automatically. Done — you've shipped a department teaching tool.</div></div>
+  </div>
+</details>
+
+<div class="reset-row"><button id="resetBtn">Reset my progress</button></div>
+
+<footer>FCC Chemistry — AI Tool Catalog · This page is itself a single HTML file, built the same way you just built yours.</footer>
+</main>
+
+<script>
+(function(){
+  var KEY='fccchem-walkthrough-v1';
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){state={};}
+
+  var boxes=document.querySelectorAll('input[type=checkbox][data-step]');
+  var ghUser=document.getElementById('ghUser');
+  var toolName=document.getElementById('toolName');
+
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+  function slug(v){return (v||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'');}
+
+  function renderPersonal(){
+    var u=slug(ghUser.value)||'YOUR-USERNAME';
+    var t=slug(toolName.value)||'YOUR-TOOL';
+    var url='https://'+u+'.github.io/'+t+'/';
+    document.getElementById('liveUrl').textContent=url;
+    var ifr=document.getElementById('iframeSnippet');
+    ifr.childNodes[0].nodeValue='<iframe src="'+url+'" width="100%" height="600"></iframe>';
+    document.querySelectorAll('.tool-name-echo').forEach(function(el){el.textContent=t;});
+    document.querySelectorAll('.path-echo').forEach(function(el){el.textContent=(u!=='YOUR-USERNAME'?u:'yourlastname')+'/'+t+'/';});
+  }
+
+  function renderProgress(){
+    var done=0;
+    boxes.forEach(function(b){
+      var on=!!state[b.dataset.step];
+      b.checked=on;
+      b.closest('.step').querySelector('.step-text').classList.toggle('done',on);
+      if(on)done++;
+    });
+    var pct=Math.round(100*done/boxes.length);
+    document.getElementById('barFill').style.width=pct+'%';
+    document.getElementById('barLabel').textContent=done+' of '+boxes.length+' steps';
+    document.getElementById('celebrate').style.display=(done===boxes.length)?'block':'none';
+    // phase badges
+    [0,1,2,3,4].forEach(function(p){
+      var ph=document.getElementById('phase'+p);
+      var pb=ph.querySelectorAll('input[data-step]');
+      var all=pb.length>0;
+      pb.forEach(function(b){if(!state[b.dataset.step])all=false;});
+      ph.querySelector('summary').classList.toggle('ph-done',all);
+      var num=ph.querySelector('.ph-num');
+      num.textContent=all?'✓':String(p);
+    });
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      state[b.dataset.step]=b.checked; save(); renderProgress();
+    });
+  });
+
+  [ghUser,toolName].forEach(function(inp){
+    inp.addEventListener('input',function(){
+      state['_'+inp.id]=inp.value; save(); renderPersonal();
+    });
+  });
+  if(state._ghUser)ghUser.value=state._ghUser;
+  if(state._toolName)toolName.value=state._toolName;
+
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var el=document.getElementById(btn.dataset.copy);
+      var text=el.childNodes[0].nodeValue.trim();
+      (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){
+        btn.textContent='Copied!'; setTimeout(function(){btn.textContent='Copy';},1500);
+      }).catch(function(){
+        var r=document.createRange(); r.selectNodeContents(el); var s=getSelection();
+        s.removeAllRanges(); s.addRange(r);
+      });
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    if(confirm('Clear all checkboxes and your saved username/tool name?')){
+      state={}; save(); ghUser.value=''; toolName.value='';
+      renderPersonal(); renderProgress();
+    }
+  });
+
+  renderPersonal(); renderProgress();
+})();
+</script>
+</body>
+</html>
