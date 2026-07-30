@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tool Title — FCC Chem</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --accent: #1f6f43;
+    --border: #ddd;
+    --panel: #f7f7f5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 24px; }
+  h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  .sub { color: var(--muted); font-size: 0.9rem; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+  input, select, textarea {
+    width: 100%; padding: 10px; font-size: 1rem;
+    border: 1px solid var(--border); border-radius: 6px; font-family: inherit;
+  }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+    padding: 11px 20px; font-size: 1rem; font-weight: 600; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.1); }
+  .result { font-size: 1.3rem; font-weight: 700; min-height: 1.6em; }
+  .err { color: #b00020; font-weight: 600; }
+  footer { margin-top: 40px; font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Tool Title</h1>
+    <div class="sub">One sentence describing what this does. — Your Name, CHEM 1A</div>
+  </header>
+
+  <!-- ============================================================
+       INPUTS — replace with whatever your tool needs
+       ============================================================ -->
+  <div class="panel">
+    <label for="inputA">Input label</label>
+    <input id="inputA" type="text" placeholder="Type something">
+    <p></p>
+    <button id="goBtn">Calculate</button>
+  </div>
+
+  <!-- ============================================================
+       OUTPUT
+       ============================================================ -->
+  <div class="panel">
+    <div class="result" id="out">—</div>
+  </div>
+
+  <footer>
+    Built by FCC Chemistry faculty ·
+    <a href="../">Back to tool catalog</a> ·
+    Unofficial faculty project, not an official FCC/SCCCD channel.
+  </footer>
+
+</div>
+
+<script>
+// =============================================================
+// YOUR LOGIC GOES HERE
+// Keep everything in this one file. No build step, no libraries.
+// =============================================================
+
+function run() {
+  const out = document.getElementById('out');
+  const val = document.getElementById('inputA').value.trim();
+
+  if (!val) {
+    out.className = 'result err';
+    out.textContent = 'Please enter something.';
+    return;
+  }
+
+  out.className = 'result';
+  out.textContent = 'You typed: ' + val;
+}
+
+document.getElementById('goBtn').addEventListener('click', run);
+document.getElementById('inputA').addEventListener('keydown', e => {
+  if (e.key === 'Enter') run();
+});
+</script>
+</body>
+</html>

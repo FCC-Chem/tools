@@ -1,0 +1,38 @@
+name: Rebuild tool catalog
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-catalog
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Rebuild index.html
+        run: python3 scripts/build_catalog.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "catalog-bot"
+          git config user.email "catalog-bot@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain index.html)" ]]; then
+            git add index.html
+            git commit -m "Rebuild catalog [skip ci]"
+            git push
+          else
+            echo "Catalog already up to date."
+          fi

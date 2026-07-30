@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Titration Curve Simulator — FCC Chem</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --accent:#1f6f43;
+          --border:#e2e2e0; --panel:#f7f7f5; --curve:#1f6f43; --eq:#b00020; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:var(--bg); color:var(--fg); line-height:1.5; }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 20px 64px; }
+  header { border-bottom:2px solid var(--accent); padding-bottom:12px; margin-bottom:22px; }
+  h1 { margin:0 0 4px; font-size:1.6rem; }
+  .sub { color:var(--muted); font-size:0.9rem; }
+  .cols { display:grid; grid-template-columns:300px 1fr; gap:22px; align-items:start; }
+  @media (max-width:760px) { .cols { grid-template-columns:1fr; } }
+  .panel { background:var(--panel); border:1px solid var(--border);
+           border-radius:8px; padding:18px; }
+  h2 { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;
+       color:var(--muted); margin:0 0 12px; }
+  .fld { margin-bottom:13px; }
+  label { display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem; }
+  input[type=number], select {
+    width:100%; padding:8px 10px; font-size:0.95rem; border:1px solid var(--border);
+    border-radius:5px; font-family:inherit; background:#fff; }
+  input[type=range] { width:100%; }
+  .rngval { float:right; font-weight:400; color:var(--muted);
+            font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  canvas { width:100%; height:auto; display:block; background:#fff;
+           border:1px solid var(--border); border-radius:8px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+           gap:10px; margin-top:14px; }
+  .stat { background:var(--panel); border:1px solid var(--border);
+          border-radius:7px; padding:11px 13px; }
+  .stat .k { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em;
+             color:var(--muted); font-weight:600; }
+  .stat .v { font-size:1.15rem; font-weight:700;
+             font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .note { font-size:0.8rem; color:var(--muted); margin-top:14px;
+          border-left:3px solid var(--border); padding-left:11px; }
+  footer { margin-top:36px; padding-top:12px; border-top:1px solid var(--border);
+           font-size:0.8rem; color:var(--muted); }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Titration Curve Simulator</h1>
+    <div class="sub">Strong and weak acid titrations. Drag the sliders and watch the curve move. — R. Gilley, CHEM 1A / 1B</div>
+  </header>
+
+  <div class="cols">
+
+    <div class="panel">
+      <h2>Analyte (in flask)</h2>
+
+      <div class="fld">
+        <label for="type">Acid type</label>
+        <select id="type">
+          <option value="strong">Strong acid (HCl)</option>
+          <option value="weak" selected>Weak acid (HA)</option>
+        </select>
+      </div>
+
+      <div class="fld">
+        <label for="ca">Concentration <span class="rngval" id="caV">0.100 M</span></label>
+        <input id="ca" type="range" min="0.01" max="0.5" step="0.005" value="0.1">
+      </div>
+
+      <div class="fld">
+        <label for="va">Volume <span class="rngval" id="vaV">25.0 mL</span></label>
+        <input id="va" type="range" min="5" max="100" step="1" value="25">
+      </div>
+
+      <div class="fld" id="pkaFld">
+        <label for="pka">pK<sub>a</sub> <span class="rngval" id="pkaV">4.76</span></label>
+        <input id="pka" type="range" min="1" max="12" step="0.01" value="4.76">
+      </div>
+
+      <h2 style="margin-top:20px">Titrant (in buret)</h2>
+
+      <div class="fld">
+        <label for="cb">NaOH concentration <span class="rngval" id="cbV">0.100 M</span></label>
+        <input id="cb" type="range" min="0.01" max="0.5" step="0.005" value="0.1">
+      </div>
+
+      <div class="note">
+        Model assumes 25 °C, ideal behavior, activity coefficients = 1.
+        Exact solution via the charge-balance equation, not the
+        textbook piecewise approximations — so it stays correct near
+        the equivalence point and for very dilute solutions.
+      </div>
+    </div>
+
+    <div>
+      <canvas id="cv" width="1200" height="760"></canvas>
+
+      <div class="stats">
+        <div class="stat"><div class="k">Initial pH</div><div class="v" id="sP0">—</div></div>
+        <div class="stat"><div class="k">V equivalence</div><div class="v" id="sVe">—</div></div>
+        <div class="stat"><div class="k">pH at eq. pt.</div><div class="v" id="sPe">—</div></div>
+        <div class="stat"><div class="k">pH at ½ V<sub>eq</sub></div><div class="v" id="sPh">—</div></div>
+      </div>
+
+      <div class="note" id="teachNote"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    Built by FCC Chemistry faculty ·
+    <a href="../">Back to tool catalog</a><br>
+    Runs entirely in your browser. Nothing is uploaded or stored.
+  </footer>
+
+</div>
+
+<script>
+// =============================================================
+// EXACT TITRATION MODEL
+//
+// Titrating a monoprotic acid (Ca, Va) with strong base (Cb, Vb).
+// Let h = [H+].  Charge balance in the mixed solution:
+//
+//   [Na+] + h = [A-] + [OH-]
+//
+//   Cb*Vb/(Va+Vb) + h = Ca*Va/(Va+Vb) * Ka/(Ka+h) + Kw/h
+//
+// For a strong acid, Ka -> infinity so the fraction term is 1.
+// Solve for h by bisection on pH in [-1, 15]. Monotonic, so
+// bisection is guaranteed to converge -- no Newton blowups.
+// =============================================================
+
+const Kw = 1.0e-14;
+
+function excessCharge(pH, Ca, Va, Cb, Vb, Ka, isStrong) {
+  const h = Math.pow(10, -pH);
+  const Vt = Va + Vb;
+  const na = Cb * Vb / Vt;
+  const at = Ca * Va / Vt;
+  const a  = isStrong ? at : at * Ka / (Ka + h);
+  const oh = Kw / h;
+  // f > 0 means too much positive charge -> solution is more acidic than pH says
+  return (na + h) - (a + oh);
+}
+
+function solvePH(Ca, Va, Cb, Vb, Ka, isStrong) {
+  let lo = -1, hi = 15;
+  const fLo = excessCharge(lo, Ca, Va, Cb, Vb, Ka, isStrong);
+  for (let k = 0; k < 200; k++) {
+    const mid = (lo + hi) / 2;
+    const fMid = excessCharge(mid, Ca, Va, Cb, Vb, Ka, isStrong);
+    if ((fMid < 0) === (fLo < 0)) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+// -------------------------------------------------------------
+function compute() {
+  const isStrong = document.getElementById('type').value === 'strong';
+  const Ca  = parseFloat(document.getElementById('ca').value);
+  const Va  = parseFloat(document.getElementById('va').value);
+  const Cb  = parseFloat(document.getElementById('cb').value);
+  const pKa = parseFloat(document.getElementById('pka').value);
+  const Ka  = Math.pow(10, -pKa);
+
+  const Veq = Ca * Va / Cb;
+  const Vmax = Math.max(Veq * 2, 1);
+
+  const pts = [];
+  const N = 900;
+  for (let i = 0; i <= N; i++) {
+    const Vb = Vmax * i / N;
+    pts.push([Vb, solvePH(Ca, Va, Cb, Vb, Ka, isStrong)]);
+  }
+
+  return {
+    pts, Veq, Vmax, isStrong, pKa,
+    pH0:  solvePH(Ca, Va, Cb, 0,       Ka, isStrong),
+    pHeq: solvePH(Ca, Va, Cb, Veq,     Ka, isStrong),
+    pHhalf: solvePH(Ca, Va, Cb, Veq/2, Ka, isStrong)
+  };
+}
+
+// -------------------------------------------------------------
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const PAD = { l: 92, r: 34, t: 30, b: 78 };
+
+function draw(m) {
+  const W = cv.width, H = cv.height;
+  const pw = W - PAD.l - PAD.r, ph = H - PAD.t - PAD.b;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  const X = v => PAD.l + (v / m.Vmax) * pw;
+  const Y = p => PAD.t + (1 - p / 14) * ph;
+
+  // grid
+  ctx.strokeStyle = '#ececeb';
+  ctx.lineWidth = 2;
+  ctx.font = '22px -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#777';
+
+  for (let p = 0; p <= 14; p += 2) {
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(p)); ctx.lineTo(W - PAD.r, Y(p)); ctx.stroke();
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(p, PAD.l - 14, Y(p));
+  }
+
+  const step = niceStep(m.Vmax);
+  for (let v = 0; v <= m.Vmax + 1e-9; v += step) {
+    ctx.beginPath(); ctx.moveTo(X(v), PAD.t); ctx.lineTo(X(v), H - PAD.b); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(v.toFixed(step < 1 ? 1 : 0), X(v), H - PAD.b + 12);
+  }
+
+  // axes
+  ctx.strokeStyle = '#999'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(PAD.l, PAD.t); ctx.lineTo(PAD.l, H - PAD.b);
+  ctx.lineTo(W - PAD.r, H - PAD.b); ctx.stroke();
+
+  ctx.fillStyle = '#333';
+  ctx.font = '600 25px -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('Volume of NaOH added (mL)', PAD.l + pw / 2, H - 34);
+  ctx.save();
+  ctx.translate(28, PAD.t + ph / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('pH', 0, 0);
+  ctx.restore();
+
+  // half-equivalence marker (weak only)
+  if (!m.isStrong) {
+    ctx.strokeStyle = '#c9c9c9'; ctx.lineWidth = 2; ctx.setLineDash([9, 7]);
+    ctx.beginPath(); ctx.moveTo(X(m.Veq / 2), Y(0)); ctx.lineTo(X(m.Veq / 2), Y(14)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(m.pKa)); ctx.lineTo(X(m.Veq / 2), Y(m.pKa)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#888';
+    ctx.font = '20px -apple-system, "Segoe UI", Roboto, sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('pH = pKa at ½Veq', X(m.Veq / 2) + 10, Y(m.pKa) - 8);
+  }
+
+  // equivalence line
+  ctx.strokeStyle = '#b00020';
+  ctx.lineWidth = 2.5; ctx.setLineDash([7, 6]);
+  ctx.beginPath(); ctx.moveTo(X(m.Veq), PAD.t); ctx.lineTo(X(m.Veq), H - PAD.b); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#b00020';
+  ctx.font = '600 21px -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('equivalence', X(m.Veq) + 10, PAD.t + 6);
+
+  // curve
+  ctx.strokeStyle = '#1f6f43'; ctx.lineWidth = 5;
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.beginPath();
+  m.pts.forEach(([v, p], i) => { i ? ctx.lineTo(X(v), Y(p)) : ctx.moveTo(X(v), Y(p)); });
+  ctx.stroke();
+
+  // equivalence dot
+  ctx.fillStyle = '#b00020';
+  ctx.beginPath(); ctx.arc(X(m.Veq), Y(m.pHeq), 9, 0, 2 * Math.PI); ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
+}
+
+function niceStep(max) {
+  const raw = max / 8;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / mag;
+  const mult = n < 1.5 ? 1 : n < 3.5 ? 2 : n < 7.5 ? 5 : 10;
+  return mult * mag;
+}
+
+// -------------------------------------------------------------
+function refresh() {
+  const isStrong = document.getElementById('type').value === 'strong';
+  document.getElementById('pkaFld').style.display = isStrong ? 'none' : '';
+
+  document.getElementById('caV').textContent  = (+document.getElementById('ca').value).toFixed(3) + ' M';
+  document.getElementById('vaV').textContent  = (+document.getElementById('va').value).toFixed(1) + ' mL';
+  document.getElementById('cbV').textContent  = (+document.getElementById('cb').value).toFixed(3) + ' M';
+  document.getElementById('pkaV').textContent = (+document.getElementById('pka').value).toFixed(2);
+
+  const m = compute();
+  draw(m);
+
+  document.getElementById('sP0').textContent = m.pH0.toFixed(2);
+  document.getElementById('sVe').textContent = m.Veq.toFixed(2) + ' mL';
+  document.getElementById('sPe').textContent = m.pHeq.toFixed(2);
+  document.getElementById('sPh').textContent = m.isStrong ? '—' : m.pHhalf.toFixed(2);
+
+  const note = document.getElementById('teachNote');
+  if (m.isStrong) {
+    note.innerHTML = 'Strong acid + strong base: equivalence pH is <strong>7.00</strong> because '
+      + 'the product (NaCl) is neutral. Notice the jump is sharpest here — that is why '
+      + 'indicator choice is forgiving for this titration.';
+  } else {
+    note.innerHTML = 'Weak acid + strong base: equivalence pH is <strong>above 7</strong> because '
+      + 'the conjugate base A⁻ hydrolyzes. At half-equivalence, [HA] = [A⁻], so '
+      + 'pH = pK<sub>a</sub> — that flat region is the buffer zone. Push pK<sub>a</sub> above ~9 '
+      + 'and watch the jump vanish: the titration stops being usable.';
+  }
+}
+
+['type', 'ca', 'va', 'pka', 'cb'].forEach(id => {
+  document.getElementById(id).addEventListener('input', refresh);
+});
+refresh();
+</script>
+</body>
+</html>

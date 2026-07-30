@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Molar Mass Calculator — FCC Chem</title>
+<style>
+  :root { --bg:#fff; --fg:#1a1a1a; --muted:#666; --accent:#1f6f43;
+          --border:#e2e2e0; --panel:#f7f7f5; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:var(--bg); color:var(--fg); line-height:1.5; }
+  .wrap { max-width:720px; margin:0 auto; padding:32px 20px 64px; }
+  header { border-bottom:2px solid var(--accent); padding-bottom:12px; margin-bottom:24px; }
+  h1 { margin:0 0 4px; font-size:1.6rem; }
+  .sub { color:var(--muted); font-size:0.9rem; }
+  .panel { background:var(--panel); border:1px solid var(--border);
+           border-radius:8px; padding:20px; margin-bottom:18px; }
+  label { display:block; font-weight:600; margin-bottom:6px; font-size:0.9rem; }
+  input { width:100%; padding:12px; font-size:1.15rem; border:1px solid var(--border);
+          border-radius:6px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  button { background:var(--accent); color:#fff; border:0; border-radius:6px;
+           padding:11px 20px; font-size:0.95rem; font-weight:600; cursor:pointer;
+           font-family:inherit; }
+  button.ghost { background:#fff; color:var(--accent); border:1px solid var(--accent); }
+  button:hover { filter:brightness(1.1); }
+  .result { font-size:1.9rem; font-weight:700; letter-spacing:-0.01em; }
+  .result small { font-size:1rem; font-weight:600; color:var(--muted); }
+  .err { color:#b00020; font-size:1.05rem; font-weight:600; }
+  table { width:100%; border-collapse:collapse; margin-top:14px; font-size:0.9rem; }
+  th, td { text-align:left; padding:7px 6px; border-bottom:1px solid var(--border); }
+  th { color:var(--muted); font-weight:600; font-size:0.78rem;
+       text-transform:uppercase; letter-spacing:0.04em; }
+  td.num { text-align:right; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .ex { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .ex button { background:#e8ece9; color:#31513f; font-weight:500;
+               padding:5px 11px; font-size:0.83rem; }
+  .hint { font-size:0.82rem; color:var(--muted); margin-top:10px; }
+  footer { margin-top:36px; padding-top:12px; border-top:1px solid var(--border);
+           font-size:0.8rem; color:var(--muted); }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Molar Mass Calculator</h1>
+    <div class="sub">Type a formula, get the molar mass and a per-element breakdown. — R. Gilley, CHEM 1A</div>
+  </header>
+
+  <div class="panel">
+    <label for="f">Chemical formula</label>
+    <input id="f" type="text" value="Ca(NO3)2" spellcheck="false" autocomplete="off">
+    <div class="ex">
+      <button data-ex="H2O">H2O</button>
+      <button data-ex="Ca(NO3)2">Ca(NO3)2</button>
+      <button data-ex="CuSO4.5H2O">CuSO4·5H2O</button>
+      <button data-ex="C6H12O6">C6H12O6</button>
+      <button data-ex="Al2(SO4)3">Al2(SO4)3</button>
+      <button data-ex="KMnO4">KMnO4</button>
+    </div>
+    <p class="hint">Parentheses and hydrates both work. Write hydrates with a period: <code>CuSO4.5H2O</code></p>
+  </div>
+
+  <div class="panel">
+    <div class="result" id="out">—</div>
+    <div id="tableBox"></div>
+  </div>
+
+  <div class="row">
+    <button id="copyBtn" class="ghost">Copy result</button>
+  </div>
+
+  <footer>
+    Built by FCC Chemistry faculty ·
+    <a href="../">Back to tool catalog</a><br>
+    Runs entirely in your browser. Nothing is uploaded or stored.
+  </footer>
+
+</div>
+
+<script>
+// ============================================================
+// Standard atomic weights (IUPAC 2021 conventional values).
+// For elements with no stable isotope, the mass number of the
+// most stable / commonly cited isotope is used and flagged.
+// ============================================================
+const MASS = {
+  H:1.008, He:4.0026, Li:6.94, Be:9.0122, B:10.81, C:12.011, N:14.007,
+  O:15.999, F:18.998, Ne:20.180, Na:22.990, Mg:24.305, Al:26.982,
+  Si:28.085, P:30.974, S:32.06, Cl:35.45, Ar:39.95, K:39.098,
+  Ca:40.078, Sc:44.956, Ti:47.867, V:50.942, Cr:51.996, Mn:54.938,
+  Fe:55.845, Co:58.933, Ni:58.693, Cu:63.546, Zn:65.38, Ga:69.723,
+  Ge:72.630, As:74.922, Se:78.971, Br:79.904, Kr:83.798, Rb:85.468,
+  Sr:87.62, Y:88.906, Zr:91.224, Nb:92.906, Mo:95.95, Tc:98,
+  Ru:101.07, Rh:102.91, Pd:106.42, Ag:107.87, Cd:112.41, In:114.82,
+  Sn:118.71, Sb:121.76, Te:127.60, I:126.90, Xe:131.29, Cs:132.91,
+  Ba:137.33, La:138.91, Ce:140.12, Pr:140.91, Nd:144.24, Pm:145,
+  Sm:150.36, Eu:151.96, Gd:157.25, Tb:158.93, Dy:162.50, Ho:164.93,
+  Er:167.26, Tm:168.93, Yb:173.05, Lu:174.97, Hf:178.49, Ta:180.95,
+  W:183.84, Re:186.21, Os:190.23, Ir:192.22, Pt:195.08, Au:196.97,
+  Hg:200.59, Tl:204.38, Pb:207.2, Bi:208.98, Po:209, At:210, Rn:222,
+  Fr:223, Ra:226, Ac:227, Th:232.04, Pa:231.04, U:238.03, Np:237,
+  Pu:244, Am:243, Cm:247, Bk:247, Cf:251, Es:252, Fm:257, Md:258,
+  No:259, Lr:266, Rf:267, Db:268, Sg:269, Bh:270, Hs:269, Mt:278,
+  Ds:281, Rg:282, Cn:285, Nh:286, Fl:289, Mc:290, Lv:293, Ts:294, Og:294
+};
+
+// ------------------------------------------------------------
+// Recursive-descent parser.
+// Grammar:  formula := ( element | '(' formula ')' ) count? ...
+// Hydrates: split on '.' or '·', each part gets an optional
+//           leading integer multiplier.
+// ------------------------------------------------------------
+function parseSegment(str) {
+  let i = 0;
+  const counts = {};
+
+  function fail(msg) { throw new Error(msg); }
+
+  function parseGroup(multiplier) {
+    while (i < str.length) {
+      const ch = str[i];
+
+      if (ch === '(' || ch === '[') {
+        const close = ch === '(' ? ')' : ']';
+        i++;
+        const sub = parseInto(close);
+        const n = readCount();
+        for (const el in sub) {
+          counts[el] = (counts[el] || 0) + sub[el] * n * multiplier;
+        }
+        continue;
+      }
+
+      if (ch === ')' || ch === ']') {
+        fail('Unmatched closing bracket');
+      }
+
+      if (!/[A-Z]/.test(ch)) fail('Unexpected character "' + ch + '"');
+
+      let sym = ch;
+      i++;
+      while (i < str.length && /[a-z]/.test(str[i])) { sym += str[i]; i++; }
+
+      if (!(sym in MASS)) fail('Unknown element: ' + sym);
+
+      const n = readCount();
+      counts[sym] = (counts[sym] || 0) + n * multiplier;
+    }
+    return counts;
+  }
+
+  function parseInto(closeChar) {
+    const sub = {};
+    while (i < str.length && str[i] !== closeChar) {
+      const ch = str[i];
+
+      if (ch === '(' || ch === '[') {
+        const inner = ch === '(' ? ')' : ']';
+        i++;
+        const nested = parseInto(inner);
+        const n = readCount();
+        for (const el in nested) sub[el] = (sub[el] || 0) + nested[el] * n;
+        continue;
+      }
+
+      if (!/[A-Z]/.test(ch)) fail('Unexpected character "' + ch + '"');
+
+      let sym = ch;
+      i++;
+      while (i < str.length && /[a-z]/.test(str[i])) { sym += str[i]; i++; }
+      if (!(sym in MASS)) fail('Unknown element: ' + sym);
+
+      const n = readCount();
+      sub[sym] = (sub[sym] || 0) + n;
+    }
+    if (i >= str.length) fail('Missing closing bracket');
+    i++; // consume close
+    return sub;
+  }
+
+  function readCount() {
+    let d = '';
+    while (i < str.length && /[0-9]/.test(str[i])) { d += str[i]; i++; }
+    if (d === '') return 1;
+    const v = parseInt(d, 10);
+    if (v === 0) fail('Subscript cannot be zero');
+    return v;
+  }
+
+  return parseGroup(1);
+}
+
+function parseFormula(raw) {
+  const cleaned = raw.replace(/\s+/g, '').replace(/·/g, '.').replace(/\*/g, '.');
+  if (!cleaned) throw new Error('Enter a formula.');
+
+  const parts = cleaned.split('.').filter(p => p !== '');
+  if (!parts.length) throw new Error('Enter a formula.');
+
+  const total = {};
+  for (const part of parts) {
+    // leading integer = hydrate multiplier, e.g. 5H2O
+    const m = part.match(/^([0-9]+)(.*)$/);
+    let mult = 1, body = part;
+    if (m) { mult = parseInt(m[1], 10); body = m[2]; }
+    if (!body) throw new Error('Incomplete hydrate segment.');
+
+    const seg = parseSegment(body);
+    for (const el in seg) total[el] = (total[el] || 0) + seg[el] * mult;
+  }
+  return total;
+}
+
+// ------------------------------------------------------------
+// Rendering
+// ------------------------------------------------------------
+const out = document.getElementById('out');
+const tableBox = document.getElementById('tableBox');
+const input = document.getElementById('f');
+let lastResult = '';
+
+function calc() {
+  const raw = input.value;
+  try {
+    const counts = parseFormula(raw);
+    const rows = Object.keys(counts).sort();
+    let total = 0;
+    rows.forEach(el => { total += MASS[el] * counts[el]; });
+
+    out.className = 'result';
+    out.innerHTML = total.toFixed(3) + ' <small>g/mol</small>';
+    lastResult = raw.trim() + ' = ' + total.toFixed(3) + ' g/mol';
+
+    let html = '<table><thead><tr><th>Element</th><th style="text-align:right">Atoms</th>'
+             + '<th style="text-align:right">Mass (g/mol)</th>'
+             + '<th style="text-align:right">Subtotal</th>'
+             + '<th style="text-align:right">% by mass</th></tr></thead><tbody>';
+    rows.forEach(el => {
+      const sub = MASS[el] * counts[el];
+      html += '<tr><td><strong>' + el + '</strong></td>'
+            + '<td class="num">' + counts[el] + '</td>'
+            + '<td class="num">' + MASS[el].toFixed(3) + '</td>'
+            + '<td class="num">' + sub.toFixed(3) + '</td>'
+            + '<td class="num">' + (100 * sub / total).toFixed(2) + '%</td></tr>';
+    });
+    html += '</tbody></table>';
+    tableBox.innerHTML = html;
+
+  } catch (e) {
+    out.className = 'err';
+    out.textContent = e.message;
+    tableBox.innerHTML = '';
+    lastResult = '';
+  }
+}
+
+input.addEventListener('input', calc);
+document.querySelectorAll('.ex button').forEach(b => {
+  b.addEventListener('click', () => { input.value = b.dataset.ex; calc(); input.focus(); });
+});
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if (!lastResult) return;
+  navigator.clipboard.writeText(lastResult).then(() => {
+    const b = document.getElementById('copyBtn');
+    const t = b.textContent;
+    b.textContent = 'Copied';
+    setTimeout(() => { b.textContent = t; }, 1200);
+  });
+});
+
+calc();
+</script>
+</body>
+</html>

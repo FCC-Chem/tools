@@ -1,0 +1,8 @@
+{
+  "title": "Molar Mass Calculator",
+  "author": "R. Gilley",
+  "course": "CHEM 1A",
+  "description": "Type any chemical formula and get molar mass plus a per-element percent-composition breakdown. Handles parentheses and hydrates.",
+  "tags": ["stoichiometry", "calculator", "chem-1a"],
+  "status": "working"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Tool Title",
+  "author": "Your Name",
+  "course": "CHEM 1A",
+  "description": "One sentence describing what this tool does and who it helps.",
+  "tags": ["example"],
+  "status": "wip"
+}

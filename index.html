@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FCC Chemistry — AI Tool Catalog</title>
+<style>
+  :root {
+    --bg:#fff; --fg:#1a1a1a; --muted:#666; --accent:#1f6f43;
+    --border:#e2e2e0; --panel:#f7f7f5;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         background:var(--bg); color:var(--fg); line-height:1.5; }
+  .wrap { max-width:1000px; margin:0 auto; padding:36px 20px 72px; }
+  header { border-bottom:2px solid var(--accent); padding-bottom:16px; margin-bottom:12px; }
+  h1 { margin:0 0 6px; font-size:1.9rem; }
+  .tagline { color:var(--muted); }
+  .controls { display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }
+  #q { flex:1; min-width:220px; padding:11px 14px; font-size:1rem;
+        border:1px solid var(--border); border-radius:8px; font-family:inherit; }
+  .filters { display:flex; gap:6px; }
+  .fbtn { padding:10px 16px; border:1px solid var(--border); background:#fff;
+           border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }
+  .fbtn.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+  .card { border:1px solid var(--border); border-radius:10px; padding:18px;
+           background:var(--panel); display:flex; flex-direction:column; }
+  .card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .card h3 { margin:0 0 8px; font-size:1.1rem; }
+  .card h3 a { color:var(--fg); text-decoration:none; }
+  .card h3 a:hover { color:var(--accent); text-decoration:underline; }
+  .status { color:#fff; font-size:0.68rem; font-weight:700; padding:3px 8px;
+             border-radius:20px; white-space:nowrap; text-transform:uppercase;
+             letter-spacing:0.03em; }
+  .desc { margin:0 0 12px; font-size:0.92rem; color:#333; flex:1; }
+  .meta { font-size:0.83rem; color:var(--muted); margin-bottom:10px; }
+  .author { font-weight:600; color:#444; }
+  .course:before { content:" · "; }
+  .tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
+  .tag { font-size:0.72rem; background:#e8ece9; color:#31513f;
+          padding:3px 8px; border-radius:4px; }
+  .links { display:flex; gap:8px; flex-wrap:wrap; }
+  .lnk { font-size:0.85rem; text-decoration:none; color:var(--accent);
+          border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }
+  .lnk.primary { background:var(--accent); color:#fff; }
+  .lnk:hover { filter:brightness(1.12); }
+  .empty { color:var(--muted); font-style:italic; }
+  .none { color:var(--muted); padding:20px 0; display:none; }
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--border);
+            font-size:0.82rem; color:var(--muted); }
+  footer a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>FCC Chemistry — AI Tool Catalog</h1>
+    <div class="tagline">Teaching tools built by our department, with AI. Click any tool to use it.</div>
+  </header>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
+    <div class="filters">
+      <button class="fbtn on" data-f="all">All</button>
+      <button class="fbtn" data-f="working">Working</button>
+      <button class="fbtn" data-f="wip">In progress</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+      <article class="card" data-search="molar mass calculator r. gilley chem 1a type any chemical formula and get molar mass plus a per-element percent-composition breakdown. handles parentheses and hydrates. stoichiometry calculator chem-1a" data-status="working">
+        <div class="card-head">
+          <h3><a href="gilley-molar-mass/">Molar Mass Calculator</a></h3>
+          <span class="status" style="background:#1f6f43">Working</span>
+        </div>
+        <p class="desc">Type any chemical formula and get molar mass plus a per-element percent-composition breakdown. Handles parentheses and hydrates.</p>
+        <div class="meta">
+          <span class="author">R. Gilley</span>
+          <span class="course">CHEM 1A</span>
+        </div>
+        <div class="tags"><span class="tag">stoichiometry</span><span class="tag">calculator</span><span class="tag">chem-1a</span></div>
+        <div class="links">
+          <a class="lnk primary" href="gilley-molar-mass/">Open tool</a>
+          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley-molar-mass">Source</a>
+          
+        </div>
+      </article>
+      <article class="card" data-search="titration curve simulator r. gilley chem 1a / 1b interactive strong- and weak-acid titration curves. solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration. acid-base simulation equilibrium chem-1b" data-status="working">
+        <div class="card-head">
+          <h3><a href="gilley-titration-sim/">Titration Curve Simulator</a></h3>
+          <span class="status" style="background:#1f6f43">Working</span>
+        </div>
+        <p class="desc">Interactive strong- and weak-acid titration curves. Solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration.</p>
+        <div class="meta">
+          <span class="author">R. Gilley</span>
+          <span class="course">CHEM 1A / 1B</span>
+        </div>
+        <div class="tags"><span class="tag">acid-base</span><span class="tag">simulation</span><span class="tag">equilibrium</span><span class="tag">chem-1b</span></div>
+        <div class="links">
+          <a class="lnk primary" href="gilley-titration-sim/">Open tool</a>
+          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley-titration-sim">Source</a>
+          
+        </div>
+      </article>
+
+  </div>
+  <p class="none" id="none">Nothing matches that search.</p>
+
+  <footer>
+    <strong>2 tools</strong> · rebuilt automatically 2026-07-30 16:07 UTC<br>
+    <a href="https://github.com/FCC-Chem/tools">Source on GitHub</a> ·
+    <a href="https://github.com/FCC-Chem/tools/discussions">Discussions</a> ·
+    <a href="https://github.com/FCC-Chem/tools/issues/new">Request a tool</a><br>
+    Unofficial faculty project. Not an official channel of Fresno City College or SCCCD.
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var none = document.getElementById('none');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var filter = 'all';
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (c) {
+      var okText = !term || c.dataset.search.indexOf(term) !== -1;
+      var okStat = filter === 'all' || c.dataset.status === filter;
+      var vis = okText && okStat;
+      c.style.display = vis ? '' : 'none';
+      if (vis) shown++;
+    });
+    none.style.display = (shown === 0 && cards.length) ? 'block' : 'none';
+  }
+
+  q.addEventListener('input', apply);
+  document.querySelectorAll('.fbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.fbtn').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      filter = b.dataset.f;
+      apply();
+    });
+  });
+})();
+</script>
+</body>
+</html>

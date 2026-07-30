@@ -1,0 +1,8 @@
+{
+  "title": "Titration Curve Simulator",
+  "author": "R. Gilley",
+  "course": "CHEM 1A / 1B",
+  "description": "Interactive strong- and weak-acid titration curves. Solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration.",
+  "tags": ["acid-base", "simulation", "equilibrium", "chem-1b"],
+  "status": "working"
+}
