@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 """
-Scans every tool folder for meta.json and regenerates the root index.html catalog.
+Scans every author folder for tools and regenerates the root index.html catalog.
 
-A "tool folder" is any top-level directory that:
-  - does not start with . or _
-  - contains an index.html
+Layout:
 
-meta.json is optional. If missing or malformed, the tool still appears in the
-catalog with fallback values, and a warning is printed. The build never fails
-on one person's bad JSON -- that would block everyone else's push.
+    <author>/<tool>/index.html      <- required
+    <author>/<tool>/meta.json       <- optional
+    <author>/<tool>/README.md       <- optional
+
+An "author folder" is any top-level directory that does not start with . or _
+and is not in SKIP_NAMES. A "tool folder" is any directory inside it that
+contains an index.html.
+
+Authorship is structural, not conventional. The author name is derived from the
+folder, so a contributor who forgets meta.json entirely still gets a correctly
+attributed card. meta.json "author" overrides the folder name when someone
+wants a display name ("R. Gilley" instead of "gilley").
+
+Nothing here can fail the build. A missing meta.json, malformed JSON, a stray
+index.html at the top level, or an empty author folder all produce a warning
+and keep going -- one person's bad file must never block everyone else's push.
 
 Run:  python3 scripts/build_catalog.py
 """
@@ -247,50 +258,90 @@ HERO_SCRIPT = r"""
 """
 
 
+def prettify(slug):
+    """'molar-mass' -> 'Molar Mass'.  Used when meta.json has no title."""
+    return " ".join(w.capitalize() for w in slug.replace("_", "-").split("-") if w)
+
+
+def read_meta(tool_dir, rel, warnings):
+    """Never raises. A bad meta.json degrades to defaults plus a warning."""
+    meta_path = tool_dir / "meta.json"
+    if not meta_path.exists():
+        warnings.append(f"{rel}/ has no meta.json - using folder-derived defaults")
+        return {}
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        if not isinstance(meta, dict):
+            raise ValueError("must be a JSON object")
+        return meta
+    except Exception as e:
+        warnings.append(f"{rel}/meta.json could not be read ({e}) - using defaults")
+        return {}
+
+
 def find_tools():
+    """Walk <author>/<tool>/index.html.
+
+    Author comes from the directory, so attribution survives a missing or
+    broken meta.json. That is the whole reason for nesting: naming
+    discipline is not required for the catalog to be correct.
+    """
     tools = []
     warnings = []
 
-    for entry in sorted(ROOT.iterdir(), key=lambda p: p.name.lower()):
-        if not entry.is_dir():
+    for author_dir in sorted(ROOT.iterdir(), key=lambda p: p.name.lower()):
+        if not author_dir.is_dir():
             continue
-        if entry.name.startswith(SKIP_PREFIXES) or entry.name in SKIP_NAMES:
-            continue
-        if not (entry / "index.html").exists():
-            warnings.append(f"{entry.name}/ has no index.html - skipped")
+        if author_dir.name.startswith(SKIP_PREFIXES) or author_dir.name in SKIP_NAMES:
             continue
 
-        meta = {}
-        meta_path = entry / "meta.json"
-        if meta_path.exists():
-            try:
-                meta = json.loads(meta_path.read_text(encoding="utf-8"))
-                if not isinstance(meta, dict):
-                    raise ValueError("meta.json must be a JSON object")
-            except Exception as e:
-                warnings.append(f"{entry.name}/meta.json could not be read ({e}) - using defaults")
-                meta = {}
-        else:
-            warnings.append(f"{entry.name}/ has no meta.json - using defaults")
+        # Catches the most likely contributor mistake: a tool committed at
+        # the top level instead of inside an author folder.
+        if (author_dir / "index.html").exists():
+            warnings.append(
+                f"{author_dir.name}/index.html sits at the author level - "
+                f"tools belong in {author_dir.name}/<tool-name>/index.html - skipped"
+            )
+            continue
 
-        tags = meta.get("tags", [])
-        if not isinstance(tags, list):
-            tags = []
+        found_any = False
 
-        status = str(meta.get("status", "wip")).lower()
-        if status not in STATUS_LABELS:
-            status = "wip"
+        for tool_dir in sorted(author_dir.iterdir(), key=lambda p: p.name.lower()):
+            if not tool_dir.is_dir():
+                continue
+            if tool_dir.name.startswith(SKIP_PREFIXES):
+                continue
+            if not (tool_dir / "index.html").exists():
+                continue
 
-        tools.append({
-            "folder": entry.name,
-            "title": str(meta.get("title") or entry.name),
-            "author": str(meta.get("author") or "Unknown"),
-            "course": str(meta.get("course") or ""),
-            "description": str(meta.get("description") or "No description yet."),
-            "tags": [str(t) for t in tags],
-            "status": status,
-            "has_readme": (entry / "README.md").exists(),
-        })
+            found_any = True
+            rel = f"{author_dir.name}/{tool_dir.name}"
+            meta = read_meta(tool_dir, rel, warnings)
+
+            tags = meta.get("tags", [])
+            if not isinstance(tags, list):
+                tags = []
+
+            status = str(meta.get("status", "wip")).lower()
+            if status not in STATUS_LABELS:
+                status = "wip"
+
+            tools.append({
+                "folder": rel,
+                "author_slug": author_dir.name,
+                "title": str(meta.get("title") or prettify(tool_dir.name)),
+                # Folder name is the fallback author. meta.json only overrides
+                # it to provide a nicer display name.
+                "author": str(meta.get("author") or prettify(author_dir.name)),
+                "course": str(meta.get("course") or ""),
+                "description": str(meta.get("description") or "No description yet."),
+                "tags": [str(t) for t in tags],
+                "status": status,
+                "has_readme": (tool_dir / "README.md").exists(),
+            })
+
+        if not found_any:
+            warnings.append(f"{author_dir.name}/ contains no tools - skipped")
 
     return tools, warnings
 
@@ -310,7 +361,7 @@ def render_card(t):
         t["title"], t["author"], t["course"], t["description"], " ".join(t["tags"])
     ]).lower())
 
-    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}">
+    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}">
         <div class="card-head">
           <h3><a href="{e(t['folder'])}/">{e(t['title'])}</a></h3>
           <span class="status" style="background:{status_color}">{status_label}</span>
@@ -337,7 +388,22 @@ def render(tools):
         empty = ""
     else:
         cards = ""
-        empty = '      <p class="empty">No tools yet. Copy <code>_template/</code> to get started.</p>'
+        empty = ('      <p class="empty">No tools yet. Copy <code>_template/</code> into '
+                 '<code>yourname/toolname/</code> to get started.</p>')
+
+    # Author dropdown, built from whoever actually has tools.
+    seen = {}
+    for t in tools:
+        seen.setdefault(t["author_slug"], t["author"])
+    opts = "".join(
+        f'<option value="{html.escape(slug)}">{html.escape(name)}</option>'
+        for slug, name in sorted(seen.items(), key=lambda kv: kv[1].lower())
+    )
+    author_sel = (
+        f'<select id="who" aria-label="Filter by author">'
+        f'<option value="all">All authors</option>{opts}</select>'
+        if len(seen) > 1 else ""
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -371,6 +437,8 @@ def render(tools):
   .controls {{ display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }}
   #q {{ flex:1; min-width:220px; padding:11px 14px; font-size:1rem;
         border:1px solid var(--border); border-radius:8px; font-family:inherit; }}
+  #who {{ padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
+          border-radius:8px; font-family:inherit; background:#fff; cursor:pointer; }}
   .filters {{ display:flex; gap:6px; }}
   .fbtn {{ padding:10px 16px; border:1px solid var(--border); background:#fff;
            border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }}
@@ -417,6 +485,7 @@ def render(tools):
 
   <div class="controls">
     <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
+    {author_sel}
     <div class="filters">
       <button class="fbtn on" data-f="all">All</button>
       <button class="fbtn" data-f="working">Working</button>
@@ -443,17 +512,20 @@ def render(tools):
 <script>
 (function () {{
   var q = document.getElementById('q');
+  var who = document.getElementById('who');       // absent when only one author
   var none = document.getElementById('none');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
   var filter = 'all';
 
   function apply() {{
     var term = q.value.trim().toLowerCase();
+    var author = who ? who.value : 'all';
     var shown = 0;
     cards.forEach(function (c) {{
       var okText = !term || c.dataset.search.indexOf(term) !== -1;
       var okStat = filter === 'all' || c.dataset.status === filter;
-      var vis = okText && okStat;
+      var okWho  = author === 'all' || c.dataset.author === author;
+      var vis = okText && okStat && okWho;
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     }});
@@ -461,6 +533,7 @@ def render(tools):
   }}
 
   q.addEventListener('input', apply);
+  if (who) who.addEventListener('change', apply);
   document.querySelectorAll('.fbtn').forEach(function (b) {{
     b.addEventListener('click', function () {{
       document.querySelectorAll('.fbtn').forEach(function (x) {{ x.classList.remove('on'); }});

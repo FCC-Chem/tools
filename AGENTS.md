@@ -9,6 +9,20 @@ A catalog of small, self-contained teaching tools for community college
 chemistry instructors. The audience is faculty with mixed technical skill.
 Portability and simplicity beat sophistication every time.
 
+## Repository layout
+
+Tools are namespaced by author:
+
+```
+<author>/<tool>/index.html      required
+<author>/<tool>/meta.json       optional
+<author>/<tool>/README.md       optional
+```
+
+The author folder is the source of truth for attribution. Never place a
+tool at the top level, and never write into another author's folder --
+copy into the current author's folder instead.
+
 ## Hard constraints
 
 - **One tool = one folder = one `index.html` file.** Do not split into
@@ -55,10 +69,14 @@ is worse than no tool.
 
 ## When adapting an existing tool
 
-- Copy the folder. Never modify another person's folder.
-- New folder name: `lastname-toolname`, all lowercase, hyphens.
+- Copy it to `<current-author>/<new-tool-name>/`. Never modify another
+  person's folder.
+- Folder names: all lowercase, hyphens instead of spaces.
+- The catalog backlink in the footer must be `../../` -- tools sit two
+  levels below the repository root.
 - Update `meta.json`: `title`, `author`, `course`, `description`, `tags`,
-  and `status` (`working` or `wip`).
+  and `status` (`working` or `wip`). All optional; the builder falls back
+  to the folder names.
 - Keep the structural layout and styling. Consistency across the catalog
   is a feature — faculty recognize the shape of these pages.
 

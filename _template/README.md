@@ -17,8 +17,11 @@ Open the link. Do X. Get Y.
 
 ## Want to adapt this for your course?
 
-1. Copy this whole folder, rename it `yourname-toolname`
+1. Copy this whole folder to `yourname/toolname/`
 2. Open `index.html` in your AI assistant
 3. Tell it what you want changed
-4. Update `meta.json` with your name and title
+4. Update `meta.json` with your title and course
 5. Commit — the catalog updates itself
+
+Your folder name is your author name. If you skip `meta.json` entirely,
+the tool still appears on the catalog, correctly attributed to you.

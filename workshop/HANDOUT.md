@@ -71,7 +71,7 @@ Requirements:
 - Vanilla JavaScript only.
 - Validate input and show a readable error message instead of NaN.
 - Always show units in the output.
-- Keep the footer link back to ../
+- Keep the footer link back to ../../
 - Comment the chemistry, not the syntax.
 
 Give me the complete file. Don't abbreviate any section.
@@ -102,16 +102,18 @@ it should have been. Don't try to fix the code yourself.
 
 1. Go to **https://github.com/FCC-Chem/tools**
 2. Click **Add file → Create new file**
-3. In the filename box type: `yourlastname-toolname/index.html`
-   - The `/` creates the folder. That's the trick.
-   - Example: `nguyen-buffer-calc/index.html`
+3. In the filename box type: `yourname/toolname/index.html`
+   - Each `/` creates a folder. That's the trick.
+   - Example: `nguyen/buffer-calc/index.html`
+   - **Your name is the first folder.** Everything you ever build goes
+     inside it, and that's what credits the tool to you.
 4. Paste your file into the big box
 5. Scroll down, click **Commit changes**, then **Commit changes** again
 
-Now the description file:
+Now the description file — optional, but it makes your card look right:
 
 6. Click **Add file → Create new file** again
-7. Filename: `yourlastname-toolname/meta.json` (same folder name exactly)
+7. Filename: `yourname/toolname/meta.json` (same two folders exactly)
 8. Paste this and edit it:
 
 ```json
@@ -140,7 +142,7 @@ itself.
 
 Your tool's direct link, to paste into Canvas:
 
-**https://fcc-chem.github.io/tools/yourlastname-toolname/**
+**https://fcc-chem.github.io/tools/yourname/toolname/**
 
 ---
 
@@ -162,7 +164,7 @@ Your tool's direct link, to paste into Canvas:
 | Page is blank | Missing `</script>` or `</html>`. Paste the file back to the AI: *"This renders blank, find the error."* |
 | Nothing happens on click | Button id doesn't match the JavaScript. Paste the file back and say so. |
 | 404 at the catalog URL | Wait 60 more seconds. Check the Actions tab finished green. |
-| Tool missing from catalog | `meta.json` is in the wrong folder, or has a trailing comma. |
+| Tool missing from catalog | `index.html` isn't two folders deep. It must be `yourname/toolname/index.html`, not `yourname/index.html`. |
 | Changes don't show | Hard refresh: `Ctrl/Cmd + Shift + R` |
 | Truly stuck | Grab the ready-made folder from `_template` and ship that. Shipping beats perfect. |
 

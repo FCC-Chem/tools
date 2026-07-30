@@ -30,6 +30,8 @@
   .controls { display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }
   #q { flex:1; min-width:220px; padding:11px 14px; font-size:1rem;
         border:1px solid var(--border); border-radius:8px; font-family:inherit; }
+  #who { padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
+          border-radius:8px; font-family:inherit; background:#fff; cursor:pointer; }
   .filters { display:flex; gap:6px; }
   .fbtn { padding:10px 16px; border:1px solid var(--border); background:#fff;
            border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }
@@ -78,6 +80,7 @@
 
   <div class="controls">
     <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
+    
     <div class="filters">
       <button class="fbtn on" data-f="all">All</button>
       <button class="fbtn" data-f="working">Working</button>
@@ -86,9 +89,9 @@
   </div>
 
   <div class="grid" id="grid">
-      <article class="card" data-search="molar mass calculator r. gilley chem 1a type any chemical formula and get molar mass plus a per-element percent-composition breakdown. handles parentheses and hydrates. stoichiometry calculator chem-1a" data-status="working">
+      <article class="card" data-search="molar mass calculator r. gilley chem 1a type any chemical formula and get molar mass plus a per-element percent-composition breakdown. handles parentheses and hydrates. stoichiometry calculator chem-1a" data-status="working" data-author="gilley">
         <div class="card-head">
-          <h3><a href="gilley-molar-mass/">Molar Mass Calculator</a></h3>
+          <h3><a href="gilley/molar-mass/">Molar Mass Calculator</a></h3>
           <span class="status" style="background:#1f6f43">Working</span>
         </div>
         <p class="desc">Type any chemical formula and get molar mass plus a per-element percent-composition breakdown. Handles parentheses and hydrates.</p>
@@ -98,14 +101,14 @@
         </div>
         <div class="tags"><span class="tag">stoichiometry</span><span class="tag">calculator</span><span class="tag">chem-1a</span></div>
         <div class="links">
-          <a class="lnk primary" href="gilley-molar-mass/">Open tool</a>
-          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley-molar-mass">Source</a>
+          <a class="lnk primary" href="gilley/molar-mass/">Open tool</a>
+          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley/molar-mass">Source</a>
           
         </div>
       </article>
-      <article class="card" data-search="titration curve simulator r. gilley chem 1a / 1b interactive strong- and weak-acid titration curves. solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration. acid-base simulation equilibrium chem-1b" data-status="working">
+      <article class="card" data-search="titration curve simulator r. gilley chem 1a / 1b interactive strong- and weak-acid titration curves. solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration. acid-base simulation equilibrium chem-1b" data-status="working" data-author="gilley">
         <div class="card-head">
-          <h3><a href="gilley-titration-sim/">Titration Curve Simulator</a></h3>
+          <h3><a href="gilley/titration-sim/">Titration Curve Simulator</a></h3>
           <span class="status" style="background:#1f6f43">Working</span>
         </div>
         <p class="desc">Interactive strong- and weak-acid titration curves. Solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration.</p>
@@ -115,8 +118,8 @@
         </div>
         <div class="tags"><span class="tag">acid-base</span><span class="tag">simulation</span><span class="tag">equilibrium</span><span class="tag">chem-1b</span></div>
         <div class="links">
-          <a class="lnk primary" href="gilley-titration-sim/">Open tool</a>
-          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley-titration-sim">Source</a>
+          <a class="lnk primary" href="gilley/titration-sim/">Open tool</a>
+          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/gilley/titration-sim">Source</a>
           
         </div>
       </article>
@@ -125,7 +128,7 @@
   <p class="none" id="none">Nothing matches that search.</p>
 
   <footer>
-    <strong>2 tools</strong> · rebuilt automatically 2026-07-30 17:10 UTC<br>
+    <strong>2 tools</strong> · rebuilt automatically 2026-07-30 18:00 UTC<br>
     <a href="https://github.com/FCC-Chem/tools">Source on GitHub</a> ·
     <a href="https://github.com/FCC-Chem/tools/discussions">Discussions</a> ·
     <a href="https://github.com/FCC-Chem/tools/issues/new">Request a tool</a><br>
@@ -137,17 +140,20 @@
 <script>
 (function () {
   var q = document.getElementById('q');
+  var who = document.getElementById('who');       // absent when only one author
   var none = document.getElementById('none');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
   var filter = 'all';
 
   function apply() {
     var term = q.value.trim().toLowerCase();
+    var author = who ? who.value : 'all';
     var shown = 0;
     cards.forEach(function (c) {
       var okText = !term || c.dataset.search.indexOf(term) !== -1;
       var okStat = filter === 'all' || c.dataset.status === filter;
-      var vis = okText && okStat;
+      var okWho  = author === 'all' || c.dataset.author === author;
+      var vis = okText && okStat && okWho;
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     });
@@ -155,6 +161,7 @@
   }
 
   q.addEventListener('input', apply);
+  if (who) who.addEventListener('change', apply);
   document.querySelectorAll('.fbtn').forEach(function (b) {
     b.addEventListener('click', function () {
       document.querySelectorAll('.fbtn').forEach(function (x) { x.classList.remove('on'); });

@@ -1,6 +1,6 @@
 {
   "title": "Tool Title",
-  "author": "Your Name",
+  "author": "Your Name (optional - defaults to your folder name)",
   "course": "CHEM 1A",
   "description": "One sentence describing what this tool does and who it helps.",
   "tags": ["example"],
