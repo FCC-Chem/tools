@@ -1,0 +1,11 @@
+{
+  "kind": "script",
+  "title": "Weekly Grade Update Emailer",
+  "author": "Your Name (optional - defaults to your folder name)",
+  "course": "CHEM 1A",
+  "description": "Reads a gradebook export and emails each student their current standing. Dry-run by default. Also does single-student lookup for office hours.",
+  "requires": "Python 3",
+  "entry": "script.py",
+  "tags": ["grading", "email", "automation"],
+  "status": "wip"
+}

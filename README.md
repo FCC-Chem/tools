@@ -24,6 +24,20 @@ Go to the [catalog](https://fcc-chem.github.io/tools/) and click it. That's it. 
 
 ---
 
+## Two kinds of tool
+
+| | **Web tool** | **Script tool** |
+|---|---|---|
+| Start from | `_template/` | `_template-script/` |
+| Required file | `index.html` | `meta.json` with `"kind": "script"` |
+| How it runs | Click a link | Download and run locally |
+| Live URL | yes | no |
+| Student data | never touches any | may read your gradebook — see rules |
+
+Web tools work on any device with no install, so they're where to start.
+Script tools do things a browser can't — read a gradebook export, send
+email, hit the Canvas API.
+
 ## Adding your own tool
 
 Every instructor gets a folder. Everything you build lives inside it:
@@ -58,6 +72,22 @@ Within about a minute your tool appears on the catalog page automatically. You d
 
 Do not edit someone else's folder. Copy it into your own — that's what
 the folders are for.
+
+### Adding a script tool
+
+1. Copy `_template-script/` to `yourname/toolname/`
+2. Run it as-is first: `python3 script.py` — dry run, sends nothing
+3. Paste `script.py` + `SPEC.md` + the sample CSV into your AI assistant
+4. Describe your course and your gradebook's actual columns
+5. Test against the sample data before it ever sees a real roster
+
+**Every script tool must ship:**
+
+- `meta.json` with `"kind": "script"` — this is what puts it on the catalog
+- `SPEC.md` — plain English: inputs, outputs, what to change. **This is
+  what lets the next person's AI adapt it.** Code alone is not enough.
+- `sample_*.csv` — synthetic data with your *real* column structure
+- Dry-run default. Sending, writing, or deleting requires an explicit flag.
 
 ---
 
@@ -109,7 +139,8 @@ derived from the folder names. The build never fails because of one bad file.
 ```
 tools/
 ├── index.html              ← auto-generated catalog, DO NOT EDIT
-├── _template/              ← copy this to start
+├── _template/              ← copy this to start a web tool
+├── _template-script/       ← copy this to start a script tool
 ├── gilley/                 ← one folder per instructor
 │   ├── molar-mass/         ← example: simple
 │   │   ├── index.html

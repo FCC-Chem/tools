@@ -23,7 +23,18 @@ The author folder is the source of truth for attribution. Never place a
 tool at the top level, and never write into another author's folder --
 copy into the current author's folder instead.
 
+## Two kinds of tool
+
+**Web tools** (`index.html`) run in the browser and are the default.
+**Script tools** (`meta.json` with `"kind": "script"`) run locally and are
+for things a browser cannot do: reading a gradebook file, sending mail,
+calling the Canvas API.
+
+Rules below marked WEB or SCRIPT apply only to that kind.
+
 ## Hard constraints
+
+### WEB
 
 - **One tool = one folder = one `index.html` file.** Do not split into
   separate `.css` or `.js` files. Do not add a build step.
@@ -38,8 +49,36 @@ copy into the current author's folder instead.
   If asked to build something that handles a real gradebook, the file
   reading must happen client-side only, via `<input type="file">`, with
   nothing leaving the page. Say so explicitly in the UI.
-- **Never commit credentials.** If a tool needs an API key, it prompts the
-  user for it at runtime and holds it in memory only.
+- **Never commit credentials.** If a web tool needs an API key, it prompts
+  the user for it at runtime and holds it in memory only.
+
+### SCRIPT
+
+- **Standard library only** unless the user explicitly asks otherwise. A
+  script that needs `pip install` before it runs will not be adopted by
+  the intended audience.
+- **Dry run is the default.** Any action that sends mail, writes to a
+  gradebook, posts to an API, or deletes anything requires an explicit
+  `--send` / `--apply` / `--yes` flag. Without it, print what *would*
+  happen and exit.
+- **Credentials come from a `.env` file** read at runtime, never from
+  literals in the source. Ship a `.env.example`. Exit with a readable
+  message listing which variables are missing.
+- **Ship synthetic sample data** with the real column structure. This is
+  what lets the next instructor test without touching a real roster, and
+  what lets an AI assistant see the schema.
+- **Ship a `SPEC.md`** describing inputs, outputs, configuration, and what
+  to change. For script tools this matters more than the code.
+- **Ungraded work is not zero.** When computing averages, a category with
+  nothing graded yet must be dropped and the remaining weights
+  renormalized. Counting it as zero tells a student in week 3 that they
+  are failing when they are not. This is the most common bug in grading
+  scripts.
+- **Validate before acting.** Check that weights sum to 1.0, that required
+  columns exist, and that the roster is non-empty. Fail with a readable
+  message naming the problem and the file.
+- **Never write code that transmits student data anywhere** except to the
+  student's own address via the user's configured mail server.
 
 ## House style
 
@@ -88,8 +127,21 @@ is worse than no tool.
 
 ## Definition of done
 
+**WEB**
+
 - Opens and works when double-clicked from the local filesystem
 - No console errors
 - Handles empty and nonsense input without crashing
-- `meta.json` is valid JSON with all six keys filled in
+- Footer links back to `../../`
+
+**SCRIPT**
+
+- Runs with no arguments against the shipped sample data and sends nothing
+- Exits with a readable message when credentials or columns are missing
+- `--help` explains every flag
+- No secrets, real names, real emails, or absolute paths anywhere in the file
+
+**BOTH**
+
+- `meta.json` is valid JSON
 - A colleague could read the code and understand what it computes

@@ -311,7 +311,10 @@ def find_tools():
                 continue
             if tool_dir.name.startswith(SKIP_PREFIXES):
                 continue
-            if not (tool_dir / "index.html").exists():
+            # A browser tool announces itself with index.html; a script
+            # tool has no index.html, so meta.json is what marks the
+            # folder as a deliberate contribution rather than clutter.
+            if not (tool_dir / "index.html").exists() and not (tool_dir / "meta.json").exists():
                 continue
 
             found_any = True
@@ -326,9 +329,35 @@ def find_tools():
             if status not in STATUS_LABELS:
                 status = "wip"
 
+            has_html = (tool_dir / "index.html").exists()
+
+            # "web" tools open in the browser. "script" tools are run
+            # locally and have no live URL. Declared kind wins; otherwise
+            # the presence of index.html decides.
+            kind = str(meta.get("kind", "")).lower()
+            if kind not in ("web", "script"):
+                kind = "web" if has_html else "script"
+            if kind == "web" and not has_html:
+                warnings.append(
+                    f'{rel}/ declares kind "web" but has no index.html - treating as script'
+                )
+                kind = "script"
+
+            spec = next((f for f in ("SPEC.md", "spec.md") if (tool_dir / f).exists()), None)
+            entry_file = str(meta.get("entry") or "")
+            if not entry_file and kind == "script":
+                found = sorted(
+                    p.name for p in tool_dir.iterdir()
+                    if p.is_file() and p.suffix in (".py", ".sh", ".ps1", ".rb", ".js")
+                )
+                entry_file = found[0] if found else ""
+
             tools.append({
                 "folder": rel,
                 "author_slug": author_dir.name,
+                "kind": kind,
+                "entry": entry_file,
+                "requires": str(meta.get("requires") or ("Python 3" if kind == "script" else "")),
                 "title": str(meta.get("title") or prettify(tool_dir.name)),
                 # Folder name is the fallback author. meta.json only overrides
                 # it to provide a nicer display name.
@@ -338,6 +367,7 @@ def find_tools():
                 "tags": [str(t) for t in tags],
                 "status": status,
                 "has_readme": (tool_dir / "README.md").exists(),
+                "spec": spec,
             })
 
         if not found_any:
@@ -349,6 +379,7 @@ def find_tools():
 def render_card(t):
     e = html.escape
     status_label, status_color = STATUS_LABELS[t["status"]]
+    src = f"https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}"
 
     course = f'<span class="course">{e(t["course"])}</span>' if t["course"] else ""
     tags = "".join(f'<span class="tag">{e(tag)}</span>' for tag in t["tags"])
@@ -357,13 +388,33 @@ def render_card(t):
         if t["has_readme"] else ""
     )
 
+    if t["kind"] == "script":
+        # No live URL: a script is downloaded and run, not opened. The
+        # spec is the primary link because it is what an AI assistant
+        # needs in order to adapt the script for someone else.
+        spec = (
+            f'<a class="lnk primary" href="{e(t["folder"])}/{e(t["spec"])}">Read the spec</a>'
+            if t["spec"] else f'<a class="lnk primary" href="{src}">View files</a>'
+        )
+        title_html = f'<a href="{src}">{e(t["title"])}</a>'
+        kind_badge = ('<span class="kind">Script'
+                      + (f' · {e(t["requires"])}' if t["requires"] else "")
+                      + "</span>")
+        links = f'{spec}\n          <a class="lnk" href="{src}">Source</a>\n          {readme}'
+    else:
+        title_html = f'<a href="{e(t["folder"])}/">{e(t["title"])}</a>'
+        kind_badge = ""
+        links = (f'<a class="lnk primary" href="{e(t["folder"])}/">Open tool</a>\n'
+                 f'          <a class="lnk" href="{src}">Source</a>\n          {readme}')
+
     search_blob = e(" ".join([
-        t["title"], t["author"], t["course"], t["description"], " ".join(t["tags"])
+        t["title"], t["author"], t["course"], t["description"],
+        " ".join(t["tags"]), t["kind"], t["requires"]
     ]).lower())
 
-    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}">
+    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}">
         <div class="card-head">
-          <h3><a href="{e(t['folder'])}/">{e(t['title'])}</a></h3>
+          <h3>{title_html}</h3>
           <span class="status" style="background:{status_color}">{status_label}</span>
         </div>
         <p class="desc">{e(t['description'])}</p>
@@ -371,11 +422,9 @@ def render_card(t):
           <span class="author">{e(t['author'])}</span>
           {course}
         </div>
-        <div class="tags">{tags}</div>
+        <div class="tags">{kind_badge}{tags}</div>
         <div class="links">
-          <a class="lnk primary" href="{e(t['folder'])}/">Open tool</a>
-          <a class="lnk" href="https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}">Source</a>
-          {readme}
+          {links}
         </div>
       </article>"""
 
@@ -403,6 +452,17 @@ def render(tools):
         f'<select id="who" aria-label="Filter by author">'
         f'<option value="all">All authors</option>{opts}</select>'
         if len(seen) > 1 else ""
+    )
+
+    # Only worth showing once both kinds actually exist.
+    kinds = {t["kind"] for t in tools}
+    kind_sel = (
+        '    <div class="filters">\n'
+        '      <button class="kbtn on" data-k="all">Any type</button>\n'
+        '      <button class="kbtn" data-k="web">Web tools</button>\n'
+        '      <button class="kbtn" data-k="script">Scripts</button>\n'
+        '    </div>'
+        if len(kinds) > 1 else ""
     )
 
     return f"""<!DOCTYPE html>
@@ -440,9 +500,9 @@ def render(tools):
   #who {{ padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
           border-radius:8px; font-family:inherit; background:#fff; cursor:pointer; }}
   .filters {{ display:flex; gap:6px; }}
-  .fbtn {{ padding:10px 16px; border:1px solid var(--border); background:#fff;
+  .fbtn, .kbtn {{ padding:10px 16px; border:1px solid var(--border); background:#fff;
            border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }}
-  .fbtn.on {{ background:var(--accent); color:#fff; border-color:var(--accent); }}
+  .fbtn.on, .kbtn.on {{ background:var(--accent); color:#fff; border-color:var(--accent); }}
   .grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }}
   .card {{ border:1px solid var(--border); border-radius:10px; padding:18px;
            background:var(--panel); display:flex; flex-direction:column; }}
@@ -460,6 +520,8 @@ def render(tools):
   .tags {{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }}
   .tag {{ font-size:0.72rem; background:#e8ece9; color:#31513f;
           padding:3px 8px; border-radius:4px; }}
+  .kind {{ font-size:0.72rem; background:#3a3f44; color:#fff; font-weight:600;
+           padding:3px 8px; border-radius:4px; }}
   .links {{ display:flex; gap:8px; flex-wrap:wrap; }}
   .lnk {{ font-size:0.85rem; text-decoration:none; color:var(--accent);
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }}
@@ -491,6 +553,7 @@ def render(tools):
       <button class="fbtn" data-f="working">Working</button>
       <button class="fbtn" data-f="wip">In progress</button>
     </div>
+{kind_sel}
   </div>
 
   <div class="grid" id="grid">
@@ -516,6 +579,7 @@ def render(tools):
   var none = document.getElementById('none');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
   var filter = 'all';
+  var kind = 'all';
 
   function apply() {{
     var term = q.value.trim().toLowerCase();
@@ -525,7 +589,8 @@ def render(tools):
       var okText = !term || c.dataset.search.indexOf(term) !== -1;
       var okStat = filter === 'all' || c.dataset.status === filter;
       var okWho  = author === 'all' || c.dataset.author === author;
-      var vis = okText && okStat && okWho;
+      var okKind = kind === 'all' || c.dataset.kind === kind;
+      var vis = okText && okStat && okWho && okKind;
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     }});
@@ -539,6 +604,14 @@ def render(tools):
       document.querySelectorAll('.fbtn').forEach(function (x) {{ x.classList.remove('on'); }});
       b.classList.add('on');
       filter = b.dataset.f;
+      apply();
+    }});
+  }});
+  document.querySelectorAll('.kbtn').forEach(function (b) {{
+    b.addEventListener('click', function () {{
+      document.querySelectorAll('.kbtn').forEach(function (x) {{ x.classList.remove('on'); }});
+      b.classList.add('on');
+      kind = b.dataset.k;
       apply();
     }});
   }});

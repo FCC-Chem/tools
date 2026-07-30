@@ -1,0 +1,9 @@
+name,email,homework_earned,homework_possible,quizzes_earned,quizzes_possible,labs_earned,labs_possible,exams_earned,exams_possible
+"Rivera, Ana",ana.rivera@example.edu,178,200,88,100,142,150,255,300
+"Chen, Wei",wei.chen@example.edu,196,200,95,100,148,150,288,300
+"Okafor, Ben",ben.okafor@example.edu,120,200,54,100,98,150,168,300
+"Nguyen, Thao",thao.nguyen@example.edu,185,200,79,100,150,150,240,300
+"Delgado, Marco",marco.delgado@example.edu,92,200,41,100,75,150,141,300
+"Patel, Riya",riya.patel@example.edu,200,200,100,100,150,150,297,300
+"Brooks, Sam",sam.brooks@example.edu,155,200,72,100,120,150,0,0
+"Ali, Yusuf",yusuf.ali@example.edu,0,0,0,0,0,0,0,0

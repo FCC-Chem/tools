@@ -33,9 +33,9 @@
   #who { padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
           border-radius:8px; font-family:inherit; background:#fff; cursor:pointer; }
   .filters { display:flex; gap:6px; }
-  .fbtn { padding:10px 16px; border:1px solid var(--border); background:#fff;
+  .fbtn, .kbtn { padding:10px 16px; border:1px solid var(--border); background:#fff;
            border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }
-  .fbtn.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .fbtn.on, .kbtn.on { background:var(--accent); color:#fff; border-color:var(--accent); }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
   .card { border:1px solid var(--border); border-radius:10px; padding:18px;
            background:var(--panel); display:flex; flex-direction:column; }
@@ -53,6 +53,8 @@
   .tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
   .tag { font-size:0.72rem; background:#e8ece9; color:#31513f;
           padding:3px 8px; border-radius:4px; }
+  .kind { font-size:0.72rem; background:#3a3f44; color:#fff; font-weight:600;
+           padding:3px 8px; border-radius:4px; }
   .links { display:flex; gap:8px; flex-wrap:wrap; }
   .lnk { font-size:0.85rem; text-decoration:none; color:var(--accent);
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }
@@ -86,10 +88,11 @@
       <button class="fbtn" data-f="working">Working</button>
       <button class="fbtn" data-f="wip">In progress</button>
     </div>
+
   </div>
 
   <div class="grid" id="grid">
-      <article class="card" data-search="molar mass calculator r. gilley chem 1a type any chemical formula and get molar mass plus a per-element percent-composition breakdown. handles parentheses and hydrates. stoichiometry calculator chem-1a" data-status="working" data-author="gilley">
+      <article class="card" data-search="molar mass calculator r. gilley chem 1a type any chemical formula and get molar mass plus a per-element percent-composition breakdown. handles parentheses and hydrates. stoichiometry calculator chem-1a web " data-status="working" data-author="gilley" data-kind="web">
         <div class="card-head">
           <h3><a href="gilley/molar-mass/">Molar Mass Calculator</a></h3>
           <span class="status" style="background:#1f6f43">Working</span>
@@ -106,7 +109,7 @@
           
         </div>
       </article>
-      <article class="card" data-search="titration curve simulator r. gilley chem 1a / 1b interactive strong- and weak-acid titration curves. solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration. acid-base simulation equilibrium chem-1b" data-status="working" data-author="gilley">
+      <article class="card" data-search="titration curve simulator r. gilley chem 1a / 1b interactive strong- and weak-acid titration curves. solves the exact charge-balance equation, so the curve stays correct near the equivalence point and at low concentration. acid-base simulation equilibrium chem-1b web " data-status="working" data-author="gilley" data-kind="web">
         <div class="card-head">
           <h3><a href="gilley/titration-sim/">Titration Curve Simulator</a></h3>
           <span class="status" style="background:#1f6f43">Working</span>
@@ -128,7 +131,7 @@
   <p class="none" id="none">Nothing matches that search.</p>
 
   <footer>
-    <strong>2 tools</strong> · rebuilt automatically 2026-07-30 18:01 UTC<br>
+    <strong>2 tools</strong> · rebuilt automatically 2026-07-30 18:16 UTC<br>
     <a href="https://github.com/FCC-Chem/tools">Source on GitHub</a> ·
     <a href="https://github.com/FCC-Chem/tools/discussions">Discussions</a> ·
     <a href="https://github.com/FCC-Chem/tools/issues/new">Request a tool</a><br>
@@ -144,6 +147,7 @@
   var none = document.getElementById('none');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
   var filter = 'all';
+  var kind = 'all';
 
   function apply() {
     var term = q.value.trim().toLowerCase();
@@ -153,7 +157,8 @@
       var okText = !term || c.dataset.search.indexOf(term) !== -1;
       var okStat = filter === 'all' || c.dataset.status === filter;
       var okWho  = author === 'all' || c.dataset.author === author;
-      var vis = okText && okStat && okWho;
+      var okKind = kind === 'all' || c.dataset.kind === kind;
+      var vis = okText && okStat && okWho && okKind;
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     });
@@ -167,6 +172,14 @@
       document.querySelectorAll('.fbtn').forEach(function (x) { x.classList.remove('on'); });
       b.classList.add('on');
       filter = b.dataset.f;
+      apply();
+    });
+  });
+  document.querySelectorAll('.kbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.kbtn').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      kind = b.dataset.k;
       apply();
     });
   });
