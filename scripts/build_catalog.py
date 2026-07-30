@@ -527,6 +527,18 @@ def render(tools):
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }}
   .lnk.primary {{ background:var(--accent); color:#fff; }}
   .lnk:hover {{ filter:brightness(1.12); }}
+  .start-here {{ display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    background:#eef5f0; border:2px solid var(--accent); border-radius:12px;
+    padding:16px 20px; margin:20px 0 6px; }}
+  .start-badge {{ background:var(--accent); color:#fff; font-size:0.72rem; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase; padding:5px 11px; border-radius:20px;
+    white-space:nowrap; }}
+  .start-text {{ flex:1; min-width:220px; }}
+  .start-text strong {{ display:block; font-size:1.05rem; margin-bottom:2px; }}
+  .start-text span {{ font-size:0.88rem; color:var(--muted); }}
+  .start-cta {{ background:var(--accent); color:#fff; text-decoration:none; font-weight:600;
+    padding:10px 18px; border-radius:8px; font-size:0.92rem; white-space:nowrap; }}
+  .start-cta:hover {{ filter:brightness(1.12); }}
   .empty {{ color:var(--muted); font-style:italic; }}
   .none {{ color:var(--muted); padding:20px 0; display:none; }}
   footer {{ margin-top:52px; padding-top:16px; border-top:1px solid var(--border);
@@ -544,6 +556,15 @@ def render(tools):
       <div class="tagline">Teaching tools built by our department, with AI. Click any tool to use it.</div>
     </div>
   </header>
+
+  <div class="start-here">
+    <span class="start-badge">Start here</span>
+    <div class="start-text">
+      <strong>New? Build and host your first tool in 90 minutes.</strong>
+      <span>The step-by-step walkthrough from the workshop — browser only, no coding, works on your phone.</span>
+    </div>
+    <a class="start-cta" href="workshop/walkthrough.html">Open the walkthrough →</a>
+  </div>
 
   <div class="controls">
     <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
