@@ -28,6 +28,226 @@ STATUS_LABELS = {
     "wip": ("Work in progress", "#b26a00"),
 }
 
+# =====================================================================
+# Rotating FCC unit cell hero.
+#
+# Geometry is physically correct: atoms touch along the face diagonal,
+# so 4r = a*sqrt(2)  ->  r = a*sqrt(2)/4 = 0.35355*a.
+#
+# Corner atoms are rendered as solid eighth-spheres, face atoms as solid
+# half-spheres -- the portion actually inside the unit cell. Each solid
+# is a partial sphere shell plus flat caps, because Three.js clipping
+# planes leave hollow openings.
+#
+# Degrades safely: if WebGL is unavailable or the CDN is blocked, the
+# block hides itself and the catalog below is unaffected.
+# =====================================================================
+HERO = r"""
+  <div class="hero" id="hero">
+    <canvas id="fcc"></canvas>
+    <div class="hero-cap">
+      <strong>Face-centered cubic unit cell</strong>
+      <span>4 atoms per cell · coordination number 12 · 74% packing efficiency</span>
+      <span class="hint" id="fccHint">drag to rotate</span>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  (function () {
+    var host = document.getElementById('hero');
+    var canvas = document.getElementById('fcc');
+
+    function bail() { if (host) host.style.display = 'none'; }
+    if (!window.THREE || !canvas) { bail(); return; }
+
+    var renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    } catch (e) { bail(); return; }
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+
+    // ---- lattice constants -------------------------------------
+    var A = 2.0;                       // cube edge
+    var R = A * Math.SQRT2 / 4;        // atomic radius, atoms touch on face diagonal
+    var H = A / 2;
+
+    var RED  = new THREE.MeshStandardMaterial({ color: 0x8f1d1d, roughness: 0.34, metalness: 0.0 });
+    var GRAY = new THREE.MeshStandardMaterial({ color: 0x585c60, roughness: 0.40, metalness: 0.0 });
+
+    // Flat caps are single-sided discs seen from either side depending
+    // on the octant, so they render DoubleSide. Three.js flips the
+    // normal for back faces in the shader, so lighting stays correct.
+    function capMat(base) {
+      var m = base.clone(); m.side = THREE.DoubleSide; return m;
+    }
+    var REDC = capMat(RED), GRAYC = capMat(GRAY);
+
+    // ---- solid eighth-sphere occupying x<=0, y>=0, z>=0 ---------
+    function octant(mat, capmat) {
+      var g = new THREE.Group();
+
+      g.add(new THREE.Mesh(
+        new THREE.SphereGeometry(R, 44, 22, 0, Math.PI / 2, 0, Math.PI / 2), mat));
+
+      // cap on z = 0 plane  (quadrant x<0, y>0)
+      var cz = new THREE.Mesh(new THREE.CircleGeometry(R, 28, Math.PI / 2, Math.PI / 2), capmat);
+      g.add(cz);
+
+      // cap on y = 0 plane  (quadrant x<0, z>0)
+      var cy = new THREE.Mesh(new THREE.CircleGeometry(R, 28, Math.PI / 2, Math.PI / 2), capmat);
+      cy.rotation.x = Math.PI / 2;
+      g.add(cy);
+
+      // cap on x = 0 plane  (quadrant y>0, z>0)
+      var cx = new THREE.Mesh(new THREE.CircleGeometry(R, 28, 0, Math.PI / 2), capmat);
+      cx.rotation.y = -Math.PI / 2;
+      g.add(cx);
+
+      return g;
+    }
+
+    // ---- solid hemisphere, flat cap at y=0, solid toward +y -----
+    function hemi(mat, capmat) {
+      var g = new THREE.Group();
+      g.add(new THREE.Mesh(
+        new THREE.SphereGeometry(R, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), mat));
+      var c = new THREE.Mesh(new THREE.CircleGeometry(R, 48), capmat);
+      c.rotation.x = Math.PI / 2;
+      g.add(c);
+      return g;
+    }
+
+    var cell = new THREE.Group();
+
+    // 8 corners: [sx, sy, sz, rotY, rotX]
+    //
+    // Base octant is (-,+,+). The cube rotation group maps it to every
+    // other octant, so no mirroring -- and therefore no flipped
+    // normals -- is ever needed.
+    //
+    // The wedge at corner (sx,sy,sz) must occupy the octant pointing
+    // INTO the cell, i.e. (-sx,-sy,-sz). Getting this backwards puts
+    // all eight wedges outside the cube, which still looks plausible
+    // at a glance and is completely wrong.
+    var CORNERS = [
+      [-1,  1,  1,  Math.PI / 2,  Math.PI],   // -> (+,-,-)
+      [ 1,  1,  1,  0,            Math.PI],   // -> (-,-,-)
+      [ 1,  1, -1, -Math.PI / 2,  Math.PI],   // -> (-,-,+)
+      [-1,  1, -1,  Math.PI,      Math.PI],   // -> (+,-,+)
+      [-1, -1, -1,  Math.PI / 2,  0       ],  // -> (+,+,+)
+      [ 1, -1, -1,  0,            0       ],  // -> (-,+,+)
+      [ 1, -1,  1, -Math.PI / 2,  0       ],  // -> (-,+,-)
+      [-1, -1,  1,  Math.PI,      0       ]   // -> (+,+,-)
+    ];
+
+    CORNERS.forEach(function (c) {
+      // Wrapper carries the position and the X flip; the inner group
+      // carries the Y spin. Net transform on the geometry is
+      // rotX(c[4]) * rotY(c[3]), which is exactly the mapping derived
+      // above. An object's own rotation never moves its own position.
+      var o = octant(RED, REDC);
+      o.rotation.y = c[3];
+      var w = new THREE.Group();
+      w.add(o);
+      w.rotation.x = c[4];
+      w.position.set(c[0] * H, c[1] * H, c[2] * H);
+      cell.add(w);
+    });
+
+    // 6 face centers. Keep the half inside the cell, so the solid
+    // points along -n and the flat cap sits flush with the face.
+    var UP = new THREE.Vector3(0, 1, 0);
+    [[1,0,0], [-1,0,0], [0,1,0], [0,-1,0], [0,0,1], [0,0,-1]].forEach(function (n) {
+      var v = new THREE.Vector3(n[0], n[1], n[2]);
+      var m = hemi(GRAY, GRAYC);
+      m.quaternion.setFromUnitVectors(UP, v.clone().negate());
+      m.position.copy(v).multiplyScalar(H);
+      cell.add(m);
+    });
+
+    scene.add(cell);
+
+    // ---- lighting ----------------------------------------------
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    var key = new THREE.DirectionalLight(0xffffff, 0.85);
+    key.position.set(4, 6, 7);
+    scene.add(key);
+    var fill = new THREE.DirectionalLight(0xffffff, 0.35);
+    fill.position.set(-6, -2, -4);
+    scene.add(fill);
+    var rim = new THREE.DirectionalLight(0xffffff, 0.25);
+    rim.position.set(-2, 5, -6);
+    scene.add(rim);
+
+    // ---- sizing -------------------------------------------------
+    function resize() {
+      var w = host.clientWidth || 600;
+      var h = host.clientHeight || 320;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      camera.position.set(0, 0, w < 520 ? 13.5 : 11.5);
+      camera.lookAt(0, 0, 0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    cell.rotation.x = 0.42;
+    cell.rotation.y = 0.6;
+
+    // ---- interaction --------------------------------------------
+    var drag = false, px = 0, py = 0, vy = 0.0045, vx = 0, idle = 0;
+    var hint = document.getElementById('fccHint');
+
+    function down(x, y) { drag = true; px = x; py = y; idle = 0;
+      if (hint) hint.style.opacity = '0'; }
+    function move(x, y) {
+      if (!drag) return;
+      cell.rotation.y += (x - px) * 0.008;
+      cell.rotation.x += (y - py) * 0.008;
+      px = x; py = y; vx = 0; vy = 0;
+    }
+    function up() { drag = false; idle = 0; }
+
+    canvas.addEventListener('mousedown', function (e) { down(e.clientX, e.clientY); });
+    window.addEventListener('mousemove', function (e) { move(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', up);
+    canvas.addEventListener('touchstart', function (e) {
+      down(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    canvas.addEventListener('touchmove', function (e) {
+      move(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    canvas.addEventListener('touchend', up);
+
+    // ---- loop ----------------------------------------------------
+    var reduce = window.matchMedia &&
+                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var visible = true;
+    document.addEventListener('visibilitychange', function () {
+      visible = !document.hidden;
+    });
+
+    function tick() {
+      requestAnimationFrame(tick);
+      if (!visible) return;
+      if (!drag && !reduce) {
+        idle++;
+        if (idle > 90) cell.rotation.y += vy;   // resume spin after a pause
+      }
+      renderer.render(scene, camera);
+    }
+    tick();
+  })();
+  </script>
+"""
+
 
 def find_tools():
     tools = []
@@ -168,6 +388,16 @@ def render(tools):
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }}
   .lnk.primary {{ background:var(--accent); color:#fff; }}
   .lnk:hover {{ filter:brightness(1.12); }}
+  .hero {{ position:relative; height:340px; margin:6px 0 4px; }}
+  .hero canvas {{ display:block; width:100%; height:100%; cursor:grab; }}
+  .hero canvas:active {{ cursor:grabbing; }}
+  .hero-cap {{ position:absolute; left:0; bottom:2px; pointer-events:none;
+               display:flex; flex-direction:column; gap:2px; }}
+  .hero-cap strong {{ font-size:0.92rem; }}
+  .hero-cap span {{ font-size:0.79rem; color:var(--muted); }}
+  .hero-cap .hint {{ font-size:0.72rem; color:#a4a4a2; letter-spacing:0.04em;
+                     text-transform:uppercase; transition:opacity .4s; }}
+  @media (max-width:620px) {{ .hero {{ height:260px; }} }}
   .empty {{ color:var(--muted); font-style:italic; }}
   .none {{ color:var(--muted); padding:20px 0; display:none; }}
   footer {{ margin-top:52px; padding-top:16px; border-top:1px solid var(--border);
@@ -182,6 +412,8 @@ def render(tools):
     <h1>FCC Chemistry — AI Tool Catalog</h1>
     <div class="tagline">Teaching tools built by our department, with AI. Click any tool to use it.</div>
   </header>
+
+{HERO}
 
   <div class="controls">
     <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
