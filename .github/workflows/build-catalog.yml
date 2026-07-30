@@ -1,4 +1,13 @@
-name: Rebuild tool catalog
+name: Build and deploy catalog
+
+# Builds index.html and publishes the site as a Pages artifact.
+#
+# The catalog is NOT committed back to the repository. An earlier version
+# of this workflow did that, which meant every contributor's next push
+# conflicted on a machine-generated file. Publishing an artifact removes
+# the bot commit entirely, so nobody ever has to resolve that conflict.
+#
+# Requires: Settings -> Pages -> Source = "GitHub Actions".
 
 on:
   push:
@@ -6,10 +15,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
+# Never cancel a running deploy; queue behind it instead.
 concurrency:
-  group: build-catalog
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -22,17 +34,28 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Rebuild index.html
+      - name: Build catalog
         run: python3 scripts/build_catalog.py
 
-      - name: Commit if changed
+      - name: Fail if the catalog is empty or malformed
         run: |
-          git config user.name  "catalog-bot"
-          git config user.email "catalog-bot@users.noreply.github.com"
-          if [[ -n "$(git status --porcelain index.html)" ]]; then
-            git add index.html
-            git commit -m "Rebuild catalog [skip ci]"
-            git push
-          else
-            echo "Catalog already up to date."
-          fi
+          test -s index.html || { echo "::error::index.html was not generated"; exit 1; }
+          grep -q "</html>" index.html || { echo "::error::index.html is truncated"; exit 1; }
+          echo "index.html: $(wc -c < index.html) bytes"
+
+      - uses: actions/configure-pages@v5
+
+      - name: Package the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -138,7 +138,6 @@ derived from the folder names. The build never fails because of one bad file.
 
 ```
 tools/
-├── index.html              ← auto-generated catalog, DO NOT EDIT
 ├── _template/              ← copy this to start a web tool
 ├── _template-script/       ← copy this to start a script tool
 ├── gilley/                 ← one folder per instructor
@@ -153,7 +152,10 @@ tools/
 └── .github/workflows/      ← the Action that runs the build
 ```
 
-`index.html` at the root is machine-generated on every push. Edits to it are overwritten.
+There is no `index.html` at the repository root, and that's deliberate.
+The catalog is *build output*: the Action generates it and publishes it
+straight to GitHub Pages. Nothing commits it back, so nobody ever has to
+resolve a merge conflict on a machine-generated file.
 
 ---
 
@@ -171,3 +173,6 @@ Optional. You never need this to contribute.
 ```bash
 python3 scripts/build_catalog.py
 ```
+
+Writes `index.html` at the root so you can preview the catalog in a
+browser. It's gitignored — you cannot accidentally commit it.
