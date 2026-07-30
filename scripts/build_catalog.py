@@ -42,18 +42,15 @@ STATUS_LABELS = {
 # Degrades safely: if WebGL is unavailable or the CDN is blocked, the
 # block hides itself and the catalog below is unaffected.
 # =====================================================================
-HERO = r"""
-  <div class="hero" id="hero">
-    <canvas id="fcc"></canvas>
-    <div class="hero-cap">
-      <strong>Face-centered cubic unit cell</strong>
-      <span>4 atoms per cell · coordination number 12 · 74% packing efficiency</span>
-      <span class="hint" id="fccHint">drag to rotate</span>
-    </div>
-  </div>
+HERO = r"""    <div class="mark" id="hero">
+      <canvas id="fcc" role="img" aria-label="Face-centered cubic unit cell"></canvas>
+    </div>"""
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
+# Loaded at the end of <body> so the Three.js download never blocks
+# rendering of the catalog itself.
+HERO_SCRIPT = r"""
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
   (function () {
     var host = document.getElementById('hero');
     var canvas = document.getElementById('fcc');
@@ -70,7 +67,9 @@ HERO = r"""
     renderer.outputEncoding = THREE.sRGBEncoding;
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    // Narrow FOV at a longer distance: less perspective distortion, so
+    // the cell reads as a compact symbol rather than a wide-angle shot.
+    var camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
 
     // ---- lattice constants -------------------------------------
     var A = 2.0;                       // cube edge
@@ -186,13 +185,16 @@ HERO = r"""
     scene.add(rim);
 
     // ---- sizing -------------------------------------------------
+    // The cell's bounding radius is sqrt(3)*a/2. At 26 deg vertical
+    // FOV the half-height at distance d is d*tan(13 deg) = 0.2309d,
+    // so d >= 1.732/0.2309 = 7.5 to fit. 8.6 leaves a margin at every
+    // rotation angle.
     function resize() {
-      var w = host.clientWidth || 600;
-      var h = host.clientHeight || 320;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
+      var s = host.clientWidth || 104;
+      renderer.setSize(s, s, false);
+      camera.aspect = 1;
       camera.updateProjectionMatrix();
-      camera.position.set(0, 0, w < 520 ? 13.5 : 11.5);
+      camera.position.set(0, 0, 8.6);
       camera.lookAt(0, 0, 0);
     }
     window.addEventListener('resize', resize);
@@ -202,18 +204,17 @@ HERO = r"""
     cell.rotation.y = 0.6;
 
     // ---- interaction --------------------------------------------
-    var drag = false, px = 0, py = 0, vy = 0.0045, vx = 0, idle = 0;
-    var hint = document.getElementById('fccHint');
+    var drag = false, px = 0, py = 0;
+    var SPIN = 0.0055;   // radians per frame, ~19 s per revolution
 
-    function down(x, y) { drag = true; px = x; py = y; idle = 0;
-      if (hint) hint.style.opacity = '0'; }
+    function down(x, y) { drag = true; px = x; py = y; }
     function move(x, y) {
       if (!drag) return;
-      cell.rotation.y += (x - px) * 0.008;
-      cell.rotation.x += (y - py) * 0.008;
-      px = x; py = y; vx = 0; vy = 0;
+      cell.rotation.y += (x - px) * 0.01;
+      cell.rotation.x += (y - py) * 0.01;
+      px = x; py = y;
     }
-    function up() { drag = false; idle = 0; }
+    function up() { drag = false; }
 
     canvas.addEventListener('mousedown', function (e) { down(e.clientX, e.clientY); });
     window.addEventListener('mousemove', function (e) { move(e.clientX, e.clientY); });
@@ -236,16 +237,13 @@ HERO = r"""
 
     function tick() {
       requestAnimationFrame(tick);
-      if (!visible) return;
-      if (!drag && !reduce) {
-        idle++;
-        if (idle > 90) cell.rotation.y += vy;   // resume spin after a pause
-      }
+      if (!visible) return;                       // no work in a hidden tab
+      if (!drag && !reduce) cell.rotation.y += SPIN;
       renderer.render(scene, camera);
     }
     tick();
   })();
-  </script>
+</script>
 """
 
 
@@ -356,9 +354,20 @@ def render(tools):
   body {{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
          background:var(--bg); color:var(--fg); line-height:1.5; }}
   .wrap {{ max-width:1000px; margin:0 auto; padding:36px 20px 72px; }}
-  header {{ border-bottom:2px solid var(--accent); padding-bottom:16px; margin-bottom:12px; }}
+  header {{ border-bottom:2px solid var(--accent); padding-bottom:16px; margin-bottom:12px;
+            display:flex; align-items:center; gap:16px; }}
+  .mark {{ width:104px; height:104px; flex:0 0 104px; }}
+  .mark canvas {{ display:block; width:100%; height:100%; cursor:grab; }}
+  .mark canvas:active {{ cursor:grabbing; }}
+  .head-text {{ min-width:0; }}
   h1 {{ margin:0 0 6px; font-size:1.9rem; }}
   .tagline {{ color:var(--muted); }}
+  @media (max-width:620px) {{
+    header {{ gap:12px; }}
+    .mark {{ width:72px; height:72px; flex:0 0 72px; }}
+    h1 {{ font-size:1.4rem; }}
+    .tagline {{ font-size:0.85rem; }}
+  }}
   .controls {{ display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }}
   #q {{ flex:1; min-width:220px; padding:11px 14px; font-size:1rem;
         border:1px solid var(--border); border-radius:8px; font-family:inherit; }}
@@ -388,16 +397,6 @@ def render(tools):
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }}
   .lnk.primary {{ background:var(--accent); color:#fff; }}
   .lnk:hover {{ filter:brightness(1.12); }}
-  .hero {{ position:relative; height:340px; margin:6px 0 4px; }}
-  .hero canvas {{ display:block; width:100%; height:100%; cursor:grab; }}
-  .hero canvas:active {{ cursor:grabbing; }}
-  .hero-cap {{ position:absolute; left:0; bottom:2px; pointer-events:none;
-               display:flex; flex-direction:column; gap:2px; }}
-  .hero-cap strong {{ font-size:0.92rem; }}
-  .hero-cap span {{ font-size:0.79rem; color:var(--muted); }}
-  .hero-cap .hint {{ font-size:0.72rem; color:#a4a4a2; letter-spacing:0.04em;
-                     text-transform:uppercase; transition:opacity .4s; }}
-  @media (max-width:620px) {{ .hero {{ height:260px; }} }}
   .empty {{ color:var(--muted); font-style:italic; }}
   .none {{ color:var(--muted); padding:20px 0; display:none; }}
   footer {{ margin-top:52px; padding-top:16px; border-top:1px solid var(--border);
@@ -409,11 +408,12 @@ def render(tools):
 <div class="wrap">
 
   <header>
-    <h1>FCC Chemistry — AI Tool Catalog</h1>
-    <div class="tagline">Teaching tools built by our department, with AI. Click any tool to use it.</div>
-  </header>
-
 {HERO}
+    <div class="head-text">
+      <h1>FCC Chemistry — AI Tool Catalog</h1>
+      <div class="tagline">Teaching tools built by our department, with AI. Click any tool to use it.</div>
+    </div>
+  </header>
 
   <div class="controls">
     <input id="q" type="search" placeholder="Search tools, authors, courses…" autocomplete="off">
@@ -471,6 +471,7 @@ def render(tools):
   }});
 }})();
 </script>
+{HERO_SCRIPT}
 </body>
 </html>
 """
