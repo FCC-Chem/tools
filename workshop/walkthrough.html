@@ -24,8 +24,8 @@
   .bar-label{font-size:.85rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums;}
   main{max-width:760px; margin:0 auto; padding:24px 16px;}
 
-  .you-box{background:var(--card); border:1px solid var(--line); border-radius:12px;
-    padding:18px; margin-bottom:22px;}
+  .you-box{background:var(--accent-soft); border:1px solid var(--accent); border-radius:12px;
+    padding:18px; margin-top:14px;}
   .you-box h2{font-size:1.02rem; margin-bottom:4px;}
   .you-box p{font-size:.88rem; color:var(--muted); margin-bottom:12px;}
   .you-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
@@ -80,6 +80,10 @@
   details.trouble{margin-top:8px; font-size:.88rem;}
   details.trouble summary{padding:6px 0; color:var(--gold); font-weight:600; font-size:.86rem;}
   details.trouble .fix{padding:6px 0 4px 12px; border-left:3px solid var(--gold); margin-left:4px; color:var(--ink);}
+  details.how{margin-top:8px; font-size:.88rem;}
+  details.how summary{padding:6px 0; color:var(--accent); font-weight:600; font-size:.86rem;}
+  details.how .clicks{padding:6px 0 4px 12px; border-left:3px solid var(--accent); margin-left:4px; color:var(--ink);}
+  details.how .clicks li{margin-bottom:5px; margin-left:16px;}
 
   .reset-row{text-align:center; margin-top:26px;}
   .reset-row button{background:none; border:1px solid var(--line); color:var(--muted);
@@ -99,7 +103,8 @@
 
 <header>
   <h1>Build &amp; Host an AI Teaching Tool</h1>
-  <p>From zero to a live tool in your Canvas course — no coding, no installs, browser only. FCC Chemistry.</p>
+  <p>From zero to a live tool in your Canvas course — no coding, no installs, browser only. FCC Chemistry.<br>
+  <em>Missed the workshop? This page works solo — open the green "Show me exactly where to click" lines under any step.</em></p>
 </header>
 
 <div class="progress-wrap">
@@ -112,21 +117,6 @@
 <main>
 
 <div class="celebrate" id="celebrate">🎉 All 18 steps done — your tool is live, embedded, and on the department catalog.</div>
-
-<div class="you-box">
-  <h2>Make this page yours</h2>
-  <p>Type these two things once and every command and URL below rewrites itself for you.</p>
-  <div class="you-grid">
-    <div>
-      <label for="ghUser">Your GitHub username</label>
-      <input id="ghUser" placeholder="e.g. prof-smith" autocomplete="off" spellcheck="false">
-    </div>
-    <div>
-      <label for="toolName">Your tool's name (lowercase, hyphens)</label>
-      <input id="toolName" placeholder="e.g. molar-mass" autocomplete="off" spellcheck="false">
-    </div>
-  </div>
-</div>
 
 <div class="ferpa">
   <h2>⚠️ The three rules — before anything else</h2>
@@ -141,9 +131,36 @@
 <details class="phase" open id="phase0">
   <summary><div class="ph-num">0</div><div class="ph-title"><h2>One-time setup</h2><span>~15 minutes · do this before the workshop</span></div><div class="chev">▶</div></summary>
   <div class="ph-body">
-    <div class="step"><input type="checkbox" data-step="s1"><div class="step-text"><b>Create a GitHub account</b> at <b>github.com</b> with your school email — then <b>click the verification link</b> in your inbox.<span class="sub">Unverified accounts can't create projects, and it fails silently. This is the #1 setup trap.</span></div></div>
-    <div class="step"><input type="checkbox" data-step="s2"><div class="step-text"><b>Confirm your AI access.</b> Go to <b>copilot.cloud.microsoft</b> (or open Copilot in Teams or Edge) and sign in with your district Microsoft&nbsp;365 account. Everyone at FCC already has this — no signup.<span class="sub">Signed in with your work account, Copilot has enterprise data protection — your chats aren't used to train models. The three rules above still apply in full. Claude or ChatGPT work fine too if you prefer.</span></div></div>
-    <div class="step"><input type="checkbox" data-step="s3"><div class="step-text"><b>Accept the FCC-Chem invite</b> when the email arrives (needed only for Phase 4 — the department catalog). It expires, so click it when you see it.</div></div>
+    <div class="step"><input type="checkbox" data-step="s1"><div class="step-text"><b>Create a GitHub account</b> at <b>github.com</b> with your school email — then <b>click the verification link</b> in your inbox.<span class="sub">Unverified accounts can't create projects, and it fails silently. This is the #1 setup trap.</span>
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>Go to <b>github.com</b> → <b>Sign up</b> (top right).</li>
+        <li>Email: your <b>school email</b>. Password: anything strong. Username: <b>choose carefully — it becomes part of every tool's web address</b> (e.g. <i>prof-lastname</i>). Lowercase, professional, hard to change later.</li>
+        <li>Pick the <b>Free</b> plan. Skip any personalization questions.</li>
+        <li>Open your school inbox → find GitHub's email → <b>click the verify link</b>. Done when github.com shows no yellow "verify your email" banner.</li>
+      </ol></div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="s2"><div class="step-text"><b>Confirm your AI access.</b> Go to <b>copilot.cloud.microsoft</b> (or open Copilot in Teams or Edge) and sign in with your district Microsoft&nbsp;365 account. Everyone at FCC already has this — no signup.<span class="sub">Signed in with your work account, Copilot has enterprise data protection — your chats aren't used to train models. The three rules above still apply in full. Claude or ChatGPT work fine too if you prefer.</span>
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>Browser → <b>copilot.cloud.microsoft</b> → <b>Sign in</b> → use your <b>district email and password</b> (the same login as Outlook/Canvas SSO).</li>
+        <li>Confirm you're in the protected version: look for the green <b>shield / "Protected"</b> badge near the top. That's the enterprise version — your prompts stay private.</li>
+        <li>No badge, or it asks you to buy something? You're in consumer Copilot — sign out and sign back in choosing <b>"Work or school account."</b></li>
+      </ol></div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="s3"><div class="step-text"><b>Accept the FCC-Chem invite</b> when the email arrives (needed only for Phase 4 — the department catalog). It expires, so click it when you see it.<span class="sub">Never got one? Email Rob Gilley or post in the repo's Discussions (github.com/FCC-Chem/tools/discussions) with your GitHub username — an invite takes 30 seconds to send.</span></div></div>
+    <div class="you-box">
+      <h2>Last setup step — personalize the rest of this page</h2>
+      <p>Enter these two things and every URL, command, and code snippet below rewrites itself for you.</p>
+      <div class="you-grid">
+        <div>
+          <label for="ghUser">Your GitHub username</label>
+          <input id="ghUser" placeholder="e.g. prof-smith" autocomplete="off" spellcheck="false">
+        </div>
+        <div>
+          <label for="toolName">Your tool's name (lowercase, hyphens)</label>
+          <input id="toolName" placeholder="e.g. molar-mass" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
   </div>
 </details>
 
@@ -157,6 +174,16 @@
     <div class="step"><input type="checkbox" data-step="s6"><div class="step-text"><b>Iterate by describing, not coding.</b> "The buttons are too small." "It calculated X wrong — the right answer is Y."<span class="sub">If it breaks, paste the error message or a screenshot back into Copilot. Don't debug by hand — the AI does the code, you do the describing. That's the whole skill.</span></div></div>
     <div class="step"><input type="checkbox" data-step="s7"><div class="step-text"><b>Test it in your browser.</b> Copilot won't run the page for you: copy the full code → paste into TextEdit (Mac: Format → Make Plain Text first) or Notepad → save as <b>index.html</b> → double-click it. Repeat after each change.
       <div class="tip"><b>Ask for the full file every time.</b> If Copilot gives you a fragment, say: "Show me the complete updated index.html, whole file."</div>
+      <details class="how"><summary>Show me exactly how to save it (Mac / Windows)</summary><div class="clicks">
+        <b>Copy first:</b> hover over Copilot's code block → click its <b>Copy</b> button (don't drag-select; you'll miss lines).<br><br>
+        <b>Mac (TextEdit):</b><ol>
+        <li>Open TextEdit → new document → <b>Format → Make Plain Text</b> (⇧⌘T) <b>before pasting</b>. This matters: rich-text mode silently converts quotes to curly ones and breaks the code.</li>
+        <li>Paste → <b>File → Save</b> → name it <b>index.html</b> → <b>uncheck</b> "If no extension is provided, use .txt" → Save → choose <b>Use .html</b> if asked.</li></ol>
+        <b>Windows (Notepad):</b><ol>
+        <li>Open Notepad → paste → <b>File → Save As</b>.</li>
+        <li>File name: <b>index.html</b> · Save as type: <b>All Files</b> (not .txt) · Encoding: UTF-8 → Save.</li></ol>
+        <b>Then</b> double-click the saved file — it opens in your browser. If it opens in a text editor instead, the file got saved as <i>index.html.txt</i> — redo the Save As with type "All Files".
+      </div></details>
       <details class="trouble"><summary>Stuck? Common fixes</summary><div class="fix">Tool too ambitious → shrink to one input, one output, one screen.<br>Output broken → paste the exact error back into the chat.<br>Finished early → restyle it, or build a second tool.</div></details>
     </div></div>
   </div>
@@ -166,9 +193,32 @@
 <details class="phase" id="phase2">
   <summary><div class="ph-num">2</div><div class="ph-title"><h2>Give it a home on GitHub</h2><span>~10 minutes · "free hosting for one file"</span></div><div class="chev">▶</div></summary>
   <div class="ph-body">
-    <div class="step"><input type="checkbox" data-step="s8"><div class="step-text"><b>New repository:</b> on github.com click <b>+ → New repository</b> → name it <b class="tool-name-echo">your-tool-name</b> → <b>Public</b> → Create repository.</div></div>
-    <div class="step"><input type="checkbox" data-step="s9"><div class="step-text"><b>Add your file:</b> <b>Add file → Create new file</b> → name it exactly <b>index.html</b> → paste your code → <b>Commit changes</b>.</div></div>
-    <div class="step"><input type="checkbox" data-step="s10"><div class="step-text"><b>Turn on hosting:</b> <b>Settings → Pages</b> → Source: <i>Deploy from a branch</i> → Branch: <b>main</b>, folder <b>/ (root)</b> → Save.</div></div>
+    <div class="step"><input type="checkbox" data-step="s8"><div class="step-text"><b>New repository:</b> on github.com click <b>+ → New repository</b> → name it <b class="tool-name-echo">your-tool-name</b> → <b>Public</b> → Create repository.
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>Top-right of any github.com page: the <b>+</b> icon → <b>New repository</b>.</li>
+        <li><b>Repository name:</b> your tool's name — lowercase, hyphens instead of spaces.</li>
+        <li>Leave Description blank (or one sentence). Select <b>Public</b> — Pages hosting needs it.</li>
+        <li>Check <b>"Add a README file"</b> — it gives the repo a normal front page so the next step's menus exist.</li>
+        <li>Green <b>Create repository</b> button at the bottom.</li>
+      </ol></div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="s9"><div class="step-text"><b>Add your file:</b> <b>Add file → Create new file</b> → name it exactly <b>index.html</b> → paste your code → <b>Commit changes</b>.
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>On your repo's page: the <b>Add file</b> button (next to the green <b>&lt;&gt; Code</b> button) → <b>Create new file</b>.</li>
+        <li>In "Name your file…" type exactly: <b>index.html</b> (lowercase, nothing else).</li>
+        <li>Click into the big empty box → paste your code.</li>
+        <li>Green <b>Commit changes…</b> button (top right) → a box pops up → click <b>Commit changes</b> again. Defaults are fine — "commit" just means "save."</li>
+      </ol></div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="s10"><div class="step-text"><b>Turn on hosting:</b> <b>Settings → Pages</b> → Source: <i>Deploy from a branch</i> → Branch: <b>main</b>, folder <b>/ (root)</b> → Save.
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>On your repo's page: <b>Settings</b> tab (far right in the row that starts with Code — the gear icon). Don't see it? You're not signed in, or you're on someone else's repo.</li>
+        <li>Left sidebar → under "Code and automation" → <b>Pages</b>.</li>
+        <li>Under <b>Build and deployment</b> → Source: <b>Deploy from a branch</b>.</li>
+        <li>Branch: pick <b>main</b> · folder <b>/ (root)</b> → <b>Save</b>.</li>
+        <li>Wait ~1 minute → <b>refresh this Settings page</b> → a box appears: "Your site is live at …" with a <b>Visit site</b> button. That's your URL.</li>
+      </ol></div></details>
+    </div></div>
     <div class="step"><input type="checkbox" data-step="s11"><div class="step-text"><b>Wait ~1 minute, then open your live URL:</b><br><span class="live-url" id="liveUrl">https://YOUR-USERNAME.github.io/YOUR-TOOL/</span>
       <details class="trouble"><summary>404 or blank page?</summary><div class="fix">Settings → Pages → confirm branch is <b>main</b> and folder <b>/ (root)</b>. Then wait the <i>full</i> minute — it's not instant. Still down? Confirm the file is named exactly <b>index.html</b>.</div></details>
     </div></div>
@@ -181,6 +231,12 @@
   <summary><div class="ph-num">3</div><div class="ph-title"><h2>Embed it in Canvas</h2><span>~5 minutes</span></div><div class="chev">▶</div></summary>
   <div class="ph-body">
     <div class="step"><input type="checkbox" data-step="s13"><div class="step-text"><b>Canvas page → Edit → <code>&lt;/&gt;</code> (HTML editor)</b> → paste:
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>In your Canvas course: <b>Pages</b> → open (or <b>+ Page</b> to create) → <b>Edit</b>.</li>
+        <li>Look at the <b>bottom-right corner of the editor box</b> for the tiny <b>&lt;/&gt;</b> icon → click it. The editor flips to raw HTML view (plain text).</li>
+        <li>Paste the iframe line below (use its Copy button — on the laptop where Canvas is open).</li>
+        <li>Click <b>&lt;/&gt;</b> again to flip back and preview → <b>Save</b> (or Save &amp; Publish).</li>
+      </ol></div></details>
       <div class="snippet" id="iframeSnippet">&lt;iframe src="https://YOUR-USERNAME.github.io/YOUR-TOOL/" width="100%" height="600"&gt;&lt;/iframe&gt;<button class="copy-btn" data-copy="iframeSnippet">Copy</button></div></div></div>
     <div class="step"><input type="checkbox" data-step="s14"><div class="step-text"><b>Save the page and check it renders.</b>
       <details class="trouble"><summary>Iframe shows blank?</summary><div class="fix">Open your live URL by itself first — if the standalone page is broken, the iframe will be too. Fix the tool, then re-check the Canvas page.</div></details>
@@ -193,7 +249,14 @@
   <summary><div class="ph-num">4</div><div class="ph-title"><h2>Submit to the department catalog</h2><span>later, when a tool earns it · your account is the workshop, the dept repo is the trophy case</span></div><div class="chev">▶</div></summary>
   <div class="ph-body">
     <div class="step"><input type="checkbox" data-step="s15"><div class="step-text"><b>Check the four hard rules</b> one last time: no student data · no credentials · no answer keys · nothing copied from a publisher. <span class="sub">Public repos are permanently mirrored — deleting later does not undo it.</span></div></div>
-    <div class="step"><input type="checkbox" data-step="s16"><div class="step-text"><b>Add your tool:</b> in <b>github.com/FCC-Chem/tools</b> → <b>Add file → Create new file</b> → type <b><span class="path-echo">yourlastname/your-tool/</span>index.html</b> (each <code>/</code> creates a folder) → paste your code → Commit.</div></div>
+    <div class="step"><input type="checkbox" data-step="s16"><div class="step-text"><b>Add your tool:</b> in <b>github.com/FCC-Chem/tools</b> → <b>Add file → Create new file</b> → type <b><span class="path-echo">yourlastname/your-tool/</span>index.html</b> (each <code>/</code> creates a folder) → paste your code → Commit.
+      <details class="how"><summary>Show me exactly where to click</summary><div class="clicks"><ol>
+        <li>Go to <b>github.com/FCC-Chem/tools</b> (signed in, invite accepted — see Phase 0).</li>
+        <li><b>Add file → Create new file</b>. In the name box, type your last name, then <b>/</b> — watch it turn into a folder — then your tool name, <b>/</b> again, then <b>index.html</b>.</li>
+        <li>Paste your tool's code (same code that's on your own account — this is a copy, not a move).</li>
+        <li><b>Commit changes…</b> → <b>Commit changes</b>. No "Add file" button? Your invite isn't accepted yet — check your email.</li>
+      </ol></div></details>
+    </div></div>
     <div class="step"><input type="checkbox" data-step="s17"><div class="step-text"><b>Optional — better catalog card:</b> repeat for <b><span class="path-echo">yourlastname/your-tool/</span>meta.json</b>, copying the format from <b>_template/meta.json</b> (title, one-sentence description, course, tags).</div></div>
     <div class="step"><input type="checkbox" data-step="s18"><div class="step-text"><b>Wait ~1 minute</b> → your tool appears on <b>fcc-chem.github.io/tools/</b>, credited to you automatically. Done — you've shipped a department teaching tool.</div></div>
   </div>
@@ -253,9 +316,56 @@
     });
   }
 
+  var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CONF_COLORS=['#0e7a5f','#b98a1c','#2f6fb3','#b3261e','#7b4fb3','#1a2332'];
+
+  // Explode from (x,y): blast outward to fill the screen, then gravity takes over.
+  function explode(x,y,n){
+    if(reduceMotion)return;
+    // farthest corner = how far pieces must fly to cover the full screen
+    var R=Math.max(
+      Math.hypot(x,y), Math.hypot(innerWidth-x,y),
+      Math.hypot(x,innerHeight-y), Math.hypot(innerWidth-x,innerHeight-y)
+    );
+    for(var i=0;i<n;i++){
+      var p=document.createElement('div');
+      var s=9+Math.random()*10;
+      p.style.cssText='position:fixed;left:'+x+'px;top:'+y+'px;width:'+s+'px;height:'+(s*0.55)+'px;background:'
+        +CONF_COLORS[i%CONF_COLORS.length]+';z-index:999;pointer-events:none;border-radius:2px;';
+      document.body.appendChild(p);
+      var ang=Math.random()*2*Math.PI;
+      var d=(0.35+0.65*Math.random())*R;               // 35–100% of the way to the far corner
+      var dx=Math.cos(ang)*d;
+      var dy=Math.sin(ang)*d*0.85-0.12*R;              // slight upward bias on the blast
+      var fallX=dx+(Math.random()*160-80);             // sideways drift while falling
+      var fallY=(innerHeight+80)-y;                    // ends below the bottom edge
+      p.animate([
+        {transform:'translate(0,0) rotate(0deg) scale(1.15)',opacity:1,
+         easing:'cubic-bezier(.05,.75,.25,1)'},        // violent decelerating blast
+        {transform:'translate('+dx+'px,'+dy+'px) rotate('+(Math.random()*720-360)+'deg) scale(1)',
+         opacity:1,offset:0.38,
+         easing:'cubic-bezier(.45,.05,.85,.5)'},       // hang, then gravity wins
+        {transform:'translate('+fallX+'px,'+fallY+'px) rotate('+(Math.random()*1800-900)+'deg) scale(.9)',
+         opacity:0.85}
+      ],{duration:1900+Math.random()*900,delay:Math.random()*120,fill:'backwards'})
+      .onfinish=function(e){e.target.effect.target.remove();};
+    }
+  }
+
   boxes.forEach(function(b){
     b.addEventListener('change',function(){
       state[b.dataset.step]=b.checked; save(); renderProgress();
+      if(b.checked){
+        var r=b.getBoundingClientRect();
+        explode(r.left+r.width/2,r.top+r.height/2,140);
+        var allDone=true;
+        boxes.forEach(function(x){if(!state[x.dataset.step])allDone=false;});
+        if(allDone){
+          setTimeout(function(){explode(innerWidth*0.2,innerHeight*0.35,120);},350);
+          setTimeout(function(){explode(innerWidth*0.8,innerHeight*0.35,120);},650);
+          setTimeout(function(){explode(innerWidth*0.5,innerHeight*0.55,160);},950);
+        }
+      }
     });
   });
 
