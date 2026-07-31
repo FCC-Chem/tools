@@ -91,6 +91,8 @@
   footer{text-align:center; color:var(--muted); font-size:.78rem; margin-top:30px; padding:0 20px;}
   .celebrate{display:none; background:var(--accent); color:#fff; border-radius:12px;
     padding:18px; text-align:center; font-size:1.02rem; font-weight:600; margin-bottom:16px;}
+  .victory{background:linear-gradient(135deg,#fdf6e3,#f3e7c8); border:2.5px solid var(--gold);
+    border-radius:14px; padding:8px 18px; margin-top:20px; box-shadow:0 3px 14px rgba(185,138,28,.18);}
   @media print{
     .progress-wrap,.copy-btn,.reset-row{display:none;}
     details.phase,details.trouble{border:none;}
@@ -116,7 +118,7 @@
 
 <main>
 
-<div class="celebrate" id="celebrate">🎉 All 18 steps done — your tool is live, embedded, and on the department catalog.</div>
+<div class="celebrate" id="celebrate">🎉 Every step done — your tool is live, embedded, and on the department catalog. Go build another one.</div>
 
 <div class="ferpa">
   <h2>⚠️ The three rules — before anything else</h2>
@@ -262,6 +264,14 @@
   </div>
 </details>
 
+<div class="victory" id="victoryBox">
+  <div class="step" style="border-bottom:none; align-items:center;">
+    <input type="checkbox" data-step="s19" style="width:26px;height:26px;">
+    <div class="step-text" style="font-size:1.08rem;"><b>🏆 THE VICTORY LAP — my tool is LIVE.</b>
+    <span class="sub">A student could open it right now. Check this box only when it's true. You'll know why.</span></div>
+  </div>
+</div>
+
 <div class="reset-row"><button id="resetBtn">Reset my progress</button></div>
 
 <footer>FCC Chemistry — AI Tool Catalog · This page is itself a single HTML file, built the same way you just built yours.</footer>
@@ -358,9 +368,19 @@
       if(b.checked){
         var r=b.getBoundingClientRect();
         explode(r.left+r.width/2,r.top+r.height/2,140);
+        if(b.dataset.step==='s19'){
+          // THE VICTORY LAP: repeated center-screen bombardment.
+          var cx=innerWidth/2, cy=innerHeight/2;
+          for(var k=0;k<7;k++)(function(k){
+            setTimeout(function(){
+              explode(cx+(Math.random()*120-60), cy+(Math.random()*120-60), 130+k*15);
+            },250+k*230);
+          })(k);
+          setTimeout(function(){explode(cx,cy,260);},2000); // the big one
+        }
         var allDone=true;
         boxes.forEach(function(x){if(!state[x.dataset.step])allDone=false;});
-        if(allDone){
+        if(allDone && b.dataset.step!=='s19'){
           setTimeout(function(){explode(innerWidth*0.2,innerHeight*0.35,120);},350);
           setTimeout(function(){explode(innerWidth*0.8,innerHeight*0.35,120);},650);
           setTimeout(function(){explode(innerWidth*0.5,innerHeight*0.55,160);},950);
