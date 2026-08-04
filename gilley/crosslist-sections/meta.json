@@ -1,0 +1,11 @@
+{
+  "kind": "script",
+  "title": "Cross-List Double Sections",
+  "author": "Rob Gilley",
+  "course": "Any",
+  "description": "Combines two Canvas shells for the same course (same lecture, different lab times) into one card via cross-listing. Interactive: lists your term's shells, asks which sections to join. Dry-run by default; blocks if student submissions exist.",
+  "requires": "Python 3",
+  "entry": "script.py",
+  "tags": ["canvas", "api", "course-setup", "cross-listing", "automation"],
+  "status": "stable"
+}
