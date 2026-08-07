@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build &amp; Host an AI Tool — FCC Chemistry Walkthrough</title>
+<title>Build an AI Tool — FCC Chemistry Walkthrough</title>
 <style>
   :root{
     --ink:#1a2332; --paper:#f7f5f0; --card:#ffffff; --accent:#0e7a5f;
     --accent-soft:#e3f2ec; --warn:#b3261e; --warn-soft:#fdecea;
-    --line:#d8d4cc; --muted:#6b7280; --gold:#b98a1c;
+    --line:#d8d4cc; --muted:#6b7280; --gold:#b98a1c; --py:#2f6fb3; --py-soft:#e6eef8;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -16,18 +16,34 @@
   header{background:var(--ink); color:#fff; padding:28px 20px 22px; text-align:center;}
   header h1{font-size:1.5rem; font-weight:700;}
   header p{color:#c9d2e0; font-size:.95rem; margin-top:6px; max-width:640px; margin-left:auto; margin-right:auto;}
+
+  .tab-bar{max-width:760px; margin:18px auto 0; padding:0 16px; display:flex; gap:10px;}
+  .tab-bar button{flex:1; padding:13px 10px; border-radius:12px; border:1.5px solid var(--line);
+    background:var(--card); color:var(--ink); font-size:.95rem; font-weight:650; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:2px;}
+  .tab-bar button small{font-weight:400; color:var(--muted); font-size:.76rem;}
+  .tab-bar button.active{border-color:var(--accent); background:var(--accent-soft); color:var(--accent);}
+  .tab-bar button.active small{color:var(--accent);}
+  body[data-path=canvas] .tab-bar button.active{border-color:var(--py); background:var(--py-soft); color:var(--py);}
+  body[data-path=canvas] .tab-bar button.active small{color:var(--py);}
+
   .progress-wrap{position:sticky; top:0; z-index:50; background:var(--paper);
-    border-bottom:1px solid var(--line); padding:10px 20px;}
+    border-bottom:1px solid var(--line); padding:10px 20px; margin-top:14px;}
   .progress-inner{max-width:760px; margin:0 auto; display:flex; align-items:center; gap:12px;}
   .bar{flex:1; height:10px; background:#e5e1d8; border-radius:5px; overflow:hidden;}
   .bar-fill{height:100%; width:0%; background:var(--accent); border-radius:5px; transition:width .3s;}
+  body[data-path=canvas] .bar-fill{background:var(--py);}
   .bar-label{font-size:.85rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums;}
   main{max-width:760px; margin:0 auto; padding:24px 16px;}
+  .path{display:none;}
+  body[data-path=html] #pathHtml{display:block;}
+  body[data-path=canvas] #pathCanvas{display:block;}
 
   .you-box{background:var(--accent-soft); border:1px solid var(--accent); border-radius:12px;
     padding:18px; margin-top:14px;}
   .you-box h2{font-size:1.02rem; margin-bottom:4px;}
   .you-box p{font-size:.88rem; color:var(--muted); margin-bottom:12px;}
+  .you-box.py{background:var(--py-soft); border-color:var(--py);}
   .you-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   @media (max-width:520px){.you-grid{grid-template-columns:1fr;}}
   .you-grid label{font-size:.8rem; font-weight:600; display:block; margin-bottom:4px;}
@@ -43,7 +59,9 @@
   summary::-webkit-details-marker{display:none;}
   .ph-num{flex-shrink:0; width:34px; height:34px; border-radius:50%; background:var(--accent-soft);
     color:var(--accent); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:.95rem;}
+  #pathCanvas .ph-num{background:var(--py-soft); color:var(--py);}
   .ph-done .ph-num{background:var(--accent); color:#fff;}
+  #pathCanvas .ph-done .ph-num{background:var(--py); color:#fff;}
   .ph-title{flex:1;}
   .ph-title h2{font-size:1.05rem;}
   .ph-title span{font-size:.8rem; color:var(--muted);}
@@ -54,6 +72,7 @@
   .step{display:flex; gap:12px; padding:13px 0; border-bottom:1px dashed var(--line); align-items:flex-start;}
   .step:last-child{border-bottom:none;}
   .step input[type=checkbox]{margin-top:4px; width:19px; height:19px; accent-color:var(--accent); flex-shrink:0; cursor:pointer;}
+  #pathCanvas .step input[type=checkbox]{accent-color:var(--py);}
   .step-text{flex:1; font-size:.94rem;}
   .step-text.done{color:var(--muted); text-decoration:line-through;}
   .step-text b{font-weight:650;}
@@ -64,6 +83,7 @@
     font-size:.82rem; margin-top:8px; white-space:pre-wrap; word-break:break-word;}
   .snippet .copy-btn{position:absolute; top:8px; right:8px; background:var(--accent); color:#fff;
     border:none; border-radius:6px; padding:5px 11px; font-size:.78rem; cursor:pointer; font-weight:600;}
+  #pathCanvas .snippet .copy-btn{background:var(--py);}
   .snippet .copy-btn:active{transform:scale(.96);}
   .live-url{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--accent); font-weight:600; word-break:break-all;}
 
@@ -72,17 +92,22 @@
   .ferpa h2{color:var(--warn); font-size:1rem; margin-bottom:8px;}
   .ferpa ol{padding-left:20px; font-size:.92rem;}
   .ferpa li{margin-bottom:6px;}
+  .ferpa p.small{font-size:.86rem; margin-top:8px;}
 
   .tip{background:var(--accent-soft); border-radius:8px; padding:10px 13px;
     font-size:.86rem; margin-top:8px;}
   .tip b{color:var(--accent);}
+  #pathCanvas .tip{background:var(--py-soft);}
+  #pathCanvas .tip b{color:var(--py);}
 
   details.trouble{margin-top:8px; font-size:.88rem;}
   details.trouble summary{padding:6px 0; color:var(--gold); font-weight:600; font-size:.86rem;}
   details.trouble .fix{padding:6px 0 4px 12px; border-left:3px solid var(--gold); margin-left:4px; color:var(--ink);}
   details.how{margin-top:8px; font-size:.88rem;}
   details.how summary{padding:6px 0; color:var(--accent); font-weight:600; font-size:.86rem;}
+  #pathCanvas details.how summary{color:var(--py);}
   details.how .clicks{padding:6px 0 4px 12px; border-left:3px solid var(--accent); margin-left:4px; color:var(--ink);}
+  #pathCanvas details.how .clicks{border-left-color:var(--py);}
   details.how .clicks li{margin-bottom:5px; margin-left:16px;}
 
   .reset-row{text-align:center; margin-top:26px;}
@@ -91,23 +116,30 @@
   footer{text-align:center; color:var(--muted); font-size:.78rem; margin-top:30px; padding:0 20px;}
   .celebrate{display:none; background:var(--accent); color:#fff; border-radius:12px;
     padding:18px; text-align:center; font-size:1.02rem; font-weight:600; margin-bottom:16px;}
+  #pathCanvas .celebrate{background:var(--py);}
   .victory{background:linear-gradient(135deg,#fdf6e3,#f3e7c8); border:2.5px solid var(--gold);
     border-radius:14px; padding:8px 18px; margin-top:20px; box-shadow:0 3px 14px rgba(185,138,28,.18);}
   @media print{
-    .progress-wrap,.copy-btn,.reset-row{display:none;}
+    .progress-wrap,.copy-btn,.reset-row,.tab-bar{display:none;}
     details.phase,details.trouble{border:none;}
     details.phase:not([open]) .ph-body{display:block;}
     body{background:#fff; padding-bottom:0;}
+    .path{display:block !important;}
   }
 </style>
 </head>
-<body>
+<body data-path="html">
 
 <header>
-  <h1>Build &amp; Host an AI Teaching Tool</h1>
-  <p>From zero to a live tool in your Canvas course — no coding, no installs, browser only. FCC Chemistry.<br>
-  <em>Missed the workshop? This page works solo — open the green "Show me exactly where to click" lines under any step.</em></p>
+  <h1>Build an AI Teaching Tool</h1>
+  <p>Two paths, pick one: a <b>web tool</b> students use in Canvas (no coding, no installs), or a <b>Canvas API tool</b> that automates your course with a script. FCC Chemistry.<br>
+  <em>Missed the workshop? This page works solo — open the "Show me exactly where to click" lines under any step.</em></p>
 </header>
+
+<div class="tab-bar" role="tablist">
+  <button id="tabHtml" role="tab" class="active">🌐 Web tool (HTML)<small>browser only · no installs · Session 1</small></button>
+  <button id="tabCanvas" role="tab">🐍 Canvas tool (API)<small>Python + a token · Session 2</small></button>
+</div>
 
 <div class="progress-wrap">
   <div class="progress-inner">
@@ -118,14 +150,17 @@
 
 <main>
 
-<div class="celebrate" id="celebrate">🎉 Every step done — your tool is live, embedded, and on the department catalog. Go build another one.</div>
+<!-- ============================ PATH A: WEB TOOL ============================ -->
+<div class="path" id="pathHtml">
+
+<div class="celebrate" id="celebrateHtml">🎉 Every step done — your tool is live, embedded, and on the department catalog. Go build another one.</div>
 
 <div class="ferpa">
   <h2>⚠️ The three rules — before anything else</h2>
   <ol>
     <li><b>No student PII into any AI tool.</b> No names, IDs, grades, or rosters — ever (CCCCO ISTI 25-300-02). Fake data only, even in demos.</li>
     <li><b>These repos are public.</b> Nothing student-related goes in them. Deleting later does not undo it.</li>
-    <li><b>API tokens are credentials.</b> Never in a chat, never in a repo. (Token handling is Session 2.)</li>
+    <li><b>API tokens are credentials.</b> Never in a chat, never in a repo. (Full token handling lives in the Canvas-tool path — read its warning box before starting that path.)</li>
   </ol>
 </div>
 
@@ -272,6 +307,184 @@
   </div>
 </div>
 
+</div><!-- /pathHtml -->
+
+<!-- ============================ PATH B: CANVAS API TOOL ============================ -->
+<div class="path" id="pathCanvas">
+
+<div class="celebrate" id="celebrateCanvas">🎉 Every step done — you changed Canvas with a script you ran yourself. The API is yours now.</div>
+
+<div class="ferpa">
+  <h2>⚠️ Read this first — you are about to handle a live credential</h2>
+  <ol>
+    <li><b>Your token never goes in a repo.</b> Even gitignored, even "just for a minute" — public repos are scraped within minutes.</li>
+    <li><b>Never hardcoded in a script.</b> It lives in a <b>.env</b> file next to the script, in a folder that is not a repo.</li>
+    <li><b>Never pasted into an AI chat.</b> The script contains no secret — paste the <i>script</i> freely, never the token.</li>
+  </ol>
+  <p class="small"><b>If a token ever touches one of those three places:</b> revoke it in Canvas immediately (Account → Settings → delete the token). Deleting the paste does <b>not</b> undo it. And the standing rule still applies: <b>no student PII into any AI tool, ever</b> — this path only ever touches your own <b>sandbox</b> course.</p>
+</div>
+
+<!-- PHASE C0 -->
+<details class="phase" open id="cphase0">
+  <summary><div class="ph-num">0</div><div class="ph-title"><h2>Before you script</h2><span>~10 minutes · Python, a folder, a sandbox</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="c1"><div class="step-text"><b>Confirm Python 3 is installed.</b> Open your terminal and run the line below — any version 3.8+ is fine.
+      <div class="snippet" id="pyCheckSnippet">python3 --version<button class="copy-btn" data-copy="pyCheckSnippet">Copy</button></div>
+      <details class="how"><summary>Show me exactly where to type this</summary><div class="clicks">
+        <b>Mac:</b> Spotlight (⌘-space) → type <b>Terminal</b> → Enter → paste the line → Enter.<br>
+        <b>Windows:</b> Start menu → type <b>cmd</b> → Enter → try <b>python --version</b> (no "3").<br><br>
+        Get a version number back? You're set. Get "command not found"? Install from <b>python.org/downloads</b> (Windows: check <b>"Add python.exe to PATH"</b> during install) — or skip installs entirely with the Colab lane in Phase 4.
+      </div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="c2"><div class="step-text"><b>Install the one library this needs:</b>
+      <div class="snippet" id="pipSnippet">python3 -m pip install requests<button class="copy-btn" data-copy="pipSnippet">Copy</button></div>
+      <span class="sub">Windows: <b>python -m pip install requests</b>. This is the only dependency — everything else is standard Python.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c3"><div class="step-text"><b>Make a home folder for your scripts</b> — e.g. <b>Documents/canvas-scripts</b>.<span class="sub">This folder will hold your token file. It must never become a repo, never sync to anything public. Plain folder, plain computer.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c4"><div class="step-text"><b>Know your sandbox and its course ID.</b> Use your <b>personal sandbox</b> if you have one (preferred). On the shared department sandbox? <b>Collision rule:</b> you will only ever touch an assignment named <b>API-TEST-yourlastname</b> — nobody edits anything without their own name on it.
+      <details class="how"><summary>Where's my course ID?</summary><div class="clicks">Open your sandbox in Canvas and read the address bar: <b>scccd.instructure.com/courses/<span style="color:var(--py)">123456</span></b> — that number is the course ID. Enter it below and the snippets on this page rewrite themselves.</div></details>
+    </div></div>
+    <div class="you-box py">
+      <h2>Personalize this path</h2>
+      <p>Enter your sandbox course ID and every snippet below rewrites itself for you.</p>
+      <div class="you-grid">
+        <div>
+          <label for="courseId">Your sandbox course ID</label>
+          <input id="courseId" placeholder="e.g. 123456" autocomplete="off" spellcheck="false" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- PHASE C1 -->
+<details class="phase" id="cphase1">
+  <summary><div class="ph-num">1</div><div class="ph-title"><h2>The token — highest-stakes 15 minutes</h2><span>generate once · store once · never anywhere else</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="c5"><div class="step-text"><b>Generate your token:</b> Canvas → <b>Account → Settings</b> → scroll to Approved Integrations → <b>+ New Access Token</b> → Purpose: <i>API scripting workshop</i> → <b>set an expiration date</b> (end of semester is plenty) → Generate.<span class="sub">The token is shown <b>once</b>. Keep the window open until the next step is done.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c6"><div class="step-text"><b>Create your .env file</b> — in your scripts folder, make a plain-text file named exactly <b>.env</b> and paste, replacing the placeholder with your real token:
+      <div class="snippet" id="envSnippet">CANVAS_TOKEN=paste-your-token-here
+CANVAS_URL=https://scccd.instructure.com
+SANDBOX_COURSE_ID=YOUR-COURSE-ID<button class="copy-btn" data-copy="envSnippet">Copy</button></div>
+      <details class="how"><summary>Show me exactly how to save a .env file</summary><div class="clicks">
+        <b>Mac (TextEdit):</b> new document → <b>Format → Make Plain Text</b> (⇧⌘T) → paste → File → Save → name it <b>env.txt</b> in your scripts folder → then in Terminal: <b>cd Documents/canvas-scripts</b> then <b>mv env.txt .env</b> (Finder hides dot-files; that's fine — the script sees it).<br><br>
+        <b>Windows (Notepad):</b> paste → Save As → File name: <b>".env"</b> <i>with the quotes</i> · Save as type: <b>All Files</b> → save into your scripts folder.
+      </div></details>
+    </div></div>
+    <div class="step"><input type="checkbox" data-step="c7"><div class="step-text"><b>Close the Canvas token window.</b> The token now exists in exactly two places: Canvas's memory and your .env. That's the whole system — check this box as your acknowledgment of the three rules at the top of this path.</div></div>
+  </div>
+</details>
+
+<!-- PHASE C2 -->
+<details class="phase" id="cphase2">
+  <summary><div class="ph-num">2</div><div class="ph-title"><h2>First contact</h2><span>~15 minutes · prove the connection before anything writes</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="c8"><div class="step-text"><b>Shared dept sandbox only:</b> in the Canvas UI, create an assignment named <b>API-TEST-yourlastname</b> (any due date, unpublished is fine). That's the only thing your script will ever touch.<span class="sub">Personal sandbox? Skip this — but make sure your sandbox has at least one assignment to practice on.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c9"><div class="step-text"><b>Save the starter script</b> as <b>canvas_tool.py</b> in your scripts folder (same folder as .env):
+      <div class="snippet" id="scriptSnippet">"""canvas_tool.py — FCC Chem starter script.
+THE THREE TOKEN RULES: never in a repo, never hardcoded,
+never in an AI chat. Leaked = revoke in Canvas immediately.
+This script reads the token from .env — it contains no secret,
+so the script itself is safe to paste into an AI chat."""
+import os, sys
+from pathlib import Path
+import requests
+
+# --- load .env from this script's folder ---
+env = Path(__file__).resolve().parent / ".env"
+if not env.exists():
+    sys.exit("No .env found next to this script — do Phase 1 first.")
+for line in env.read_text().splitlines():
+    line = line.strip()
+    if line and not line.startswith("#") and "=" in line:
+        k, v = line.split("=", 1)
+        os.environ.setdefault(k.strip(), v.strip())
+
+TOKEN = os.environ.get("CANVAS_TOKEN")
+URL = os.environ.get("CANVAS_URL", "https://scccd.instructure.com").rstrip("/")
+COURSE = os.environ.get("SANDBOX_COURSE_ID")
+if not TOKEN or "paste-your" in TOKEN or not COURSE:
+    sys.exit("Fill in CANVAS_TOKEN and SANDBOX_COURSE_ID in .env first.")
+H = {"Authorization": "Bearer " + TOKEN}
+
+# --- Section 1: connectivity proof (a read — changes nothing) ---
+r = requests.get(URL + "/api/v1/courses/" + COURSE, headers=H)
+r.raise_for_status()
+print("Connected to:", r.json()["name"])
+
+# --- Section 2: list assignments ---
+r = requests.get(URL + "/api/v1/courses/" + COURSE + "/assignments",
+                 headers=H, params={"per_page": 50})
+r.raise_for_status()
+assignments = r.json()
+if not assignments:
+    sys.exit("No assignments here yet — create one in Canvas, then rerun.")
+for i, a in enumerate(assignments):
+    print("[" + str(i) + "]", a["name"], "· due:", a.get("due_at") or "none")
+
+# --- Section 3: dry run, confirm, then change ONE due date ---
+pick = input("\nNumber of the assignment to change"
+             " (dept sandbox: ONLY the one with your name), or Enter to quit: ").strip()
+if pick == "":
+    sys.exit("Stopped after the read-only sections. Nothing was changed.")
+a = assignments[int(pick)]
+new_due = input("New due date (YYYY-MM-DD): ").strip() + "T23:59:00Z"
+print("\nDRY RUN — this is what the script is ABOUT to do:")
+print("  course:    ", COURSE)
+print("  assignment:", a["name"])
+print("  due date:  ", a.get("due_at") or "none", " ->", new_due)
+if input('Type YES to make this change for real: ').strip() != "YES":
+    sys.exit("Cancelled. Nothing was changed.")
+r = requests.put(URL + "/api/v1/courses/" + COURSE + "/assignments/" + str(a["id"]),
+                 headers=H, json={"assignment": {"due_at": new_due}})
+r.raise_for_status()
+print("Done. Refresh the assignment in Canvas and look at the due date.")<button class="copy-btn" data-copy="scriptSnippet">Copy</button></div>
+      <span class="sub">Save it the same way as the .env (plain text, correct name) — or paste it into your AI chat and say "explain this to me line by line" first. That paste is safe: no secret in the script.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c10"><div class="step-text"><b>Run it:</b>
+      <div class="snippet" id="runSnippet">cd Documents/canvas-scripts
+python3 canvas_tool.py<button class="copy-btn" data-copy="runSnippet">Copy</button></div>
+      It should print <b>Connected to: <i>your sandbox's name</i></b> and list its assignments. Press <b>Enter</b> at the prompt to stop there — that's this phase's win: connection proven with reads only.
+      <details class="trouble"><summary>401? 404? Other errors?</summary><div class="fix"><b>401 Unauthorized</b> → token pasted wrong in .env (extra space, missing character) or already expired/revoked.<br><b>404 Not Found</b> → wrong course ID — recheck the number in your sandbox's URL.<br><b>ModuleNotFoundError: requests</b> → redo the pip install (Phase 0).<br>Anything else → paste the full error into your AI chat. The error, not the token.</div></details>
+    </div></div>
+  </div>
+</details>
+
+<!-- PHASE C3 -->
+<details class="phase" id="cphase3">
+  <summary><div class="ph-num">3</div><div class="ph-title"><h2>Change something real</h2><span>~35 minutes · dry run → confirm → write</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="c11"><div class="step-text"><b>Run the script again</b> — this time pick an assignment by number (<b>dept sandbox: only API-TEST-yourlastname</b>) and enter a new due date.</div></div>
+    <div class="step"><input type="checkbox" data-step="c12"><div class="step-text"><b>Stop at the DRY RUN printout and actually read it.</b> The script shows you exactly what it's about to change <i>before</i> it changes anything, and won't proceed without YES.<span class="sub">This pattern is the entire lesson — the date change is just the excuse. <b>Demand dry-run-then-confirm from every script an AI ever writes you.</b></span></div></div>
+    <div class="step"><input type="checkbox" data-step="c13"><div class="step-text"><b>Type YES → refresh Canvas → watch the due date move.</b> You just automated Canvas: token in .env, read first, dry run, confirm, one precise write.</div></div>
+  </div>
+</details>
+
+<!-- PHASE C4 -->
+<details class="phase" id="cphase4">
+  <summary><div class="ph-num">4</div><div class="ph-title"><h2>Make it yours</h2><span>riff time · the AI modifies, you approve</span></div><div class="chev">▶</div></summary>
+  <div class="ph-body">
+    <div class="step"><input type="checkbox" data-step="c14"><div class="step-text"><b>Paste the script into your AI chat and ask for one change:</b> a different field (assignment name, points), loop over all assignments, or shift every due date by 7 days.<span class="sub">Safe to paste because the script holds no secret — that's the payoff of the .env pattern. One rule for anything the AI gives back: it must keep the dry-run-then-confirm step, or you reject it.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c15"><div class="step-text"><b>Know what else this reaches:</b> the same pattern works for announcements, pages, quizzes, modules — the whole Canvas API. Curious about safer token storage? Ask about the <b>keyring</b> pattern — it's the upgrade path. Then post what you automated in <b>github.com/FCC-Chem/tools</b> Discussions.
+      <details class="how"><summary>No Python on your machine? The Colab lane</summary><div class="clicks">
+        Google Colab runs Python in the browser — zero installs, needs a Google account. Two changes from the local flow:<br><br>
+        <b>1.</b> No .env file. The notebook asks for your token at runtime and holds it only in memory:<br>
+        <b>from getpass import getpass</b><br>
+        <b>TOKEN = getpass("Paste your Canvas token: ")</b><br><br>
+        <b>2.</b> Nothing is stored — closing the notebook forgets the token; you paste it again each session. The token still never gets typed into a chat, saved in the notebook file, or shared. Slightly slower loop, zero install — it's the escape hatch, not the main road.
+      </div></details>
+    </div></div>
+  </div>
+</details>
+
+<div class="victory" id="victoryBoxCanvas">
+  <div class="step" style="border-bottom:none; align-items:center;">
+    <input type="checkbox" data-step="cv1" style="width:26px;height:26px;">
+    <div class="step-text" style="font-size:1.08rem;"><b>🏆 THE VICTORY LAP — my script changed Canvas.</b>
+    <span class="sub">Token stored right, dry run read, YES typed, due date moved. Check this box only when it's true.</span></div>
+  </div>
+</div>
+
+</div><!-- /pathCanvas -->
+
 <div class="reset-row"><button id="resetBtn">Reset my progress</button></div>
 
 <footer>FCC Chemistry — AI Tool Catalog · This page is itself a single HTML file, built the same way you just built yours.</footer>
@@ -286,10 +499,22 @@
   var boxes=document.querySelectorAll('input[type=checkbox][data-step]');
   var ghUser=document.getElementById('ghUser');
   var toolName=document.getElementById('toolName');
+  var courseId=document.getElementById('courseId');
 
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 
   function slug(v){return (v||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-+|-+$/g,'');}
+
+  // ---- tabs ----
+  var tabHtml=document.getElementById('tabHtml'), tabCanvas=document.getElementById('tabCanvas');
+  function setPath(p){
+    document.body.setAttribute('data-path',p);
+    tabHtml.classList.toggle('active',p==='html');
+    tabCanvas.classList.toggle('active',p==='canvas');
+    state._path=p; save(); renderProgress();
+  }
+  tabHtml.addEventListener('click',function(){setPath('html');});
+  tabCanvas.addEventListener('click',function(){setPath('canvas');});
 
   function renderPersonal(){
     var u=slug(ghUser.value)||'YOUR-USERNAME';
@@ -300,29 +525,40 @@
     ifr.childNodes[0].nodeValue='<iframe src="'+url+'" width="100%" height="600"></iframe>';
     document.querySelectorAll('.tool-name-echo').forEach(function(el){el.textContent=t;});
     document.querySelectorAll('.path-echo').forEach(function(el){el.textContent=(u!=='YOUR-USERNAME'?u:'yourlastname')+'/'+t+'/';});
+    // canvas path
+    var cid=(courseId.value||'').replace(/[^0-9]/g,'')||'YOUR-COURSE-ID';
+    document.getElementById('envSnippet').childNodes[0].nodeValue=
+      'CANVAS_TOKEN=paste-your-token-here\nCANVAS_URL=https://scccd.instructure.com\nSANDBOX_COURSE_ID='+cid;
   }
 
   function renderProgress(){
+    var path=document.body.getAttribute('data-path');
+    var scope=document.getElementById(path==='canvas'?'pathCanvas':'pathHtml');
+    var pBoxes=scope.querySelectorAll('input[data-step]');
     var done=0;
     boxes.forEach(function(b){
       var on=!!state[b.dataset.step];
       b.checked=on;
       b.closest('.step').querySelector('.step-text').classList.toggle('done',on);
-      if(on)done++;
     });
-    var pct=Math.round(100*done/boxes.length);
+    pBoxes.forEach(function(b){if(state[b.dataset.step])done++;});
+    var pct=pBoxes.length?Math.round(100*done/pBoxes.length):0;
     document.getElementById('barFill').style.width=pct+'%';
-    document.getElementById('barLabel').textContent=done+' of '+boxes.length+' steps';
-    document.getElementById('celebrate').style.display=(done===boxes.length)?'block':'none';
-    // phase badges
-    [0,1,2,3,4].forEach(function(p){
-      var ph=document.getElementById('phase'+p);
+    document.getElementById('barLabel').textContent=done+' of '+pBoxes.length+' steps';
+    document.getElementById('celebrateHtml').style.display='none';
+    document.getElementById('celebrateCanvas').style.display='none';
+    if(pBoxes.length&&done===pBoxes.length){
+      document.getElementById(path==='canvas'?'celebrateCanvas':'celebrateHtml').style.display='block';
+    }
+    // phase badges (both paths)
+    document.querySelectorAll('details.phase').forEach(function(ph){
       var pb=ph.querySelectorAll('input[data-step]');
       var all=pb.length>0;
       pb.forEach(function(b){if(!state[b.dataset.step])all=false;});
       ph.querySelector('summary').classList.toggle('ph-done',all);
       var num=ph.querySelector('.ph-num');
-      num.textContent=all?'✓':String(p);
+      if(!num.dataset.n)num.dataset.n=num.textContent;
+      num.textContent=all?'✓':num.dataset.n;
     });
   }
 
@@ -368,7 +604,7 @@
       if(b.checked){
         var r=b.getBoundingClientRect();
         explode(r.left+r.width/2,r.top+r.height/2,140);
-        if(b.dataset.step==='s19'){
+        if(b.dataset.step==='s19'||b.dataset.step==='cv1'){
           // THE VICTORY LAP: repeated center-screen bombardment.
           var cx=innerWidth/2, cy=innerHeight/2;
           for(var k=0;k<7;k++)(function(k){
@@ -378,9 +614,10 @@
           })(k);
           setTimeout(function(){explode(cx,cy,260);},2000); // the big one
         }
+        var scope=document.getElementById(document.body.getAttribute('data-path')==='canvas'?'pathCanvas':'pathHtml');
         var allDone=true;
-        boxes.forEach(function(x){if(!state[x.dataset.step])allDone=false;});
-        if(allDone && b.dataset.step!=='s19'){
+        scope.querySelectorAll('input[data-step]').forEach(function(x){if(!state[x.dataset.step])allDone=false;});
+        if(allDone && b.dataset.step!=='s19' && b.dataset.step!=='cv1'){
           setTimeout(function(){explode(innerWidth*0.2,innerHeight*0.35,120);},350);
           setTimeout(function(){explode(innerWidth*0.8,innerHeight*0.35,120);},650);
           setTimeout(function(){explode(innerWidth*0.5,innerHeight*0.55,160);},950);
@@ -389,13 +626,14 @@
     });
   });
 
-  [ghUser,toolName].forEach(function(inp){
+  [ghUser,toolName,courseId].forEach(function(inp){
     inp.addEventListener('input',function(){
       state['_'+inp.id]=inp.value; save(); renderPersonal();
     });
   });
   if(state._ghUser)ghUser.value=state._ghUser;
   if(state._toolName)toolName.value=state._toolName;
+  if(state._courseId)courseId.value=state._courseId;
 
   document.querySelectorAll('.copy-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -411,12 +649,14 @@
   });
 
   document.getElementById('resetBtn').addEventListener('click',function(){
-    if(confirm('Clear all checkboxes and your saved username/tool name?')){
-      state={}; save(); ghUser.value=''; toolName.value='';
+    if(confirm('Clear all checkboxes and saved info on BOTH paths?')){
+      var p=state._path; state={_path:p}; save();
+      ghUser.value=''; toolName.value=''; courseId.value='';
       renderPersonal(); renderProgress();
     }
   });
 
+  setPath(state._path==='canvas'?'canvas':'html');
   renderPersonal(); renderProgress();
 })();
 </script>
