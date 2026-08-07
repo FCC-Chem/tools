@@ -330,16 +330,35 @@
   <div class="ph-body">
     <div class="step"><input type="checkbox" data-step="c1"><div class="step-text"><b>Confirm Python 3 is installed.</b> Open your terminal and run the line below — any version 3.8+ is fine.
       <div class="snippet" id="pyCheckSnippet">python3 --version<button class="copy-btn" data-copy="pyCheckSnippet">Copy</button></div>
-      <details class="how"><summary>Show me exactly where to type this</summary><div class="clicks">
-        <b>Mac:</b> Spotlight (⌘-space) → type <b>Terminal</b> → Enter → paste the line → Enter.<br>
-        <b>Windows:</b> Start menu → type <b>cmd</b> → Enter → try <b>python --version</b> (no "3").<br><br>
-        Get a version number back? You're set. Get "command not found"? Install from <b>python.org/downloads</b> (Windows: check <b>"Add python.exe to PATH"</b> during install) — or skip installs entirely with the Colab lane in Phase 4.
+      <details class="how"><summary>Show me exactly where to type this (Mac / Windows)</summary><div class="clicks">
+        The terminal is just a text box where you type instructions to your computer. It looks intimidating; it's a text box.<br><br>
+        <b>Mac:</b><ol>
+        <li>Hold <b>⌘ (command)</b> and tap <b>space</b> → a search bar appears → type <b>Terminal</b> → Enter.</li>
+        <li>A window opens with a blinking cursor. Click in it, paste the line above (⌘V), press <b>Enter</b>.</li>
+        <li><b>Success looks like:</b> <i>Python 3.12.4</i> (any 3.8-or-higher number). That's it.</li>
+        <li><b>"command not found"?</b> Install from <b>python.org/downloads</b> (big yellow button, then keep clicking Continue/Agree/Install) → close the Terminal window, open a fresh one, try again.</li></ol>
+        <b>Windows:</b><ol>
+        <li>Press the <b>Windows key</b> → type <b>cmd</b> → Enter. A black window opens — that's Command Prompt.</li>
+        <li>Type <b>python --version</b> (no "3" on Windows) → Enter.</li>
+        <li><b>Success looks like:</b> <i>Python 3.12.4</i>.</li>
+        <li><b>Nothing prints, or the Microsoft Store opens?</b> That's Windows' decoy Python. Install the real one from <b>python.org/downloads</b> — and on the installer's FIRST screen, tick the checkbox <b>"Add python.exe to PATH"</b> before clicking Install. Then close the black window, open a fresh one, try again.</li></ol>
+        Truly stuck? You don't need Python at all — the Colab lane in Phase 4 runs everything in the browser.
       </div></details>
     </div></div>
     <div class="step"><input type="checkbox" data-step="c2"><div class="step-text"><b>Install the one library this needs:</b>
       <div class="snippet" id="pipSnippet">python3 -m pip install requests<button class="copy-btn" data-copy="pipSnippet">Copy</button></div>
-      <span class="sub">Windows: <b>python -m pip install requests</b>. This is the only dependency — everything else is standard Python.</span></div></div>
-    <div class="step"><input type="checkbox" data-step="c3"><div class="step-text"><b>Make a home folder for your scripts</b> — e.g. <b>Documents/canvas-scripts</b>.<span class="sub">This folder will hold your token file. It must never become a repo, never sync to anything public. Plain folder, plain computer.</span></div></div>
+      <span class="sub">Windows: <b>python -m pip install requests</b>. This is the only dependency — everything else is standard Python.</span>
+      <details class="how"><summary>What this does + what success looks like</summary><div class="clicks">
+        It downloads one free helper library ("requests") that lets Python talk to websites. Type it in the same terminal window from the previous step.<br><br>
+        <b>Success looks like:</b> a few lines ending in <i>Successfully installed requests-…</i> — or <i>Requirement already satisfied</i>, which is also success (it was already there).<br>
+        A yellow <i>"notice: a new release of pip is available"</i> at the end is an advertisement, not an error — ignore it.
+      </div></details></div></div>
+    <div class="step"><input type="checkbox" data-step="c3"><div class="step-text"><b>Make a home folder for your scripts</b> — e.g. <b>Documents/canvas-scripts</b>.<span class="sub">This folder will hold your token file. It must never become a repo, never sync to anything public. Plain folder, plain computer.</span>
+      <details class="how"><summary>Show me exactly how (Mac / Windows)</summary><div class="clicks">
+        <b>Mac:</b> Finder → <b>Documents</b> (left sidebar) → File menu → <b>New Folder</b> (⇧⌘N) → name it <b>canvas-scripts</b> → Enter.<br>
+        <b>Windows:</b> File Explorer → <b>Documents</b> → right-click empty space → <b>New → Folder</b> → name it <b>canvas-scripts</b> → Enter.<br><br>
+        Lowercase with a hyphen matters: you'll type this name into the terminal later, and <i>Canvas Scripts</i> with a capital and a space is much easier to mistype there.
+      </div></details></div></div>
     <div class="step"><input type="checkbox" data-step="c4"><div class="step-text"><b>Know your sandbox and its course ID.</b> Use your <b>personal sandbox</b> if you have one (preferred). On the shared department sandbox? <b>Collision rule:</b> you will only ever touch an assignment named <b>API-TEST-yourlastname</b> — nobody edits anything without their own name on it.
       <details class="how"><summary>Where's my course ID?</summary><div class="clicks">Open your sandbox in Canvas and read the address bar: <b>scccd.instructure.com/courses/<span style="color:var(--py)">123456</span></b> — that number is the course ID. Enter it below and the snippets on this page rewrite themselves.</div></details>
     </div></div>
@@ -360,14 +379,36 @@
 <details class="phase" id="cphase1">
   <summary><div class="ph-num">1</div><div class="ph-title"><h2>The token — highest-stakes 15 minutes</h2><span>generate once · store once · never anywhere else</span></div><div class="chev">▶</div></summary>
   <div class="ph-body">
-    <div class="step"><input type="checkbox" data-step="c5"><div class="step-text"><b>Generate your token:</b> Canvas → <b>Account → Settings</b> → scroll to Approved Integrations → <b>+ New Access Token</b> → Purpose: <i>API scripting workshop</i> → <b>set an expiration date</b> (end of semester is plenty) → Generate.<span class="sub">The token is shown <b>once</b>. Keep the window open until the next step is done.</span></div></div>
+    <div class="step"><input type="checkbox" data-step="c5"><div class="step-text"><b>Generate your token:</b> Canvas → <b>Account → Settings</b> → scroll to Approved Integrations → <b>+ New Access Token</b> → Purpose: <i>API scripting workshop</i> → <b>set an expiration date</b> (end of semester is plenty) → Generate.<span class="sub">The token is shown <b>once</b>. Keep the window open until the next step is done.</span>
+      <details class="how"><summary>Show me exactly where to click in Canvas</summary><div class="clicks"><ol>
+        <li>In Canvas, far-left dark rail → <b>Account</b> (your picture or initials at the top) → <b>Settings</b>.</li>
+        <li>Scroll down — past "Ways to Contact" and the feature checkboxes — to the section headed <b>Approved Integrations</b>.</li>
+        <li>Click the <b>+ New Access Token</b> button.</li>
+        <li>A dialog opens. <b>Purpose:</b> type <i>API scripting workshop</i>. <b>Expires:</b> click the calendar icon → pick a date near the end of the semester. Don't leave it blank — a token that never expires is a token you'll forget you have.</li>
+        <li>Click <b>Generate Token</b>.</li>
+        <li>The next dialog shows your token: the long scramble of letters and numbers after <b>Token:</b>. Select <b>all</b> of it (triple-click usually grabs the whole thing) → copy (⌘C / Ctrl-C).</li>
+        <li><b>Don't close this dialog yet.</b> Canvas never shows this token again. Do the next step (paste into .env), <i>then</i> come back and close it.</li>
+        <li>Copied it wrong, or lost it? Zero harm: back in Approved Integrations, click the <b>trash icon</b> on that token and generate a fresh one. The old one dies instantly — that's also the emergency move if a token ever leaks.</li>
+      </ol></div></details></div></div>
     <div class="step"><input type="checkbox" data-step="c6"><div class="step-text"><b>Create your .env file</b> — in your scripts folder, make a plain-text file named exactly <b>.env</b> and paste, replacing the placeholder with your real token:
       <div class="snippet" id="envSnippet">CANVAS_TOKEN=paste-your-token-here
 CANVAS_URL=https://scccd.instructure.com
 SANDBOX_COURSE_ID=YOUR-COURSE-ID<button class="copy-btn" data-copy="envSnippet">Copy</button></div>
-      <details class="how"><summary>Show me exactly how to save a .env file</summary><div class="clicks">
-        <b>Mac (TextEdit):</b> new document → <b>Format → Make Plain Text</b> (⇧⌘T) → paste → File → Save → name it <b>env.txt</b> in your scripts folder → then in Terminal: <b>cd Documents/canvas-scripts</b> then <b>mv env.txt .env</b> (Finder hides dot-files; that's fine — the script sees it).<br><br>
-        <b>Windows (Notepad):</b> paste → Save As → File name: <b>".env"</b> <i>with the quotes</i> · Save as type: <b>All Files</b> → save into your scripts folder.
+      <details class="how"><summary>Show me exactly how to save a .env file (Mac / Windows)</summary><div class="clicks">
+        <b>Mac (TextEdit):</b><ol>
+        <li>Spotlight (⌘-space) → <b>TextEdit</b> → New Document.</li>
+        <li><b>Format → Make Plain Text</b> (⇧⌘T) <b>before pasting</b> — rich-text mode silently curls the quotes and breaks the file.</li>
+        <li>Copy the three lines above → paste → replace <i>paste-your-token-here</i> with your real token (⌘V from the Canvas dialog). No spaces around the <b>=</b> signs.</li>
+        <li>File → Save → name it <b>env.txt</b> → save into <b>Documents/canvas-scripts</b>.</li>
+        <li>Now the rename to .env — open Terminal, paste this one line, press Enter:</li></ol>
+        <div class="snippet" id="mvSnippet">mv ~/Documents/canvas-scripts/env.txt ~/Documents/canvas-scripts/.env<button class="copy-btn" data-copy="mvSnippet">Copy</button></div>
+        <ol start="6"><li>The file <b>vanishes from Finder — that's normal.</b> Mac hides any file starting with a dot. It's still there (press <b>⇧⌘.</b> in Finder to peek at hidden files; same keys to hide again), and the script will find it.</li></ol>
+        <b>Windows (Notepad):</b><ol>
+        <li>Start → <b>Notepad</b> → copy the three lines above → paste → replace <i>paste-your-token-here</i> with your real token. No spaces around the <b>=</b> signs.</li>
+        <li>File → <b>Save As</b> → navigate to <b>Documents\canvas-scripts</b>.</li>
+        <li>File name: type <b>".env"</b> <i>including the quotation marks</i> — the quotes stop Notepad from tacking on .txt.</li>
+        <li>Save as type: <b>All Files</b> → Save.</li>
+        <li><b>Check it worked:</b> in File Explorer the file is named <b>.env</b> with type "ENV File". Seeing <b>.env.txt</b>? Delete it and redo Save As — the quotes were missing.</li></ol>
       </div></details>
     </div></div>
     <div class="step"><input type="checkbox" data-step="c7"><div class="step-text"><b>Close the Canvas token window.</b> The token now exists in exactly two places: Canvas's memory and your .env. That's the whole system — check this box as your acknowledgment of the three rules at the top of this path.</div></div>
@@ -438,11 +479,27 @@ r = requests.put(URL + "/api/v1/courses/" + COURSE + "/assignments/" + str(a["id
                  headers=H, json={"assignment": {"due_at": new_due}})
 r.raise_for_status()
 print("Done. Refresh the assignment in Canvas and look at the due date.")<button class="copy-btn" data-copy="scriptSnippet">Copy</button></div>
-      <span class="sub">Save it the same way as the .env (plain text, correct name) — or paste it into your AI chat and say "explain this to me line by line" first. That paste is safe: no secret in the script.</span></div></div>
+      <span class="sub">Save it the same way as the .env (plain text, correct name) — or paste it into your AI chat and say "explain this to me line by line" first. That paste is safe: no secret in the script.</span>
+      <details class="how"><summary>Show me exactly how to save it (Mac / Windows)</summary><div class="clicks">
+        Click the snippet's <b>Copy</b> button first — don't drag-select; you'll miss lines.<br><br>
+        <b>Mac (TextEdit):</b> new document → <b>Format → Make Plain Text</b> (⇧⌘T) → paste → File → Save → name it <b>canvas_tool.py</b> → <b>uncheck</b> "If no extension is provided, use .txt" → save into <b>Documents/canvas-scripts</b> → if asked, keep <b>.py</b>.<br>
+        <b>Windows (Notepad):</b> paste → File → Save As → <b>Documents\canvas-scripts</b> → File name: <b>canvas_tool.py</b> → Save as type: <b>All Files</b> → Save.<br><br>
+        Underscore, not hyphen: <b>canvas_tool.py</b>. Python filenames use underscores.
+      </div></details></div></div>
     <div class="step"><input type="checkbox" data-step="c10"><div class="step-text"><b>Run it:</b>
       <div class="snippet" id="runSnippet">cd Documents/canvas-scripts
 python3 canvas_tool.py<button class="copy-btn" data-copy="runSnippet">Copy</button></div>
       It should print <b>Connected to: <i>your sandbox's name</i></b> and list its assignments. Press <b>Enter</b> at the prompt to stop there — that's this phase's win: connection proven with reads only.
+      <details class="how"><summary>Show me exactly how to run it (Mac / Windows)</summary><div class="clicks">
+        <b>cd</b> means "change directory" — you're pointing the terminal at the folder that holds your script and .env before running anything.<br><br>
+        <b>Mac:</b><ol>
+        <li>Open Terminal → paste <b>cd ~/Documents/canvas-scripts</b> → Enter. (Or type <b>cd</b> and a space, then <b>drag the folder from Finder into the Terminal window</b> — it types the path for you.)</li>
+        <li>Then: <b>python3 canvas_tool.py</b> → Enter.</li></ol>
+        <b>Windows:</b><ol>
+        <li>Open Command Prompt → type <b>cd Documents\canvas-scripts</b> → Enter.</li>
+        <li>Then: <b>python canvas_tool.py</b> → Enter (no "3" on Windows).</li></ol>
+        <b>Success looks like:</b> <i>Connected to:</i> followed by your sandbox's name, then a numbered assignment list, then a question. Press <b>Enter</b> at the question to stop — you've proven the whole connection without changing a thing.
+      </div></details>
       <details class="trouble"><summary>401? 404? Other errors?</summary><div class="fix"><b>401 Unauthorized</b> → token pasted wrong in .env (extra space, missing character) or already expired/revoked.<br><b>404 Not Found</b> → wrong course ID — recheck the number in your sandbox's URL.<br><b>ModuleNotFoundError: requests</b> → redo the pip install (Phase 0).<br>Anything else → paste the full error into your AI chat. The error, not the token.</div></details>
     </div></div>
   </div>
