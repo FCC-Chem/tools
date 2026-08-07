@@ -108,7 +108,7 @@ Entirely optional. It just makes your catalog card better.
 
 - `author` overrides your folder name — use it for a nicer display name
 - `title` overrides the tool folder name
-- `status` is `working` or `wip`. Be honest — `wip` is not a failure, it's an invitation.
+- `status` is `working` (web tools), `stable` (script tools), or `wip`. Be honest — `wip` is not a failure, it's an invitation.
 
 If `meta.json` is missing or malformed, your tool still appears with values
 derived from the folder names. The build never fails because of one bad file.

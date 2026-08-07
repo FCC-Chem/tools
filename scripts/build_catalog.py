@@ -36,6 +36,7 @@ SKIP_NAMES = {"scripts", "workshop", "node_modules"}
 
 STATUS_LABELS = {
     "working": ("Working", "#1f6f43"),
+    "stable": ("Stable", "#1f6f43"),
     "wip": ("Work in progress", "#b26a00"),
 }
 
@@ -571,7 +572,7 @@ def render(tools):
     {author_sel}
     <div class="filters">
       <button class="fbtn on" data-f="all">All</button>
-      <button class="fbtn" data-f="working">Working</button>
+      <button class="fbtn" data-f="working">Working / Stable</button>
       <button class="fbtn" data-f="wip">In progress</button>
     </div>
 {kind_sel}
@@ -608,7 +609,8 @@ def render(tools):
     var shown = 0;
     cards.forEach(function (c) {{
       var okText = !term || c.dataset.search.indexOf(term) !== -1;
-      var okStat = filter === 'all' || c.dataset.status === filter;
+      var okStat = filter === 'all' || c.dataset.status === filter ||
+        (filter === 'working' && c.dataset.status === 'stable');
       var okWho  = author === 'all' || c.dataset.author === author;
       var okKind = kind === 'all' || c.dataset.kind === kind;
       var vis = okText && okStat && okWho && okKind;
