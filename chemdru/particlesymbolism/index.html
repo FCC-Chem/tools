@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemical Symbolism & Particle Diagrams</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-2: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --bond: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: rgba(0,0,0,0.25);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .mode-toggle button {
+      border: none;
+      background: transparent;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.15s;
+    }
+
+    .mode-toggle button.active {
+      background: white;
+      color: #0f172a;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 220px 1fr 280px;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+      }
+    }
+
+    .panel {
+      background: var(--panel);
+      border-right: 1px solid var(--panel-2);
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .panel:last-child {
+      border-right: none;
+      border-left: 1px solid var(--panel-2);
+    }
+
+    .panel h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .atom-palette {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .atom-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.6rem 0.4rem;
+      background: var(--panel-2);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: grab;
+      transition: border-color 0.15s, transform 0.1s;
+      user-select: none;
+    }
+
+    .atom-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .atom-btn:active { cursor: grabbing; }
+
+    .atom-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+
+    .atom-btn small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .workspace-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #0b1220;
+      position: relative;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      background: var(--panel);
+      border-bottom: 1px solid var(--panel-2);
+      align-items: center;
+    }
+
+    .toolbar button, .side-btn {
+      background: var(--panel-2);
+      border: none;
+      color: var(--text);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+
+    .toolbar button:hover, .side-btn:hover {
+      background: #475569;
+    }
+
+    .toolbar button.danger { background: #7f1d1d; }
+    .toolbar button.danger:hover { background: #991b1b; }
+
+    .toolbar .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    #canvas {
+      flex: 1;
+      width: 100%;
+      min-height: 360px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .info-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--panel-2);
+      border-radius: 10px;
+      padding: 0.9rem;
+    }
+
+    .card h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .formula-display {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      min-height: 2rem;
+      word-break: break-word;
+    }
+
+    .classification {
+      display: inline-block;
+      margin-top: 0.4rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .classification.element { background: #0ea5e9; color: #0f172a; }
+    .classification.compound { background: #22c55e; color: #0f172a; }
+    .classification.mixture { background: #f59e0b; color: #0f172a; }
+    .classification.empty { background: #475569; color: #e2e8f0; }
+
+    .legend {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .legend strong { color: var(--text); }
+
+    .game-area { display: none; }
+    .game-area.active { display: block; }
+
+    .target-box {
+      background: linear-gradient(135deg, #1e3a5f, #312e81);
+      border: 1px solid #6366f1;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .target-box .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #a5b4fc;
+      margin-bottom: 0.35rem;
+    }
+
+    .target-formula {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #e0e7ff;
+    }
+
+    .game-feedback {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .game-feedback.correct {
+      display: block;
+      background: #14532d;
+      color: #86efac;
+      border: 1px solid #22c55e;
+    }
+
+    .game-feedback.incorrect {
+      display: block;
+      background: #7f1d1d;
+      color: #fca5a5;
+      border: 1px solid #ef4444;
+    }
+
+    .game-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .game-controls button {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .side-btn.primary {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .side-btn.primary:hover { background: #7dd3fc; }
+
+    .side-btn.success {
+      background: var(--accent-2);
+      color: #0f172a;
+    }
+
+    .side-btn.success:hover { background: #4ade80; }
+
+    .instructions {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .instructions ol {
+      margin: 0.4rem 0 0 1.1rem;
+    }
+
+    .instructions li { margin-bottom: 0.25rem; }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: var(--muted);
+    }
+
+    .score-row strong { color: var(--text); }
+
+    /* Ghost atom while dragging from palette */
+    .ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #0f172a;
+      opacity: 0.85;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Chemical Symbolism Explorer</h1>
+      <p>Connect atoms → see the formula. Elements · Compounds · Mixtures</p>
+    </div>
+    <div class="mode-toggle">
+      <button id="modeExplore" class="active">Explore</button>
+      <button id="modeGame">Game</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <!-- Left: Atom palette -->
+    <aside class="panel">
+      <h2>Atoms (drag onto canvas)</h2>
+      <div class="atom-palette" id="palette"></div>
+
+      <div style="margin-top: 1.25rem;">
+        <h2>How to use</h2>
+        <div class="instructions">
+          <ol>
+            <li>Drag atoms from the palette onto the canvas.</li>
+            <li><strong>Click</strong> an atom to select it (yellow ring).</li>
+            <li>Click a second atom to <strong>bond</strong> them (or unbond if already connected).</li>
+            <li>Drag atoms on the canvas to move them.</li>
+            <li>Double-click an atom to delete it.</li>
+          </ol>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center: Workspace -->
+    <div class="workspace-wrap">
+      <div class="toolbar">
+        <button id="btnClear" class="danger">Clear all</button>
+        <button id="btnDelete">Delete selected</button>
+        <span class="hint" id="statusHint">Drag atoms in · Click two atoms to bond/unbond</span>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Right: Symbolism + Game -->
+    <aside class="panel info-panel">
+      <div class="card">
+        <h3>Current symbolism</h3>
+        <div class="formula-display" id="formulaDisplay">—</div>
+        <span class="classification empty" id="classification">Empty</span>
+      </div>
+
+      <div class="card">
+        <h3>What this means</h3>
+        <div class="legend" id="meaning">
+          Add atoms to begin. Connected groups of different elements form <strong>compounds</strong>. Several identical molecules stay a pure substance; different formulas make a <strong>mixture</strong>.
+        </div>
+      </div>
+
+      <div class="card game-area" id="gameArea">
+        <div class="target-box">
+          <div class="label">Build this</div>
+          <div class="target-formula" id="targetFormula">H<sub>2</sub>O</div>
+        </div>
+        <div class="game-feedback" id="gameFeedback"></div>
+        <div class="game-controls">
+          <button class="side-btn success" id="btnCheck">Check answer</button>
+          <button class="side-btn" id="btnNewChallenge">New challenge</button>
+        </div>
+        <div class="score-row">
+          <span>Score: <strong id="score">0</strong></span>
+          <span>Streak: <strong id="streak">0</strong></span>
+        </div>
+      </div>
+
+      <div class="card" id="exploreTips">
+        <h3>Tips</h3>
+        <div class="legend">
+          • Same element bonded → still an <strong>element</strong> (e.g. O<sub>2</sub>)<br>
+          • Different elements bonded → <strong>compound</strong> (e.g. H<sub>2</sub>O)<br>
+          • Several identical molecules → still pure <strong>element</strong> or <strong>compound</strong><br>
+          • Different formulas present → <strong>mixture</strong><br>
+          • Formulas use atom counts for each connected molecule.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ---------- Element data ----------
+    const ELEMENTS = [
+      { symbol: "H", name: "Hydrogen", color: "#e2e8f0", radius: 14 },
+      { symbol: "C", name: "Carbon",   color: "#64748b", radius: 18 },
+      { symbol: "N", name: "Nitrogen", color: "#3b82f6", radius: 17 },
+      { symbol: "O", name: "Oxygen",   color: "#ef4444", radius: 16 },
+      { symbol: "F", name: "Fluorine", color: "#a3e635", radius: 15 },
+      { symbol: "Na",name: "Sodium",   color: "#c084fc", radius: 20 },
+      { symbol: "Cl",name: "Chlorine", color: "#4ade80", radius: 18 },
+      { symbol: "S", name: "Sulfur",   color: "#eab308", radius: 18 },
+    ];
+
+    // ---------- State ----------
+    let atoms = [];          // { id, symbol, x, y, r, color }
+    let bonds = [];          // { a, b }  (atom ids)
+    let selectedId = null;
+    let nextId = 1;
+    let mode = "explore";    // "explore" | "game"
+    let dragAtomId = null;
+    let dragOffset = { x: 0, y: 0 };
+    let paletteDrag = null;  // { symbol, color, r }
+    let score = 0;
+    let streak = 0;
+    let currentChallenge = null;
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // ---------- Challenges (game mode) ----------
+    // Each challenge: target formula string (for display) + required multiset of molecule formulas
+    // We match by sorting the list of molecular formulas present.
+    const CHALLENGES = [
+      { display: "H<sub>2</sub>", molecules: ["H2"] },
+      { display: "O<sub>2</sub>", molecules: ["O2"] },
+      { display: "N<sub>2</sub>", molecules: ["N2"] },
+      { display: "H<sub>2</sub>O", molecules: ["H2O"] },
+      { display: "CO<sub>2</sub>", molecules: ["CO2"] },
+      { display: "NH<sub>3</sub>", molecules: ["NH3"] },
+      { display: "CH<sub>4</sub>", molecules: ["CH4"] },
+      { display: "HCl", molecules: ["HCl"] },
+      { display: "NaCl", molecules: ["NaCl"] },
+      { display: "H<sub>2</sub> + O<sub>2</sub>", molecules: ["H2", "O2"] },
+      { display: "2 H<sub>2</sub>O", molecules: ["H2O", "H2O"] },
+      { display: "N<sub>2</sub> + 3 H<sub>2</sub>", molecules: ["N2", "H2", "H2", "H2"] },
+      { display: "H<sub>2</sub> + Cl<sub>2</sub>", molecules: ["H2", "Cl2"] },
+      { display: "CO + O<sub>2</sub>", molecules: ["CO", "O2"] },
+      { display: "S<sub>8</sub>", molecules: ["S8"] },
+      { display: "F<sub>2</sub>", molecules: ["F2"] },
+      { display: "H<sub>2</sub>S", molecules: ["H2S"] },
+      { display: "C + O<sub>2</sub>", molecules: ["C", "O2"] },
+    ];
+
+    // ---------- Helpers ----------
+    function getElement(symbol) {
+      return ELEMENTS.find(e => e.symbol === symbol);
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const toolbarH = document.querySelector(".toolbar").offsetHeight;
+      const w = rect.width;
+      const h = Math.max(320, rect.height - toolbarH);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function atomById(id) {
+      return atoms.find(a => a.id === id);
+    }
+
+    function isBonded(id1, id2) {
+      return bonds.some(b =>
+        (b.a === id1 && b.b === id2) || (b.a === id2 && b.b === id1)
+      );
+    }
+
+    function toggleBond(id1, id2) {
+      if (id1 === id2) return;
+      const idx = bonds.findIndex(b =>
+        (b.a === id1 && b.b === id2) || (b.a === id2 && b.b === id1)
+      );
+      if (idx >= 0) {
+        bonds.splice(idx, 1);
+      } else {
+        // prevent overlapping too far? allow free bonding for educational simplicity
+        bonds.push({ a: id1, b: id2 });
+      }
+      updateSymbolism();
+      draw();
+    }
+
+    function deleteAtom(id) {
+      atoms = atoms.filter(a => a.id !== id);
+      bonds = bonds.filter(b => b.a !== id && b.b !== id);
+      if (selectedId === id) selectedId = null;
+      updateSymbolism();
+      draw();
+    }
+
+    function clearAll() {
+      atoms = [];
+      bonds = [];
+      selectedId = null;
+      updateSymbolism();
+      draw();
+      hideFeedback();
+    }
+
+    // Connected components (molecules)
+    function getMolecules() {
+      const adj = new Map();
+      atoms.forEach(a => adj.set(a.id, []));
+      bonds.forEach(b => {
+        adj.get(b.a).push(b.b);
+        adj.get(b.b).push(b.a);
+      });
+
+      const visited = new Set();
+      const molecules = [];
+
+      for (const a of atoms) {
+        if (visited.has(a.id)) continue;
+        const queue = [a.id];
+        visited.add(a.id);
+        const group = [];
+        while (queue.length) {
+          const id = queue.shift();
+          group.push(id);
+          for (const nb of adj.get(id)) {
+            if (!visited.has(nb)) {
+              visited.add(nb);
+              queue.push(nb);
+            }
+          }
+        }
+        molecules.push(group);
+      }
+      return molecules;
+    }
+
+    // Element order for conventional formulas (NaCl, NH3, H2O, HCl, CO2, …)
+    // Metals first, then C, N, H, then other nonmetals in a stable order.
+    const FORMULA_ORDER = ["Na", "C", "N", "H", "O", "S", "F", "Cl"];
+    function formulaOrderIndex(sym) {
+      const i = FORMULA_ORDER.indexOf(sym);
+      return i === -1 ? 100 + sym.charCodeAt(0) : i;
+    }
+
+    // Canonical formula for a set of atom ids
+    function formulaForGroup(ids) {
+      const counts = {};
+      ids.forEach(id => {
+        const sym = atomById(id).symbol;
+        counts[sym] = (counts[sym] || 0) + 1;
+      });
+      const keys = Object.keys(counts).sort(
+        (a, b) => formulaOrderIndex(a) - formulaOrderIndex(b)
+      );
+      return keys.map(k => counts[k] === 1 ? k : k + counts[k]).join("");
+    }
+
+    function formulaToHTML(f) {
+      return f.replace(/(\d+)/g, "<sub>$1</sub>");
+    }
+
+    function updateSymbolism() {
+      const molecules = getMolecules();
+      const formulas = molecules.map(formulaForGroup).sort();
+      const displayEl = document.getElementById("formulaDisplay");
+      const classEl = document.getElementById("classification");
+      const meaningEl = document.getElementById("meaning");
+
+      if (formulas.length === 0) {
+        displayEl.innerHTML = "—";
+        classEl.textContent = "Empty";
+        classEl.className = "classification empty";
+        meaningEl.innerHTML = "Add atoms to begin. Connected groups of different elements form <strong>compounds</strong>. Several identical molecules stay a pure substance; different formulas make a <strong>mixture</strong>.";
+        return;
+      }
+
+      // Build display: group identical formulas
+      const tally = {};
+      formulas.forEach(f => { tally[f] = (tally[f] || 0) + 1; });
+      const parts = Object.keys(tally).sort().map(f => {
+        const n = tally[f];
+        return (n > 1 ? n + " " : "") + formulaToHTML(f);
+      });
+      displayEl.innerHTML = parts.join(" + ");
+
+      // Classification
+      // Multiple identical molecules still count as a pure substance
+      // (element or compound). Only different formulas make a mixture.
+      const uniqueForms = [...new Set(formulas)];
+      let type, meaning;
+
+      if (uniqueForms.length === 1) {
+        const f = uniqueForms[0];
+        const symbols = f.match(/[A-Z][a-z]?/g) || [];
+        const uniqueElements = new Set(symbols);
+        const count = formulas.length;
+
+        if (uniqueElements.size === 1) {
+          type = "element";
+          if (count === 1) {
+            meaning = `This is a pure <strong>element</strong>. All atoms are the same kind (${symbols[0]}). The formula shows how many atoms are bonded together.`;
+          } else {
+            meaning = `This is a pure <strong>element</strong>. You have ${count} identical molecules of ${formulaToHTML(f)}. Same particle type throughout = pure substance.`;
+          }
+        } else {
+          type = "compound";
+          if (count === 1) {
+            meaning = `This is a pure <strong>compound</strong>. Different elements are chemically bonded in a fixed ratio. The formula is the molecular formula of the connected group.`;
+          } else {
+            meaning = `This is a pure <strong>compound</strong>. You have ${count} identical molecules of ${formulaToHTML(f)}. Same particle type throughout = pure substance.`;
+          }
+        }
+      } else {
+        type = "mixture";
+        meaning = `This is a <strong>mixture</strong>. You have more than one kind of particle (different formulas) that are not bonded to each other.`;
+      }
+
+      classEl.textContent = type;
+      classEl.className = "classification " + type;
+      meaningEl.innerHTML = meaning;
+    }
+
+    // ---------- Drawing ----------
+    function draw() {
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      ctx.clearRect(0, 0, w, h);
+
+      // subtle grid
+      ctx.strokeStyle = "rgba(148,163,184,0.08)";
+      ctx.lineWidth = 1;
+      const step = 40;
+      for (let x = 0; x < w; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // bonds
+      ctx.lineCap = "round";
+      bonds.forEach(b => {
+        const A = atomById(b.a);
+        const B = atomById(b.b);
+        if (!A || !B) return;
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.strokeStyle = "#94a3b8";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+
+      // atoms
+      atoms.forEach(a => {
+        // selection ring
+        if (a.id === selectedId) {
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, a.r + 6, 0, Math.PI * 2);
+          ctx.strokeStyle = "#fbbf24";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        // body
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.fillStyle = a.color;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(15,23,42,0.5)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        // label
+        ctx.fillStyle = "#0f172a";
+        ctx.font = `bold ${a.symbol.length > 1 ? 12 : 14}px system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(a.symbol, a.x, a.y);
+      });
+    }
+
+    // ---------- Hit test ----------
+    function hitAtom(x, y) {
+      // topmost first
+      for (let i = atoms.length - 1; i >= 0; i--) {
+        const a = atoms[i];
+        const dx = a.x - x, dy = a.y - y;
+        if (dx * dx + dy * dy <= a.r * a.r) return a;
+      }
+      return null;
+    }
+
+    function canvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    // ---------- Pointer events on canvas ----------
+    canvas.addEventListener("pointerdown", (e) => {
+      const { x, y } = canvasCoords(e);
+      const hit = hitAtom(x, y);
+      if (hit) {
+        canvas.setPointerCapture(e.pointerId);
+        dragAtomId = hit.id;
+        dragOffset.x = x - hit.x;
+        dragOffset.y = y - hit.y;
+
+        if (selectedId === null) {
+          selectedId = hit.id;
+        } else if (selectedId === hit.id) {
+          // keep selected
+        } else {
+          // bond / unbond
+          toggleBond(selectedId, hit.id);
+          selectedId = null;
+        }
+        draw();
+      } else {
+        selectedId = null;
+        draw();
+      }
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (dragAtomId === null) return;
+      const { x, y } = canvasCoords(e);
+      const a = atomById(dragAtomId);
+      if (!a) return;
+      a.x = x - dragOffset.x;
+      a.y = y - dragOffset.y;
+      // keep on canvas
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      a.x = Math.max(a.r, Math.min(w - a.r, a.x));
+      a.y = Math.max(a.r, Math.min(h - a.r, a.y));
+      draw();
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      dragAtomId = null;
+    });
+
+    canvas.addEventListener("pointercancel", () => {
+      dragAtomId = null;
+    });
+
+    canvas.addEventListener("dblclick", (e) => {
+      const { x, y } = canvasCoords(e);
+      const hit = hitAtom(x, y);
+      if (hit) {
+        deleteAtom(hit.id);
+      }
+    });
+
+    // ---------- Palette drag ----------
+    function buildPalette() {
+      const pal = document.getElementById("palette");
+      ELEMENTS.forEach(el => {
+        const btn = document.createElement("div");
+        btn.className = "atom-btn";
+        btn.draggable = true;
+        btn.innerHTML = `
+          <div class="atom-circle" style="background:${el.color}">${el.symbol}</div>
+          <small>${el.name}</small>
+        `;
+        btn.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", el.symbol);
+          e.dataTransfer.effectAllowed = "copy";
+          paletteDrag = el;
+        });
+        // touch / pointer fallback: click to place near center
+        btn.addEventListener("click", () => {
+          const w = canvas.width / (window.devicePixelRatio || 1);
+          const h = canvas.height / (window.devicePixelRatio || 1);
+          addAtom(el.symbol, w / 2 + (Math.random() - 0.5) * 80, h / 2 + (Math.random() - 0.5) * 80);
+        });
+        pal.appendChild(btn);
+      });
+    }
+
+    canvas.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+    });
+
+    canvas.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const symbol = e.dataTransfer.getData("text/plain");
+      if (!symbol) return;
+      const { x, y } = canvasCoords(e);
+      addAtom(symbol, x, y);
+      paletteDrag = null;
+    });
+
+    function addAtom(symbol, x, y) {
+      const el = getElement(symbol);
+      if (!el) return;
+      atoms.push({
+        id: nextId++,
+        symbol: el.symbol,
+        x, y,
+        r: el.radius,
+        color: el.color
+      });
+      updateSymbolism();
+      draw();
+    }
+
+    // ---------- Toolbar ----------
+    document.getElementById("btnClear").addEventListener("click", clearAll);
+    document.getElementById("btnDelete").addEventListener("click", () => {
+      if (selectedId !== null) deleteAtom(selectedId);
+    });
+
+    // ---------- Mode switching ----------
+    document.getElementById("modeExplore").addEventListener("click", () => setMode("explore"));
+    document.getElementById("modeGame").addEventListener("click", () => setMode("game"));
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById("modeExplore").classList.toggle("active", m === "explore");
+      document.getElementById("modeGame").classList.toggle("active", m === "game");
+      document.getElementById("gameArea").classList.toggle("active", m === "game");
+      document.getElementById("exploreTips").style.display = m === "explore" ? "block" : "none";
+      if (m === "game") {
+        newChallenge();
+      } else {
+        hideFeedback();
+      }
+    }
+
+    // ---------- Game logic ----------
+    function newChallenge() {
+      hideFeedback();
+      clearAll();
+      currentChallenge = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
+      document.getElementById("targetFormula").innerHTML = currentChallenge.display;
+    }
+
+    function hideFeedback() {
+      const fb = document.getElementById("gameFeedback");
+      fb.className = "game-feedback";
+      fb.textContent = "";
+    }
+
+    function checkAnswer() {
+      if (!currentChallenge) return;
+      const molecules = getMolecules();
+      const formulas = molecules.map(formulaForGroup).sort();
+      const target = [...currentChallenge.molecules].sort();
+
+      const match =
+        formulas.length === target.length &&
+        formulas.every((f, i) => f === target[i]);
+
+      const fb = document.getElementById("gameFeedback");
+      if (match) {
+        fb.className = "game-feedback correct";
+        fb.textContent = "Correct! Great job matching the symbolism.";
+        score += 1;
+        streak += 1;
+        document.getElementById("score").textContent = score;
+        document.getElementById("streak").textContent = streak;
+      } else {
+        fb.className = "game-feedback incorrect";
+        fb.textContent = "Not yet. Check atom counts, bonds, and whether pieces are separate or connected.";
+        streak = 0;
+        document.getElementById("streak").textContent = streak;
+      }
+    }
+
+    document.getElementById("btnCheck").addEventListener("click", checkAnswer);
+    document.getElementById("btnNewChallenge").addEventListener("click", newChallenge);
+
+    // ---------- Init ----------
+    buildPalette();
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    updateSymbolism();
+
+    // keyboard: Delete / Backspace removes selected
+    window.addEventListener("keydown", (e) => {
+      if ((e.key === "Delete" || e.key === "Backspace") && selectedId !== null) {
+        e.preventDefault();
+        deleteAtom(selectedId);
+      }
+      if (e.key === "Escape") {
+        selectedId = null;
+        draw();
+      }
+    });
+  </script>
+</body>
+</html>
