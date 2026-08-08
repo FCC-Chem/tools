@@ -3,6 +3,6 @@
   "author": "Dr. U",
   "course": "CHEM 3A",
   "description": "Connect particle diagrams to chemical symbolism and matter classification",
-  "tags": ["element","compound","mixture","symbolism","particles"]
+  "tags": ["element","compound","mixture","symbolism","particles"],
   "status": "working"
 }
