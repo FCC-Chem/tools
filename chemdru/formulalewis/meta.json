@@ -1,0 +1,8 @@
+{
+  "title": "Lewis Dot Structures from Chemical Formula",
+  "author": "Dr. U",
+  "course": "CHEM 3A",
+  "description": "Type the chemical formula, connect atoms, add lone pairs. Check octet rule.",
+  "tags": ["lewisdot"],
+  "status": "wip"
+}
