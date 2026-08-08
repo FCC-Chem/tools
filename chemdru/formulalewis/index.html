@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lewis Structure Builder — electron budget tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F7F1;
+    --paper-2:#EEF1E9;
+    --grid:#D9E2D6;
+    --ink:#1C2622;
+    --ink-soft:#4A564E;
+    --bond:#2B6E63;
+    --bond-soft:#BFE0D8;
+    --warn:#C4501E;
+    --warn-soft:#F7E3D6;
+    --good:#2B6E63;
+    --accent:#E3A23D;
+    --alkali:#C6577E;
+    --alkaline:#D9A441;
+    --metalloid:#7D8C4C;
+    --nonmetal:#2B6E63;
+    --halogen:#4C6FB0;
+    --noble:#8B6BAF;
+    --other:#5B6B72;
+    --shadow: 0 1px 0 rgba(28,38,34,0.06), 0 6px 16px rgba(28,38,34,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; margin:0;}
+  button{font-family:'Inter',sans-serif; cursor:pointer;}
+  code{font-family:'JetBrains Mono',monospace; background:var(--paper-2); padding:1px 4px; border-radius:4px;}
+
+  .app{display:flex; flex-direction:column; height:100vh; min-height:0;}
+
+  header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:8px 16px; background:var(--paper); border-bottom:1px solid var(--grid); flex:0 0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:8px;}
+  .brand .mark{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px; color:var(--bond);
+    border:1.5px solid var(--bond); border-radius:6px; padding:1px 5px; letter-spacing:0.03em;
+  }
+  .brand h1{font-size:16px; font-weight:700; letter-spacing:-0.01em;}
+
+  .btn{
+    appearance:none; border:1.5px solid var(--grid); background:#fff; color:var(--ink);
+    font-size:12.5px; font-weight:600; padding:6px 11px; border-radius:8px;
+    display:inline-flex; align-items:center; gap:6px; transition:border-color .15s, transform .1s, background .15s;
+    white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--bond); background:var(--bond-soft);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{background:var(--bond); border-color:var(--bond); color:#fff;}
+  .btn.primary:hover{background:#235a51;}
+  .btn.ghost{background:transparent;}
+  .btn:focus-visible, button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+
+  /* ---- formula row ---- */
+  .formula-row{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    padding:7px 16px; background:var(--paper-2); border-bottom:1px solid var(--grid); flex:0 0 auto;
+  }
+  #formulaInput{
+    font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:600;
+    border:1.5px solid var(--grid); border-radius:8px; padding:6px 10px; min-width:130px;
+    background:#fff; color:var(--ink); line-height:1.3; white-space:nowrap; overflow-x:auto;
+    position:relative;
+  }
+  #formulaInput:focus-visible, #formulaInput:focus{outline:3px solid var(--accent); outline-offset:1px; border-color:var(--bond);}
+  #formulaInput sub{font-size:0.72em;}
+  #formulaInput sup{font-size:0.72em;}
+  #formulaInput.is-empty::before{content:"e.g. CO"; color:#B7C2B4;}
+
+  .fmt-group{display:flex; align-items:center; gap:3px; padding:2px 6px; border:1.5px solid var(--grid); border-radius:8px; background:#fff;}
+  .fmt-label{font-size:10.5px; color:var(--ink-soft); font-weight:600; margin-right:2px; white-space:nowrap;}
+  .fmt-btn{
+    border:1px solid rgba(28,38,34,0.12); background:var(--paper); color:var(--ink);
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    padding:3px 7px; border-radius:6px; min-width:26px;
+  }
+  .fmt-btn:hover{background:var(--bond-soft); border-color:var(--bond);}
+  .fmt-btn.charge{color:var(--bond);}
+
+  .examples{display:flex; gap:5px; flex-wrap:wrap; align-items:center;}
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600;
+    border:1.5px solid rgba(28,38,34,0.1); background:#fff; border-radius:20px; padding:3px 9px;
+    color:var(--ink); cursor:pointer;
+  }
+  .chip:hover{border-color:var(--bond); background:var(--bond-soft);}
+  .chip sub, .chip sup{font-size:0.75em;}
+  .parse-error{
+    font-size:12px; color:var(--warn); background:var(--warn-soft); border-radius:6px;
+    padding:4px 9px; display:none; flex-basis:100%;
+  }
+  .parse-error.show{display:inline-block;}
+
+  /* ---- tools row ---- */
+  .tools-row{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding:7px 16px; background:#fff; border-bottom:1px solid var(--grid); flex:0 0 auto;
+  }
+  .tool-group{display:inline-flex; border:1.5px solid var(--grid); border-radius:9px; overflow:hidden;}
+  .tool-group button{
+    border:none; background:#fff; padding:6px 11px; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    display:flex; align-items:center; gap:5px; border-right:1px solid var(--grid);
+  }
+  .tool-group button:last-child{border-right:none;}
+  .tool-group button.active{background:var(--bond); color:#fff;}
+  .tool-group button:not(.active):hover{background:var(--bond-soft); color:var(--ink);}
+  .tool-glyph{font-family:'JetBrains Mono',monospace; font-size:13px;}
+
+  .budget{display:flex; align-items:center; gap:8px; flex:1; min-width:170px;}
+  .budget .track{
+    flex:1; max-width:170px; height:9px; border-radius:20px; background:var(--paper-2);
+    border:1px solid var(--grid); overflow:hidden; transition:border-color .2s;
+  }
+  .budget .fill{height:100%; background:var(--bond); width:0%; transition:width .18s ease;}
+  .budget .fill.full{background:var(--good);}
+  .budget .nums{font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; white-space:nowrap;}
+  .budget .nums .remaining{color:var(--bond);}
+  .budget .nums .remaining.zero{color:var(--good);}
+
+  .octet-result{font-size:12px; font-weight:600; white-space:nowrap;}
+  .octet-result.good{color:var(--good);}
+  .octet-result.bad{color:var(--warn);}
+
+  /* ---- main: workspace dominant, log narrow ---- */
+  .layout{flex:1; min-height:0; display:grid; grid-template-columns:1fr 220px;}
+  @media (max-width: 760px){
+    .layout{grid-template-columns:1fr; grid-template-rows:1fr 180px;}
+    .log-panel{border-left:none; border-top:1px solid var(--grid);}
+  }
+
+  #workspace{
+    position:relative; overflow:auto; min-height:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:28px 28px; background-position:-1px -1px;
+  }
+  #workspace .empty-hint{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    text-align:center; color:var(--ink-soft); font-size:14px; pointer-events:none; padding:20px;
+  }
+  #workspace .empty-hint strong{color:var(--ink); display:block; font-family:'Space Grotesk',sans-serif; font-size:16px; margin-bottom:4px;}
+
+  .mol-caption{
+    position:absolute; top:10px; left:12px; z-index:2;
+    background:rgba(255,255,255,0.9); border:1px solid var(--grid); border-radius:8px;
+    padding:6px 11px; display:none; box-shadow:var(--shadow);
+  }
+  .mol-caption #molHeading{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:15px; display:block;}
+  .mol-caption #molHeading sub, .mol-caption #molHeading sup{font-size:0.7em;}
+  .mol-caption #molBreakdown{font-size:11px; color:var(--ink-soft); display:block; margin-top:1px;}
+
+  svg#bondLayer{position:absolute; top:0; left:0; pointer-events:none;}
+  svg#bondLayer .bond-hit{pointer-events:auto; cursor:pointer;}
+  svg#bondLayer .bond-hit:hover line.bl{stroke:var(--warn) !important;}
+
+  .atom{position:absolute; width:96px; height:96px; margin-left:-48px; margin-top:-48px; touch-action:none;}
+  .atom .core{
+    position:absolute; left:24px; top:24px; width:48px; height:48px; border-radius:50%;
+    background:#fff; border:2.5px solid var(--cat-color); display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:18px; color:var(--ink);
+    cursor:grab; box-shadow:var(--shadow); user-select:none; transition:box-shadow .12s, border-color .12s;
+  }
+  .atom.dragging .core{cursor:grabbing; box-shadow:0 8px 22px rgba(28,38,34,0.18);}
+  .atom .core.armed{border-color:var(--accent); box-shadow:0 0 0 4px rgba(227,162,61,0.32);}
+  .atom .core.octet-bad{border-color:var(--warn) !important; box-shadow:0 0 0 3px rgba(196,80,30,0.28);}
+
+  .lp{
+    position:absolute; width:20px; height:20px; border-radius:50%; border:none; background:transparent; padding:0; cursor:pointer;
+  }
+  .lp i{position:absolute; width:6px; height:6px; border-radius:50%; background:var(--ink); display:block;}
+  .lp:hover i{background:var(--warn);}
+  .lp:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:50%;}
+
+  @media (prefers-reduced-motion: no-preference){
+    .atom{animation:pop .18s ease-out;}
+    .atom .core.armed{animation:pulse 1s ease-in-out infinite;}
+  }
+  @keyframes pop{ from{transform:scale(0.85); opacity:0;} to{transform:scale(1); opacity:1;} }
+  @keyframes pulse{ 0%,100%{box-shadow:0 0 0 4px rgba(227,162,61,0.32);} 50%{box-shadow:0 0 0 7px rgba(227,162,61,0.14);} }
+
+  /* ---- log panel ---- */
+  .log-panel{
+    border-left:1px solid var(--grid); background:var(--paper-2); overflow-y:auto; padding:10px 10px 20px; min-height:0;
+  }
+  .log-panel h2{font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:8px;}
+  .log-empty{font-size:12px; color:var(--ink-soft);}
+  .log-entry{
+    background:#fff; border:1px solid rgba(28,38,34,0.08); border-radius:7px; padding:6px 8px; margin-bottom:5px; font-size:11.5px;
+  }
+  .log-entry .action{font-weight:600; color:var(--ink);}
+  .log-entry .action.remove{color:var(--warn);}
+  .log-entry .meta{color:var(--ink-soft); font-family:'JetBrains Mono',monospace; font-size:10.5px; margin-top:2px;}
+
+  /* ---- instructions dialog ---- */
+  dialog#howto{border:none; border-radius:14px; padding:0; max-width:520px; width:92vw; box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+  dialog#howto::backdrop{background:rgba(28,38,34,0.45);}
+  .dialog-inner{padding:22px 24px 20px;}
+  .dialog-inner h2{font-size:17px; margin-bottom:12px; letter-spacing:0; color:var(--ink);}
+  .dialog-inner ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:9px; font-size:14px; line-height:1.45;}
+  .dialog-inner ol li strong{color:var(--bond);}
+  .dialog-inner .close-row{margin-top:18px; display:flex; justify-content:flex-end;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="mark">e⁻</span>
+      <h1>Lewis Structure Builder</h1>
+    </div>
+    <button class="btn ghost" id="howtoBtn">How it works</button>
+  </header>
+
+  <div class="formula-row">
+    <div id="formulaInput" class="is-empty" contenteditable="true" spellcheck="false" aria-label="Chemical formula editor. Type element letters and digits; use the buttons to add subscripts and ion charge."></div>
+    <button type="button" class="btn ghost" id="clearFormula">Clear</button>
+    <button type="button" class="btn primary" id="buildBtn">Build</button>
+
+    <div class="fmt-group" aria-label="Insert subscript digit">
+      <span class="fmt-label">Sub</span>
+      <button type="button" class="fmt-btn" data-sub="2">2</button>
+      <button type="button" class="fmt-btn" data-sub="3">3</button>
+      <button type="button" class="fmt-btn" data-sub="4">4</button>
+      <button type="button" class="fmt-btn" data-sub="5">5</button>
+      <button type="button" class="fmt-btn" data-sub="6">6</button>
+    </div>
+    <div class="fmt-group" aria-label="Set ion charge">
+      <span class="fmt-label">Charge</span>
+      <button type="button" class="fmt-btn charge" data-charge="+">+</button>
+      <button type="button" class="fmt-btn charge" data-charge="2+">2+</button>
+      <button type="button" class="fmt-btn charge" data-charge="3+">3+</button>
+      <button type="button" class="fmt-btn charge" data-charge="-">−</button>
+      <button type="button" class="fmt-btn charge" data-charge="2-">2−</button>
+      <button type="button" class="fmt-btn charge" data-charge="3-">3−</button>
+    </div>
+
+    <div class="examples">
+      <button class="chip" data-html="H<sub>2</sub>O">H<sub>2</sub>O</button>
+      <button class="chip" data-html="C<sub>2</sub>H<sub>4</sub>">C<sub>2</sub>H<sub>4</sub></button>
+      <button class="chip" data-html="NH<sub>3</sub>">NH<sub>3</sub></button>
+      <button class="chip" data-html="CO<sub>3</sub><sup>2&minus;</sup>">CO<sub>3</sub><sup>2−</sup></button>
+      <button class="chip" data-html="NH<sub>4</sub><sup>+</sup>">NH<sub>4</sub><sup>+</sup></button>
+      <button class="chip" data-html="ClO<sub>3</sub><sup>&minus;</sup>">ClO<sub>3</sub><sup>−</sup></button>
+    </div>
+    <span class="parse-error" id="parseError"></span>
+  </div>
+
+  <div class="tools-row">
+    <div class="tool-group" role="group" aria-label="Drawing tool">
+      <button type="button" data-tool="1" class="active"><span class="tool-glyph">—</span> Single</button>
+      <button type="button" data-tool="2"><span class="tool-glyph">=</span> Double</button>
+      <button type="button" data-tool="3"><span class="tool-glyph">≡</span> Triple</button>
+      <button type="button" data-tool="lone"><span class="tool-glyph">:</span> Lone pair</button>
+    </div>
+    <div class="budget">
+      <div class="track"><div class="fill" id="budgetFill"></div></div>
+      <div class="nums">Placed <span id="placedNum">0</span>/<span id="totalNum">0</span> · Left <span class="remaining" id="remainingNum">0</span></div>
+    </div>
+    <button class="btn" id="checkOctetBtn">Check octet</button>
+    <span class="octet-result" id="octetResult"></span>
+    <button class="btn" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="layout">
+    <div id="workspace">
+      <svg id="bondLayer"></svg>
+      <div class="mol-caption" id="molCaption">
+        <span id="molHeading"></span>
+        <span id="molBreakdown"></span>
+      </div>
+      <div class="empty-hint" id="emptyHint">
+        <div>
+          <strong>Nothing built yet</strong>
+          Type a formula above — use the Sub buttons for atom counts and the Charge buttons for ion charge — then press Build.
+        </div>
+      </div>
+    </div>
+    <div class="log-panel">
+      <h2>Electron log</h2>
+      <div id="logList"><div class="log-empty">Actions you take will appear here.</div></div>
+    </div>
+  </div>
+</div>
+
+<dialog id="howto">
+  <div class="dialog-inner">
+    <h2>How to use this tool</h2>
+    <ol>
+      <li><strong>Type element letters</strong> directly (e.g. <code>CO</code>). Click a <strong>Sub</strong> button to insert an atom-count subscript right where your cursor is (e.g. click "3" after "CO" to get CO₃).</li>
+      <li>If it's an ion, click a <strong>Charge</strong> button (e.g. "2−") — this always replaces any previous charge and sits as a proper superscript.</li>
+      <li>Press <strong>Build</strong>. Bare atom symbols appear on the canvas; <strong>drag any atom</strong> to rearrange the layout.</li>
+      <li>Pick <strong>Single, Double, or Triple</strong>, then click one atom and then another to draw that bond. Using a bond tool on a pair that's already bonded raises the bond order by one step (single \u2192 double \u2192 triple) — so clicking Single twice on the same pair turns it into a double bond.</li>
+      <li>Pick <strong>Lone pair</strong> and click an atom to place a lone pair on it (up to four). Lone pairs automatically settle into the open space around the atom, away from its bonds, and reposition themselves if you add more bonds or drag atoms around.</li>
+      <li>Click any bond line or lone pair directly to <strong>remove it</strong> and return its electrons to the budget.</li>
+      <li>Once you think you're done, press <strong>Check octet</strong> — atoms without a full outer shell (8 electrons, or 2 for hydrogen) will highlight red.</li>
+      <li>The bar tracks <strong>electrons placed vs. total available</strong> — you can't place more than the formula allows — and the log on the right records every move.</li>
+    </ol>
+    <div class="close-row"><button class="btn primary" id="howtoClose">Got it</button></div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+
+  var VALENCE = {
+    H:1, He:2, Li:1, Be:2, B:3, C:4, N:5, O:6, F:7, Ne:8,
+    Na:1, Mg:2, Al:3, Si:4, P:5, S:6, Cl:7, Ar:8, Br:7, I:7
+  };
+  var CATEGORY = {
+    H:"other", He:"noble", Li:"alkali", Be:"alkaline", B:"metalloid", C:"nonmetal", N:"nonmetal",
+    O:"nonmetal", F:"halogen", Ne:"noble", Na:"alkali", Mg:"alkaline", Al:"metalloid", Si:"metalloid",
+    P:"nonmetal", S:"nonmetal", Cl:"halogen", Ar:"noble", Br:"halogen", I:"halogen"
+  };
+  var KNOWN2 = Object.keys(VALENCE).filter(function(s){return s.length===2;}).map(function(s){return s.toLowerCase();});
+  var KNOWN1 = Object.keys(VALENCE).filter(function(s){return s.length===1;}).map(function(s){return s.toLowerCase();});
+  var SYMBOL_BY_LOWER = {};
+  Object.keys(VALENCE).forEach(function(s){ SYMBOL_BY_LOWER[s.toLowerCase()] = s; });
+
+  var ORDER_GLYPH = {1:"\u2013", 2:"=", 3:"\u2261"};
+  var ORDER_NAME = {1:"single", 2:"double", 3:"triple"};
+  var ZWS = "\u200B";
+
+  /* ---------------- formula editor (contenteditable) ---------------- */
+  var editor = document.getElementById("formulaInput");
+
+  function updateEmptyState(){
+    var text = editor.textContent.replace(new RegExp(ZWS,"g"), "");
+    editor.classList.toggle("is-empty", text.trim() === "");
+  }
+
+  function placeCaretAfterWithSpacer(node){
+    var spacer = document.createTextNode(ZWS);
+    if(node.nextSibling){ node.parentNode.insertBefore(spacer, node.nextSibling); }
+    else { node.parentNode.appendChild(spacer); }
+    var r = document.createRange();
+    r.setStart(spacer, 1);
+    r.collapse(true);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  function insertAtCursor(node){
+    editor.focus();
+    var sel = window.getSelection();
+    if(sel.rangeCount > 0 && editor.contains(sel.anchorNode)){
+      var range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(node);
+    } else {
+      editor.appendChild(node);
+    }
+    placeCaretAfterWithSpacer(node);
+    updateEmptyState();
+  }
+
+  editor.addEventListener("input", updateEmptyState);
+  editor.addEventListener("blur", updateEmptyState);
+
+  Array.prototype.forEach.call(document.querySelectorAll(".fmt-btn[data-sub]"), function(btn){
+    btn.addEventListener("click", function(){
+      var sub = document.createElement("sub");
+      sub.textContent = btn.getAttribute("data-sub");
+      insertAtCursor(sub);
+    });
+  });
+
+  function chargeDisplayText(spec){
+    var m = spec.match(/^([0-9]*)([+-])$/);
+    if(!m) return spec;
+    var mag = m[1];
+    var sign = m[2] === "-" ? "\u2212" : "+";
+    return (mag || "") + sign;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".fmt-btn[data-charge]"), function(btn){
+    btn.addEventListener("click", function(){
+      editor.focus();
+      Array.prototype.slice.call(editor.querySelectorAll("sup")).forEach(function(n){ n.remove(); });
+      var sup = document.createElement("sup");
+      sup.textContent = chargeDisplayText(btn.getAttribute("data-charge"));
+      editor.appendChild(sup);
+      placeCaretAfterWithSpacer(sup);
+      updateEmptyState();
+    });
+  });
+
+  document.getElementById("clearFormula").addEventListener("click", function(){
+    editor.innerHTML = "";
+    updateEmptyState();
+    editor.focus();
+  });
+
+  editor.addEventListener("paste", function(e){
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData("text/plain");
+    insertAtCursor(document.createTextNode(text));
+  });
+
+  editor.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      e.preventDefault();
+      attemptBuild();
+    }
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function(chip){
+    chip.addEventListener("click", function(){
+      editor.innerHTML = chip.getAttribute("data-html");
+      updateEmptyState();
+      attemptBuild();
+    });
+  });
+
+  document.getElementById("buildBtn").addEventListener("click", attemptBuild);
+
+  /* ---------------- read editor DOM -> {formulaPart, chargePart} ---------------- */
+  function readEditor(){
+    var formulaPart = "", chargePart = "";
+    function walk(node, inSup){
+      node.childNodes.forEach(function(child){
+        if(child.nodeType === Node.TEXT_NODE){
+          if(inSup) chargePart += child.textContent; else formulaPart += child.textContent;
+        } else if(child.nodeType === Node.ELEMENT_NODE){
+          var tag = child.tagName.toLowerCase();
+          if(tag === "br") return;
+          walk(child, inSup || tag === "sup");
+        }
+      });
+    }
+    walk(editor, false);
+    var stripZws = function(s){ return s.split(ZWS).join(""); };
+    return { formulaPart: stripZws(formulaPart).replace(/\s+/g,""), chargePart: stripZws(chargePart).trim() };
+  }
+
+  /* ---------------- charge text -> signed number ---------------- */
+  function parseCharge(raw){
+    var s = raw.replace(/\s+/g,"").replace(/\u2212/g,"-");
+    if(!s) return {ok:true, charge:0};
+    var m = s.match(/^([0-9]*)([+-])$/);
+    if(m){ var mag = m[1] ? parseInt(m[1],10) : 1; return {ok:true, charge: m[2]==="-" ? -mag : mag}; }
+    var m2 = s.match(/^([+-])([0-9]*)$/);
+    if(m2){ var mag2 = m2[2] ? parseInt(m2[2],10) : 1; return {ok:true, charge: m2[1]==="-" ? -mag2 : mag2}; }
+    return {ok:false, error:"Couldn't read the charge \"" + raw + "\" \u2014 use the Charge buttons."};
+  }
+
+  /* ---------------- full parse: formula text + charge text -> entries ---------------- */
+  function parseFormula(formulaPart, chargePart){
+    var fp = formulaPart;
+    var charge = 0, chargeSource = null;
+
+    if(chargePart){
+      var pc = parseCharge(chargePart);
+      if(!pc.ok) return {ok:false, error:pc.error};
+      charge = pc.charge; chargeSource = "sup";
+    }
+
+    if(chargeSource === null && fp.indexOf("^") !== -1){
+      var idx = fp.lastIndexOf("^");
+      var tail = fp.slice(idx+1);
+      fp = fp.slice(0, idx);
+      var pc2 = parseCharge(tail);
+      if(!pc2.ok) return {ok:false, error:pc2.error};
+      charge = pc2.charge; chargeSource = "caret";
+    }
+
+    if(/[()]/.test(fp)) return {ok:false, error:"Parentheses aren't supported \u2014 write atoms directly, e.g. NH4 instead of (NH4)."};
+    if(!fp) return {ok:false, error:"Type some atoms, e.g. CO, then add a subscript and charge with the buttons."};
+
+    if(chargeSource === null && /[0-9]{2,}[+-]$/.test(fp)){
+      return {ok:false, error:"For a charge with a number (like 2\u2212 or 3+), use the Charge buttons above the field \u2014 typing it directly can be confused with a subscript."};
+    }
+
+    var entries = [];
+    var i = 0;
+    while(i < fp.length){
+      var ch = fp[i];
+      if(ch === "+" || ch === "-"){
+        if(chargeSource !== null){
+          return {ok:false, error:"Found an extra " + ch + " in the formula \u2014 set the charge once, using the Charge buttons."};
+        }
+        var remainder = fp.slice(i);
+        var pc3 = parseCharge(remainder);
+        if(!pc3.ok) return {ok:false, error:pc3.error};
+        charge = pc3.charge;
+        chargeSource = "inline";
+        break;
+      }
+      var two = fp.substr(i,2).toLowerCase();
+      var one = fp.substr(i,1).toLowerCase();
+      var sym = null, len = 0;
+      if(/^[a-z][a-z]$/.test(two) && KNOWN2.indexOf(two) !== -1){
+        sym = SYMBOL_BY_LOWER[two]; len = 2;
+      } else if(/^[a-z]$/.test(one) && KNOWN1.indexOf(one) !== -1){
+        sym = SYMBOL_BY_LOWER[one]; len = 1;
+      } else {
+        var bad = fp.substr(i).match(/^[A-Za-z]+/);
+        bad = bad ? bad[0] : fp.substr(i,1);
+        return {ok:false, error:"Couldn't recognize \"" + bad + "\" as a supported element. Supported: " + Object.keys(VALENCE).join(", ") + "."};
+      }
+      i += len;
+      var digits = fp.substr(i).match(/^[0-9]+/);
+      var count = 1;
+      if(digits){ count = parseInt(digits[0],10); i += digits[0].length; }
+      var existing = entries.find(function(e){return e.sym===sym;});
+      if(existing) existing.count += count; else entries.push({sym:sym, count:count});
+    }
+    if(!entries.length) return {ok:false, error:"Couldn't find any atoms in that formula."};
+    return {ok:true, entries:entries, charge:charge};
+  }
+
+  function budgetBreakdown(entries, charge){
+    var total = 0;
+    var parts = entries.map(function(e){
+      var sub = e.count * VALENCE[e.sym];
+      total += sub;
+      return e.count + "\u00D7" + VALENCE[e.sym];
+    });
+    var text = parts.join(" + ");
+    if(charge !== 0){
+      var adj = -charge;
+      total += adj;
+      text += " " + (adj >= 0 ? "+" : "\u2212") + " " + Math.abs(adj) + " (charge)";
+    }
+    text += " = " + total + " valence e\u207B";
+    return {total: total, text: text};
+  }
+
+  function prettyFormula(entries, charge){
+    var html = entries.map(function(e){
+      return e.sym + (e.count>1 ? "<sub>"+e.count+"</sub>" : "");
+    }).join("");
+    if(charge !== 0){
+      var mag = Math.abs(charge);
+      var sign = charge > 0 ? "+" : "\u2212";
+      html += "<sup>" + (mag>1?mag:"") + sign + "</sup>";
+    }
+    return html;
+  }
+
+  function attemptBuild(){
+    var read = readEditor();
+    var res = parseFormula(read.formulaPart, read.chargePart);
+    var parseErrorEl = document.getElementById("parseError");
+    if(!res.ok){
+      parseErrorEl.textContent = res.error;
+      parseErrorEl.classList.add("show");
+      return;
+    }
+    parseErrorEl.classList.remove("show");
+    buildMolecule(res.entries, res.charge);
+  }
+
+  /* ---------------- state ---------------- */
+  var atoms = [];           // {id, sym, x, y, cat, lonePairs}
+  var bonds = [];           // {id, aId, bId, order}
+  var nextId = 1;
+  var currentTool = "1";    // "1" | "2" | "3" | "lone"
+  var pendingAtom = null;
+  var totalBudget = 0;
+  var placed = 0;
+  var logEntries = [];
+
+  var workspace = document.getElementById("workspace");
+  var bondLayer = document.getElementById("bondLayer");
+  var emptyHint = document.getElementById("emptyHint");
+  var molCaption = document.getElementById("molCaption");
+  var molHeadingArea = document.getElementById("molHeading");
+  var molBreakdownArea = document.getElementById("molBreakdown");
+
+  function byId(id){ for(var i=0;i<atoms.length;i++){ if(atoms[i].id===id) return atoms[i]; } return null; }
+  function findBond(idA, idB){
+    for(var i=0;i<bonds.length;i++){
+      var b = bonds[i];
+      if((b.aId===idA && b.bId===idB) || (b.aId===idB && b.bId===idA)) return b;
+    }
+    return null;
+  }
+  function neighborsOf(atomId){
+    var out = [];
+    bonds.forEach(function(b){
+      if(b.aId===atomId) out.push(b.bId);
+      else if(b.bId===atomId) out.push(b.aId);
+    });
+    return out;
+  }
+
+  /* ---------------- build molecule from formula ---------------- */
+  function buildMolecule(entries, charge){
+    atoms = []; bonds = []; pendingAtom = null; placed = 0; logEntries = [];
+    Array.prototype.slice.call(workspace.querySelectorAll(".atom")).forEach(function(n){ n.remove(); });
+
+    var flat = [];
+    entries.forEach(function(e){ for(var k=0;k<e.count;k++){ flat.push(e.sym); } });
+
+    var centerIdx = flat.findIndex(function(s){ return s !== "H"; });
+    if(centerIdx === -1) centerIdx = 0;
+
+    var rect = workspace.getBoundingClientRect();
+    var cx = Math.max(rect.width, 400) / 2 + workspace.scrollLeft;
+    var cy = Math.max(rect.height, 400) / 2 + workspace.scrollTop;
+
+    var satellites = flat.filter(function(_,i){ return i !== centerIdx; });
+    var R = 150;
+
+    addAtomAt(flat[centerIdx], cx, cy);
+    if(satellites.length === 1){
+      addAtomAt(satellites[0], cx + R, cy);
+    } else {
+      satellites.forEach(function(sym, i){
+        var angle = (-90 + (360 / satellites.length) * i) * Math.PI / 180;
+        addAtomAt(sym, cx + R*Math.cos(angle), cy + R*Math.sin(angle));
+      });
+    }
+
+    var bd = budgetBreakdown(entries, charge);
+    totalBudget = bd.total;
+    molHeadingArea.innerHTML = prettyFormula(entries, charge);
+    molBreakdownArea.textContent = bd.text;
+    molCaption.style.display = "block";
+
+    updateEmptyHint();
+    renderBonds();
+    updateBudgetUI();
+    renderLog();
+    clearOctetCheck();
+  }
+
+  function addAtomAt(sym, x, y){
+    var atom = { id: nextId++, sym: sym, x:x, y:y, cat: CATEGORY[sym] || "other", lonePairs: 0 };
+    atoms.push(atom);
+    renderAtom(atom);
+    return atom;
+  }
+
+  function updateEmptyHint(){ emptyHint.style.display = atoms.length ? "none" : "flex"; }
+
+  /* ---------------- budget UI ---------------- */
+  function updateBudgetUI(){
+    var remaining = Math.max(totalBudget - placed, 0);
+    document.getElementById("placedNum").textContent = placed;
+    document.getElementById("totalNum").textContent = totalBudget;
+    var remEl = document.getElementById("remainingNum");
+    remEl.textContent = remaining;
+    remEl.classList.toggle("zero", remaining === 0 && totalBudget > 0);
+    var pct = totalBudget > 0 ? Math.min(100, (placed/totalBudget)*100) : 0;
+    var fill = document.getElementById("budgetFill");
+    fill.style.width = pct + "%";
+    fill.classList.toggle("full", remaining === 0 && totalBudget > 0);
+  }
+
+  function remainingElectrons(){ return totalBudget - placed; }
+
+  function flashBudgetWarning(){
+    var track = document.querySelector(".budget .track");
+    track.style.borderColor = "var(--warn)";
+    setTimeout(function(){ track.style.borderColor = "var(--grid)"; }, 500);
+  }
+
+  function flashAtomFull(atomId){
+    var el = document.querySelector('.atom[data-id="'+atomId+'"] .core');
+    if(!el) return;
+    var prevBorder = el.style.borderColor;
+    el.style.borderColor = "var(--warn)";
+    setTimeout(function(){ el.style.borderColor = prevBorder; }, 500);
+  }
+
+  /* ---------------- octet check ---------------- */
+  function clearOctetCheck(){
+    Array.prototype.forEach.call(document.querySelectorAll(".atom .core.octet-bad"), function(el){ el.classList.remove("octet-bad"); });
+    var res = document.getElementById("octetResult");
+    res.textContent = "";
+    res.className = "octet-result";
+  }
+
+  function checkOctet(){
+    if(!atoms.length) return;
+    var badCount = 0;
+    atoms.forEach(function(atom){
+      var bondSum = 0;
+      bonds.forEach(function(b){ if(b.aId===atom.id || b.bId===atom.id) bondSum += b.order; });
+      var env = atom.lonePairs*2 + bondSum*2;
+      var target = (atom.sym === "H" || atom.sym === "He") ? 2 : 8;
+      var el = document.querySelector('.atom[data-id="'+atom.id+'"] .core');
+      if(env !== target){
+        badCount++;
+        if(el) el.classList.add("octet-bad");
+      } else if(el){
+        el.classList.remove("octet-bad");
+      }
+    });
+    var res = document.getElementById("octetResult");
+    if(badCount === 0){
+      res.textContent = "\u2713 All atoms have a complete shell.";
+      res.className = "octet-result good";
+    } else {
+      res.textContent = badCount + (badCount===1 ? " atom needs" : " atoms need") + " attention.";
+      res.className = "octet-result bad";
+    }
+  }
+  document.getElementById("checkOctetBtn").addEventListener("click", checkOctet);
+
+  /* ---------------- log ---------------- */
+  function logEvent(kind, text, delta){
+    logEntries.unshift({kind:kind, text:text, delta:delta});
+    renderLog();
+  }
+  function renderLog(){
+    var list = document.getElementById("logList");
+    if(!logEntries.length){ list.innerHTML = '<div class="log-empty">Actions you take will appear here.</div>'; return; }
+    list.innerHTML = "";
+    logEntries.forEach(function(entry){
+      var div = document.createElement("div");
+      div.className = "log-entry";
+      var isRemove = entry.kind.indexOf("remove") === 0;
+      div.innerHTML = '<div class="action' + (isRemove?' remove':'') + '">' + entry.text + '</div>' +
+        '<div class="meta">' + (entry.delta>=0?'+':'') + entry.delta + ' e\u207B \u00B7 placed ' + placed + '/' + totalBudget + '</div>';
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------- lone pair geometry (bond-aware) ---------------- */
+  function angleTo(atom, other){
+    var dx = other.x - atom.x, dy = other.y - atom.y;
+    var deg = Math.atan2(dy, dx) * 180 / Math.PI;
+    return (deg + 360) % 360;
+  }
+  function angDist(a,b){ var d = Math.abs(a-b) % 360; return d > 180 ? 360-d : d; }
+
+  function computeSlotAngles(atom){
+    var bondAngles = neighborsOf(atom.id).map(function(nid){
+      var n = byId(nid);
+      return n ? angleTo(atom, n) : null;
+    }).filter(function(a){ return a !== null; });
+
+    var candidates = [0,45,90,135,180,225,270,315];
+    function minDistToBonds(a){
+      if(!bondAngles.length) return 180;
+      return Math.min.apply(null, bondAngles.map(function(b){ return angDist(a,b); }));
+    }
+    var scored = candidates.slice().sort(function(a,b){
+      var da = minDistToBonds(a), db = minDistToBonds(b);
+      if(db !== da) return db - da;
+      var aCard = (a % 90 === 0) ? 0 : 1, bCard = (b % 90 === 0) ? 0 : 1;
+      return aCard - bCard;
+    });
+
+    var chosen = [];
+    scored.forEach(function(c){
+      if(chosen.length >= 4) return;
+      var spaced = chosen.every(function(ch){ return angDist(c,ch) >= 60; });
+      if(spaced && minDistToBonds(c) >= 30) chosen.push(c);
+    });
+    if(chosen.length < 4){
+      scored.forEach(function(c){
+        if(chosen.length >= 4) return;
+        if(chosen.indexOf(c) === -1 && minDistToBonds(c) >= 20) chosen.push(c);
+      });
+    }
+    if(chosen.length < 4){
+      scored.forEach(function(c){
+        if(chosen.length >= 4) return;
+        if(chosen.indexOf(c) === -1) chosen.push(c);
+      });
+    }
+    return chosen;
+  }
+
+  function lonePairCenter(angleDeg){
+    var rad = angleDeg * Math.PI/180;
+    var r = 34;
+    return { x: 48 + r*Math.cos(rad), y: 48 + r*Math.sin(rad) };
+  }
+  function lonePairDotOffsets(angleDeg){
+    var rad = angleDeg * Math.PI/180;
+    var perp = rad + Math.PI/2;
+    var spread = 4.5;
+    return [
+      { dx: -spread*Math.cos(perp), dy: -spread*Math.sin(perp) },
+      { dx:  spread*Math.cos(perp), dy:  spread*Math.sin(perp) }
+    ];
+  }
+
+  function renderLonePairsInto(atomEl, atom){
+    var old = atomEl.querySelectorAll(".lp");
+    old.forEach(function(n){ n.remove(); });
+    if(atom.lonePairs <= 0) return;
+    var angles = computeSlotAngles(atom);
+    var n = Math.min(atom.lonePairs, angles.length);
+    for(var idx=0; idx<n; idx++){
+      var angle = angles[idx];
+      var center = lonePairCenter(angle);
+      var offs = lonePairDotOffsets(angle);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "lp";
+      btn.style.left = (center.x - 10) + "px";
+      btn.style.top = (center.y - 10) + "px";
+      btn.setAttribute("aria-label", atom.sym + " lone pair \u2014 click to remove");
+      btn.innerHTML =
+        '<i style="left:' + (10+offs[0].dx-3) + 'px;top:' + (10+offs[0].dy-3) + 'px;"></i>' +
+        '<i style="left:' + (10+offs[1].dx-3) + 'px;top:' + (10+offs[1].dy-3) + 'px;"></i>';
+      btn.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        removeLonePair(atom.id);
+      });
+      atomEl.appendChild(btn);
+    }
+  }
+
+  function renderAtom(atom){
+    var el = document.createElement("div");
+    el.className = "atom";
+    el.setAttribute("data-id", atom.id);
+    el.style.left = atom.x+"px";
+    el.style.top = atom.y+"px";
+    el.style.setProperty("--cat-color", "var(--"+atom.cat+")");
+
+    var core = document.createElement("div");
+    core.className = "core";
+    core.textContent = atom.sym;
+    el.appendChild(core);
+
+    workspace.appendChild(el);
+    renderLonePairsInto(el, atom);
+
+    var potentialDrag=false, dragging=false, offX=0, offY=0, startX=0, startY=0;
+    core.addEventListener("pointerdown", function(ev){
+      potentialDrag = true; dragging = false;
+      startX = ev.clientX; startY = ev.clientY;
+      core.setPointerCapture(ev.pointerId);
+      var rect = workspace.getBoundingClientRect();
+      offX = (ev.clientX - rect.left + workspace.scrollLeft) - atom.x;
+      offY = (ev.clientY - rect.top + workspace.scrollTop) - atom.y;
+    });
+    core.addEventListener("pointermove", function(ev){
+      if(!potentialDrag) return;
+      var dx = ev.clientX-startX, dy = ev.clientY-startY;
+      if(!dragging && Math.sqrt(dx*dx+dy*dy) > 4){ dragging = true; el.classList.add("dragging"); }
+      if(dragging){
+        var rect = workspace.getBoundingClientRect();
+        atom.x = (ev.clientX - rect.left + workspace.scrollLeft) - offX;
+        atom.y = (ev.clientY - rect.top + workspace.scrollTop) - offY;
+        el.style.left = atom.x+"px";
+        el.style.top = atom.y+"px";
+        renderBonds();
+        refreshAtom(atom.id);
+        neighborsOf(atom.id).forEach(refreshAtom);
+      }
+    });
+    function endDrag(ev){
+      if(!potentialDrag) return;
+      potentialDrag = false;
+      try{ core.releasePointerCapture(ev.pointerId); }catch(e){}
+      if(dragging){
+        dragging = false;
+        el.classList.remove("dragging");
+        return;
+      }
+      onAtomClick(atom.id);
+    }
+    core.addEventListener("pointerup", endDrag);
+    core.addEventListener("pointercancel", function(){ potentialDrag=false; dragging=false; el.classList.remove("dragging"); });
+  }
+
+  function refreshAtom(atomId){
+    var atom = byId(atomId);
+    var el = document.querySelector('.atom[data-id="'+atomId+'"]');
+    if(!atom || !el) return;
+    renderLonePairsInto(el, atom);
+    el.querySelector(".core").classList.toggle("armed", pendingAtom === atomId);
+  }
+
+  /* ---------------- interaction ---------------- */
+  function onAtomClick(atomId){
+    if(currentTool === "lone"){
+      addLonePair(atomId);
+      return;
+    }
+    var order = parseInt(currentTool, 10);
+    if(!pendingAtom){
+      pendingAtom = atomId;
+      refreshAtom(atomId);
+      return;
+    }
+    if(pendingAtom === atomId){
+      pendingAtom = null;
+      refreshAtom(atomId);
+      return;
+    }
+    var otherId = pendingAtom;
+    pendingAtom = null;
+    refreshAtom(otherId);
+    formOrUpdateBond(otherId, atomId, order);
+  }
+
+  function addLonePair(atomId){
+    var atom = byId(atomId);
+    if(atom.lonePairs >= 4){ flashAtomFull(atomId); return; }
+    if(remainingElectrons() < 2){ flashBudgetWarning(); return; }
+    clearOctetCheck();
+    atom.lonePairs += 1;
+    placed += 2;
+    logEvent("add-lone", "Added lone pair to " + atom.sym, 2);
+    refreshAtom(atomId);
+    updateBudgetUI();
+  }
+
+  function removeLonePair(atomId){
+    var atom = byId(atomId);
+    if(!atom || atom.lonePairs <= 0) return;
+    clearOctetCheck();
+    atom.lonePairs -= 1;
+    placed -= 2;
+    logEvent("remove-lone", "Removed lone pair from " + atom.sym, -2);
+    refreshAtom(atomId);
+    updateBudgetUI();
+  }
+
+  function formOrUpdateBond(idA, idB, toolOrder){
+    var existing = findBond(idA, idB);
+    var oldOrder = existing ? existing.order : 0;
+    var newOrder;
+    if(!existing){ newOrder = toolOrder; }
+    else if(toolOrder > oldOrder){ newOrder = toolOrder; }
+    else { newOrder = Math.min(oldOrder + 1, 3); }
+
+    if(newOrder === oldOrder) return; // already at max order, nothing to do
+
+    var delta = (newOrder - oldOrder) * 2;
+    if(delta > 0 && remainingElectrons() < delta){ flashBudgetWarning(); return; }
+
+    clearOctetCheck();
+    var a = byId(idA), b = byId(idB);
+    if(existing){
+      existing.order = newOrder;
+      placed += delta;
+      logEvent("add-bond", "Changed " + a.sym + "\u2013" + b.sym + " to " + ORDER_NAME[newOrder] + " bond", delta);
+    } else {
+      bonds.push({ id: nextId++, aId:idA, bId:idB, order:newOrder });
+      placed += newOrder*2;
+      logEvent("add-bond", "Formed " + a.sym + ORDER_GLYPH[newOrder] + b.sym + " bond", newOrder*2);
+    }
+    updateBudgetUI();
+    renderBonds();
+    refreshAtom(idA);
+    refreshAtom(idB);
+  }
+
+  function removeBond(bondId){
+    var idx = bonds.findIndex(function(b){return b.id===bondId;});
+    if(idx === -1) return;
+    var b = bonds[idx];
+    var a1 = byId(b.aId), a2 = byId(b.bId);
+    clearOctetCheck();
+    bonds.splice(idx,1);
+    placed -= b.order*2;
+    logEvent("remove-bond", "Removed " + (a1?a1.sym:"?") + ORDER_GLYPH[b.order] + (a2?a2.sym:"?") + " bond", -(b.order*2));
+    updateBudgetUI();
+    renderBonds();
+    refreshAtom(b.aId);
+    refreshAtom(b.bId);
+  }
+
+  /* ---------------- bond rendering ---------------- */
+  function svgEl(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    return e;
+  }
+
+  function renderBonds(){
+    var w = Math.max(workspace.scrollWidth, workspace.clientWidth);
+    var h = Math.max(workspace.scrollHeight, workspace.clientHeight);
+    bondLayer.setAttribute("width", w);
+    bondLayer.setAttribute("height", h);
+    bondLayer.innerHTML = "";
+
+    bonds.forEach(function(b){
+      var a1 = byId(b.aId), a2 = byId(b.bId);
+      if(!a1 || !a2) return;
+      var dx = a2.x-a1.x, dy = a2.y-a1.y;
+      var dist = Math.sqrt(dx*dx+dy*dy) || 1;
+      var ux = dx/dist, uy = dy/dist;
+      var px = -uy, py = ux;
+      var rimGap = 27;
+      var sx = a1.x+ux*rimGap, sy = a1.y+uy*rimGap;
+      var ex = a2.x-ux*rimGap, ey = a2.y-uy*rimGap;
+      var offsets = b.order===1 ? [0] : b.order===2 ? [-3.5,3.5] : [-6,0,6];
+
+      var g = svgEl("g", {class:"bond-hit"});
+      var hit = svgEl("line", {x1:sx,y1:sy,x2:ex,y2:ey, stroke:"transparent", "stroke-width":16});
+      g.appendChild(hit);
+      offsets.forEach(function(off){
+        var l = svgEl("line", {
+          x1:sx+px*off, y1:sy+py*off, x2:ex+px*off, y2:ey+py*off,
+          stroke:"var(--bond)", "stroke-width":3, "stroke-linecap":"round", class:"bl"
+        });
+        g.appendChild(l);
+      });
+      var title = svgEl("title", {});
+      title.textContent = ORDER_NAME[b.order] + " bond \u2014 click to remove";
+      g.appendChild(title);
+      g.addEventListener("click", function(){ removeBond(b.id); });
+      bondLayer.appendChild(g);
+    });
+  }
+
+  /* ---------------- controls ---------------- */
+  Array.prototype.forEach.call(document.querySelectorAll(".tool-group button"), function(btn){
+    btn.addEventListener("click", function(){
+      currentTool = btn.getAttribute("data-tool");
+      pendingAtom = null;
+      Array.prototype.forEach.call(document.querySelectorAll(".tool-group button"), function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      atoms.forEach(function(a){ refreshAtom(a.id); });
+    });
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!atoms.length) return;
+    atoms.forEach(function(a){ a.lonePairs = 0; });
+    bonds = []; placed = 0; pendingAtom = null; logEntries = [];
+    atoms.forEach(function(a){ refreshAtom(a.id); });
+    updateBudgetUI(); renderBonds(); renderLog(); clearOctetCheck();
+  });
+
+  var howto = document.getElementById("howto");
+  document.getElementById("howtoBtn").addEventListener("click", function(){ howto.showModal(); });
+  document.getElementById("howtoClose").addEventListener("click", function(){ howto.close(); });
+
+  window.addEventListener("resize", renderBonds);
+
+  updateEmptyHint();
+  updateBudgetUI();
+})();
+</script>
+</body>
+</html>
