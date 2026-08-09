@@ -2,7 +2,7 @@
   "title": "Polyatomic Ion Memorization Game (Green Sheet)",
   "author": "Dr. Dan",
   "course": "CHEM 3A or CHEM 1A",
-  "description": "This interactive study tool helps students practice identifying common polyatomic ions by matching each ion’s name and chemical formula. Students can choose to study Name → Formula, Formula → Name, or use a mixed review mode. The activity provides immediate feedback, tracks accuracy and streaks, and allows students to reveal answers when needed. Chemical formulas are displayed with proper subscripts and superscript charges, and element symbols are case-sensitive to reinforce correct chemical notation. A clickable periodic table reference is also included below the activity for quick review of element symbols and atomic numbers.",
+  "description": "This interactive study tool helps students practice identifying common polyatomic ions by matching each ion’s name and chemical formula. Students can choose to study Name → Formula, Formula → Name, or use a mixed review mode. The activity provides immediate feedback, tracks accuracy and streaks, and allows students to reveal answers when needed.",
   "tags": ["naming"],
   "status": "working"
 }
