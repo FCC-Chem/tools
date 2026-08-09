@@ -3,13 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SI Prefix Challenge</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
         margin: 0;
@@ -42,7 +39,7 @@
         margin: 0 auto;
         color: #667085;
         line-height: 1.5;
-        max-width: 680px;
+        max-width: 700px;
     }
 
     .game-card,
@@ -60,10 +57,6 @@
     .missed-section {
         margin-top: 20px;
     }
-
-    /* ==========================
-       COURSE TOGGLE
-       ========================== */
 
     .course-selector {
         text-align: center;
@@ -145,10 +138,6 @@
         font-size: 0.88rem;
     }
 
-    /* ==========================
-       SCOREBOARD
-       ========================== */
-
     .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -176,10 +165,6 @@
         margin-top: 3px;
         color: #243b64;
     }
-
-    /* ==========================
-       QUESTION
-       ========================== */
 
     .question-type {
         display: table;
@@ -218,10 +203,6 @@
         margin-bottom: 25px;
     }
 
-    /* ==========================
-       INPUT
-       ========================== */
-
     .instruction {
         text-align: center;
         margin-bottom: 12px;
@@ -252,10 +233,6 @@
         font-size: 0.84rem;
         min-height: 20px;
     }
-
-    /* ==========================
-       BUTTONS
-       ========================== */
 
     .button-row {
         display: flex;
@@ -303,10 +280,6 @@
         color: #374151;
     }
 
-    /* ==========================
-       FEEDBACK
-       ========================== */
-
     .feedback {
         display: none;
         margin-top: 20px;
@@ -337,10 +310,6 @@
         border: 1px solid #c8dcf6;
     }
 
-    /* ==========================
-       SETTINGS
-       ========================== */
-
     .settings h2,
     .reference-section h2,
     .missed-section h2 {
@@ -349,11 +318,18 @@
         margin-top: 0;
     }
 
+    .settings-note {
+        text-align: center;
+        color: #667085;
+        margin: -6px 0 18px;
+        font-size: 0.9rem;
+    }
+
     .settings-row {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 18px;
+        gap: 12px;
     }
 
     .checkbox-label {
@@ -366,10 +342,6 @@
     .checkbox-label input {
         margin-right: 7px;
     }
-
-    /* ==========================
-       REFERENCE
-       ========================== */
 
     .reference-section {
         display: none;
@@ -396,10 +368,6 @@
     .reference-table tr:hover {
         background: #fafbff;
     }
-
-    /* ==========================
-       MISSED
-       ========================== */
 
     .missed-section {
         display: none;
@@ -461,62 +429,35 @@
     <div class="header">
         <h1>SI Prefix Challenge</h1>
         <p>
-            Practice converting between SI prefixes, scientific notation,
+            Practice SI prefix names, symbols, scientific notation,
             and standard decimal notation.
         </p>
     </div>
 
     <div class="game-card">
 
-        <!-- COURSE MODE -->
-
         <div class="course-selector">
 
-            <div class="course-selector-title">
-                Select Course
-            </div>
+            <div class="course-selector-title">Select Course</div>
 
             <div class="course-toggle-row">
 
-                <span
-                    class="course-name"
-                    id="chem3Label"
-                >
-                    CHEM 3A
-                </span>
+                <span class="course-name" id="chem3Label">CHEM 3A</span>
 
                 <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="courseToggle"
-                        checked
-                    >
-
+                    <input type="checkbox" id="courseToggle" checked>
                     <span class="slider"></span>
-
                 </label>
 
-                <span
-                    class="course-name active"
-                    id="chem1Label"
-                >
-                    CHEM 1A
-                </span>
+                <span class="course-name active" id="chem1Label">CHEM 1A</span>
 
             </div>
 
-            <div
-                class="course-range"
-                id="courseRange"
-            >
+            <div class="course-range" id="courseRange">
                 CHEM 1A Range: tera (10¹²) through femto (10⁻¹⁵)
             </div>
 
         </div>
-
-
-        <!-- SCOREBOARD -->
 
         <div class="stats">
 
@@ -542,45 +483,22 @@
 
         </div>
 
-
-        <!-- QUESTION -->
-
-        <div
-            class="question-type"
-            id="questionType"
-        >
-            Prefix → Number
+        <div class="question-type" id="questionType">
+            Prefix Name → Number
         </div>
 
-        <div
-            class="question-label"
-            id="questionLabel"
-        >
-            What numerical value corresponds to the SI prefix:
+        <div class="question-label" id="questionLabel">
+            What numerical value corresponds to:
         </div>
 
-        <div
-            class="question-display"
-            id="questionDisplay"
-        >
+        <div class="question-display" id="questionDisplay">
             kilo
         </div>
 
-        <div
-            class="question-subtitle"
-            id="questionSubtitle"
-        >
-            Symbol: k
-        </div>
+        <div class="question-subtitle" id="questionSubtitle"></div>
 
-
-        <!-- INPUT -->
-
-        <div
-            class="instruction"
-            id="instruction"
-        >
-            Enter the numerical value:
+        <div class="instruction" id="instruction">
+            Enter your answer:
         </div>
 
         <input
@@ -593,15 +511,7 @@
             spellcheck="false"
         >
 
-        <div
-            class="example-text"
-            id="exampleText"
-        >
-            Example: 10^3 or 1000
-        </div>
-
-
-        <!-- BUTTONS -->
+        <div class="example-text" id="exampleText"></div>
 
         <div class="button-row">
 
@@ -622,70 +532,56 @@
 
         </div>
 
-
-        <div
-            class="feedback"
-            id="feedback"
-        ></div>
-
-
-        <!-- SECONDARY -->
+        <div class="feedback" id="feedback"></div>
 
         <div class="secondary-controls">
 
-            <button onclick="newQuestion()">
-                New Question
-            </button>
-
-            <button onclick="toggleReference()">
-                Reference Table
-            </button>
-
-            <button onclick="toggleMissed()">
-                Missed Prefixes
-            </button>
-
-            <button onclick="resetGame()">
-                Reset Score
-            </button>
+            <button onclick="newQuestion()">New Question</button>
+            <button onclick="toggleReference()">Reference Table</button>
+            <button onclick="toggleMissed()">Missed Prefixes</button>
+            <button onclick="resetGame()">Reset Score</button>
 
         </div>
 
     </div>
 
-
-    <!-- QUESTION TYPES -->
-
     <div class="settings">
 
         <h2>Question Types</h2>
 
+        <div class="settings-note">
+            Turn question styles on or off to customize practice.
+        </div>
+
         <div class="settings-row">
 
             <label class="checkbox-label">
-                <input
-                    type="checkbox"
-                    id="typePrefix"
-                    checked
-                >
-                Prefix → Number
+                <input type="checkbox" id="typePrefixNumber" checked>
+                Prefix Name → Number
             </label>
 
             <label class="checkbox-label">
-                <input
-                    type="checkbox"
-                    id="typeScientific"
-                    checked
-                >
+                <input type="checkbox" id="typeSymbolNumber" checked>
+                Prefix Symbol → Number
+            </label>
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="typePrefixSymbol" checked>
+                Prefix Name → Symbol
+            </label>
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="typeSymbolPrefix" checked>
+                Prefix Symbol → Name
+            </label>
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="typeScientificPrefix" checked>
                 Scientific Notation → Prefix
             </label>
 
             <label class="checkbox-label">
-                <input
-                    type="checkbox"
-                    id="typeStandard"
-                    checked
-                >
+                <input type="checkbox" id="typeStandardPrefix" checked>
                 Standard Notation → Prefix
             </label>
 
@@ -693,17 +589,9 @@
 
     </div>
 
+    <div class="reference-section" id="referenceSection">
 
-    <!-- REFERENCE -->
-
-    <div
-        class="reference-section"
-        id="referenceSection"
-    >
-
-        <h2 id="referenceTitle">
-            SI Prefix Reference
-        </h2>
+        <h2 id="referenceTitle">SI Prefix Reference</h2>
 
         <table class="reference-table">
 
@@ -722,23 +610,13 @@
 
     </div>
 
-
-    <!-- MISSED -->
-
-    <div
-        class="missed-section"
-        id="missedSection"
-    >
+    <div class="missed-section" id="missedSection">
 
         <h2>Prefixes to Review</h2>
 
-        <div
-            class="missed-list"
-            id="missedList"
-        ></div>
+        <div class="missed-list" id="missedList"></div>
 
     </div>
-
 
     <div class="footer">
         SI Prefix Challenge
@@ -746,22 +624,15 @@
 
 </div>
 
-
 <script>
 
-/* ==========================================================
-   COMPLETE PREFIX DATABASE
-   ========================================================== */
-
 const allPrefixes = [
-
     { name: "tera",  symbol: "T", exponent: 12 },
     { name: "giga",  symbol: "G", exponent: 9 },
     { name: "mega",  symbol: "M", exponent: 6 },
     { name: "kilo",  symbol: "k", exponent: 3 },
     { name: "hecto", symbol: "h", exponent: 2 },
     { name: "deca",  symbol: "da", exponent: 1 },
-
     { name: "deci",  symbol: "d", exponent: -1 },
     { name: "centi", symbol: "c", exponent: -2 },
     { name: "milli", symbol: "m", exponent: -3 },
@@ -769,24 +640,9 @@ const allPrefixes = [
     { name: "nano",  symbol: "n", exponent: -9 },
     { name: "pico",  symbol: "p", exponent: -12 },
     { name: "femto", symbol: "f", exponent: -15 }
-
 ];
 
-
-/* ==========================================================
-   COURSE SETTINGS
-   ========================================================== */
-
-/*
-   CHEM 1A
-   tera → femto
-
-   CHEM 3A
-   tera → nano
-*/
-
 const courseSettings = {
-
     CHEM1A: {
         name: "CHEM 1A",
         maxExponent: 12,
@@ -798,16 +654,9 @@ const courseSettings = {
         maxExponent: 12,
         minExponent: -9
     }
-
 };
 
-
-/* ==========================================================
-   GAME VARIABLES
-   ========================================================== */
-
 let currentCourse = "CHEM1A";
-
 let currentPrefix = null;
 let currentQuestionType = null;
 
@@ -816,42 +665,20 @@ let attempts = 0;
 let streak = 0;
 
 let questionAnswered = false;
-
 let previousPrefixIndex = -1;
 let previousQuestionType = "";
-
 let missedPrefixes = {};
 
-
-/* ==========================================================
-   GET ACTIVE PREFIXES
-   ========================================================== */
-
 function getActivePrefixes() {
-
-    const settings =
-        courseSettings[currentCourse];
+    const settings = courseSettings[currentCourse];
 
     return allPrefixes.filter(prefix =>
-
-        prefix.exponent <=
-        settings.maxExponent
-
-        &&
-
-        prefix.exponent >=
-        settings.minExponent
-
+        prefix.exponent <= settings.maxExponent &&
+        prefix.exponent >= settings.minExponent
     );
 }
 
-
-/* ==========================================================
-   SUPERSCRIPT
-   ========================================================== */
-
 function exponentToSuperscript(number) {
-
     const map = {
         "-": "⁻",
         "0": "⁰",
@@ -872,40 +699,21 @@ function exponentToSuperscript(number) {
         .join("");
 }
 
-
-/* ==========================================================
-   STANDARD NOTATION
-   ========================================================== */
-
 function exponentToStandard(exponent) {
-
     if (exponent > 0) {
-
-        return "1" +
-            "0".repeat(exponent);
-
+        return "1" + "0".repeat(exponent);
     }
 
     if (exponent < 0) {
-
         return "0." +
-            "0".repeat(
-                Math.abs(exponent) - 1
-            ) +
+            "0".repeat(Math.abs(exponent) - 1) +
             "1";
-
     }
 
     return "1";
 }
 
-
-/* ==========================================================
-   COMMAS
-   ========================================================== */
-
 function addCommas(numberString) {
-
     if (numberString.includes(".")) {
         return numberString;
     }
@@ -916,501 +724,234 @@ function addCommas(numberString) {
     );
 }
 
-
-/* ==========================================================
-   COURSE TOGGLE
-   ========================================================== */
-
 function updateCourse() {
+    const toggle = document.getElementById("courseToggle");
 
-    const toggle =
-        document.getElementById(
-            "courseToggle"
-        );
-
-    if (toggle.checked) {
-
-        currentCourse = "CHEM1A";
-
-    }
-
-    else {
-
-        currentCourse = "CHEM3A";
-
-    }
-
+    currentCourse = toggle.checked ? "CHEM1A" : "CHEM3A";
 
     updateCourseDisplay();
-
-    /*
-       Clear score when switching courses so
-       results don't mix between course modes.
-    */
 
     correct = 0;
     attempts = 0;
     streak = 0;
-
     missedPrefixes = {};
-
     previousPrefixIndex = -1;
     previousQuestionType = "";
 
     updateStats();
     updateMissedList();
     buildReferenceTable();
-
     newQuestion();
 }
 
-
-/* ==========================================================
-   COURSE DISPLAY
-   ========================================================== */
-
 function updateCourseDisplay() {
+    const chem1Label = document.getElementById("chem1Label");
+    const chem3Label = document.getElementById("chem3Label");
+    const courseRange = document.getElementById("courseRange");
 
-    const chem1Label =
-        document.getElementById(
-            "chem1Label"
-        );
-
-    const chem3Label =
-        document.getElementById(
-            "chem3Label"
-        );
-
-    const courseRange =
-        document.getElementById(
-            "courseRange"
-        );
-
-
-    if (
-        currentCourse === "CHEM1A"
-    ) {
-
-        chem1Label.classList.add(
-            "active"
-        );
-
-        chem3Label.classList.remove(
-            "active"
-        );
+    if (currentCourse === "CHEM1A") {
+        chem1Label.classList.add("active");
+        chem3Label.classList.remove("active");
 
         courseRange.innerHTML =
             "CHEM 1A Range: " +
             "<strong>tera (10¹²)</strong> through " +
             "<strong>femto (10⁻¹⁵)</strong>";
-
-    }
-
-    else {
-
-        chem3Label.classList.add(
-            "active"
-        );
-
-        chem1Label.classList.remove(
-            "active"
-        );
+    } else {
+        chem3Label.classList.add("active");
+        chem1Label.classList.remove("active");
 
         courseRange.innerHTML =
             "CHEM 3A Range: " +
             "<strong>tera (10¹²)</strong> through " +
             "<strong>nano (10⁻⁹)</strong>";
-
     }
-
 }
 
-
-/* ==========================================================
-   ENABLED QUESTION TYPES
-   ========================================================== */
-
 function getEnabledQuestionTypes() {
-
     let types = [];
 
-    if (
-        document.getElementById(
-            "typePrefix"
-        ).checked
-    ) {
-
-        types.push(
-            "prefixToNumber"
-        );
-
+    if (document.getElementById("typePrefixNumber").checked) {
+        types.push("prefixToNumber");
     }
 
-    if (
-        document.getElementById(
-            "typeScientific"
-        ).checked
-    ) {
-
-        types.push(
-            "scientificToPrefix"
-        );
-
+    if (document.getElementById("typeSymbolNumber").checked) {
+        types.push("symbolToNumber");
     }
 
-    if (
-        document.getElementById(
-            "typeStandard"
-        ).checked
-    ) {
-
-        types.push(
-            "standardToPrefix"
-        );
-
+    if (document.getElementById("typePrefixSymbol").checked) {
+        types.push("prefixToSymbol");
     }
 
+    if (document.getElementById("typeSymbolPrefix").checked) {
+        types.push("symbolToPrefix");
+    }
+
+    if (document.getElementById("typeScientificPrefix").checked) {
+        types.push("scientificToPrefix");
+    }
+
+    if (document.getElementById("typeStandardPrefix").checked) {
+        types.push("standardToPrefix");
+    }
 
     if (types.length === 0) {
-
-        document.getElementById(
-            "typePrefix"
-        ).checked = true;
-
-        types.push(
-            "prefixToNumber"
-        );
-
+        document.getElementById("typePrefixNumber").checked = true;
+        types.push("prefixToNumber");
     }
 
     return types;
 }
 
-
-/* ==========================================================
-   NEW QUESTION
-   ========================================================== */
-
 function newQuestion() {
-
-    const activePrefixes =
-        getActivePrefixes();
-
-    const enabledTypes =
-        getEnabledQuestionTypes();
-
-
-    /*
-       Question type
-    */
+    const activePrefixes = getActivePrefixes();
+    const enabledTypes = getEnabledQuestionTypes();
 
     let type;
 
-    if (
-        enabledTypes.length > 1
-    ) {
-
+    if (enabledTypes.length > 1) {
         do {
-
-            type =
-                enabledTypes[
-                    Math.floor(
-                        Math.random() *
-                        enabledTypes.length
-                    )
-                ];
-
-        }
-
-        while (
-            type ===
-            previousQuestionType
-        );
-
+            type = enabledTypes[
+                Math.floor(Math.random() * enabledTypes.length)
+            ];
+        } while (type === previousQuestionType);
+    } else {
+        type = enabledTypes[0];
     }
 
-    else {
-
-        type =
-            enabledTypes[0];
-
-    }
-
-
-    previousQuestionType =
-        type;
-
-    currentQuestionType =
-        type;
-
-
-    /*
-       Prefix
-    */
+    previousQuestionType = type;
+    currentQuestionType = type;
 
     let prefixIndex;
 
     do {
-
-        prefixIndex =
-            Math.floor(
-                Math.random() *
-                activePrefixes.length
-            );
-
-    }
-
-    while (
-        prefixIndex ===
-        previousPrefixIndex
-
-        &&
-
+        prefixIndex = Math.floor(
+            Math.random() * activePrefixes.length
+        );
+    } while (
+        prefixIndex === previousPrefixIndex &&
         activePrefixes.length > 1
     );
 
-
-    previousPrefixIndex =
-        prefixIndex;
-
-    currentPrefix =
-        activePrefixes[
-            prefixIndex
-        ];
-
-
-    /*
-       Reset display
-    */
+    previousPrefixIndex = prefixIndex;
+    currentPrefix = activePrefixes[prefixIndex];
 
     questionAnswered = false;
 
-    document.getElementById(
-        "answer"
-    ).value = "";
-
-    document.getElementById(
-        "feedback"
-    ).className =
-        "feedback";
-
-    document.getElementById(
-        "feedback"
-    ).innerHTML = "";
-
-    document.getElementById(
-        "checkButton"
-    ).textContent =
+    document.getElementById("answer").value = "";
+    document.getElementById("feedback").className = "feedback";
+    document.getElementById("feedback").innerHTML = "";
+    document.getElementById("checkButton").textContent =
         "Check Answer";
 
-
-    /*
-       Display question
-    */
-
-    if (
-        type ===
-        "prefixToNumber"
-    ) {
-
+    if (type === "prefixToNumber") {
         showPrefixToNumber();
-
-    }
-
-    else if (
-        type ===
-        "scientificToPrefix"
-    ) {
-
+    } else if (type === "symbolToNumber") {
+        showSymbolToNumber();
+    } else if (type === "prefixToSymbol") {
+        showPrefixToSymbol();
+    } else if (type === "symbolToPrefix") {
+        showSymbolToPrefix();
+    } else if (type === "scientificToPrefix") {
         showScientificToPrefix();
-
-    }
-
-    else {
-
+    } else {
         showStandardToPrefix();
-
     }
 
-
-    document.getElementById(
-        "answer"
-    ).focus();
+    document.getElementById("answer").focus();
 }
 
-
-/* ==========================================================
-   PREFIX → NUMBER
-   ========================================================== */
+function setQuestion(typeLabel, questionLabel, display, subtitle, instruction, placeholder, example) {
+    document.getElementById("questionType").textContent = typeLabel;
+    document.getElementById("questionLabel").textContent = questionLabel;
+    document.getElementById("questionDisplay").textContent = display;
+    document.getElementById("questionSubtitle").innerHTML = subtitle;
+    document.getElementById("instruction").textContent = instruction;
+    document.getElementById("answer").placeholder = placeholder;
+    document.getElementById("exampleText").textContent = example;
+}
 
 function showPrefixToNumber() {
-
-    document.getElementById(
-        "questionType"
-    ).textContent =
-        "Prefix → Number";
-
-    document.getElementById(
-        "questionLabel"
-    ).textContent =
-        "What numerical value corresponds to the SI prefix:";
-
-    document.getElementById(
-        "questionDisplay"
-    ).textContent =
-        currentPrefix.name;
-
-    document.getElementById(
-        "questionSubtitle"
-    ).innerHTML =
-        "Symbol: <strong>" +
-        currentPrefix.symbol +
-        "</strong>";
-
-    document.getElementById(
-        "instruction"
-    ).textContent =
-        "Enter the numerical value:";
-
-    document.getElementById(
-        "answer"
-    ).placeholder =
-        "Example: 10^-3 or 0.001";
-
-    document.getElementById(
-        "exampleText"
-    ).textContent =
-        "Scientific notation or standard notation are both accepted.";
+    setQuestion(
+        "Prefix Name → Number",
+        "What numerical value corresponds to the SI prefix:",
+        currentPrefix.name,
+        "",
+        "Enter the numerical value:",
+        "Example: 10^-3 or 0.001",
+        "Scientific notation or standard notation are both accepted."
+    );
 }
 
+function showSymbolToNumber() {
+    setQuestion(
+        "Prefix Symbol → Number",
+        "What numerical value corresponds to the SI prefix symbol:",
+        currentPrefix.symbol,
+        "",
+        "Enter the numerical value:",
+        "Example: 10^-3 or 0.001",
+        "Remember: SI prefix symbols are case-sensitive."
+    );
+}
 
-/* ==========================================================
-   SCIENTIFIC → PREFIX
-   ========================================================== */
+function showPrefixToSymbol() {
+    setQuestion(
+        "Prefix Name → Symbol",
+        "What is the SI symbol for the prefix:",
+        currentPrefix.name,
+        "",
+        "Enter the SI prefix symbol:",
+        "Example: k",
+        "Symbols are case-sensitive: M = mega, while m = milli."
+    );
+}
+
+function showSymbolToPrefix() {
+    setQuestion(
+        "Prefix Symbol → Name",
+        "What SI prefix name corresponds to the symbol:",
+        currentPrefix.symbol,
+        "",
+        "Enter the SI prefix name:",
+        "Example: kilo",
+        "Prefix names are not case-sensitive."
+    );
+}
 
 function showScientificToPrefix() {
-
-    document.getElementById(
-        "questionType"
-    ).textContent =
-        "Scientific Notation → Prefix";
-
-    document.getElementById(
-        "questionLabel"
-    ).textContent =
-        "Which SI prefix corresponds to:";
-
-    document.getElementById(
-        "questionDisplay"
-    ).innerHTML =
-        "10" +
-        exponentToSuperscript(
-            currentPrefix.exponent
-        );
-
-    document.getElementById(
-        "questionSubtitle"
-    ).textContent =
-        "";
-
-    document.getElementById(
-        "instruction"
-    ).textContent =
-        "Enter the SI prefix name or symbol:";
-
-    document.getElementById(
-        "answer"
-    ).placeholder =
-        "Example: milli or m";
-
-    document.getElementById(
-        "exampleText"
-    ).textContent =
-        "Prefix names are not case-sensitive. SI symbols are case-sensitive.";
+    setQuestion(
+        "Scientific Notation → Prefix",
+        "Which SI prefix corresponds to:",
+        "10" + exponentToSuperscript(currentPrefix.exponent),
+        "",
+        "Enter the SI prefix name or symbol:",
+        "Example: milli or m",
+        "Either the full prefix name or the correct case-sensitive symbol is accepted."
+    );
 }
-
-
-/* ==========================================================
-   STANDARD → PREFIX
-   ========================================================== */
 
 function showStandardToPrefix() {
+    const standard = exponentToStandard(currentPrefix.exponent);
 
-    const standard =
-        exponentToStandard(
-            currentPrefix.exponent
-        );
-
-    document.getElementById(
-        "questionType"
-    ).textContent =
-        "Standard Notation → Prefix";
-
-    document.getElementById(
-        "questionLabel"
-    ).textContent =
-        "Which SI prefix corresponds to:";
-
-    document.getElementById(
-        "questionDisplay"
-    ).textContent =
-        addCommas(standard);
-
-    document.getElementById(
-        "questionSubtitle"
-    ).textContent =
-        "";
-
-    document.getElementById(
-        "instruction"
-    ).textContent =
-        "Enter the SI prefix name or symbol:";
-
-    document.getElementById(
-        "answer"
-    ).placeholder =
-        "Example: micro or µ";
-
-    document.getElementById(
-        "exampleText"
-    ).textContent =
-        "Either the full prefix name or correct SI symbol is accepted.";
+    setQuestion(
+        "Standard Notation → Prefix",
+        "Which SI prefix corresponds to:",
+        addCommas(standard),
+        "",
+        "Enter the SI prefix name or symbol:",
+        "Example: micro or µ",
+        "Either the full prefix name or the correct case-sensitive symbol is accepted."
+    );
 }
 
-
-/* ==========================================================
-   NORMALIZE NUMBER
-   ========================================================== */
-
 function normalizeNumberAnswer(input) {
+    let answer = input.trim();
 
-    let answer =
-        input.trim();
-
-    answer =
-        answer.replace(
-            /\s+/g,
-            ""
-        );
-
-    answer =
-        answer.replace(
-            /,/g,
-            ""
-        );
-
-    answer =
-        answer.replace(
-            /×/g,
-            "x"
-        );
-
-    answer =
-        answer.replace(
-            /\*/g,
-            "x"
-        );
-
+    answer = answer.replace(/\s+/g, "");
+    answer = answer.replace(/,/g, "");
+    answer = answer.replace(/×/g, "x");
+    answer = answer.replace(/\*/g, "x");
 
     const superscriptMap = {
         "⁰": "0",
@@ -1427,784 +968,323 @@ function normalizeNumberAnswer(input) {
         "⁺": "+"
     };
 
-
-    answer =
-        answer.replace(
-            /[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,
-            character =>
-                superscriptMap[
-                    character
-                ]
-        );
-
+    answer = answer.replace(
+        /[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,
+        character => superscriptMap[character]
+    );
 
     return answer.toLowerCase();
 }
 
-
-/* ==========================================================
-   INTERPRET NUMBER
-   ========================================================== */
-
 function interpretNumberAnswer(input) {
+    let answer = normalizeNumberAnswer(input);
 
-    let answer =
-        normalizeNumberAnswer(
-            input
-        );
-
-
-    /*
-       10^3
-       10^-3
-       10³
-    */
-
-    let powerMatch =
-        answer.match(
-            /^10\^?([+-]?\d+)$/
-        );
+    let powerMatch = answer.match(/^10\^?([+-]?\d+)$/);
 
     if (powerMatch) {
-
-        return Number(
-            powerMatch[1]
-        );
-
+        return Number(powerMatch[1]);
     }
 
-
-    /*
-       1e3
-       1e-3
-    */
-
-    let eMatch =
-        answer.match(
-            /^1(?:\.0+)?e([+-]?\d+)$/
-        );
+    let eMatch = answer.match(/^1(?:\.0+)?e([+-]?\d+)$/);
 
     if (eMatch) {
-
-        return Number(
-            eMatch[1]
-        );
-
+        return Number(eMatch[1]);
     }
 
-
-    /*
-       1x10^3
-       1×10^-3
-    */
-
-    let scientificMatch =
-        answer.match(
-            /^1(?:\.0+)?x10\^?([+-]?\d+)$/
-        );
+    let scientificMatch = answer.match(
+        /^1(?:\.0+)?x10\^?([+-]?\d+)$/
+    );
 
     if (scientificMatch) {
+        return Number(scientificMatch[1]);
+    }
 
-        return Number(
-            scientificMatch[1]
+    const activePrefixes = getActivePrefixes();
+
+    for (let i = 0; i < activePrefixes.length; i++) {
+        const standard = exponentToStandard(
+            activePrefixes[i].exponent
         );
 
-    }
-
-
-    /*
-       Standard notation
-    */
-
-    const activePrefixes =
-        getActivePrefixes();
-
-    for (
-        let i = 0;
-        i < activePrefixes.length;
-        i++
-    ) {
-
-        const standard =
-            exponentToStandard(
-                activePrefixes[i]
-                    .exponent
-            );
-
-        if (
-            answer === standard
-        ) {
-
-            return activePrefixes[i]
-                .exponent;
-
+        if (answer === standard) {
+            return activePrefixes[i].exponent;
         }
-
     }
-
 
     return null;
 }
 
+function prefixNameIsCorrect(input) {
+    return input.trim().toLowerCase() === currentPrefix.name.toLowerCase();
+}
 
-/* ==========================================================
-   PREFIX ANSWER
-   ========================================================== */
+function prefixSymbolIsCorrect(input) {
+    const trimmed = input.trim();
 
-function prefixAnswerIsCorrect(
-    input
-) {
-
-    const trimmed =
-        input.trim();
-
-
-    /*
-       Full names:
-       case-insensitive
-    */
-
-    if (
-        trimmed.toLowerCase() ===
-        currentPrefix.name
-            .toLowerCase()
-    ) {
-
+    if (trimmed === currentPrefix.symbol) {
         return true;
-
     }
 
-
-    /*
-       Symbols:
-       case-sensitive
-    */
-
     if (
-        trimmed ===
-        currentPrefix.symbol
+        currentPrefix.name === "micro" &&
+        (trimmed === "μ" || trimmed === "µ" || trimmed === "u")
     ) {
-
         return true;
-
     }
-
-
-    /*
-       Micro alternatives
-    */
-
-    if (
-        currentPrefix.name ===
-        "micro"
-
-        &&
-
-        (
-            trimmed === "μ"
-            ||
-            trimmed === "µ"
-            ||
-            trimmed.toLowerCase()
-                === "u"
-        )
-    ) {
-
-        return true;
-
-    }
-
 
     return false;
 }
 
-
-/* ==========================================================
-   CHECK ANSWER
-   ========================================================== */
+function prefixNameOrSymbolIsCorrect(input) {
+    return prefixNameIsCorrect(input) || prefixSymbolIsCorrect(input);
+}
 
 function checkAnswer() {
-
-    if (
-        questionAnswered
-    ) {
-
+    if (questionAnswered) {
         newQuestion();
-
         return;
     }
 
+    const answerElement = document.getElementById("answer");
+    const feedback = document.getElementById("feedback");
+    const userAnswer = answerElement.value;
 
-    const answerElement =
-        document.getElementById(
-            "answer"
-        );
-
-    const feedback =
-        document.getElementById(
-            "feedback"
-        );
-
-    const userAnswer =
-        answerElement.value;
-
-
-    if (
-        userAnswer.trim() === ""
-    ) {
-
-        feedback.className =
-            "feedback info";
-
-        feedback.textContent =
-            "Enter an answer before checking.";
-
+    if (userAnswer.trim() === "") {
+        feedback.className = "feedback info";
+        feedback.textContent = "Enter an answer before checking.";
         return;
     }
-
 
     let isCorrect = false;
 
-
     if (
-        currentQuestionType ===
-        "prefixToNumber"
+        currentQuestionType === "prefixToNumber" ||
+        currentQuestionType === "symbolToNumber"
     ) {
+        const enteredExponent = interpretNumberAnswer(userAnswer);
+        isCorrect = enteredExponent === currentPrefix.exponent;
+    }
 
-        const enteredExponent =
-            interpretNumberAnswer(
-                userAnswer
-            );
+    else if (currentQuestionType === "prefixToSymbol") {
+        isCorrect = prefixSymbolIsCorrect(userAnswer);
+    }
 
-        if (
-            enteredExponent ===
-            currentPrefix.exponent
-        ) {
-
-            isCorrect = true;
-
-        }
-
+    else if (currentQuestionType === "symbolToPrefix") {
+        isCorrect = prefixNameIsCorrect(userAnswer);
     }
 
     else {
-
-        isCorrect =
-            prefixAnswerIsCorrect(
-                userAnswer
-            );
-
+        isCorrect = prefixNameOrSymbolIsCorrect(userAnswer);
     }
-
 
     attempts++;
 
-
-    if (
-        isCorrect
-    ) {
-
+    if (isCorrect) {
         correct++;
-
         streak++;
 
-        feedback.className =
-            "feedback correct";
-
+        feedback.className = "feedback correct";
         feedback.innerHTML =
             "✓ <strong>Correct!</strong><br><br>" +
             getCompleteAnswer();
-
-    }
-
-    else {
-
+    } else {
         streak = 0;
+        addMissedPrefix(currentPrefix);
 
-        addMissedPrefix(
-            currentPrefix
-        );
-
-        feedback.className =
-            "feedback incorrect";
-
+        feedback.className = "feedback incorrect";
         feedback.innerHTML =
             "✗ <strong>Not quite.</strong><br><br>" +
             getCompleteAnswer();
-
     }
 
-
     questionAnswered = true;
-
-    document.getElementById(
-        "checkButton"
-    ).textContent =
+    document.getElementById("checkButton").textContent =
         "Next Question";
 
     updateStats();
 }
 
-
-/* ==========================================================
-   FULL ANSWER
-   ========================================================== */
-
 function getCompleteAnswer() {
-
-    const standard =
-        exponentToStandard(
-            currentPrefix.exponent
-        );
+    const standard = exponentToStandard(currentPrefix.exponent);
 
     return (
-
         "<strong>" +
         currentPrefix.name +
         "</strong> (" +
         currentPrefix.symbol +
         ")" +
-
         " = 10" +
-        exponentToSuperscript(
-            currentPrefix.exponent
-        ) +
-
+        exponentToSuperscript(currentPrefix.exponent) +
         " = " +
-        addCommas(
-            standard
-        )
-
+        addCommas(standard)
     );
 }
 
-
-/* ==========================================================
-   SKIP
-   ========================================================== */
-
 function skipQuestion() {
-
-    if (
-        questionAnswered
-    ) {
-
+    if (questionAnswered) {
         newQuestion();
-
         return;
     }
 
+    const feedback = document.getElementById("feedback");
 
-    const feedback =
-        document.getElementById(
-            "feedback"
-        );
-
-    feedback.className =
-        "feedback info";
-
+    feedback.className = "feedback info";
     feedback.innerHTML =
         "<strong>Answer:</strong><br><br>" +
         getCompleteAnswer();
 
-
-    addMissedPrefix(
-        currentPrefix
-    );
-
+    addMissedPrefix(currentPrefix);
     streak = 0;
-
     questionAnswered = true;
 
-    document.getElementById(
-        "checkButton"
-    ).textContent =
+    document.getElementById("checkButton").textContent =
         "Next Question";
 
     updateStats();
 }
 
-
-/* ==========================================================
-   SCORE
-   ========================================================== */
-
 function updateStats() {
-
-    document.getElementById(
-        "correctCount"
-    ).textContent =
-        correct;
-
-    document.getElementById(
-        "attemptCount"
-    ).textContent =
-        attempts;
-
-    document.getElementById(
-        "streakCount"
-    ).textContent =
-        streak;
-
+    document.getElementById("correctCount").textContent = correct;
+    document.getElementById("attemptCount").textContent = attempts;
+    document.getElementById("streakCount").textContent = streak;
 
     let percent = 0;
 
-    if (
-        attempts > 0
-    ) {
-
-        percent =
-            Math.round(
-                (correct / attempts) *
-                100
-            );
-
+    if (attempts > 0) {
+        percent = Math.round((correct / attempts) * 100);
     }
 
-
-    document.getElementById(
-        "accuracy"
-    ).textContent =
+    document.getElementById("accuracy").textContent =
         percent + "%";
 }
 
-
-/* ==========================================================
-   MISSED PREFIXES
-   ========================================================== */
-
-function addMissedPrefix(
-    prefix
-) {
-
-    if (
-        !missedPrefixes[
-            prefix.name
-        ]
-    ) {
-
-        missedPrefixes[
-            prefix.name
-        ] = {
-
+function addMissedPrefix(prefix) {
+    if (!missedPrefixes[prefix.name]) {
+        missedPrefixes[prefix.name] = {
             prefix: prefix,
             count: 0
-
         };
-
     }
 
-
-    missedPrefixes[
-        prefix.name
-    ].count++;
-
-
+    missedPrefixes[prefix.name].count++;
     updateMissedList();
 }
 
-
 function updateMissedList() {
-
-    const container =
-        document.getElementById(
-            "missedList"
-        );
-
+    const container = document.getElementById("missedList");
     container.innerHTML = "";
 
+    const entries = Object.values(missedPrefixes);
 
-    const entries =
-        Object.values(
-            missedPrefixes
-        );
-
-
-    if (
-        entries.length === 0
-    ) {
-
+    if (entries.length === 0) {
         container.innerHTML =
             "<div>No missed prefixes yet!</div>";
-
         return;
     }
 
+    entries.sort((a, b) => b.count - a.count);
 
-    entries.sort(
-        (a, b) =>
-            b.count - a.count
-    );
+    entries.forEach(item => {
+        const div = document.createElement("div");
 
+        div.className = "missed-item";
 
-    entries.forEach(
-        item => {
+        div.textContent =
+            item.prefix.name +
+            " (" +
+            item.prefix.symbol +
+            ") — missed " +
+            item.count +
+            (item.count === 1 ? " time" : " times");
 
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "missed-item";
-
-            div.textContent =
-                item.prefix.name +
-                " (" +
-                item.prefix.symbol +
-                ") — missed " +
-                item.count +
-                (
-                    item.count === 1
-                    ? " time"
-                    : " times"
-                );
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
+        container.appendChild(div);
+    });
 }
 
-
-/* ==========================================================
-   REFERENCE TABLE
-   ========================================================== */
-
 function buildReferenceTable() {
-
-    const table =
-        document.getElementById(
-            "referenceBody"
-        );
-
-    const title =
-        document.getElementById(
-            "referenceTitle"
-        );
+    const table = document.getElementById("referenceBody");
+    const title = document.getElementById("referenceTitle");
 
     table.innerHTML = "";
 
-
     title.textContent =
-        courseSettings[
-            currentCourse
-        ].name +
+        courseSettings[currentCourse].name +
         " SI Prefix Reference";
 
+    const activePrefixes = getActivePrefixes();
 
-    const activePrefixes =
-        getActivePrefixes();
+    activePrefixes.forEach(prefix => {
+        const row = document.createElement("tr");
+        const standard = exponentToStandard(prefix.exponent);
 
+        row.innerHTML = `
+            <td>${prefix.name}</td>
+            <td><strong>${prefix.symbol}</strong></td>
+            <td>10${exponentToSuperscript(prefix.exponent)}</td>
+            <td>${addCommas(standard)}</td>
+        `;
 
-    activePrefixes.forEach(
-        prefix => {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-            const standard =
-                exponentToStandard(
-                    prefix.exponent
-                );
-
-
-            row.innerHTML = `
-
-                <td>
-                    ${prefix.name}
-                </td>
-
-                <td>
-                    <strong>
-                        ${prefix.symbol}
-                    </strong>
-                </td>
-
-                <td>
-                    10${exponentToSuperscript(prefix.exponent)}
-                </td>
-
-                <td>
-                    ${addCommas(standard)}
-                </td>
-
-            `;
-
-
-            table.appendChild(
-                row
-            );
-
-        }
-    );
+        table.appendChild(row);
+    });
 }
-
-
-/* ==========================================================
-   TOGGLE REFERENCE
-   ========================================================== */
 
 function toggleReference() {
+    const section = document.getElementById("referenceSection");
 
-    const section =
-        document.getElementById(
-            "referenceSection"
-        );
-
-    if (
-        section.style.display ===
-        "block"
-    ) {
-
-        section.style.display =
-            "none";
-
-    }
-
-    else {
-
-        section.style.display =
-            "block";
-
-    }
+    section.style.display =
+        section.style.display === "block"
+            ? "none"
+            : "block";
 }
 
-
-/* ==========================================================
-   TOGGLE MISSED
-   ========================================================== */
-
 function toggleMissed() {
-
-    const section =
-        document.getElementById(
-            "missedSection"
-        );
+    const section = document.getElementById("missedSection");
 
     updateMissedList();
 
-
-    if (
-        section.style.display ===
-        "block"
-    ) {
-
-        section.style.display =
-            "none";
-
-    }
-
-    else {
-
-        section.style.display =
-            "block";
-
-    }
+    section.style.display =
+        section.style.display === "block"
+            ? "none"
+            : "block";
 }
 
-
-/* ==========================================================
-   RESET
-   ========================================================== */
-
 function resetGame() {
-
     correct = 0;
     attempts = 0;
     streak = 0;
-
     missedPrefixes = {};
 
     updateStats();
     updateMissedList();
-
     newQuestion();
 }
 
-
-/* ==========================================================
-   ENTER KEY
-   ========================================================== */
-
 document
-    .getElementById(
-        "answer"
-    )
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                checkAnswer();
-
-            }
-
+    .getElementById("answer")
+    .addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
         }
-    );
-
-
-/* ==========================================================
-   COURSE TOGGLE EVENT
-   ========================================================== */
+    });
 
 document
-    .getElementById(
-        "courseToggle"
-    )
-    .addEventListener(
-        "change",
-        updateCourse
-    );
-
-
-/* ==========================================================
-   QUESTION TYPE CHECKBOXES
-   ========================================================== */
+    .getElementById("courseToggle")
+    .addEventListener("change", updateCourse);
 
 document
-    .querySelectorAll(
-        '.settings input[type="checkbox"]'
-    )
-    .forEach(
-        checkbox => {
-
-            checkbox.addEventListener(
-                "change",
-                function() {
-
-                    getEnabledQuestionTypes();
-
-                    newQuestion();
-
-                }
-            );
-
-        }
-    );
-
-
-/* ==========================================================
-   START GAME
-   ========================================================== */
+    .querySelectorAll('.settings input[type="checkbox"]')
+    .forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            getEnabledQuestionTypes();
+            newQuestion();
+        });
+    });
 
 updateCourseDisplay();
-
 buildReferenceTable();
-
 updateMissedList();
-
 newQuestion();
 
 </script>
-
 </body>
 </html>
