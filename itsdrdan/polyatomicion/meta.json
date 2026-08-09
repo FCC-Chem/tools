@@ -1,0 +1,8 @@
+{
+  "title": "PolyAtomic Ion Memorization Game (Green Sheet)",
+  "author": "Dr. Dan",
+  "course": "CHEM 3A or CHEM 1A",
+  "description": "Type the polyatomic ion formula with charges or polyatomic ion name",
+  "tags": ["naming"],
+  "status": "working"
+}
