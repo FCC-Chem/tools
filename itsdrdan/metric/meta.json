@@ -1,0 +1,8 @@
+{
+  "title": "Metric Prefix Memorization Game (Yellow Sheet)",
+  "author": "Dr. Dan",
+  "course": "CHEM 3A or CHEM 1A",
+  "description": "Practice SI prefixes by matching prefix names and symbols with their corresponding scientific and standard notation values. Choose between CHEM 3A and CHEM 1A difficulty levels, track your accuracy and streak, and review any prefixes you miss.",
+  "tags": ["metric", "prefixes"],
+  "status": "working"
+}
