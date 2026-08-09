@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimensional Analysis Challenge</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-2: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --bond: #e2e8f0;
+      --card-bg: #1e3a5f;
+      --card-border: #3b82f6;
+      --success-glow: rgba(34, 197, 94, 0.4);
+      --danger-glow: rgba(239, 68, 68, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .stats {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: rgba(0,0,0,0.25);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stat span { opacity: 0.85; font-weight: 500; font-size: 0.8rem; }
+
+    .level-select {
+      display: flex;
+      background: rgba(0,0,0,0.25);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .level-select button {
+      border: none;
+      background: transparent;
+      color: white;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+      transition: background 0.15s;
+    }
+
+    .level-select button.active {
+      background: white;
+      color: #0f172a;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+    }
+
+    @media (max-width: 900px) {
+      .main { grid-template-columns: 1fr; }
+    }
+
+    .workspace {
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .problem-card {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--panel-2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .problem-card h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .problem-statement {
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .problem-statement .qty { color: var(--accent); }
+    .problem-statement .target { color: var(--accent-2); }
+
+    .chain-area {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid var(--panel-2);
+      min-height: 180px;
+    }
+
+    .chain-area h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 100px;
+    }
+
+    .start-qty {
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+      color: white;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      box-shadow: 0 2px 8px rgba(14,165,233,0.4);
+    }
+
+    .multiply {
+      font-size: 1.4rem;
+      color: var(--muted);
+      font-weight: 300;
+      padding: 0 0.15rem;
+    }
+
+    .slot {
+      width: 118px;
+      height: 100px;
+      border: 2px dashed var(--panel-2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      background: rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .slot.drag-over {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .slot.filled {
+      border-style: solid;
+      border-color: var(--card-border);
+      background: transparent;
+      padding: 0;
+    }
+
+    .slot .remove-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: white;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .slot.filled:hover .remove-btn { display: flex; }
+
+    .conv-card {
+      width: 118px;
+      height: 100px;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .conv-card:active { cursor: grabbing; }
+    .conv-card.dragging { opacity: 0.5; transform: scale(0.95); }
+    .conv-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.35); }
+
+    .conv-card .num, .conv-card .den {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 0.2rem 0.15rem;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .conv-card .num {
+      background: rgba(56, 189, 248, 0.15);
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    .conv-card .den {
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .conv-card .flip-hint {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-size: 0.65rem;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .conv-card.in-slot {
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .conv-card.in-slot:hover { transform: none; box-shadow: 0 0 0 2px var(--accent); }
+
+    .conv-card.flipped .num {
+      background: rgba(99, 102, 241, 0.12);
+    }
+    .conv-card.flipped .den {
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    .unit-preview {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: rgba(0,0,0,0.25);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      min-height: 2.2rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+
+    .unit-preview .cancel {
+      text-decoration: line-through;
+      color: var(--danger);
+      opacity: 0.75;
+    }
+
+    .unit-preview .keep {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .unit-preview .num-keep {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .unit-preview .pending { color: var(--muted); }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+      box-shadow: 0 3px 10px rgba(34, 197, 94, 0.35);
+    }
+
+    button.primary:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(34, 197, 94, 0.45); }
+    button.primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    button.secondary {
+      background: var(--panel-2);
+      color: var(--text);
+      border: none;
+      padding: 0.65rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button.secondary:hover { background: #475569; }
+
+    .feedback {
+      padding: 0.9rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--accent-2);
+      color: #86efac;
+    }
+    .feedback.error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+    }
+    .feedback.info {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--accent);
+      color: #7dd3fc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sidebar {
+      background: var(--panel);
+      border-left: 1px solid var(--panel-2);
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sidebar h3 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .card-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      min-height: 120px;
+    }
+
+    .card-pool .conv-card {
+      /* slightly smaller in pool for density */
+    }
+
+    .help-box {
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .help-box strong { color: var(--text); }
+
+    .timer-bar {
+      height: 4px;
+      background: var(--panel-2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .timer-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-2), var(--warn), var(--danger));
+      transition: width 0.3s linear;
+      width: 100%;
+    }
+
+    .result-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .result-overlay.show { display: flex; }
+
+    .result-modal {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid var(--panel-2);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .result-modal h2 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .result-modal .score-big {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-2);
+      margin: 0.75rem 0;
+    }
+    .result-modal p { color: var(--muted); margin-bottom: 1.25rem; line-height: 1.5; }
+
+    .result-modal .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .progress-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--panel-2);
+    }
+    .progress-dots span.done { background: var(--accent-2); }
+    .progress-dots span.current { background: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,0.3); }
+
+    footer {
+      text-align: center;
+      padding: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--panel-2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Dimensional Analysis Challenge</h1>
+    </div>
+    <div class="stats">
+      <div class="stat">Score: <strong id="score">0</strong></div>
+      <div class="stat">Streak: <strong id="streak">0</strong></div>
+      <div class="stat"><span>Time</span> <strong id="timer">0:00</strong></div>
+      <div class="level-select">
+        <button data-level="easy" class="active">Easy</button>
+        <button data-level="medium">Medium</button>
+        <button data-level="hard">Hard</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="workspace">
+      <div class="problem-card">
+        <h2>Convert</h2>
+        <div class="problem-statement" id="problemText">
+          Loading problem...
+        </div>
+        <div class="timer-bar"><div class="fill" id="timerBar"></div></div>
+      </div>
+
+      <div class="chain-area">
+        <h3>Build your conversion chain — drag cards here, click a placed card to flip</h3>
+        <div class="chain" id="chain">
+          <div class="start-qty" id="startQty">—</div>
+          <!-- slots added dynamically -->
+        </div>
+        <div class="unit-preview" id="unitPreview">
+          Units will appear here as you build the chain
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="primary" id="checkBtn">Check Answer</button>
+        <button class="secondary" id="clearBtn">Clear Chain</button>
+        <button class="secondary" id="hintBtn">Hint</button>
+        <button class="secondary" id="skipBtn">Skip</button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="sidebar">
+      <h3>Conversion Factor Cards</h3>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:-0.5rem;">Drag into the chain. Some cards are distractors!</p>
+      <div class="card-pool" id="cardPool"></div>
+
+      <div class="help-box">
+        <strong>How to play</strong><br>
+        1. Drag conversion cards into the empty slots.<br>
+        2. Click a placed card to <strong>flip</strong> numerator ↔ denominator.<br>
+        3. Numbers stay green — only cancelled <em>units</em> are struck through. Multiply the green numbers for your answer.<br>
+        4. Goal: only the target unit remains. Avoid distractor cards!<br>
+        Covers SI, imperial, pressure, energy & volume units.
+      </div>
+    </div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-modal">
+      <div class="progress-dots" id="progressDots"></div>
+      <h2 id="resultTitle">Nice work!</h2>
+      <div class="score-big" id="resultScore">+120</div>
+      <p id="resultMsg">Units cancelled perfectly.</p>
+      <div class="actions">
+        <button class="primary" id="nextBtn">Next Problem</button>
+        <button class="secondary" id="retryBtn">Retry</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Dimensional Analysis Challenge · Practice SI prefixes & unit conversions</footer>
+
+  <script>
+    // ========== DATA ==========
+    const SI_PREFIXES = {
+      'G': 1e9, 'M': 1e6, 'k': 1e3, 'h': 1e2, 'da': 10,
+      '': 1, 'd': 0.1, 'c': 0.01, 'm': 0.001, 'µ': 1e-6, 'n': 1e-9, 'p': 1e-12
+    };
+
+    // Pre-defined conversion factors (value of numerator relative to denominator base)
+    // Each factor: { num: {val, unit}, den: {val, unit}, label optional }
+    const FACTORS = {
+      // ——— Mass (SI) — prefix ↔ base only ———
+      kg_g:    { num: {v:1000, u:'g'},   den: {v:1, u:'kg'} },
+      g_mg:    { num: {v:1000, u:'mg'},  den: {v:1, u:'g'} },
+      g_µg:    { num: {v:1e6,  u:'µg'},  den: {v:1, u:'g'} },
+      // ——— Mass (Imperial / US) ———
+      lb_g:    { num: {v:453.592, u:'g'}, den: {v:1, u:'lb'} },
+      lb_oz:   { num: {v:16, u:'oz'},     den: {v:1, u:'lb'} },
+      oz_g:    { num: {v:28.3495, u:'g'}, den: {v:1, u:'oz'} },
+      // ——— Length (SI) — prefix ↔ base only ———
+      km_m:    { num: {v:1000, u:'m'},   den: {v:1, u:'km'} },
+      m_cm:    { num: {v:100,  u:'cm'},  den: {v:1, u:'m'} },
+      m_mm:    { num: {v:1000, u:'mm'},  den: {v:1, u:'m'} },
+      // ——— Length (Imperial) ———
+      in_cm:   { num: {v:2.54, u:'cm'},  den: {v:1, u:'in'} },
+      ft_in:   { num: {v:12,   u:'in'},  den: {v:1, u:'ft'} },
+      yd_ft:   { num: {v:3,    u:'ft'},  den: {v:1, u:'yd'} },
+      mi_ft:   { num: {v:5280, u:'ft'},  den: {v:1, u:'mi'} },
+      mi_km:   { num: {v:1.60934, u:'km'}, den: {v:1, u:'mi'} },
+      ft_m:    { num: {v:0.3048, u:'m'}, den: {v:1, u:'ft'} },
+      // ——— Volume (SI) — prefix ↔ base only ———
+      L_mL:    { num: {v:1000, u:'mL'},  den: {v:1, u:'L'} },
+      L_µL:    { num: {v:1e6,  u:'µL'},  den: {v:1, u:'L'} },
+      m3_L:    { num: {v:1000, u:'L'},   den: {v:1, u:'m³'} },
+      cm3_mL:  { num: {v:1,    u:'mL'},  den: {v:1, u:'cm³'} },
+      // ——— Volume (US customary) ———
+      gal_L:   { num: {v:3.78541, u:'L'}, den: {v:1, u:'gal'} },
+      gal_qt:  { num: {v:4, u:'qt'},     den: {v:1, u:'gal'} },
+      qt_pt:   { num: {v:2, u:'pt'},     den: {v:1, u:'qt'} },
+      pt_cup:  { num: {v:2, u:'cup'},    den: {v:1, u:'pt'} },
+      cup_floz:{ num: {v:8, u:'fl oz'},  den: {v:1, u:'cup'} },
+      floz_mL: { num: {v:29.5735, u:'mL'}, den: {v:1, u:'fl oz'} },
+      // ——— Time ———
+      h_min:   { num: {v:60,   u:'min'}, den: {v:1, u:'h'} },
+      min_s:   { num: {v:60,   u:'s'},   den: {v:1, u:'min'} },
+      d_h:     { num: {v:24,   u:'h'},   den: {v:1, u:'d'} },
+      // ——— Pressure ———
+      atm_Pa:  { num: {v:101325, u:'Pa'}, den: {v:1, u:'atm'} },
+      atm_kPa: { num: {v:101.325, u:'kPa'}, den: {v:1, u:'atm'} },
+      atm_mmHg:{ num: {v:760, u:'mmHg'}, den: {v:1, u:'atm'} },
+      atm_torr:{ num: {v:760, u:'torr'}, den: {v:1, u:'atm'} },
+      atm_bar: { num: {v:1.01325, u:'bar'}, den: {v:1, u:'atm'} },
+      atm_psi: { num: {v:14.6959, u:'psi'}, den: {v:1, u:'atm'} },
+      kPa_Pa:  { num: {v:1000, u:'Pa'},  den: {v:1, u:'kPa'} },
+      bar_kPa: { num: {v:100,  u:'kPa'}, den: {v:1, u:'bar'} },
+      mmHg_torr:{ num: {v:1, u:'torr'},  den: {v:1, u:'mmHg'} },
+      // ——— Energy ———
+      kJ_J:    { num: {v:1000, u:'J'},   den: {v:1, u:'kJ'} },
+      kcal_J:  { num: {v:4184, u:'J'},   den: {v:1, u:'kcal'} },
+      cal_J:   { num: {v:4.184, u:'J'},  den: {v:1, u:'cal'} },
+      kcal_cal:{ num: {v:1000, u:'cal'}, den: {v:1, u:'kcal'} },
+      kWh_J:   { num: {v:3.6e6, u:'J'},  den: {v:1, u:'kWh'} },
+      kWh_kJ:  { num: {v:3600, u:'kJ'},  den: {v:1, u:'kWh'} },
+      eV_J:    { num: {v:1.602e-19, u:'J'}, den: {v:1, u:'eV'} },
+      // ——— Chemistry / amount ———
+      mol_mmol:{ num: {v:1000, u:'mmol'}, den: {v:1, u:'mol'} },
+    };
+
+    // Problem bank by difficulty
+    // path = factor keys needed (orientation decided by student via flips)
+    // SI prefix factors are prefix↔base only (no prefix-to-prefix shortcuts)
+    // Hard problems always require ≥ 2 conversion factors
+    const PROBLEMS = {
+      easy: [
+        {
+          start: 5.2, unit: 'kg', target: 'g',
+          path: ['kg_g'],
+          distractors: ['g_mg', 'km_m', 'L_mL', 'lb_g'],
+          time: 45, base: 100
+        },
+        {
+          start: 350, unit: 'cm', target: 'm',
+          path: ['m_cm'],
+          distractors: ['m_mm', 'kg_g', 'in_cm', 'ft_in'],
+          time: 45, base: 100
+        },
+        {
+          start: 2.5, unit: 'L', target: 'mL',
+          path: ['L_mL'],
+          distractors: ['L_µL', 'kg_g', 'h_min', 'gal_L'],
+          time: 40, base: 100
+        },
+        {
+          start: 4800, unit: 'mg', target: 'g',
+          path: ['g_mg'],
+          distractors: ['g_µg', 'kg_g', 'L_mL', 'oz_g'],
+          time: 45, base: 100
+        },
+        {
+          start: 1.8, unit: 'km', target: 'm',
+          path: ['km_m'],
+          distractors: ['m_cm', 'kg_g', 'mi_km', 'ft_m'],
+          time: 40, base: 100
+        },
+        {
+          start: 3, unit: 'h', target: 'min',
+          path: ['h_min'],
+          distractors: ['min_s', 'd_h', 'kg_g', 'atm_Pa'],
+          time: 40, base: 100
+        },
+        {
+          start: 12, unit: 'in', target: 'cm',
+          path: ['in_cm'],
+          distractors: ['ft_in', 'm_cm', 'kg_g', 'm_mm'],
+          time: 45, base: 110
+        },
+        {
+          start: 2, unit: 'atm', target: 'mmHg',
+          path: ['atm_mmHg'],
+          distractors: ['atm_Pa', 'atm_psi', 'kPa_Pa', 'bar_kPa'],
+          time: 50, base: 120
+        },
+        {
+          start: 5, unit: 'kcal', target: 'J',
+          path: ['kcal_J'],
+          distractors: ['kJ_J', 'cal_J', 'kWh_J', 'kcal_cal'],
+          time: 50, base: 120
+        },
+        {
+          start: 1.5, unit: 'gal', target: 'L',
+          path: ['gal_L'],
+          distractors: ['gal_qt', 'L_mL', 'floz_mL', 'm3_L'],
+          time: 45, base: 110
+        }
+      ],
+      medium: [
+        {
+          start: 2.4, unit: 'kg', target: 'mg',
+          path: ['kg_g', 'g_mg'],
+          distractors: ['g_µg', 'L_mL', 'km_m', 'lb_g', 'oz_g'],
+          time: 70, base: 160
+        },
+        {
+          start: 3.5, unit: 'km', target: 'cm',
+          path: ['km_m', 'm_cm'],
+          distractors: ['m_mm', 'kg_g', 'mi_km', 'ft_m', 'in_cm'],
+          time: 70, base: 160
+        },
+        {
+          start: 1.2, unit: 'L', target: 'µL',
+          path: ['L_µL'],
+          distractors: ['L_mL', 'g_mg', 'h_min', 'mol_mmol', 'gal_L'],
+          time: 55, base: 150
+        },
+        {
+          start: 86400, unit: 's', target: 'h',
+          path: ['min_s', 'h_min'],
+          distractors: ['d_h', 'kg_g', 'atm_Pa', 'L_mL'],
+          time: 75, base: 170
+        },
+        {
+          start: 2.5, unit: 'ft', target: 'cm',
+          path: ['ft_in', 'in_cm'],
+          distractors: ['ft_m', 'm_cm', 'yd_ft', 'kg_g', 'm_mm'],
+          time: 75, base: 170
+        },
+        {
+          start: 3, unit: 'atm', target: 'Pa',
+          path: ['atm_kPa', 'kPa_Pa'],
+          distractors: ['atm_Pa', 'atm_mmHg', 'bar_kPa', 'atm_psi', 'atm_torr'],
+          time: 80, base: 180
+        },
+        {
+          start: 2.5, unit: 'kWh', target: 'J',
+          path: ['kWh_kJ', 'kJ_J'],
+          distractors: ['kWh_J', 'kcal_J', 'cal_J', 'eV_J'],
+          time: 75, base: 170
+        },
+        {
+          start: 0.5, unit: 'gal', target: 'mL',
+          path: ['gal_L', 'L_mL'],
+          distractors: ['gal_qt', 'floz_mL', 'm3_L', 'cup_floz', 'L_µL'],
+          time: 80, base: 180
+        },
+        {
+          start: 16, unit: 'oz', target: 'mg',
+          path: ['oz_g', 'g_mg'],
+          distractors: ['lb_oz', 'lb_g', 'kg_g', 'g_µg'],
+          time: 75, base: 170
+        },
+        {
+          start: 2, unit: 'mi', target: 'm',
+          path: ['mi_km', 'km_m'],
+          distractors: ['mi_ft', 'ft_m', 'ft_in', 'm_cm'],
+          time: 80, base: 180
+        }
+      ],
+      hard: [
+        {
+          start: 3.6, unit: 'kg', target: 'µg',
+          path: ['kg_g', 'g_µg'],
+          distractors: ['g_mg', 'L_µL', 'km_m', 'm_mm', 'lb_g', 'oz_g'],
+          time: 95, base: 220
+        },
+        {
+          start: 0.0025, unit: 'km', target: 'mm',
+          path: ['km_m', 'm_mm'],
+          distractors: ['m_cm', 'kg_g', 'mi_km', 'ft_m', 'in_cm'],
+          time: 90, base: 210
+        },
+        {
+          start: 1.5, unit: 'd', target: 's',
+          path: ['d_h', 'h_min', 'min_s'],
+          distractors: ['kg_g', 'L_mL', 'm_cm', 'atm_Pa', 'gal_L'],
+          time: 110, base: 250
+        },
+        {
+          start: 5, unit: 'mi', target: 'cm',
+          path: ['mi_km', 'km_m', 'm_cm'],
+          distractors: ['mi_ft', 'ft_in', 'in_cm', 'ft_m', 'yd_ft'],
+          time: 110, base: 240
+        },
+        {
+          start: 2.5, unit: 'atm', target: 'Pa',
+          path: ['atm_kPa', 'kPa_Pa'],
+          distractors: ['atm_Pa', 'atm_mmHg', 'atm_psi', 'bar_kPa', 'atm_torr'],
+          time: 90, base: 210
+        },
+        {
+          start: 3, unit: 'kWh', target: 'J',
+          path: ['kWh_kJ', 'kJ_J'],
+          distractors: ['kWh_J', 'kcal_J', 'cal_J', 'eV_J', 'kcal_cal'],
+          time: 90, base: 220
+        },
+        {
+          start: 1.25, unit: 'gal', target: 'µL',
+          path: ['gal_L', 'L_µL'],
+          distractors: ['gal_qt', 'floz_mL', 'L_mL', 'm3_L', 'cup_floz'],
+          time: 100, base: 240
+        },
+        {
+          start: 2.5, unit: 'lb', target: 'mg',
+          path: ['lb_g', 'g_mg'],
+          distractors: ['lb_oz', 'oz_g', 'kg_g', 'g_µg', 'L_mL'],
+          time: 95, base: 230
+        },
+        {
+          start: 0.75, unit: 'yd', target: 'mm',
+          path: ['yd_ft', 'ft_m', 'm_mm'],
+          distractors: ['ft_in', 'in_cm', 'm_cm', 'mi_ft', 'ft_m'],
+          time: 110, base: 250
+        },
+        {
+          start: 760, unit: 'torr', target: 'Pa',
+          path: ['atm_torr', 'atm_kPa', 'kPa_Pa'],
+          distractors: ['atm_mmHg', 'atm_Pa', 'bar_kPa', 'atm_psi', 'mmHg_torr'],
+          time: 110, base: 250
+        }
+      ]
+    };
+
+    // ========== STATE ==========
+    let currentLevel = 'easy';
+    let problemIndex = 0;
+    let currentProblem = null;
+    let score = 0;
+    let streak = 0;
+    let placedCards = []; // array of {key, flipped, id}
+    let availableCards = []; // pool cards
+    let timerInterval = null;
+    let timeLeft = 0;
+    let maxTime = 0;
+    let startTimestamp = 0;
+    let problemCount = 0;
+    let totalProblemsInLevel = 0;
+
+    // ========== DOM ==========
+    const $ = id => document.getElementById(id);
+    const scoreEl = $('score');
+    const streakEl = $('streak');
+    const timerEl = $('timer');
+    const timerBar = $('timerBar');
+    const problemText = $('problemText');
+    const startQtyEl = $('startQty');
+    const chainEl = $('chain');
+    const unitPreview = $('unitPreview');
+    const cardPool = $('cardPool');
+    const feedback = $('feedback');
+    const checkBtn = $('checkBtn');
+    const clearBtn = $('clearBtn');
+    const hintBtn = $('hintBtn');
+    const skipBtn = $('skipBtn');
+    const resultOverlay = $('resultOverlay');
+    const resultTitle = $('resultTitle');
+    const resultScore = $('resultScore');
+    const resultMsg = $('resultMsg');
+    const nextBtn = $('nextBtn');
+    const retryBtn = $('retryBtn');
+    const progressDots = $('progressDots');
+
+    // ========== HELPERS ==========
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function cloneFactor(key, flipped = false) {
+      const f = FACTORS[key];
+      if (!f) return null;
+      return {
+        key,
+        flipped,
+        num: flipped ? {...f.den} : {...f.num},
+        den: flipped ? {...f.num} : {...f.den}
+      };
+    }
+
+    function cardHTML(factor, inSlot = false, id = null) {
+      const cls = `conv-card${inSlot ? ' in-slot' : ''}${factor.flipped ? ' flipped' : ''}`;
+      const dataId = id !== null ? ` data-id="${id}"` : '';
+      const dataKey = ` data-key="${factor.key}"`;
+      return `
+        <div class="${cls}" draggable="${!inSlot}" ${dataId}${dataKey} title="Click to flip when placed">
+          <div class="num">${factor.num.v} ${factor.num.u}</div>
+          <div class="den">${factor.den.v} ${factor.den.u}</div>
+          ${inSlot ? '<span class="flip-hint">↻ flip</span>' : ''}
+        </div>`;
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // ========== RENDER ==========
+    function renderProblem() {
+      const p = currentProblem;
+      problemText.innerHTML = `Convert <span class="qty">${p.start} ${p.unit}</span> to <span class="target">${p.target}</span>`;
+      startQtyEl.textContent = `${p.start} ${p.unit}`;
+
+      // Build slots: path length + 1 extra possible
+      const needed = Math.max(p.path.length + 1, 3);
+      // Clear previous slots (keep start qty)
+      while (chainEl.children.length > 1) chainEl.removeChild(chainEl.lastChild);
+
+      for (let i = 0; i < needed; i++) {
+        const mult = document.createElement('span');
+        mult.className = 'multiply';
+        mult.textContent = '×';
+        chainEl.appendChild(mult);
+
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.dataset.index = i;
+        slot.innerHTML = '<span style="color:var(--muted);font-size:0.75rem;">drop</span>';
+        chainEl.appendChild(slot);
+      }
+
+      placedCards = [];
+      updateUnitPreview();
+      renderPool();
+      hideFeedback();
+    }
+
+    function renderPool() {
+      cardPool.innerHTML = '';
+      availableCards.forEach((c, idx) => {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = cardHTML(c, false, idx);
+        const el = wrap.firstElementChild;
+        el.addEventListener('dragstart', onDragStart);
+        el.addEventListener('dragend', onDragEnd);
+        // Also support click-to-add on mobile / preference
+        el.addEventListener('dblclick', () => addCardToFirstEmpty(c.key, false));
+        cardPool.appendChild(el);
+      });
+    }
+
+    function renderPlaced() {
+      const slots = chainEl.querySelectorAll('.slot');
+      slots.forEach((slot, i) => {
+        const card = placedCards[i];
+        if (card) {
+          slot.classList.add('filled');
+          slot.innerHTML = cardHTML(card, true, i) +
+            `<button class="remove-btn" data-idx="${i}" title="Remove">×</button>`;
+          const cardEl = slot.querySelector('.conv-card');
+          cardEl.addEventListener('click', () => flipCard(i));
+          slot.querySelector('.remove-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeCard(i);
+          });
+        } else {
+          slot.classList.remove('filled');
+          slot.innerHTML = '<span style="color:var(--muted);font-size:0.75rem;">drop</span>';
+        }
+      });
+      updateUnitPreview();
+    }
+
+    function updateUnitPreview() {
+      if (!currentProblem) return;
+      // Simulate unit cancellation
+      let units = [{u: currentProblem.unit, sign: 1}]; // starting unit in numerator conceptually
+
+      placedCards.forEach(c => {
+        if (!c) return;
+        // multiply by num/den → add num unit, subtract den unit
+        units.push({u: c.num.u, sign: 1});
+        units.push({u: c.den.u, sign: -1});
+      });
+
+      // Cancel matching pairs
+      const net = {};
+      units.forEach(({u, sign}) => {
+        net[u] = (net[u] || 0) + sign;
+      });
+
+      // Helper: number always stays green; only the unit symbol is cancelled when appropriate
+      function fmtPart(val, unit) {
+        const unitCls = net[unit] === 0 ? 'cancel' : 'keep';
+        return `<span class="num-keep">${val}</span> <span class="${unitCls}">${unit}</span>`;
+      }
+
+      // Build display
+      const parts = [];
+      // Starting quantity — number always green; starting unit cancels when appropriate
+      const startUnitCls = net[currentProblem.unit] === 0 ? 'cancel' : 'keep';
+      parts.push(`<span class="num-keep">${currentProblem.start}</span> <span class="${startUnitCls}">${currentProblem.unit}</span>`);
+
+      placedCards.forEach((c) => {
+        if (!c) return;
+        parts.push(` <span class="pending">×</span> `);
+        parts.push(`(${fmtPart(c.num.v, c.num.u)} / ${fmtPart(c.den.v, c.den.u)})`);
+      });
+
+      // Final remaining units
+      const remaining = Object.entries(net).filter(([, v]) => v !== 0);
+      let finalStr = '';
+      if (remaining.length === 0) {
+        finalStr = ' → <span class="keep">dimensionless?</span>';
+      } else if (remaining.length === 1 && remaining[0][1] === 1) {
+        finalStr = ` → <span class="keep">${remaining[0][0]}</span>`;
+        if (remaining[0][0] === currentProblem.target) {
+          finalStr += ' <span style="color:var(--accent-2)">✓</span>';
+        }
+      } else {
+        finalStr = ' → <span class="pending">' + remaining.map(([u, s]) => s > 0 ? u : `1/${u}`).join(' · ') + '</span>';
+      }
+
+      unitPreview.innerHTML = parts.join('') + finalStr;
+    }
+
+    // ========== DRAG & DROP ==========
+    let dragKey = null;
+
+    function onDragStart(e) {
+      dragKey = e.target.dataset.key;
+      e.target.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData('text/plain', dragKey);
+    }
+
+    function onDragEnd(e) {
+      e.target.classList.remove('dragging');
+      dragKey = null;
+    }
+
+    function setupDropZones() {
+      chainEl.addEventListener('dragover', e => {
+        e.preventDefault();
+        const slot = e.target.closest('.slot');
+        if (slot && !slot.classList.contains('filled')) {
+          slot.classList.add('drag-over');
+        }
+      });
+
+      chainEl.addEventListener('dragleave', e => {
+        const slot = e.target.closest('.slot');
+        if (slot) slot.classList.remove('drag-over');
+      });
+
+      chainEl.addEventListener('drop', e => {
+        e.preventDefault();
+        const slot = e.target.closest('.slot');
+        if (!slot) return;
+        slot.classList.remove('drag-over');
+        if (slot.classList.contains('filled')) return;
+
+        const key = e.dataTransfer.getData('text/plain') || dragKey;
+        if (!key) return;
+        const idx = parseInt(slot.dataset.index, 10);
+        placeCard(idx, key, false);
+      });
+    }
+
+    function placeCard(idx, key, flipped) {
+      // Ensure array is long enough
+      while (placedCards.length <= idx) placedCards.push(null);
+      // Remove from previous position if already placed (not needed for pool)
+      placedCards[idx] = cloneFactor(key, flipped);
+      // Remove one instance from available (visual only – we keep pool full for simplicity)
+      // Actually keep pool infinite for practice; just place
+      renderPlaced();
+    }
+
+    function addCardToFirstEmpty(key, flipped) {
+      const slots = chainEl.querySelectorAll('.slot');
+      for (let i = 0; i < slots.length; i++) {
+        if (!placedCards[i]) {
+          placeCard(i, key, flipped);
+          return;
+        }
+      }
+      // Add extra slot if needed
+      const mult = document.createElement('span');
+      mult.className = 'multiply';
+      mult.textContent = '×';
+      chainEl.appendChild(mult);
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.dataset.index = placedCards.length;
+      chainEl.appendChild(slot);
+      placeCard(placedCards.length, key, flipped);
+    }
+
+    function flipCard(idx) {
+      if (!placedCards[idx]) return;
+      placedCards[idx].flipped = !placedCards[idx].flipped;
+      const f = placedCards[idx];
+      // swap
+      const tmp = f.num;
+      f.num = f.den;
+      f.den = tmp;
+      renderPlaced();
+    }
+
+    function removeCard(idx) {
+      placedCards[idx] = null;
+      // Compact? Optional – leave holes for now, or compact
+      renderPlaced();
+    }
+
+    function clearChain() {
+      placedCards = [];
+      renderPlaced();
+      hideFeedback();
+    }
+
+    // ========== LOGIC ==========
+    function loadProblem(index) {
+      const bank = PROBLEMS[currentLevel];
+      if (index >= bank.length) index = 0;
+      problemIndex = index;
+      currentProblem = bank[index];
+      totalProblemsInLevel = bank.length;
+
+      // Build available cards: correct path + distractors, shuffled
+      const keys = [...currentProblem.path, ...currentProblem.distractors];
+      availableCards = shuffle(keys).map(k => cloneFactor(k, false));
+
+      renderProblem();
+      startTimer(currentProblem.time);
+      updateProgressDots();
+    }
+
+    function startTimer(seconds) {
+      clearInterval(timerInterval);
+      maxTime = seconds;
+      timeLeft = seconds;
+      startTimestamp = Date.now();
+      timerEl.textContent = formatTime(timeLeft);
+      timerBar.style.width = '100%';
+
+      timerInterval = setInterval(() => {
+        timeLeft = Math.max(0, maxTime - (Date.now() - startTimestamp) / 1000);
+        timerEl.textContent = formatTime(timeLeft);
+        timerBar.style.width = `${(timeLeft / maxTime) * 100}%`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          showFeedback('Time\'s up! Try again or skip.', 'error');
+        }
+      }, 200);
+    }
+
+    function checkAnswer() {
+      if (!currentProblem) return;
+      const active = placedCards.filter(Boolean);
+      if (active.length === 0) {
+        showFeedback('Place at least one conversion factor.', 'info');
+        return;
+      }
+
+      // Verify units cancel to target
+      let net = {};
+      net[currentProblem.unit] = 1;
+      active.forEach(c => {
+        net[c.num.u] = (net[c.num.u] || 0) + 1;
+        net[c.den.u] = (net[c.den.u] || 0) - 1;
+      });
+
+      // Clean zeros
+      Object.keys(net).forEach(k => { if (net[k] === 0) delete net[k]; });
+
+      const remaining = Object.keys(net);
+      const success = remaining.length === 1 && remaining[0] === currentProblem.target && net[currentProblem.target] === 1;
+
+      // Also compute numerical value to confirm correctness (optional extra check)
+      let value = currentProblem.start;
+      active.forEach(c => {
+        value = value * (c.num.v / c.den.v);
+      });
+
+      if (success) {
+        const timeBonus = Math.round((timeLeft / maxTime) * 40);
+        const efficiencyBonus = Math.max(0, 30 - Math.abs(active.length - currentProblem.path.length) * 10);
+        const streakBonus = Math.min(streak * 5, 40);
+        const points = currentProblem.base + timeBonus + efficiencyBonus + streakBonus;
+
+        score += points;
+        streak += 1;
+        scoreEl.textContent = score;
+        streakEl.textContent = streak;
+
+        clearInterval(timerInterval);
+        showResult(true, points, `Perfect! Units cancel to ${currentProblem.target}. Value ≈ ${value.toPrecision(4)} ${currentProblem.target}`);
+      } else {
+        streak = 0;
+        streakEl.textContent = 0;
+        let msg = 'Units do not cancel to the target. ';
+        if (remaining.length === 0) msg += 'Everything cancelled — you need the target unit left.';
+        else if (remaining.length === 1) msg += `You ended with ${remaining[0]} instead of ${currentProblem.target}.`;
+        else msg += `Leftover units: ${remaining.join(', ')}. Flip or replace cards.`;
+        showFeedback(msg, 'error');
+      }
+    }
+
+    function showFeedback(msg, type) {
+      feedback.textContent = msg;
+      feedback.className = `feedback show ${type}`;
+    }
+
+    function hideFeedback() {
+      feedback.className = 'feedback';
+    }
+
+    function showResult(success, points, msg) {
+      resultTitle.textContent = success ? 'Excellent!' : 'Not quite';
+      resultScore.textContent = success ? `+${points}` : '—';
+      resultMsg.textContent = msg;
+      resultOverlay.classList.add('show');
+      updateProgressDots();
+    }
+
+    function updateProgressDots() {
+      progressDots.innerHTML = '';
+      for (let i = 0; i < totalProblemsInLevel; i++) {
+        const s = document.createElement('span');
+        if (i < problemIndex) s.classList.add('done');
+        if (i === problemIndex) s.classList.add('current');
+        progressDots.appendChild(s);
+      }
+    }
+
+    function nextProblem() {
+      resultOverlay.classList.remove('show');
+      problemIndex = (problemIndex + 1) % PROBLEMS[currentLevel].length;
+      loadProblem(problemIndex);
+    }
+
+    function retryProblem() {
+      resultOverlay.classList.remove('show');
+      loadProblem(problemIndex);
+    }
+
+    function giveHint() {
+      if (!currentProblem) return;
+      const needed = currentProblem.path;
+      const placedKeys = placedCards.filter(Boolean).map(c => c.key);
+      const missing = needed.filter(k => !placedKeys.includes(k));
+      if (missing.length === 0) {
+        showFeedback('You have the right cards — try flipping some so units cancel properly.', 'info');
+      } else {
+        const f = FACTORS[missing[0]];
+        showFeedback(`Hint: You may need a factor involving ${f.num.u} and ${f.den.u}.`, 'info');
+      }
+    }
+
+    // ========== EVENTS ==========
+    checkBtn.addEventListener('click', checkAnswer);
+    clearBtn.addEventListener('click', clearChain);
+    hintBtn.addEventListener('click', giveHint);
+    skipBtn.addEventListener('click', () => {
+      streak = 0;
+      streakEl.textContent = 0;
+      nextProblem();
+    });
+    nextBtn.addEventListener('click', nextProblem);
+    retryBtn.addEventListener('click', retryProblem);
+
+    document.querySelectorAll('.level-select button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.level-select button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLevel = btn.dataset.level;
+        problemIndex = 0;
+        score = 0;
+        streak = 0;
+        scoreEl.textContent = 0;
+        streakEl.textContent = 0;
+        loadProblem(0);
+      });
+    });
+
+    setupDropZones();
+
+    // Keyboard: Enter to check
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !resultOverlay.classList.contains('show')) checkAnswer();
+    });
+
+    // ========== INIT ==========
+    loadProblem(0);
+  </script>
+</body>
+</html>
