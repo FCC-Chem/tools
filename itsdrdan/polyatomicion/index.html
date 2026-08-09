@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polyatomic Ion Study Lab</title>
+
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #d9e1ea;
+      --primary: #1f5f99;
+      --primary-dark: #16466f;
+      --good: #1f7a4c;
+      --good-bg: #edf9f2;
+      --bad: #a53a3a;
+      --bad-bg: #fff0f0;
+      --warn: #8a5a00;
+      --warn-bg: #fff8e6;
+      --soft: #eef4fa;
+      --shadow: 0 14px 34px rgba(23, 32, 42, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px 16px 48px;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #e8f2fb 0, transparent 34%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #e9f2fa;
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 10px auto 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .panel,
+    .study-card,
+
+    /* -------------------------------------------------------------
+       CLICKABLE PERIODIC TABLE REFERENCE
+    ------------------------------------------------------------- */
+
+    .periodic-reference {
+      margin-top: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .periodic-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 20px;
+      border: 0;
+      border-radius: 0;
+      background: #eef4fa;
+      color: var(--primary-dark);
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    .periodic-toggle:hover {
+      background: #e4eef7;
+    }
+
+    .periodic-toggle-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .periodic-toggle-title {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .periodic-toggle-subtitle {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+
+    .periodic-arrow {
+      font-size: 1.15rem;
+      transition: transform 0.2s ease;
+    }
+
+    .periodic-toggle[aria-expanded="true"] .periodic-arrow {
+      transform: rotate(180deg);
+    }
+
+    .periodic-content {
+      display: none;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .periodic-content.open {
+      display: block;
+    }
+
+    .periodic-instructions {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .periodic-scroll {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .periodic-table {
+      min-width: 920px;
+      display: grid;
+      grid-template-columns: repeat(18, minmax(46px, 1fr));
+      grid-template-rows: repeat(7, 58px);
+      gap: 4px;
+    }
+
+    .element-button {
+      position: relative;
+      min-width: 0;
+      padding: 4px 3px;
+      border: 1px solid #b9c9d8;
+      border-radius: 7px;
+      background: #f9fbfd;
+      color: var(--ink);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .element-button:hover,
+    .element-button:focus-visible {
+      background: #e8f2fb;
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .element-number {
+      position: absolute;
+      top: 3px;
+      left: 5px;
+      color: var(--muted);
+      font-size: 0.58rem;
+      font-weight: 600;
+    }
+
+    .element-symbol {
+      display: block;
+      margin-top: 9px;
+      text-align: center;
+      color: #173f61;
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .series-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #b9c9d8;
+      border-radius: 7px;
+      background: #f5f7f9;
+      color: var(--muted);
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .periodic-series {
+      min-width: 920px;
+      display: grid;
+      grid-template-columns: 105px repeat(15, minmax(46px, 1fr));
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .series-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .periodic-detail {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid #cbd8e4;
+      border-radius: 12px;
+      background: #f7fafc;
+      text-align: center;
+      color: #344054;
+      line-height: 1.4;
+    }
+
+    .periodic-detail-symbol {
+      display: inline-block;
+      margin-right: 8px;
+      color: #173f61;
+      font-size: 1.8rem;
+      font-weight: 800;
+      vertical-align: middle;
+    }
+
+    .periodic-case-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .footer-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #344054;
+    }
+
+    select,
+    input {
+      width: 100%;
+      border: 1.5px solid #c8d2dc;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    select {
+      min-height: 44px;
+      padding: 9px 11px;
+    }
+
+    input {
+      padding: 13px 14px;
+    }
+
+    select:focus,
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(31, 95, 153, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.06s ease, background 0.15s ease;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #e9edf2;
+      color: #25313d;
+    }
+
+    .btn-secondary:hover {
+      background: #dfe5eb;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary-dark);
+      border: 1px solid #bfd0e0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .stat-label {
+      margin-top: 3px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .study-card {
+      overflow: hidden;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--soft);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-top .kind {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .card-top .counter {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .card-body {
+      padding: 30px 24px 24px;
+    }
+
+    .prompt-label {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.055em;
+    }
+
+    .prompt {
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+      text-align: center;
+      font-size: clamp(2rem, 7vw, 4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: #173f61;
+      overflow-wrap: anywhere;
+    }
+
+    .prompt.name-prompt {
+      font-size: clamp(1.9rem, 5.7vw, 3.35rem);
+    }
+
+    .chem {
+      white-space: nowrap;
+      font-variant-numeric: lining-nums;
+    }
+
+    .chem sub {
+      font-size: 0.62em;
+      line-height: 0;
+      vertical-align: -0.32em;
+    }
+
+    .chem sup {
+      font-size: 0.58em;
+      line-height: 0;
+      vertical-align: 0.72em;
+      margin-left: 0.03em;
+    }
+
+    .answer-wrap {
+      max-width: 610px;
+      margin: 0 auto;
+    }
+
+    .answer-help {
+      margin: 7px 2px 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .answer-help code {
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: #eef1f4;
+      color: #344054;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.95em;
+    }
+
+    .answer-actions {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .feedback {
+      display: none;
+      max-width: 610px;
+      margin: 18px auto 0;
+      padding: 15px 16px;
+      border-radius: 12px;
+      line-height: 1.45;
+    }
+
+    .feedback.good {
+      display: block;
+      background: var(--good-bg);
+      color: var(--good);
+      border: 1px solid #bfe6cf;
+    }
+
+    .feedback.bad {
+      display: block;
+      background: var(--bad-bg);
+      color: var(--bad);
+      border: 1px solid #efc3c3;
+    }
+
+    .feedback.reveal {
+      display: block;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 1px solid #ead49c;
+    }
+
+    .feedback strong {
+      color: inherit;
+    }
+
+    .next-row {
+      display: none;
+      max-width: 610px;
+      margin: 12px auto 0;
+    }
+
+    .next-row.show {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: #e7ecf1;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width 0.2s ease;
+    }
+
+
+    /* -------------------------------------------------------------
+       CLICKABLE PERIODIC TABLE REFERENCE
+    ------------------------------------------------------------- */
+
+    .periodic-reference {
+      margin-top: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .periodic-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 20px;
+      border: 0;
+      border-radius: 0;
+      background: #eef4fa;
+      color: var(--primary-dark);
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    .periodic-toggle:hover {
+      background: #e4eef7;
+    }
+
+    .periodic-toggle-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .periodic-toggle-title {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .periodic-toggle-subtitle {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+
+    .periodic-arrow {
+      font-size: 1.15rem;
+      transition: transform 0.2s ease;
+    }
+
+    .periodic-toggle[aria-expanded="true"] .periodic-arrow {
+      transform: rotate(180deg);
+    }
+
+    .periodic-content {
+      display: none;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .periodic-content.open {
+      display: block;
+    }
+
+    .periodic-instructions {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .periodic-scroll {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .periodic-table {
+      min-width: 920px;
+      display: grid;
+      grid-template-columns: repeat(18, minmax(46px, 1fr));
+      grid-template-rows: repeat(7, 58px);
+      gap: 4px;
+    }
+
+    .element-button {
+      position: relative;
+      min-width: 0;
+      padding: 4px 3px;
+      border: 1px solid #b9c9d8;
+      border-radius: 7px;
+      background: #f9fbfd;
+      color: var(--ink);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .element-button:hover,
+    .element-button:focus-visible {
+      background: #e8f2fb;
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .element-number {
+      position: absolute;
+      top: 3px;
+      left: 5px;
+      color: var(--muted);
+      font-size: 0.58rem;
+      font-weight: 600;
+    }
+
+    .element-symbol {
+      display: block;
+      margin-top: 9px;
+      text-align: center;
+      color: #173f61;
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .series-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #b9c9d8;
+      border-radius: 7px;
+      background: #f5f7f9;
+      color: var(--muted);
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .periodic-series {
+      min-width: 920px;
+      display: grid;
+      grid-template-columns: 105px repeat(15, minmax(46px, 1fr));
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .series-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .periodic-detail {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid #cbd8e4;
+      border-radius: 12px;
+      background: #f7fafc;
+      text-align: center;
+      color: #344054;
+      line-height: 1.4;
+    }
+
+    .periodic-detail-symbol {
+      display: inline-block;
+      margin-right: 8px;
+      color: #173f61;
+      font-size: 1.8rem;
+      font-weight: 800;
+      vertical-align: middle;
+    }
+
+    .periodic-case-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .footer-card {
+      margin-top: 16px;
+      padding: 16px 18px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .footer-card strong {
+      color: #344054;
+    }
+
+    .completion {
+      display: none;
+      text-align: center;
+      padding: 34px 24px;
+    }
+
+    .completion.show {
+      display: block;
+    }
+
+    .completion h2 {
+      margin-top: 0;
+      font-size: 2rem;
+    }
+
+    .completion p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 700px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card-body {
+        padding: 24px 16px 20px;
+      }
+
+      .answer-actions,
+      .next-row.show {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="eyebrow">Interactive Chemistry Study Tool</div>
+      <h1>Polyatomic Ion Study Lab</h1>
+      <p>
+        Practice both directions: identify a formula from an ion name or identify
+        the ion name from a formula. Questions are shuffled and do not repeat
+        until the deck is complete.
+      </p>
+    </header>
+
+    <section class="panel" aria-label="Study settings">
+      <div class="controls-grid">
+        <div class="field">
+          <label for="modeSelect">Question mode</label>
+          <select id="modeSelect">
+            <option value="mixed">Mixed: Name ↔ Formula</option>
+            <option value="nameToFormula">Name → Formula</option>
+            <option value="formulaToName">Formula → Name</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="groupSelect">Ion set</label>
+          <select id="groupSelect">
+            <option value="all">All ions from the green sheet</option>
+            <option value="oxyanions">Oxyanion table</option>
+            <option value="common">Other common polyatomic ions</option>
+            <option value="rules">Naming-rule examples</option>
+            <option value="solubility">Additional ion from solubility table</option>
+          </select>
+        </div>
+
+        <button id="restartButton" class="btn-secondary" type="button">
+          Shuffle / Restart
+        </button>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Study statistics">
+      <div class="stat">
+        <div id="scoreValue" class="stat-value">0 / 0</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat">
+        <div id="streakValue" class="stat-value">0</div>
+        <div class="stat-label">Streak</div>
+      </div>
+      <div class="stat">
+        <div id="remainingValue" class="stat-value">0</div>
+        <div class="stat-label">Remaining</div>
+      </div>
+      <div class="stat">
+        <div id="percentValue" class="stat-value">—</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </section>
+
+    <main class="study-card">
+      <div class="progress-track" aria-hidden="true">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+
+      <div id="quizArea">
+        <div class="card-top">
+          <div id="questionKind" class="kind">Name → Formula</div>
+          <div id="questionCounter" class="counter">Question 1</div>
+        </div>
+
+        <div class="card-body">
+          <div id="promptLabel" class="prompt-label">Ion name</div>
+          <div id="prompt" class="prompt name-prompt">Sulfate</div>
+
+          <div class="answer-wrap">
+            <label for="answerInput"><strong>Your answer</strong></label>
+            <input
+              id="answerInput"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="Type your answer"
+            >
+            <div id="answerHelp" class="answer-help">
+              Element symbols are case-sensitive. You may type ordinary keyboard notation such as SO4^2-. Correct answers display with chemical subscripts and superscript charges.
+            </div>
+
+            <div class="answer-actions">
+              <button id="checkButton" class="btn-primary" type="button">Check Answer</button>
+              <button id="revealButton" class="btn-ghost" type="button">Reveal Answer</button>
+            </div>
+          </div>
+
+          <div id="feedback" class="feedback" aria-live="polite"></div>
+
+          <div id="nextRow" class="next-row">
+            <button id="nextButton" class="btn-primary" type="button">Next Question</button>
+            <button id="retryButton" class="btn-secondary" type="button">Try This One Again</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="completionArea" class="completion">
+        <h2>Deck Complete</h2>
+        <p id="completionText"></p>
+        <button id="studyAgainButton" class="btn-primary" type="button">Study Again</button>
+      </div>
+    </main>
+
+
+    <section class="periodic-reference" aria-label="Periodic table reference">
+      <button
+        id="periodicToggle"
+        class="periodic-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="periodicContent">
+        <span class="periodic-toggle-text">
+          <span class="periodic-toggle-title">Periodic Table Reference</span>
+          <span class="periodic-toggle-subtitle">Click to open, then select any element for its name and atomic number.</span>
+        </span>
+        <span class="periodic-arrow" aria-hidden="true">▼</span>
+      </button>
+
+      <div id="periodicContent" class="periodic-content">
+        <p class="periodic-instructions">
+          Use this reference when you need to check an element symbol.
+          Click any element to see its full name and atomic number.
+        </p>
+
+        <div class="periodic-scroll">
+          <div id="periodicMain" class="periodic-table" aria-label="Main periodic table"></div>
+
+          <div id="lanthanideRow" class="periodic-series" aria-label="Lanthanide series">
+            <div class="series-label">Lanthanides</div>
+          </div>
+
+          <div id="actinideRow" class="periodic-series" aria-label="Actinide series">
+            <div class="series-label">Actinides</div>
+          </div>
+        </div>
+
+        <div id="periodicDetail" class="periodic-detail" aria-live="polite">
+          Select an element to view its information.
+        </div>
+
+        <div class="periodic-case-note">
+          Remember: element symbols are case-sensitive. Oxygen is <strong>O</strong>, chlorine is <strong>Cl</strong>, and cobalt is <strong>Co</strong>.
+        </div>
+      </div>
+    </section>
+
+
+    <section class="footer-card">
+      <strong>Included:</strong> all polyatomic ions explicitly shown in the uploaded
+      green sheet, including both acetate formulas. The study deck contains
+      <strong><span id="totalIonCount"></span> unique ion names</strong>.
+    </section>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // SOURCE DECK
+    // -------------------------------------------------------------------------
+    // All polyatomic ions explicitly shown in the uploaded green sheet.
+    //
+    // Categories:
+    //   oxyanions  = Oxyanions table
+    //   common     = Other Common Polyatomic Ions table
+    //   rules      = Naming-rule examples
+    //   solubility = Additional explicit polyatomic ion on the solubility table
+    //
+    // Formula syntax:
+    //   html     = formatted display
+    //   formulas = accepted plain-text formulas for typed answers
+    //   names    = accepted name variants for typed answers
+    // -------------------------------------------------------------------------
+
+    const ions = [
+      // OXYANIONS TABLE
+      {
+        name: "borate",
+        html: "BO<sub>3</sub><sup>3−</sup>",
+        formulas: ["BO3^3-"],
+        names: ["borate"],
+        group: "oxyanions"
+      },
+      {
+        name: "carbonate",
+        html: "CO<sub>3</sub><sup>2−</sup>",
+        formulas: ["CO3^2-"],
+        names: ["carbonate"],
+        group: "oxyanions"
+      },
+      {
+        name: "nitrate",
+        html: "NO<sub>3</sub><sup>−</sup>",
+        formulas: ["NO3^-"],
+        names: ["nitrate"],
+        group: "oxyanions"
+      },
+      {
+        name: "silicate",
+        html: "SiO<sub>3</sub><sup>2−</sup>",
+        formulas: ["SiO3^2-"],
+        names: ["silicate"],
+        group: "oxyanions"
+      },
+      {
+        name: "phosphate",
+        html: "PO<sub>4</sub><sup>3−</sup>",
+        formulas: ["PO4^3-"],
+        names: ["phosphate"],
+        group: "oxyanions"
+      },
+      {
+        name: "sulfate",
+        html: "SO<sub>4</sub><sup>2−</sup>",
+        formulas: ["SO4^2-"],
+        names: ["sulfate"],
+        group: "oxyanions"
+      },
+      {
+        name: "chlorate",
+        html: "ClO<sub>3</sub><sup>−</sup>",
+        formulas: ["ClO3^-"],
+        names: ["chlorate"],
+        group: "oxyanions"
+      },
+      {
+        name: "arsenate",
+        html: "AsO<sub>4</sub><sup>3−</sup>",
+        formulas: ["AsO4^3-"],
+        names: ["arsenate"],
+        group: "oxyanions"
+      },
+      {
+        name: "selenate",
+        html: "SeO<sub>4</sub><sup>2−</sup>",
+        formulas: ["SeO4^2-"],
+        names: ["selenate"],
+        group: "oxyanions"
+      },
+      {
+        name: "bromate",
+        html: "BrO<sub>3</sub><sup>−</sup>",
+        formulas: ["BrO3^-"],
+        names: ["bromate"],
+        group: "oxyanions"
+      },
+      {
+        name: "tellurate",
+        html: "TeO<sub>4</sub><sup>2−</sup>",
+        formulas: ["TeO4^2-"],
+        names: ["tellurate"],
+        group: "oxyanions"
+      },
+      {
+        name: "iodate",
+        html: "IO<sub>3</sub><sup>−</sup>",
+        formulas: ["IO3^-"],
+        names: ["iodate"],
+        group: "oxyanions"
+      },
+
+      // OTHER COMMON POLYATOMIC IONS
+      {
+        name: "hydronium",
+        html: "H<sub>3</sub>O<sup>+</sup>",
+        formulas: ["H3O^+"],
+        names: ["hydronium"],
+        group: "common"
+      },
+      {
+        name: "ammonium",
+        html: "NH<sub>4</sub><sup>+</sup>",
+        formulas: ["NH4^+"],
+        names: ["ammonium"],
+        group: "common"
+      },
+      {
+        name: "mercury(I)",
+        html: "Hg<sub>2</sub><sup>2+</sup>",
+        formulas: ["Hg2^2+"],
+        names: ["mercury(I)", "mercury 1", "mercury(I) ion", "mercury one"],
+        group: "common"
+      },
+      {
+        name: "hydroxide",
+        html: "OH<sup>−</sup>",
+        formulas: ["OH^-"],
+        names: ["hydroxide"],
+        group: "common"
+      },
+      {
+        name: "cyanide",
+        html: "CN<sup>−</sup>",
+        formulas: ["CN^-"],
+        names: ["cyanide"],
+        group: "common"
+      },
+      {
+        name: "peroxide",
+        html: "O<sub>2</sub><sup>2−</sup>",
+        formulas: ["O2^2-"],
+        names: ["peroxide"],
+        group: "common"
+      },
+      {
+        name: "permanganate",
+        html: "MnO<sub>4</sub><sup>−</sup>",
+        formulas: ["MnO4^-"],
+        names: ["permanganate"],
+        group: "common"
+      },
+      {
+        name: "chromate",
+        html: "CrO<sub>4</sub><sup>2−</sup>",
+        formulas: ["CrO4^2-"],
+        names: ["chromate"],
+        group: "common"
+      },
+      {
+        name: "dichromate",
+        html: "Cr<sub>2</sub>O<sub>7</sub><sup>2−</sup>",
+        formulas: ["Cr2O7^2-"],
+        names: ["dichromate"],
+        group: "common"
+      },
+      {
+        name: "oxalate",
+        html: "C<sub>2</sub>O<sub>4</sub><sup>2−</sup>",
+        formulas: ["C2O4^2-"],
+        names: ["oxalate"],
+        group: "common"
+      },
+      {
+        name: "acetate",
+        html: "C<sub>2</sub>H<sub>3</sub>O<sub>2</sub><sup>−</sup>",
+        formulas: ["C2H3O2^-", "CH3COO^-"],
+        names: ["acetate"],
+        group: "common",
+        displayNoteHtml: "Also written <span class='chem'>CH<sub>3</sub>COO<sup>−</sup></span>"
+      },
+
+      // NAMING-RULE EXAMPLES
+      {
+        name: "perchlorate",
+        html: "ClO<sub>4</sub><sup>−</sup>",
+        formulas: ["ClO4^-"],
+        names: ["perchlorate"],
+        group: "rules"
+      },
+      {
+        name: "chlorite",
+        html: "ClO<sub>2</sub><sup>−</sup>",
+        formulas: ["ClO2^-"],
+        names: ["chlorite"],
+        group: "rules"
+      },
+      {
+        name: "hypochlorite",
+        html: "ClO<sup>−</sup>",
+        formulas: ["ClO^-"],
+        names: ["hypochlorite"],
+        group: "rules"
+      },
+      {
+        name: "thiosulfate",
+        html: "S<sub>2</sub>O<sub>3</sub><sup>2−</sup>",
+        formulas: ["S2O3^2-"],
+        names: ["thiosulfate"],
+        group: "rules"
+      },
+      {
+        name: "hydrogenphosphate",
+        html: "HPO<sub>4</sub><sup>2−</sup>",
+        formulas: ["HPO4^2-"],
+        names: ["hydrogenphosphate", "hydrogen phosphate"],
+        group: "rules"
+      },
+      {
+        name: "dihydrogenphosphate",
+        html: "H<sub>2</sub>PO<sub>4</sub><sup>−</sup>",
+        formulas: ["H2PO4^-"],
+        names: ["dihydrogenphosphate", "dihydrogen phosphate"],
+        group: "rules"
+      },
+
+      // EXPLICITLY SHOWN ON THE SOLUBILITY TABLE
+      {
+        name: "sulfite",
+        html: "SO<sub>3</sub><sup>2−</sup>",
+        formulas: ["SO3^2-"],
+        names: ["sulfite"],
+        group: "solubility"
+      }
+    ];
+
+    // -------------------------------------------------------------------------
+    // STATE
+    // -------------------------------------------------------------------------
+
+    const modeSelect = document.getElementById("modeSelect");
+    const groupSelect = document.getElementById("groupSelect");
+    const restartButton = document.getElementById("restartButton");
+
+    const scoreValue = document.getElementById("scoreValue");
+    const streakValue = document.getElementById("streakValue");
+    const remainingValue = document.getElementById("remainingValue");
+    const percentValue = document.getElementById("percentValue");
+
+    const quizArea = document.getElementById("quizArea");
+    const completionArea = document.getElementById("completionArea");
+    const completionText = document.getElementById("completionText");
+
+    const questionKind = document.getElementById("questionKind");
+    const questionCounter = document.getElementById("questionCounter");
+    const promptLabel = document.getElementById("promptLabel");
+    const prompt = document.getElementById("prompt");
+    const answerInput = document.getElementById("answerInput");
+    const answerHelp = document.getElementById("answerHelp");
+    const checkButton = document.getElementById("checkButton");
+    const revealButton = document.getElementById("revealButton");
+    const feedback = document.getElementById("feedback");
+    const nextRow = document.getElementById("nextRow");
+    const nextButton = document.getElementById("nextButton");
+    const retryButton = document.getElementById("retryButton");
+    const studyAgainButton = document.getElementById("studyAgainButton");
+    const progressBar = document.getElementById("progressBar");
+    const totalIonCount = document.getElementById("totalIonCount");
+
+    let deck = [];
+    let currentIndex = 0;
+    let currentQuestion = null;
+    let correctCount = 0;
+    let attemptedQuestions = 0;
+    let streak = 0;
+    let answeredCurrent = false;
+    let currentWasMissed = false;
+
+    totalIonCount.textContent = ions.length;
+
+    // -------------------------------------------------------------------------
+    // HELPERS
+    // -------------------------------------------------------------------------
+
+    function shuffle(array) {
+      const copy = [...array];
+
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+
+      return copy;
+    }
+
+    function normalizeName(value) {
+      return value
+        .toLowerCase()
+        .trim()
+        .replace(/[‐‑‒–—]/g, "-")
+        .replace(/\s+/g, " ")
+        .replace(/\s*\(\s*/g, "(")
+        .replace(/\s*\)\s*/g, ")");
+    }
+
+    function normalizeFormula(value) {
+      const subMap = {
+        "₀":"0","₁":"1","₂":"2","₃":"3","₄":"4",
+        "₅":"5","₆":"6","₇":"7","₈":"8","₉":"9"
+      };
+
+      const supMap = {
+        "⁰":"0","¹":"1","²":"2","³":"3","⁴":"4",
+        "⁵":"5","⁶":"6","⁷":"7","⁸":"8","⁹":"9",
+        "⁺":"+","⁻":"-"
+      };
+
+      let s = value.trim();
+
+      s = s.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, ch => subMap[ch]);
+      s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]/g, ch => supMap[ch]);
+      s = s.replace(/[−–—]/g, "-");
+      s = s.replace(/\s+/g, "");
+      s = s.replace(/[{}]/g, "");
+      s = s.replace(/[()]/g, "");
+
+      // IMPORTANT: Do NOT change letter case here.
+      // Chemical element symbols are case-sensitive:
+      // O = oxygen, while o is incorrect.
+      // Cl = chlorine, while CL or cl are incorrect.
+      return s;
+    }
+
+    function formulaVariants(formula) {
+      // Start with the canonical form, e.g. SO4^2- or NO3^-.
+      const variants = new Set();
+      const clean = normalizeFormula(formula);
+
+      variants.add(clean);
+      variants.add(clean.replace(/\^/g, ""));
+
+      const match = clean.match(/^(.*)\^(\d*)([+-])$/);
+
+      if (match) {
+        const base = match[1];
+        const magnitude = match[2] || "1";
+        const sign = match[3];
+
+        variants.add(base + "^" + (magnitude === "1" ? "" : magnitude) + sign);
+        variants.add(base + "^" + magnitude + sign);
+        variants.add(base + (magnitude === "1" ? "" : magnitude) + sign);
+        variants.add(base + magnitude + sign);
+        variants.add(base + sign + (magnitude === "1" ? "" : magnitude));
+        variants.add(base + sign + magnitude);
+      }
+
+      return variants;
+    }
+
+    function isFormulaCorrect(input, ion) {
+      const user = normalizeFormula(input);
+
+      return ion.formulas.some(formula => {
+        return formulaVariants(formula).has(user);
+      });
+    }
+
+    function isNameCorrect(input, ion) {
+      const user = normalizeName(input);
+      return ion.names.some(name => normalizeName(name) === user);
+    }
+
+    function plainFormula(formula) {
+      return formula.replace("^1", "^");
+    }
+
+    function expectedFormulaText(ion) {
+      if (ion.formulas.length === 1) {
+        return plainFormula(ion.formulas[0]);
+      }
+
+      return ion.formulas.map(plainFormula).join(" or ");
+    }
+
+    function selectedIons() {
+      const group = groupSelect.value;
+
+      if (group === "all") {
+        return ions;
+      }
+
+      return ions.filter(ion => ion.group === group);
+    }
+
+    function chooseDirection() {
+      const mode = modeSelect.value;
+
+      if (mode === "mixed") {
+        return Math.random() < 0.5 ? "nameToFormula" : "formulaToName";
+      }
+
+      return mode;
+    }
+
+    function buildDeck() {
+      return shuffle(selectedIons()).map(ion => ({
+        ion,
+        direction: chooseDirection()
+      }));
+    }
+
+    // -------------------------------------------------------------------------
+    // QUIZ RENDERING
+    // -------------------------------------------------------------------------
+
+    function startSession() {
+      deck = buildDeck();
+      currentIndex = 0;
+      correctCount = 0;
+      attemptedQuestions = 0;
+      streak = 0;
+      answeredCurrent = false;
+      currentWasMissed = false;
+
+      completionArea.classList.remove("show");
+      quizArea.style.display = "block";
+
+      if (deck.length === 0) {
+        completionArea.classList.add("show");
+        quizArea.style.display = "none";
+        completionText.textContent = "No ions are available in this set.";
+        return;
+      }
+
+      showQuestion();
+      updateStats();
+    }
+
+    function showQuestion() {
+      if (currentIndex >= deck.length) {
+        finishSession();
+        return;
+      }
+
+      currentQuestion = deck[currentIndex];
+      answeredCurrent = false;
+      currentWasMissed = false;
+
+      const ion = currentQuestion.ion;
+      const direction = currentQuestion.direction;
+
+      questionCounter.textContent =
+        "Question " + (currentIndex + 1) + " of " + deck.length;
+
+      feedback.className = "feedback";
+      feedback.innerHTML = "";
+      nextRow.className = "next-row";
+
+      answerInput.disabled = false;
+      checkButton.disabled = false;
+      revealButton.disabled = false;
+      answerInput.value = "";
+
+      if (direction === "nameToFormula") {
+        questionKind.textContent = "Name → Formula";
+        promptLabel.textContent = "Ion name";
+        prompt.className = "prompt name-prompt";
+        prompt.textContent = ion.name;
+        answerInput.placeholder = "Type the chemical formula";
+        answerHelp.innerHTML =
+          "Element symbols are <strong>case-sensitive</strong>. Type ordinary keyboard notation such as " +
+          "<code>SO4^2-</code>. For example, <code>SO4^2-</code> is accepted, but " +
+          "<code>so4^2-</code> is not. The formatted formula is " +
+          "<span class='chem'><strong>SO<sub>4</sub><sup>2−</sup></strong></span>.";
+      } else {
+        questionKind.textContent = "Formula → Name";
+        promptLabel.textContent = "Chemical formula";
+        prompt.className = "prompt chem";
+        prompt.innerHTML = "<span class='chem'>" + ion.html + "</span>";
+        answerInput.placeholder = "Type the ion name";
+        answerHelp.textContent =
+          "Capitalization does not matter. Spaces are accepted in names such as hydrogen phosphate.";
+      }
+
+      updateStats();
+      answerInput.focus();
+    }
+
+    function checkAnswer() {
+      if (answeredCurrent) {
+        return;
+      }
+
+      const answer = answerInput.value.trim();
+
+      if (!answer) {
+        feedback.className = "feedback reveal";
+        feedback.textContent = "Enter an answer before checking.";
+        answerInput.focus();
+        return;
+      }
+
+      const ion = currentQuestion.ion;
+      const direction = currentQuestion.direction;
+
+      const correct =
+        direction === "nameToFormula"
+          ? isFormulaCorrect(answer, ion)
+          : isNameCorrect(answer, ion);
+
+      attemptedQuestions++;
+
+      if (correct) {
+        if (!currentWasMissed) {
+          correctCount++;
+          streak++;
+        } else {
+          streak = 0;
+        }
+
+        answeredCurrent = true;
+        answerInput.disabled = true;
+        checkButton.disabled = true;
+        revealButton.disabled = true;
+
+        let extra = "";
+        if (ion.displayNoteHtml) {
+          extra = " " + ion.displayNoteHtml + ".";
+        }
+
+        feedback.className = "feedback good";
+        feedback.innerHTML =
+          "<strong>Correct!</strong> " +
+          ion.name +
+          " = <span class='chem'>" +
+          ion.html +
+          "</span>." +
+          extra;
+
+        nextRow.className = "next-row show";
+      } else {
+        currentWasMissed = true;
+        streak = 0;
+
+        feedback.className = "feedback bad";
+
+        if (direction === "nameToFormula") {
+          feedback.innerHTML =
+            "<strong>Not quite.</strong> Check the formula, charge, and capitalization of each element symbol. " +
+            "Element symbols are case-sensitive. Try again, or reveal the answer.";
+        } else {
+          feedback.innerHTML =
+            "<strong>Not quite.</strong> Try again, or reveal the answer.";
+        }
+
+        answerInput.select();
+      }
+
+      updateStats();
+    }
+
+    function revealAnswer() {
+      if (answeredCurrent) {
+        return;
+      }
+
+      const ion = currentQuestion.ion;
+      currentWasMissed = true;
+      attemptedQuestions++;
+      streak = 0;
+      answeredCurrent = true;
+
+      answerInput.disabled = true;
+      checkButton.disabled = true;
+      revealButton.disabled = true;
+
+      feedback.className = "feedback reveal";
+
+      if (currentQuestion.direction === "nameToFormula") {
+        feedback.innerHTML =
+          "<strong>Answer:</strong> <span class='chem'>" +
+          ion.html +
+          "</span> &nbsp;(" +
+          expectedFormulaText(ion) +
+          ")" +
+          (ion.displayNoteHtml ? ". " + ion.displayNoteHtml + "." : "");
+      } else {
+        feedback.innerHTML =
+          "<strong>Answer:</strong> " + ion.name;
+      }
+
+      nextRow.className = "next-row show";
+      updateStats();
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      showQuestion();
+    }
+
+    function retryCurrent() {
+      answeredCurrent = false;
+      answerInput.disabled = false;
+      checkButton.disabled = false;
+      revealButton.disabled = false;
+      answerInput.value = "";
+
+      feedback.className = "feedback";
+      feedback.innerHTML = "";
+      nextRow.className = "next-row";
+
+      answerInput.focus();
+    }
+
+    function finishSession() {
+      quizArea.style.display = "none";
+      completionArea.classList.add("show");
+
+      const accuracy =
+        attemptedQuestions === 0
+          ? 0
+          : Math.round((correctCount / attemptedQuestions) * 100);
+
+      completionText.textContent =
+        "You finished " +
+        deck.length +
+        " ions. You earned " +
+        correctCount +
+        " correct points with an accuracy of " +
+        accuracy +
+        "% based on checked/revealed attempts.";
+
+      progressBar.style.width = "100%";
+      updateStats();
+    }
+
+    function updateStats() {
+      scoreValue.textContent = correctCount + " / " + deck.length;
+      streakValue.textContent = streak;
+
+      const remaining = Math.max(deck.length - currentIndex, 0);
+      remainingValue.textContent = remaining;
+
+      if (attemptedQuestions === 0) {
+        percentValue.textContent = "—";
+      } else {
+        percentValue.textContent =
+          Math.round((correctCount / attemptedQuestions) * 100) + "%";
+      }
+
+      if (deck.length > 0) {
+        const completed = Math.min(currentIndex, deck.length);
+        progressBar.style.width = ((completed / deck.length) * 100) + "%";
+      } else {
+        progressBar.style.width = "0%";
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // EVENTS
+    // -------------------------------------------------------------------------
+
+    checkButton.addEventListener("click", checkAnswer);
+    revealButton.addEventListener("click", revealAnswer);
+    nextButton.addEventListener("click", nextQuestion);
+    retryButton.addEventListener("click", retryCurrent);
+    restartButton.addEventListener("click", startSession);
+    studyAgainButton.addEventListener("click", startSession);
+
+    modeSelect.addEventListener("change", startSession);
+    groupSelect.addEventListener("change", startSession);
+
+    answerInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        if (answeredCurrent) {
+          nextQuestion();
+        } else {
+          checkAnswer();
+        }
+      }
+    });
+
+
+    // -------------------------------------------------------------------------
+    // CLICKABLE PERIODIC TABLE REFERENCE
+    // -------------------------------------------------------------------------
+
+    const periodicElements = [{"number":1,"symbol":"H","name":"Hydrogen","period":1,"group":1,"series":"main"},{"number":2,"symbol":"He","name":"Helium","period":1,"group":18,"series":"main"},{"number":3,"symbol":"Li","name":"Lithium","period":2,"group":1,"series":"main"},{"number":4,"symbol":"Be","name":"Beryllium","period":2,"group":2,"series":"main"},{"number":5,"symbol":"B","name":"Boron","period":2,"group":13,"series":"main"},{"number":6,"symbol":"C","name":"Carbon","period":2,"group":14,"series":"main"},{"number":7,"symbol":"N","name":"Nitrogen","period":2,"group":15,"series":"main"},{"number":8,"symbol":"O","name":"Oxygen","period":2,"group":16,"series":"main"},{"number":9,"symbol":"F","name":"Fluorine","period":2,"group":17,"series":"main"},{"number":10,"symbol":"Ne","name":"Neon","period":2,"group":18,"series":"main"},{"number":11,"symbol":"Na","name":"Sodium","period":3,"group":1,"series":"main"},{"number":12,"symbol":"Mg","name":"Magnesium","period":3,"group":2,"series":"main"},{"number":13,"symbol":"Al","name":"Aluminum","period":3,"group":13,"series":"main"},{"number":14,"symbol":"Si","name":"Silicon","period":3,"group":14,"series":"main"},{"number":15,"symbol":"P","name":"Phosphorus","period":3,"group":15,"series":"main"},{"number":16,"symbol":"S","name":"Sulfur","period":3,"group":16,"series":"main"},{"number":17,"symbol":"Cl","name":"Chlorine","period":3,"group":17,"series":"main"},{"number":18,"symbol":"Ar","name":"Argon","period":3,"group":18,"series":"main"},{"number":19,"symbol":"K","name":"Potassium","period":4,"group":1,"series":"main"},{"number":20,"symbol":"Ca","name":"Calcium","period":4,"group":2,"series":"main"},{"number":21,"symbol":"Sc","name":"Scandium","period":4,"group":3,"series":"main"},{"number":22,"symbol":"Ti","name":"Titanium","period":4,"group":4,"series":"main"},{"number":23,"symbol":"V","name":"Vanadium","period":4,"group":5,"series":"main"},{"number":24,"symbol":"Cr","name":"Chromium","period":4,"group":6,"series":"main"},{"number":25,"symbol":"Mn","name":"Manganese","period":4,"group":7,"series":"main"},{"number":26,"symbol":"Fe","name":"Iron","period":4,"group":8,"series":"main"},{"number":27,"symbol":"Co","name":"Cobalt","period":4,"group":9,"series":"main"},{"number":28,"symbol":"Ni","name":"Nickel","period":4,"group":10,"series":"main"},{"number":29,"symbol":"Cu","name":"Copper","period":4,"group":11,"series":"main"},{"number":30,"symbol":"Zn","name":"Zinc","period":4,"group":12,"series":"main"},{"number":31,"symbol":"Ga","name":"Gallium","period":4,"group":13,"series":"main"},{"number":32,"symbol":"Ge","name":"Germanium","period":4,"group":14,"series":"main"},{"number":33,"symbol":"As","name":"Arsenic","period":4,"group":15,"series":"main"},{"number":34,"symbol":"Se","name":"Selenium","period":4,"group":16,"series":"main"},{"number":35,"symbol":"Br","name":"Bromine","period":4,"group":17,"series":"main"},{"number":36,"symbol":"Kr","name":"Krypton","period":4,"group":18,"series":"main"},{"number":37,"symbol":"Rb","name":"Rubidium","period":5,"group":1,"series":"main"},{"number":38,"symbol":"Sr","name":"Strontium","period":5,"group":2,"series":"main"},{"number":39,"symbol":"Y","name":"Yttrium","period":5,"group":3,"series":"main"},{"number":40,"symbol":"Zr","name":"Zirconium","period":5,"group":4,"series":"main"},{"number":41,"symbol":"Nb","name":"Niobium","period":5,"group":5,"series":"main"},{"number":42,"symbol":"Mo","name":"Molybdenum","period":5,"group":6,"series":"main"},{"number":43,"symbol":"Tc","name":"Technetium","period":5,"group":7,"series":"main"},{"number":44,"symbol":"Ru","name":"Ruthenium","period":5,"group":8,"series":"main"},{"number":45,"symbol":"Rh","name":"Rhodium","period":5,"group":9,"series":"main"},{"number":46,"symbol":"Pd","name":"Palladium","period":5,"group":10,"series":"main"},{"number":47,"symbol":"Ag","name":"Silver","period":5,"group":11,"series":"main"},{"number":48,"symbol":"Cd","name":"Cadmium","period":5,"group":12,"series":"main"},{"number":49,"symbol":"In","name":"Indium","period":5,"group":13,"series":"main"},{"number":50,"symbol":"Sn","name":"Tin","period":5,"group":14,"series":"main"},{"number":51,"symbol":"Sb","name":"Antimony","period":5,"group":15,"series":"main"},{"number":52,"symbol":"Te","name":"Tellurium","period":5,"group":16,"series":"main"},{"number":53,"symbol":"I","name":"Iodine","period":5,"group":17,"series":"main"},{"number":54,"symbol":"Xe","name":"Xenon","period":5,"group":18,"series":"main"},{"number":55,"symbol":"Cs","name":"Cesium","period":6,"group":1,"series":"main"},{"number":56,"symbol":"Ba","name":"Barium","period":6,"group":2,"series":"main"},{"number":72,"symbol":"Hf","name":"Hafnium","period":6,"group":4,"series":"main"},{"number":73,"symbol":"Ta","name":"Tantalum","period":6,"group":5,"series":"main"},{"number":74,"symbol":"W","name":"Tungsten","period":6,"group":6,"series":"main"},{"number":75,"symbol":"Re","name":"Rhenium","period":6,"group":7,"series":"main"},{"number":76,"symbol":"Os","name":"Osmium","period":6,"group":8,"series":"main"},{"number":77,"symbol":"Ir","name":"Iridium","period":6,"group":9,"series":"main"},{"number":78,"symbol":"Pt","name":"Platinum","period":6,"group":10,"series":"main"},{"number":79,"symbol":"Au","name":"Gold","period":6,"group":11,"series":"main"},{"number":80,"symbol":"Hg","name":"Mercury","period":6,"group":12,"series":"main"},{"number":81,"symbol":"Tl","name":"Thallium","period":6,"group":13,"series":"main"},{"number":82,"symbol":"Pb","name":"Lead","period":6,"group":14,"series":"main"},{"number":83,"symbol":"Bi","name":"Bismuth","period":6,"group":15,"series":"main"},{"number":84,"symbol":"Po","name":"Polonium","period":6,"group":16,"series":"main"},{"number":85,"symbol":"At","name":"Astatine","period":6,"group":17,"series":"main"},{"number":86,"symbol":"Rn","name":"Radon","period":6,"group":18,"series":"main"},{"number":87,"symbol":"Fr","name":"Francium","period":7,"group":1,"series":"main"},{"number":88,"symbol":"Ra","name":"Radium","period":7,"group":2,"series":"main"},{"number":104,"symbol":"Rf","name":"Rutherfordium","period":7,"group":4,"series":"main"},{"number":105,"symbol":"Db","name":"Dubnium","period":7,"group":5,"series":"main"},{"number":106,"symbol":"Sg","name":"Seaborgium","period":7,"group":6,"series":"main"},{"number":107,"symbol":"Bh","name":"Bohrium","period":7,"group":7,"series":"main"},{"number":108,"symbol":"Hs","name":"Hassium","period":7,"group":8,"series":"main"},{"number":109,"symbol":"Mt","name":"Meitnerium","period":7,"group":9,"series":"main"},{"number":110,"symbol":"Ds","name":"Darmstadtium","period":7,"group":10,"series":"main"},{"number":111,"symbol":"Rg","name":"Roentgenium","period":7,"group":11,"series":"main"},{"number":112,"symbol":"Cn","name":"Copernicium","period":7,"group":12,"series":"main"},{"number":113,"symbol":"Nh","name":"Nihonium","period":7,"group":13,"series":"main"},{"number":114,"symbol":"Fl","name":"Flerovium","period":7,"group":14,"series":"main"},{"number":115,"symbol":"Mc","name":"Moscovium","period":7,"group":15,"series":"main"},{"number":116,"symbol":"Lv","name":"Livermorium","period":7,"group":16,"series":"main"},{"number":117,"symbol":"Ts","name":"Tennessine","period":7,"group":17,"series":"main"},{"number":118,"symbol":"Og","name":"Oganesson","period":7,"group":18,"series":"main"},{"number":57,"symbol":"La","name":"Lanthanum","series":"lanthanide","seriesIndex":1},{"number":58,"symbol":"Ce","name":"Cerium","series":"lanthanide","seriesIndex":2},{"number":59,"symbol":"Pr","name":"Praseodymium","series":"lanthanide","seriesIndex":3},{"number":60,"symbol":"Nd","name":"Neodymium","series":"lanthanide","seriesIndex":4},{"number":61,"symbol":"Pm","name":"Promethium","series":"lanthanide","seriesIndex":5},{"number":62,"symbol":"Sm","name":"Samarium","series":"lanthanide","seriesIndex":6},{"number":63,"symbol":"Eu","name":"Europium","series":"lanthanide","seriesIndex":7},{"number":64,"symbol":"Gd","name":"Gadolinium","series":"lanthanide","seriesIndex":8},{"number":65,"symbol":"Tb","name":"Terbium","series":"lanthanide","seriesIndex":9},{"number":66,"symbol":"Dy","name":"Dysprosium","series":"lanthanide","seriesIndex":10},{"number":67,"symbol":"Ho","name":"Holmium","series":"lanthanide","seriesIndex":11},{"number":68,"symbol":"Er","name":"Erbium","series":"lanthanide","seriesIndex":12},{"number":69,"symbol":"Tm","name":"Thulium","series":"lanthanide","seriesIndex":13},{"number":70,"symbol":"Yb","name":"Ytterbium","series":"lanthanide","seriesIndex":14},{"number":71,"symbol":"Lu","name":"Lutetium","series":"lanthanide","seriesIndex":15},{"number":89,"symbol":"Ac","name":"Actinium","series":"actinide","seriesIndex":1},{"number":90,"symbol":"Th","name":"Thorium","series":"actinide","seriesIndex":2},{"number":91,"symbol":"Pa","name":"Protactinium","series":"actinide","seriesIndex":3},{"number":92,"symbol":"U","name":"Uranium","series":"actinide","seriesIndex":4},{"number":93,"symbol":"Np","name":"Neptunium","series":"actinide","seriesIndex":5},{"number":94,"symbol":"Pu","name":"Plutonium","series":"actinide","seriesIndex":6},{"number":95,"symbol":"Am","name":"Americium","series":"actinide","seriesIndex":7},{"number":96,"symbol":"Cm","name":"Curium","series":"actinide","seriesIndex":8},{"number":97,"symbol":"Bk","name":"Berkelium","series":"actinide","seriesIndex":9},{"number":98,"symbol":"Cf","name":"Californium","series":"actinide","seriesIndex":10},{"number":99,"symbol":"Es","name":"Einsteinium","series":"actinide","seriesIndex":11},{"number":100,"symbol":"Fm","name":"Fermium","series":"actinide","seriesIndex":12},{"number":101,"symbol":"Md","name":"Mendelevium","series":"actinide","seriesIndex":13},{"number":102,"symbol":"No","name":"Nobelium","series":"actinide","seriesIndex":14},{"number":103,"symbol":"Lr","name":"Lawrencium","series":"actinide","seriesIndex":15}];
+
+    const periodicToggle = document.getElementById("periodicToggle");
+    const periodicContent = document.getElementById("periodicContent");
+    const periodicMain = document.getElementById("periodicMain");
+    const lanthanideRow = document.getElementById("lanthanideRow");
+    const actinideRow = document.getElementById("actinideRow");
+    const periodicDetail = document.getElementById("periodicDetail");
+
+    function makeElementButton(element) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "element-button";
+      button.setAttribute(
+        "aria-label",
+        element.name + ", symbol " + element.symbol + ", atomic number " + element.number
+      );
+
+      button.innerHTML =
+        "<span class='element-number'>" + element.number + "</span>" +
+        "<span class='element-symbol'>" + element.symbol + "</span>";
+
+      button.addEventListener("click", function() {
+        periodicDetail.innerHTML =
+          "<span class='periodic-detail-symbol'>" + element.symbol + "</span>" +
+          "<strong>" + element.name + "</strong>" +
+          " &nbsp;·&nbsp; Atomic Number " + element.number;
+      });
+
+      return button;
+    }
+
+    function renderPeriodicTable() {
+      periodicElements
+        .filter(element => element.series === "main")
+        .forEach(element => {
+          const button = makeElementButton(element);
+          button.style.gridColumn = element.group;
+          button.style.gridRow = element.period;
+          periodicMain.appendChild(button);
+        });
+
+      const lanthanidePlaceholder = document.createElement("div");
+      lanthanidePlaceholder.className = "series-placeholder";
+      lanthanidePlaceholder.style.gridColumn = "3";
+      lanthanidePlaceholder.style.gridRow = "6";
+      lanthanidePlaceholder.textContent = "57–71";
+      periodicMain.appendChild(lanthanidePlaceholder);
+
+      const actinidePlaceholder = document.createElement("div");
+      actinidePlaceholder.className = "series-placeholder";
+      actinidePlaceholder.style.gridColumn = "3";
+      actinidePlaceholder.style.gridRow = "7";
+      actinidePlaceholder.textContent = "89–103";
+      periodicMain.appendChild(actinidePlaceholder);
+
+      periodicElements
+        .filter(element => element.series === "lanthanide")
+        .sort((a, b) => a.number - b.number)
+        .forEach(element => {
+          lanthanideRow.appendChild(makeElementButton(element));
+        });
+
+      periodicElements
+        .filter(element => element.series === "actinide")
+        .sort((a, b) => a.number - b.number)
+        .forEach(element => {
+          actinideRow.appendChild(makeElementButton(element));
+        });
+    }
+
+    periodicToggle.addEventListener("click", function() {
+      const isOpen = periodicContent.classList.toggle("open");
+      periodicToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    renderPeriodicTable();
+
+
+    // Start immediately.
+    startSession();
+  </script>
+</body>
+</html>
