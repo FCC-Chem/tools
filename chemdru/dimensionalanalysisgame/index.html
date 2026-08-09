@@ -445,18 +445,131 @@
       width: 100%;
     }
 
+    .start-overlay,
     .result-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.92);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 100;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
+      padding: 1rem;
     }
 
+    .start-overlay.show,
     .result-overlay.show { display: flex; }
+
+    .start-modal {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      max-width: 520px;
+      width: 100%;
+      border: 1px solid var(--panel-2);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      animation: popIn 0.3s ease;
+    }
+
+    .start-modal h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.35rem;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .start-modal .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .start-modal .instructions {
+      background: rgba(0,0,0,0.25);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--muted);
+      margin-bottom: 1.35rem;
+    }
+
+    .start-modal .instructions strong { color: var(--text); }
+    .start-modal .instructions ol {
+      margin: 0.5rem 0 0 1.2rem;
+      padding: 0;
+    }
+    .start-modal .instructions li { margin-bottom: 0.35rem; }
+
+    .start-modal .diff-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .start-modal .diff-options {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .start-modal .diff-options button {
+      flex: 1;
+      min-width: 100px;
+      border: 2px solid var(--panel-2);
+      background: rgba(0,0,0,0.2);
+      color: var(--text);
+      padding: 0.7rem 0.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+
+    .start-modal .diff-options button:hover {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .start-modal .diff-options button.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.18);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .start-modal .diff-options button small {
+      display: block;
+      font-weight: 500;
+      font-size: 0.72rem;
+      opacity: 0.7;
+      margin-top: 0.2rem;
+    }
+
+    .start-modal .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+    }
+
+    .start-modal .start-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.5);
+    }
 
     .result-modal {
       background: var(--panel);
@@ -576,6 +689,33 @@
         4. Goal: only the target unit remains. Avoid distractor cards!<br>
         Covers SI, imperial, pressure, energy & volume units.
       </div>
+    </div>
+  </div>
+
+  <div class="start-overlay show" id="startOverlay">
+    <div class="start-modal">
+      <h1>Dimensional Analysis Challenge</h1>
+      <p class="subtitle">Practice unit conversions with flip cards &amp; cancelling units</p>
+
+      <div class="instructions">
+        <strong>How to play</strong>
+        <ol>
+          <li>Drag conversion-factor cards into the chain slots.</li>
+          <li>Click a placed card to <strong>flip</strong> numerator ↔ denominator.</li>
+          <li>Numbers stay green — only cancelled <em>units</em> are struck through. Multiply the green numbers for your answer.</li>
+          <li>Goal: arrange cards so only the <strong>target unit</strong> remains. Watch out for distractor cards!</li>
+          <li>Faster, accurate answers earn more points. Build a streak for bonuses.</li>
+        </ol>
+      </div>
+
+      <div class="diff-label">Choose difficulty</div>
+      <div class="diff-options" id="startDiffOptions">
+        <button data-level="easy" class="active">Easy<small>1-step · SI basics</small></button>
+        <button data-level="medium">Medium<small>2-step · mixed units</small></button>
+        <button data-level="hard">Hard<small>Multi-step · no shortcuts</small></button>
+      </div>
+
+      <button class="start-btn" id="startGameBtn">Start Challenge</button>
     </div>
   </div>
 
@@ -1298,11 +1438,20 @@
     nextBtn.addEventListener('click', nextProblem);
     retryBtn.addEventListener('click', retryProblem);
 
+    const startOverlay = $('startOverlay');
+    const startGameBtn = $('startGameBtn');
+
+    // Header level buttons — only switch mid-game
     document.querySelectorAll('.level-select button').forEach(btn => {
       btn.addEventListener('click', () => {
+        if (startOverlay.classList.contains('show')) return; // ignore while on start screen
         document.querySelectorAll('.level-select button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentLevel = btn.dataset.level;
+        // Sync start-screen buttons too
+        document.querySelectorAll('#startDiffOptions button').forEach(b => {
+          b.classList.toggle('active', b.dataset.level === currentLevel);
+        });
         problemIndex = 0;
         score = 0;
         streak = 0;
@@ -1312,15 +1461,45 @@
       });
     });
 
+    // Start-screen difficulty buttons
+    document.querySelectorAll('#startDiffOptions button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#startDiffOptions button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLevel = btn.dataset.level;
+        // Sync header buttons
+        document.querySelectorAll('.level-select button').forEach(b => {
+          b.classList.toggle('active', b.dataset.level === currentLevel);
+        });
+      });
+    });
+
+    startGameBtn.addEventListener('click', () => {
+      startOverlay.classList.remove('show');
+      score = 0;
+      streak = 0;
+      scoreEl.textContent = 0;
+      streakEl.textContent = 0;
+      problemIndex = 0;
+      loadProblem(0);
+    });
+
     setupDropZones();
 
-    // Keyboard: Enter to check
+    // Keyboard: Enter to check (not while overlays are open)
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !resultOverlay.classList.contains('show')) checkAnswer();
+      if (e.key === 'Enter') {
+        if (startOverlay.classList.contains('show')) {
+          startGameBtn.click();
+        } else if (!resultOverlay.classList.contains('show')) {
+          checkAnswer();
+        }
+      }
     });
 
     // ========== INIT ==========
-    loadProblem(0);
+    // Do not start a problem or timer until student clicks Start
+    // Placeholder text remains visible behind the start overlay
   </script>
 </body>
 </html>
