@@ -1,0 +1,8 @@
+{
+  "title": "Dimensional Analysis Game",
+  "author": "Dr. U",
+  "course": "CHEM 3A",
+  "description": "Identify the conversion factor, flip if needed. Three levels of difficulty.",
+  "tags": ["dimensional analysis","units","SI prefixes","conversion factor"],
+  "status": "working"
+}
