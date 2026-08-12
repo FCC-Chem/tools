@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Significant Figures Study Tool</title>
+
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #202536;
+      --muted: #677084;
+      --border: #dbe1eb;
+      --accent: #6574e8;
+      --accent-dark: #4f5dcc;
+      --accent-soft: #eef0ff;
+      --good: #177245;
+      --good-bg: #eaf8f0;
+      --bad: #b42318;
+      --bad-bg: #fff0ee;
+      --hint: #755900;
+      --hint-bg: #fff8dd;
+      --shadow: 0 14px 38px rgba(37, 50, 83, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #fafbff 0%, var(--bg) 100%);
+    }
+
+    .page {
+      width: min(980px, 92%);
+      margin: 32px auto 56px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1.02rem;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .compare-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 15px 17px;
+      box-shadow: 0 6px 18px rgba(37, 50, 83, 0.04);
+      line-height: 1.5;
+    }
+
+    .compare-card strong {
+      color: var(--accent-dark);
+    }
+
+    .infinity-note {
+      margin: 14px 0 22px;
+      padding: 13px 16px;
+      border: 1px solid #d9cef5;
+      border-radius: 13px;
+      background: #f7f2ff;
+      color: #533f80;
+      line-height: 1.55;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 10px;
+      background: white;
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .tab:hover {
+      transform: translateY(-1px);
+      border-color: #aeb7ff;
+    }
+
+    .tab.active {
+      color: white;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .study-card {
+      padding: clamp(20px, 4vw, 34px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: var(--accent-soft);
+      color: #3946a4;
+      font-weight: 850;
+      font-size: 0.9rem;
+    }
+
+    .score {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 750;
+    }
+
+    .prompt {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+      line-height: 1.55;
+    }
+
+    .prompt strong {
+      background: var(--accent-soft);
+      color: #3441ad;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    .number-display {
+      margin: 20px 0 22px;
+      padding: 18px;
+      text-align: center;
+      background: #fbfcff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: clamp(1.75rem, 5vw, 3rem);
+      font-weight: 850;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .number-display sup {
+      font-size: 0.58em;
+      vertical-align: super;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1.5px solid #cbd3df;
+      border-radius: 12px;
+      font-size: 1.07rem;
+      outline: none;
+      background: white;
+      color: var(--text);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(101, 116, 232, 0.12);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .primary,
+    .secondary,
+    .hint-button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 17px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .secondary {
+      background: #eef1f6;
+      color: #344054;
+    }
+
+    .hint-button {
+      color: var(--hint);
+      background: var(--hint-bg);
+      border: 1px solid #eedb99;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .hint-box,
+    .feedback {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      line-height: 1.55;
+    }
+
+    .hint-box {
+      background: var(--hint-bg);
+      color: #614900;
+      border: 1px solid #eedb99;
+    }
+
+    .feedback.good {
+      display: block;
+      background: var(--good-bg);
+      border: 1px solid #b7dfc7;
+      color: var(--good);
+    }
+
+    .feedback.bad {
+      display: block;
+      background: var(--bad-bg);
+      border: 1px solid #f1c2bc;
+      color: var(--bad);
+    }
+
+    details {
+      margin-top: 22px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: white;
+      box-shadow: 0 7px 22px rgba(37, 50, 83, 0.05);
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 17px 20px;
+      cursor: pointer;
+      font-weight: 850;
+      background: #fbfcff;
+    }
+
+    .rules {
+      padding: 4px 22px 22px;
+      color: #344054;
+      line-height: 1.65;
+    }
+
+    .rules h3 {
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .rules ul {
+      margin-top: 7px;
+      padding-left: 23px;
+    }
+
+    .rules li {
+      margin: 7px 0;
+    }
+
+    .example {
+      margin: 11px 0;
+      padding: 11px 13px;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: #f7f9fc;
+    }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    @media (max-width: 760px) {
+      .compare {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .answer-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Significant Figures Study Tool</h1>
+      <p>
+        Practice identifying significant figures and rounding measurements correctly.
+        Pay close attention to whether the question asks for
+        <strong>significant figures</strong> or <strong>decimal places</strong>.
+      </p>
+    </section>
+
+    <section class="compare">
+      <div class="compare-card">
+        <strong>Significant Figures</strong> = the total number of meaningful digits in a measured value.
+      </div>
+      <div class="compare-card">
+        <strong>Decimal Places</strong> = the number of digits located to the right of the decimal point.
+      </div>
+    </section>
+
+    <div class="infinity-note">
+      <strong>Exact counted quantities</strong> have an infinite number of significant figures.
+      For these questions, enter <strong>oo</strong> for infinity.
+    </div>
+
+    <nav class="tabs" aria-label="Study modes">
+      <button class="tab active" data-mode="count">Count Sig Figs</button>
+      <button class="tab" data-mode="siground">Round to Sig Figs</button>
+      <button class="tab" data-mode="decimal">Round to Decimal Places</button>
+      <button class="tab" data-mode="mixed">Mixed Practice</button>
+    </nav>
+
+    <section class="study-card">
+      <div class="topline">
+        <div class="badge" id="typeBadge">Counting Significant Figures</div>
+        <div class="score">
+          <span>Correct: <span id="correctCount">0</span></span>
+          <span>Attempted: <span id="attemptCount">0</span></span>
+        </div>
+      </div>
+
+      <p class="prompt" id="prompt"></p>
+      <div class="number-display" id="numberDisplay"></div>
+
+      <div class="answer-row">
+        <input
+          id="answerInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Type your answer"
+          aria-label="Answer"
+        />
+        <button class="primary" id="checkBtn">Check Answer</button>
+      </div>
+
+      <div class="actions">
+        <button class="hint-button" id="hintBtn">Hint</button>
+        <button class="secondary" id="nextBtn">New Question</button>
+        <button class="secondary" id="resetBtn">Reset Score</button>
+      </div>
+
+      <div class="hint-box" id="hintBox"></div>
+      <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+    </section>
+
+    <details>
+      <summary>Show Significant Figures & Rounding Rules</summary>
+      <div class="rules">
+        <h3>Counting Significant Figures</h3>
+        <ul>
+          <li>All <strong>nonzero digits</strong> are significant.</li>
+          <li><strong>Zeros between nonzero digits</strong> are significant.</li>
+          <li><strong>Leading zeros</strong> are not significant. They only locate the decimal point.</li>
+          <li><strong>Trailing zeros after a decimal point</strong> are significant.</li>
+          <li>
+            For a whole number written <strong>without a decimal point</strong>,
+            trailing zeros are normally not counted as significant in this study tool.
+          </li>
+          <li>
+            In <strong>scientific notation</strong>, count only the digits in the coefficient.
+            The exponent does not affect the number of significant figures.
+          </li>
+          <li>
+            <strong>Exact counted quantities</strong>, such as 12 students or 6 test tubes,
+            have an infinite number of significant figures. Enter <strong>oo</strong>.
+          </li>
+        </ul>
+
+        <div class="example">
+          <strong>0.00450 g</strong> has 3 significant figures.
+        </div>
+
+        <div class="example">
+          <strong>4.500 × 10<sup>6</sup> molecules</strong> has 4 significant figures.
+        </div>
+
+        <div class="example">
+          <strong>18 students</strong> is an exact counted quantity, so enter <strong>oo</strong>.
+        </div>
+
+        <h3>Rounding to Significant Figures</h3>
+        <p>
+          Start counting at the <strong>first nonzero digit</strong>.
+          Keep the requested number of significant figures, then use the next digit to decide whether to round.
+        </p>
+
+        <h3>Rounding to Decimal Places</h3>
+        <p>
+          Count positions <strong>to the right of the decimal point</strong>.
+          This is different from counting significant figures.
+        </p>
+
+        <div class="example">
+          12.347 rounded to <strong>3 significant figures</strong> = 12.3<br />
+          12.347 rounded to <strong>3 decimal places</strong> = 12.347
+        </div>
+
+        <h3>Rounding Rule</h3>
+        <p>
+          If the first digit being removed is <strong>5 or greater</strong>, increase the final retained digit by 1.
+          If it is <strong>4 or less</strong>, leave the final retained digit unchanged.
+        </p>
+      </div>
+    </details>
+
+    <div class="footer">
+      Scientific notation answers may be entered using E notation, such as <strong>1.20e3</strong>.
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const countBank = [
+        {
+          display: "7 m",
+          answer: "1",
+          reason: "The single nonzero digit is significant.",
+          hint: "Every nonzero digit is significant."
+        },
+        {
+          display: "0.004",
+          answer: "1",
+          reason: "Leading zeros are not significant. Only the 4 counts.",
+          hint: "Ignore zeros that only locate the decimal point."
+        },
+        {
+          display: "45 g",
+          answer: "2",
+          reason: "Both nonzero digits are significant.",
+          hint: "Nonzero digits always count."
+        },
+        {
+          display: "900",
+          answer: "1",
+          reason: "Without a decimal point, trailing zeros in this whole number are not counted as significant in this study tool.",
+          hint: "Compare this with 900., where the decimal point makes the trailing zeros significant."
+        },
+        {
+          display: "0.00450",
+          answer: "3",
+          reason: "The leading zeros are not significant, but the final zero after the decimal is significant.",
+          hint: "Ignore leading zeros. Count from the first nonzero digit through the final trailing decimal zero."
+        },
+        {
+          display: "900.",
+          answer: "3",
+          reason: "The decimal point indicates that both trailing zeros are significant.",
+          hint: "A decimal point written after a whole number makes the trailing zeros significant."
+        },
+        {
+          display: "12.30 mL",
+          answer: "4",
+          reason: "The trailing zero is after a decimal point, so it is significant.",
+          hint: "The unit does not affect the number of significant figures."
+        },
+        {
+          display: "90.05 °C",
+          answer: "4",
+          reason: "Zeros between nonzero digits are significant.",
+          hint: "Interior zeros count."
+        },
+        {
+          display: "3.0400 × 10<sup>5</sup> Pa",
+          answer: "5",
+          reason: "In scientific notation, only the coefficient determines the number of significant figures.",
+          hint: "Ignore the ×10 exponent and count the digits in 3.0400."
+        },
+        {
+          display: "100.20 mg",
+          answer: "5",
+          reason: "The interior zeros and the trailing zero after the decimal are all significant.",
+          hint: "Once counting starts at the first nonzero digit, every shown digit here counts."
+        },
+        {
+          display: "0.007020 g",
+          answer: "4",
+          reason: "Leading zeros are not significant. The zero between 7 and 2 and the final trailing zero are significant.",
+          hint: "Start counting at 7, not at the zeros before it."
+        },
+        {
+          display: "250.0 mL",
+          answer: "4",
+          reason: "Because a decimal point is shown, all trailing zeros are significant.",
+          hint: "The final zero is meaningful."
+        },
+        {
+          display: "6.022 × 10<sup>23</sup> particles",
+          answer: "4",
+          reason: "The coefficient 6.022 contains four significant figures.",
+          hint: "The exponent does not count."
+        },
+        {
+          display: "1.20 × 10<sup>−3</sup> mol",
+          answer: "3",
+          reason: "The coefficient 1.20 has three significant figures.",
+          hint: "Count only the digits in 1.20."
+        },
+        {
+          display: "7.0 × 10<sup>−6</sup> m",
+          answer: "2",
+          reason: "The coefficient 7.0 contains two significant figures.",
+          hint: "A trailing zero after a decimal is significant."
+        },
+        {
+          display: "4.50000 g",
+          answer: "6",
+          reason: "All trailing zeros after the decimal point are significant.",
+          hint: "Count the 4, 5, and every trailing decimal zero."
+        },
+        {
+          display: "102.030 mL",
+          answer: "6",
+          reason: "Interior zeros and the trailing decimal zero are significant.",
+          hint: "Zeros between nonzero digits count, and the final zero after the decimal counts too."
+        },
+        {
+          display: "8.765432 × 10<sup>2</sup> J",
+          answer: "7",
+          reason: "The coefficient contains seven significant figures.",
+          hint: "Ignore the exponent and count the digits in the coefficient."
+        },
+        {
+          display: "1000.500 g",
+          answer: "7",
+          reason: "Because a decimal point is present, the zeros between 1 and 5 are significant, and the final two zeros are significant.",
+          hint: "With a decimal shown, the written zeros are meaningful."
+        },
+        {
+          display: "12.345678 L",
+          answer: "8",
+          reason: "All eight nonzero digits are significant.",
+          hint: "Every nonzero digit counts."
+        },
+        {
+          display: "0.0012345678 mol",
+          answer: "8",
+          reason: "The leading zeros are not significant; the eight digits from 1 through 8 are significant.",
+          hint: "Start counting at the first nonzero digit."
+        },
+        {
+          display: "9.87654321 × 10<sup>−4</sup> M",
+          answer: "9",
+          reason: "The coefficient contains nine significant figures.",
+          hint: "Count every digit in 9.87654321."
+        },
+        {
+          display: "1234.50000 mg",
+          answer: "9",
+          reason: "All nonzero digits and all trailing zeros after the decimal point are significant.",
+          hint: "The decimal point makes the trailing zeros significant."
+        },
+        {
+          display: "0.0800 L",
+          answer: "3",
+          reason: "Leading zeros are not significant, while trailing zeros after the decimal are significant.",
+          hint: "Start with the 8."
+        },
+        {
+          display: "4500 kg",
+          answer: "2",
+          reason: "In this tool, trailing zeros in a whole number without a decimal point are not counted as significant.",
+          hint: "There is no decimal point shown."
+        },
+        {
+          display: "4500. kg",
+          answer: "4",
+          reason: "The decimal point indicates that the trailing zeros are significant.",
+          hint: "A decimal point after a whole number changes how its trailing zeros are interpreted."
+        }
+      ];
+
+      const countedBank = [
+        {
+          display: "18 students",
+          answer: "oo",
+          reason: "This is an exact counted quantity, so it has an infinite number of significant figures.",
+          hint: "This value was counted, not measured. Enter oo."
+        },
+        {
+          display: "6 beakers",
+          answer: "oo",
+          reason: "A counted number is exact and has an infinite number of significant figures.",
+          hint: "Exact counted quantities use oo in this tool."
+        },
+        {
+          display: "24 test tubes",
+          answer: "oo",
+          reason: "This is an exact count, not a measurement.",
+          hint: "Counted quantities are exact. Enter oo."
+        },
+        {
+          display: "3 lab partners",
+          answer: "oo",
+          reason: "The value is an exact count and therefore has infinite significant figures.",
+          hint: "A counted number has no measurement uncertainty."
+        },
+        {
+          display: "12 eggs",
+          answer: "oo",
+          reason: "This is an exact counted value, so it has infinite significant figures.",
+          hint: "Think exact count rather than measurement."
+        },
+        {
+          display: "8 graduated cylinders",
+          answer: "oo",
+          reason: "This is an exact counted quantity and therefore has infinite significant figures.",
+          hint: "Counted objects are exact. Enter oo."
+        }
+      ];
+
+      const sigRoundBank = [
+        {
+          value: 12.347,
+          shown: "12.347",
+          places: 3,
+          answer: "12.3",
+          hint: "Start at the first nonzero digit. Keep three total significant digits: 1, 2, and 3.",
+          reason: "The fourth significant digit is 4, so the 3 stays unchanged."
+        },
+        {
+          value: 0.004567,
+          shown: "0.004567",
+          places: 2,
+          answer: "0.0046",
+          hint: "Leading zeros do not count. The first two significant digits are 4 and 5.",
+          reason: "The next digit is 6, so 5 rounds up to 6."
+        },
+        {
+          value: 83.764,
+          shown: "83.764",
+          places: 4,
+          answer: "83.76",
+          hint: "Keep the first four significant digits.",
+          reason: "The next digit is 4, so no rounding up is needed."
+        },
+        {
+          value: 105.87,
+          shown: "105.87",
+          places: 3,
+          answer: "106",
+          hint: "The zero between 1 and 5 is significant.",
+          reason: "The next digit is 8, so 105 rounds to 106."
+        },
+        {
+          value: 0.09076,
+          shown: "0.09076",
+          places: 3,
+          answer: "0.0908",
+          hint: "The leading zeros do not count. Begin with the 9.",
+          reason: "The first three significant digits are 9, 0, and 7. The next digit is 6, so 7 rounds up."
+        },
+        {
+          value: 12345,
+          shown: "12345",
+          places: 2,
+          answer: "12000",
+          accepted: ["12000", "1.2e4", "1.2x10^4", "1.2×10^4"],
+          hint: "Keep the first two significant digits, then replace the remaining positions with zeros.",
+          reason: "The third significant digit is 3, so 12 stays unchanged."
+        },
+        {
+          value: 98765,
+          shown: "98765",
+          places: 3,
+          answer: "98800",
+          accepted: ["98800", "9.88e4", "9.88x10^4", "9.88×10^4"],
+          hint: "Keep 9, 8, and 7. Then inspect the next digit.",
+          reason: "The next digit is 6, so 987 rounds to 988."
+        },
+        {
+          value: 2.9951,
+          shown: "2.9951",
+          places: 3,
+          answer: "3.00",
+          hint: "Be careful: rounding can cause a carry into the previous digit.",
+          reason: "The next digit is 5, so 2.99 rounds upward to 3.00. The zeros are needed to show three significant figures."
+        },
+        {
+          value: 0.00080944,
+          shown: "0.00080944",
+          places: 4,
+          answer: "0.0008094",
+          hint: "Start counting significant figures at 8.",
+          reason: "The fifth significant digit is 4, so the final retained digit stays unchanged."
+        },
+        {
+          value: 65.050,
+          shown: "65.050",
+          places: 4,
+          answer: "65.05",
+          hint: "Zeros between nonzero digits are significant.",
+          reason: "The requested four significant figures are 6, 5, 0, and 5."
+        }
+      ];
+
+      const decimalBank = [
+        {
+          shown: "12.347",
+          places: 2,
+          answer: "12.35",
+          hint: "Count two digits to the right of the decimal point.",
+          reason: "The third decimal digit is 7, so the hundredths place rounds up."
+        },
+        {
+          shown: "5.8049",
+          places: 3,
+          answer: "5.805",
+          hint: "Keep three digits after the decimal point.",
+          reason: "The fourth decimal digit is 9, so the third decimal digit rounds up."
+        },
+        {
+          shown: "0.00678",
+          places: 4,
+          answer: "0.0068",
+          accepted: ["0.0068", ".0068"],
+          hint: "Decimal places count from the decimal point, even when the digits are zeros.",
+          reason: "The first four decimal places are 0, 0, 6, and 7. The next digit is 8, so 7 rounds up."
+        },
+        {
+          shown: "38.1257",
+          places: 1,
+          answer: "38.1",
+          hint: "Keep only one digit to the right of the decimal.",
+          reason: "The second decimal digit is 2, so the tenths digit stays unchanged."
+        },
+        {
+          shown: "104.999",
+          places: 2,
+          answer: "105.00",
+          hint: "Rounding can carry across the decimal point.",
+          reason: "The third decimal digit is 9, so 104.99 rounds to 105.00. The two zeros show two decimal places."
+        },
+        {
+          shown: "7.2",
+          places: 3,
+          answer: "7.200",
+          hint: "If the value already has fewer decimal places than requested, add zeros.",
+          reason: "Three decimal places must be shown explicitly."
+        },
+        {
+          shown: "0.45061",
+          places: 3,
+          answer: "0.451",
+          hint: "Count exactly three positions after the decimal point.",
+          reason: "The fourth decimal digit is 6, so 0.450 rounds to 0.451."
+        },
+        {
+          shown: "91.444",
+          places: 2,
+          answer: "91.44",
+          hint: "Look at the third digit after the decimal.",
+          reason: "The third decimal digit is 4, so the hundredths digit remains unchanged."
+        },
+        {
+          shown: "3.9997",
+          places: 3,
+          answer: "4.000",
+          hint: "Keep three decimal places, even if rounding changes the whole-number portion.",
+          reason: "The fourth decimal digit is 7, so 3.999 rounds to 4.000."
+        },
+        {
+          shown: "16.0502",
+          places: 3,
+          answer: "16.050",
+          hint: "Count three digits after the decimal, including zeros.",
+          reason: "The fourth decimal digit is 2, so the third decimal digit stays unchanged."
+        }
+      ];
+
+      const tabs = [...document.querySelectorAll(".tab")];
+      const promptEl = document.getElementById("prompt");
+      const numberEl = document.getElementById("numberDisplay");
+      const badgeEl = document.getElementById("typeBadge");
+      const answerEl = document.getElementById("answerInput");
+      const feedbackEl = document.getElementById("feedback");
+      const hintEl = document.getElementById("hintBox");
+      const correctEl = document.getElementById("correctCount");
+      const attemptedEl = document.getElementById("attemptCount");
+
+      let mode = "count";
+      let current = null;
+      let currentType = "count";
+      let correct = 0;
+      let attempted = 0;
+      let answeredCurrent = false;
+      let countingQuestionsSinceExact = 0;
+      let nextExactAt = 4 + Math.floor(Math.random() * 4); // exact-count item appears about every 5th–8th counting problem
+
+      const modeLabels = {
+        count: "Counting Significant Figures",
+        siground: "Rounding to Significant Figures",
+        decimal: "Rounding to Decimal Places",
+        mixed: "Mixed Practice"
+      };
+
+      function randomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function chooseMixedType() {
+        const types = ["count", "siground", "decimal"];
+        return types[Math.floor(Math.random() * types.length)];
+      }
+
+      function normalizeAnswer(value) {
+        return value
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .replace(/∞/g, "oo")
+          .replace(/×/g, "x");
+      }
+
+      function numericEquivalent(a, b) {
+        const clean = s => s.replace(/x10\^?/g, "e").replace(/[()]/g, "");
+        const na = Number(clean(normalizeAnswer(a)));
+        const nb = Number(clean(normalizeAnswer(b)));
+        return Number.isFinite(na) && Number.isFinite(nb) && Math.abs(na - nb) < 1e-12;
+      }
+
+      function isCorrect(userInput, item) {
+        const user = normalizeAnswer(userInput);
+        const accepted = (item.accepted || [item.answer]).map(normalizeAnswer);
+
+        if (accepted.includes(user)) return true;
+
+        // Preserve required trailing zeros when the official answer explicitly uses them.
+        // Otherwise allow mathematically equivalent numeric entry.
+        const official = String(item.answer);
+        const requiresVisibleZeros =
+          official.includes(".") &&
+          /0$/.test(official);
+
+        if (!requiresVisibleZeros) {
+          return accepted.some(ans => numericEquivalent(user, ans));
+        }
+
+        return false;
+      }
+
+      function renderQuestion() {
+        feedbackEl.className = "feedback";
+        feedbackEl.textContent = "";
+        hintEl.style.display = "none";
+        hintEl.textContent = "";
+        answerEl.value = "";
+        answerEl.focus();
+        answeredCurrent = false;
+
+        currentType = mode === "mixed" ? chooseMixedType() : mode;
+
+        if (currentType === "count") {
+          if (countingQuestionsSinceExact >= nextExactAt) {
+            current = randomItem(countedBank);
+            countingQuestionsSinceExact = 0;
+            nextExactAt = 4 + Math.floor(Math.random() * 4);
+          } else {
+            current = randomItem(countBank);
+            countingQuestionsSinceExact++;
+          }
+
+          badgeEl.textContent = mode === "mixed"
+            ? "Mixed Practice • Count Significant Figures"
+            : modeLabels.count;
+
+          promptEl.innerHTML =
+            "How many <strong>significant figures</strong> are present in the following value?";
+          numberEl.innerHTML = current.display;
+          answerEl.placeholder = "Enter a number or oo";
+
+        } else if (currentType === "siground") {
+          current = randomItem(sigRoundBank);
+          badgeEl.textContent = mode === "mixed"
+            ? "Mixed Practice • Round to Significant Figures"
+            : modeLabels.siground;
+
+          promptEl.innerHTML =
+            `Round the following number to <strong>${current.places} significant figure${current.places === 1 ? "" : "s"}</strong>.`;
+          numberEl.textContent = current.shown;
+          answerEl.placeholder = "Enter the rounded value";
+
+        } else {
+          current = randomItem(decimalBank);
+          badgeEl.textContent = mode === "mixed"
+            ? "Mixed Practice • Round to Decimal Places"
+            : modeLabels.decimal;
+
+          promptEl.innerHTML =
+            `Round the following number to <strong>${current.places} decimal place${current.places === 1 ? "" : "s"}</strong>.`;
+          numberEl.textContent = current.shown;
+          answerEl.placeholder = "Enter the rounded value";
+        }
+      }
+
+      function checkAnswer() {
+        if (!current || answeredCurrent) return;
+
+        const value = answerEl.value.trim();
+
+        if (!value) {
+          feedbackEl.className = "feedback bad";
+          feedbackEl.textContent = "Enter an answer before checking.";
+          return;
+        }
+
+        attempted++;
+        answeredCurrent = true;
+
+        if (isCorrect(value, current)) {
+          correct++;
+          feedbackEl.className = "feedback good";
+          feedbackEl.innerHTML = `<strong>Correct!</strong> ${current.reason}`;
+        } else {
+          feedbackEl.className = "feedback bad";
+          feedbackEl.innerHTML =
+            `<strong>Not quite.</strong> The correct answer is <strong>${current.answer}</strong>. ${current.reason}`;
+        }
+
+        correctEl.textContent = correct;
+        attemptedEl.textContent = attempted;
+      }
+
+      function showHint() {
+        if (!current) return;
+        hintEl.style.display = "block";
+        hintEl.innerHTML = `<strong>Hint:</strong> ${current.hint}`;
+      }
+
+      function resetScore() {
+        correct = 0;
+        attempted = 0;
+        correctEl.textContent = "0";
+        attemptedEl.textContent = "0";
+        renderQuestion();
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          tabs.forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+          mode = tab.dataset.mode;
+          badgeEl.textContent = modeLabels[mode];
+          renderQuestion();
+        });
+      });
+
+      document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+      document.getElementById("hintBtn").addEventListener("click", showHint);
+      document.getElementById("nextBtn").addEventListener("click", renderQuestion);
+      document.getElementById("resetBtn").addEventListener("click", resetScore);
+
+      answerEl.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          if (answeredCurrent) {
+            renderQuestion();
+          } else {
+            checkAnswer();
+          }
+        }
+      });
+
+      renderQuestion();
+    })();
+  </script>
+</body>
+</html>
