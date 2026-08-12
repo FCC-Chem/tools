@@ -143,10 +143,31 @@
     font-family:var(--font-display);
   }
 
-  /* ---------- Legend ---------- */
-  .legend-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
-  .legend-list li{ display:flex; align-items:center; gap:8px; font-size:0.78rem; }
-  .legend-dot{ width:14px; height:14px; border-radius:50%; flex:0 0 auto; border:1px solid rgba(0,0,0,0.15);}
+  /* ---------- Bonding sites panel ---------- */
+  #bondSitesList{ display:flex; flex-direction:column; gap:6px; margin:0 0 6px; padding:0; list-style:none; }
+  #bondSitesList li{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.8rem;
+    background:#efe9db;
+    padding:6px 10px;
+    border-radius:8px;
+  }
+  #bondSitesList li .site-dot{
+    width:12px; height:12px;
+    border-radius:50%;
+    flex:0 0 auto;
+    border:1px solid rgba(0,0,0,0.15);
+  }
+  #bondSitesList li .site-count{
+    margin-left:auto;
+    font-family:var(--font-display);
+    font-weight:700;
+    color:var(--amber-dim);
+  }
+  #bondSitesNote{ font-size:0.8rem; color:var(--panel-sub); }
+  #bondSitesNote.all-done{ color:#2f7a45; font-weight:600; }
 
   /* ---------- Formula panel ---------- */
   #formulaList{ display:flex; flex-direction:column; gap:6px; margin:0 0 8px; padding:0; list-style:none;}
@@ -334,8 +355,9 @@
     </div>
 
     <div class="panel">
-      <h2 class="panel-title">Legend</h2>
-      <ul class="legend-list" id="legendList"></ul>
+      <h2 class="panel-title">Open Bonding Sites</h2>
+      <ul id="bondSitesList"></ul>
+      <div id="bondSitesNote"></div>
     </div>
 
     <div class="panel">
@@ -379,7 +401,7 @@
 
 </div>
 
-<footer>Tip: this workspace is a true 3D scene &mdash; rotate it to check the real shape of what you've built. <span style="opacity:0.5">(build 2026-08-09.6)</span></footer>
+<footer>Tip: this workspace is a true 3D scene &mdash; rotate it to check the real shape of what you've built. <span style="opacity:0.5">(build 2026-08-09.10) &middot; <span id="debugBtn" style="cursor:pointer; text-decoration:underline; text-decoration-style:dotted;" title="Copy the exact computed 3D coordinates for troubleshooting">debug</span></span></footer>
 
 <script>
 (function(){
@@ -478,6 +500,61 @@
   }
   const IDENTITY = [[1,0,0],[0,1,0],[0,0,1]];
 
+  // Given two local unit vectors and the two world unit vectors they
+  // should map to, find the rotation that does so (exact whenever the
+  // angle between the local pair matches the angle between the world
+  // pair, which holds here since both come from the same underlying
+  // tetrahedral geometry). Used to orient a ring atom sitting at a
+  // fixed template position so its remaining connection points end up
+  // pointing the right way for substituents.
+  function orthoFrame(va, vb){
+    const e1 = normV(va);
+    const e2 = normV(subV(vb, scaleV(e1, dotV(vb, e1))));
+    const e3 = crossV(e1, e2);
+    return [e1, e2, e3];
+  }
+  function fitRotation(localA, localB, worldA, worldB){
+    const E = orthoFrame(localA, localB); // columns e1,e2,e3 (as rows here)
+    const F = orthoFrame(worldA, worldB);
+    // R = F * E^T, where E and F are built with e1/e2/e3 (f1/f2/f3) as columns
+    const Emat = [[E[0][0],E[1][0],E[2][0]],[E[0][1],E[1][1],E[2][1]],[E[0][2],E[1][2],E[2][2]]];
+    const Fmat = [[F[0][0],F[1][0],F[2][0]],[F[0][1],F[1][1],F[2][1]],[F[0][2],F[1][2],F[2][2]]];
+    const Et = [[Emat[0][0],Emat[1][0],Emat[2][0]],[Emat[0][1],Emat[1][1],Emat[2][1]],[Emat[0][2],Emat[1][2],Emat[2][2]]];
+    return matMul(Fmat, Et);
+  }
+
+  // A validated, analytically-exact chair conformation for a
+  // six-membered ring: every edge is exactly BOND_LEN, every C-C-C
+  // angle is exactly the tetrahedral 109.47 degrees. Used directly as
+  // a rigid template rather than built up bond-by-bond, since
+  // incremental per-atom propagation turned out to be sensitive to
+  // which specific connection-point pair each atom happened to use
+  // for its two ring bonds and could fail to close cleanly.
+  const CHAIR6_TEMPLATE = (() => {
+    const L = BOND_LEN, R = (2*Math.sqrt(2)/3) * L, h = L/6;
+    const pts = [];
+    for (let i=0;i<6;i++){
+      const theta = i * Math.PI/3;
+      pts.push([R*Math.cos(theta), R*Math.sin(theta), (i % 2 === 0) ? h : -h]);
+    }
+    return pts;
+  })();
+
+  // A flat regular hexagon, for six-membered rings where each ring
+  // atom is trigonal planar (3 connections - e.g. benzene, where every
+  // ring carbon has 2 ring neighbors + 1 H) rather than tetrahedral.
+  // A tetrahedral chair would be chemically wrong here: trigonal
+  // planar centers naturally give a flat ring with 120-degree angles.
+  const HEX6_PLANAR_TEMPLATE = (() => {
+    const R = BOND_LEN; // regular hexagon: circumradius equals side length
+    const pts = [];
+    for (let i=0;i<6;i++){
+      const theta = i * Math.PI/3;
+      pts.push([R*Math.cos(theta), R*Math.sin(theta), 0]);
+    }
+    return pts;
+  })();
+
   function shortestArc(a, b){
     a = normV(a); b = normV(b);
     const d = Math.max(-1, Math.min(1, dotV(a,b)));
@@ -532,26 +609,138 @@
     return comps;
   }
 
-  function layoutComponent(comp){
-    let rootId = comp[0];
-    comp.forEach(id => {
-      if (atoms[id].neighborOrder.length > atoms[rootId].neighborOrder.length) rootId = id;
+  // Find one simple ring (cycle) within a component, if any, and return
+  // its atom ids in walk order (ring[i] bonded to ring[i+1], and the
+  // last element bonded back to the first). Standard DFS back-edge
+  // detection - sufficient for the simple, single-ring molecules an
+  // intro course actually builds (doesn't attempt fused/bridged
+  // polycyclic systems).
+  function findRingInComponent(compIds){
+    const adj = {};
+    compIds.forEach(id => adj[id] = []);
+    Object.values(bonds).forEach(b => {
+      if (adj[b.a] && adj[b.b]){ adj[b.a].push(b.b); adj[b.b].push(b.a); }
     });
-    atoms[rootId].pos = [0,0,0];
-    atoms[rootId].rot = IDENTITY;
-    const visited = new Set([rootId]);
-    const queue = [rootId];
+    const parent = {}, state = {};
+    compIds.forEach(id => state[id] = 0);
+    let found = null;
+    function dfs(u, par){
+      state[u] = 1;
+      let skippedParent = false;
+      for (const v of adj[u]){
+        if (v === par && !skippedParent){ skippedParent = true; continue; }
+        if (state[v] === 1){ found = { u, ancestor:v }; return true; }
+        if (state[v] === 0){ parent[v] = u; if (dfs(v, u)) return true; }
+      }
+      state[u] = 2;
+      return false;
+    }
+    for (const id of compIds){
+      if (state[id] === 0){ parent[id] = null; if (dfs(id, null)) break; }
+    }
+    if (!found) return null;
+    const ring = [found.u];
+    let cur = found.u;
+    while (cur !== found.ancestor){ cur = parent[cur]; ring.push(cur); }
+    return ring.length >= 3 ? ring : null;
+  }
+
+  function layoutComponent(comp){
+    const visited = new Set();
+    const queue = [];
+    const ring = findRingInComponent(comp);
+
+    // Which neighbor-order each atom's connection points get assigned
+    // to. Normally this is just chronological bond-creation order. But
+    // for a ring atom, whether its two ring bonds happen to land on
+    // "adjacent" tetrahedral vertices or on two unrelated ones is just
+    // an accident of which order hydrogens were clicked in - and using
+    // an inconsistent pair of vertices at even one ring atom is enough
+    // to break the clean, staggered chair-style closure. So for ring
+    // atoms we force their two ring neighbors into the first two
+    // connection-point slots (consistently, all the way around),
+    // leaving the remaining slots for whatever else is attached.
+    const domainOrder = {};
+    comp.forEach(id => { domainOrder[id] = atoms[id].neighborOrder; });
+    if (ring){
+      const n = ring.length;
+      ring.forEach((id, i) => {
+        const prevId = ring[(i - 1 + n) % n];
+        const nextId = ring[(i + 1) % n];
+        const rest = atoms[id].neighborOrder.filter(nid => nid !== prevId && nid !== nextId);
+        domainOrder[id] = [prevId, nextId, ...rest];
+      });
+    }
+    function holesFor(id){ return getHoles(atoms[id].el, domainOrder[id].length); }
+    // Which atom each atom was reached FROM during placement (null for
+    // ring atoms and the overall root). Needed so the linear-parent
+    // twist below can find the one connection point that is genuinely
+    // "new" for a given atom, rather than assuming it's always at a
+    // fixed array index - which one is new depends on where that atom
+    // itself sits in the tree, not on chronological build order.
+    const parentOf = {};
+
+    if (ring && ring.length === 6){
+      // Six-membered ring: decide whether this is a tetrahedral ring
+      // (every atom has 4 connections, e.g. cyclohexane) or a trigonal
+      // planar ring (every atom has 3 connections, e.g. benzene) and
+      // place atoms directly on the matching validated template, then
+      // work out each atom's orientation by fitting its two ring-bond
+      // connection points to the directions the template actually
+      // requires - this guarantees a clean, correctly-shaped closure
+      // regardless of which specific connection points ended up
+      // assigned to the ring bonds.
+      const stericCounts = ring.map(id => holesFor(id).length);
+      const allTetrahedral = stericCounts.every(n => n === 4);
+      const allTrigonal = stericCounts.every(n => n === 3);
+      const template = allTetrahedral ? CHAIR6_TEMPLATE : allTrigonal ? HEX6_PLANAR_TEMPLATE : null;
+      if (template){
+        ring.forEach((id, i) => {
+          atoms[id].pos = template[i].slice();
+          visited.add(id);
+        });
+        const n = ring.length;
+        ring.forEach((id, i) => {
+          const prevId = ring[(i - 1 + n) % n], nextId = ring[(i + 1) % n];
+          const holes = holesFor(id);
+          const worldA = normV(subV(atoms[prevId].pos, atoms[id].pos));
+          const worldB = normV(subV(atoms[nextId].pos, atoms[id].pos));
+          atoms[id].rot = fitRotation(holes[0], holes[1], worldA, worldB);
+        });
+        ring.forEach(id => queue.push(id));
+      } else {
+        layoutRingFallback(ring, domainOrder, holesFor, visited, queue);
+      }
+    } else if (ring){
+      layoutRingFallback(ring, domainOrder, holesFor, visited, queue);
+    } else {
+      let rootId = comp[0];
+      comp.forEach(id => {
+        if (atoms[id].neighborOrder.length > atoms[rootId].neighborOrder.length) rootId = id;
+      });
+      atoms[rootId].pos = [0,0,0];
+      atoms[rootId].rot = IDENTITY;
+      visited.add(rootId);
+      queue.push(rootId);
+    }
     while(queue.length){
       const pid = queue.shift();
       const parent = atoms[pid];
-      const pHoles = getHoles(parent.el, parent.neighborOrder.length);
-      parent.neighborOrder.forEach((cid, idx) => {
+      const pHoles = holesFor(pid);
+      // For a linear (2-domain) atom, find which of its two slots (if
+      // either) was the one it was itself reached through - that slot
+      // is the "reference" side; the other is the one real new child a
+      // pass-through linear atom can have, and always needs the twist.
+      const parentLinkId = parentOf[pid];
+      const parentLinkIdx = (parentLinkId != null) ? domainOrder[pid].indexOf(parentLinkId) : -1;
+      domainOrder[pid].forEach((cid, idx) => {
         if (visited.has(cid)) return;
         const child = atoms[cid];
         const parentWorldDir = normV(matVec(parent.rot, pHoles[idx]));
         const childPos = addV(parent.pos, scaleV(parentWorldDir, BOND_LEN));
-        const childHoleIdx = child.neighborOrder.indexOf(pid);
-        const childLocalBack = getHoles(child.el, child.neighborOrder.length)[childHoleIdx];
+        const childOrder = domainOrder[cid] || child.neighborOrder;
+        const childHoleIdx = childOrder.indexOf(pid);
+        const childLocalBack = getHoles(child.el, childOrder.length)[childHoleIdx];
         const targetDir = scaleV(parentWorldDir, -1);
         const arc = shortestArc(childLocalBack, targetDir);
         let R = axisAngleToMatrix(arc.axis, arc.angle);
@@ -561,22 +750,51 @@
         // on how far each attached group is "twisted" around the bond
         // axis, so real cumulated double bonds settle into planes
         // perpendicular to each other (each pi bond uses one of two
-        // orthogonal p-orbitals). We reproduce that by giving the
-        // second such neighbor an extra 90-degree twist relative to
-        // the first.
-        if (pHoles.length === 2 && idx === 1){
+        // orthogonal p-orbitals). We reproduce that by giving whichever
+        // slot is NOT the one this atom was itself reached through an
+        // extra 90-degree twist - i.e. every new child except the very
+        // first one placed for a parent with no incoming bond of its
+        // own (the root of its own branch).
+        const isReferenceSlot = parentLinkIdx === -1 ? (idx === 0) : (idx === parentLinkIdx);
+        if (pHoles.length === 2 && !isReferenceSlot){
           const twist = axisAngleToMatrix(normV(targetDir), Math.PI/2);
           R = matMul(twist, R);
         }
         child.pos = childPos;
         child.rot = R;
+        parentOf[cid] = pid;
         visited.add(cid);
         queue.push(cid);
       });
     }
   }
 
-  function arrangeComponents(comps){
+  // Ring sizes other than 6 (no validated rigid template available):
+  // walk the ring as one continuous sequential chain - the same
+  // propagation a simple open chain uses - rather than letting the
+  // general branching BFS above process both ring neighbors of a high-
+  // degree atom independently, which can send the two halves of the
+  // ring down unrelated paths that never meet back up near each other.
+  function layoutRingFallback(ring, domainOrder, holesFor, visited, queue){
+    atoms[ring[0]].pos = [0,0,0];
+    atoms[ring[0]].rot = IDENTITY;
+    visited.add(ring[0]);
+    for (let i=1;i<ring.length;i++){
+      const prevId = ring[i-1], curId = ring[i];
+      const prev = atoms[prevId], cur = atoms[curId];
+      const prevHoles = holesFor(prevId);
+      const prevHoleIdx = domainOrder[prevId].indexOf(curId);
+      const prevWorldDir = normV(matVec(prev.rot, prevHoles[prevHoleIdx]));
+      cur.pos = addV(prev.pos, scaleV(prevWorldDir, BOND_LEN));
+      const curHoleIdx = domainOrder[curId].indexOf(prevId);
+      const curLocalBack = holesFor(curId)[curHoleIdx];
+      const targetDir = scaleV(prevWorldDir, -1);
+      const arc = shortestArc(curLocalBack, targetDir);
+      cur.rot = axisAngleToMatrix(arc.axis, arc.angle);
+      visited.add(curId);
+    }
+    ring.forEach(id => queue.push(id));
+  }  function arrangeComponents(comps){
     let cursorX = 0;
     const GAP = 60;
     comps.forEach(comp => {
@@ -607,7 +825,7 @@
      ============================================================ */
   function addAtom(key){
     const id = 'a' + (nextId++);
-    atoms[id] = { id, el:key, neighborOrder:[], pos:[0,0,0], rot:{axis:[0,1,0],angle:0} };
+    atoms[id] = { id, el:key, neighborOrder:[], pos:[0,0,0], rot:IDENTITY };
     recompute();
   }
 
@@ -665,6 +883,7 @@
     const comps = findComponents();
     arrangeComponents(comps);
     updateFormulaPanel(comps);
+    updateBondSitesPanel();
     render();
   }
 
@@ -699,6 +918,56 @@
       }
     });
     note.textContent = loose > 0 ? (loose + (loose===1 ? ' atom is' : ' atoms are') + ' still unconnected.') : '';
+  }
+
+  /* ============================================================
+     OPEN BONDING SITES
+     ============================================================ */
+  function updateBondSitesPanel(){
+    const list = document.getElementById('bondSitesList');
+    const note = document.getElementById('bondSitesNote');
+    list.innerHTML = '';
+    note.classList.remove('all-done');
+
+    const atomIds = Object.keys(atoms);
+    if (atomIds.length === 0){
+      note.textContent = 'Add some atoms to get started.';
+      return;
+    }
+
+    // For every element present, tally how many open connection points
+    // remain (capacity minus bonds already used) and on how many atoms.
+    const tally = {}; // el -> { openSites, openAtoms }
+    atomIds.forEach(id => {
+      const atom = atoms[id];
+      const cap = ELEMENTS[atom.el].maxConn;
+      const used = totalBondOrder(id);
+      const open = cap - used;
+      if (open > 0){
+        if (!tally[atom.el]) tally[atom.el] = { openSites:0, openAtoms:0 };
+        tally[atom.el].openSites += open;
+        tally[atom.el].openAtoms += 1;
+      }
+    });
+
+    const openElements = BANK_ORDER.filter(k => tally[k]);
+    if (openElements.length === 0){
+      note.textContent = 'All atoms are fully bonded!';
+      note.classList.add('all-done');
+      return;
+    }
+
+    openElements.forEach(key => {
+      const cfg = ELEMENTS[key];
+      const t = tally[key];
+      const li = document.createElement('li');
+      li.innerHTML =
+        '<span class="site-dot" style="background:' + cfg.color + '"></span>' +
+        cfg.name + ' (' + t.openAtoms + (t.openAtoms === 1 ? ' atom' : ' atoms') + ')' +
+        '<span class="site-count">' + t.openSites + (t.openSites === 1 ? ' site' : ' sites') + '</span>';
+      list.appendChild(li);
+    });
+    note.textContent = '';
   }
 
   /* ============================================================
@@ -895,10 +1164,9 @@
   });
 
   /* ============================================================
-     BANK + LEGEND UI
+     BANK UI
      ============================================================ */
   const bankGrid = document.getElementById('bankGrid');
-  const legendList = document.getElementById('legendList');
 
   BANK_ORDER.forEach(key => {
     const cfg = ELEMENTS[key];
@@ -914,10 +1182,6 @@
       '<span class="bank-text"><span class="bank-name">' + cfg.name + '</span><span class="bank-sym">' + key + '</span></span>';
     btn.addEventListener('click', () => addAtom(key));
     bankGrid.appendChild(btn);
-
-    const li = document.createElement('li');
-    li.innerHTML = '<span class="legend-dot" style="background:' + cfg.color + '"></span>' + cfg.name + ' (' + key + ')';
-    legendList.appendChild(li);
   });
 
   /* ============================================================
@@ -986,6 +1250,26 @@
   document.getElementById('zoomOut').addEventListener('click', () => { zoom = Math.max(0.5, zoom - 0.15); applyView(); });
   document.getElementById('resetViewBtn').addEventListener('click', () => { yaw = -25; pitch = 15; zoom = 1; applyView(); });
   document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+  document.getElementById('debugBtn').addEventListener('click', () => {
+    const dump = {
+      atoms: Object.fromEntries(Object.values(atoms).map(a => [a.id, {
+        el: a.el,
+        pos: a.pos.map(v => Math.round(v*10)/10),
+        neighborOrder: a.neighborOrder,
+        rot: a.rot.map(row => row.map(v => Math.round(v*1000)/1000))
+      }])),
+      bonds
+    };
+    const text = JSON.stringify(dump, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(
+        () => toast('Debug data copied to clipboard.'),
+        () => window.prompt('Copy this debug data:', text)
+      );
+    } else {
+      window.prompt('Copy this debug data:', text);
+    }
+  });
 
   /* ============================================================
      INIT
