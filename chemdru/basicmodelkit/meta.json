@@ -2,7 +2,7 @@
   "title": "Basic Model Kit",
   "author": "Dr. U",
   "course": "CHEM 3A",
-  "description": "Molecular Modeling Kit for simple molecules. No expanded octets, no cyclic structures.",
+  "description": "Molecular Modeling Kit for simple molecules. No expanded octets.",
   "tags": ["modeling","vsepr","molecular shape","model"],
-  "status": "wip"
+  "status": "working"
 }
