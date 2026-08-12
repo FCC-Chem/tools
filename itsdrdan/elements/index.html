@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8fc" />
+  <title>Element Symbol Study Lab</title>
+  <style>
+    :root{
+      --bg:#f7f8fc;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#667085;
+      --line:#e5e7eb;
+      --accent:#6d5dfc;
+      --accent2:#15a6a6;
+      --good:#178a55;
+      --bad:#c54545;
+      --warn:#a46a00;
+      --soft:#f0efff;
+      --soft2:#eafafa;
+      --shadow:0 18px 45px rgba(31,41,55,.09);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(109,93,252,.09), transparent 28%),
+        radial-gradient(circle at 88% 16%, rgba(21,166,166,.08), transparent 26%),
+        var(--bg);
+      color:var(--ink);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+
+    .wrap{
+      width:min(1180px, calc(100% - 28px));
+      margin:28px auto 54px;
+    }
+
+    .topbar{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .atom-logo{
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:linear-gradient(135deg, var(--accent), #8f84ff);
+      color:white;
+      font-size:24px;
+      box-shadow:0 10px 24px rgba(109,93,252,.24);
+    }
+
+    h1{
+      font-size:clamp(1.35rem, 2.6vw, 2.05rem);
+      margin:0;
+      letter-spacing:-.025em;
+    }
+
+    .subtitle{
+      color:var(--muted);
+      margin:4px 0 0;
+      font-size:.95rem;
+    }
+
+    .header-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:none;
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:700;
+      transition:.18s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+
+    .btn-primary{
+      background:var(--accent);
+      color:#fff;
+      box-shadow:0 7px 16px rgba(109,93,252,.2);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+
+    .btn-teal{
+      background:var(--accent2);
+      color:white;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.5fr .82fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(229,231,235,.85);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .study{
+      padding:24px;
+    }
+
+    .settings{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:12px;
+      margin-bottom:22px;
+    }
+
+    .control label{
+      display:block;
+      font-size:.78rem;
+      color:var(--muted);
+      font-weight:800;
+      margin:0 0 6px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    select{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      background:#fff;
+      color:var(--ink);
+      outline:none;
+    }
+
+    select:focus,input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(109,93,252,.12);
+    }
+
+    .prompt-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      min-height:315px;
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      background:
+        linear-gradient(180deg, rgba(109,93,252,.035), rgba(21,166,166,.02)),
+        #fff;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .question-type{
+      font-size:.78rem;
+      font-weight:900;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+      color:var(--accent);
+      margin-bottom:12px;
+    }
+
+    .question{
+      font-size:clamp(2rem, 6vw, 4.1rem);
+      font-weight:900;
+      letter-spacing:-.04em;
+      line-height:1.05;
+      margin:0 0 8px;
+    }
+
+    .atomic-line{
+      color:var(--muted);
+      margin-bottom:24px;
+      font-size:.92rem;
+      min-height:1.2em;
+    }
+
+    .answer-row{
+      width:min(520px, 100%);
+      display:flex;
+      gap:9px;
+    }
+
+    .answer-row input{
+      flex:1;
+      min-width:0;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:13px 14px;
+      font-size:1.05rem;
+      outline:none;
+    }
+
+    .feedback{
+      min-height:56px;
+      margin-top:15px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:3px;
+      font-weight:750;
+    }
+
+    .feedback.good{color:var(--good)}
+    .feedback.bad{color:var(--bad)}
+    .feedback .small{
+      color:var(--muted);
+      font-size:.88rem;
+      font-weight:600;
+    }
+
+    .card-actions{
+      margin-top:13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:9px;
+      margin-top:17px;
+    }
+
+    .stat{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      text-align:center;
+      background:#fff;
+    }
+
+    .stat strong{
+      display:block;
+      font-size:1.25rem;
+    }
+
+    .stat span{
+      display:block;
+      font-size:.74rem;
+      color:var(--muted);
+      margin-top:2px;
+      font-weight:700;
+    }
+
+    .side{
+      display:grid;
+      gap:18px;
+    }
+
+    .side-card{
+      padding:18px;
+    }
+
+    .side-card h2{
+      font-size:1rem;
+      margin:0 0 11px;
+      letter-spacing:-.01em;
+    }
+
+    .progress-track{
+      height:10px;
+      background:#eceef3;
+      border-radius:999px;
+      overflow:hidden;
+      margin:9px 0 7px;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .25s ease;
+    }
+
+    .progress-copy{
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.45;
+    }
+
+    .missed-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      min-height:34px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:7px 10px;
+      background:#f6f7f9;
+      border:1px solid var(--line);
+      font-weight:800;
+      font-size:.82rem;
+    }
+
+    .chip button{
+      border:none;
+      background:transparent;
+      color:var(--muted);
+      padding:0;
+      line-height:1;
+      font-size:1rem;
+    }
+
+    .tip{
+      background:linear-gradient(135deg, var(--soft), #f8f7ff);
+    }
+
+    .tip p{
+      margin:0;
+      color:#5148a7;
+      line-height:1.48;
+      font-size:.9rem;
+    }
+
+    .reference{
+      margin-top:18px;
+      padding:20px;
+    }
+
+    .ref-head{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin-bottom:15px;
+    }
+
+    .ref-head h2{
+      margin:0;
+      font-size:1.15rem;
+    }
+
+    .ref-head p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    .legend{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      font-size:.75rem;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      display:inline-block;
+      margin-right:4px;
+    }
+    .dot.core{background:var(--accent)}
+    .dot.extra{background:var(--accent2)}
+
+    .element-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(78px, 1fr));
+      gap:8px;
+    }
+
+    .element{
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:10px 8px;
+      background:#fff;
+      text-align:center;
+      min-height:88px;
+      position:relative;
+      transition:.18s ease;
+      user-select:none;
+    }
+
+    .element:hover{
+      transform:translateY(-2px);
+      box-shadow:0 7px 16px rgba(31,41,55,.08);
+    }
+
+    .element.core{border-top:4px solid var(--accent)}
+    .element.extra{border-top:4px solid var(--accent2)}
+
+    .element .z{
+      position:absolute;
+      left:7px;
+      top:6px;
+      color:var(--muted);
+      font-size:.66rem;
+      font-weight:800;
+    }
+
+    .element .sym{
+      display:block;
+      font-size:1.48rem;
+      font-weight:900;
+      margin-top:5px;
+    }
+
+    .element .name{
+      display:block;
+      color:var(--muted);
+      font-size:.72rem;
+      margin-top:2px;
+      word-break:break-word;
+    }
+
+    .element.hidden-answer .name{
+      filter:blur(5px);
+      user-select:none;
+    }
+
+    .ref-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:13px;
+    }
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      margin-top:16px;
+      font-size:.78rem;
+    }
+
+    .toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      background:#1f2937;
+      color:white;
+      padding:11px 14px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:.85rem;
+      opacity:0;
+      transform:translateY(8px);
+      pointer-events:none;
+      transition:.2s ease;
+      box-shadow:var(--shadow);
+      z-index:20;
+    }
+    .toast.show{opacity:1; transform:translateY(0)}
+
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+      .settings{grid-template-columns:1fr}
+      .topbar{align-items:flex-start}
+      .header-actions{display:none}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .answer-row{flex-direction:column}
+      .ref-head{align-items:flex-start; flex-direction:column}
+      .legend{justify-content:flex-start}
+    }
+
+    @media (max-width: 520px){
+      .wrap{width:min(100% - 16px, 1180px); margin-top:10px}
+      .study{padding:14px}
+      .prompt-card{padding:20px 14px; min-height:345px}
+      .side-card,.reference{padding:14px}
+      .element-grid{grid-template-columns:repeat(4, minmax(0, 1fr))}
+      .element{min-height:82px;padding:9px 4px}
+      .element .name{font-size:.64rem}
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="atom-logo" aria-hidden="true">⚛</div>
+        <div>
+          <h1>Element Symbol Study Lab</h1>
+          <p class="subtitle">Practice element names and symbols for introductory & health-science chemistry.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" id="focusMissedTop">Review Missed</button>
+        <button class="btn btn-primary" id="newQuestionTop">New Question</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <article class="card study">
+        <div class="settings">
+          <div class="control">
+            <label for="setSelect">Element Set</label>
+            <select id="setSelect">
+              <option value="core">First 20 Elements</option>
+              <option value="health">Health Science Essentials</option>
+              <option value="combined" selected>Combined Study Set</option>
+              <option value="missed">Missed Elements Only</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="directionSelect">Question Style</label>
+            <select id="directionSelect">
+              <option value="mixed" selected>Mixed</option>
+              <option value="nameToSymbol">Name → Symbol</option>
+              <option value="symbolToName">Symbol → Name</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="orderSelect">Question Order</label>
+            <select id="orderSelect">
+              <option value="random" selected>Random</option>
+              <option value="atomic">Atomic Number</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="prompt-card">
+          <div class="question-type" id="questionType">Name → Symbol</div>
+          <div class="question" id="questionText">Oxygen</div>
+          <div class="atomic-line" id="atomicLine">Atomic number 8</div>
+
+          <div class="answer-row">
+            <input
+              id="answerInput"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              aria-label="Answer"
+              placeholder="Type your answer..."
+            />
+            <button class="btn btn-primary" id="checkBtn">Check</button>
+          </div>
+
+          <div class="feedback" id="feedback" aria-live="polite">
+            <span>Type the matching element name or symbol.</span>
+            <span class="small">Symbols are case-sensitive: Co ≠ CO.</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-secondary" id="hintBtn">Hint</button>
+            <button class="btn btn-secondary" id="revealBtn">Reveal</button>
+            <button class="btn btn-teal" id="nextBtn">Next</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong id="correctStat">0</strong><span>Correct</span></div>
+          <div class="stat"><strong id="attemptStat">0</strong><span>Answered</span></div>
+          <div class="stat"><strong id="accuracyStat">—</strong><span>Accuracy</span></div>
+          <div class="stat"><strong id="streakStat">0</strong><span>Streak</span></div>
+        </div>
+      </article>
+
+      <aside class="side">
+        <section class="card side-card">
+          <h2>Study Progress</h2>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-copy" id="progressCopy">
+            Answer questions to build your mastery score.
+          </div>
+        </section>
+
+        <section class="card side-card">
+          <h2>Elements to Review</h2>
+          <div class="missed-list" id="missedList"></div>
+          <div class="progress-copy" id="missedEmpty">No missed elements yet.</div>
+        </section>
+
+        <section class="card side-card tip">
+          <h2>Symbol Tip</h2>
+          <p>
+            The first letter of an element symbol is always capitalized. If there is a second letter, it is lowercase:
+            <strong>Fe</strong>, <strong>Ag</strong>, <strong>Na</strong>. This tool checks symbol capitalization.
+          </p>
+        </section>
+
+        <section class="card side-card">
+          <h2>Reset Session</h2>
+          <div class="progress-copy" style="margin-bottom:10px">
+            Your session stats and missed-element list are saved in this browser.
+          </div>
+          <button class="btn btn-secondary" id="resetBtn">Reset Progress</button>
+        </section>
+      </aside>
+    </section>
+
+    <section class="card reference">
+      <div class="ref-head">
+        <div>
+          <h2>Study Reference</h2>
+          <p>First 20 elements plus a focused set of commonly encountered elements in health-science chemistry.</p>
+        </div>
+        <div class="legend">
+          <span><i class="dot core"></i> First 20</span>
+          <span><i class="dot extra"></i> Health-science extension</span>
+        </div>
+      </div>
+
+      <div class="element-grid" id="elementGrid"></div>
+
+      <div class="ref-actions">
+        <button class="btn btn-secondary" id="hideNamesBtn">Hide Names</button>
+        <button class="btn btn-secondary" id="showCoreBtn">Show First 20</button>
+        <button class="btn btn-secondary" id="showHealthBtn">Show Health Set</button>
+        <button class="btn btn-secondary" id="showAllBtn">Show All</button>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Standalone HTML • GitHub Pages ready • No API key required
+    </p>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const ELEMENTS = [
+      // First 20
+      {z:1,  symbol:"H",  name:"Hydrogen",  core:true},
+      {z:2,  symbol:"He", name:"Helium",    core:true},
+      {z:3,  symbol:"Li", name:"Lithium",   core:true},
+      {z:4,  symbol:"Be", name:"Beryllium", core:true},
+      {z:5,  symbol:"B",  name:"Boron",     core:true},
+      {z:6,  symbol:"C",  name:"Carbon",    core:true},
+      {z:7,  symbol:"N",  name:"Nitrogen",  core:true},
+      {z:8,  symbol:"O",  name:"Oxygen",    core:true},
+      {z:9,  symbol:"F",  name:"Fluorine",  core:true},
+      {z:10, symbol:"Ne", name:"Neon",      core:true},
+      {z:11, symbol:"Na", name:"Sodium",    core:true},
+      {z:12, symbol:"Mg", name:"Magnesium", core:true},
+      {z:13, symbol:"Al", name:"Aluminum",  core:true},
+      {z:14, symbol:"Si", name:"Silicon",   core:true},
+      {z:15, symbol:"P",  name:"Phosphorus",core:true},
+      {z:16, symbol:"S",  name:"Sulfur",    core:true},
+      {z:17, symbol:"Cl", name:"Chlorine",  core:true},
+      {z:18, symbol:"Ar", name:"Argon",     core:true},
+      {z:19, symbol:"K",  name:"Potassium", core:true},
+      {z:20, symbol:"Ca", name:"Calcium",   core:true},
+
+      // Health-science / common chemistry extension
+      {z:22, symbol:"Ti", name:"Titanium",  health:true},
+      {z:24, symbol:"Cr", name:"Chromium",  health:true},
+      {z:25, symbol:"Mn", name:"Manganese", health:true},
+      {z:26, symbol:"Fe", name:"Iron",      health:true},
+      {z:27, symbol:"Co", name:"Cobalt",    health:true},
+      {z:28, symbol:"Ni", name:"Nickel",    health:true},
+      {z:29, symbol:"Cu", name:"Copper",    health:true},
+      {z:30, symbol:"Zn", name:"Zinc",      health:true},
+      {z:33, symbol:"As", name:"Arsenic",   health:true},
+      {z:34, symbol:"Se", name:"Selenium",  health:true},
+      {z:35, symbol:"Br", name:"Bromine",   health:true},
+      {z:47, symbol:"Ag", name:"Silver",    health:true},
+      {z:48, symbol:"Cd", name:"Cadmium",   health:true},
+      {z:53, symbol:"I",  name:"Iodine",    health:true},
+      {z:56, symbol:"Ba", name:"Barium",    health:true},
+      {z:78, symbol:"Pt", name:"Platinum",  health:true},
+      {z:79, symbol:"Au", name:"Gold",      health:true},
+      {z:80, symbol:"Hg", name:"Mercury",   health:true},
+      {z:82, symbol:"Pb", name:"Lead",      health:true}
+    ];
+
+    const CORE = ELEMENTS.filter(e => e.core);
+    // "Health Science Essentials" intentionally includes several first-20 elements heavily used in chemistry/physiology.
+    const HEALTH_SYMBOLS = new Set([
+      "H","C","N","O","F","Na","Mg","P","S","Cl","K","Ca",
+      "Ti","Cr","Mn","Fe","Co","Ni","Cu","Zn","As","Se","Br",
+      "Ag","Cd","I","Ba","Pt","Au","Hg","Pb"
+    ]);
+    const HEALTH = ELEMENTS.filter(e => HEALTH_SYMBOLS.has(e.symbol));
+
+    const els = {
+      setSelect: document.getElementById("setSelect"),
+      directionSelect: document.getElementById("directionSelect"),
+      orderSelect: document.getElementById("orderSelect"),
+      questionType: document.getElementById("questionType"),
+      questionText: document.getElementById("questionText"),
+      atomicLine: document.getElementById("atomicLine"),
+      answerInput: document.getElementById("answerInput"),
+      feedback: document.getElementById("feedback"),
+      checkBtn: document.getElementById("checkBtn"),
+      hintBtn: document.getElementById("hintBtn"),
+      revealBtn: document.getElementById("revealBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      newQuestionTop: document.getElementById("newQuestionTop"),
+      focusMissedTop: document.getElementById("focusMissedTop"),
+      correctStat: document.getElementById("correctStat"),
+      attemptStat: document.getElementById("attemptStat"),
+      accuracyStat: document.getElementById("accuracyStat"),
+      streakStat: document.getElementById("streakStat"),
+      progressFill: document.getElementById("progressFill"),
+      progressCopy: document.getElementById("progressCopy"),
+      missedList: document.getElementById("missedList"),
+      missedEmpty: document.getElementById("missedEmpty"),
+      resetBtn: document.getElementById("resetBtn"),
+      elementGrid: document.getElementById("elementGrid"),
+      hideNamesBtn: document.getElementById("hideNamesBtn"),
+      showCoreBtn: document.getElementById("showCoreBtn"),
+      showHealthBtn: document.getElementById("showHealthBtn"),
+      showAllBtn: document.getElementById("showAllBtn"),
+      toast: document.getElementById("toast")
+    };
+
+    let state = loadState();
+    let current = null;
+    let currentDirection = "nameToSymbol";
+    let answeredCurrent = false;
+    let revealedCurrent = false;
+    let atomicIndex = 0;
+    let lastSymbol = "";
+    let referenceMode = "all";
+    let namesHidden = true;
+
+    function defaultState(){
+      return {
+        correct:0,
+        attempts:0,
+        streak:0,
+        bestStreak:0,
+        missed:{},
+        seen:{}
+      };
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem("elementStudyLabState");
+        return raw ? {...defaultState(), ...JSON.parse(raw)} : defaultState();
+      }catch{
+        return defaultState();
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem("elementStudyLabState", JSON.stringify(state));
+    }
+
+    function getMissedElements(){
+      return ELEMENTS.filter(e => (state.missed[e.symbol] || 0) > 0);
+    }
+
+    function getSet(){
+      const v = els.setSelect.value;
+      if(v === "core") return CORE;
+      if(v === "health") return HEALTH;
+      if(v === "missed"){
+        const missed = getMissedElements();
+        return missed.length ? missed : ELEMENTS;
+      }
+      return ELEMENTS;
+    }
+
+    function chooseDirection(){
+      const value = els.directionSelect.value;
+      if(value === "mixed"){
+        return Math.random() < .5 ? "nameToSymbol" : "symbolToName";
+      }
+      return value;
+    }
+
+    function pickQuestion(){
+      const pool = getSet();
+      if(!pool.length) return ELEMENTS[0];
+
+      if(els.orderSelect.value === "atomic"){
+        const sorted = [...pool].sort((a,b)=>a.z-b.z);
+        const selected = sorted[atomicIndex % sorted.length];
+        atomicIndex = (atomicIndex + 1) % sorted.length;
+        return selected;
+      }
+
+      let choices = pool;
+      if(pool.length > 1 && lastSymbol){
+        choices = pool.filter(e => e.symbol !== lastSymbol);
+      }
+      return choices[Math.floor(Math.random()*choices.length)];
+    }
+
+    function newQuestion(){
+      current = pickQuestion();
+      currentDirection = chooseDirection();
+      answeredCurrent = false;
+      revealedCurrent = false;
+      lastSymbol = current.symbol;
+
+      els.questionType.textContent =
+        currentDirection === "nameToSymbol" ? "Name → Symbol" : "Symbol → Name";
+
+      els.questionText.textContent =
+        currentDirection === "nameToSymbol" ? current.name : current.symbol;
+
+      els.atomicLine.textContent = `Atomic number ${current.z}`;
+      els.answerInput.value = "";
+      els.answerInput.disabled = false;
+      els.checkBtn.disabled = false;
+      els.feedback.className = "feedback";
+      els.feedback.innerHTML = `
+        <span>Type the matching ${currentDirection === "nameToSymbol" ? "symbol" : "element name"}.</span>
+        <span class="small">${currentDirection === "nameToSymbol" ? "Symbol capitalization counts." : "Element-name capitalization does not matter."}</span>
+      `;
+      els.answerInput.placeholder =
+        currentDirection === "nameToSymbol" ? "Example: Fe" : "Example: Iron";
+      els.answerInput.focus();
+    }
+
+    function normalizedName(s){
+      return s.trim().toLowerCase().replace(/\s+/g," ");
+    }
+
+    function isCorrectAnswer(){
+      const entered = els.answerInput.value.trim();
+      if(currentDirection === "nameToSymbol"){
+        return entered === current.symbol;
+      }
+      return normalizedName(entered) === normalizedName(current.name);
+    }
+
+    function checkAnswer(){
+      if(!current || answeredCurrent) return;
+
+      const entered = els.answerInput.value.trim();
+      if(!entered){
+        showToast("Type an answer first.");
+        els.answerInput.focus();
+        return;
+      }
+
+      const ok = isCorrectAnswer();
+      answeredCurrent = true;
+      els.answerInput.disabled = true;
+      els.checkBtn.disabled = true;
+
+      state.attempts += 1;
+      state.seen[current.symbol] = (state.seen[current.symbol] || 0) + 1;
+
+      if(ok){
+        state.correct += 1;
+        state.streak += 1;
+        state.bestStreak = Math.max(state.bestStreak, state.streak);
+        if(state.missed[current.symbol]){
+          state.missed[current.symbol] = Math.max(0, state.missed[current.symbol] - 1);
+        }
+
+        els.feedback.className = "feedback good";
+        els.feedback.innerHTML = `
+          <span>✓ Correct!</span>
+          <span class="small">${current.name} = ${current.symbol}</span>
+        `;
+      }else{
+        state.streak = 0;
+        state.missed[current.symbol] = (state.missed[current.symbol] || 0) + 1;
+
+        els.feedback.className = "feedback bad";
+        els.feedback.innerHTML = `
+          <span>Not quite. The correct answer is <strong>${currentDirection === "nameToSymbol" ? current.symbol : current.name}</strong>.</span>
+          <span class="small">${current.name} = ${current.symbol}</span>
+        `;
+      }
+
+      saveState();
+      updateStats();
+      renderMissed();
+    }
+
+    function showHint(){
+      if(!current) return;
+      if(currentDirection === "nameToSymbol"){
+        const len = current.symbol.length;
+        const first = current.symbol[0];
+        els.feedback.className = "feedback";
+        els.feedback.innerHTML = `
+          <span>Hint: The symbol starts with <strong>${first}</strong> and has ${len} letter${len === 1 ? "" : "s"}.</span>
+          <span class="small">Atomic number ${current.z}</span>
+        `;
+      }else{
+        els.feedback.className = "feedback";
+        els.feedback.innerHTML = `
+          <span>Hint: The name starts with <strong>${current.name[0]}</strong> and has ${current.name.length} letters.</span>
+          <span class="small">Atomic number ${current.z}</span>
+        `;
+      }
+    }
+
+    function revealAnswer(){
+      if(!current || answeredCurrent || revealedCurrent) return;
+      revealedCurrent = true;
+      answeredCurrent = true;
+      els.answerInput.disabled = true;
+      els.checkBtn.disabled = true;
+      state.missed[current.symbol] = (state.missed[current.symbol] || 0) + 1;
+      state.streak = 0;
+      saveState();
+
+      els.feedback.className = "feedback";
+      els.feedback.innerHTML = `
+        <span><strong>${current.name} = ${current.symbol}</strong></span>
+        <span class="small">This element was added to your review list.</span>
+      `;
+      updateStats();
+      renderMissed();
+    }
+
+    function updateStats(){
+      els.correctStat.textContent = state.correct;
+      els.attemptStat.textContent = state.attempts;
+      els.streakStat.textContent = state.streak;
+      els.accuracyStat.textContent =
+        state.attempts ? `${Math.round((state.correct/state.attempts)*100)}%` : "—";
+
+      const seenCount = Object.keys(state.seen).length;
+      const total = ELEMENTS.length;
+      const pct = Math.round((seenCount/total)*100);
+      els.progressFill.style.width = `${pct}%`;
+      els.progressCopy.textContent =
+        `${seenCount} of ${total} study-set elements encountered. Best streak: ${state.bestStreak}.`;
+    }
+
+    function renderMissed(){
+      const missed = getMissedElements()
+        .sort((a,b)=>(state.missed[b.symbol]||0)-(state.missed[a.symbol]||0));
+
+      els.missedList.innerHTML = "";
+      els.missedEmpty.style.display = missed.length ? "none" : "block";
+
+      missed.slice(0,16).forEach(e=>{
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.innerHTML = `
+          <span>${e.symbol} · ${e.name}</span>
+          <button title="Remove from missed list" aria-label="Remove ${e.name} from missed list">×</button>
+        `;
+        chip.querySelector("button").addEventListener("click", ()=>{
+          delete state.missed[e.symbol];
+          saveState();
+          renderMissed();
+          if(els.setSelect.value === "missed" && getMissedElements().length === 0){
+            els.setSelect.value = "combined";
+            newQuestion();
+          }
+        });
+        els.missedList.appendChild(chip);
+      });
+    }
+
+    function referenceElements(){
+      if(referenceMode === "core") return CORE;
+      if(referenceMode === "health") return HEALTH;
+      return ELEMENTS;
+    }
+
+    function renderReference(){
+      els.elementGrid.innerHTML = "";
+      referenceElements()
+        .slice()
+        .sort((a,b)=>a.z-b.z)
+        .forEach(e=>{
+          const div = document.createElement("div");
+          div.className = `element ${e.core ? "core" : "extra"} ${namesHidden ? "hidden-answer" : ""}`;
+          div.title = `${e.name} (${e.symbol}), atomic number ${e.z}`;
+          div.innerHTML = `
+            <span class="z">${e.z}</span>
+            <span class="sym">${e.symbol}</span>
+            <span class="name">${e.name}</span>
+          `;
+          div.addEventListener("click", ()=>{
+            div.classList.toggle("hidden-answer");
+          });
+          els.elementGrid.appendChild(div);
+        });
+
+      els.hideNamesBtn.textContent = namesHidden ? "Show Names" : "Hide Names";
+    }
+
+    function resetProgress(){
+      if(!confirm("Reset all saved practice stats and missed elements for this browser?")) return;
+      state = defaultState();
+      saveState();
+      updateStats();
+      renderMissed();
+      els.setSelect.value = "combined";
+      newQuestion();
+      showToast("Progress reset.");
+    }
+
+    function showToast(message){
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(()=>els.toast.classList.remove("show"), 1700);
+    }
+
+    els.checkBtn.addEventListener("click", checkAnswer);
+    els.nextBtn.addEventListener("click", newQuestion);
+    els.newQuestionTop.addEventListener("click", newQuestion);
+    els.hintBtn.addEventListener("click", showHint);
+    els.revealBtn.addEventListener("click", revealAnswer);
+
+    els.answerInput.addEventListener("keydown", e=>{
+      if(e.key === "Enter"){
+        if(answeredCurrent) newQuestion();
+        else checkAnswer();
+      }
+    });
+
+    els.setSelect.addEventListener("change", ()=>{
+      atomicIndex = 0;
+      if(els.setSelect.value === "missed" && getMissedElements().length === 0){
+        showToast("No missed elements yet — using the combined set.");
+      }
+      newQuestion();
+    });
+
+    els.directionSelect.addEventListener("change", newQuestion);
+    els.orderSelect.addEventListener("change", ()=>{
+      atomicIndex = 0;
+      newQuestion();
+    });
+
+    els.focusMissedTop.addEventListener("click", ()=>{
+      if(getMissedElements().length === 0){
+        showToast("No missed elements yet.");
+        return;
+      }
+      els.setSelect.value = "missed";
+      atomicIndex = 0;
+      newQuestion();
+    });
+
+    els.resetBtn.addEventListener("click", resetProgress);
+
+    els.hideNamesBtn.addEventListener("click", ()=>{
+      namesHidden = !namesHidden;
+      renderReference();
+    });
+    els.showCoreBtn.addEventListener("click", ()=>{ referenceMode="core"; renderReference(); });
+    els.showHealthBtn.addEventListener("click", ()=>{ referenceMode="health"; renderReference(); });
+    els.showAllBtn.addEventListener("click", ()=>{ referenceMode="all"; renderReference(); });
+
+    renderReference();
+    renderMissed();
+    updateStats();
+    newQuestion();
+  </script>
+</body>
+</html>
