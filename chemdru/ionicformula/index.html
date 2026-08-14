@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ionic Compound Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#173226;
+    --page-bg:#eef6f0;
+    --paper:#ffffff;
+    --grid-line:rgba(47,107,71,.11);
+    --green-900:#1f4d36;
+    --green-800:#245a3f;
+    --green-700:#2f6b47;
+    --green-600:#3c7d54;
+    --green-500:#4f9268;
+    --green-300:#a9d9bd;
+    --green-200:#c9e9d6;
+    --green-100:#e3f5ea;
+    --cation:#b6791e;
+    --cation-bg:#fbeed9;
+    --cation-bg-strong:#f3d9a6;
+    --anion:#1f6f66;
+    --anion-bg:#dcf1ee;
+    --anion-bg-strong:#b7e0da;
+    --danger:#b03a2e;
+    --shadow:0 2px 6px rgba(23,50,38,.12);
+    --shadow-lg:0 10px 28px rgba(23,50,38,.18);
+    --radius:10px;
+    font-family:'Nunito Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink);}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  sub{font-size:.68em;}
+  sup{font-size:.62em;}
+
+  header{
+    background:linear-gradient(135deg,var(--green-900),var(--green-700));
+    color:var(--green-100);
+    padding:14px 20px;
+    box-shadow:var(--shadow);
+    position:relative;
+    z-index:5;
+  }
+  header h1{margin:0;font-size:1.28rem;font-weight:800;letter-spacing:.2px;}
+  header p{margin:4px 0 0;font-size:.85rem;color:var(--green-200);max-width:74ch;line-height:1.4;}
+
+  .help-btn{
+    position:absolute; top:14px; right:20px;
+    background:rgba(255,255,255,.12); color:var(--green-100);
+    border:1px solid rgba(255,255,255,.35); border-radius:20px;
+    padding:6px 14px; font-size:.8rem; font-weight:700; cursor:pointer;
+  }
+  .help-btn:hover{background:rgba(255,255,255,.22);}
+
+  .help-panel{
+    display:none; background:var(--green-100); border-bottom:1px solid var(--green-300);
+    padding:14px 20px; font-size:.86rem; line-height:1.55;
+  }
+  .help-panel.open{display:block;}
+  .help-panel h3{margin:0 0 4px;color:var(--green-900);font-size:.95rem;}
+  .help-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:760px){.help-grid{grid-template-columns:1fr;}}
+
+  main{
+    flex:1;
+    display:grid;
+    grid-template-columns:200px 1fr 200px;
+    gap:14px;
+    padding:14px;
+    align-items:start;
+  }
+  @media (max-width:980px){
+    main{grid-template-columns:1fr; }
+    .bank{order:2;}
+    .bank.cations{order:1;}
+    .bank.anions{order:3;}
+    .workspace-col{order:1;}
+  }
+
+  .bank{
+    background:var(--paper);
+    border:1px solid var(--green-200);
+    border-radius:var(--radius);
+    padding:10px;
+    box-shadow:var(--shadow);
+  }
+  .bank h2{
+    margin:0 0 8px; font-size:.82rem; text-transform:uppercase; letter-spacing:.6px;
+    color:var(--green-800); border-bottom:2px solid var(--green-200); padding-bottom:6px;
+  }
+  .bank.cations h2{color:var(--cation); border-bottom-color:var(--cation-bg-strong);}
+  .bank.anions h2{color:var(--anion); border-bottom-color:var(--anion-bg-strong);}
+  .bank-list{
+    display:flex; flex-direction:column; gap:6px;
+    max-height:72vh; overflow-y:auto; padding-right:2px;
+  }
+  @media (max-width:980px){
+    .bank-list{flex-direction:row; flex-wrap:nowrap; overflow-x:auto; max-height:none; padding-bottom:4px;}
+    .ion-card{min-width:98px;}
+  }
+
+  .ion-card{
+    cursor:grab; user-select:none; touch-action:none;
+    border-radius:8px; padding:9px 8px;
+    border:1.5px solid var(--green-200);
+    background:var(--green-100);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .ion-card:active{cursor:grabbing;}
+  .ion-card:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
+  .bank.cations .ion-card{background:var(--cation-bg); border-color:var(--cation-bg-strong);}
+  .bank.anions .ion-card{background:var(--anion-bg); border-color:var(--anion-bg-strong);}
+  .ion-card .sym{font-weight:700; font-size:1.02rem;}
+  .bank.cations .ion-card .sym{color:var(--cation);}
+  .bank.anions .ion-card .sym{color:var(--anion);}
+
+  .ion-card.ghost{
+    position:fixed; z-index:999; pointer-events:none; opacity:.92;
+    box-shadow:var(--shadow-lg); transform:scale(1.05);
+  }
+
+  .workspace-col{display:flex; flex-direction:column; gap:12px;}
+
+  .workspace{
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:22px 22px;
+    border:1px solid var(--green-200);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+    min-height:340px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:0;
+    position:relative;
+    transition:box-shadow .25s ease;
+    overflow-x:auto;
+  }
+  .workspace.balanced{
+    box-shadow:0 0 0 3px var(--green-500), var(--shadow-lg);
+  }
+
+  .zone{
+    display:flex; flex-direction:column;
+    min-width:120px;
+    position:relative;
+  }
+  .zone.cation-zone{align-items:flex-end;}
+  .zone.anion-zone{align-items:flex-start;}
+  .zone .zone-label{
+    font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; font-weight:800;
+    color:var(--green-700); margin-bottom:8px;
+  }
+  .zone.cation-zone .zone-label{color:var(--cation); transform:translateX(-22px);}
+  .zone.anion-zone .zone-label{color:var(--anion); transform:translateX(22px);}
+  .zone .zone-empty{
+    font-size:.78rem; color:#6b8a78; text-align:center;
+    width:112px; padding:26px 8px; line-height:1.4;
+    border:2px dashed var(--green-300); border-radius:8px;
+  }
+  .zone.cation-zone .zone-empty{border-color:var(--cation-bg-strong); transform:translateX(-22px);}
+  .zone.anion-zone .zone-empty{border-color:var(--anion-bg-strong); transform:translateX(22px);}
+  .zone.drag-over .zone-empty{background:var(--green-100); border-style:solid;}
+  .zone .zone-count{font-size:.72rem; color:var(--ink); opacity:.75; margin-top:8px; text-align:center; max-width:150px;}
+  .zone.cation-zone .zone-count{transform:translateX(-22px);}
+  .zone.anion-zone .zone-count{transform:translateX(22px);}
+
+  /* Jigsaw stacks: each stack is a flush column of interlocking pieces.
+     Cation pieces bulge teeth outward (one tooth per unit of charge);
+     anion pieces have matching notches. When total stack heights match,
+     the two columns mesh into one seamless rectangle. */
+  .stack{
+    display:flex; flex-direction:column;
+    position:relative;
+  }
+  .stack.cation-stack{ }
+  .stack.anion-stack{ margin-left:-9px; }
+
+  .piece{
+    box-sizing:border-box;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; cursor:pointer;
+    animation:pop .12s ease;
+  }
+  @keyframes pop{from{transform:scaleY(.5); opacity:0;} to{transform:scaleY(1); opacity:1;}}
+  .piece.cation{
+    background:linear-gradient(160deg,var(--cation-bg-strong),var(--cation-bg));
+    z-index:2;
+  }
+  .piece.anion{
+    background:linear-gradient(160deg,var(--anion-bg-strong),var(--anion-bg));
+    z-index:1;
+  }
+  .piece .sym{font-weight:700; font-size:.72rem; line-height:1; white-space:nowrap;}
+  .piece.cation .sym{color:var(--cation);}
+  .piece.anion .sym{color:var(--anion);}
+  .piece .rm{
+    position:absolute; top:3px; width:15px; height:15px; border-radius:50%;
+    background:var(--danger); color:#fff; font-size:.6rem; line-height:15px; text-align:center;
+    opacity:0; transition:opacity .12s ease;
+  }
+  .piece.cation .rm{left:5px;}
+  .piece.anion .rm{right:5px;}
+  .piece:hover .rm{opacity:1;}
+  .piece:hover{filter:brightness(1.04);}
+
+  .balance-bar{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px;
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    padding:10px 16px; box-shadow:var(--shadow); font-size:.86rem;
+  }
+  .balance-chip{
+    display:flex; align-items:center; gap:6px; font-weight:700;
+    padding:5px 10px; border-radius:20px; background:var(--green-100); color:var(--green-800);
+  }
+  .balance-chip.cation{color:var(--cation); background:var(--cation-bg);}
+  .balance-chip.anion{color:var(--anion); background:var(--anion-bg);}
+  .balance-status{margin-left:auto; font-weight:800; font-size:.9rem;}
+  .balance-status.ok{color:var(--green-700);}
+  .balance-status.no{color:#7a6a3f;}
+  .balance-status.empty{color:#8a9c92;}
+  .actions{display:flex; gap:8px; flex-wrap:wrap;}
+
+  button.btn{
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer;
+    border-radius:8px; padding:7px 13px; border:1.5px solid var(--green-500);
+    background:var(--paper); color:var(--green-800); transition:all .12s ease;
+  }
+  button.btn:hover{background:var(--green-100);}
+  button.btn.primary{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+  button.btn.primary:hover{background:var(--green-800);}
+  button.btn.ghost{border-color:var(--green-200); color:var(--ink); opacity:.75;}
+  button.btn:disabled{opacity:.4; cursor:not-allowed;}
+
+  .builder{
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:14px 16px;
+  }
+  .builder h3{margin:0 0 10px; font-size:.9rem; color:var(--green-900);}
+  .builder-grid{display:grid; grid-template-columns:1.1fr .9fr 1.4fr; gap:14px;}
+  @media (max-width:760px){.builder-grid{grid-template-columns:1fr;}}
+  .field-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.4px; color:var(--green-700); font-weight:800; margin-bottom:5px; display:block;}
+
+  .formula-toolbar{display:flex; gap:6px; margin-bottom:6px;}
+  .tbtn{
+    font-family:'JetBrains Mono',monospace; font-size:.75rem; font-weight:700;
+    border:1.5px solid var(--green-300); background:var(--green-100); color:var(--green-800);
+    border-radius:6px; padding:3px 9px; cursor:pointer;
+  }
+  .tbtn.active{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+
+  #formulaInput{
+    font-family:'JetBrains Mono',monospace; font-size:1.15rem; min-height:38px;
+    border:1.5px solid var(--green-300); border-radius:8px; padding:7px 10px;
+    background:#fbfffc; outline:none;
+  }
+  #formulaInput:focus{border-color:var(--green-600);}
+
+  .type-options{display:flex; gap:10px;}
+  .type-option{
+    flex:1; border:1.5px solid var(--green-300); border-radius:8px; padding:8px 10px;
+    cursor:pointer; text-align:center; font-size:.8rem; font-weight:700; color:var(--green-800);
+    background:#fbfffc;
+  }
+  .type-option.selected{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+
+  #nameInput{
+    width:100%; font-size:.95rem; padding:8px 10px; border:1.5px solid var(--green-300);
+    border-radius:8px; outline:none; background:#fbfffc; font-family:inherit;
+  }
+  #nameInput:focus{border-color:var(--green-600);}
+
+  .feedback{margin-top:12px; font-size:.83rem; line-height:1.5; display:none;}
+  .feedback.show{display:block;}
+  .fb-row{padding:6px 10px; border-radius:7px; margin-bottom:5px;}
+  .fb-row.ok{background:#e4f5e9; color:#1f6b3a;}
+  .fb-row.bad{background:#fdecea; color:#a03a2e;}
+
+  .builder-actions{margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+  .hint{font-size:.76rem; color:#6b8a78;}
+
+  .log-wrap{
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:14px 16px; overflow-x:auto;
+  }
+  .log-wrap h3{margin:0 0 10px; font-size:.9rem; color:var(--green-900); display:flex; justify-content:space-between; align-items:center;}
+  table{border-collapse:collapse; width:100%; font-size:.82rem; min-width:640px;}
+  th,td{border:1px solid var(--green-200); padding:6px 8px; text-align:left;}
+  th{background:var(--green-100); color:var(--green-800); font-size:.72rem; text-transform:uppercase; letter-spacing:.3px;}
+  td.formula{font-family:'JetBrains Mono',monospace; font-size:.95rem;}
+  tr.correct td{background:#f2fbf4;}
+  tr.incorrect td{background:#fdf6f2;}
+  .log-empty{font-size:.82rem; color:#6b8a78; padding:6px 2px;}
+  .del-row{border:none; background:none; color:var(--danger); cursor:pointer; font-weight:700; font-size:.85rem;}
+
+  footer{padding:8px 16px; text-align:center; font-size:.7rem; color:#7f978a;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚗️ Ionic Compound Builder</h1>
+  <p>Drag (or tap) a cation and an anion onto the workspace. Add extra copies of each until the total positive and negative charges balance to zero — that's your neutral compound.</p>
+  <button class="help-btn" id="helpToggle">What's Type I / Type II?</button>
+</header>
+
+<div class="help-panel" id="helpPanel">
+  <div class="help-grid">
+    <div>
+      <h3>Type I ionic compounds</h3>
+      <p>The cation is a metal that only ever forms <strong>one</strong> possible charge (most Group 1, Group 2, and a few others). No Roman numeral is needed in the name — just "metal name + anion name," e.g. <em>calcium chloride</em>.</p>
+    </div>
+    <div>
+      <h3>Type II ionic compounds</h3>
+      <p>The cation is a metal that can form <strong>more than one</strong> possible charge (many transition metals). A Roman numeral showing that specific charge is required in the name, e.g. <em>iron (III) oxide</em>.</p>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="bank cations">
+    <h2>Cations (+)</h2>
+    <div class="bank-list" id="cationBank"></div>
+  </div>
+
+  <div class="workspace-col">
+    <div class="workspace" id="workspace">
+      <div class="zone cation-zone" id="cationZone">
+        <div class="zone-label">Cation stack</div>
+        <div class="zone-empty" id="cationEmpty">Drag a cation here</div>
+        <div class="stack cation-stack" id="cationUnits"></div>
+        <div class="zone-count" id="cationCountLabel"></div>
+      </div>
+      <div class="zone anion-zone" id="anionZone">
+        <div class="zone-label">Anion stack</div>
+        <div class="zone-empty" id="anionEmpty">Drag an anion here</div>
+        <div class="stack anion-stack" id="anionUnits"></div>
+        <div class="zone-count" id="anionCountLabel"></div>
+      </div>
+    </div>
+
+    <div class="balance-bar">
+      <div class="balance-chip cation" id="cationChip">Cation charge: —</div>
+      <div class="balance-chip anion" id="anionChip">Anion charge: —</div>
+      <div class="balance-status empty" id="balanceStatus">Add ions to begin</div>
+      <div class="actions">
+        <button class="btn ghost" id="resetBtn">Reset workspace</button>
+      </div>
+    </div>
+
+    <div class="builder">
+      <h3>Record this compound</h3>
+      <div class="builder-grid">
+        <div>
+          <span class="field-label">Chemical formula</span>
+          <div class="formula-toolbar">
+            <button class="tbtn" id="subToggle" type="button" title="Subscript">X<sub>2</sub></button>
+            <button class="tbtn" id="supToggle" type="button" title="Superscript">X<sup>2</sup></button>
+            <button class="tbtn" id="parenOpen" type="button">(</button>
+            <button class="tbtn" id="parenClose" type="button">)</button>
+          </div>
+          <div id="formulaInput" contenteditable="true" spellcheck="false"></div>
+        </div>
+        <div>
+          <span class="field-label">Compound type</span>
+          <div class="type-options">
+            <div class="type-option" data-type="1" id="typeOpt1">Type I</div>
+            <div class="type-option" data-type="2" id="typeOpt2">Type II</div>
+          </div>
+        </div>
+        <div>
+          <span class="field-label">Compound name</span>
+          <input type="text" id="nameInput" placeholder="e.g. aluminum chloride">
+        </div>
+      </div>
+
+      <div class="builder-actions">
+        <button class="btn primary" id="checkBtn" disabled>Check my work</button>
+        <button class="btn" id="addLogBtn" disabled>Add to compound log</button>
+        <span class="hint" id="builderHint">Balance the charges above to unlock checking.</span>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="log-wrap">
+      <h3>Compound Log <button class="btn ghost" id="clearLogBtn" style="font-size:.7rem;padding:4px 9px;">Clear log</button></h3>
+      <div id="logTableWrap">
+        <div class="log-empty" id="logEmpty">No compounds recorded yet — build one above and click "Add to compound log."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bank anions">
+    <h2>Anions (−)</h2>
+    <div class="bank-list" id="anionBank"></div>
+  </div>
+</main>
+
+<footer>Ionic Compound Builder · part of the intro chemistry digital toolkit</footer>
+
+<script>
+(function(){
+
+const CATIONS = [
+  {id:'Na', sym:'Na', charge:1, name:'Sodium', type:1},
+  {id:'K',  sym:'K',  charge:1, name:'Potassium', type:1},
+  {id:'Sn', sym:'Sn', charge:4, name:'Tin', type:2, roman:'IV'},
+  {id:'Li', sym:'Li', charge:1, name:'Lithium', type:1},
+  {id:'Al', sym:'Al', charge:3, name:'Aluminum', type:1},
+  {id:'Ca', sym:'Ca', charge:2, name:'Calcium', type:1},
+  {id:'Cr', sym:'Cr', charge:3, name:'Chromium', type:2, roman:'III'},
+  {id:'Mg', sym:'Mg', charge:2, name:'Magnesium', type:1},
+  {id:'Fe3',sym:'Fe', charge:3, name:'Iron', type:2, roman:'III'},
+  {id:'Fe2',sym:'Fe', charge:2, name:'Iron', type:2, roman:'II'},
+  {id:'Cu2',sym:'Cu', charge:2, name:'Copper', type:2, roman:'II'},
+  {id:'Cu1',sym:'Cu', charge:1, name:'Copper', type:2, roman:'I'},
+  {id:'Ni', sym:'Ni', charge:2, name:'Nickel', type:2, roman:'II'},
+  {id:'Ag', sym:'Ag', charge:1, name:'Silver', type:1},
+  {id:'Zn', sym:'Zn', charge:2, name:'Zinc', type:1},
+  {id:'Co', sym:'Co', charge:2, name:'Cobalt', type:2, roman:'II'},
+  {id:'Cs', sym:'Cs', charge:1, name:'Cesium', type:1},
+  {id:'Rb', sym:'Rb', charge:1, name:'Rubidium', type:1},
+  {id:'NH4',sym:'NH4',charge:1, name:'Ammonium', type:1, poly:true},
+  {id:'Ba', sym:'Ba', charge:2, name:'Barium', type:1},
+];
+
+const ANIONS = [
+  {id:'H2PO4', sym:'H2PO4', charge:1, name:'dihydrogen phosphate', poly:true},
+  {id:'Cr2O7', sym:'Cr2O7', charge:2, name:'dichromate', poly:true},
+  {id:'HCO3',  sym:'HCO3',  charge:1, name:'hydrogen carbonate', poly:true},
+  {id:'Br',    sym:'Br',    charge:1, name:'bromide'},
+  {id:'CrO4',  sym:'CrO4',  charge:2, name:'chromate', poly:true},
+  {id:'CO3',   sym:'CO3',   charge:2, name:'carbonate', poly:true},
+  {id:'Cl',    sym:'Cl',    charge:1, name:'chloride'},
+  {id:'SO3',   sym:'SO3',   charge:2, name:'sulfite', poly:true},
+  {id:'N',     sym:'N',     charge:3, name:'nitride'},
+  {id:'F',     sym:'F',     charge:1, name:'fluoride'},
+  {id:'NO3',   sym:'NO3',   charge:1, name:'nitrate', poly:true},
+  {id:'HPO4',  sym:'HPO4',  charge:2, name:'hydrogen phosphate', poly:true},
+  {id:'HSO4',  sym:'HSO4',  charge:1, name:'hydrogen sulfate', poly:true},
+  {id:'I',     sym:'I',     charge:1, name:'iodide'},
+  {id:'OH',    sym:'OH',    charge:1, name:'hydroxide', poly:true},
+  {id:'O',     sym:'O',     charge:2, name:'oxide'},
+  {id:'PO4',   sym:'PO4',   charge:3, name:'phosphate', poly:true},
+  {id:'MnO4',  sym:'MnO4',  charge:1, name:'permanganate', poly:true},
+  {id:'S',     sym:'S',     charge:2, name:'sulfide'},
+];
+
+const byId = (arr,id)=>arr.find(x=>x.id===id);
+const subScript = s => s.replace(/(\d+)/g, '<sub>$1</sub>');
+const chargeLabel = (n,isCation)=>{
+  const sign = isCation ? '+' : '\u2212';
+  return n===1 ? sign : `${n}${sign}`;
+};
+
+let state = {
+  cation: {id:null, count:0},
+  anion:  {id:null, count:0}
+};
+
+// ---------- Build bank cards ----------
+const cationBankEl = document.getElementById('cationBank');
+const anionBankEl = document.getElementById('anionBank');
+
+function buildBank(list, container, isCation){
+  list.forEach(ion=>{
+    const card = document.createElement('div');
+    card.className = 'ion-card';
+    card.innerHTML = `<span class="sym mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span>`;
+    makeDraggable(card, ion, isCation);
+    container.appendChild(card);
+  });
+}
+buildBank(CATIONS, cationBankEl, true);
+buildBank(ANIONS, anionBankEl, false);
+
+// ---------- Drag / tap handling ----------
+const cationZoneEl = document.getElementById('cationZone');
+const anionZoneEl = document.getElementById('anionZone');
+
+function makeDraggable(el, ion, isCation){
+  el.addEventListener('pointerdown', (e)=>{
+    if(e.button !== undefined && e.button !== 0) return;
+    const startX = e.clientX, startY = e.clientY;
+    let dragging = false, ghost = null;
+
+    function onMove(ev){
+      const dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if(!dragging && Math.hypot(dx,dy) > 6){
+        dragging = true;
+        ghost = el.cloneNode(true);
+        ghost.classList.add('ghost');
+        ghost.style.width = el.offsetWidth+'px';
+        document.body.appendChild(ghost);
+      }
+      if(dragging){
+        ghost.style.left = (ev.clientX - ghost.offsetWidth/2) + 'px';
+        ghost.style.top = (ev.clientY - ghost.offsetHeight/2) + 'px';
+        const zone = isCation ? cationZoneEl : anionZoneEl;
+        const over = document.elementFromPoint(ev.clientX, ev.clientY);
+        zone.classList.toggle('drag-over', !!(over && zone.contains(over)));
+      }
+    }
+    function onUp(ev){
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      cationZoneEl.classList.remove('drag-over');
+      anionZoneEl.classList.remove('drag-over');
+      if(dragging){
+        ghost.remove();
+        const zone = isCation ? cationZoneEl : anionZoneEl;
+        const over = document.elementFromPoint(ev.clientX, ev.clientY);
+        if(over && zone.contains(over)) addIonToZone(ion, isCation);
+      } else {
+        addIonToZone(ion, isCation);
+      }
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp, {once:true});
+  });
+}
+
+function addIonToZone(ion, isCation){
+  const key = isCation ? 'cation' : 'anion';
+  const cur = state[key];
+  if(cur.id && cur.id !== ion.id){
+    cur.id = ion.id;
+    cur.count = 1;
+  } else {
+    cur.id = ion.id;
+    cur.count += 1;
+  }
+  renderZones();
+}
+
+function removeOneFromZone(isCation){
+  const key = isCation ? 'cation' : 'anion';
+  const cur = state[key];
+  cur.count = Math.max(0, cur.count - 1);
+  if(cur.count === 0) cur.id = null;
+  renderZones();
+}
+
+function renderZones(){
+  renderZone(state.cation, true, 'cationUnits', 'cationEmpty', 'cationCountLabel');
+  renderZone(state.anion, false, 'anionUnits', 'anionEmpty', 'anionCountLabel');
+  updateBalance();
+  clearBuilderInputs(); // any change to the ions on the workspace invalidates the formula/type/name already entered
+}
+
+// ---------- Jigsaw piece geometry ----------
+// Each piece's height is proportional to its ion's charge magnitude
+// (one "unit" of height per charge). Cation pieces grow teeth outward
+// on their right edge, anion pieces cut matching notches into their
+// left edge, one tooth per unit, so the wave phase stays continuous
+// no matter how many pieces are stacked. When the two stacks reach
+// equal total height (i.e. the charges balance), the teeth and
+// notches line up perfectly and the two columns read as one seamless
+// rectangle -- exactly the visual the worksheet's paper pieces give.
+const UNIT = 38;   // px of height per 1 unit of charge
+const BUMP = 9;    // px the teeth protrude / notches cut inward
+const PIECE_W = 90; // px, core visual width of a piece (wide enough for longest polyatomic symbols)
+
+function toothPath(edge, teeth){
+  const h = teeth * UNIT;
+  const step = UNIT;
+  const px = n => `${n}px`;
+  let pts = [];
+  if(edge === 'right'){
+    pts.push(`0 0`, `${px(PIECE_W)} 0`);
+    for(let i=0;i<teeth;i++){
+      const yMid = i*step + step/2;
+      const yEnd = (i+1)*step;
+      pts.push(`${px(PIECE_W+BUMP)} ${px(yMid)}`, `${px(PIECE_W)} ${px(yEnd)}`);
+    }
+    pts.push(`0 ${px(h)}`);
+  } else {
+    pts.push(`${px(PIECE_W)} 0`, `0 0`);
+    for(let i=0;i<teeth;i++){
+      const yMid = i*step + step/2;
+      const yEnd = (i+1)*step;
+      pts.push(`${px(BUMP)} ${px(yMid)}`, `0 ${px(yEnd)}`);
+    }
+    pts.push(`${px(PIECE_W)} ${px(h)}`);
+  }
+  return `polygon(${pts.join(',')})`;
+}
+
+function renderZone(zoneState, isCation, unitsId, emptyId, countId){
+  const unitsEl = document.getElementById(unitsId);
+  const emptyEl = document.getElementById(emptyId);
+  const countEl = document.getElementById(countId);
+  const zoneEl = unitsEl.closest('.zone');
+  unitsEl.innerHTML = '';
+  if(!zoneState.id || zoneState.count === 0){
+    emptyEl.style.display = '';
+    countEl.textContent = '';
+    zoneEl.classList.remove('has-content');
+    return;
+  }
+  emptyEl.style.display = 'none';
+  zoneEl.classList.add('has-content');
+  const ion = byId(isCation ? CATIONS : ANIONS, zoneState.id);
+  const teeth = ion.charge; // one tooth per unit of charge magnitude
+  const h = teeth * UNIT;
+  const edge = isCation ? 'right' : 'left';
+  const boxW = isCation ? PIECE_W + BUMP : PIECE_W;
+  const clip = toothPath(edge, teeth);
+
+  for(let i=0;i<zoneState.count;i++){
+    const u = document.createElement('div');
+    u.className = 'piece ' + (isCation ? 'cation' : 'anion');
+    u.style.width = boxW + 'px';
+    u.style.height = h + 'px';
+    u.style.clipPath = clip;
+    u.style.webkitClipPath = clip;
+    u.innerHTML = `<span class="sym mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span><span class="rm">\u00d7</span>`;
+    u.addEventListener('click', ()=>removeOneFromZone(isCation));
+    unitsEl.appendChild(u);
+  }
+  countEl.innerHTML = `${zoneState.count} \u00d7 <span class="mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span>`;
+}
+
+// ---------- Balance tracking ----------
+const cationChip = document.getElementById('cationChip');
+const anionChip = document.getElementById('anionChip');
+const balanceStatus = document.getElementById('balanceStatus');
+const workspaceEl = document.getElementById('workspace');
+const checkBtn = document.getElementById('checkBtn');
+const addLogBtn = document.getElementById('addLogBtn');
+const builderHint = document.getElementById('builderHint');
+
+let isBalanced = false;
+
+function updateBalance(){
+  const cIon = state.cation.id ? byId(CATIONS, state.cation.id) : null;
+  const aIon = state.anion.id ? byId(ANIONS, state.anion.id) : null;
+  const cTotal = cIon ? cIon.charge * state.cation.count : 0;
+  const aTotal = aIon ? aIon.charge * state.anion.count : 0;
+
+  cationChip.textContent = cIon ? `Cation charge: +${cTotal}` : 'Cation charge: \u2014';
+  anionChip.textContent = aIon ? `Anion charge: \u2212${aTotal}` : 'Anion charge: \u2014';
+
+  if(!cIon || !aIon){
+    balanceStatus.textContent = 'Add ions to begin';
+    balanceStatus.className = 'balance-status empty';
+    isBalanced = false;
+  } else if(cTotal === aTotal){
+    balanceStatus.textContent = '\u2713 Balanced \u2014 neutral compound!';
+    balanceStatus.className = 'balance-status ok';
+    isBalanced = true;
+  } else {
+    balanceStatus.textContent = `Not balanced (${cTotal > aTotal ? 'too much +' : 'too much \u2212'})`;
+    balanceStatus.className = 'balance-status no';
+    isBalanced = false;
+  }
+  workspaceEl.classList.toggle('balanced', isBalanced);
+  checkBtn.disabled = !isBalanced;
+  addLogBtn.disabled = !isBalanced;
+  builderHint.textContent = isBalanced
+    ? 'Fill in the formula, type, and name, then check your work.'
+    : 'Balance the charges above to unlock checking.';
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  state = {cation:{id:null,count:0}, anion:{id:null,count:0}};
+  renderZones();
+  clearBuilderInputs();
+});
+
+// ---------- Formula input (contenteditable with subscript/superscript toggle) ----------
+const formulaInput = document.getElementById('formulaInput');
+const subToggle = document.getElementById('subToggle');
+const supToggle = document.getElementById('supToggle');
+let subMode = false;
+let supMode = false;
+
+subToggle.addEventListener('click', ()=>{
+  subMode = !subMode;
+  if(subMode) supMode = false;
+  subToggle.classList.toggle('active', subMode);
+  supToggle.classList.toggle('active', supMode);
+  formulaInput.focus();
+});
+
+supToggle.addEventListener('click', ()=>{
+  supMode = !supMode;
+  if(supMode) subMode = false;
+  supToggle.classList.toggle('active', supMode);
+  subToggle.classList.toggle('active', subMode);
+  formulaInput.focus();
+});
+
+formulaInput.addEventListener('keydown', (e)=>{
+  if((subMode || supMode) && /^[0-9]$/.test(e.key)){
+    e.preventDefault();
+    const tag = subMode ? 'sub' : 'sup';
+    document.execCommand('insertHTML', false, `<${tag}>${e.key}</${tag}>&#8203;`);
+  }
+});
+
+document.getElementById('parenOpen').addEventListener('click', ()=>{
+  formulaInput.focus();
+  document.execCommand('insertText', false, '(');
+});
+document.getElementById('parenClose').addEventListener('click', ()=>{
+  formulaInput.focus();
+  document.execCommand('insertText', false, ')');
+});
+
+// ---------- Type selector ----------
+const typeOpt1 = document.getElementById('typeOpt1');
+const typeOpt2 = document.getElementById('typeOpt2');
+let selectedType = null;
+[typeOpt1, typeOpt2].forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    selectedType = opt.dataset.type;
+    typeOpt1.classList.toggle('selected', selectedType==='1');
+    typeOpt2.classList.toggle('selected', selectedType==='2');
+  });
+});
+
+const nameInput = document.getElementById('nameInput');
+
+function clearBuilderInputs(){
+  formulaInput.innerHTML = '';
+  nameInput.value = '';
+  selectedType = null;
+  typeOpt1.classList.remove('selected');
+  typeOpt2.classList.remove('selected');
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedback').innerHTML = '';
+}
+
+// ---------- Chemistry helpers ----------
+function gcd(a,b){ return b ? gcd(b, a % b) : a; }
+
+function correctCounts(cIon, aIon){
+  const g = gcd(cIon.charge, aIon.charge);
+  return { cCount: aIon.charge / g, aCount: cIon.charge / g };
+}
+
+function plainFormulaPart(ion, count){
+  let base = ion.sym;
+  if(count > 1 && ion.poly) base = `(${base})`;
+  if(count > 1) base += count;
+  return base;
+}
+
+function correctFormulaPlain(cIon, aIon, counts){
+  return plainFormulaPart(cIon, counts.cCount) + plainFormulaPart(aIon, counts.aCount);
+}
+
+function correctName(cIon, aIon){
+  let cname = cIon.name.toLowerCase();
+  if(cIon.type === 2) cname += ` (${cIon.roman})`;
+  return `${cname} ${aIon.name}`;
+}
+
+function normalize(s){
+  return s
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+\(/g, '(');   // "chromium (III)" and "chromium(III)" should both be accepted
+}
+
+// Reads the visible text out of the formula box, ignoring the <sub> tags
+// themselves (textContent already does this) and stripping the invisible
+// zero-width-space marker characters used to keep the caret from getting
+// stuck right after an inserted <sub>.
+function getFormulaPlainText(){
+  return formulaInput.textContent
+    .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+    .trim();
+}
+
+// ---------- Check my work ----------
+checkBtn.addEventListener('click', ()=>{
+  const cIon = byId(CATIONS, state.cation.id);
+  const aIon = byId(ANIONS, state.anion.id);
+  const counts = correctCounts(cIon, aIon);
+
+  const userFormulaText = getFormulaPlainText();
+  const correctFormula = correctFormulaPlain(cIon, aIon, counts);
+  const formulaOK = userFormulaText === correctFormula;
+  const usedSub = /<sub>/i.test(formulaInput.innerHTML);
+
+  const typeOK = selectedType === String(cIon.type);
+  const cName = correctName(cIon, aIon);
+  const nameOK = normalize(nameInput.value) === normalize(cName);
+
+  const fb = document.getElementById('feedback');
+  fb.classList.add('show');
+  fb.innerHTML = `
+    <div class="fb-row ${formulaOK && usedSub ? 'ok':'bad'}">
+      Formula: ${formulaOK ? (usedSub ? '\u2713 Correct!' : '\u2713 Correct \u2014 but remember to format your subscript numbers with the "sub" button.') : `\u2717 Not quite. Correct formula: <span class="mono">${subScript(correctFormula)}</span>`}
+    </div>
+    <div class="fb-row ${typeOK ? 'ok':'bad'}">
+      Type: ${typeOK ? '\u2713 Correct!' : `\u2717 This is actually Type ${cIon.type} (${cIon.type===2 ? 'the metal has more than one possible charge, so it needs a Roman numeral' : 'this metal only forms one possible charge'}).`}
+    </div>
+    <div class="fb-row ${nameOK ? 'ok':'bad'}">
+      Name: ${nameOK ? '\u2713 Correct!' : `\u2717 Not quite. Correct name: <em>${cName}</em>`}
+    </div>
+  `;
+});
+
+// ---------- Add to log ----------
+const logs = [];
+const logEmpty = document.getElementById('logEmpty');
+const logTableWrap = document.getElementById('logTableWrap');
+
+addLogBtn.addEventListener('click', ()=>{
+  const cIon = byId(CATIONS, state.cation.id);
+  const aIon = byId(ANIONS, state.anion.id);
+  const counts = correctCounts(cIon, aIon);
+  const correct = correctFormulaPlain(cIon, aIon, counts);
+
+  const userFormulaHTML = formulaInput.innerHTML.trim() || `<span class="mono">${subScript(correct)}</span>`;
+  const userFormulaText = getFormulaPlainText();
+  const userName = nameInput.value.trim() || correctName(cIon, aIon);
+
+  const isRight = userFormulaText === correct && selectedType === String(cIon.type) &&
+    normalize(userName) === normalize(correctName(cIon, aIon));
+
+  logs.push({
+    cationName: cIon.name, cCount: state.cation.count,
+    anionName: aIon.name, aCount: state.anion.count,
+    formulaHTML: userFormulaHTML, name: userName,
+    type: selectedType ? `Type ${selectedType}` : '\u2014',
+    correct: isRight
+  });
+  renderLog();
+  state = {cation:{id:null,count:0}, anion:{id:null,count:0}};
+  renderZones();
+  clearBuilderInputs();
+});
+
+document.getElementById('clearLogBtn').addEventListener('click', ()=>{
+  logs.length = 0;
+  renderLog();
+});
+
+function renderLog(){
+  if(logs.length === 0){
+    logTableWrap.innerHTML = '';
+    logTableWrap.appendChild(logEmpty);
+    return;
+  }
+  let html = `<table><thead><tr>
+    <th>Cation</th><th>#</th><th>Anion</th><th>#</th><th>Formula</th><th>Name</th><th>Type</th><th></th>
+  </tr></thead><tbody>`;
+  logs.forEach((row, i)=>{
+    html += `<tr class="${row.correct ? 'correct':'incorrect'}">
+      <td>${row.cationName}</td><td>${row.cCount}</td>
+      <td>${row.anionName}</td><td>${row.aCount}</td>
+      <td class="formula">${row.formulaHTML}</td>
+      <td>${row.name}</td><td>${row.type}</td>
+      <td><button class="del-row" data-i="${i}">\u2715</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  logTableWrap.innerHTML = html;
+  logTableWrap.querySelectorAll('.del-row').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      logs.splice(Number(btn.dataset.i), 1);
+      renderLog();
+    });
+  });
+}
+
+// ---------- Help panel ----------
+document.getElementById('helpToggle').addEventListener('click', ()=>{
+  document.getElementById('helpPanel').classList.toggle('open');
+});
+
+renderZones();
+})();
+</script>
+</body>
+</html>
