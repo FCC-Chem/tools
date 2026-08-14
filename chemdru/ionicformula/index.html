@@ -747,14 +747,46 @@ function insertNodeAtCursor(node, cursorAfterNode){
   sel.addRange(after);
 }
 
-function insertSubSup(digit, tag){
-  const frag = document.createDocumentFragment();
+// Looks at the text node right before the cursor and, if it ends in one or
+// more digits and sub/sup mode is on, moves those trailing digits into a
+// <sub>/<sup> element. This runs AFTER text has already landed in the DOM
+// (via 'input' or 'compositionend') rather than trying to intercept the
+// keystroke beforehand -- see the note below on why that's necessary.
+function wrapTrailingDigits(){
+  if(!(subMode || supMode)) return;
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+  if(!range.collapsed || !formulaInput.contains(range.startContainer)) return;
+  const node = range.startContainer;
+  if(node.nodeType !== Node.TEXT_NODE) return;
+
+  const text = node.textContent;
+  const offset = range.startOffset;
+  let start = offset;
+  while(start > 0 && /[0-9]/.test(text[start-1])) start--;
+  if(start === offset) return; // no digits sitting right before the caret
+
+  const before = text.slice(0, start);
+  const digits = text.slice(start, offset);
+  const after = text.slice(offset);
+
+  const tag = subMode ? 'sub' : 'sup';
   const el = document.createElement(tag);
-  el.textContent = digit;
-  const zwsp = document.createTextNode('\u200B'); // lets the caret sit after the sub/sup instead of getting stuck inside it
+  el.textContent = digits;
+  const zwsp = document.createTextNode('\u200B' + after);
+
+  const frag = document.createDocumentFragment();
+  if(before) frag.appendChild(document.createTextNode(before));
   frag.appendChild(el);
   frag.appendChild(zwsp);
-  insertNodeAtCursor(frag, zwsp);
+  node.parentNode.replaceChild(frag, node);
+
+  const newRange = document.createRange();
+  newRange.setStart(zwsp, 1); // right after the zero-width space, before any trailing text
+  newRange.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(newRange);
 }
 
 // ---------- Formula input (contenteditable with subscript/superscript toggle) ----------
@@ -780,17 +812,22 @@ supToggle.addEventListener('click', ()=>{
   formulaInput.focus();
 });
 
-// Android/mobile soft keyboards go through IME composition, where 'keydown'
-// often reports e.key as "Unidentified" instead of the actual digit typed --
-// so a keydown-based check silently never matches there even though it works
-// fine with a physical keyboard. 'beforeinput' reports the real inserted
-// character via e.data consistently across both desktop and mobile Chrome.
-formulaInput.addEventListener('beforeinput', (e)=>{
-  if((subMode || supMode) && e.inputType === 'insertText' && e.data && /^[0-9]$/.test(e.data)){
-    e.preventDefault();
-    insertSubSup(e.data, subMode ? 'sub' : 'sup');
-  }
+// Android/Gboard buffers letters and digits together into a single IME
+// "word" for its prediction engine, only committing them once it hits a
+// word-boundary character like '(' or a space. While that composition is
+// in progress, 'beforeinput' reports inputType 'insertCompositionText' (not
+// 'insertText'), and the digit isn't even in the DOM yet -- so intercepting
+// the keystroke beforehand (the previous approach) can never catch a digit
+// typed right after letters, only one typed after a boundary character like
+// '(' reset the composition. The reliable fix is to not fight the IME at
+// all: let every keystroke land normally, then clean up right afterward.
+// 'input' fires for ordinary (non-composing) typing; 'compositionend' fires
+// once a buffered IME word is actually committed to the DOM.
+formulaInput.addEventListener('input', (e)=>{
+  if(e.isComposing) return; // still mid-composition -- wait for compositionend
+  wrapTrailingDigits();
 });
+formulaInput.addEventListener('compositionend', wrapTrailingDigits);
 
 document.getElementById('parenOpen').addEventListener('click', ()=>{
   insertNodeAtCursor(document.createTextNode('('));
