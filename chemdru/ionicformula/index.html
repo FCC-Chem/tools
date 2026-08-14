@@ -709,6 +709,54 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
   clearBuilderInputs();
 });
 
+// Places a range at the current cursor position inside formulaInput, falling
+// back to the end of its contents if there's no valid selection there yet
+// (e.g. right after a fresh page load or a toolbar-button click that stole
+// focus away from any prior caret position).
+function getEditableRange(){
+  const sel = window.getSelection();
+  if(sel && sel.rangeCount > 0){
+    const r = sel.getRangeAt(0);
+    if(formulaInput.contains(r.commonAncestorContainer)) return {sel, range:r};
+  }
+  const range = document.createRange();
+  range.selectNodeContents(formulaInput);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  return {sel, range};
+}
+
+// Inserts a DOM node at the current cursor position and leaves the cursor
+// immediately after it (or after cursorAfterNode, if given -- needed when
+// node is a DocumentFragment, since a fragment goes empty/detached once its
+// children are moved into the document, so positioning a range relative to
+// the fragment itself afterward would fail). Uses the standard Range/
+// Selection APIs directly rather than the deprecated (and, on Android
+// Chrome, unreliable) document.execCommand -- this is what actually fixes
+// subscript/superscript insertion on mobile.
+function insertNodeAtCursor(node, cursorAfterNode){
+  formulaInput.focus();
+  const {sel, range} = getEditableRange();
+  range.deleteContents();
+  range.insertNode(node);
+  const after = document.createRange();
+  after.setStartAfter(cursorAfterNode || node);
+  after.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(after);
+}
+
+function insertSubSup(digit, tag){
+  const frag = document.createDocumentFragment();
+  const el = document.createElement(tag);
+  el.textContent = digit;
+  const zwsp = document.createTextNode('\u200B'); // lets the caret sit after the sub/sup instead of getting stuck inside it
+  frag.appendChild(el);
+  frag.appendChild(zwsp);
+  insertNodeAtCursor(frag, zwsp);
+}
+
 // ---------- Formula input (contenteditable with subscript/superscript toggle) ----------
 const formulaInput = document.getElementById('formulaInput');
 const subToggle = document.getElementById('subToggle');
@@ -740,19 +788,17 @@ supToggle.addEventListener('click', ()=>{
 formulaInput.addEventListener('beforeinput', (e)=>{
   if((subMode || supMode) && e.inputType === 'insertText' && e.data && /^[0-9]$/.test(e.data)){
     e.preventDefault();
-    const tag = subMode ? 'sub' : 'sup';
-    document.execCommand('insertHTML', false, `<${tag}>${e.data}</${tag}>&#8203;`);
+    insertSubSup(e.data, subMode ? 'sub' : 'sup');
   }
 });
 
 document.getElementById('parenOpen').addEventListener('click', ()=>{
-  formulaInput.focus();
-  document.execCommand('insertText', false, '(');
+  insertNodeAtCursor(document.createTextNode('('));
 });
 document.getElementById('parenClose').addEventListener('click', ()=>{
-  formulaInput.focus();
-  document.execCommand('insertText', false, ')');
+  insertNodeAtCursor(document.createTextNode(')'));
 });
+
 
 // ---------- Type selector ----------
 const typeOpt1 = document.getElementById('typeOpt1');
