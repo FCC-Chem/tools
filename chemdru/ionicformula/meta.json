@@ -1,7 +1,7 @@
 {
   "title": "Ionic Formulas and Names",
   "author": "Dr. U",
-  "course": "CHEM 3A",
+  "course": "CHEM 3A","CHEM 1A"
   "description": "Charge balance ions, write the chemical formula and name the compound",
   "tags": ["nomenclature","ionic","formulas"],
   "status": "working"
