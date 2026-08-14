@@ -732,11 +732,16 @@ supToggle.addEventListener('click', ()=>{
   formulaInput.focus();
 });
 
-formulaInput.addEventListener('keydown', (e)=>{
-  if((subMode || supMode) && /^[0-9]$/.test(e.key)){
+// Android/mobile soft keyboards go through IME composition, where 'keydown'
+// often reports e.key as "Unidentified" instead of the actual digit typed --
+// so a keydown-based check silently never matches there even though it works
+// fine with a physical keyboard. 'beforeinput' reports the real inserted
+// character via e.data consistently across both desktop and mobile Chrome.
+formulaInput.addEventListener('beforeinput', (e)=>{
+  if((subMode || supMode) && e.inputType === 'insertText' && e.data && /^[0-9]$/.test(e.data)){
     e.preventDefault();
     const tag = subMode ? 'sub' : 'sup';
-    document.execCommand('insertHTML', false, `<${tag}>${e.key}</${tag}>&#8203;`);
+    document.execCommand('insertHTML', false, `<${tag}>${e.data}</${tag}>&#8203;`);
   }
 });
 
