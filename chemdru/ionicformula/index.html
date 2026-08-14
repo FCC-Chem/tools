@@ -106,11 +106,21 @@
   }
   @media (max-width:980px){
     .bank-list{flex-direction:row; flex-wrap:nowrap; overflow-x:auto; max-height:none; padding-bottom:4px;}
-    .ion-card{min-width:98px; touch-action:pan-x;}
+    .ion-card{min-width:98px;}
+  }
+  /* touch-action is scoped to non-overlapping widths (rather than relying on
+     cascade/source-order between a general rule and a media-query rule) so
+     mobile browsers that strictly enforce touch-action -- e.g. Android Chrome --
+     reliably allow native horizontal swipe-scrolling on the ion strip. */
+  @media (min-width:981px){
+    .ion-card{touch-action:none;} /* desktop: only our custom drag gesture should respond to pointer moves */
+  }
+  @media (max-width:980px){
+    .ion-card{touch-action:pan-x;} /* mobile strip: let the browser handle horizontal swipe-to-scroll natively */
   }
 
   .ion-card{
-    cursor:grab; user-select:none; touch-action:none;
+    cursor:grab; user-select:none;
     border-radius:8px; padding:9px 8px;
     border:1.5px solid var(--green-200);
     background:var(--green-100);
