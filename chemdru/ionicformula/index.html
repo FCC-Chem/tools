@@ -106,7 +106,7 @@
   }
   @media (max-width:980px){
     .bank-list{flex-direction:row; flex-wrap:nowrap; overflow-x:auto; max-height:none; padding-bottom:4px;}
-    .ion-card{min-width:98px;}
+    .ion-card{min-width:98px; touch-action:pan-x;}
   }
 
   .ion-card{
@@ -523,7 +523,7 @@ function makeDraggable(el, ion, isCation){
     }
     function onUp(ev){
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onCancel);
       cationZoneEl.classList.remove('drag-over');
       anionZoneEl.classList.remove('drag-over');
       if(dragging){
@@ -535,8 +535,19 @@ function makeDraggable(el, ion, isCation){
         addIonToZone(ion, isCation);
       }
     }
+    function onCancel(){
+      // The browser took over the gesture as a native scroll (touch-action: pan-x on
+      // the horizontal ion strip) -- clean up quietly. This is NOT a tap or a drop,
+      // so the ion must not be added.
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      cationZoneEl.classList.remove('drag-over');
+      anionZoneEl.classList.remove('drag-over');
+      if(dragging && ghost) ghost.remove();
+    }
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp, {once:true});
+    window.addEventListener('pointercancel', onCancel, {once:true});
   });
 }
 
@@ -777,6 +788,19 @@ function correctName(cIon, aIon){
   return `${cname} ${aIon.name}`;
 }
 
+// For (di)hydrogen-containing polyatomic anions, students commonly see the
+// name written as one fused word (e.g. "dihydrogenphosphate") as well as two
+// words ("dihydrogen phosphate"). Both are accepted as correct.
+function nameMatchesCorrect(userValue, cIon, aIon){
+  const correct = correctName(cIon, aIon);
+  const variants = [correct];
+  if(/(^|\s)(di)?hydrogen\s+\w/.test(aIon.name)){
+    variants.push(correct.replace(/((?:di)?hydrogen)\s+(\w)/, '$1$2'));
+  }
+  const userNorm = normalize(userValue);
+  return variants.some(v => normalize(v) === userNorm);
+}
+
 function normalize(s){
   return s
     .replace(/\s+/g,' ')
@@ -804,17 +828,19 @@ checkBtn.addEventListener('click', ()=>{
   const userFormulaText = getFormulaPlainText();
   const correctFormula = correctFormulaPlain(cIon, aIon, counts);
   const formulaOK = userFormulaText === correctFormula;
+  const needsSub = /\d/.test(correctFormula); // does the correct formula actually contain any digits?
   const usedSub = /<sub>/i.test(formulaInput.innerHTML);
+  const formulaFullyCorrect = formulaOK && (!needsSub || usedSub);
 
   const typeOK = selectedType === String(cIon.type);
   const cName = correctName(cIon, aIon);
-  const nameOK = normalize(nameInput.value) === normalize(cName);
+  const nameOK = nameMatchesCorrect(nameInput.value, cIon, aIon);
 
   const fb = document.getElementById('feedback');
   fb.classList.add('show');
   fb.innerHTML = `
-    <div class="fb-row ${formulaOK && usedSub ? 'ok':'bad'}">
-      Formula: ${formulaOK ? (usedSub ? '\u2713 Correct!' : '\u2713 Correct \u2014 but remember to format your subscript numbers with the "sub" button.') : `\u2717 Not quite. Correct formula: <span class="mono">${subScript(correctFormula)}</span>`}
+    <div class="fb-row ${formulaFullyCorrect ? 'ok':'bad'}">
+      Formula: ${formulaOK ? (formulaFullyCorrect ? '\u2713 Correct!' : '\u2713 Correct \u2014 but remember to format your subscript numbers with the "sub" button.') : `\u2717 Not quite. Correct formula: <span class="mono">${subScript(correctFormula)}</span>`}
     </div>
     <div class="fb-row ${typeOK ? 'ok':'bad'}">
       Type: ${typeOK ? '\u2713 Correct!' : `\u2717 This is actually Type ${cIon.type} (${cIon.type===2 ? 'the metal has more than one possible charge, so it needs a Roman numeral' : 'this metal only forms one possible charge'}).`}
@@ -841,7 +867,7 @@ addLogBtn.addEventListener('click', ()=>{
   const userName = nameInput.value.trim() || correctName(cIon, aIon);
 
   const isRight = userFormulaText === correct && selectedType === String(cIon.type) &&
-    normalize(userName) === normalize(correctName(cIon, aIon));
+    nameMatchesCorrect(userName, cIon, aIon);
 
   logs.push({
     cationName: cIon.name, cCount: state.cation.count,
