@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ionic, Covalent &amp; Acid Nomenclature Study Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#58445f;
+    --page-bg:#fff7fb;
+    --paper:#fffefe;
+    --grid-line:rgba(164,129,191,.12);
+    --green-900:#6d4f7b;
+    --green-800:#7f6290;
+    --green-700:#9474aa;
+    --green-600:#a788bb;
+    --green-500:#bea2cf;
+    --green-300:#dbc8e8;
+    --green-200:#eadff2;
+    --green-100:#f7f0fb;
+    --cation:#d97896;
+    --cation-bg:#fff0f5;
+    --cation-bg-strong:#f7c9d8;
+    --anion:#5796aa;
+    --anion-bg:#eef9fb;
+    --anion-bg-strong:#c5e8ef;
+    --danger:#c65b73;
+    --pink:#f3b7cd;
+    --pink-soft:#fff0f6;
+    --lavender:#cdb9ea;
+    --lavender-soft:#f5effc;
+    --blue:#a9d9ea;
+    --blue-soft:#eef9fd;
+    --mint:#bfe5d3;
+    --mint-soft:#effaf5;
+    --yellow:#f6dfa7;
+    --yellow-soft:#fff9e9;
+    --shadow:0 3px 10px rgba(91,65,103,.11);
+    --shadow-lg:0 12px 30px rgba(91,65,103,.17);
+    --radius:16px;
+    font-family:'Nunito Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink);}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  sub{font-size:.68em;}
+  sup{font-size:.62em;}
+
+  header{
+    background:linear-gradient(135deg,var(--green-900),var(--green-700));
+    color:var(--green-100);
+    padding:14px 20px;
+    box-shadow:var(--shadow);
+    position:relative;
+    z-index:5;
+  }
+  header h1{margin:0;font-size:1.28rem;font-weight:800;letter-spacing:.2px;}
+  header p{margin:4px 0 0;font-size:.85rem;color:var(--green-200);max-width:74ch;line-height:1.4;}
+
+  .help-btn{
+    position:absolute; top:14px; right:20px;
+    background:rgba(255,255,255,.12); color:var(--green-100);
+    border:1px solid rgba(255,255,255,.35); border-radius:20px;
+    padding:6px 14px; font-size:.8rem; font-weight:700; cursor:pointer;
+  }
+  .help-btn:hover{background:rgba(255,255,255,.22);}
+
+  .help-panel{
+    display:none; background:var(--green-100); border-bottom:1px solid var(--green-300);
+    padding:14px 20px; font-size:.86rem; line-height:1.55;
+  }
+  .help-panel.open{display:block;}
+  .help-panel h3{margin:0 0 4px;color:var(--green-900);font-size:.95rem;}
+  .help-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:760px){.help-grid{grid-template-columns:1fr;}}
+
+  main{
+    flex:1;
+    display:grid;
+    grid-template-columns:200px 1fr 200px;
+    gap:14px;
+    padding:14px;
+    align-items:start;
+  }
+  @media (max-width:980px){
+    main{grid-template-columns:1fr; }
+    .bank{min-width:0;}
+    .bank.cations{order:1;}
+    .bank.anions{order:2;}
+    .workspace-col{order:3; min-width:0;}
+  }
+
+  .bank{
+    background:var(--paper);
+    border:1px solid var(--green-200);
+    border-radius:var(--radius);
+    padding:10px;
+    box-shadow:var(--shadow);
+  }
+  .bank h2{
+    margin:0 0 8px; font-size:.82rem; text-transform:uppercase; letter-spacing:.6px;
+    color:var(--green-800); border-bottom:2px solid var(--green-200); padding-bottom:6px;
+  }
+  .bank.cations h2{color:var(--cation); border-bottom-color:var(--cation-bg-strong);}
+  .bank.anions h2{color:var(--anion); border-bottom-color:var(--anion-bg-strong);}
+  .bank-list{
+    display:flex; flex-direction:column; gap:6px;
+    max-height:72vh; overflow-y:auto; padding-right:2px;
+  }
+  @media (max-width:980px){
+    .bank-list{flex-direction:row; flex-wrap:nowrap; overflow-x:auto; max-height:none; padding-bottom:4px;}
+    .ion-card{min-width:98px;}
+  }
+  /* touch-action is scoped to non-overlapping widths (rather than relying on
+     cascade/source-order between a general rule and a media-query rule) so
+     mobile browsers that strictly enforce touch-action -- e.g. Android Chrome --
+     reliably allow native horizontal swipe-scrolling on the ion strip. */
+  @media (min-width:981px){
+    .ion-card{touch-action:none;} /* desktop: only our custom drag gesture should respond to pointer moves */
+  }
+  @media (max-width:980px){
+    .ion-card{touch-action:pan-x;} /* mobile strip: let the browser handle horizontal swipe-to-scroll natively */
+  }
+
+  .ion-card{
+    cursor:grab; user-select:none;
+    border-radius:8px; padding:9px 8px;
+    border:1.5px solid var(--green-200);
+    background:var(--green-100);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .ion-card:active{cursor:grabbing;}
+  .ion-card:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
+  .bank.cations .ion-card{background:var(--cation-bg); border-color:var(--cation-bg-strong);}
+  .bank.anions .ion-card{background:var(--anion-bg); border-color:var(--anion-bg-strong);}
+  .ion-card .sym{font-weight:700; font-size:1.02rem;}
+  .bank.cations .ion-card .sym{color:var(--cation);}
+  .bank.anions .ion-card .sym{color:var(--anion);}
+
+  .ion-card.ghost{
+    position:fixed; z-index:999; pointer-events:none; opacity:.92;
+    box-shadow:var(--shadow-lg); transform:scale(1.05);
+  }
+
+  .workspace-col{display:flex; flex-direction:column; gap:12px; min-width:0;}
+
+  .workspace{
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:22px 22px;
+    border:1px solid var(--green-200);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+    min-height:340px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:0;
+    position:relative;
+    transition:box-shadow .25s ease;
+    overflow-x:auto;
+    min-width:0;
+  }
+  .workspace.balanced{
+    box-shadow:0 0 0 3px var(--green-500), var(--shadow-lg);
+  }
+  @media (max-width:480px){
+    .workspace{padding:12px; min-height:280px;}
+  }
+
+  .zone{
+    display:flex; flex-direction:column;
+    min-width:120px;
+    position:relative;
+  }
+  .zone.cation-zone{align-items:flex-end;}
+  .zone.anion-zone{align-items:flex-start;}
+  .zone .zone-label{
+    font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; font-weight:800;
+    color:var(--green-700); margin-bottom:8px;
+  }
+  .zone.cation-zone .zone-label{color:var(--cation); transform:translateX(-22px);}
+  .zone.anion-zone .zone-label{color:var(--anion); transform:translateX(22px);}
+  .zone .zone-empty{
+    font-size:.78rem; color:#6b8a78; text-align:center;
+    width:112px; padding:26px 8px; line-height:1.4;
+    border:2px dashed var(--green-300); border-radius:8px;
+  }
+  .zone.cation-zone .zone-empty{border-color:var(--cation-bg-strong); transform:translateX(-22px);}
+  .zone.anion-zone .zone-empty{border-color:var(--anion-bg-strong); transform:translateX(22px);}
+  .zone.drag-over .zone-empty{background:var(--green-100); border-style:solid;}
+  .zone .zone-count{font-size:.72rem; color:var(--ink); opacity:.75; margin-top:8px; text-align:center; max-width:150px;}
+  .zone.cation-zone .zone-count{transform:translateX(-22px);}
+  .zone.anion-zone .zone-count{transform:translateX(22px);}
+
+  /* Jigsaw stacks: each stack is a flush column of interlocking pieces.
+     Cation pieces bulge teeth outward (one tooth per unit of charge);
+     anion pieces have matching notches. When total stack heights match,
+     the two columns mesh into one seamless rectangle. */
+  .stack{
+    display:flex; flex-direction:column;
+    position:relative;
+  }
+  .stack.cation-stack{ }
+  .stack.anion-stack{ margin-left:-9px; }
+
+  .piece{
+    box-sizing:border-box;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; cursor:pointer;
+    animation:pop .12s ease;
+  }
+  @keyframes pop{from{transform:scaleY(.5); opacity:0;} to{transform:scaleY(1); opacity:1;}}
+  .piece.cation{
+    background:linear-gradient(160deg,var(--cation-bg-strong),var(--cation-bg));
+    z-index:2;
+  }
+  .piece.anion{
+    background:linear-gradient(160deg,var(--anion-bg-strong),var(--anion-bg));
+    z-index:1;
+  }
+  .piece .sym{font-weight:700; font-size:.72rem; line-height:1; white-space:nowrap;}
+  .piece.cation .sym{color:var(--cation);}
+  .piece.anion .sym{color:var(--anion);}
+  .piece .rm{
+    position:absolute; top:3px; width:15px; height:15px; border-radius:50%;
+    background:var(--danger); color:#fff; font-size:.6rem; line-height:15px; text-align:center;
+    opacity:0; transition:opacity .12s ease;
+  }
+  .piece.cation .rm{left:5px;}
+  .piece.anion .rm{right:5px;}
+  .piece:hover .rm{opacity:1;}
+  .piece:hover{filter:brightness(1.04);}
+
+  .balance-bar{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px 20px;
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    padding:10px 16px; box-shadow:var(--shadow); font-size:.86rem;
+  }
+  .balance-chip{
+    display:flex; align-items:center; gap:6px; font-weight:700;
+    padding:5px 10px; border-radius:20px; background:var(--green-100); color:var(--green-800);
+  }
+  .balance-chip.cation{color:var(--cation); background:var(--cation-bg);}
+  .balance-chip.anion{color:var(--anion); background:var(--anion-bg);}
+  .balance-status{margin-left:auto; font-weight:800; font-size:.9rem;}
+  .balance-status.ok{color:var(--green-700);}
+  .balance-status.no{color:#7a6a3f;}
+  .balance-status.empty{color:#8a9c92;}
+  .actions{display:flex; gap:8px; flex-wrap:wrap;}
+
+  button.btn{
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer;
+    border-radius:8px; padding:7px 13px; border:1.5px solid var(--green-500);
+    background:var(--paper); color:var(--green-800); transition:all .12s ease;
+  }
+  button.btn:hover{background:var(--green-100);}
+  button.btn.primary{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+  button.btn.primary:hover{background:var(--green-800);}
+  button.btn.ghost{border-color:var(--green-200); color:var(--ink); opacity:.75;}
+  button.btn:disabled{opacity:.4; cursor:not-allowed;}
+
+  .builder{
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:14px 16px;
+  }
+  .builder h3{margin:0 0 10px; font-size:.9rem; color:var(--green-900);}
+  .builder-grid{display:grid; grid-template-columns:1.1fr .9fr 1.4fr; gap:14px;}
+  @media (max-width:760px){.builder-grid{grid-template-columns:1fr;}}
+  .field-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.4px; color:var(--green-700); font-weight:800; margin-bottom:5px; display:block;}
+
+  .formula-toolbar{display:flex; gap:6px; margin-bottom:6px;}
+  .tbtn{
+    font-family:'JetBrains Mono',monospace; font-size:.75rem; font-weight:700;
+    border:1.5px solid var(--green-300); background:var(--green-100); color:var(--green-800);
+    border-radius:6px; padding:3px 9px; cursor:pointer;
+  }
+  .tbtn.active{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+
+  #formulaInput{
+    font-family:'JetBrains Mono',monospace; font-size:1.15rem; min-height:38px;
+    border:1.5px solid var(--green-300); border-radius:8px; padding:7px 10px;
+    background:#fbfffc; outline:none;
+  }
+  #formulaInput:focus{border-color:var(--green-600);}
+
+  .type-options{display:flex; gap:10px;}
+  .type-option{
+    flex:1; border:1.5px solid var(--green-300); border-radius:8px; padding:8px 10px;
+    cursor:pointer; text-align:center; font-size:.8rem; font-weight:700; color:var(--green-800);
+    background:#fbfffc;
+  }
+  .type-option.selected{background:var(--green-700); color:#fff; border-color:var(--green-700);}
+
+  #nameInput{
+    width:100%; font-size:.95rem; padding:8px 10px; border:1.5px solid var(--green-300);
+    border-radius:8px; outline:none; background:#fbfffc; font-family:inherit;
+  }
+  #nameInput:focus{border-color:var(--green-600);}
+
+  .feedback{margin-top:12px; font-size:.83rem; line-height:1.5; display:none;}
+  .feedback.show{display:block;}
+  .fb-row{padding:6px 10px; border-radius:7px; margin-bottom:5px;}
+  .fb-row.ok{background:#e4f5e9; color:#1f6b3a;}
+  .fb-row.bad{background:#fdecea; color:#a03a2e;}
+
+  .builder-actions{margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+  .hint{font-size:.76rem; color:#6b8a78;}
+
+  .log-wrap{
+    background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:14px 16px; overflow-x:auto; min-width:0;
+  }
+  .log-wrap h3{margin:0 0 10px; font-size:.9rem; color:var(--green-900); display:flex; justify-content:space-between; align-items:center;}
+  table{border-collapse:collapse; width:100%; font-size:.82rem; min-width:640px;}
+  th,td{border:1px solid var(--green-200); padding:6px 8px; text-align:left;}
+  th{background:var(--green-100); color:var(--green-800); font-size:.72rem; text-transform:uppercase; letter-spacing:.3px;}
+  td.formula{font-family:'JetBrains Mono',monospace; font-size:.95rem;}
+  tr.correct td{background:#f2fbf4;}
+  tr.incorrect td{background:#fdf6f2;}
+  .log-empty{font-size:.82rem; color:#6b8a78; padding:6px 2px;}
+  .del-row{border:none; background:none; color:var(--danger); cursor:pointer; font-weight:700; font-size:.85rem;}
+
+
+  /* ---------- Mode switcher ---------- */
+  .mode-shell{
+    padding:12px 14px 0;
+  }
+  .mode-switcher{
+    max-width:760px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    background:var(--paper); border:1px solid var(--green-200); border-radius:12px;
+    padding:7px; box-shadow:var(--shadow);
+  }
+  .mode-btn{
+    border:0; border-radius:8px; padding:10px 14px; cursor:pointer;
+    font:700 .9rem 'Nunito Sans',system-ui,sans-serif;
+    color:var(--green-800); background:transparent;
+  }
+  .mode-btn:hover{background:var(--green-100);}
+  .mode-btn.active{background:var(--green-700); color:#fff;}
+
+  /* ---------- Study / Quiz panel ---------- */
+  .quiz-panel{
+    display:none; background:var(--paper); border:1px solid var(--green-200);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:16px;
+  }
+  body.quiz-mode .quiz-panel{display:block;}
+  body.quiz-mode .builder, body.quiz-mode .log-wrap{display:none;}
+
+  .quiz-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:12px; flex-wrap:wrap; margin-bottom:12px;
+  }
+  .quiz-top h2{margin:0; font-size:1rem; color:var(--green-900);}
+  .quiz-top p{margin:3px 0 0; font-size:.8rem; color:#6b8a78;}
+  .quiz-stats{display:flex; gap:7px; flex-wrap:wrap;}
+  .stat-chip{
+    background:var(--green-100); color:var(--green-800); border:1px solid var(--green-200);
+    border-radius:20px; padding:5px 9px; font-size:.75rem; font-weight:800;
+  }
+  .practice-controls{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 13px;}
+  .practice-btn{
+    border:1.5px solid var(--green-300); background:#fbfffc; color:var(--green-800);
+    border-radius:8px; padding:6px 9px; cursor:pointer; font:700 .75rem 'Nunito Sans',system-ui,sans-serif;
+  }
+  .practice-btn.active{background:var(--green-700); border-color:var(--green-700); color:#fff;}
+  .question-card{
+    border:1px solid var(--green-200); background:linear-gradient(145deg,#fbfffc,var(--green-100));
+    border-radius:10px; padding:16px; text-align:center;
+  }
+  .question-kicker{
+    text-transform:uppercase; letter-spacing:.55px; font-weight:800; font-size:.7rem;
+    color:var(--green-700); margin-bottom:7px;
+  }
+  .question-prompt{font-size:1rem; font-weight:700; margin-bottom:8px; color:var(--ink);}
+  .question-target{
+    font-family:'JetBrains Mono',monospace; font-size:1.55rem; font-weight:700;
+    color:var(--green-900); min-height:34px;
+  }
+  .question-target.name-target{font-family:'Nunito Sans',system-ui,sans-serif; font-size:1.32rem;}
+  .quiz-answer-area{margin-top:13px;}
+  #quizNameInput{
+    width:min(100%,520px); font-size:1rem; padding:9px 11px; border:1.5px solid var(--green-300);
+    border-radius:8px; outline:none; background:#fff; font-family:inherit;
+  }
+  #quizNameInput:focus{border-color:var(--green-600);}
+  .quiz-formula-editor{width:min(100%,520px); margin:0 auto; text-align:left;}
+  .quiz-formula-toolbar{justify-content:flex-start; flex-wrap:wrap;}
+  #quizFormulaInput{
+    font-family:'JetBrains Mono',monospace; font-size:1.2rem; min-height:42px;
+    border:1.5px solid var(--green-300); border-radius:8px; padding:8px 10px;
+    background:#fff; outline:none; width:100%;
+  }
+  #quizFormulaInput:focus{border-color:var(--green-600);}
+  #quizFormulaInput:empty::before{content:attr(data-placeholder); color:#8aa095; pointer-events:none;}
+  .math-editor-note{margin-top:5px; font-size:.72rem; line-height:1.35; color:#6b8a78;}
+  .build-instruction{font-size:.82rem; color:#557263; line-height:1.45;}
+  .quiz-actions{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  #quizPeriodicReferences{margin-top:12px;}
+  .quiz-feedback{display:none; margin-top:12px; border-radius:8px; padding:9px 11px; font-size:.84rem; line-height:1.45;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:#e4f5e9;color:#1f6b3a;}
+  .quiz-feedback.bad{background:#fdecea;color:#9b382e;}
+  .quiz-feedback.info{background:#edf4ef;color:#375d47;}
+  .quiz-hint{display:none; margin:10px auto 0; max-width:620px; font-size:.8rem; color:#557263;}
+  .quiz-hint.show{display:block;}
+
+  body.quiz-name-question main{grid-template-columns:1fr;}
+  body.quiz-name-question .bank,
+  body.quiz-name-question .workspace,
+  body.quiz-name-question .balance-bar{display:none;}
+  body.quiz-name-question .workspace-col{width:min(100%,800px); margin:0 auto;}
+
+  /* ---------- Kawaii pastel refresh ---------- */
+  body{
+    background:
+      radial-gradient(circle at 9% 10%, rgba(243,183,205,.22) 0 90px, transparent 91px),
+      radial-gradient(circle at 91% 18%, rgba(169,217,234,.22) 0 105px, transparent 106px),
+      radial-gradient(circle at 80% 78%, rgba(205,185,234,.18) 0 120px, transparent 121px),
+      var(--page-bg);
+    background-attachment:fixed;
+  }
+  header{
+    background:linear-gradient(120deg,#e8a8c1 0%,#c6afe7 48%,#9fd5e6 100%);
+    color:#fff;
+    border-radius:0 0 24px 24px;
+    overflow:hidden;
+  }
+  header::after{
+    content:'✦  ♡  ☆'; position:absolute; right:24px; bottom:7px;
+    font-size:1.05rem; letter-spacing:7px; opacity:.42; pointer-events:none;
+  }
+  header p{color:rgba(255,255,255,.92);}
+  .help-btn{background:rgba(255,255,255,.2); color:#fff; border-color:rgba(255,255,255,.5);}
+  .help-panel{background:linear-gradient(90deg,var(--pink-soft),var(--lavender-soft),var(--blue-soft));}
+  .mode-switcher,.quiz-panel,.bank,.workspace,.balance-bar,.builder,.log-wrap{
+    border-color:#eadcf1; box-shadow:var(--shadow);
+  }
+  .mode-switcher{border-radius:18px; background:rgba(255,255,255,.88);}
+  .mode-btn{border-radius:13px;}
+  .mode-btn.active,.practice-btn.active,button.btn.primary{
+    background:linear-gradient(135deg,#d988aa,#9e82c5);
+    border-color:#b594ce; color:#fff; box-shadow:0 4px 10px rgba(157,118,181,.18);
+  }
+  .mode-btn:hover,.practice-btn:hover,button.btn:hover{background:var(--lavender-soft);}
+  .question-card{
+    position:relative; overflow:hidden; border-color:#ead9f1; border-radius:18px;
+    background:linear-gradient(145deg,#fffdfd 0%,#fff3f8 42%,#f4f0fc 72%,#eef9fd 100%);
+  }
+  .question-card::before,.question-card::after{
+    position:absolute; pointer-events:none; opacity:.2; color:#b783be; font-size:1.1rem;
+  }
+  .question-card::before{content:'♡ ✦'; left:12px; top:10px;}
+  .question-card::after{content:'☆ ♡'; right:12px; bottom:10px;}
+  .stat-chip:nth-child(1){background:var(--pink-soft); border-color:#f3cddd; color:#a95f7d;}
+  .stat-chip:nth-child(2){background:var(--blue-soft); border-color:#cce7f1; color:#4f8194;}
+  .practice-btn{background:#fffafd; border-color:#dfcaeb; border-radius:12px;}
+  #quizNameInput,#quizFormulaInput,#formulaInput,#nameInput{
+    border-color:#dec9ea; background:rgba(255,255,255,.94); border-radius:12px;
+  }
+  #quizNameInput:focus,#quizFormulaInput:focus,#formulaInput:focus,#nameInput:focus{
+    border-color:#b58ac8; box-shadow:0 0 0 3px rgba(205,185,234,.25);
+  }
+  .tbtn{border-color:#dec8ea; background:var(--lavender-soft); color:#76568a; border-radius:9px;}
+  .tbtn.active{background:linear-gradient(135deg,#d98cae,#a58ac8); border-color:#b58fc9;}
+  .bank.cations .ion-card{background:linear-gradient(145deg,#fff8fb,var(--cation-bg));}
+  .bank.anions .ion-card{background:linear-gradient(145deg,#f8fdff,var(--anion-bg));}
+  .ion-card{border-radius:13px;}
+  .workspace{background-color:#fffdfd;}
+  .piece.cation{background:linear-gradient(160deg,#f6c7d8,#fff0f5);}
+  .piece.anion{background:linear-gradient(160deg,#c4e8ef,#eef9fb);}
+  .quiz-feedback.ok{background:var(--mint-soft); color:#47765f;}
+  .quiz-feedback.bad{background:#fff0f3; color:#a24d65;}
+  .quiz-feedback.info{background:var(--blue-soft); color:#4d7482;}
+
+  /* ---------- Periodic-table formula reference ---------- */
+  .periodic-reference{
+    margin-top:14px; border:1px solid #e5d4ef; border-radius:16px; padding:10px 12px;
+    background:linear-gradient(145deg,rgba(255,255,255,.95),var(--lavender-soft));
+    box-shadow:0 3px 10px rgba(111,78,127,.08);
+  }
+  .periodic-reference summary{
+    cursor:pointer; list-style:none; font-weight:800; font-size:.8rem; color:var(--green-900);
+    display:flex; align-items:center; justify-content:space-between; gap:8px; user-select:none;
+  }
+  .periodic-reference summary::-webkit-details-marker{display:none;}
+  .periodic-reference summary::after{content:'⌄'; font-size:1rem; transition:transform .15s ease;}
+  .periodic-reference:not([open]) summary::after{transform:rotate(-90deg);}
+  .periodic-note{font-size:.7rem; color:#806f87; margin:5px 0 8px; line-height:1.35;}
+  .periodic-table-wrap{overflow-x:auto; padding:3px 1px 5px;}
+  .periodic-table{display:grid; grid-template-columns:repeat(18,minmax(34px,1fr)); gap:3px; min-width:720px;}
+  .pt-cell{
+    position:relative; min-height:42px; border:1px solid rgba(116,86,132,.13); border-radius:7px;
+    background:#fff; padding:3px 2px 2px; text-align:center; cursor:pointer; color:#5e4965;
+    font-family:'Nunito Sans',system-ui,sans-serif; transition:transform .1s ease, box-shadow .1s ease;
+  }
+  .pt-cell:hover{transform:translateY(-2px); box-shadow:0 4px 8px rgba(91,65,103,.14); z-index:2;}
+  .periodic-reference.reference-only .pt-cell{cursor:default;}
+  .periodic-reference.reference-only .pt-cell:hover{transform:none; box-shadow:none; z-index:auto;}
+  .pt-num{display:block; font-size:.48rem; line-height:1; opacity:.62; text-align:left;}
+  .pt-symbol{display:block; font-family:'JetBrains Mono',monospace; font-weight:800; font-size:.87rem; line-height:1.15;}
+  .pt-name{display:block; font-size:.43rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; opacity:.72;}
+  .pt-nonmetal{background:#fff1f6;}
+  .pt-alkali,.pt-alkaline{background:#fff8e8;}
+  .pt-transition{background:#f6effc;}
+  .pt-post,.pt-metalloid{background:#effaf5;}
+  .pt-halogen{background:#eef9fd;}
+  .pt-noble{background:#f1f0ff;}
+  .pt-lanthanide{background:#fff3ed;}
+  .pt-actinide{background:#fceef7;}
+  .pt-series-label{
+    grid-column:1 / span 3; display:flex; align-items:center; justify-content:flex-end;
+    padding-right:6px; font-size:.54rem; color:#806f87; font-weight:800;
+  }
+  .pt-series{display:grid; grid-template-columns:repeat(18,minmax(34px,1fr)); gap:3px; min-width:720px; margin-top:5px;}
+  .pt-legend{display:flex; flex-wrap:wrap; gap:5px 10px; margin-top:7px; font-size:.56rem; color:#78647e;}
+  .pt-key{display:inline-flex; align-items:center; gap:4px;}
+  .pt-swatch{width:9px;height:9px;border-radius:3px;border:1px solid rgba(80,60,90,.12);}
+
+  @media (max-width:600px){
+    .mode-switcher{grid-template-columns:1fr;}
+    .question-target{font-size:1.3rem;}
+  }
+
+  footer{padding:8px 16px; text-align:center; font-size:.7rem; color:#7f978a;}
+</style>
+</head>
+<body class="quiz-mode">
+
+<header>
+  <h1>⚗️ Ionic, Covalent &amp; Acid Nomenclature</h1>
+  <p>Start in Study / Quiz Mode to practice ionic compounds, binary covalent molecules, binary acids, and oxyacids — or switch to Free Builder Mode to explore ionic compounds on your own.</p>
+  <button class="help-btn" id="helpToggle">Naming Help</button>
+</header>
+
+<div class="help-panel" id="helpPanel">
+  <div class="help-grid">
+    <div>
+      <h3>Type I ionic compounds</h3>
+      <p>The cation is a metal that only ever forms <strong>one</strong> possible charge (most Group 1, Group 2, and a few others). No Roman numeral is needed in the name — just "metal name + anion name," e.g. <em>calcium chloride</em>.</p>
+    </div>
+    <div>
+      <h3>Type II ionic compounds</h3>
+      <p>The cation is a metal that can form <strong>more than one</strong> possible charge (many transition metals). A Roman numeral showing that specific charge is required in the name, e.g. <em>iron (III) oxide</em>.</p>
+    </div>
+    <div>
+      <h3>Binary covalent compounds</h3>
+      <p>Use Greek prefixes <strong>mono- through deca-</strong> to show the number of each atom. The first element keeps its normal name and <strong>does not use mono- when only one atom is present</strong>. The second element always uses a prefix and ends in <strong>-ide</strong>, e.g. <em>carbon monoxide</em> and <em>carbon dioxide</em>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mode-shell">
+  <div class="mode-switcher" role="tablist" aria-label="Learning mode">
+    <button class="mode-btn active" id="quizModeBtn" type="button">Study / Quiz Mode</button>
+    <button class="mode-btn" id="freeModeBtn" type="button">Free Builder Mode</button>
+  </div>
+</div>
+
+<main>
+  <div class="bank cations">
+    <h2>Cations (+)</h2>
+    <div class="bank-list" id="cationBank"></div>
+  </div>
+
+  <div class="workspace-col">
+    <section class="quiz-panel" id="quizPanel">
+      <div class="quiz-top">
+        <div>
+          <h2>Study / Quiz Mode</h2>
+          <p>Practice binary ionic compounds, polyatomic ionic compounds, binary covalent molecules, binary acids, and oxyacids. Formula → name and name → formula questions are mixed together; ionic compounds can also be built with the ion pieces.</p>
+        </div>
+        <div class="quiz-stats">
+          <span class="stat-chip" id="scoreChip">Score: 0 / 0</span>
+          <span class="stat-chip" id="streakChip">Streak: 0</span>
+        </div>
+      </div>
+
+      <div class="practice-controls" aria-label="Question type">
+        <button class="practice-btn active" type="button" data-practice="mixed">Mixed Practice</button>
+        <button class="practice-btn" type="button" data-practice="binaryionic">Binary Ionic Only</button>
+        <button class="practice-btn" type="button" data-practice="polyatomicionic">Polyatomic Ionic Only</button>
+        <button class="practice-btn" type="button" data-practice="name">Formula → Name</button>
+        <button class="practice-btn" type="button" data-practice="build">Name → Formula / Build</button>
+        <button class="practice-btn" type="button" data-practice="acids">Acids Only</button>
+        <button class="practice-btn" type="button" data-practice="covalent">Covalent Only</button>
+      </div>
+
+      <div class="question-card">
+        <div class="question-kicker" id="questionKicker">Question</div>
+        <div class="question-prompt" id="questionPrompt"></div>
+        <div class="question-target" id="questionTarget"></div>
+
+        <div class="quiz-answer-area" id="quizNameArea">
+          <input type="text" id="quizNameInput" autocomplete="off" placeholder="Type your answer">
+        </div>
+        <div class="quiz-answer-area" id="quizFormulaArea" style="display:none;">
+          <div class="quiz-formula-editor">
+            <span class="field-label">Formula editor</span>
+            <div class="formula-toolbar quiz-formula-toolbar">
+              <button class="tbtn active" id="quizSubToggle" type="button" title="Toggle automatic subscript formatting">X<sub>2</sub> Subscript</button>
+              <button class="tbtn" id="quizParenOpen" type="button">(</button>
+              <button class="tbtn" id="quizParenClose" type="button">)</button>
+              <button class="tbtn" id="quizFormulaClear" type="button">Clear</button>
+            </div>
+            <div id="quizFormulaInput" contenteditable="true" spellcheck="false" inputmode="text" data-placeholder="Type the formula, e.g. H₂SO₄"></div>
+            <div class="math-editor-note">Subscript mode starts ON. Type numbers normally and they will be formatted as subscripts. You can also paste a plain formula such as H2SO4.</div>
+          </div>
+        </div>
+        <div class="quiz-answer-area" id="quizBuildArea" style="display:none;">
+          <div class="build-instruction">Use the cation and anion banks below. Add the correct ions until the compound is represented in its lowest whole-number ratio.</div>
+        </div>
+
+        <div class="quiz-actions">
+          <button class="btn primary" id="quizCheckBtn" type="button">Check Answer</button>
+          <button class="btn" id="quizNextBtn" type="button">New Question</button>
+          <button class="btn ghost" id="quizHintBtn" type="button">Hint</button>
+          <button class="btn ghost" id="quizRevealBtn" type="button">Show Answer</button>
+        </div>
+
+        <div class="quiz-hint" id="quizHint"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+
+        <div id="quizPeriodicReferences">
+          <details class="periodic-reference reference-only" id="namePeriodicReference" open>
+            <summary>✨ Periodic Table Reference</summary>
+            <div class="periodic-note">Use the periodic table as a reference while identifying the elements in the formula.</div>
+            <div class="periodic-table-wrap">
+              <div class="periodic-table" id="namePeriodicTable"></div>
+              <div class="pt-series" id="namePeriodicSeries"></div>
+            </div>
+            <div class="pt-legend">
+              <span class="pt-key"><span class="pt-swatch pt-nonmetal"></span>nonmetal</span>
+              <span class="pt-key"><span class="pt-swatch pt-alkali"></span>alkali/alkaline earth</span>
+              <span class="pt-key"><span class="pt-swatch pt-transition"></span>transition metal</span>
+              <span class="pt-key"><span class="pt-swatch pt-metalloid"></span>post-transition/metalloid</span>
+              <span class="pt-key"><span class="pt-swatch pt-halogen"></span>halogen</span>
+              <span class="pt-key"><span class="pt-swatch pt-noble"></span>noble gas</span>
+            </div>
+          </details>
+          <details class="periodic-reference" id="periodicReference" open>
+              <summary>✨ Periodic Table Reference</summary>
+              <div class="periodic-note">Use this as a symbol reference. You can also click an element to insert its symbol into the formula editor.</div>
+              <div class="periodic-table-wrap">
+                <div class="periodic-table" id="periodicTable"></div>
+                <div class="pt-series" id="periodicSeries"></div>
+              </div>
+              <div class="pt-legend">
+                <span class="pt-key"><span class="pt-swatch pt-nonmetal"></span>nonmetal</span>
+                <span class="pt-key"><span class="pt-swatch pt-alkali"></span>alkali/alkaline earth</span>
+                <span class="pt-key"><span class="pt-swatch pt-transition"></span>transition metal</span>
+                <span class="pt-key"><span class="pt-swatch pt-metalloid"></span>post-transition/metalloid</span>
+                <span class="pt-key"><span class="pt-swatch pt-halogen"></span>halogen</span>
+                <span class="pt-key"><span class="pt-swatch pt-noble"></span>noble gas</span>
+              </div>
+            </details>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace" id="workspace">
+      <div class="zone cation-zone" id="cationZone">
+        <div class="zone-label">Cation stack</div>
+        <div class="zone-empty" id="cationEmpty">Drag a cation here</div>
+        <div class="stack cation-stack" id="cationUnits"></div>
+        <div class="zone-count" id="cationCountLabel"></div>
+      </div>
+      <div class="zone anion-zone" id="anionZone">
+        <div class="zone-label">Anion stack</div>
+        <div class="zone-empty" id="anionEmpty">Drag an anion here</div>
+        <div class="stack anion-stack" id="anionUnits"></div>
+        <div class="zone-count" id="anionCountLabel"></div>
+      </div>
+    </div>
+
+    <div class="balance-bar">
+      <div class="balance-chip cation" id="cationChip">Cation charge: —</div>
+      <div class="balance-chip anion" id="anionChip">Anion charge: —</div>
+      <div class="balance-status empty" id="balanceStatus">Add ions to begin</div>
+      <div class="actions">
+        <button class="btn ghost" id="resetBtn">Reset workspace</button>
+      </div>
+    </div>
+
+    <div class="builder">
+      <h3>Record this compound</h3>
+      <div class="builder-grid">
+        <div>
+          <span class="field-label">Chemical formula</span>
+          <div class="formula-toolbar">
+            <button class="tbtn" id="subToggle" type="button" title="Subscript">X<sub>2</sub></button>
+            <button class="tbtn" id="supToggle" type="button" title="Superscript">X<sup>2</sup></button>
+            <button class="tbtn" id="parenOpen" type="button">(</button>
+            <button class="tbtn" id="parenClose" type="button">)</button>
+          </div>
+          <div id="formulaInput" contenteditable="true" spellcheck="false"></div>
+        </div>
+        <div>
+          <span class="field-label">Compound type</span>
+          <div class="type-options">
+            <div class="type-option" data-type="1" id="typeOpt1">Type I</div>
+            <div class="type-option" data-type="2" id="typeOpt2">Type II</div>
+          </div>
+        </div>
+        <div>
+          <span class="field-label">Compound name</span>
+          <input type="text" id="nameInput" placeholder="e.g. aluminum chloride">
+        </div>
+      </div>
+
+      <div class="builder-actions">
+        <button class="btn primary" id="checkBtn" disabled>Check my work</button>
+        <button class="btn" id="addLogBtn" disabled>Add to compound log</button>
+        <span class="hint" id="builderHint">Balance the charges above to unlock checking.</span>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="log-wrap">
+      <h3>Compound Log <button class="btn ghost" id="clearLogBtn" style="font-size:.7rem;padding:4px 9px;">Clear log</button></h3>
+      <div id="logTableWrap">
+        <div class="log-empty" id="logEmpty">No compounds recorded yet — build one above and click "Add to compound log."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bank anions">
+    <h2>Anions (−)</h2>
+    <div class="bank-list" id="anionBank"></div>
+  </div>
+</main>
+
+<footer>Ionic, Covalent &amp; Acid Nomenclature · Study / Quiz + Free Builder Mode · intro chemistry digital toolkit</footer>
+
+<script>
+(function(){
+
+const CATIONS = [
+  {id:'Na', sym:'Na', charge:1, name:'Sodium', type:1},
+  {id:'K',  sym:'K',  charge:1, name:'Potassium', type:1},
+  {id:'Sn', sym:'Sn', charge:4, name:'Tin', type:2, roman:'IV'},
+  {id:'Li', sym:'Li', charge:1, name:'Lithium', type:1},
+  {id:'Al', sym:'Al', charge:3, name:'Aluminum', type:1},
+  {id:'Ca', sym:'Ca', charge:2, name:'Calcium', type:1},
+  {id:'Cr', sym:'Cr', charge:3, name:'Chromium', type:2, roman:'III'},
+  {id:'Mg', sym:'Mg', charge:2, name:'Magnesium', type:1},
+  {id:'Fe3',sym:'Fe', charge:3, name:'Iron', type:2, roman:'III'},
+  {id:'Fe2',sym:'Fe', charge:2, name:'Iron', type:2, roman:'II'},
+  {id:'Cu2',sym:'Cu', charge:2, name:'Copper', type:2, roman:'II'},
+  {id:'Cu1',sym:'Cu', charge:1, name:'Copper', type:2, roman:'I'},
+  {id:'Ni', sym:'Ni', charge:2, name:'Nickel', type:2, roman:'II'},
+  {id:'Ag', sym:'Ag', charge:1, name:'Silver', type:1},
+  {id:'Zn', sym:'Zn', charge:2, name:'Zinc', type:1},
+  {id:'Co', sym:'Co', charge:2, name:'Cobalt', type:2, roman:'II'},
+  {id:'Cs', sym:'Cs', charge:1, name:'Cesium', type:1},
+  {id:'Rb', sym:'Rb', charge:1, name:'Rubidium', type:1},
+  {id:'NH4',sym:'NH4',charge:1, name:'Ammonium', type:1, poly:true, greenSheet:true},
+  {id:'H3O',sym:'H3O',charge:1, name:'Hydronium', type:1, poly:true, greenSheet:true},
+  {id:'Hg2_1',sym:'Hg2',charge:2, name:'Mercury', type:2, roman:'I', poly:true, greenSheet:true},
+  {id:'Ba', sym:'Ba', charge:2, name:'Barium', type:1},
+];
+
+// Page 1 of the course Green Sheet gives the -ate oxyanions below, then
+// supplies rules for per-, -ite, hypo-, thio-, hydrogen-, and dihydrogen-
+// variants.  The quiz pool is generated from those rules so combinations
+// such as hydrogensulfite are available without hard-coding every entry.
+const BASE_OXYANIONS = [
+  {sym:'BO3',  charge:3, name:'borate'},
+  {sym:'CO3',  charge:2, name:'carbonate'},
+  {sym:'NO3',  charge:1, name:'nitrate'},
+  {sym:'SiO3', charge:2, name:'silicate'},
+  {sym:'PO4',  charge:3, name:'phosphate'},
+  {sym:'SO4',  charge:2, name:'sulfate'},
+  {sym:'ClO3', charge:1, name:'chlorate'},
+  {sym:'AsO4', charge:3, name:'arsenate'},
+  {sym:'SeO4', charge:2, name:'selenate'},
+  {sym:'BrO3', charge:1, name:'bromate'},
+  {sym:'TeO4', charge:2, name:'tellurate'},
+  {sym:'IO3',  charge:1, name:'iodate'},
+];
+
+const MONATOMIC_ANIONS = [
+  {id:'Br', sym:'Br', charge:1, name:'bromide'},
+  {id:'Cl', sym:'Cl', charge:1, name:'chloride'},
+  {id:'N',  sym:'N',  charge:3, name:'nitride'},
+  {id:'F',  sym:'F',  charge:1, name:'fluoride'},
+  {id:'I',  sym:'I',  charge:1, name:'iodide'},
+  {id:'O',  sym:'O',  charge:2, name:'oxide'},
+  {id:'S',  sym:'S',  charge:2, name:'sulfide'},
+];
+
+const GREEN_SHEET_COMMON_ANIONS = [
+  {id:'OH',      sym:'OH',      charge:1, name:'hydroxide',   poly:true, greenSheet:true},
+  {id:'CN',      sym:'CN',      charge:1, name:'cyanide',     poly:true, greenSheet:true},
+  {id:'O2_2',    sym:'O2',      charge:2, name:'peroxide',    poly:true, greenSheet:true},
+  {id:'MnO4',    sym:'MnO4',    charge:1, name:'permanganate',poly:true, greenSheet:true},
+  {id:'CrO4',    sym:'CrO4',    charge:2, name:'chromate',    poly:true, greenSheet:true},
+  {id:'Cr2O7',   sym:'Cr2O7',   charge:2, name:'dichromate',  poly:true, greenSheet:true},
+  {id:'C2O4',    sym:'C2O4',    charge:2, name:'oxalate',     poly:true, greenSheet:true},
+  {id:'C2H3O2',  sym:'C2H3O2',  charge:1, name:'acetate',     poly:true, greenSheet:true, altSyms:['CH3COO']},
+];
+
+function changeOxygenCount(sym, delta){
+  const m = sym.match(/^(.*)O(\d+)$/);
+  if(!m) return sym;
+  const n = Number(m[2]) + delta;
+  if(n < 1) return sym;
+  return m[1] + 'O' + (n === 1 ? '' : n);
+}
+
+function thioFormula(sym){
+  const m = sym.match(/^(.*)O(\d+)$/);
+  if(!m) return sym;
+  const prefix = m[1];
+  const oxygenCount = Number(m[2]);
+  const remainingO = oxygenCount - 1;
+  // Sulfate is the Green Sheet example: SO4 -> S2O3.
+  const sulfurPart = prefix === 'S' ? 'S2' : prefix + 'S';
+  return sulfurPart + (remainingO > 0 ? 'O' + (remainingO === 1 ? '' : remainingO) : '');
+}
+
+function addHydrogenVariants(form){
+  const out = [form];
+  const maxH = Math.min(2, form.charge - 1); // page 1 specifies hydrogen and dihydrogen
+  for(let h=1; h<=maxH; h++){
+    const hText = h === 1 ? 'H' : `H${h}`;
+    const namePrefix = h === 1 ? 'hydrogen' : 'dihydrogen';
+    out.push({
+      ...form,
+      id:`green:${namePrefix}${form.name}`,
+      sym:hText + form.sym,
+      charge:form.charge - h,
+      name:namePrefix + form.name,
+      poly:true,
+      greenSheet:true,
+      derived:true
+    });
+  }
+  return out;
+}
+
+function buildGreenSheetOxyanions(){
+  const ions = [];
+  const halogenAteNames = new Set(['chlorate','bromate','iodate']);
+
+  BASE_OXYANIONS.forEach(base=>{
+    const ate = {
+      id:`green:${base.name}`, sym:base.sym, charge:base.charge,
+      name:base.name, poly:true, greenSheet:true
+    };
+    const iteName = base.name.replace(/ate$/, 'ite');
+    const ite = {
+      id:`green:${iteName}`, sym:changeOxygenCount(base.sym,-1), charge:base.charge,
+      name:iteName, poly:true, greenSheet:true, derived:true
+    };
+
+    // Hydrogen/dihydrogen may combine with the normal -ate or the -ite form
+    // (for example hydrogen sulfate or hydrogen sulfite), but we do not stack
+    // a second prefix on top of per-, hypo-, or thio-.
+    ions.push(...addHydrogenVariants(ate));
+    ions.push(...addHydrogenVariants(ite));
+
+    // per-/hypo- families are kept to the familiar halogen oxyanion series.
+    if(halogenAteNames.has(base.name)){
+      ions.push({
+        id:`green:per${base.name}`, sym:changeOxygenCount(base.sym,1), charge:base.charge,
+        name:'per'+base.name, poly:true, greenSheet:true, derived:true
+      });
+      ions.push({
+        id:`green:hypo${iteName}`, sym:changeOxygenCount(base.sym,-2), charge:base.charge,
+        name:'hypo'+iteName, poly:true, greenSheet:true, derived:true
+      });
+    }
+
+    // The Green Sheet specifically gives thiosulfate as the thio- example.
+    if(base.name === 'sulfate'){
+      ions.push({
+        id:'green:thiosulfate', sym:thioFormula(base.sym), charge:base.charge,
+        name:'thiosulfate', poly:true, greenSheet:true, derived:true
+      });
+    }
+  });
+  return ions;
+}
+
+const ANIONS = [
+  ...MONATOMIC_ANIONS,
+  ...buildGreenSheetOxyanions(),
+  ...GREEN_SHEET_COMMON_ANIONS,
+];
+
+// ---------- Acid nomenclature pool ----------
+// Binary acids use hydro- + anion root + -ic acid. Oxyacids follow the
+// standard -ate -> -ic acid and -ite -> -ous acid pattern.
+const BINARY_ACIDS = [
+  {formula:'HF',  name:'hydrofluoric acid',  family:'binary'},
+  {formula:'HCl', name:'hydrochloric acid', family:'binary'},
+  {formula:'HBr', name:'hydrobromic acid',  family:'binary'},
+  {formula:'HI',  name:'hydroiodic acid',   family:'binary'},
+  {formula:'H2S', name:'hydrosulfuric acid',family:'binary'},
+];
+
+const ACID_STEMS = {
+  borate:    {ic:'boric',      ous:'borous'},
+  carbonate: {ic:'carbonic',   ous:'carbonous'},
+  nitrate:   {ic:'nitric',     ous:'nitrous'},
+  silicate:  {ic:'silicic',    ous:'silicous'},
+  phosphate: {ic:'phosphoric', ous:'phosphorous'},
+  sulfate:   {ic:'sulfuric',   ous:'sulfurous'},
+  chlorate:  {ic:'chloric',    ous:'chlorous'},
+  arsenate:  {ic:'arsenic',    ous:'arsenous'},
+  selenate:  {ic:'selenic',    ous:'selenous'},
+  bromate:   {ic:'bromic',     ous:'bromous'},
+  tellurate: {ic:'telluric',   ous:'tellurous'},
+  iodate:    {ic:'iodic',      ous:'iodous'},
+};
+
+function acidFormulaFromAnion(sym, charge){
+  return (charge === 1 ? 'H' : `H${charge}`) + sym;
+}
+
+function buildOxyacidPool(){
+  const acids = [];
+  const halogenAteNames = new Set(['chlorate','bromate','iodate']);
+
+  BASE_OXYANIONS.forEach(base=>{
+    const stem = ACID_STEMS[base.name];
+    if(!stem) return;
+
+    acids.push({
+      formula:acidFormulaFromAnion(base.sym, base.charge),
+      name:`${stem.ic} acid`, family:'oxyacid'
+    });
+
+    const iteSym = changeOxygenCount(base.sym,-1);
+    acids.push({
+      formula:acidFormulaFromAnion(iteSym, base.charge),
+      name:`${stem.ous} acid`, family:'oxyacid'
+    });
+
+    // Familiar halogen per-/hypo- oxyacid families; no hydrogen-prefix stacking.
+    if(halogenAteNames.has(base.name)){
+      acids.push({
+        formula:acidFormulaFromAnion(changeOxygenCount(base.sym,1), base.charge),
+        name:`per${stem.ic} acid`, family:'oxyacid'
+      });
+      acids.push({
+        formula:acidFormulaFromAnion(changeOxygenCount(base.sym,-2), base.charge),
+        name:`hypo${stem.ous} acid`, family:'oxyacid'
+      });
+    }
+  });
+
+  // A few common Green-Sheet oxyanions that also have standard acid names.
+  acids.push(
+    {formula:'HMnO4',  name:'permanganic acid', family:'oxyacid'},
+    {formula:'H2CrO4', name:'chromic acid',     family:'oxyacid'},
+    {formula:'H2Cr2O7',name:'dichromic acid',   family:'oxyacid'},
+    {formula:'H2S2O3', name:'thiosulfuric acid',family:'oxyacid'}
+  );
+
+  return acids;
+}
+
+const ACIDS = [...BINARY_ACIDS, ...buildOxyacidPool()];
+
+
+// ---------- Binary covalent nomenclature pool ----------
+// Prefixes run from mono- through deca-.  The first element never uses mono-
+// when its subscript is 1; the second element always uses a numerical prefix
+// and is converted to an -ide name.  The quiz intentionally includes both
+// familiar molecules and chemically fanciful combinations so students must
+// apply the naming rules rather than recognize memorized compounds.
+const COVALENT_PREFIXES = ['', 'mono', 'di', 'tri', 'tetra', 'penta', 'hexa', 'hepta', 'octa', 'nona', 'deca'];
+
+const COVALENT_ELEMENTS = [
+  {sym:'B',  name:'boron',     ide:'boride'},
+  {sym:'C',  name:'carbon',    ide:'carbide'},
+  {sym:'N',  name:'nitrogen',  ide:'nitride'},
+  {sym:'O',  name:'oxygen',    ide:'oxide'},
+  {sym:'F',  name:'fluorine',  ide:'fluoride'},
+  {sym:'Si', name:'silicon',   ide:'silicide'},
+  {sym:'P',  name:'phosphorus',ide:'phosphide'},
+  {sym:'S',  name:'sulfur',    ide:'sulfide'},
+  {sym:'Cl', name:'chlorine',  ide:'chloride'},
+  {sym:'Se', name:'selenium',  ide:'selenide'},
+  {sym:'Br', name:'bromine',   ide:'bromide'},
+  {sym:'I',  name:'iodine',    ide:'iodide'},
+];
+
+// Standard contraction of a numerical prefix before "oxide".
+const OXIDE_PREFIX_NAMES = {
+  1:'monoxide', 2:'dioxide', 3:'trioxide', 4:'tetroxide', 5:'pentoxide',
+  6:'hexoxide', 7:'heptoxide', 8:'octoxide', 9:'nonoxide', 10:'decoxide'
+};
+
+function covalentFormulaPart(sym, count){
+  return sym + (count === 1 ? '' : String(count));
+}
+
+function covalentFormula(first, second, firstCount, secondCount){
+  return covalentFormulaPart(first.sym, firstCount) + covalentFormulaPart(second.sym, secondCount);
+}
+
+function secondCovalentName(element, count){
+  if(element.sym === 'O') return OXIDE_PREFIX_NAMES[count];
+  return COVALENT_PREFIXES[count] + element.ide;
+}
+
+function covalentName(first, second, firstCount, secondCount){
+  const firstPrefix = firstCount === 1 ? '' : COVALENT_PREFIXES[firstCount];
+  return `${firstPrefix}${first.name} ${secondCovalentName(second, secondCount)}`;
+}
+
+// A few familiar examples are included deliberately, while the rest of the
+// quiz can generate "fake" but rule-valid names such as heptaiodine decafluoride.
+const COVALENT_EXAMPLES = [
+  {first:'C', second:'O', firstCount:1, secondCount:1},   // carbon monoxide
+  {first:'C', second:'O', firstCount:1, secondCount:2},   // carbon dioxide
+  {first:'N', second:'O', firstCount:2, secondCount:5},   // dinitrogen pentoxide
+  {first:'N', second:'O', firstCount:2, secondCount:4},   // dinitrogen tetroxide
+  {first:'P', second:'Cl',firstCount:1, secondCount:3},   // phosphorus trichloride
+  {first:'P', second:'Cl',firstCount:1, secondCount:5},   // phosphorus pentachloride
+  {first:'S', second:'F', firstCount:1, secondCount:6},   // sulfur hexafluoride
+  {first:'I', second:'F', firstCount:7, secondCount:10},  // heptaiodine decafluoride (rule-practice example)
+];
+
+function covalentElement(sym){ return COVALENT_ELEMENTS.find(e=>e.sym===sym); }
+
+function makeCovalentQuestion(direction){
+  let first, second, firstCount, secondCount;
+
+  // Roughly one-third of covalent questions come from recognizable/fixed examples;
+  // the rest are randomized to force use of the prefixes all the way to deca-.
+  if(Math.random() < .34){
+    const ex = randomItem(COVALENT_EXAMPLES);
+    first = covalentElement(ex.first);
+    second = covalentElement(ex.second);
+    firstCount = ex.firstCount;
+    secondCount = ex.secondCount;
+  } else {
+    first = randomItem(COVALENT_ELEMENTS);
+    do { second = randomItem(COVALENT_ELEMENTS); } while(second.sym === first.sym);
+
+    // Include 1 frequently enough to practice dropping mono- on the first element,
+    // while still giving substantial practice with the larger prefixes.
+    firstCount = Math.random() < .28 ? 1 : 2 + Math.floor(Math.random()*9);
+    secondCount = 1 + Math.floor(Math.random()*10);
+  }
+
+  const formula = covalentFormula(first, second, firstCount, secondCount);
+  const name = covalentName(first, second, firstCount, secondCount);
+  return {kind:'covalent', direction, first, second, firstCount, secondCount, formula, name};
+}
+
+const byId = (arr,id)=>arr.find(x=>x.id===id);
+const subScript = s => s.replace(/(\d+)/g, '<sub>$1</sub>');
+const chargeLabel = (n,isCation)=>{
+  const sign = isCation ? '+' : '\u2212';
+  return n===1 ? sign : `${n}${sign}`;
+};
+
+let state = {
+  cation: {id:null, count:0},
+  anion:  {id:null, count:0}
+};
+
+let appMode = 'quiz';
+let practiceMode = 'mixed';
+let quizQuestion = null;
+let quizStats = {correct:0, attempted:0, streak:0};
+let quizAnswered = false;
+let previousQuestionKey = null;
+
+
+// ---------- Build bank cards ----------
+const cationBankEl = document.getElementById('cationBank');
+const anionBankEl = document.getElementById('anionBank');
+
+function buildBank(list, container, isCation){
+  list.forEach(ion=>{
+    const card = document.createElement('div');
+    card.className = 'ion-card';
+    card.innerHTML = `<span class="sym mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span>`;
+    makeDraggable(card, ion, isCation);
+    container.appendChild(card);
+  });
+}
+buildBank(CATIONS, cationBankEl, true);
+buildBank(ANIONS, anionBankEl, false);
+
+// ---------- Drag / tap handling ----------
+const cationZoneEl = document.getElementById('cationZone');
+const anionZoneEl = document.getElementById('anionZone');
+
+function makeDraggable(el, ion, isCation){
+  el.addEventListener('pointerdown', (e)=>{
+    if(e.button !== undefined && e.button !== 0) return;
+    const startX = e.clientX, startY = e.clientY;
+    let dragging = false, ghost = null;
+
+    function onMove(ev){
+      const dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if(!dragging && Math.hypot(dx,dy) > 6){
+        dragging = true;
+        ghost = el.cloneNode(true);
+        ghost.classList.add('ghost');
+        ghost.style.width = el.offsetWidth+'px';
+        document.body.appendChild(ghost);
+      }
+      if(dragging){
+        ghost.style.left = (ev.clientX - ghost.offsetWidth/2) + 'px';
+        ghost.style.top = (ev.clientY - ghost.offsetHeight/2) + 'px';
+        const zone = isCation ? cationZoneEl : anionZoneEl;
+        const over = document.elementFromPoint(ev.clientX, ev.clientY);
+        zone.classList.toggle('drag-over', !!(over && zone.contains(over)));
+      }
+    }
+    function onUp(ev){
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointercancel', onCancel);
+      cationZoneEl.classList.remove('drag-over');
+      anionZoneEl.classList.remove('drag-over');
+      if(dragging){
+        ghost.remove();
+        const zone = isCation ? cationZoneEl : anionZoneEl;
+        const over = document.elementFromPoint(ev.clientX, ev.clientY);
+        if(over && zone.contains(over)) addIonToZone(ion, isCation);
+      } else {
+        addIonToZone(ion, isCation);
+      }
+    }
+    function onCancel(){
+      // The browser took over the gesture as a native scroll (touch-action: pan-x on
+      // the horizontal ion strip) -- clean up quietly. This is NOT a tap or a drop,
+      // so the ion must not be added.
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      cationZoneEl.classList.remove('drag-over');
+      anionZoneEl.classList.remove('drag-over');
+      if(dragging && ghost) ghost.remove();
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp, {once:true});
+    window.addEventListener('pointercancel', onCancel, {once:true});
+  });
+}
+
+function addIonToZone(ion, isCation){
+  const key = isCation ? 'cation' : 'anion';
+  const cur = state[key];
+  if(cur.id && cur.id !== ion.id){
+    cur.id = ion.id;
+    cur.count = 1;
+  } else {
+    cur.id = ion.id;
+    cur.count += 1;
+  }
+  renderZones();
+}
+
+function removeOneFromZone(isCation){
+  const key = isCation ? 'cation' : 'anion';
+  const cur = state[key];
+  cur.count = Math.max(0, cur.count - 1);
+  if(cur.count === 0) cur.id = null;
+  renderZones();
+}
+
+function renderZones(){
+  renderZone(state.cation, true, 'cationUnits', 'cationEmpty', 'cationCountLabel');
+  renderZone(state.anion, false, 'anionUnits', 'anionEmpty', 'anionCountLabel');
+  updateBalance();
+  if(appMode === 'free') clearBuilderInputs(); // free-builder edits invalidate the recorded formula/type/name
+}
+
+// ---------- Jigsaw piece geometry ----------
+// Each piece's height is proportional to its ion's charge magnitude
+// (one "unit" of height per charge). Cation pieces grow teeth outward
+// on their right edge, anion pieces cut matching notches into their
+// left edge, one tooth per unit, so the wave phase stays continuous
+// no matter how many pieces are stacked. When the two stacks reach
+// equal total height (i.e. the charges balance), the teeth and
+// notches line up perfectly and the two columns read as one seamless
+// rectangle -- exactly the visual the worksheet's paper pieces give.
+const UNIT = 38;   // px of height per 1 unit of charge
+const BUMP = 9;    // px the teeth protrude / notches cut inward
+const PIECE_W = 90; // px, core visual width of a piece (wide enough for longest polyatomic symbols)
+
+function toothPath(edge, teeth){
+  const h = teeth * UNIT;
+  const step = UNIT;
+  const px = n => `${n}px`;
+  let pts = [];
+  if(edge === 'right'){
+    pts.push(`0 0`, `${px(PIECE_W)} 0`);
+    for(let i=0;i<teeth;i++){
+      const yMid = i*step + step/2;
+      const yEnd = (i+1)*step;
+      pts.push(`${px(PIECE_W+BUMP)} ${px(yMid)}`, `${px(PIECE_W)} ${px(yEnd)}`);
+    }
+    pts.push(`0 ${px(h)}`);
+  } else {
+    pts.push(`${px(PIECE_W)} 0`, `0 0`);
+    for(let i=0;i<teeth;i++){
+      const yMid = i*step + step/2;
+      const yEnd = (i+1)*step;
+      pts.push(`${px(BUMP)} ${px(yMid)}`, `0 ${px(yEnd)}`);
+    }
+    pts.push(`${px(PIECE_W)} ${px(h)}`);
+  }
+  return `polygon(${pts.join(',')})`;
+}
+
+function renderZone(zoneState, isCation, unitsId, emptyId, countId){
+  const unitsEl = document.getElementById(unitsId);
+  const emptyEl = document.getElementById(emptyId);
+  const countEl = document.getElementById(countId);
+  const zoneEl = unitsEl.closest('.zone');
+  unitsEl.innerHTML = '';
+  if(!zoneState.id || zoneState.count === 0){
+    emptyEl.style.display = '';
+    countEl.textContent = '';
+    zoneEl.classList.remove('has-content');
+    return;
+  }
+  emptyEl.style.display = 'none';
+  zoneEl.classList.add('has-content');
+  const ion = byId(isCation ? CATIONS : ANIONS, zoneState.id);
+  const teeth = ion.charge; // one tooth per unit of charge magnitude
+  const h = teeth * UNIT;
+  const edge = isCation ? 'right' : 'left';
+  const boxW = isCation ? PIECE_W + BUMP : PIECE_W;
+  const clip = toothPath(edge, teeth);
+
+  for(let i=0;i<zoneState.count;i++){
+    const u = document.createElement('div');
+    u.className = 'piece ' + (isCation ? 'cation' : 'anion');
+    u.style.width = boxW + 'px';
+    u.style.height = h + 'px';
+    u.style.clipPath = clip;
+    u.style.webkitClipPath = clip;
+    u.innerHTML = `<span class="sym mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span><span class="rm">\u00d7</span>`;
+    u.addEventListener('click', ()=>removeOneFromZone(isCation));
+    unitsEl.appendChild(u);
+  }
+  countEl.innerHTML = `${zoneState.count} \u00d7 <span class="mono">${subScript(ion.sym)}<sup>${chargeLabel(ion.charge,isCation)}</sup></span>`;
+}
+
+// ---------- Balance tracking ----------
+const cationChip = document.getElementById('cationChip');
+const anionChip = document.getElementById('anionChip');
+const balanceStatus = document.getElementById('balanceStatus');
+const workspaceEl = document.getElementById('workspace');
+const checkBtn = document.getElementById('checkBtn');
+const addLogBtn = document.getElementById('addLogBtn');
+const builderHint = document.getElementById('builderHint');
+
+let isBalanced = false;
+
+function updateBalance(){
+  const cIon = state.cation.id ? byId(CATIONS, state.cation.id) : null;
+  const aIon = state.anion.id ? byId(ANIONS, state.anion.id) : null;
+  const cTotal = cIon ? cIon.charge * state.cation.count : 0;
+  const aTotal = aIon ? aIon.charge * state.anion.count : 0;
+
+  cationChip.textContent = cIon ? `Cation charge: +${cTotal}` : 'Cation charge: \u2014';
+  anionChip.textContent = aIon ? `Anion charge: \u2212${aTotal}` : 'Anion charge: \u2014';
+
+  if(!cIon || !aIon){
+    balanceStatus.textContent = 'Add ions to begin';
+    balanceStatus.className = 'balance-status empty';
+    isBalanced = false;
+  } else if(cTotal === aTotal){
+    balanceStatus.textContent = '\u2713 Balanced \u2014 neutral compound!';
+    balanceStatus.className = 'balance-status ok';
+    isBalanced = true;
+  } else {
+    balanceStatus.textContent = `Not balanced (${cTotal > aTotal ? 'too much +' : 'too much \u2212'})`;
+    balanceStatus.className = 'balance-status no';
+    isBalanced = false;
+  }
+  workspaceEl.classList.toggle('balanced', isBalanced);
+  if(appMode === 'free'){
+    checkBtn.disabled = !isBalanced;
+    addLogBtn.disabled = !isBalanced;
+    builderHint.textContent = isBalanced
+      ? 'Fill in the formula, type, and name, then check your work.'
+      : 'Balance the charges above to unlock checking.';
+  }
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  state = {cation:{id:null,count:0}, anion:{id:null,count:0}};
+  renderZones();
+  clearBuilderInputs();
+});
+
+// Places a range at the current cursor position inside formulaInput, falling
+// back to the end of its contents if there's no valid selection there yet
+// (e.g. right after a fresh page load or a toolbar-button click that stole
+// focus away from any prior caret position).
+function getEditableRange(){
+  const sel = window.getSelection();
+  if(sel && sel.rangeCount > 0){
+    const r = sel.getRangeAt(0);
+    if(formulaInput.contains(r.commonAncestorContainer)) return {sel, range:r};
+  }
+  const range = document.createRange();
+  range.selectNodeContents(formulaInput);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  return {sel, range};
+}
+
+// Inserts a DOM node at the current cursor position and leaves the cursor
+// immediately after it (or after cursorAfterNode, if given -- needed when
+// node is a DocumentFragment, since a fragment goes empty/detached once its
+// children are moved into the document, so positioning a range relative to
+// the fragment itself afterward would fail). Uses the standard Range/
+// Selection APIs directly rather than the deprecated (and, on Android
+// Chrome, unreliable) document.execCommand -- this is what actually fixes
+// subscript/superscript insertion on mobile.
+function insertNodeAtCursor(node, cursorAfterNode){
+  formulaInput.focus();
+  const {sel, range} = getEditableRange();
+  range.deleteContents();
+  range.insertNode(node);
+  const after = document.createRange();
+  after.setStartAfter(cursorAfterNode || node);
+  after.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(after);
+}
+
+// Looks at the text node right before the cursor and, if it ends in one or
+// more digits and sub/sup mode is on, moves those trailing digits into a
+// <sub>/<sup> element. This runs AFTER text has already landed in the DOM
+// (via 'input' or 'compositionend') rather than trying to intercept the
+// keystroke beforehand -- see the note below on why that's necessary.
+function wrapTrailingDigits(){
+  if(!(subMode || supMode)) return;
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+  if(!range.collapsed || !formulaInput.contains(range.startContainer)) return;
+  const node = range.startContainer;
+  if(node.nodeType !== Node.TEXT_NODE) return;
+
+  const text = node.textContent;
+  const offset = range.startOffset;
+  let start = offset;
+  while(start > 0 && /[0-9]/.test(text[start-1])) start--;
+  if(start === offset) return; // no digits sitting right before the caret
+
+  const before = text.slice(0, start);
+  const digits = text.slice(start, offset);
+  const after = text.slice(offset);
+
+  const tag = subMode ? 'sub' : 'sup';
+  const el = document.createElement(tag);
+  el.textContent = digits;
+  const zwsp = document.createTextNode('\u200B' + after);
+
+  const frag = document.createDocumentFragment();
+  if(before) frag.appendChild(document.createTextNode(before));
+  frag.appendChild(el);
+  frag.appendChild(zwsp);
+  node.parentNode.replaceChild(frag, node);
+
+  const newRange = document.createRange();
+  newRange.setStart(zwsp, 1); // right after the zero-width space, before any trailing text
+  newRange.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(newRange);
+}
+
+// ---------- Formula input (contenteditable with subscript/superscript toggle) ----------
+const formulaInput = document.getElementById('formulaInput');
+const subToggle = document.getElementById('subToggle');
+const supToggle = document.getElementById('supToggle');
+let subMode = false;
+let supMode = false;
+
+subToggle.addEventListener('click', ()=>{
+  subMode = !subMode;
+  if(subMode) supMode = false;
+  subToggle.classList.toggle('active', subMode);
+  supToggle.classList.toggle('active', supMode);
+  formulaInput.focus();
+});
+
+supToggle.addEventListener('click', ()=>{
+  supMode = !supMode;
+  if(supMode) subMode = false;
+  supToggle.classList.toggle('active', supMode);
+  subToggle.classList.toggle('active', subMode);
+  formulaInput.focus();
+});
+
+// Android/Gboard buffers letters and digits together into a single IME
+// "word" for its prediction engine, only committing them once it hits a
+// word-boundary character like '(' or a space. While that composition is
+// in progress, 'beforeinput' reports inputType 'insertCompositionText' (not
+// 'insertText'), and the digit isn't even in the DOM yet -- so intercepting
+// the keystroke beforehand (the previous approach) can never catch a digit
+// typed right after letters, only one typed after a boundary character like
+// '(' reset the composition. The reliable fix is to not fight the IME at
+// all: let every keystroke land normally, then clean up right afterward.
+// 'input' fires for ordinary (non-composing) typing; 'compositionend' fires
+// once a buffered IME word is actually committed to the DOM.
+formulaInput.addEventListener('input', (e)=>{
+  if(e.isComposing) return; // still mid-composition -- wait for compositionend
+  wrapTrailingDigits();
+});
+formulaInput.addEventListener('compositionend', wrapTrailingDigits);
+
+document.getElementById('parenOpen').addEventListener('click', ()=>{
+  insertNodeAtCursor(document.createTextNode('('));
+});
+document.getElementById('parenClose').addEventListener('click', ()=>{
+  insertNodeAtCursor(document.createTextNode(')'));
+});
+
+
+// ---------- Type selector ----------
+const typeOpt1 = document.getElementById('typeOpt1');
+const typeOpt2 = document.getElementById('typeOpt2');
+let selectedType = null;
+[typeOpt1, typeOpt2].forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    selectedType = opt.dataset.type;
+    typeOpt1.classList.toggle('selected', selectedType==='1');
+    typeOpt2.classList.toggle('selected', selectedType==='2');
+  });
+});
+
+const nameInput = document.getElementById('nameInput');
+
+function clearBuilderInputs(){
+  formulaInput.innerHTML = '';
+  nameInput.value = '';
+  selectedType = null;
+  typeOpt1.classList.remove('selected');
+  typeOpt2.classList.remove('selected');
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('feedback').innerHTML = '';
+}
+
+// ---------- Chemistry helpers ----------
+function gcd(a,b){ return b ? gcd(b, a % b) : a; }
+
+function correctCounts(cIon, aIon){
+  const g = gcd(cIon.charge, aIon.charge);
+  return { cCount: aIon.charge / g, aCount: cIon.charge / g };
+}
+
+function plainFormulaPart(ion, count, symOverride){
+  let base = symOverride || ion.sym;
+  if(count > 1 && ion.poly) base = `(${base})`;
+  if(count > 1) base += count;
+  return base;
+}
+
+function correctFormulaPlain(cIon, aIon, counts){
+  return plainFormulaPart(cIon, counts.cCount) + plainFormulaPart(aIon, counts.aCount);
+}
+
+function correctFormulaVariantsPlain(cIon, aIon, counts){
+  const cSyms = [cIon.sym, ...(cIon.altSyms || [])];
+  const aSyms = [aIon.sym, ...(aIon.altSyms || [])];
+  const variants = [];
+  cSyms.forEach(cs=>aSyms.forEach(as=>{
+    variants.push(plainFormulaPart(cIon, counts.cCount, cs) + plainFormulaPart(aIon, counts.aCount, as));
+  }));
+  return [...new Set(variants)];
+}
+
+function correctName(cIon, aIon){
+  let cname = cIon.name.toLowerCase();
+  if(cIon.type === 2) cname += ` (${cIon.roman})`;
+  return `${cname} ${aIon.name}`;
+}
+
+// For (di)hydrogen-containing polyatomic anions, students commonly see the
+// name written as one fused word (e.g. "dihydrogenphosphate") as well as two
+// words ("dihydrogen phosphate"). Both are accepted as correct.
+function nameMatchesCorrect(userValue, cIon, aIon){
+  const correct = correctName(cIon, aIon);
+  const variants = [correct];
+
+  // The Green Sheet writes hydrogenphosphate / dihydrogenphosphate as a
+  // single prefixed word. Accept the common spaced version too.
+  if(/^dihydrogen/.test(aIon.name)){
+    const spaced = aIon.name.replace(/^dihydrogen/, 'dihydrogen ');
+    variants.push(correctName(cIon, {...aIon, name:spaced}));
+  } else if(/^hydrogen/.test(aIon.name)){
+    const spaced = aIon.name.replace(/^hydrogen/, 'hydrogen ');
+    variants.push(correctName(cIon, {...aIon, name:spaced}));
+  }
+
+  const userNorm = normalize(userValue);
+  return variants.some(v => normalize(v) === userNorm);
+}
+
+function normalize(s){
+  return s
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+\(/g, '(');   // "chromium (III)" and "chromium(III)" should both be accepted
+}
+
+function normalizeFormulaAnswer(s){
+  const subDigits = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+  return String(s || '')
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, d=>subDigits[d])
+    .replace(/\s+/g,'')
+    .trim();
+}
+
+// Reads the visible text out of the formula box, ignoring the <sub> tags
+// themselves (textContent already does this) and stripping the invisible
+// zero-width-space marker characters used to keep the caret from getting
+// stuck right after an inserted <sub>.
+function getFormulaPlainText(){
+  return formulaInput.textContent
+    .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+    .trim();
+}
+
+// ---------- Check my work ----------
+checkBtn.addEventListener('click', ()=>{
+  const cIon = byId(CATIONS, state.cation.id);
+  const aIon = byId(ANIONS, state.anion.id);
+  const counts = correctCounts(cIon, aIon);
+
+  const userFormulaText = getFormulaPlainText();
+  const correctFormula = correctFormulaPlain(cIon, aIon, counts);
+  const correctFormulaVariants = correctFormulaVariantsPlain(cIon, aIon, counts);
+  const formulaOK = correctFormulaVariants.includes(userFormulaText);
+  const needsSub = /\d/.test(userFormulaText || correctFormula); // does the submitted/correct formula contain any digits?
+  const usedSub = /<sub>/i.test(formulaInput.innerHTML);
+  const formulaFullyCorrect = formulaOK && (!needsSub || usedSub);
+
+  const typeOK = selectedType === String(cIon.type);
+  const cName = correctName(cIon, aIon);
+  const nameOK = nameMatchesCorrect(nameInput.value, cIon, aIon);
+
+  const fb = document.getElementById('feedback');
+  fb.classList.add('show');
+  fb.innerHTML = `
+    <div class="fb-row ${formulaFullyCorrect ? 'ok':'bad'}">
+      Formula: ${formulaOK ? (formulaFullyCorrect ? '\u2713 Correct!' : '\u2713 Correct \u2014 but remember to format your subscript numbers with the "sub" button.') : `\u2717 Not quite. Correct formula: <span class="mono">${subScript(correctFormula)}</span>`}
+    </div>
+    <div class="fb-row ${typeOK ? 'ok':'bad'}">
+      Type: ${typeOK ? '\u2713 Correct!' : `\u2717 This is actually Type ${cIon.type} (${cIon.type===2 ? 'the metal has more than one possible charge, so it needs a Roman numeral' : 'this metal only forms one possible charge'}).`}
+    </div>
+    <div class="fb-row ${nameOK ? 'ok':'bad'}">
+      Name: ${nameOK ? '\u2713 Correct!' : `\u2717 Not quite. Correct name: <em>${cName}</em>`}
+    </div>
+  `;
+});
+
+// ---------- Add to log ----------
+const logs = [];
+const logEmpty = document.getElementById('logEmpty');
+const logTableWrap = document.getElementById('logTableWrap');
+
+addLogBtn.addEventListener('click', ()=>{
+  const cIon = byId(CATIONS, state.cation.id);
+  const aIon = byId(ANIONS, state.anion.id);
+  const counts = correctCounts(cIon, aIon);
+  const correct = correctFormulaPlain(cIon, aIon, counts);
+  const correctVariants = correctFormulaVariantsPlain(cIon, aIon, counts);
+
+  const userFormulaHTML = formulaInput.innerHTML.trim() || `<span class="mono">${subScript(correct)}</span>`;
+  const userFormulaText = getFormulaPlainText();
+  const userName = nameInput.value.trim() || correctName(cIon, aIon);
+
+  const isRight = correctVariants.includes(userFormulaText) && selectedType === String(cIon.type) &&
+    nameMatchesCorrect(userName, cIon, aIon);
+
+  logs.push({
+    cationName: cIon.name, cCount: state.cation.count,
+    anionName: aIon.name, aCount: state.anion.count,
+    formulaHTML: userFormulaHTML, name: userName,
+    type: selectedType ? `Type ${selectedType}` : '\u2014',
+    correct: isRight
+  });
+  renderLog();
+  state = {cation:{id:null,count:0}, anion:{id:null,count:0}};
+  renderZones();
+  clearBuilderInputs();
+});
+
+document.getElementById('clearLogBtn').addEventListener('click', ()=>{
+  logs.length = 0;
+  renderLog();
+});
+
+function renderLog(){
+  if(logs.length === 0){
+    logTableWrap.innerHTML = '';
+    logTableWrap.appendChild(logEmpty);
+    return;
+  }
+  let html = `<table><thead><tr>
+    <th>Cation</th><th>#</th><th>Anion</th><th>#</th><th>Formula</th><th>Name</th><th>Type</th><th></th>
+  </tr></thead><tbody>`;
+  logs.forEach((row, i)=>{
+    html += `<tr class="${row.correct ? 'correct':'incorrect'}">
+      <td>${row.cationName}</td><td>${row.cCount}</td>
+      <td>${row.anionName}</td><td>${row.aCount}</td>
+      <td class="formula">${row.formulaHTML}</td>
+      <td>${row.name}</td><td>${row.type}</td>
+      <td><button class="del-row" data-i="${i}">\u2715</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  logTableWrap.innerHTML = html;
+  logTableWrap.querySelectorAll('.del-row').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      logs.splice(Number(btn.dataset.i), 1);
+      renderLog();
+    });
+  });
+}
+
+
+// ---------- Mode switching + Study / Quiz engine ----------
+const freeModeBtn = document.getElementById('freeModeBtn');
+const quizModeBtn = document.getElementById('quizModeBtn');
+const quizNameArea = document.getElementById('quizNameArea');
+const quizFormulaArea = document.getElementById('quizFormulaArea');
+const quizBuildArea = document.getElementById('quizBuildArea');
+const quizNameInput = document.getElementById('quizNameInput');
+const quizFormulaInput = document.getElementById('quizFormulaInput');
+const namePeriodicReference = document.getElementById('namePeriodicReference');
+const periodicReference = document.getElementById('periodicReference');
+const quizSubToggle = document.getElementById('quizSubToggle');
+const questionKicker = document.getElementById('questionKicker');
+const questionPrompt = document.getElementById('questionPrompt');
+const questionTarget = document.getElementById('questionTarget');
+const quizFeedback = document.getElementById('quizFeedback');
+const quizHint = document.getElementById('quizHint');
+const scoreChip = document.getElementById('scoreChip');
+const streakChip = document.getElementById('streakChip');
+
+// ---------- Quiz formula math editor ----------
+// Subscript mode is on by default for formula-answer questions. Letters stay
+// on the baseline; digits typed while this mode is on are converted into
+// semantic <sub> elements so formulas display like H₂SO₄ while the checker
+// can still read the plain text as H2SO4.
+let quizSubMode = true;
+
+function setQuizSubMode(on){
+  quizSubMode = !!on;
+  quizSubToggle.classList.toggle('active', quizSubMode);
+  quizSubToggle.setAttribute('aria-pressed', String(quizSubMode));
+  quizSubToggle.title = quizSubMode
+    ? 'Automatic subscript formatting is ON'
+    : 'Automatic subscript formatting is OFF';
+}
+
+function getQuizFormulaRange(){
+  const sel = window.getSelection();
+  if(sel && sel.rangeCount > 0){
+    const r = sel.getRangeAt(0);
+    if(quizFormulaInput.contains(r.commonAncestorContainer)) return {sel, range:r};
+  }
+  const range = document.createRange();
+  range.selectNodeContents(quizFormulaInput);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  return {sel, range};
+}
+
+function insertQuizNodeAtCursor(node, cursorAfterNode){
+  quizFormulaInput.focus();
+  const {sel, range} = getQuizFormulaRange();
+  range.deleteContents();
+  range.insertNode(node);
+  const after = document.createRange();
+  after.setStartAfter(cursorAfterNode || node);
+  after.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(after);
+}
+
+function wrapQuizTrailingDigits(){
+  if(!quizSubMode) return;
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0) return;
+  const range = sel.getRangeAt(0);
+  if(!range.collapsed || !quizFormulaInput.contains(range.startContainer)) return;
+  const node = range.startContainer;
+  if(node.nodeType !== Node.TEXT_NODE) return;
+
+  const text = node.textContent;
+  const offset = range.startOffset;
+  let start = offset;
+  while(start > 0 && /[0-9]/.test(text[start-1])) start--;
+  if(start === offset) return;
+
+  const before = text.slice(0, start);
+  const digits = text.slice(start, offset);
+  const afterText = text.slice(offset);
+  const sub = document.createElement('sub');
+  sub.textContent = digits;
+  const zwsp = document.createTextNode('\u200B' + afterText);
+
+  const frag = document.createDocumentFragment();
+  if(before) frag.appendChild(document.createTextNode(before));
+  frag.appendChild(sub);
+  frag.appendChild(zwsp);
+  node.parentNode.replaceChild(frag, node);
+
+  const newRange = document.createRange();
+  newRange.setStart(zwsp, 1);
+  newRange.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(newRange);
+}
+
+// Paste plain formulas cleanly. When subscript mode is ON, every digit in the
+// pasted text is rendered as a subscript instead of only the final digit.
+function insertQuizFormulaText(text){
+  const subDigits = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+  text = String(text || '')
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, d=>subDigits[d])
+    .replace(/[\r\n\t]/g,'')
+    .replace(/\s+/g,'');
+
+  quizFormulaInput.focus();
+  const {sel, range} = getQuizFormulaRange();
+  range.deleteContents();
+  const frag = document.createDocumentFragment();
+  const parts = text.split(/(\d+)/).filter(Boolean);
+  parts.forEach(part=>{
+    if(quizSubMode && /^\d+$/.test(part)){
+      const sub = document.createElement('sub');
+      sub.textContent = part;
+      frag.appendChild(sub);
+    } else {
+      frag.appendChild(document.createTextNode(part));
+    }
+  });
+  const cursor = document.createTextNode('\u200B');
+  frag.appendChild(cursor);
+  range.insertNode(frag);
+  const after = document.createRange();
+  after.setStart(cursor, 1);
+  after.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(after);
+}
+
+function getQuizFormulaPlainText(){
+  return quizFormulaInput.textContent
+    .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+    .replace(/\s+/g,'')
+    .trim();
+}
+
+quizSubToggle.addEventListener('click', ()=>{
+  setQuizSubMode(!quizSubMode);
+  quizFormulaInput.focus();
+});
+quizFormulaInput.addEventListener('input', e=>{
+  if(e.isComposing) return;
+  wrapQuizTrailingDigits();
+});
+quizFormulaInput.addEventListener('compositionend', wrapQuizTrailingDigits);
+quizFormulaInput.addEventListener('paste', e=>{
+  e.preventDefault();
+  insertQuizFormulaText((e.clipboardData || window.clipboardData).getData('text'));
+});
+quizFormulaInput.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    checkQuizAnswer();
+  }
+});
+document.getElementById('quizParenOpen').addEventListener('click', ()=>{
+  insertQuizNodeAtCursor(document.createTextNode('('));
+});
+document.getElementById('quizParenClose').addEventListener('click', ()=>{
+  insertQuizNodeAtCursor(document.createTextNode(')'));
+});
+document.getElementById('quizFormulaClear').addEventListener('click', ()=>{
+  quizFormulaInput.innerHTML = '';
+  quizFormulaInput.focus();
+});
+setQuizSubMode(true);
+
+// ---------- Clickable periodic-table reference ----------
+// The main grid follows the standard 18-column layout. Lanthanides and
+// actinides are shown in two separate rows underneath to keep the table compact.
+const PERIODIC_MAIN = [
+  [
+    [1,'H','Hydrogen','nonmetal'],null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[2,'He','Helium','noble']
+  ],
+  [
+    [3,'Li','Lithium','alkali'],[4,'Be','Beryllium','alkaline'],null,null,null,null,null,null,null,null,null,null,[5,'B','Boron','metalloid'],[6,'C','Carbon','nonmetal'],[7,'N','Nitrogen','nonmetal'],[8,'O','Oxygen','nonmetal'],[9,'F','Fluorine','halogen'],[10,'Ne','Neon','noble']
+  ],
+  [
+    [11,'Na','Sodium','alkali'],[12,'Mg','Magnesium','alkaline'],null,null,null,null,null,null,null,null,null,null,[13,'Al','Aluminum','post'],[14,'Si','Silicon','metalloid'],[15,'P','Phosphorus','nonmetal'],[16,'S','Sulfur','nonmetal'],[17,'Cl','Chlorine','halogen'],[18,'Ar','Argon','noble']
+  ],
+  [
+    [19,'K','Potassium','alkali'],[20,'Ca','Calcium','alkaline'],[21,'Sc','Scandium','transition'],[22,'Ti','Titanium','transition'],[23,'V','Vanadium','transition'],[24,'Cr','Chromium','transition'],[25,'Mn','Manganese','transition'],[26,'Fe','Iron','transition'],[27,'Co','Cobalt','transition'],[28,'Ni','Nickel','transition'],[29,'Cu','Copper','transition'],[30,'Zn','Zinc','transition'],[31,'Ga','Gallium','post'],[32,'Ge','Germanium','metalloid'],[33,'As','Arsenic','metalloid'],[34,'Se','Selenium','nonmetal'],[35,'Br','Bromine','halogen'],[36,'Kr','Krypton','noble']
+  ],
+  [
+    [37,'Rb','Rubidium','alkali'],[38,'Sr','Strontium','alkaline'],[39,'Y','Yttrium','transition'],[40,'Zr','Zirconium','transition'],[41,'Nb','Niobium','transition'],[42,'Mo','Molybdenum','transition'],[43,'Tc','Technetium','transition'],[44,'Ru','Ruthenium','transition'],[45,'Rh','Rhodium','transition'],[46,'Pd','Palladium','transition'],[47,'Ag','Silver','transition'],[48,'Cd','Cadmium','transition'],[49,'In','Indium','post'],[50,'Sn','Tin','post'],[51,'Sb','Antimony','metalloid'],[52,'Te','Tellurium','metalloid'],[53,'I','Iodine','halogen'],[54,'Xe','Xenon','noble']
+  ],
+  [
+    [55,'Cs','Cesium','alkali'],[56,'Ba','Barium','alkaline'],['57–71','Ln','Lanthanides','lanthanide'],[72,'Hf','Hafnium','transition'],[73,'Ta','Tantalum','transition'],[74,'W','Tungsten','transition'],[75,'Re','Rhenium','transition'],[76,'Os','Osmium','transition'],[77,'Ir','Iridium','transition'],[78,'Pt','Platinum','transition'],[79,'Au','Gold','transition'],[80,'Hg','Mercury','transition'],[81,'Tl','Thallium','post'],[82,'Pb','Lead','post'],[83,'Bi','Bismuth','post'],[84,'Po','Polonium','post'],[85,'At','Astatine','halogen'],[86,'Rn','Radon','noble']
+  ],
+  [
+    [87,'Fr','Francium','alkali'],[88,'Ra','Radium','alkaline'],['89–103','An','Actinides','actinide'],[104,'Rf','Rutherfordium','transition'],[105,'Db','Dubnium','transition'],[106,'Sg','Seaborgium','transition'],[107,'Bh','Bohrium','transition'],[108,'Hs','Hassium','transition'],[109,'Mt','Meitnerium','transition'],[110,'Ds','Darmstadtium','transition'],[111,'Rg','Roentgenium','transition'],[112,'Cn','Copernicium','transition'],[113,'Nh','Nihonium','post'],[114,'Fl','Flerovium','post'],[115,'Mc','Moscovium','post'],[116,'Lv','Livermorium','post'],[117,'Ts','Tennessine','halogen'],[118,'Og','Oganesson','noble']
+  ]
+];
+
+const LANTHANIDES = [
+  [57,'La','Lanthanum'],[58,'Ce','Cerium'],[59,'Pr','Praseodymium'],[60,'Nd','Neodymium'],[61,'Pm','Promethium'],[62,'Sm','Samarium'],[63,'Eu','Europium'],[64,'Gd','Gadolinium'],[65,'Tb','Terbium'],[66,'Dy','Dysprosium'],[67,'Ho','Holmium'],[68,'Er','Erbium'],[69,'Tm','Thulium'],[70,'Yb','Ytterbium'],[71,'Lu','Lutetium']
+];
+const ACTINIDES = [
+  [89,'Ac','Actinium'],[90,'Th','Thorium'],[91,'Pa','Protactinium'],[92,'U','Uranium'],[93,'Np','Neptunium'],[94,'Pu','Plutonium'],[95,'Am','Americium'],[96,'Cm','Curium'],[97,'Bk','Berkelium'],[98,'Cf','Californium'],[99,'Es','Einsteinium'],[100,'Fm','Fermium'],[101,'Md','Mendelevium'],[102,'No','Nobelium'],[103,'Lr','Lawrencium']
+];
+
+function makePeriodicCell(data, categoryOverride, insertable=true){
+  if(!data) return document.createElement('span');
+  const [num,symbol,name,category] = data;
+  const isRangeLabel = String(num).includes('–');
+  const cell = document.createElement(insertable && !isRangeLabel ? 'button' : 'div');
+
+  if(cell.tagName === 'BUTTON') cell.type = 'button';
+  cell.className = `pt-cell pt-${categoryOverride || category || 'transition'}`;
+  cell.setAttribute('aria-label', `${name}, symbol ${symbol}`);
+  cell.innerHTML = `<span class="pt-num">${num}</span><span class="pt-symbol">${symbol}</span><span class="pt-name">${name}</span>`;
+
+  // Only the table under formula-entry questions inserts symbols.
+  // Formula → Name questions use the same table purely as a reference.
+  if(insertable && !isRangeLabel){
+    cell.title = `${name} (${symbol}) — click to insert ${symbol}`;
+    cell.addEventListener('click', ()=>insertQuizFormulaText(symbol));
+  } else {
+    cell.title = `${name} (${symbol})`;
+  }
+  return cell;
+}
+
+function populatePeriodicReference(tableId, seriesId, insertable){
+  const table = document.getElementById(tableId);
+  const series = document.getElementById(seriesId);
+  if(!table || !series) return;
+
+  table.innerHTML = '';
+  PERIODIC_MAIN.forEach(row=>
+    row.forEach(cell=>table.appendChild(makePeriodicCell(cell, undefined, insertable)))
+  );
+
+  series.innerHTML = '';
+  const addSeriesRow = (label, items, category)=>{
+    const lab = document.createElement('div');
+    lab.className = 'pt-series-label';
+    lab.textContent = label;
+    series.appendChild(lab);
+    items.forEach(item=>
+      series.appendChild(makePeriodicCell([...item,category], category, insertable))
+    );
+  };
+  addSeriesRow('Lanthanides →', LANTHANIDES, 'lanthanide');
+  addSeriesRow('Actinides →', ACTINIDES, 'actinide');
+}
+
+function buildPeriodicReference(){
+  // Formula-answer questions: clickable symbols insert into the math editor.
+  populatePeriodicReference('periodicTable', 'periodicSeries', true);
+
+  // Formula → Name questions: reference-only periodic table beneath the name box.
+  populatePeriodicReference('namePeriodicTable', 'namePeriodicSeries', false);
+}
+buildPeriodicReference();
+
+function resetWorkspaceOnly(){
+  state = {cation:{id:null,count:0}, anion:{id:null,count:0}};
+  renderZones();
+}
+
+function setMode(mode){
+  appMode = mode;
+  const isQuiz = mode === 'quiz';
+  document.body.classList.toggle('quiz-mode', isQuiz);
+  document.body.classList.remove('quiz-name-question');
+  freeModeBtn.classList.toggle('active', !isQuiz);
+  quizModeBtn.classList.toggle('active', isQuiz);
+  resetWorkspaceOnly();
+  clearBuilderInputs();
+  if(isQuiz){
+    newQuizQuestion();
+  } else {
+    checkBtn.disabled = true;
+    addLogBtn.disabled = true;
+    updateBalance();
+  }
+}
+
+freeModeBtn.addEventListener('click', ()=>setMode('free'));
+quizModeBtn.addEventListener('click', ()=>setMode('quiz'));
+
+document.querySelectorAll('.practice-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    practiceMode = btn.dataset.practice;
+    document.querySelectorAll('.practice-btn').forEach(b=>b.classList.toggle('active', b===btn));
+    if(appMode === 'quiz') newQuizQuestion();
+  });
+});
+
+function randomItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// Ionic-only practice pools:
+// Binary ionic = monatomic cation + monatomic anion.
+// Polyatomic ionic = at least one ion is polyatomic (including NH4+ and Hg2^2+).
+const BINARY_IONIC_CATIONS = CATIONS.filter(ion => !ion.poly);
+const BINARY_IONIC_ANIONS = ANIONS.filter(ion => !ion.poly);
+const POLYATOMIC_IONIC_PAIRS = [];
+CATIONS.forEach(cIon=>{
+  ANIONS.forEach(aIon=>{
+    if(cIon.poly || aIon.poly) POLYATOMIC_IONIC_PAIRS.push({cIon,aIon});
+  });
+});
+
+function makeQuestion(){
+  let direction = practiceMode;
+  let kind = 'ionic';
+
+  if(direction === 'binaryionic'){
+    kind = 'binaryionic';
+    direction = Math.random() < .5 ? 'name' : 'build';
+  } else if(direction === 'polyatomicionic'){
+    kind = 'polyatomicionic';
+    direction = Math.random() < .5 ? 'name' : 'build';
+  } else if(direction === 'acids'){
+    kind = 'acid';
+    direction = Math.random() < .5 ? 'name' : 'formula';
+  } else if(direction === 'covalent'){
+    kind = 'covalent';
+    direction = Math.random() < .5 ? 'name' : 'formula';
+  } else if(direction === 'mixed'){
+    // Ionic remains the largest category, with acids and covalent compounds
+    // appearing regularly throughout mixed practice.
+    const r = Math.random();
+    kind = r < .50 ? 'ionic' : (r < .75 ? 'acid' : 'covalent');
+    if(kind === 'ionic') direction = Math.random() < .5 ? 'name' : 'build';
+    else direction = Math.random() < .5 ? 'name' : 'formula';
+  } else if(direction === 'name'){
+    // Formula -> Name includes ionic compounds, acids, and covalent molecules.
+    const r = Math.random();
+    kind = r < .46 ? 'ionic' : (r < .72 ? 'acid' : 'covalent');
+    direction = 'name';
+  } else if(direction === 'build'){
+    // Name -> answer: ionic compounds are physically built; acids and covalent
+    // molecules are entered with the formula editor.
+    const r = Math.random();
+    kind = r < .50 ? 'ionic' : (r < .75 ? 'acid' : 'covalent');
+    direction = kind === 'ionic' ? 'build' : 'formula';
+  }
+
+  let key, guard = 0;
+  let question;
+  do {
+    if(kind === 'acid'){
+      const acid = randomItem(ACIDS);
+      question = {
+        kind:'acid', direction, acid,
+        formula:acid.formula,
+        name:acid.name
+      };
+      key = `acid:${direction}:${acid.formula}`;
+    } else if(kind === 'covalent'){
+      question = makeCovalentQuestion(direction);
+      key = `covalent:${direction}:${question.formula}`;
+    } else {
+      let cIon, aIon;
+
+      if(kind === 'binaryionic'){
+        cIon = randomItem(BINARY_IONIC_CATIONS);
+        aIon = randomItem(BINARY_IONIC_ANIONS);
+      } else if(kind === 'polyatomicionic'){
+        const pair = randomItem(POLYATOMIC_IONIC_PAIRS);
+        cIon = pair.cIon;
+        aIon = pair.aIon;
+      } else {
+        cIon = randomItem(CATIONS);
+        aIon = randomItem(ANIONS);
+      }
+
+      const counts = correctCounts(cIon,aIon);
+      question = {
+        kind:'ionic', direction, cIon, aIon, counts,
+        formula:correctFormulaPlain(cIon,aIon,counts),
+        name:correctName(cIon,aIon),
+        ionicCategory: kind === 'binaryionic'
+          ? 'binary'
+          : (kind === 'polyatomicionic' ? 'polyatomic' : null)
+      };
+      key = `ionic:${kind}:${direction}:${cIon.id}:${aIon.id}`;
+    }
+    guard++;
+  } while(key === previousQuestionKey && guard < 30);
+
+  previousQuestionKey = key;
+  return question;
+}
+
+function renderQuizQuestion(){
+  if(!quizQuestion) return;
+  quizAnswered = false;
+  quizFeedback.className = 'quiz-feedback';
+  quizFeedback.innerHTML = '';
+  quizHint.className = 'quiz-hint';
+  quizHint.textContent = '';
+  quizNameInput.value = '';
+  quizFormulaInput.innerHTML = '';
+  setQuizSubMode(true);
+  quizNameArea.style.display = 'none';
+  quizFormulaArea.style.display = 'none';
+  quizBuildArea.style.display = 'none';
+  namePeriodicReference.style.display = 'none';
+  periodicReference.style.display = 'none';
+  resetWorkspaceOnly();
+
+  const isTextQuestion = quizQuestion.kind !== 'ionic' || quizQuestion.direction === 'name';
+  document.body.classList.toggle('quiz-name-question', isTextQuestion);
+
+  if(quizQuestion.kind === 'covalent'){
+    quizBuildArea.style.display = 'none';
+
+    if(quizQuestion.direction === 'name'){
+      quizNameArea.style.display = '';
+      quizFormulaArea.style.display = 'none';
+      namePeriodicReference.style.display = '';
+      questionKicker.textContent = 'Binary Covalent · Formula → Name';
+      questionPrompt.textContent = 'What is the correct molecular name for this formula?';
+      questionTarget.className = 'question-target';
+      questionTarget.innerHTML = subScript(quizQuestion.formula);
+      quizNameInput.placeholder = 'Type the complete covalent compound name';
+      quizHint.textContent = 'Use mono- through deca- to show atom counts. Do not use mono- on the first element when its subscript is 1. The second element always gets a prefix and changes to an -ide ending.';
+      setTimeout(()=>quizNameInput.focus(),0);
+    } else {
+      quizNameArea.style.display = 'none';
+      quizFormulaArea.style.display = '';
+      periodicReference.style.display = '';
+      questionKicker.textContent = 'Binary Covalent · Name → Formula';
+      questionPrompt.textContent = 'What is the correct formula for the covalent compound named below?';
+      questionTarget.className = 'question-target name-target';
+      questionTarget.textContent = quizQuestion.name;
+      quizHint.textContent = 'Translate each numerical prefix directly into a subscript: mono = 1, di = 2, tri = 3, tetra = 4, penta = 5, hexa = 6, hepta = 7, octa = 8, nona = 9, deca = 10.';
+      setTimeout(()=>quizFormulaInput.focus(),0);
+    }
+    return;
+  }
+
+  if(quizQuestion.kind === 'acid'){
+    quizBuildArea.style.display = 'none';
+
+    if(quizQuestion.direction === 'name'){
+      quizNameArea.style.display = '';
+      quizFormulaArea.style.display = 'none';
+      namePeriodicReference.style.display = '';
+      questionKicker.textContent = quizQuestion.acid.family === 'binary' ? 'Binary Acid · Formula → Name' : 'Oxyacid · Formula → Name';
+      questionPrompt.textContent = 'What is the correct acid name for this formula?';
+      questionTarget.className = 'question-target';
+      questionTarget.innerHTML = subScript(quizQuestion.formula);
+      quizNameInput.placeholder = 'Type the complete acid name';
+      quizHint.textContent = quizQuestion.acid.family === 'binary'
+        ? 'For a binary acid, use hydro- + the nonmetal root + -ic acid.'
+        : 'For an oxyacid, identify the oxyanion: -ate becomes -ic acid and -ite becomes -ous acid. Keep a single per- or hypo- prefix when present.';
+      setTimeout(()=>quizNameInput.focus(),0);
+    } else {
+      quizNameArea.style.display = 'none';
+      quizFormulaArea.style.display = '';
+      periodicReference.style.display = '';
+      questionKicker.textContent = quizQuestion.acid.family === 'binary' ? 'Binary Acid · Name → Formula' : 'Oxyacid · Name → Formula';
+      questionPrompt.textContent = 'What is the correct formula for the acid named below?';
+      questionTarget.className = 'question-target name-target';
+      questionTarget.textContent = quizQuestion.name;
+      quizHint.textContent = quizQuestion.acid.family === 'binary'
+        ? 'Use the charge of the monatomic anion to determine how many H atoms are needed.'
+        : 'Convert the acid ending back to its oxyanion: -ic acid comes from -ate and -ous acid comes from -ite, then add enough H+ to neutralize the anion charge.';
+      setTimeout(()=>quizFormulaInput.focus(),0);
+    }
+    return;
+  }
+
+  if(quizQuestion.direction === 'name'){
+    questionKicker.textContent = quizQuestion.ionicCategory === 'binary'
+      ? 'Binary Ionic · Formula → Name'
+      : (quizQuestion.ionicCategory === 'polyatomic'
+          ? 'Polyatomic Ionic · Formula → Name'
+          : 'Ionic Compound · Formula → Name');
+    questionPrompt.textContent = 'What is the correct name for this ionic compound?';
+    questionTarget.className = 'question-target';
+    questionTarget.innerHTML = subScript(quizQuestion.formula);
+    quizNameArea.style.display = '';
+    quizFormulaArea.style.display = 'none';
+    quizBuildArea.style.display = 'none';
+    namePeriodicReference.style.display = '';
+    quizNameInput.placeholder = 'Type the complete ionic compound name';
+    quizHint.textContent = 'Identify the cation and anion first. Green Sheet variants may use one prefix family at a time; hydrogen/dihydrogen may also combine with an -ite form. If the metal can form more than one charge, determine the Roman numeral from the formula.';
+    setTimeout(()=>quizNameInput.focus(),0);
+  } else {
+    questionKicker.textContent = quizQuestion.ionicCategory === 'binary'
+      ? 'Binary Ionic · Name → Build'
+      : (quizQuestion.ionicCategory === 'polyatomic'
+          ? 'Polyatomic Ionic · Name → Build'
+          : 'Ionic Compound · Name → Build');
+    questionPrompt.textContent = 'Build the neutral ionic compound named below.';
+    questionTarget.className = 'question-target name-target';
+    questionTarget.textContent = quizQuestion.name;
+    quizNameArea.style.display = 'none';
+    quizFormulaArea.style.display = 'none';
+    quizBuildArea.style.display = '';
+    quizHint.textContent = 'Translate the anion name first, then choose the ions and balance total positive and negative charge in the lowest whole-number ratio.';
+  }
+}
+
+function newQuizQuestion(){
+  quizQuestion = makeQuestion();
+  renderQuizQuestion();
+}
+
+function updateQuizStats(){
+  scoreChip.textContent = `Score: ${quizStats.correct} / ${quizStats.attempted}`;
+  streakChip.textContent = `Streak: ${quizStats.streak}`;
+}
+
+function markQuizResult(ok, message){
+  if(!quizAnswered){
+    quizStats.attempted++;
+    if(ok){
+      quizStats.correct++;
+      quizStats.streak++;
+    } else {
+      quizStats.streak = 0;
+    }
+    quizAnswered = true;
+    updateQuizStats();
+  }
+  quizFeedback.className = `quiz-feedback show ${ok ? 'ok':'bad'}`;
+  quizFeedback.innerHTML = message;
+}
+
+function checkQuizAnswer(){
+  if(!quizQuestion) return;
+
+  if(quizQuestion.kind === 'covalent'){
+    if(quizQuestion.direction === 'name'){
+      const ok = normalize(quizNameInput.value) === normalize(quizQuestion.name);
+      markQuizResult(ok, ok
+        ? `✓ Correct! <strong>${quizQuestion.name}</strong>`
+        : `✗ Not quite. Recheck both numerical prefixes, remember that mono- is omitted only from a one-atom first element, and change the second element to its -ide name.`);
+    } else {
+      const ok = normalizeFormulaAnswer(getQuizFormulaPlainText()) === normalizeFormulaAnswer(quizQuestion.formula);
+      markQuizResult(ok, ok
+        ? `✓ Correct! <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>.`
+        : `✗ Not quite. Translate each prefix into the matching subscript and keep the element symbols in the order given by the name.`);
+    }
+    return;
+  }
+
+  if(quizQuestion.kind === 'acid'){
+    if(quizQuestion.direction === 'name'){
+      const ok = normalize(quizNameInput.value) === normalize(quizQuestion.name);
+      markQuizResult(ok, ok
+        ? `✓ Correct! <strong>${quizQuestion.name}</strong>`
+        : `✗ Not quite. Check whether this is a binary acid or an oxyacid and apply the matching naming rule.`);
+    } else {
+      const ok = normalizeFormulaAnswer(getQuizFormulaPlainText()) === normalizeFormulaAnswer(quizQuestion.formula);
+      markQuizResult(ok, ok
+        ? `✓ Correct! <span class="mono">${subScript(quizQuestion.formula)}</span> is ${quizQuestion.name}.`
+        : `✗ Not quite. Recheck the parent anion and the number of H atoms required to make a neutral acid formula.`);
+    }
+    return;
+  }
+
+  if(quizQuestion.direction === 'name'){
+    const ok = nameMatchesCorrect(quizNameInput.value, quizQuestion.cIon, quizQuestion.aIon);
+    markQuizResult(ok, ok
+      ? `✓ Correct! <strong>${quizQuestion.name}</strong>`
+      : `✗ Not quite. Try identifying the cation, anion, and whether a Roman numeral is required.`);
+    return;
+  }
+
+  const cCorrect = state.cation.id === quizQuestion.cIon.id;
+  const aCorrect = state.anion.id === quizQuestion.aIon.id;
+  const countsCorrect = state.cation.count === quizQuestion.counts.cCount &&
+                        state.anion.count === quizQuestion.counts.aCount;
+  const ok = cCorrect && aCorrect && countsCorrect;
+
+  let detail = '';
+  if(!cCorrect || !aCorrect) detail = 'Check that you selected the ions named in the compound.';
+  else if(!countsCorrect) detail = 'You have the correct ions, but check the lowest whole-number ratio needed to balance the charges.';
+
+  markQuizResult(ok, ok
+    ? `✓ Correct! Your pieces represent <span class="mono">${subScript(quizQuestion.formula)}</span>.`
+    : `✗ Not quite. ${detail}`);
+}
+
+document.getElementById('quizCheckBtn').addEventListener('click', checkQuizAnswer);
+document.getElementById('quizNextBtn').addEventListener('click', newQuizQuestion);
+document.getElementById('quizHintBtn').addEventListener('click', ()=>{
+  quizHint.classList.toggle('show');
+});
+document.getElementById('quizRevealBtn').addEventListener('click', ()=>{
+  if(!quizQuestion) return;
+  if(!quizAnswered){
+    quizStats.attempted++;
+    quizStats.streak = 0;
+    quizAnswered = true;
+    updateQuizStats();
+  }
+  quizFeedback.className = 'quiz-feedback show info';
+
+  if(quizQuestion.kind === 'covalent'){
+    quizFeedback.innerHTML = quizQuestion.direction === 'name'
+      ? `Answer: <strong>${quizQuestion.name}</strong>`
+      : `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>.`;
+    return;
+  }
+
+  if(quizQuestion.kind === 'acid'){
+    quizFeedback.innerHTML = quizQuestion.direction === 'name'
+      ? `Answer: <strong>${quizQuestion.name}</strong>`
+      : `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>.`;
+    return;
+  }
+
+  quizFeedback.innerHTML = quizQuestion.direction === 'name'
+    ? `Answer: <strong>${quizQuestion.name}</strong>`
+    : `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>. Use ${quizQuestion.counts.cCount} <span class="mono">${subScript(quizQuestion.cIon.sym)}</span> ion${quizQuestion.counts.cCount===1?'':'s'} and ${quizQuestion.counts.aCount} <span class="mono">${subScript(quizQuestion.aIon.sym)}</span> ion${quizQuestion.counts.aCount===1?'':'s'}.`;
+});
+quizNameInput.addEventListener('keydown', e=>{
+  if(e.key === 'Enter') checkQuizAnswer();
+});
+
+updateQuizStats();
+
+// ---------- Help panel ----------
+document.getElementById('helpToggle').addEventListener('click', ()=>{
+  document.getElementById('helpPanel').classList.toggle('open');
+});
+
+setMode('quiz');
+})();
+</script>
+</body>
+</html>
