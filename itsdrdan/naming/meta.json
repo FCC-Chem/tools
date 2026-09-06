@@ -1,7 +1,7 @@
 {
   "title": "Ionic Formula, Naming, and Compound Study Tool",
   "author": "Dr. Dan",
-  "course": "CHEM 3A" "CHEM 1A",
+  "course": "CHEM 3A, CHEM 1A",
   "description": "Interactive chemistry study tool for practicing chemical formulas and nomenclature. Includes Study/Quiz Mode with Mixed Practice, Binary Ionic Only, Polyatomic Ionic Only, Formula to Name, Name to Formula/Build, Acids Only, and Covalent Only practice. Covers Type I and Type II ionic compounds, polyatomic ions, oxyanion naming patterns, binary acids, oxyacids, and binary covalent compounds using prefixes mono- through deca-. Also includes a Free Builder Mode, formula math editor with subscripts, hints, answer reveal, score and streak tracking, and periodic table references.",
   "tags": [
     "ionic compounds",
@@ -20,6 +20,8 @@
     "prefixes",
     "periodic table",
     "chemistry",
-    "CHEM 3A"
+    "CHEM 3A",
+    "CHEM 1A"
   ],
   "status": "working"
+}
