@@ -580,7 +580,7 @@
       <div class="quiz-top">
         <div>
           <h2>Study / Quiz Mode</h2>
-          <p>Practice binary ionic compounds, polyatomic ionic compounds, binary covalent molecules, binary acids, and oxyacids. Formula → name and name → formula questions are mixed together; ionic compounds can also be built with the ion pieces.</p>
+          <p>Practice binary ionic compounds, polyatomic ionic compounds, binary covalent molecules, binary acids, and oxyacids. Formula → name and name → formula questions are mixed together; ionic compounds may be typed as formulas or built with the ion pieces.</p>
         </div>
         <div class="quiz-stats">
           <span class="stat-chip" id="scoreChip">Score: 0 / 0</span>
@@ -1946,16 +1946,40 @@ CATIONS.forEach(cIon=>{
   });
 });
 
+function ionicFormulaVariants(question){
+  const variants = [question.formula];
+  const cIon = question.cIon;
+  const aIon = question.aIon;
+  const counts = question.counts;
+
+  const cSyms = [cIon.sym].concat(cIon.altSyms || []);
+  const aSyms = [aIon.sym].concat(aIon.altSyms || []);
+
+  cSyms.forEach(cSym=>{
+    aSyms.forEach(aSym=>{
+      const cAlt = {...cIon, sym:cSym};
+      const aAlt = {...aIon, sym:aSym};
+      variants.push(correctFormulaPlain(cAlt, aAlt, counts));
+    });
+  });
+
+  return [...new Set(variants.map(normalizeFormulaAnswer))];
+}
+
+function ionicFormulaMatches(userValue, question){
+  return ionicFormulaVariants(question).includes(normalizeFormulaAnswer(userValue));
+}
+
 function makeQuestion(){
   let direction = practiceMode;
   let kind = 'ionic';
 
   if(direction === 'binaryionic'){
     kind = 'binaryionic';
-    direction = Math.random() < .5 ? 'name' : 'build';
+    direction = randomItem(['name','formula','build']);
   } else if(direction === 'polyatomicionic'){
     kind = 'polyatomicionic';
-    direction = Math.random() < .5 ? 'name' : 'build';
+    direction = randomItem(['name','formula','build']);
   } else if(direction === 'acids'){
     kind = 'acid';
     direction = Math.random() < .5 ? 'name' : 'formula';
@@ -1967,7 +1991,7 @@ function makeQuestion(){
     // appearing regularly throughout mixed practice.
     const r = Math.random();
     kind = r < .50 ? 'ionic' : (r < .75 ? 'acid' : 'covalent');
-    if(kind === 'ionic') direction = Math.random() < .5 ? 'name' : 'build';
+    if(kind === 'ionic') direction = randomItem(['name','formula','build']);
     else direction = Math.random() < .5 ? 'name' : 'formula';
   } else if(direction === 'name'){
     // Formula -> Name includes ionic compounds, acids, and covalent molecules.
@@ -1975,11 +1999,11 @@ function makeQuestion(){
     kind = r < .46 ? 'ionic' : (r < .72 ? 'acid' : 'covalent');
     direction = 'name';
   } else if(direction === 'build'){
-    // Name -> answer: ionic compounds are physically built; acids and covalent
-    // molecules are entered with the formula editor.
+    // Name -> answer: ionic compounds alternate between typing the formula
+    // and physically building it; acids and covalent molecules use the formula editor.
     const r = Math.random();
     kind = r < .50 ? 'ionic' : (r < .75 ? 'acid' : 'covalent');
-    direction = kind === 'ionic' ? 'build' : 'formula';
+    direction = kind === 'ionic' ? randomItem(['formula','build']) : 'formula';
   }
 
   let key, guard = 0;
@@ -2125,6 +2149,21 @@ function renderQuizQuestion(){
     quizNameInput.placeholder = 'Type the complete ionic compound name';
     quizHint.textContent = 'Identify the cation and anion first. Green Sheet variants may use one prefix family at a time; hydrogen/dihydrogen may also combine with an -ite form. If the metal can form more than one charge, determine the Roman numeral from the formula.';
     setTimeout(()=>quizNameInput.focus(),0);
+  } else if(quizQuestion.direction === 'formula'){
+    questionKicker.textContent = quizQuestion.ionicCategory === 'binary'
+      ? 'Binary Ionic · Name → Formula'
+      : (quizQuestion.ionicCategory === 'polyatomic'
+          ? 'Polyatomic Ionic · Name → Formula'
+          : 'Ionic Compound · Name → Formula');
+    questionPrompt.textContent = 'What is the correct formula for the ionic compound named below?';
+    questionTarget.className = 'question-target name-target';
+    questionTarget.textContent = quizQuestion.name;
+    quizNameArea.style.display = 'none';
+    quizFormulaArea.style.display = '';
+    quizBuildArea.style.display = 'none';
+    periodicReference.style.display = '';
+    quizHint.textContent = 'Identify each ion and its charge, then balance the charges in the lowest whole-number ratio. Use parentheses around a polyatomic ion when more than one copy is needed. Do not include ion charges in the final neutral formula.';
+    setTimeout(()=>quizFormulaInput.focus(),0);
   } else {
     questionKicker.textContent = quizQuestion.ionicCategory === 'binary'
       ? 'Binary Ionic · Name → Build'
@@ -2208,6 +2247,14 @@ function checkQuizAnswer(){
     return;
   }
 
+  if(quizQuestion.direction === 'formula'){
+    const ok = ionicFormulaMatches(getQuizFormulaPlainText(), quizQuestion);
+    markQuizResult(ok, ok
+      ? `✓ Correct! <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>.`
+      : `✗ Not quite. Recheck the ion charges, reduce to the lowest whole-number ratio, and use parentheses when more than one polyatomic ion is needed.`);
+    return;
+  }
+
   const cCorrect = state.cation.id === quizQuestion.cIon.id;
   const aCorrect = state.anion.id === quizQuestion.aIon.id;
   const countsCorrect = state.cation.count === quizQuestion.counts.cCount &&
@@ -2252,9 +2299,13 @@ document.getElementById('quizRevealBtn').addEventListener('click', ()=>{
     return;
   }
 
-  quizFeedback.innerHTML = quizQuestion.direction === 'name'
-    ? `Answer: <strong>${quizQuestion.name}</strong>`
-    : `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>. Use ${quizQuestion.counts.cCount} <span class="mono">${subScript(quizQuestion.cIon.sym)}</span> ion${quizQuestion.counts.cCount===1?'':'s'} and ${quizQuestion.counts.aCount} <span class="mono">${subScript(quizQuestion.aIon.sym)}</span> ion${quizQuestion.counts.aCount===1?'':'s'}.`;
+  if(quizQuestion.direction === 'name'){
+    quizFeedback.innerHTML = `Answer: <strong>${quizQuestion.name}</strong>`;
+  } else if(quizQuestion.direction === 'formula'){
+    quizFeedback.innerHTML = `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>.`;
+  } else {
+    quizFeedback.innerHTML = `Answer: <strong>${quizQuestion.name}</strong> = <span class="mono">${subScript(quizQuestion.formula)}</span>. Use ${quizQuestion.counts.cCount} <span class="mono">${subScript(quizQuestion.cIon.sym)}</span> ion${quizQuestion.counts.cCount===1?'':'s'} and ${quizQuestion.counts.aCount} <span class="mono">${subScript(quizQuestion.aIon.sym)}</span> ion${quizQuestion.counts.aCount===1?'':'s'}.`;
+  }
 });
 quizNameInput.addEventListener('keydown', e=>{
   if(e.key === 'Enter') checkQuizAnswer();
