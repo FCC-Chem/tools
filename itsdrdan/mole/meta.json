@@ -1,0 +1,23 @@
+{
+  "title": "Mole Conversion Study Game",
+  "author": "Dr. Dan",
+  "course": "CHEM 3A / CHEM 1A",
+  "description": "Interactive chemistry study game for practicing mole conversions and dimensional analysis. CHEM 3A mode focuses on 1-2 step allied-health conversions using molar mass, Avogadro's number, and mole ratios from chemical formulas, with an optional drag-and-drop conversion factor builder that allows students to flip conversion factors. CHEM 1A mode expands to 1-5 step STEM-level problems including density, percent composition, and empirical formulas. Includes significant figure checking, worked math-editor solutions, hints, score and streak tracking, and a Yellow Sheet periodic table reference.",
+  "tags": [
+    "mole conversions",
+    "dimensional analysis",
+    "molar mass",
+    "Avogadro's number",
+    "mole ratios",
+    "significant figures",
+    "density",
+    "percent composition",
+    "empirical formulas",
+    "CHEM 3A",
+    "CHEM 1A",
+    "allied health chemistry",
+    "general chemistry",
+    "study game"
+  ],
+  "status": "working"
+}
