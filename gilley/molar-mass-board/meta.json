@@ -1,0 +1,8 @@
+{
+  "title": "Molar Mass — Chalkboard Walkthrough",
+  "author": "R. Gilley",
+  "course": "CHEM 3A / CHEM 1A",
+  "description": "Looping chalkboard animation that works the molar mass of C6H12O6 step by step: each line is written as the matching subscript is circled, summed to 180.156 and boxed as 180.16 g/mol.",
+  "tags": ["molar mass", "stoichiometry", "animation", "chem-3a", "chem-1a"],
+  "status": "working"
+}
