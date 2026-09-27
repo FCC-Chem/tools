@@ -1,0 +1,25 @@
+{
+  "title": "Stoichiometry Study Game",
+  "author": "Dr. Dan",
+  "course": "CHEM 3A / CHEM 1A",
+  "description": "Interactive stoichiometry practice using coefficients in balanced chemical equations. Modes include mixed practice, mass stoichiometry, solution stoichiometry with titration and percent m/m and m/v, ideal gas stoichiometry and gas identity, limiting reactants and leftovers, and percent yield. Includes significant-figure feedback, factor-card setup with flipping for every question (with separate stages for two-reactant problems), worked solutions, scoring, and an embedded Yellow Sheet periodic table. Contextual video help links each generated question to relevant lessons on Dr. Dan’s YouTube channel, primarily the CHEM 3A Chapter 11 stoichiometry playlist.",
+  "tags": [
+    "stoichiometry",
+    "balanced chemical equations",
+    "mole ratios",
+    "dimensional analysis",
+    "mass stoichiometry",
+    "solution stoichiometry",
+    "molarity",
+    "titration",
+    "percent concentration",
+    "ideal gas law",
+    "limiting reactants",
+    "percent yield",
+    "CHEM 3A",
+    "CHEM 1A",
+    "YouTube video help",
+    "CHEM 3A Chapter 11"
+  ],
+  "status": "working"
+}
