@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stoichiometry Study Game (Canvas embed) — FCC Chem</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --accent: #1f6f43;
+    --border: #ddd;
+    --panel: #f7f7f5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  #game { display: block; width: 100%; border: 0; }
+  /* Standalone (opened from the catalog): the game fills the viewport and scrolls itself,
+     exactly as Dan's page does. Embedded in Canvas: the frame grows to fit the content instead. */
+  body:not(.embedded) #game { height: 100vh; }
+  body.embedded { overflow: hidden; }
+  body.embedded #game { overflow: hidden; }
+  footer { font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--border);
+    padding: 12px 20px; }
+  body.embedded footer { display: none; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- Dan's tool, untouched, loaded from his folder. This wrapper only adds auto-resize so the
+     game can be iframed into a Canvas page without an inner scrollbar. -->
+<iframe id="game" src="../../itsdrdan/stoichiometry/" title="Stoichiometry Study Game"
+        scrolling="auto"></iframe>
+
+<footer>
+  Game by Dr. Dan; Canvas auto-resize wrapper by Rob Gilley ·
+  <a href="../../">Back to tool catalog</a> ·
+  Unofficial faculty project, not an official FCC/SCCCD channel.
+</footer>
+
+<script>
+(function () {
+  var embedded = window.parent !== window;
+  if (!embedded) return;                       // standalone: nothing to do
+  document.body.classList.add('embedded');
+
+  var game = document.getElementById('game');
+  var lastSent = 0;
+  var pending = false;
+
+  function innerHeight() {
+    // Same origin (both folders are on fcc-chem.github.io), so the inner document is readable.
+    // Measure the BODY box, not documentElement.scrollHeight: scrollHeight is never smaller
+    // than the frame's own viewport, so using it makes the frame grow a little every tick, forever.
+    var doc = game.contentDocument;
+    if (!doc || !doc.body) return 0;
+    var b = doc.body, cs = doc.defaultView.getComputedStyle(b);
+    return Math.ceil(b.getBoundingClientRect().height
+                     + parseFloat(cs.marginTop || 0) + parseFloat(cs.marginBottom || 0));
+  }
+
+  function sync() {
+    pending = false;
+    var h = innerHeight();
+    if (!h) return;
+    game.style.height = h + 'px';
+    var total = document.documentElement.scrollHeight;
+    if (Math.abs(total - lastSent) < 2) return;
+    lastSent = total;
+    // Canvas listens for this LTI message from any iframe on a page and sets that
+    // iframe's height to the value given, so the outer frame grows with the game.
+    window.parent.postMessage({ subject: 'lti.frameResize', height: total }, '*');
+  }
+
+  function schedule() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(sync);
+  }
+
+  game.addEventListener('load', function () {
+    var doc = game.contentDocument;
+    if (!doc) return;
+    sync();
+    // Content height changes whenever a question, factor builder, solution or hint opens/closes.
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(schedule);
+      ro.observe(doc.documentElement);
+      if (doc.body) ro.observe(doc.body);
+    }
+    new MutationObserver(schedule).observe(doc.documentElement,
+      { childList: true, subtree: true, attributes: true, characterData: true });
+    game.contentWindow.addEventListener('resize', schedule);
+    // Fonts and images finishing after load can still shift the height.
+    setTimeout(sync, 500); setTimeout(sync, 1500); setTimeout(sync, 3000);
+  });
+  window.addEventListener('resize', schedule);
+})();
+</script>
+</body>
+</html>
