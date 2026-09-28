@@ -1,8 +1,16 @@
 {
-  "title": "Stoichiometry Study Game — Canvas embed (auto-resize)",
+  "title": "Stoichiometry Study Game \u2014 Canvas embed (auto-resize)",
   "author": "Rob Gilley",
   "course": "CHEM 3A / CHEM 1A",
-  "description": "Thin wrapper around Dr. Dan's Stoichiometry Study Game that makes it embeddable in a Canvas page without an inner scrollbar: it measures the game's height and sends Canvas an lti.frameResize message so the iframe grows and shrinks with the content. Dan's tool is loaded unmodified from his folder. Opened directly, it behaves exactly like the original.",
-  "tags": ["stoichiometry", "canvas", "embed", "iframe", "wrapper", "CHEM 3A", "CHEM 1A"],
+  "description": "Thin wrapper around Dr. Dan's Stoichiometry Study Game that makes it embeddable in a Canvas page without an inner scrollbar: it measures the game's height and sends Canvas an lti.frameResize message so the iframe grows and shrinks with the content. Dan's tool is loaded unmodified from his folder. Opened directly, it behaves exactly like the original. Add ?course=1A (or 3A) to the URL to open on that course tab.",
+  "tags": [
+    "stoichiometry",
+    "canvas",
+    "embed",
+    "iframe",
+    "wrapper",
+    "CHEM 3A",
+    "CHEM 1A"
+  ],
   "status": "wip"
 }

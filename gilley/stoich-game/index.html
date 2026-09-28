@@ -43,11 +43,21 @@
 
 <script>
 (function () {
+  // ?course=1A (or 3A) pre-selects the course level in Dan's game, so a CHEM 1A page opens on the CHEM 1A tab.
+  function selectCourse(doc) {
+    var want = new URLSearchParams(window.location.search).get('course');
+    if (!want) return;
+    var btn = doc.querySelector('#course button[data-course="' + want.toUpperCase() + '"]');
+    if (btn && !btn.classList.contains('active')) btn.click();
+  }
+  var game = document.getElementById('game');
   var embedded = window.parent !== window;
-  if (!embedded) return;                       // standalone: nothing to do
+  if (!embedded) {                             // standalone: only the course pre-select applies
+    game.addEventListener('load', function () { if (game.contentDocument) selectCourse(game.contentDocument); });
+    return;
+  }
   document.body.classList.add('embedded');
 
-  var game = document.getElementById('game');
   var lastSent = 0;
   var pending = false;
 
@@ -84,6 +94,7 @@
   game.addEventListener('load', function () {
     var doc = game.contentDocument;
     if (!doc) return;
+    selectCourse(doc);
     sync();
     // Content height changes whenever a question, factor builder, solution or hint opens/closes.
     if (window.ResizeObserver) {
