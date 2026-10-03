@@ -1,0 +1,28 @@
+{
+  "title": "Oxidation & Reduction Study Game — LEO Goes GER!",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 1A and CHEM1B",
+  "description": "Interactive REDOX study game with six modes: Oxidation States, Identify REDOX, Activity Series, Half-Reaction Method, Acidic REDOX, and Basic REDOX. Practice individual oxidation numbers and complete charts; identify oxidation, reduction, oxidizing agents, and reducing agents; predict activity-series reactions; and balance equations through guided steps. Includes hints, answer reveals, completed-work review with optional automatic expansion, visual cancellation of electrons and common species, an activity series chart, embedded Dr. Dan video lessons, scoring, streaks, celebration animations, and a responsive pastel interface with Pocket Leo.",
+  "tags": [
+    "chemistry",
+    "CHEM 1A",
+    "redox",
+    "oxidation states",
+    "oxidation numbers",
+    "oxidation",
+    "reduction",
+    "oxidizing agent",
+    "reducing agent",
+    "activity series",
+    "half reactions",
+    "balancing equations",
+    "acidic solution",
+    "basic solution",
+    "combustion",
+    "single displacement",
+    "combination",
+    "decomposition",
+    "guided practice"
+  ],
+  "version": "12"
+}
