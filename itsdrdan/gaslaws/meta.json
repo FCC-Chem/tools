@@ -1,0 +1,33 @@
+{
+  "title": "Gas Laws Study Game — Under Pressure with ItsDrDan",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3A and CHEM 1A",
+  "description": "Responsive gas-law practice with Gas Theory, Changing Conditions, Mixtures & Wet Gases, Ideal Gas Lab, Mystery Gas, Mixed Practice, and a 10-question readiness check. CHEM 1A adds RMS speed, molecular-speed distributions, Graham’s law of effusion, more advanced gas-mixture calculations, and coefficient-box reaction stoichiometry. Uses atm, mmHg, torr, kelvin conversions, mL/L conversions, Dalton’s law, mole fractions, gas collection over water, ideal-gas molar mass and density, and common gas identification. CHEM 3A Ideal Gas Lab includes 15% guided reaction questions; optional real-gas challenges occur in 3% of CHEM 1A Mixed Practice and are excluded from the quiz. Includes guided steps, solution maps, completed work, hints, answer reveals, homework-style unit entry, scientific notation input, scoring, streaks, XP, celebrations, a particle playground, an embedded ItsDrDan lesson, and performance-based study recommendations.",
+  "tags": [
+    "chemistry",
+    "CHEM 3A",
+    "CHEM 1A",
+    "gas laws",
+    "kinetic molecular theory",
+    "Boyle law",
+    "Charles law",
+    "Avogadro law",
+    "Dalton law",
+    "combined gas law",
+    "ideal gas law",
+    "partial pressure",
+    "mole fraction",
+    "water vapor",
+    "gas collection",
+    "molar mass",
+    "gas density",
+    "gas stoichiometry",
+    "RMS speed",
+    "Graham law",
+    "effusion",
+    "real gas",
+    "readiness quiz"
+  ],
+  "version": "17",
+  "status": "working"
+}
