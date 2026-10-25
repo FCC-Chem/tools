@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Equation Rearranger</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--d:#14532d;--m:#2e7d32;--l:#e8f5e9;--b:#a5d6a7;--am:#b45309}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;background:#f4faf4;color:#1b2e1f}
+.wrap{max-width:900px;margin:0 auto;padding:12px}
+h1{font-size:1.3rem;margin:4px 0;color:var(--d)}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}
+button{font:inherit;font-size:.95rem;padding:7px 11px;border:1.5px solid var(--m);background:#fff;color:var(--d);border-radius:8px;cursor:pointer}
+button:hover{background:var(--l)}button.on{background:var(--m);color:#fff}button:disabled{opacity:.4;cursor:default}
+.stats{display:flex;flex-wrap:wrap;gap:8px}.stats div{background:#fff;border:1px solid var(--b);border-radius:8px;padding:5px 10px;font-size:.85rem}
+.stats b{font-size:1.1rem;color:var(--d);font-family:'JetBrains Mono',monospace}
+.card{background:#fff;border:1.5px solid var(--b);border-radius:12px;padding:12px;margin-top:10px}
+#goal{font-size:1.05rem}#goal .v{font-family:'JetBrains Mono',monospace;font-weight:700}
+.stage{margin-top:8px;min-height:170px;display:flex;align-items:center;justify-content:center;overflow-x:auto;padding:14px 6px;border-radius:10px;border:1px solid var(--b);
+ background-color:#fbfffb;background-image:linear-gradient(#cfe8d0 1px,transparent 1px),linear-gradient(90deg,#cfe8d0 1px,transparent 1px);background-size:24px 24px;
+ font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:clamp(1.05rem,3.8vw,1.8rem)}
+.side{display:inline-flex;align-items:center;gap:.35em;padding:10px;border-radius:12px;border:2px dashed transparent;margin:auto;transition:.15s}
+.side.drop{border-color:var(--m);background:rgba(165,214,167,.4)}
+#eqsign{font-weight:700;padding:0 .3em;color:var(--d)}
+.chip{display:inline-flex;align-items:center;gap:.2em;background:#fff;border:2px solid var(--m);border-radius:10px;padding:.1em .45em;cursor:default;user-select:none;box-shadow:0 2px 0 var(--b);white-space:nowrap}
+.stage.armed .chip{cursor:pointer;border-color:var(--am)}.stage.armed .chip:hover{background:#fff3e0;transform:translateY(-1px)}#tools.nudge{animation:sh .4s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.chip.tm{border-style:dashed}.chip.hint{animation:p .7s infinite alternate;border-color:var(--am)}
+@keyframes p{to{box-shadow:0 0 0 6px rgba(180,83,9,.35)}}
+.ghost{position:fixed;z-index:9;pointer-events:none;transform:translate(-50%,-50%) scale(1.12);box-shadow:0 8px 18px rgba(0,0,0,.3);font-family:'JetBrains Mono',monospace;font-size:1.5rem}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em}
+.fr>span{display:inline-flex;align-items:center;gap:.3em;padding:.1em .15em}.fr>b{height:2px;background:var(--d);align-self:stretch;margin:2px 0}
+.t{color:var(--am);font-weight:700}sub,sup{font-size:.6em;line-height:0}
+#last,#msg{margin-top:8px;min-height:1.4em}#last{color:#476b4c;font-size:.95rem}
+#msg.ok{background:var(--l);border:1.5px solid var(--m);border-radius:10px;padding:10px}
+#msg.no{background:#fff3e0;border:1.5px solid var(--am);border-radius:10px;padding:10px}
+#msg .eq{font-family:'JetBrains Mono',monospace;font-size:1.2rem;margin:6px 0}
+#tbar{height:6px;background:#dcedc8;border-radius:3px;margin-top:6px;display:none}#tbar i{display:block;height:100%;background:var(--m);border-radius:3px}
+small{color:#476b4c}button.pulse{animation:p2 .7s infinite alternate;border-color:var(--am);background:#fff3e0}@keyframes p2{to{box-shadow:0 0 0 6px rgba(180,83,9,.35)}}
+</style></head><body><div class="wrap">
+<h1>⚗ Equation Rearranger</h1>
+<div class="bar" id="lv"></div>
+<div class="bar"><label><input type="checkbox" id="tm"> Timer (90 s per problem)</label></div>
+<div class="stats"><div>Score <b id="sc">0</b></div><div>Streak <b id="st">0</b> <small>(best <span id="bs">0</span>)</small></div><div>Problem <b id="pn">0</b></div><div>Moves <b id="mv">0</b> / par <b id="par">0</b></div><div id="tbox" style="display:none">Time <b id="tl">90</b></div></div>
+<div class="card">
+<div id="goal"></div><div id="tbar"><i></i></div>
+<div class="stage" id="stage"><div class="side" id="L"></div><div id="eqsign">=</div><div class="side" id="R"></div></div>
+<div id="last"></div>
+<div class="bar" id="tools">
+<button data-a="mul" title="Multiply both sides by a piece you tap">× Multiply</button><button data-a="div" title="Divide both sides by a piece you tap">÷ Divide</button>
+<button data-a="add" title="Add a piece you tap to both sides">+ Add</button><button data-a="sub" title="Subtract a piece you tap from both sides">− Subtract</button>
+<button id="bneg">× (−1)</button><button id="blog">log₁₀</button><button id="bp10">10ˣ</button><button id="bsw">⇄ swap</button>
+<span style="flex:1"></span><button id="bun">↶ Undo</button><button id="bhi">💡 Hint</button><button id="bre">Restart</button><button id="bsk">Show answer</button>
+</div>
+<small id="how">Choose an operation first, then tap the piece to use. Drag a piece across the = sign (or just tap it) to move it. For your own operation, press ×, ÷, + or −, then tap the piece to use.</small>
+<div id="msg"></div><div class="bar"><button id="bnx" style="display:none" class="on">Next problem →</button></div>
+</div></div>
+<script>
+const $=id=>document.getElementById(id);
+/* ---------- equation bank (edit freely: 'Name', 'formula', {c:[constants], t:[allowed targets]}) ---------- */
+const MD=[['Density','d = m/V'],['Boyle’s Law','P_1*V_1 = P_2*V_2'],['Charles’s Law','V_1/T_1 = V_2/T_2'],['Avogadro’s Law','V_1/n_1 = V_2/n_2'],
+['Gay-Lussac’s Law','P_1/T_1 = P_2/T_2'],['Ideal Gas Law','P*V = n*R*T',{c:['R']}],['Combined Gas Law','P_1*V_1/T_1 = P_2*V_2/T_2'],
+['Dilution','M_1*V_1 = M_2*V_2'],['Molarity','M = n/V'],['Moles from mass','n = m/MM'],['Half-life (1st order)','t_half = 0.693/k'],
+['Heat','q = m*c*ΔT'],['Light','c = λ*ν',{c:['c']}],['Water ion product','K_w = [H3O+]*[OH-]']];
+const AS=[['Temperature change','ΔT = T_f - T_i'],['Kelvin scale','T_K = T_C + 273.15'],['Dalton’s Law','P_total = P_1 + P_2 + P_3'],['pH + pOH','pH + pOH = 14'],
+['Mole fractions','X_1 + X_2 = 1'],['Volume after adding water','V_f = V_i + V_w'],['Enthalpy change','ΔH = H_p - H_r']];
+const MX=[['Heat (ΔT expanded)','q = m*c*(T_f - T_i)'],['Average atomic mass','M_avg = f_1*m_1 + f_2*m_2'],['Gibbs free energy','ΔG = ΔH - T*ΔS'],
+['Dilution with added water','M_1*V_1 = M_2*(V_1 + V_w)',{t:['M_1','M_2','V_w']}],['°F to °C','T_C = (T_F - 32)*5/9'],['°C to °F','T_F = 9/5*T_C + 32'],
+['Heat released by a reaction','q_rxn = -m*c*ΔT']];
+const LG=[['pH','pH = -log([H3O+])'],['pOH','pOH = -log([OH-])'],['pKa','pK_a = -log(K_a)'],['Henderson–Hasselbalch','pH = pK_a + log([A-]/[HA])'],
+['Integrated rate law (log form)','k*t = 2.303*log([A]_0/[A])'],['Nernst equation','E = E_0 - 0.0592/n*log(Q)']];
+const LV={a:MD,b:AS,m:MX,h:[...LG,...LG,...MX]};
+const LN={a:'1A  × ÷',b:'1B  + −',m:'2  Mixed',h:'3  Hard (log)'};
+/* ---------- expression engine: Expr = array of terms {s:±1,n:[factors],d:[factors]} ---------- */
+const K={f:f=>f.k==='v'?'v'+f.name:f.k==='n'?'n'+f.v:f.k+'('+K.e(f.e)+')',t:t=>t.s+'|'+t.n.map(K.f).sort().join('*')+'/'+t.d.map(K.f).sort().join('*'),e:e=>e.map(K.t).sort().join('+')};
+function norm(e){const out=[];
+ for(const t of e){let s=t.s,zero=false;const n=[],d=[];
+  const add=(f,inv)=>{
+   if(f.k==='sum'){const g=norm(f.e);if(!g.length){if(!inv)zero=true;return}
+    if(g.length===1){const u=g[0];s*=u.s;u.n.forEach(x=>add(x,inv));u.d.forEach(x=>add(x,!inv));return}f={k:'sum',e:g}}
+   else if(f.k==='log'||f.k==='p10'){f={k:f.k,e:norm(f.e)};const a=f.e,i=(a.length===1&&a[0].s===1&&a[0].n.length===1&&!a[0].d.length)?a[0].n[0]:null;
+    if(i&&i.k===(f.k==='log'?'p10':'log'))return add({k:'sum',e:i.e},inv)}
+   if(f.k==='n'&&f.v===1)return;(inv?d:n).push(f)};
+  t.n.forEach(f=>add(f,false));t.d.forEach(f=>add(f,true));if(zero)continue;
+  for(let i=0;i<n.length;i++){const k=K.f(n[i]),j=d.findIndex(x=>K.f(x)===k);if(j>=0){n.splice(i--,1);d.splice(j,1)}}
+  out.push({s,n,d})}
+ const o=[];for(const t of out){if(t.n.length===1&&!t.d.length&&t.n[0].k==='sum')t.n[0].e.forEach(u=>o.push({s:u.s*t.s,n:u.n,d:u.d}));else o.push(t)}
+ for(let i=0;i<o.length;i++){const k=K.t({...o[i],s:1}),j=o.findIndex((u,x)=>x>i&&u.s===-o[i].s&&K.t({...u,s:1})===k);if(j>=0){o.splice(j,1);o.splice(i--,1)}}
+ return o}
+const one=x=>x.length===1?x[0]:{s:1,n:[{k:'sum',e:x}],d:[]};
+const mulE=(e,o)=>{if(!e.length||!o.length)return[];const a=one(e),b=one(o);return norm([{s:a.s*b.s,n:[...a.n,...b.n],d:[...a.d,...b.d]}])};
+const invE=o=>o.length===1?[{s:o[0].s,n:o[0].d,d:o[0].n}]:[{s:1,n:[],d:[{k:'sum',e:o}]}];
+const negE=e=>e.map(t=>({...t,s:-t.s})),addE=(e,o)=>norm([...e,...o]);
+const fnE=(k,e)=>norm([{s:1,n:[{k,e}],d:[]}]);
+function parse(str){const T=str.match(/\d+\.?\d*|\[[^\]]+\](?:_[A-Za-z0-9]+)?|[A-Za-z\u0370-\u03ff][A-Za-z\u0370-\u03ff0-9]*(?:_[A-Za-z0-9]+)?|[-+*\/()]/g);let i=0;const pk=()=>T[i],nx=()=>T[i++];
+ function sum(){let s=1;if(pk()==='-'){nx();s=-1}else if(pk()==='+')nx();const e=[term(s)];while(pk()==='+'||pk()==='-')e.push(term(nx()==='-'?-1:1));return e}
+ function term(s){const n=[],d=[];let inv=false;for(;;){(inv?d:n).push(fac());const o=pk();if(o==='*'||o==='/'){nx();inv=o==='/'}else break}return{s,n,d}}
+ function fac(){const t=nx();if(t==='('){const e=sum();nx();return{k:'sum',e}}
+  if(t==='log'&&pk()==='('){nx();const e=sum();nx();return{k:'log',e}}
+  return /^[\d.]/.test(t)?{k:'n',v:+t,t}:{k:'v',name:t}}
+ return norm(sum())}
+function doOp(st,m){const f=e=>m.t==='neg'?negE(e):m.t==='log'||m.t==='p10'?fnE(m.t,e):m.t==='mul'?mulE(e,m.inv?invE(m.x):m.x):addE(e,m.inv?negE(m.x):m.x);return{L:f(st.L),R:f(st.R)}}
+const isT=(e,g)=>e.length===1&&e[0].s===1&&e[0].n.length===1&&!e[0].d.length&&e[0].n[0].k==='v'&&e[0].n[0].name===g;
+const has=(e,g)=>JSON.stringify(e).includes('"name":"'+g+'"');
+const isoAny=(st,g)=>(isT(st.L,g)&&!has(st.R,g))||(isT(st.R,g)&&!has(st.L,g));
+const solved=(st,g)=>isT(st.L,g)&&!has(st.R,g);
+function vars(e,s=new Set()){e.forEach(t=>[...t.n,...t.d].forEach(f=>f.k==='v'?s.add(f.name):f.k!=='n'&&vars(f.e,s)));return s}
+/* ---------- rendering ---------- */
+function disp(n){let m,sub='';if(n[0]==='['){m=n.match(/^\[(.+?)\](?:_(.+))?$/);return'['+m[1].replace(/(\d+)/g,'<sub>$1</sub>').replace(/([+-])$/,(x,c)=>'<sup>'+(c==='-'?'−':'+')+'</sup>')+']'+(m[2]?'<sub>'+m[2]+'</sub>':'')}
+ m=n.match(/^(.+?)(?:_(.+))?$/);return m[1]+(m[2]?'<sub>'+(m[2]==='half'?'½':m[2])+'</sub>':'')}
+let TG='',REG=[];
+const P=(opr,mv)=>REG.push({opr,mv})-1;
+const rF=f=>f.k==='v'?'<span class="v'+(f.name===TG?' t':'')+'">'+disp(f.name)+'</span>':f.k==='n'?f.t:f.k==='sum'?'('+rE(f.e)+')':f.k==='log'?'log('+rE(f.e)+')':'10<sup>'+rE(f.e)+'</sup>';
+const fr=(a,b)=>'<span class="fr"><span>'+a+'</span><b></b><span>'+b+'</span></span>';
+const rT0=t=>{const a=t.n.length?t.n.map(rF).join('&thinsp;'):'1';return t.d.length?fr(a,t.d.map(rF).join('&thinsp;')):a};
+const rE=e=>e.length?e.map((t,i)=>(t.s<0?(i?' − ':'−'):(i?' + ':''))+rT0(t)).join(''):'0';
+function rTop(e){if(!e.length)return'0';
+ if(e.length>1)return e.map((t,i)=>'<span class="chip tm" data-p="'+P([{...t,s:1}],{t:'add',x:[{...t,s:1}],inv:t.s>0})+'">'+(t.s<0?(i?'− ':'−'):(i?'+ ':''))+rT0(t)+'</span>').join(' ');
+ const t=e[0];let h='';if(t.s<0)h+='<span class="chip" data-p="'+P([{s:-1,n:[],d:[]}],{t:'neg'})+'">−</span>';
+ const w=t.s>0&&t.n.length===1&&!t.d.length&&(t.n[0].k==='log'||t.n[0].k==='p10');
+ const cf=(f,dn)=>{const o=[{s:1,n:[f],d:[]}];return'<span class="chip" data-p="'+P(o,w?{t:f.k==='log'?'p10':'log'}:{t:'mul',x:o,inv:!dn})+'">'+rF(f)+'</span>'};
+ const a=t.n.length?t.n.map(f=>cf(f,false)).join(''):'1';
+ return h+(t.d.length?fr(a,t.d.map(f=>cf(f,true)).join('')):a)}
+const build=s=>{REG=[];rTop(s.L);rTop(s.R);return REG.slice()};
+const key=s=>K.e(s.L)+'='+K.e(s.R);
+function solve(st,g,max=9){const seen=new Set([key(st)]);let q=[{st,p:[],i:-1}];
+ for(let d=0;d<max&&q.length&&seen.size<20000;d++){const nq=[];
+  for(const x of q)build(x.st).forEach((pc,idx)=>{const ns=doOp(x.st,pc.mv),k=key(ns);if(seen.has(k))return;seen.add(k);
+   const r={st:ns,p:[...x.p,pc.mv],i:x.i<0?idx:x.i};if(isoAny(ns,g))throw r;nq.push(r)});q=nq}return null}
+const trySolve=(st,g)=>{try{return solve(st,g)}catch(r){return r}};
+const desc=m=>{const x=m.x&&rE(m.x.length>1?[one(m.x)]:m.x),ng=m.x&&m.x.length===1&&m.x[0].s<0,y=m.x&&rE(negE(m.x));
+ return m.t==='neg'?'Multiplied both sides by −1':m.t==='log'?'Took log₁₀ of both sides':m.t==='p10'?'Raised 10 to the power of both sides':
+ m.t==='mul'?(m.inv?'Divided':'Multiplied')+' both sides by '+x:(m.inv?'Subtracted '+x+' from':'Added '+x+' to')+' both sides'};
+/* ---------- game state ---------- */
+let lvl='a',st,hist=[],cur={},score=0,streak=0,best=0,pn=0,moves=0,hinted=false,done=false,armed=null,tl=90,last=null,PCS=[];
+function pick(){const pool=LV[lvl];for(let tr=0;tr<80;tr++){const[name,f,o={}]=pool[Math.random()*pool.length|0];let[a,b]=f.split('=').map(parse);if(Math.random()<.5)[a,b]=[b,a];
+ const vs=o.t||[...vars([...a,...b])],c=vs.filter(v=>!(o.c||[]).includes(v)&&!isoAny({L:a,R:b},v)&&(name+v)!==cur.id);if(!c.length)continue;
+ const g=c[Math.random()*c.length|0];return{name,id:name+g,tg:g,st:{L:a,R:b}}}}
+function newProblem(){cur=pick();TG=cur.tg;st=cur.st;hist=[];moves=0;hinted=false;done=false;armed=null;tl=90;last=null;pn++;
+ const s=trySolve(st,TG);cur.par=s?s.p.length+(isT(s.st.R,TG)?1:0):4;cur.sol=s;
+ $('msg').className='';$('msg').innerHTML='';$('bnx').style.display='none';draw()}
+function draw(hi){REG=[];const L=rTop(st.L),R=rTop(st.R);PCS=REG;$('L').innerHTML=L;$('R').innerHTML=R;
+ $('goal').innerHTML='<b>'+cur.name+'</b> — Goal: get <span class="v t">'+disp(TG)+'</span> alone on the <b>left</b> side.';
+ $('last').innerHTML=last?'Last step: '+last:'&nbsp;';
+ $('sc').textContent=score;$('st').textContent=streak;$('bs').textContent=best;$('pn').textContent=pn;$('mv').textContent=moves;$('par').textContent=cur.par;
+ document.querySelectorAll('[data-a]').forEach(b=>b.classList.toggle('on',b.dataset.a===armed));
+ $('stage').classList.toggle('armed',!!armed);
+ const ns=!done&&isoAny(st,TG)&&!solved(st,TG),m=$('msg');$('bsw').classList.toggle('pulse',ns);
+ if(ns){m.className='no';m.dataset.sw=1;m.innerHTML='<b>'+disp(TG)+' is isolated — but on the right.</b> Now swap right &amp; left to achieve the goal.'}
+ else if(m.dataset.sw){delete m.dataset.sw;m.className='';m.innerHTML=''}
+ $('how').innerHTML=armed?'<b>'+{mul:'Multiply',div:'Divide',add:'Add',sub:'Subtract'}[armed]+' both sides</b> — now tap the piece to use.':'<b>Step 1:</b> choose an operation (× ÷ + −, or × (−1), log₁₀, 10ˣ, swap). <b>Step 2:</b> for × ÷ + −, tap the piece to use. It is applied to both sides.';
+ if(hi!=null){const el=document.querySelector('[data-p="'+hi+'"]');el&&el.classList.add('hint')}}
+function move(mv){if(done)return;$('msg').className='';$('msg').innerHTML='';hist.push(st);st=doOp(st,mv);moves++;armed=null;last=desc(mv);draw();if(solved(st,TG))win()}
+function act(id){const pc=PCS[id];if(!pc||done)return;
+ if(!armed){$('msg').className='no';$('msg').innerHTML='Choose an operation first (× ÷ + −), then tap the piece you want to use.';const t=$('tools');t.classList.remove('nudge');void t.offsetWidth;t.classList.add('nudge');return}
+ move({t:armed==='mul'||armed==='div'?'mul':'add',x:pc.opr,inv:armed==='div'||armed==='sub'})}
+function win(){done=true;draw();const ok=!hinted;streak=ok?streak+1:0;best=Math.max(best,streak);
+ const base={a:100,b:100,m:150,h:200}[lvl],eff=moves<=cur.par?50:moves<=cur.par+2?25:0,tb=$('tm').checked?Math.round(tl):0,mult=ok?Math.min(2.5,1+.25*(streak-1)):1;
+ const pts=Math.round((base+eff+tb)*mult*(ok?1:.5));score+=pts;draw();
+ $('msg').className='ok';$('msg').innerHTML='<b>✓ Solved!</b> '+(moves<=cur.par?'Perfect — that matches the shortest path ('+cur.par+').':'In '+moves+' moves (shortest is '+cur.par+').')+
+ '<div class="eq">'+rE(st.L)+' = '+rE(st.R)+'</div>+'+pts+' pts <small>(base '+base+', efficiency '+eff+(tb?', time '+tb:'')+', streak ×'+mult.toFixed(2)+(ok?'':', hint used: half points, streak reset')+')</small>';
+ $('bnx').style.display='';$('bnx').focus()}
+function giveUp(why){if(done)return;done=true;streak=0;const s=trySolve(st,TG);let e='';if(s){const f=s.st.R&&isT(s.st.R,TG)?{L:s.st.R,R:s.st.L}:s.st;e='<div class="eq">'+rE(f.L)+' = '+rE(f.R)+'</div>'}
+ draw();$('msg').className='no';$('msg').innerHTML='<b>'+why+'</b> One way to finish:'+e+'Streak reset — you can still study it, then continue.';$('bnx').style.display=''}
+/* ---------- events ---------- */
+$('stage').addEventListener('click',e=>{const c=e.target.closest('[data-p]');if(c)act(+c.dataset.p)});
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{armed=armed===b.dataset.a?null:b.dataset.a;draw()});
+$('bneg').onclick=()=>move({t:'neg'});$('blog').onclick=()=>move({t:'log'});$('bp10').onclick=()=>move({t:'p10'});
+$('bsw').onclick=()=>{if(!done){hist.push(st);st={L:st.R,R:st.L};last='Swapped the two sides';draw();if(solved(st,TG))win()}};
+$('bun').onclick=()=>{if(hist.length&&!done){st=hist.pop();moves=Math.max(0,moves-1);last='Undid a step';draw()}};
+$('bre').onclick=()=>{if(!done){st=cur.st;hist=[];moves=0;last=null;draw()}};
+$('bhi').onclick=()=>{if(done)return;if(isoAny(st,TG)){hinted=true;last='Hint — '+disp(TG)+' is isolated; use swap to put it on the left.';draw();return}const s=trySolve(st,TG);hinted=true;if(s){last='Hint — a useful next step: '+desc(s.p[0])+' (see the highlighted piece). Half points this problem.';draw(s.i)}else{last='No hint found — try Undo or Restart.';draw()}};
+$('bsk').onclick=()=>giveUp('Answer revealed.');
+$('bnx').onclick=newProblem;
+$('tm').onchange=()=>{$('tbox').style.display=$('tbar').style.display=$('tm').checked?'':'none';tl=90};
+setInterval(()=>{if(!$('tm').checked||done)return;tl-=.25;$('tl').textContent=Math.max(0,Math.ceil(tl));$('tbar').firstChild.style.width=Math.max(0,tl/90*100)+'%';if(tl<=0)giveUp('Time’s up!')},250);
+for(const k in LN){const b=document.createElement('button');b.textContent='Level '+LN[k];b.dataset.l=k;b.onclick=()=>{lvl=k;streak=0;cur={};document.querySelectorAll('[data-l]').forEach(x=>x.classList.toggle('on',x.dataset.l===k));newProblem()};$('lv').appendChild(b)}
+document.querySelector('[data-l="a"]').classList.add('on');newProblem();
+</script></body></html>
