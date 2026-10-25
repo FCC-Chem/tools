@@ -34,7 +34,7 @@ button:hover{background:var(--l)}button.on{background:var(--m);color:#fff}button
 #msg.no{background:#fff3e0;border:1.5px solid var(--am);border-radius:10px;padding:10px}
 #msg .eq{font-family:'JetBrains Mono',monospace;font-size:1.2rem;margin:6px 0}
 #tbar{height:6px;background:#dcedc8;border-radius:3px;margin-top:6px;display:none}#tbar i{display:block;height:100%;background:var(--m);border-radius:3px}
-small{color:#476b4c}button.pulse{animation:p2 .7s infinite alternate;border-color:var(--am);background:#fff3e0}@keyframes p2{to{box-shadow:0 0 0 6px rgba(180,83,9,.35)}}
+small{color:#476b4c}.chip .chip{box-shadow:none;padding:.05em .3em}button.pulse{animation:p2 .7s infinite alternate;border-color:var(--am);background:#fff3e0}@keyframes p2{to{box-shadow:0 0 0 6px rgba(180,83,9,.35)}}
 </style></head><body><div class="wrap">
 <h1>⚗ Equation Rearranger</h1>
 <div class="bar" id="lv"></div>
@@ -72,7 +72,7 @@ const LN={a:'1A  × ÷',b:'1B  + −',m:'2  Mixed',h:'3  Hard (log)'};
 /* ---------- expression engine: Expr = array of terms {s:±1,n:[factors],d:[factors]} ---------- */
 const K={f:f=>f.k==='v'?'v'+f.name:f.k==='n'?'n'+f.v:f.k+'('+K.e(f.e)+')',t:t=>t.s+'|'+t.n.map(K.f).sort().join('*')+'/'+t.d.map(K.f).sort().join('*'),e:e=>e.map(K.t).sort().join('+')};
 function norm(e){const out=[];
- for(const t of e){let s=t.s,zero=false;const n=[],d=[];
+ for(const t of e){let s=t.s,zero=false;let n=[],d=[];
   const add=(f,inv)=>{
    if(f.k==='sum'){const g=norm(f.e);if(!g.length){if(!inv)zero=true;return}
     if(g.length===1){const u=g[0];s*=u.s;u.n.forEach(x=>add(x,inv));u.d.forEach(x=>add(x,!inv));return}f={k:'sum',e:g}}
@@ -80,13 +80,15 @@ function norm(e){const out=[];
     if(i&&i.k===(f.k==='log'?'p10':'log'))return add({k:'sum',e:i.e},inv)}
    if(f.k==='n'&&f.v===1)return;(inv?d:n).push(f)};
   t.n.forEach(f=>add(f,false));t.d.forEach(f=>add(f,true));if(zero)continue;
+  
   for(let i=0;i<n.length;i++){const k=K.f(n[i]),j=d.findIndex(x=>K.f(x)===k);if(j>=0){n.splice(i--,1);d.splice(j,1)}}
+  const mg=l=>{const q=l.filter(f=>f.k==='n');if(q.length<2)return l;const v=+q.reduce((a,f)=>a*f.v,1).toPrecision(12);return[...(v===1?[]:[{k:'n',v,t:''+v}]),...l.filter(f=>f.k!=='n')]};n=mg(n);d=mg(d);
   out.push({s,n,d})}
  const o=[];for(const t of out){if(t.n.length===1&&!t.d.length&&t.n[0].k==='sum')t.n[0].e.forEach(u=>o.push({s:u.s*t.s,n:u.n,d:u.d}));else o.push(t)}
  for(let i=0;i<o.length;i++){const k=K.t({...o[i],s:1}),j=o.findIndex((u,x)=>x>i&&u.s===-o[i].s&&K.t({...u,s:1})===k);if(j>=0){o.splice(j,1);o.splice(i--,1)}}
  return o}
 const one=x=>x.length===1?x[0]:{s:1,n:[{k:'sum',e:x}],d:[]};
-const mulE=(e,o)=>{if(!e.length||!o.length)return[];const a=one(e),b=one(o);return norm([{s:a.s*b.s,n:[...a.n,...b.n],d:[...a.d,...b.d]}])};
+const mulE=(e,o,dist)=>{if(!e.length||!o.length)return[];if(dist&&e.length>1&&o.length===1)return norm(e.map(t=>({s:t.s*o[0].s,n:[...t.n,...o[0].n],d:[...t.d,...o[0].d]})));const a=one(e),b=one(o);return norm([{s:a.s*b.s,n:[...a.n,...b.n],d:[...a.d,...b.d]}])};
 const invE=o=>o.length===1?[{s:o[0].s,n:o[0].d,d:o[0].n}]:[{s:1,n:[],d:[{k:'sum',e:o}]}];
 const negE=e=>e.map(t=>({...t,s:-t.s})),addE=(e,o)=>norm([...e,...o]);
 const fnE=(k,e)=>norm([{s:1,n:[{k,e}],d:[]}]);
@@ -97,7 +99,7 @@ function parse(str){const T=str.match(/\d+\.?\d*|\[[^\]]+\](?:_[A-Za-z0-9]+)?|[A
   if(t==='log'&&pk()==='('){nx();const e=sum();nx();return{k:'log',e}}
   return /^[\d.]/.test(t)?{k:'n',v:+t,t}:{k:'v',name:t}}
  return norm(sum())}
-function doOp(st,m){const f=e=>m.t==='neg'?negE(e):m.t==='log'||m.t==='p10'?fnE(m.t,e):m.t==='mul'?mulE(e,m.inv?invE(m.x):m.x):addE(e,m.inv?negE(m.x):m.x);return{L:f(st.L),R:f(st.R)}}
+function doOp(st,m){const f=e=>m.t==='neg'?negE(e):m.t==='log'||m.t==='p10'?fnE(m.t,e):m.t==='mul'?(m.inv?mulE(e,invE(m.x)):mulE(e,m.x,true)):addE(e,m.inv?negE(m.x):m.x);return{L:f(st.L),R:f(st.R)}}
 const isT=(e,g)=>e.length===1&&e[0].s===1&&e[0].n.length===1&&!e[0].d.length&&e[0].n[0].k==='v'&&e[0].n[0].name===g;
 const has=(e,g)=>JSON.stringify(e).includes('"name":"'+g+'"');
 const isoAny=(st,g)=>(isT(st.L,g)&&!has(st.R,g))||(isT(st.R,g)&&!has(st.L,g));
@@ -113,7 +115,10 @@ const fr=(a,b)=>'<span class="fr"><span>'+a+'</span><b></b><span>'+b+'</span></s
 const rT0=t=>{const a=t.n.length?t.n.map(rF).join('&thinsp;'):'1';return t.d.length?fr(a,t.d.map(rF).join('&thinsp;')):a};
 const rE=e=>e.length?e.map((t,i)=>(t.s<0?(i?' − ':'−'):(i?' + ':''))+rT0(t)).join(''):'0';
 function rTop(e){if(!e.length)return'0';
- if(e.length>1)return e.map((t,i)=>'<span class="chip tm" data-p="'+P([{...t,s:1}],{t:'add',x:[{...t,s:1}],inv:t.s>0})+'">'+(t.s<0?(i?'− ':'−'):(i?'+ ':''))+rT0(t)+'</span>').join(' ');
+ if(e.length>1)return e.map((t,i)=>{const o=[{...t,s:1}],sg=t.s<0?(i?'− ':'−'):(i?'+ ':''),id=P(o,{t:'add',x:o,inv:t.s>0});
+  if(t.n.length+t.d.length<2)return'<span class="chip tm" data-p="'+id+'">'+sg+rT0(t)+'</span>';
+  const cf=f=>'<span class="chip" data-p="'+P([{s:1,n:[f],d:[]}],null)+'">'+rF(f)+'</span>',a=t.n.length?t.n.map(cf).join(''):'1';
+  return'<span class="chip tm" data-p="'+id+'">'+sg+(t.d.length?fr(a,t.d.map(cf).join('')):a)+'</span>'}).join(' ');
  const t=e[0];let h='';if(t.s<0)h+='<span class="chip" data-p="'+P([{s:-1,n:[],d:[]}],{t:'neg'})+'">−</span>';
  const w=t.s>0&&t.n.length===1&&!t.d.length&&(t.n[0].k==='log'||t.n[0].k==='p10');
  const cf=(f,dn)=>{const o=[{s:1,n:[f],d:[]}];return'<span class="chip" data-p="'+P(o,w?{t:f.k==='log'?'p10':'log'}:{t:'mul',x:o,inv:!dn})+'">'+rF(f)+'</span>'};
@@ -123,7 +128,7 @@ const build=s=>{REG=[];rTop(s.L);rTop(s.R);return REG.slice()};
 const key=s=>K.e(s.L)+'='+K.e(s.R);
 function solve(st,g,max=9){const seen=new Set([key(st)]);let q=[{st,p:[],i:-1}];
  for(let d=0;d<max&&q.length&&seen.size<20000;d++){const nq=[];
-  for(const x of q)build(x.st).forEach((pc,idx)=>{const ns=doOp(x.st,pc.mv),k=key(ns);if(seen.has(k))return;seen.add(k);
+  for(const x of q)build(x.st).forEach((pc,idx)=>{if(!pc.mv)return;const ns=doOp(x.st,pc.mv),k=key(ns);if(seen.has(k))return;seen.add(k);
    const r={st:ns,p:[...x.p,pc.mv],i:x.i<0?idx:x.i};if(isoAny(ns,g))throw r;nq.push(r)});q=nq}return null}
 const trySolve=(st,g)=>{try{return solve(st,g)}catch(r){return r}};
 const desc=m=>{const x=m.x&&rE(m.x.length>1?[one(m.x)]:m.x),ng=m.x&&m.x.length===1&&m.x[0].s<0,y=m.x&&rE(negE(m.x));
