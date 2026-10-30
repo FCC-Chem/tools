@@ -1,0 +1,93 @@
+name: Sync Dr. Dan's games from his personal repos
+
+# Dr. Dan develops each game in his own repo (github.com/ItsDrDan/<repo>).
+# This workflow copies the latest index.html, meta.json and any assets/
+# folder from those repos into itsdrdan/<folder>/ here, so he only ever
+# edits in one place.
+#
+# Runs every hour, and can be run on demand from the Actions tab
+# ("Sync Dr. Dan's games..." -> Run workflow).
+#
+# Only the itsdrdan/ folder is ever touched. Edits made to itsdrdan/
+# directly in this repo WILL be overwritten -- change the personal repo.
+#
+# To add a game: add a line to the list below (personal repo, folder here).
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # commit the copied files
+  actions: write    # start the catalog rebuild afterwards
+
+concurrency:
+  group: sync-itsdrdan
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy latest files from ItsDrDan repos
+        id: sync
+        run: |
+          while read -r repo folder; do
+            [ -z "$repo" ] && continue
+            echo "== ItsDrDan/$repo -> itsdrdan/$folder"
+            rm -rf /tmp/src
+            if ! git clone -q --depth 1 "https://github.com/ItsDrDan/$repo" /tmp/src; then
+              echo "::warning::Could not fetch ItsDrDan/$repo; skipping it"
+              continue
+            fi
+            if [ ! -s /tmp/src/index.html ]; then
+              echo "::warning::ItsDrDan/$repo has no index.html; skipping it"
+              continue
+            fi
+            mkdir -p "itsdrdan/$folder"
+            cp /tmp/src/index.html "itsdrdan/$folder/index.html"
+            if [ -f /tmp/src/meta.json ]; then
+              cp /tmp/src/meta.json "itsdrdan/$folder/meta.json"
+            fi
+            if [ -d /tmp/src/assets ]; then
+              rm -rf "itsdrdan/$folder/assets"
+              cp -r /tmp/src/assets "itsdrdan/$folder/assets"
+            fi
+          done <<'EOF'
+          elements         elements
+          gaslaws          gaslaws
+          ionicformula     naming
+          lewisstructures  lewisstructures
+          metric           metric
+          moles            mole
+          polyatomic       polyatomicion
+          reactions        reactions
+          redox            redox
+          sigfig           sigfigs
+          stoichiometry    stoichiometry
+          thermochemistry  thermochemistry
+          EOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add itsdrdan
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git diff --cached --stat
+            git commit -m "Sync Dr. Dan's games from his personal repos"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # A push made by this workflow does not start other workflows on its
+      # own, so start the catalog build explicitly.
+      - name: Rebuild the catalog site
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-catalog.yml --repo "${{ github.repository }}" --ref main
