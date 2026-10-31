@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functional Groups Studio • ItsDrDan • CHEM 3B</title>
+<style>
+:root{--ink:#22313b;--muted:#5c6a75;--line:#e4dfd3;--card:#fffefa;--blue:#4a9fd6;--blue-d:#3b82b4;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:linear-gradient(120deg,#f1faf4 0%,#fffaf1 45%,#fdf1f1 100%);min-height:100vh;line-height:1.45}
+.app{max-width:1280px;margin:0 auto;padding:14px 14px 40px}
+.hidden{display:none!important}
+button,select,input{font:inherit;color:inherit}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 6px 20px #26343c10;padding:18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 22px;border-radius:24px;background:linear-gradient(120deg,#fff,#f4f9ff);border:1px solid var(--line);box-shadow:0 8px 24px #26343c10}
+.hero h1{margin:6px 0 4px;font-size:clamp(26px,3.4vw,38px);line-height:1.1;font-weight:900;letter-spacing:-.01em}
+.hero h1 .a{color:#d96b5f}.hero h1 .b{color:#3f94c9}
+.hero .subtitle{margin:0;color:var(--muted);font-size:15px}
+.badge{display:inline-block;background:#f1ece2;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.hero-emoji{font-size:64px;line-height:1;filter:drop-shadow(0 4px 6px #0002)}
+details.directions{margin:10px 0;padding:0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f6f2ff,#f0f8ff);box-shadow:0 4px 0 #9fb6e833,0 8px 16px #26343c0d}
+details.directions>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;display:flex;justify-content:space-between;align-items:center;min-height:48px;border-radius:16px}
+details.directions>summary::-webkit-details-marker{display:none}
+details.directions>summary:hover{background:#ffffff80}
+details.directions>summary:focus-visible,.collapsible>summary:focus-visible{outline:3px solid #5b7fd1;outline-offset:2px}
+.sum-hint{font-size:13px;font-weight:900;color:#fff;background:#4a6fc4;padding:6px 14px;border-radius:999px}
+.sum-hint:after{content:" ▾"}
+details.directions[open]>summary:after{content:"Hide ▴";font-size:13px;font-weight:900;color:#4a6fc4}
+details.directions[open] .sum-hint{display:none}
+details.directions ol{margin:0 18px 6px;padding-left:22px;line-height:1.6}
+details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12px;padding:9px 12px;font-size:14px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0}
+.mode-btn{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:4px;border-radius:16px;background:linear-gradient(145deg,#ffffffa6,var(--mb));padding:10px 12px 12px;display:grid;grid-template-columns:44px 1fr;grid-template-areas:"i n" "i s";column-gap:10px;align-items:center;min-height:62px;transition:transform .15s}
+.mode-btn:hover{transform:translateY(-2px)}
+.mode-btn.active{outline:3px solid var(--ma);outline-offset:2px;background:linear-gradient(145deg,#fff,var(--mb))}
+.mode-icon{grid-area:i;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#ffffffbc;color:#344952}
+.mode-icon svg{width:28px;height:28px}
+.mode-name{grid-area:n;font-weight:900;font-size:17px;line-height:1.2}
+.mode-btn small{grid-area:s;font-size:12px;color:#4c5a65;font-weight:600;margin-top:2px}
+.mode-btn[data-mode=spot]{--mb:#e7f6e9;--ma:#7caf86}.mode-btn[data-mode=classify]{--mb:#fff0dc;--ma:#d6ab66}.mode-btn[data-mode=name]{--mb:#e6f2ff;--ma:#82afd2}.mode-btn[data-mode=match]{--mb:#f0e8fc;--ma:#ad8cce}.mode-btn[data-mode=react]{--mb:#fde7e7;--ma:#d48a8a}.mode-btn[data-mode=props]{--mb:#e3f7f6;--ma:#6fb7b3}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-areas:"card side" "card ref" "card vid";gap:14px;align-items:start;margin-top:10px}
+#practice{grid-area:card}#journey{grid-area:side}#refDetails{grid-area:ref}#videoDetails{grid-area:vid}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.mode-title{margin:0;font-size:26px;font-weight:900}
+.score{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{background:#f1ece2;border-radius:999px;padding:7px 13px;font-weight:800;font-size:14px}
+.action{border:0;border-radius:14px;padding:13px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px}
+.action.primary{background:var(--blue);color:#fff}.action.primary:hover{background:var(--blue-d)}
+.action.secondary{background:#f1ece2}.action.secondary:hover{background:#e8e1d3}
+.action.next{background:#263840;color:#fff}.action:disabled{opacity:.55;cursor:default}
+#nextBtn{min-height:44px;padding:8px 18px}
+.footer-note{color:var(--muted);font-size:13px;margin:8px 0}
+.progress-note{margin:8px 0 6px}
+.style-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:15px;font-weight:800}
+.style-row select{min-height:40px;border-radius:12px;border:2px solid var(--line);background:#fff;padding:4px 10px;font-weight:700}
+.prompt{font-size:21px;font-weight:800;margin:12px 0 8px;line-height:1.35}
+.struct{display:flex;justify-content:center;align-items:center;background:#fff;border:2px dashed #e2dccd;border-radius:16px;padding:8px;margin:8px 0 12px;min-height:130px;overflow-x:auto}
+.struct svg.mol{max-width:100%;height:auto}
+.condensed{font-size:30px;font-weight:700;letter-spacing:.02em;font-family:Georgia,'Times New Roman',serif;padding:18px 8px;text-align:center;word-break:break-word}
+.condensed sub{font-size:.62em}
+.options{display:grid;gap:10px;margin:8px 0 4px}
+.cols2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.option{display:flex;align-items:center;gap:10px;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:58px;font-size:18px;font-weight:700;cursor:pointer;transition:transform .12s}
+.option:hover:not(:disabled){transform:translateY(-1px);border-color:#9bc3e0}
+.option.selected{border-color:var(--blue);background:#eaf5fd;box-shadow:0 0 0 3px #4a9fd633}
+.option.wrong{border-color:#d9776f;background:#fdeeed}
+.option.right{border-color:#4fa36a;background:#e8f7ec}
+.option:disabled{cursor:default}
+.opt-letter{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#f1ece2;display:grid;place-items:center;font-size:14px;font-weight:900}
+.opt-body{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-width:0;gap:2px}
+.struct-opts .opt-body svg.mol{max-width:100%;height:auto}
+.optname{font-size:14px;color:var(--muted);font-weight:800}
+.rxn{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;background:#fff;border:2px dashed #e2dccd;border-radius:16px;padding:8px;margin:8px 0 12px}
+.rxn svg.mol{max-width:100%;height:auto}
+.plus{font-size:26px;font-weight:900;color:#6b7a85;padding:0 4px}
+.ptext{font-size:22px;font-weight:800;padding:0 6px}
+.rarrow{display:inline-flex;flex-direction:column;align-items:center;font-size:34px;font-weight:900;line-height:1;margin:0 6px}
+.rlab{font-size:14px;font-weight:800;color:#3b5f7a;text-align:center;line-height:1.1;min-height:14px}.rlab small{display:block;font-size:11px;font-weight:700;color:#6b7a85}
+.qmark{font-size:40px;font-weight:900;color:#c08a2e;padding:0 10px}
+.btn-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:12px}
+.hintbox{display:none;background:#fff6d6;border:1px solid #f0dc94;border-radius:14px;padding:10px 14px;margin-top:10px;font-weight:600}
+.hintbox.show{display:block}
+.feedback{margin-top:10px;border-radius:14px;padding:0;line-height:1.5;font-size:16px}
+.feedback.good{background:#e8f7ec;border:1px solid #bfe5c9;padding:12px 14px}
+.feedback.bad{background:#fdeeed;border:1px solid #f1c5c1;padding:12px 14px}
+.collapsible,.journey{padding:0}
+.collapsible>summary,.journey>summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:900;font-size:17px;min-height:48px;display:flex;align-items:center;gap:8px}
+.collapsible>summary::-webkit-details-marker,.journey>summary::-webkit-details-marker{display:none}
+.collapsible>summary:after,.journey>summary:after{content:'▸';margin-left:auto;font-size:16px;transition:transform .15s}
+.collapsible[open]>summary:after,.journey[open]>summary:after{transform:rotate(90deg)}
+.collapsible>.body,.journey>.body{padding:0 16px 14px}
+.journey{background:linear-gradient(120deg,#fff8e6,#eef6ff)}
+.journey-chip{white-space:nowrap;margin-left:auto;margin-right:8px;background:#fff;border:2px solid #f0cf86;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:900}
+.xp-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;font-weight:800;font-size:14px}
+.xp-track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.xp-fill{height:100%;background:linear-gradient(90deg,#8fd8c8,#f7c968);width:0;transition:width .3s}
+.xp-note{font-size:12.5px;color:var(--muted);margin:8px 0}
+.mode-xp{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0;font-size:11.5px;font-weight:700;color:var(--muted)}
+.mode-xp div{background:#fff;border-radius:10px;padding:6px 8px}.mode-xp b{display:block;font-size:18px;color:var(--ink)}
+.jbadges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.jbadge{border:2px dashed #d5dce2;border-radius:12px;padding:8px 10px;font-size:13px;opacity:.55;background:#fff}
+.jbadge.earned{opacity:1;border:2px solid #f0cf86;background:#fff8e6}.jbadge .bt{font-weight:900;font-size:14px}
+.journey-reset{margin-top:12px;font-size:14px;min-height:42px;padding:6px 14px;border-radius:12px;border:2px solid #d5dce2;background:#fff;cursor:pointer}
+.table-scroll{overflow-x:auto}
+.ref-table{width:100%;border-collapse:collapse;font-size:14px}.ref-table th,.ref-table td{border:1px solid #e6e0d2;padding:6px 8px;text-align:left}.ref-table th{background:#f4f0fb}.ref-table td.g{font-weight:900}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;font-size:17px;box-shadow:0 8px 24px #0002;pointer-events:none;transition:.3s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confetti{position:absolute;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.source-note{margin-top:16px}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "side" "ref" "vid"}.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+ .app{padding:10px 10px 30px}
+ .hero{padding:10px 14px}.hero .subtitle{display:none}.hero h1{font-size:24px}.hero-emoji{font-size:44px}.badge{font-size:11px;padding:4px 8px}
+ .sum-hint{padding:4px 10px;font-size:12px}
+ .mode-grid{gap:8px}.mode-btn{grid-template-columns:34px 1fr;padding:8px 8px 10px;min-height:52px}.mode-btn small{display:none}.mode-icon{width:34px;height:34px}.mode-icon svg{width:22px;height:22px}.mode-name{font-size:14px}
+ .card{padding:14px}.prompt{font-size:18px}.condensed{font-size:24px}
+ .cols3{grid-template-columns:1fr}.options:not(.struct-opts){grid-template-columns:1fr}.option{min-width:0}.opt-body{overflow-wrap:anywhere}.option{font-size:16px;padding:8px 10px}
+ .btn-row{grid-template-columns:1fr 1fr;position:sticky;bottom:0;z-index:5;background:linear-gradient(#fff0,#fffcf6 22%);padding:10px 0 8px;margin-bottom:0}.btn-row .primary{grid-column:1/-1}
+ #nextBtn{flex:1 1 100%}
+ .mode-xp{grid-template-columns:repeat(2,1fr)}
+}
+.video-wrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+</style></head>
+<body>
+<div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
+<div class="app">
+<section class="hero"><div><span class="badge">🧪 Functional Groups • ItsDrDan • CHEM 3B</span>
+<h1><span class="a">Functional</span> <span class="b">Groups</span> Studio</h1>
+<p class="subtitle">Spot, name and draw organic compounds, then predict how they react.</p></div><div class="hero-emoji" aria-hidden="true">⚗️</div></section>
+<details class="directions" id="howTo"><summary id="howToTitle">📘 How to use this game <span class="sum-hint">Tap to open</span></summary>
+<ol><li><strong>Pick a mode.</strong> Spot the Group, 1°/2°/3°, Name It, Draw It, Predict the Product or Properties.</li>
+<li><strong>Choose an answer</strong> and press Check Answer. Wrong choices are marked so you can try again.</li>
+<li><strong>Need help?</strong> Hint gives a clue. Show Answer reveals the solution but earns no point.</li>
+<li><strong>Skeletal or condensed.</strong> Use the Structure style menu to practice both ways of drawing.</li>
+<li><strong>Earn XP and badges</strong> for independent answers and streaks. Progress is saved in this browser only.</li></ol>
+<p class="tip"><strong>Tip:</strong> In skeletal drawings every corner and line end is a carbon with enough hydrogens to make four bonds.</p></details>
+<nav class="mode-grid" id="modeGrid" aria-label="Choose a study mode"></nav>
+<div class="main">
+<section class="card" id="practice">
+<div class="toprow"><h2 class="mode-title" id="modeTitle">Spot the Group</h2><div class="score"><span class="pill">Correct: <span id="correct">0</span></span><span class="pill">Streak: <span id="streak">0</span> 🔥</span><span class="pill">Assisted: <span id="assisted">0</span></span><button class="action next" id="nextBtn">New Question ↻</button></div></div>
+<p class="footer-note progress-note" id="progressLabel"></p>
+<div class="style-row" id="styleRow"><label for="styleSel">Structure style</label><select id="styleSel"><option value="mixed">Mixed</option><option value="skeletal">Skeletal</option><option value="condensed">Condensed</option></select></div>
+<div id="questionArea"></div>
+<div class="btn-row"><button class="action primary" id="checkBtn">Check Answer</button><button class="action secondary" id="hintBtn">Hint</button><button class="action secondary" id="showBtn">Show Answer</button></div>
+<div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+</section>
+<details class="card journey" id="journey"><summary>🧭 Chemistry Journey <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary><div class="body">
+<div class="xp-row"><span id="xpLevel">Level 1</span><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><span id="xpText">0 / 100 XP</span></div>
+<p class="xp-note">Earn 10 XP for each independent answer (+2 per streak step, up to +10) and 2 XP for a reveal. Saved in this browser only.</p>
+<div class="mode-xp" id="modeXp"></div><div class="jbadges" id="jbadges"></div><button class="journey-reset" id="journeyReset" type="button">Reset progress</button></div></details>
+<details class="card collapsible" id="videoDetails"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><p class="footer-note">CHEM 3B video playlist. Try the problem first, then pause a video to practice.</p><div class="video-wrap"><iframe id="plPlayer" title="Dr. Dan CHEM 3B playlist" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="footer-note"><a href="https://www.youtube.com/playlist?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f" target="_blank" rel="noopener">Open the playlist on YouTube ↗</a></p></div></details>
+<details class="card collapsible" id="refDetails"><summary>🧠 Reference &amp; rules</summary><div class="body" id="refBody"></div></details>
+</div>
+<p class="footer-note source-note">Practice topics follow the CHEM 3B organic chemistry chapters (hydrocarbons through amides). All questions and structures are generated for this game.</p>
+</div>
+<script>
+/* ===== Chemistry engine: structure model, layout, SVG, SMILES, condensed formula ===== */
+const BL=34,deg=Math.PI/180;
+const cos=a=>Math.cos(a*deg),sin=a=>Math.sin(a*deg);
+const nd=(el,draw,cond,extra)=>Object.assign({el,draw,cond,subs:[]},extra||{});
+const Cc=(subs)=>({el:'C',subs:subs||[]});
+const sO=()=>({b:2,node:nd('O','O','O')});
+const sOH=()=>({b:1,node:nd('O','OH','OH')});
+const sNH2=()=>({b:1,node:nd('N','NH2','NH2')});
+const sMe=()=>({b:1,node:{el:'C',cond:'CH3',subs:[]}});
+const sX=x=>({b:1,node:nd(x,x,x)});
+const tOH=()=>nd('O','OH','OH'),tNH2=()=>nd('N','NH2','NH2'),tH=()=>nd('H','H','H',{noSmiles:true}),tX=x=>nd(x,x,x);
+const nO=()=>nd('O','O','O'),nNH=()=>nd('N','NH','NH'),nN3=(m)=>nd('N','N','N',{subs:m?[sMe()]:[]});
+const Cs=k=>Array.from({length:k},()=>Cc());
+const RING=()=>({el:'C',ring:true,cond:'C6H5',subs:[]});
+function M(nodes,bonds){return {chain:nodes,bonds:bonds||Array(Math.max(0,nodes.length-1)).fill(1)}}
+function flipMol(m){return {chain:m.chain.slice().reverse(),bonds:m.bonds.slice().reverse()}}
+
+function layout(m){const n=m.chain.length,pos=[{x:0,y:0}],ang=[];let t=-60;
+ if(n>1){ang[0]=30;for(let k=1;k<n-1;k++){const lin=m.bonds[k-1]===3||m.bonds[k]===3;if(lin)ang[k]=ang[k-1];else{ang[k]=ang[k-1]+t;t=-t}}
+  for(let i=0;i<n-1;i++)pos.push({x:pos[i].x+BL*cos(ang[i]),y:pos[i].y+BL*sin(ang[i])})}
+ const lay={pos,ang,t,subs:[],ring:null};
+ for(let k=0;k<n;k++){const node=m.chain[k],ss=node.subs||[];if(!ss.length)continue;
+  let out;const prev=k>0?pos[k-1]:null,next=k<n-1?pos[k+1]:null;
+  const u=(a,b)=>{const dx=a.x-b.x,dy=a.y-b.y,l=Math.hypot(dx,dy);return {x:dx/l,y:dy/l}};
+  if(prev&&next){const u1=u(prev,pos[k]),u2=u(next,pos[k]);let ox=-(u1.x+u2.x),oy=-(u1.y+u2.y);const l=Math.hypot(ox,oy);if(l<1e-6){ox=-u1.y;oy=u1.x;if(oy>0){ox=-ox;oy=-oy}}else{ox/=l;oy/=l}out=Math.atan2(oy,ox)/deg}
+  else if(next){const a0=Math.atan2(pos[k].y-next.y,pos[k].x-next.x)/deg;const c1=a0+60,c2=a0-60;out=sin(c1)<sin(c2)?c1:c2}
+  else if(prev){const a0=Math.atan2(pos[k].y-prev.y,pos[k].x-prev.x)/deg;const c1=a0+60,c2=a0-60;out=sin(c1)<sin(c2)?c1:c2}
+  else out=-90;
+  const dirs=ss.length===1?[out]:[out-58,out+58];
+  ss.forEach((s,j)=>lay.subs.push({k,s,x:pos[k].x+BL*cos(dirs[j]),y:pos[k].y+BL*sin(dirs[j]),dir:dirs[j]}))}
+ if(m.chain[0].ring){lay.ring={cx:-BL*cos(30),cy:-BL*sin(30)}}
+ return lay}
+
+function labelSVG(txt,x,y,color,cls){let h='',i=0;const parts=[];for(const ch of txt){if(/[0-9]/.test(ch))parts.push(['sub',ch]);else if(ch==='+'||ch==='−'||ch==='-')parts.push(['sup',ch==='-'?'−':ch]);else parts.push(['n',ch])}
+ const first=parts[0][1],off=first==='H'||first==='O'||first==='N'||first==='C'?-6.5:-9;
+ let inner='';for(const [k,c] of parts){inner+=k==='n'?c:k==='sub'?`<tspan dy="5" font-size="12">${c}</tspan><tspan dy="-5"></tspan>`:`<tspan dy="-6" font-size="12">${c}</tspan><tspan dy="6"></tspan>`}
+ return `<text x="${(x+off).toFixed(1)}" y="${(y+6).toFixed(1)}" fill="${color}" class="atom-label" font-size="18" font-weight="800" font-family="Inter,Helvetica,Arial,sans-serif" stroke="#fff" stroke-width="5" stroke-linejoin="round" paint-order="stroke">${inner}</text>`}
+const ECOL={O:'#c0392b',N:'#2f5fc4',Cl:'#2e8b57',Br:'#8a5a1c',F:'#2e8b57',H:'#334650'};
+function svgMol(m,opt){opt=opt||{};const lay=layout(m),pts=[];const S='#2d3f4b';let body='';
+ const line=(x1,y1,x2,y2,w)=>`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${S}" stroke-width="${w||2.4}" stroke-linecap="round"/>`;
+ const bond=(a,b,order,aLab,bLab)=>{let [x1,y1,x2,y2]=[a.x,a.y,b.x,b.y];const dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l,px=-uy,py=ux;if(aLab){x1+=ux*9;y1+=uy*9}if(bLab){x2-=ux*9;y2-=uy*9}
+  const offs=order===1?[0]:order===2?[-2.9,2.9]:[-4.2,0,4.2];return offs.map(o=>line(x1+px*o,y1+py*o,x2+px*o,y2+py*o)).join('')};
+ const labs=[];const hasLab=n=>!!n.draw;
+ lay.pos.forEach(p=>pts.push(p));lay.subs.forEach(s=>pts.push(s));
+ for(let i=0;i<m.chain.length-1;i++)body+=bond(lay.pos[i],lay.pos[i+1],m.bonds[i],hasLab(m.chain[i]),hasLab(m.chain[i+1]));
+ lay.subs.forEach(s=>{body+=bond(lay.pos[s.k],s,s.s.b,hasLab(m.chain[s.k]),hasLab(s.s.node))});
+ m.chain.forEach((n,i)=>{if(hasLab(n))labs.push([n.draw,lay.pos[i],n.el])});lay.subs.forEach(s=>{if(hasLab(s.s.node))labs.push([s.s.node.draw,s,s.s.node.el])});
+ let ring='';if(lay.ring){const {cx,cy}=lay.ring,R=BL,vs=[0,1,2,3,4,5].map(j=>[cx+R*cos(30+60*j),cy+R*sin(30+60*j)]);ring=`<polygon points="${vs.map(v=>v[0].toFixed(1)+','+v[1].toFixed(1)).join(' ')}" fill="none" stroke="${S}" stroke-width="2.4" stroke-linejoin="round"/><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(R*.62).toFixed(1)}" fill="none" stroke="${S}" stroke-width="2"/>`;vs.forEach(v=>pts.push({x:v[0],y:v[1]}))}
+ const lt=labs.map(([t,p,e])=>labelSVG(t,p.x,p.y,ECOL[e]||S)).join('');
+ const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y),pad=opt.pad||24;let x0=Math.min(...xs)-pad,x1=Math.max(...xs)+pad+8,y0=Math.min(...ys)-pad,y1=Math.max(...ys)+pad;
+ const w=x1-x0,h=y1-y0,sc=opt.scale||1;
+ return `<svg class="mol" viewBox="${x0.toFixed(0)} ${y0.toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}" width="${(w*sc).toFixed(0)}" height="${(h*sc).toFixed(0)}" role="img" aria-label="${esc(opt.alt||'Chemical structure')}" xmlns="http://www.w3.org/2000/svg">${ring}${body}${lt}</svg>`}
+
+const SYM=e=>e;
+function smiles(m){let s='';const sub=(sb)=>{const nn=sb.node;return '('+(sb.b===2?'=':sb.b===3?'#':'')+SYM(nn.el)+')'};
+ for(let i=0;i<m.chain.length;i++){const n=m.chain[i];if(n.noSmiles)continue;if(i>0)s+=m.bonds[i-1]===2?'=':m.bonds[i-1]===3?'#':'';
+  if(n.ring)s+='c1ccccc1';else s+=n.smi||SYM(n.el);(n.subs||[]).forEach(sb=>{s+=sub(sb)})}return s}
+function condensed(m){let s='';const ord=(n,i)=>{let v=0;if(i>0)v+=m.bonds[i-1];if(i<m.chain.length-1)v+=m.bonds[i];(n.subs||[]).forEach(sb=>v+=sb.b);return v};
+ m.chain.forEach((n,i)=>{if(i>0)s+=m.bonds[i-1]===2?'=':m.bonds[i-1]===3?'≡':'';
+  if(n.ring){s+=m.chain.length===1?'C6H6':'C6H5';return}
+  if(n.el==='C'&&!n.cond){const h=4-ord(n,i);s+=h<=0?'C':h===1?'CH':'CH'+h}
+  else if(n.el==='N'&&n.draw==='NH'){const h=3-ord(n,i);s+=h<=0?'N':h===1?'NH':'NH'+h}
+  else if(n.el==='N'&&n.draw==='N'){s+='N'}
+  else s+=n.cond||n.el;
+  (n.subs||[]).forEach(sb=>{s+='('+(sb.b===2?'=':'')+(sb.node.cond||sb.node.el)+')'})});
+ return s}
+const subsc=t=>t.replace(/([A-Za-z\)])(\d+)/g,'$1<sub>$2</sub>');
+function condHTML(m){return subsc(condensed(m)).replace(/≡/g,'≡')}
+
+/* ===== Compound specs: build / name / group ===== */
+const ST=['','meth','eth','prop','but','pent','hex'];
+const ALK=n=>ST[n]+'yl';
+const loc=(n,p)=>Math.min(p,n+1-p);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const ACID_COMMON={1:'formic acid',2:'acetic acid',3:'propionic acid',4:'butyric acid'};
+const ACYL_COMMON={1:'formate',2:'acetate',3:'propionate',4:'butyrate'};
+const XN={Cl:'chloro',Br:'bromo',F:'fluoro'};
+function alkylGroups(list){const c={};list.forEach(n=>{const k=ALK(n);c[k]=(c[k]||0)+1});const di={2:'di',3:'tri'};return Object.keys(c).sort().map(k=>(c[k]>1?di[c[k]]:'')+k).join('')}
+const FAM={
+ alkane:{grp:'alkane',build:s=>M(Cs(s.n)),name:s=>ST[s.n]+'ane'},
+ alkene:{grp:'alkene',build:s=>{const b=Array(s.n-1).fill(1);b[s.p-1]=2;return M(Cs(s.n),b)},name:s=>s.n<=3?ST[s.n]+'ene':Math.min(s.p,s.n-s.p)+'-'+ST[s.n]+'ene'},
+ alkyne:{grp:'alkyne',build:s=>{const b=Array(s.n-1).fill(1);b[s.p-1]=3;return M(Cs(s.n),b)},name:s=>s.n<=3?ST[s.n]+'yne':Math.min(s.p,s.n-s.p)+'-'+ST[s.n]+'yne'},
+ halo:{grp:'halide',build:s=>{const c=Cs(s.n);if(s.p===1){c.push(tX(s.X));return M(c)}c[s.p-1].subs=[sX(s.X)];return M(c)},name:s=>s.n<=2?XN[s.X]+ST[s.n]+'ane':loc(s.n,s.p)+'-'+XN[s.X]+ST[s.n]+'ane'},
+ alcohol:{grp:'alcohol',build:s=>{const c=Cs(s.n);if(s.tert){c[s.p-1].subs=[sOH(),sMe()];return M(c)}if(s.p===1){c.push(tOH());return M(c)}c[s.p-1].subs=[sOH()];return M(c)},
+  name:s=>{if(s.tert){const l=loc(s.n,s.p);return `${l}-methyl-${l}-${ST[s.n]}anol`}return s.n<=2?ST[s.n]+'anol':loc(s.n,s.p)+'-'+ST[s.n]+'anol'},cls:s=>s.tert?3:s.p===1?1:2},
+ ether:{grp:'ether',build:s=>M([...Cs(s.a),nO(),...Cs(s.b)]),
+  name:s=>{const a=Math.min(s.a,s.b),L=Math.max(s.a,s.b);return L<=2||a===L?`${ST[a]}oxy${ST[L]}ane`:`1-${ST[a]}oxy${ST[L]}ane`},
+  common:s=>s.a===s.b?`di${ALK(s.a)} ether`:[ALK(s.a),ALK(s.b)].sort().join(' ')+' ether'},
+ aldehyde:{grp:'aldehyde',build:s=>M([...Cs(s.n-1),Cc([sO()]),tH()]),name:s=>ST[s.n]+'anal'},
+ ketone:{grp:'ketone',build:s=>{const c=Cs(s.n);c[s.p-1].subs=[sO()];return M(c)},name:s=>s.n===3?'propanone':loc(s.n,s.p)+'-'+ST[s.n]+'anone'},
+ acid:{grp:'acid',build:s=>M([...Cs(s.n-1),Cc([sO()]),tOH()]),name:s=>ST[s.n]+'anoic acid',common:s=>ACID_COMMON[s.n]},
+ ester:{grp:'ester',build:s=>M([...Cs(s.a-1),Cc([sO()]),nO(),...Cs(s.b)]),name:s=>`${ALK(s.b)} ${ST[s.a]}anoate`,common:s=>`${ALK(s.b)} ${ACYL_COMMON[s.a]}`},
+ amine1:{grp:'amine',build:s=>{const c=Cs(s.n);if(s.p===1){c.push(tNH2());return M(c)}c[s.p-1].subs=[sNH2()];return M(c)},name:s=>s.n<=2?ST[s.n]+'anamine':loc(s.n,s.p)+'-'+ST[s.n]+'anamine',cls:()=>1},
+ amine2:{grp:'amine',build:s=>M([...Cs(s.a),nNH(),...Cs(s.b)]),name:s=>s.a===s.b?`di${ALK(s.a)}amine`:[ALK(s.a),ALK(s.b)].sort().join('')+'amine',iupac:s=>{const a=Math.min(s.a,s.b),L=Math.max(s.a,s.b);return `N-${ALK(a).replace('yl','yl')}${ST[L]}anamine`.replace('N-','N-')},cls:()=>2},
+ amine3:{grp:'amine',build:s=>M([...Cs(s.a),nN3(true),...Cs(s.b)]),name:s=>alkylGroups([s.a,s.b,1])+'amine',cls:()=>3},
+ amide1:{grp:'amide',build:s=>M([...Cs(s.a-1),Cc([sO()]),tNH2()]),name:s=>ST[s.a]+'anamide',cls:()=>1},
+ amide2:{grp:'amide',build:s=>M([...Cs(s.a-1),Cc([sO()]),nNH(),...Cs(s.b)]),name:s=>`N-${ST[s.b]+'yl'}${ST[s.a]}anamide`.replace('N-methyl','N-methyl'),cls:()=>2},
+ amide3:{grp:'amide',build:s=>M([...Cs(s.a-1),Cc([sO()]),nN3(true),...Cs(1)]),name:s=>`N,N-dimethyl${ST[s.a]}anamide`,cls:()=>3},
+ arene:{grp:'aromatic',build:s=>M([RING(),...Cs(s.k)]),name:s=>s.k===0?'benzene':s.k===1?'toluene':s.k===2?'ethylbenzene':'propylbenzene'}
+};
+const bd=s=>{const m=FAM[s.f].build(s);if(s.flip){const f=flipMol(m);if(!f.chain[0].draw&&!f.chain[f.chain.length-1].draw)return f;if(!f.chain[0].draw)return f}return m};
+const nm=s=>FAM[s.f].name(s);
+const gp=s=>FAM[s.f].grp;
+const key=s=>nm(s);
+/* random spec generators (valid, name-canonical) */
+const R={
+ alkane:()=>({f:'alkane',n:rnd(3,6)}),
+ alkene:()=>{const n=rnd(3,6);return {f:'alkene',n,p:rnd(1,Math.min(Math.floor(n/2),n-1)||1),flip:Math.random()<.5}},
+ alkyne:()=>{const n=rnd(3,6);return {f:'alkyne',n,p:rnd(1,Math.min(Math.floor(n/2),n-1)||1),flip:Math.random()<.5}},
+ halo:()=>{const n=rnd(2,5);return {f:'halo',n,p:rnd(1,Math.ceil(n/2)),X:pickOne(['Cl','Br']),flip:Math.random()<.5}},
+ alcohol:()=>{const n=rnd(2,6);const p=rnd(1,Math.ceil(n/2));return {f:'alcohol',n,p,flip:Math.random()<.5}},
+ alcohol3:()=>{const n=rnd(3,6);const p=rnd(2,Math.ceil(n/2));return {f:'alcohol',n,p,tert:true,flip:Math.random()<.5}},
+ ether:()=>({f:'ether',a:rnd(1,3),b:rnd(1,4)}),
+ aldehyde:()=>({f:'aldehyde',n:rnd(2,6)}),
+ ketone:()=>{const n=rnd(3,6);return {f:'ketone',n,p:n===3?2:rnd(2,Math.ceil((n+1)/2)),flip:Math.random()<.5}},
+ acid:()=>({f:'acid',n:rnd(1,6)}),
+ ester:()=>({f:'ester',a:rnd(1,4),b:rnd(1,3)}),
+ amine1:()=>{const n=rnd(1,5);return {f:'amine1',n,p:n<=2?1:rnd(1,Math.ceil(n/2)),flip:Math.random()<.5}},
+ amine2:()=>({f:'amine2',a:rnd(1,3),b:rnd(1,3)}),
+ amine3:()=>({f:'amine3',a:rnd(1,3),b:rnd(1,3)}),
+ amide1:()=>({f:'amide1',a:rnd(1,5)}),
+ amide2:()=>({f:'amide2',a:rnd(1,4),b:rnd(1,2)}),
+ amide3:()=>({f:'amide3',a:rnd(1,4)}),
+ arene:()=>({f:'arene',k:rnd(0,3)})
+};
+/* neighbours: plausible wrong structures for each spec (used for name and match options) */
+function neighbours(s){const c=[];const add=x=>{if(x)c.push(x)};const fl=()=>Math.random()<.5;
+ const same=f=>R[f]();
+ switch(s.f){
+ case 'alkane':add({f:'alkane',n:Math.max(3,s.n-1)});add({f:'alkane',n:Math.min(6,s.n+1)});add({f:'alkene',n:s.n,p:1});add({f:'alkyne',n:s.n,p:1});add({f:'alcohol',n:s.n,p:1});add({f:'halo',n:s.n,p:1,X:'Cl'});break;
+ case 'alkene':add({f:'alkene',n:s.n,p:s.p===1&&s.n>=4?2:1});add({f:'alkane',n:s.n});add({f:'alkyne',n:s.n,p:s.p});add({f:'alkene',n:s.n<6?s.n+1:s.n-1,p:1});add({f:'alkene',n:s.n>3?s.n-1:s.n+1,p:1});break;
+ case 'alkyne':add({f:'alkyne',n:s.n,p:s.p===1&&s.n>=4?2:1});add({f:'alkane',n:s.n});add({f:'alkene',n:s.n,p:s.p});add({f:'alkyne',n:s.n<6?s.n+1:s.n-1,p:1});add({f:'alkyne',n:s.n>3?s.n-1:s.n+1,p:1});break;
+ case 'halo':add({f:'halo',n:s.n,p:s.p===1?Math.min(2,Math.ceil(s.n/2)):1,X:s.X,flip:fl()});add({f:'halo',n:s.n,p:s.p,X:s.X==='Cl'?'Br':'Cl',flip:fl()});add({f:'halo',n:s.n+1,p:1,X:s.X});add({f:'alkane',n:s.n});add({f:'alcohol',n:s.n,p:s.p,flip:fl()});break;
+ case 'alcohol':if(s.tert){add({f:'alcohol',n:s.n,p:s.p,flip:fl()});add({f:'alcohol',n:s.n,p:1});add({f:'alcohol',n:s.n,p:Math.min(2,Math.ceil(s.n/2))});add({f:'alcohol',n:s.n+1>6?s.n-1:s.n+1,p:s.p,tert:true,flip:fl()});add({f:'alcohol',n:s.n>3?s.n-1:s.n+1,p:Math.min(s.p,2),tert:true,flip:fl()});add({f:'ketone',n:s.n,p:2});break}
+  add({f:'alcohol',n:s.n,p:s.p===1?(s.n>=3?2:1):1,flip:fl()});if(s.n>=5&&s.p<Math.ceil(s.n/2))add({f:'alcohol',n:s.n,p:s.p+1,flip:fl()});add({f:'alcohol',n:s.n<6?s.n+1:s.n-1,p:s.p,flip:fl()});add({f:'alcohol',n:s.n>2?s.n-1:s.n+1,p:Math.min(s.p,Math.ceil((s.n>2?s.n-1:s.n+1)/2)),flip:fl()});if(s.p===1&&s.n>=2)add({f:'aldehyde',n:s.n});if(s.p>1)add({f:'ketone',n:s.n,p:s.p,flip:fl()});add({f:'ether',a:1,b:s.n-1||1});add({f:'amine1',n:s.n,p:s.p,flip:fl()});break;
+ case 'ether':add({f:'ether',a:s.b,b:s.a===s.b?s.a+1:Math.max(1,s.a+1)});add({f:'ether',a:s.a+1>3?s.a-1||1:s.a+1,b:s.b});add({f:'ether',a:s.a,b:s.b+1>4?s.b-1||1:s.b+1});add({f:'alcohol',n:Math.min(6,s.a+s.b),p:1});add({f:'alcohol',n:Math.min(6,s.a+s.b),p:2,flip:fl()});add({f:'ester',a:Math.max(1,s.a),b:1});break;
+ case 'aldehyde':add({f:'aldehyde',n:s.n===6?5:s.n+1});add({f:'aldehyde',n:s.n>2?s.n-1:s.n+1});add({f:'alcohol',n:s.n,p:1});add({f:'acid',n:s.n});if(s.n>=3)add({f:'ketone',n:s.n,p:2,flip:fl()});break;
+ case 'ketone':{const alt=s.n>=5?(s.p===2?3:2):null;if(alt&&alt<=Math.ceil(s.n/2))add({f:'ketone',n:s.n,p:alt,flip:fl()});add({f:'ketone',n:s.n<6?s.n+1:s.n-1,p:2,flip:fl()});add({f:'ketone',n:s.n>3?s.n-1:s.n+1,p:2,flip:fl()});add({f:'aldehyde',n:s.n});add({f:'alcohol',n:s.n,p:2,flip:fl()});add({f:'acid',n:s.n});break}
+ case 'acid':add({f:'acid',n:s.n===6?5:s.n+1});add({f:'acid',n:s.n>1?s.n-1:s.n+1});add({f:'aldehyde',n:Math.max(2,s.n)});add({f:'alcohol',n:Math.max(2,s.n),p:1});add({f:'ester',a:Math.max(1,s.n-1),b:1});break;
+ case 'ester':add({f:'ester',a:s.b,b:s.a<=3?s.a:3});add({f:'ester',a:s.a===4?3:s.a+1,b:s.b});add({f:'ester',a:s.a,b:s.b===3?2:s.b+1});add({f:'acid',n:Math.min(6,s.a+s.b)});add({f:'ether',a:s.a,b:s.b});break;
+ case 'amine1':add({f:'amine1',n:s.n,p:s.p===1&&s.n>=3?2:1,flip:fl()});add({f:'amine1',n:s.n<5?s.n+1:s.n-1,p:1});add({f:'amine1',n:s.n>1?s.n-1:s.n+1,p:1});add({f:'alcohol',n:Math.max(2,s.n),p:s.p,flip:fl()});add({f:'amide1',a:Math.max(2,s.n)});break;
+ case 'amine2':add({f:'amine2',a:s.b,b:s.a===s.b?s.a+1:s.a+1>3?1:s.a+1});add({f:'amine3',a:s.a,b:s.b});add({f:'amine1',n:Math.min(6,s.a+s.b),p:1});add({f:'amine2',a:s.a+1>3?1:s.a+1,b:s.b});add({f:'amine2',a:s.a,b:s.b+1>3?1:s.b+1});break;
+ case 'amine3':add({f:'amine2',a:s.a,b:s.b});add({f:'amine3',a:s.a+1>3?1:s.a+1,b:s.b});add({f:'amine3',a:s.a,b:s.b+1>3?1:s.b+1});add({f:'amine1',n:Math.min(6,s.a+s.b+1),p:1});add({f:'amine2',a:s.a+1,b:s.b+1>3?2:s.b+1});break;
+ case 'amide1':add({f:'amide1',a:s.a===5?4:s.a+1});add({f:'amide1',a:s.a>1?s.a-1:s.a+1});add({f:'amine1',n:s.a,p:1});add({f:'acid',n:s.a});add({f:'amide2',a:s.a,b:1});break;
+ case 'amide2':add({f:'amide2',a:s.a,b:s.b===1?2:1});add({f:'amide2',a:s.a===4?3:s.a+1,b:s.b});add({f:'amide3',a:s.a});add({f:'amide1',a:s.a});add({f:'ester',a:s.a,b:s.b});break;
+ case 'amide3':add({f:'amide2',a:s.a,b:1});add({f:'amide3',a:s.a===4?3:s.a+1});add({f:'amide1',a:s.a});add({f:'amine3',a:s.a,b:1});break;
+ case 'arene':add({f:'arene',k:(s.k+1)%4});add({f:'arene',k:(s.k+2)%4});add({f:'arene',k:(s.k+3)%4});add({f:'alkane',n:6});break;
+ }
+ return c}
+function distinctOptions(s,k){const seen=new Set([nm(s)]),out=[];const pool=shuf(neighbours(s));for(const x of pool){const nmx=nm(x);if(!seen.has(nmx)){seen.add(nmx);out.push(x);if(out.length>=k)break}}
+ let guard=0;const fam=s.f==='alcohol'&&s.tert?'alcohol3':s.f;while(out.length<k&&guard++<80){const x=R[fam]();const nmx=nm(x);if(!seen.has(nmx)){seen.add(nmx);out.push(x)}}
+ return out}
+
+/* ===== Game content ===== */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=id=>document.getElementById(id);
+const GN={alkane:'Alkane',alkene:'Alkene',alkyne:'Alkyne',halide:'Alkyl halide',aromatic:'Aromatic ring',alcohol:'Alcohol',ether:'Ether',aldehyde:'Aldehyde',ketone:'Ketone',acid:'Carboxylic acid',ester:'Ester',amine:'Amine',amide:'Amide'};
+const GD={alkane:'has only C–C single bonds (and C–H bonds).',alkene:'has a C=C double bond.',alkyne:'has a C≡C triple bond.',halide:'has a halogen (Cl, Br or F) attached to a carbon.',aromatic:'contains a benzene ring.',alcohol:'has an –OH on a carbon that has only single bonds.',ether:'has an oxygen between two carbons (C–O–C).',aldehyde:'has a C=O at the end of the chain with an H on the carbonyl carbon (–CHO).',ketone:'has a C=O with a carbon on each side.',acid:'has a –COOH group: C=O and –OH on the same carbon.',ester:'has a C=O attached to –O–C (–COO–).',amine:'has a nitrogen bonded only by single bonds to carbon (and H).',amide:'has a C=O attached directly to nitrogen (–CON).'};
+const CONF={alkane:['alkene','alkyne','aromatic','halide'],alkene:['alkane','alkyne','aromatic','alcohol'],alkyne:['alkene','alkane','aromatic'],halide:['alkane','alcohol','amine'],aromatic:['alkene','alkane','alkyne'],alcohol:['ether','acid','aldehyde','ketone','amine'],ether:['alcohol','ester','ketone','aldehyde'],aldehyde:['ketone','acid','ester','alcohol'],ketone:['aldehyde','ester','acid','ether'],acid:['ester','aldehyde','alcohol','amide'],ester:['acid','ether','ketone','amide'],amine:['amide','alcohol','ether'],amide:['amine','acid','ester','aldehyde']};
+const GRP_R={alkane:['alkane'],alkene:['alkene'],alkyne:['alkyne'],halide:['halo'],aromatic:['arene'],alcohol:['alcohol','alcohol','alcohol3'],ether:['ether'],aldehyde:['aldehyde'],ketone:['ketone'],acid:['acid'],ester:['ester'],amine:['amine1','amine2','amine3'],amide:['amide1','amide2','amide3']};
+function bag(list){let b=[],last=null;return ()=>{if(!b.length){b=shuf(list);if(b[b.length-1]===last&&b.length>1)b.unshift(b.pop())}last=b.pop();return last}}
+const spotBag=bag(Object.keys(GN)),nameBag=bag(['alkane','alkene','alkyne','halo','alcohol','alcohol3','ether','aldehyde','ketone','acid','ester','amine1','amine2','amine3','amide1','amide2','amide3']),clsBag=bag(['alcohol','alcohol3','amine1','amine2','amine3','amide1','amide2','amide3']),propsBag=bag(['bp','imf','sol','imf']),reactBag=bag(['ox1ald','ox1acid','ox2','ox3','ester','hydrolysis','hydrogenation','hydration','reduction','amide','neutral','amineHCl']);
+function structHTML(s,style,scale){const m=bd(s);if(style==='condensed')return `<div class="condensed" aria-label="Condensed structure">${condHTML(m)}</div>`;return svgMol(m,{scale:scale||1,alt:'Skeletal structure'})}
+function structStyle(){const v=state.style;return v==='mixed'?(Math.random()<.5?'skeletal':'condensed'):v}
+function optSVG(s){return svgMol(bd(s),{scale:.7,pad:16})}
+const partsHTML=(parts,scale)=>parts.map(p=>p.mol?svgMol(p.mol,{scale:scale||.7,pad:14}):`<span class="ptext">${p.t}</span>`).join('<span class="plus">+</span>');
+const partKey=parts=>parts.map(p=>p.mol?smiles(p.mol):p.t).join('|');
+const sp=(s)=>({mol:bd(s),spec:s});
+
+/* ---- question generators: return {kind,html,options:[{key,html}],answer,hint,why} ---- */
+function genSpot(){const g=spotBag();const fam=pickOne(GRP_R[g]);let s=R[fam]();const style=structStyle();
+ if(style==='condensed'&&g==='aromatic')s=R.arene();
+ const others=shuf(CONF[g]).slice(0,2);const rest=shuf(Object.keys(GN).filter(x=>x!==g&&!others.includes(x)));const opts=shuf([g,...others,rest[0]]);
+ const tail=(g==='amine'||g==='amide'||g==='ester'||g==='acid')?'':'';
+ return {kind:'spot',html:`<p class="prompt">Which functional group is in this compound?</p><div class="struct">${structHTML(s,style)}</div>`,options:opts.map(o=>({key:o,html:GN[o]})),smi:smiles(bd(s)),sname:nm(s),answer:g,hint:'Look for the key atoms: C=O (carbonyl), O, N, halogens or multiple bonds. Then check what is attached to them.',why:`${GN[g]}: the compound ${GD[g]} This is ${nm(s)}.`,cols:2}}
+function genClassify(){const f=clsBag();const s=R[f]();const cl=FAM[s.f].cls(s);const what=FAM[s.f].grp;const label=['','Primary (1°)','Secondary (2°)','Tertiary (3°)'];
+ const why=what==='alcohol'?`Look at the carbon that carries the –OH. It is bonded to ${cl} other carbon${cl>1?'s':''}, so this is a ${label[cl].toLowerCase()} alcohol.`:what==='amine'?`Count the carbon groups attached to nitrogen: ${cl}. So this is a ${label[cl].toLowerCase()} amine (${nm(s)}).`:`Count the carbon groups on the nitrogen, not counting the carbonyl carbon: ${cl-1}. ${cl===1?'Only H atoms are on N':'N has '+(cl-1)+' alkyl group'+(cl>2?'s':'')}, so this is a ${label[cl].toLowerCase()} amide (${nm(s)}).`;
+ const hint=what==='alcohol'?'Find the carbon attached to the –OH, then count how many other carbons it is bonded to.':what==='amine'?'Count the number of carbon groups attached directly to the nitrogen.':'For an amide, count the carbon groups on nitrogen, not counting the carbonyl carbon (0 = primary, 1 = secondary, 2 = tertiary).';
+ return {kind:'classify',smi:smiles(bd(s)),sname:nm(s),html:`<p class="prompt">Classify this ${what} as primary, secondary or tertiary.</p><div class="struct">${structHTML(s,structStyle())}</div>`,options:[1,2,3].map(i=>({key:String(i),html:label[i]})),answer:String(cl),hint,why,cols:3}}
+function nameWhy(s){const g=FAM[s.f].grp,n=nm(s),c=FAM[s.f].common?FAM[s.f].common(s):null;
+ const extra=c?` Common name: ${c}.`:'';
+ const sch={alkane:'Count the carbons in the chain and add -ane.',alkene:'Use the longest chain with the C=C, number from the end nearest the double bond, and use -ene.',alkyne:'Use the longest chain with the C≡C, number from the end nearest the triple bond, and use -yne.',halide:'Name the halogen as a prefix (chloro, bromo) with its number, then the alkane name.',alcohol:'Use the longest chain that has the –OH, number from the end nearest the –OH, and change -e to -ol (branches such as methyl go in front).',ether:'Name the shorter group as an alkoxy prefix (methoxy, ethoxy) on the longer alkane chain.',aldehyde:'The C=O is at the chain end (carbon 1). Change -e to -al.',ketone:'Number from the end nearest the C=O and change -e to -one.',acid:'Count all carbons including the –COOH carbon and change -e to -oic acid.',ester:'Name the alkyl group on the O first, then the acid part with -oate.',amine:'Name the alkyl groups on N in alphabetical order, then add -amine (primary amines may also use -anamine with a number).',amide:'Count the carbons in the acyl part and change -e to -amide; groups on N are written N-.'}[g];
+ return `${n}. ${sch}${extra}`}
+function genName(){const f=nameBag();const s=R[f]();const style=structStyle();const others=distinctOptions(s,3);const opts=shuf([s,...others]).map(x=>({key:nm(x),html:nm(x)}));
+ return {kind:'name',smi:smiles(bd(s)),sname:nm(s),html:`<p class="prompt">What is the name of this compound?</p><div class="struct">${structHTML(s,style)}</div>`,options:opts,answer:nm(s),hint:'Find the functional group first, then count the carbons in the main chain and number from the end nearest the group.',why:nameWhy(s),cols:2}}
+function genMatch(){const f=nameBag();const s=R[f]();const others=distinctOptions(s,3);const opts=shuf([s,...others]).map(x=>({key:nm(x),html:optSVG(x),struct:true}));
+ return {kind:'match',smi:smiles(bd(s)),sname:nm(s),optSmi:Object.fromEntries([s,...others].map(x=>[nm(x),smiles(bd(x))])),html:`<p class="prompt">Which structure is <strong>${esc(nm(s))}</strong>?</p><p class="footer-note">Pick the drawing that matches the name.</p>`,options:opts,answer:nm(s),hint:'Decode the name: the stem tells you the chain length, the ending tells you the functional group, and the number tells you where it is.',why:nameWhy(s),cols:2,struct:true}}
+
+/* ---- properties ---- */
+const BP=[{r:1,g:'London dispersion only',s:{f:'alkane',n:4},nm:'butane'},{r:2,g:'weak dipole–dipole (no H bonds)',s:{f:'ether',a:1,b:2},nm:'methoxyethane'},{r:3,g:'dipole–dipole (polar C=O)',s:{f:'aldehyde',n:3},nm:'propanal'},{r:4,g:'hydrogen bonding (–OH)',s:{f:'alcohol',n:3,p:1},nm:'1-propanol'},{r:5,g:'strong hydrogen bonding (–COOH, forms pairs)',s:{f:'acid',n:2},nm:'ethanoic acid'}];
+function genProps(){const k=propsBag();
+ if(k==='bp'){const pick=shuf(BP).slice(0,4);const hi=Math.random()<.5;const ans=pick.reduce((a,b)=>(hi?b.r>a.r:b.r<a.r)?b:a);const items=pick.map(x=>x.r===3&&Math.random()<.5?{...x,s:{f:'ketone',n:3,p:2},nm:'propanone'}:x);const a2=items.find(x=>x.r===ans.r);
+  return {kind:'props',html:`<p class="prompt">These four compounds have nearly the same molar mass (58–60 g/mol). Which has the <strong>${hi?'HIGHEST':'LOWEST'}</strong> boiling point?</p>`,options:items.map(x=>({key:x.nm,html:optSVG(x.s)+`<span class="optname">${x.nm}</span>`,struct:true})),answer:a2.nm,hint:'Stronger attractions between molecules mean a higher boiling point. Order: London dispersion < ether < aldehyde/ketone < alcohol < carboxylic acid.',why:`${a2.nm} has the ${hi?'strongest':'weakest'} attractions: ${a2.g}. Order of boiling points: alkane < ether < aldehyde/ketone < alcohol < carboxylic acid.`,cols:2,struct:true}}
+ if(k==='sol'){const good=pickOne([{f:'alcohol',n:1,p:1},{f:'alcohol',n:2,p:1},{f:'alcohol',n:3,p:1},{f:'acid',n:2},{f:'amine1',n:1,p:1},{f:'ketone',n:3,p:2},{f:'acid',n:1}]);
+  const bad=shuf([{f:'alkane',n:6},{f:'alkane',n:5},{f:'alkene',n:6,p:1},{f:'arene',k:1},{f:'halo',n:5,p:1,X:'Br'},{f:'ether',a:4,b:4}]).slice(0,3);const opts=shuf([good,...bad]);
+  return {kind:'props',html:`<p class="prompt">Which compound is <strong>most soluble in water</strong>?</p>`,options:opts.map(x=>({key:nm(x),html:optSVG(x)+`<span class="optname">${nm(x)}</span>`,struct:true})),answer:nm(good),hint:'Water dissolves small molecules that can hydrogen bond (–OH, –COOH, –NH₂, C=O). Large hydrocarbon parts are nonpolar and do not dissolve.',why:`${nm(good)} is small and polar, so it hydrogen bonds with water. The others are mostly nonpolar hydrocarbon and are not very soluble.`,cols:2,struct:true}}
+ const f=pickOne(['alkane','alkene','ether','aldehyde','ketone','ester','alcohol','acid','amine1','amine2','amine3','amide1','amide2','amide3','halo','arene']);const s=R[f]();const g=FAM[s.f].grp;
+ const hb=['alcohol','acid'].includes(g)||(g==='amine'&&s.f!=='amine3')||(g==='amide'&&s.f!=='amide3');const dd=['ether','aldehyde','ketone','ester','halide'].includes(g)||s.f==='amine3'||s.f==='amide3';
+ const ans=hb?'Hydrogen bonding':dd?'Dipole–dipole attractions':'London dispersion forces';
+ const why=hb?`${nm(s)} has an O–H or N–H bond, so its molecules hydrogen bond to each other. This is the strongest attraction between molecules.`:dd?`${nm(s)} is polar but has no O–H or N–H bond, so its molecules attract by dipole–dipole forces.`:`${nm(s)} is nonpolar (only C and H), so only weak London dispersion forces act between its molecules.`;
+ return {kind:'props',smi:smiles(bd(s)),sname:nm(s),html:`<p class="prompt">What is the strongest attraction between molecules of this compound (as a pure liquid)?</p><div class="struct">${structHTML(s,structStyle())}</div>`,options:['Hydrogen bonding','Dipole–dipole attractions','London dispersion forces','Ionic bonds'].map(o=>({key:o,html:o})),answer:ans,hint:'Does the molecule have an O–H or N–H bond (hydrogen bonding)? If not, is it polar (dipole–dipole) or only C and H (London forces)?',why,cols:2}}
+
+/* ---- reactions ---- */
+const RX=(spec)=>({mol:bd(spec),spec});
+const NO={t:'No reaction'};
+function uniqOpts(correct,wrongs,fill){const seen=new Set([partKey(correct)]),out=[];for(const w of wrongs){const k=partKey(w);if(!seen.has(k)){seen.add(k);out.push(w);if(out.length===3)break}}for(const w of fill||[]){if(out.length>=3)break;const k=partKey(w);if(!seen.has(k)){seen.add(k);out.push(w)}}return out}
+const H2O={t:'H₂O'};
+function genReact(){const k=reactBag();let react,arrow,correct,wrongs,why,hint,title,fill=[[NO],[{mol:bd({f:'alkane',n:3})}]];
+ const mk=s=>({mol:bd(s)});
+ if(k==='ox1ald'){const n=rnd(2,5),a={f:'alcohol',n,p:1};react=[mk(a)];arrow='[O]<small>first oxidation product</small>';correct=[mk({f:'aldehyde',n})];wrongs=[[mk({f:'acid',n})],n>=3?[mk({f:'ketone',n,p:2})]:[mk({f:'alkene',n,p:1})],[NO],[mk({f:'alkene',n,p:1})]];why=`A primary (1°) alcohol is oxidized first to an aldehyde: ${nm(a)} → ${nm({f:'aldehyde',n})}. (More [O] would continue to the carboxylic acid.)`;hint='Primary alcohols oxidize to aldehydes first. The –CH₂OH carbon becomes –CHO.';title='Oxidation of a primary alcohol'}
+ else if(k==='ox1acid'){const n=rnd(2,5),a={f:'alcohol',n,p:1};react=[mk(a)];arrow='excess [O]<small>strong oxidizing agent</small>';correct=[mk({f:'acid',n})];wrongs=[[mk({f:'aldehyde',n})],[mk({f:'ester',a:n,b:1})],[NO],[mk({f:'alkene',n,p:1})]];why=`With excess oxidizing agent a primary alcohol is oxidized all the way: alcohol → aldehyde → carboxylic acid. Product: ${nm({f:'acid',n})}.`;hint='With an excess of [O], the aldehyde formed is oxidized further to a carboxylic acid.';title='Complete oxidation of a primary alcohol'}
+ else if(k==='ox2'){const n=rnd(3,6),p=n===3?2:rnd(2,Math.ceil((n+1)/2)),a={f:'alcohol',n,p,flip:Math.random()<.5};const kt={f:'ketone',n,p,flip:a.flip};react=[mk(a)];arrow='[O]';correct=[mk(kt)];wrongs=[[mk({f:'aldehyde',n})],[mk({f:'acid',n})],[NO],[mk({f:'alcohol',n,p:1})]];why=`A secondary (2°) alcohol is oxidized to a ketone: ${nm(a)} → ${nm(kt)}. The –CH(OH)– carbon becomes C=O.`;hint='A secondary alcohol has one H on the carbon bearing –OH. Oxidation removes it and forms a ketone.';title='Oxidation of a secondary alcohol'}
+ else if(k==='ox3'){const a=R.alcohol3(),n=a.n;react=[mk(a)];arrow='[O]';correct=[NO];wrongs=[[mk({f:'ketone',n,p:2})],[mk({f:'aldehyde',n})],[mk({f:'acid',n})]];why=`${nm(a)} is a tertiary (3°) alcohol. The carbon bearing –OH has no H to remove, so it does not oxidize.`;hint='Check the carbon that carries the –OH: does it still have an H atom to lose?';title='Oxidation of a tertiary alcohol'}
+ else if(k==='ester'){const a=rnd(1,4),b=rnd(1,4);const ac={f:'acid',n:a},al={f:'alcohol',n:b,p:1};const es={f:'ester',a,b};react=[mk(ac),mk(al)];arrow='H⁺<small>heat</small>';correct=[mk(es),H2O];
+  wrongs=[[mk({f:'ester',a:b,b:a>4?4:a}),H2O],[mk({f:'ester',a,b:b===4?3:b+1}),H2O],[mk({f:'ether',a,b}),H2O],[mk({f:'ester',a:a===4?3:a+1,b}),H2O]];why=`Esterification: acid + alcohol → ester + water. The alcohol's alkyl group goes on the O and the acid's carbons form the acyl part: ${nm(es)}.`;hint='In an ester name, the alcohol part comes first (alkyl) and the acid part ends in -oate. Water is the other product.';title='Esterification'}
+ else if(k==='hydrolysis'){const a=rnd(2,4),b=rnd(1,3);const es={f:'ester',a,b};react=[mk(es),H2O];arrow='H⁺<small>heat</small>';correct=[mk({f:'acid',n:a}),mk({f:'alcohol',n:b,p:1})];
+  wrongs=[[mk({f:'acid',n:b}),mk({f:'alcohol',n:a,p:1})],[mk({f:'aldehyde',n:a}),mk({f:'alcohol',n:b,p:1})],[mk({f:'acid',n:a}),mk({f:'alkane',n:b+1>6?6:b+1})],[mk({f:'acid',n:a+b})]];why=`Hydrolysis splits the ester back into its parts: ${nm(es)} → ${nm({f:'acid',n:a})} + ${nm({f:'alcohol',n:b,p:1})}.`;hint='Break the C–O single bond next to the C=O. The carbonyl side becomes the acid and the O–alkyl side becomes the alcohol.';title='Hydrolysis of an ester'}
+ else if(k==='hydrogenation'){const al=R.alkene();const n=al.n;react=[mk(al),{t:'H₂'}];arrow='Ni or Pt';correct=[mk({f:'alkane',n})];wrongs=[[mk({f:'alcohol',n,p:Math.min(al.p,Math.ceil(n/2))})],[mk({f:'alkyne',n,p:al.p})],[NO],[mk({f:'alkane',n:n===6?5:n+1})]];why=`Hydrogenation adds H₂ across the C=C double bond, giving the alkane ${nm({f:'alkane',n})}.`;hint='H₂ with a Ni or Pt catalyst adds one H to each carbon of the double bond.';title='Hydrogenation of an alkene'}
+ else if(k==='hydration'){const c=pickOne([{n:2,p:1},{n:4,p:2},{n:6,p:3}]);const al={f:'alkene',n:c.n,p:c.p,flip:Math.random()<.5};const pr={f:'alcohol',n:c.n,p:c.p};react=[mk(al),H2O];arrow='H⁺';correct=[mk(pr)];wrongs=[[mk({f:'alkane',n:c.n})],[mk(c.n>2?{f:'alcohol',n:c.n,p:1}:{f:'aldehyde',n:2})],[mk(c.n>2?{f:'ketone',n:c.n,p:2>c.p?c.p:Math.max(2,c.p)}:{f:'acid',n:2})],[mk({f:'halo',n:c.n,p:c.p,X:'Cl'})]];why=`Hydration adds H and OH across the C=C: ${nm(al)} + H₂O → ${nm(pr)}.`;hint='Water adds as H– and –OH across the double bond. The product is an alcohol with the same number of carbons.';title='Hydration of an alkene'}
+ else if(k==='reduction'){const ald=Math.random()<.5;const sp0=ald?{f:'aldehyde',n:rnd(2,5)}:R.ketone();react=[mk(sp0),{t:'H₂'}];arrow='Ni';const n=sp0.n;const pr=ald?{f:'alcohol',n,p:1}:{f:'alcohol',n:sp0.n,p:sp0.p,flip:sp0.flip};correct=[mk(pr)];wrongs=[[mk({f:'acid',n})],[mk({f:'alkane',n})],[mk(ald?{f:'alcohol',n,p:Math.min(2,Math.ceil(n/2))}:{f:'alcohol',n,p:1})],[NO]];if(ald&&n<3)wrongs[2]=[mk({f:'alkene',n,p:1})];why=`Reduction (adding H₂) converts C=O into C–OH: ${ald?'an aldehyde gives a primary alcohol':'a ketone gives a secondary alcohol'}. Product: ${nm(pr)}.`;hint='H₂ adds across the C=O double bond, making an –OH on that carbon.';title=ald?'Reduction of an aldehyde':'Reduction of a ketone'}
+ else if(k==='amide'){const a=rnd(2,4);react=[mk({f:'acid',n:a}),mk({f:'amine1',n:1,p:1})];arrow='heat';const am={f:'amide2',a,b:1};correct=[mk(am),H2O];wrongs=[[mk({f:'amide1',a}),H2O],[mk({f:'ester',a,b:1}),H2O],[mk({f:'amine2',a,b:1}),H2O],[mk({f:'amide3',a}),H2O]];why=`A carboxylic acid and an amine form an amide plus water. The –OH of the acid is replaced by the N of the amine: ${nm(am)}.`;hint='The acid loses its –OH, the amine loses an H, and water is released. The new C–N bond makes an amide.';title='Amide formation'}
+ else if(k==='neutral'){const n=rnd(1,5);const salt=M([...Cs(n-1),Cc([sO()]),nd('O','O−','O⁻',{smi:'[O-]'})]);react=[mk({f:'acid',n}),{t:'NaOH'}];arrow='';correct=[{mol:salt},{t:'Na⁺'},H2O];wrongs=[[mk({f:'ester',a:n,b:1}),H2O],[NO],[mk({f:'alcohol',n:Math.max(2,n),p:1}),H2O],[mk({f:'aldehyde',n:Math.max(2,n)}),H2O]];why=`A carboxylic acid is neutralized by a base to form a carboxylate salt (and water): sodium ${ST[n]}anoate.`;hint='NaOH removes the acidic H from –COOH. The product is an ionic salt (carboxylate ion + Na⁺) and water.';title='Neutralizing a carboxylic acid'}
+ else {const n=rnd(1,4);const salt=M([...Cs(n),nd('N','NH3+','NH₃⁺',{smi:'[NH3+]'})]);react=[mk({f:'amine1',n,p:1}),{t:'HCl'}];arrow='';correct=[{mol:salt},{t:'Cl⁻'}];wrongs=[[NO],[mk({f:'amide1',a:n+1>5?5:n+1}),H2O],[mk({f:'halo',n,p:1,X:'Cl'}),{t:'NH₃'}],[mk({f:'alcohol',n:Math.max(2,n),p:1}),{t:'HCl'}]];why=`An amine is a weak base. It accepts H⁺ from HCl to form an ammonium salt: ${ST[n]}ylammonium chloride.`;hint='Amines act as bases: the N lone pair picks up an H⁺ from the acid to give an ammonium ion with Cl⁻.';title='Amine plus acid'}
+ const wr=uniqOpts(correct,wrongs,fill);
+ const options=shuf([correct,...wr]).map(p=>({key:partKey(p),html:partsHTML(p),struct:true}));
+ return {kind:'react',rx:{react:react.map(p=>p.mol?smiles(p.mol):p.t),correct:correct.map(p=>p.mol?smiles(p.mol):p.t),title},html:`<p class="prompt">${title}: predict the major product.</p><div class="rxn">${partsHTML(react,.9)}<span class="rarrow"><span class="rlab">${arrow}</span>→</span><span class="qmark">?</span></div>`,options,answer:partKey(correct),hint,why,cols:2,struct:true}}
+const GEN={spot:genSpot,classify:genClassify,name:genName,match:genMatch,react:genReact,props:genProps};
+
+/* ===== UI state, journey, rendering ===== */
+const MODES=[
+ {id:'spot',title:'Spot the Group',short:'Identify the functional group',icon:'<circle cx="21" cy="21" r="11"/><path d="m30 30 12 12"/>'},
+ {id:'classify',title:'1° 2° 3°',short:'Classify alcohols, amines, amides',icon:'<path d="M24 8v12M24 20 12 38M24 20l12 18"/><circle cx="24" cy="8" r="3"/><circle cx="12" cy="38" r="3"/><circle cx="36" cy="38" r="3"/>'},
+ {id:'name',title:'Name It',short:'IUPAC and common names',icon:'<path d="M8 12h32v22H24l-8 8v-8H8z"/><path d="M15 21h18M15 27h12"/>'},
+ {id:'match',title:'Draw It',short:'Pick the structure for a name',icon:'<path d="M12 36 36 12M30 10l8 8-22 22-10 2 2-10z"/>'},
+ {id:'react',title:'Predict the Product',short:'Oxidation, esters, amides & more',icon:'<path d="M6 24h30m-8-8 8 8-8 8"/><circle cx="42" cy="24" r="3"/>'},
+ {id:'props',title:'Properties',short:'Boiling point, H-bonding, solubility',icon:'<path d="M24 6C24 6 12 22 12 30a12 12 0 0 0 24 0C36 22 24 6 24 6z"/>'}
+];
+const JKEY='itsdrdan-groups-journey-v1';
+const jBlank=()=>({xp:0,correct:0,assisted:0,best:0,modes:{},badges:{}});
+let journey=jBlank();try{const j=JSON.parse(localStorage.getItem(JKEY)||'null');if(j&&typeof j==='object')journey=Object.assign(jBlank(),j)}catch{}
+const jSave=()=>{try{localStorage.setItem(JKEY,JSON.stringify(journey))}catch{}};
+const BADGES=[
+ {id:'first',t:'🌱 First Answer',d:'Answer your first question',ok:j=>j.correct>=1},
+ {id:'ten',t:'🔟 Ten Correct',d:'10 independent answers',ok:j=>j.correct>=10},
+ {id:'fifty',t:'🏅 Fifty Correct',d:'50 independent answers',ok:j=>j.correct>=50},
+ {id:'streak5',t:'🔥 Hot Streak',d:'5 correct in a row',ok:j=>j.best>=5},
+ {id:'streak10',t:'⚡ On Fire',d:'10 correct in a row',ok:j=>j.best>=10},
+ {id:'spotter',t:'🔎 Group Spotter',d:'10 correct in Spot the Group',ok:j=>(j.modes.spot||0)>=10},
+ {id:'namer',t:'🏷 Namer',d:'10 correct in Name It',ok:j=>(j.modes.name||0)>=10},
+ {id:'chemist',t:'⚗ Reaction Chemist',d:'10 correct in Predict the Product',ok:j=>(j.modes.react||0)>=10},
+ {id:'explorer',t:'🧭 Explorer',d:'Answer in all six modes',ok:j=>MODES.every(m=>(j.modes[m.id]||0)>0)}
+];
+let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600)}
+function renderJourney(){const lvl=Math.floor(journey.xp/100)+1,into=journey.xp%100;$('jChip').textContent=`Level ${lvl} • ${journey.xp} XP`;$('xpLevel').textContent='Level '+lvl;$('xpFill').style.width=into+'%';$('xpText').textContent=into+' / 100 XP';
+ $('modeXp').innerHTML=MODES.map(m=>`<div><b>${journey.modes[m.id]||0}</b>${m.title}</div>`).join('');
+ $('jbadges').innerHTML=BADGES.map(b=>`<div class="jbadge ${journey.badges[b.id]?'earned':''}"><div class="bt">${b.t}</div>${b.d}</div>`).join('')}
+function awardXP(assisted){const before=Math.floor(journey.xp/100);if(assisted){journey.xp+=2;journey.assisted++}else{journey.xp+=10+Math.min(state.streak,5)*2;journey.correct++;journey.modes[state.mode]=(journey.modes[state.mode]||0)+1;journey.best=Math.max(journey.best,state.streak)}
+ BADGES.forEach(b=>{if(!journey.badges[b.id]&&b.ok(journey)){journey.badges[b.id]=1;toast('Badge earned: '+b.t)}});if(Math.floor(journey.xp/100)>before)toast('Level up! You reached level '+(Math.floor(journey.xp/100)+1));jSave();renderJourney()}
+
+const state={mode:'spot',style:'mixed',q:null,selected:null,done:false,revealed:false,correct:0,streak:0,assisted:0};
+function buildModes(){$('modeGrid').innerHTML=MODES.map(m=>`<button class="mode-btn ${m.id===state.mode?'active':''}" data-mode="${m.id}" aria-pressed="${m.id===state.mode}"><span class="mode-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${m.icon}</svg></span><span class="mode-name">${m.title}</span><small>${m.short}</small></button>`).join('');
+ $('modeGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;buildModes();nextQ();if(matchMedia('(max-width:700px)').matches)requestAnimationFrame(()=>requestAnimationFrame(()=>{const c=$('practice');window.scrollTo({top:Math.max(0,scrollY+c.getBoundingClientRect().top-8),behavior:'smooth'})}))})}
+function fb(kind,html){const f=$('feedback');f.className='feedback '+kind;f.innerHTML=html}
+function nextQ(){let q;try{q=GEN[state.mode]()}catch(e){console.error(e);q=GEN[state.mode]()}state.q=q;state.selected=null;state.done=false;state.revealed=false;$('hintBox').className='hintbox';$('hintBox').textContent='';fb('','');
+ $('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title;$('styleRow').classList.toggle('hidden',!['spot','classify','name','props'].includes(state.mode));
+ const grid=`<div class="options cols${q.cols||2}${q.struct?' struct-opts':''}" role="group" aria-label="Answer choices">${q.options.map((o,i)=>`<button type="button" class="option" data-key="${esc(o.key)}" aria-pressed="false"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-body">${o.html}</span></button>`).join('')}</div>`;
+ $('questionArea').innerHTML=q.html+grid;
+ $('questionArea').querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(state.done)return;state.selected=b.dataset.key;$('questionArea').querySelectorAll('.option').forEach(x=>{const on=x===b;x.classList.toggle('selected',on);x.classList.remove('wrong');x.setAttribute('aria-pressed',on?'true':'false')})});
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);$('progressLabel').textContent=`${MODES.find(m=>m.id===state.mode).short}`;updateStats()}
+function updateStats(){$('correct').textContent=state.correct;$('streak').textContent=state.streak;$('assisted').textContent=state.assisted}
+function finish(){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
+ $('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===q.answer)b.classList.add('right')});
+ if(state.revealed){state.assisted++;state.streak=0;fb('good','👀 '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
+ else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+q.why);awardXP(false)}updateStats()}
+function check(){if(state.done)return;if(!state.selected){fb('bad','Choose an answer first.');return}
+ if(state.selected!==state.q.answer){state.streak=0;updateStats();$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+esc(state.q.hint));return}
+ finish()}
+function hint(){if(state.done)return;$('hintBox').textContent='💡 '+state.q.hint;$('hintBox').className='hintbox show'}
+function show(){if(state.done)return;state.revealed=true;state.selected=state.q.answer;finish()}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const box=$('celebrate'),cols=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#b9a3e6','#f2a8c4'];for(let i=0;i<55;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.top='-20px';p.style.background=cols[i%6];p.style.animationDelay=Math.random()*.5+'s';box.appendChild(p);setTimeout(()=>p.remove(),3600)}}
+const REF=[['Alkane','C–C single bonds only','-ane','propane'],['Alkene','C=C','-ene','propene'],['Alkyne','C≡C','-yne','propyne'],['Alkyl halide','C–Cl, C–Br','chloro-, bromo-','2-chloropropane'],['Alcohol','C–OH','-ol','2-propanol'],['Ether','C–O–C','alkoxy- / ether','methoxyethane'],['Aldehyde','C(=O)H at chain end','-al','propanal'],['Ketone','C–C(=O)–C','-one','2-butanone'],['Carboxylic acid','–C(=O)OH','-oic acid','propanoic acid'],['Ester','–C(=O)O–C','-oate','methyl ethanoate'],['Amine','C–N (no C=O)','-amine','ethylamine'],['Amide','–C(=O)N','-amide','propanamide']];
+function renderRef(){$('refBody').innerHTML=`<div class="table-scroll"><table class="ref-table"><thead><tr><th>Group</th><th>Key feature</th><th>Name ending</th><th>Example</th></tr></thead><tbody>${REF.map(r=>`<tr>${r.map((c,i)=>`<td${i===0?' class="g"':''}>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="footer-note"><b>Oxidation ladder:</b> 1° alcohol → aldehyde → carboxylic acid; 2° alcohol → ketone; 3° alcohol → no reaction.<br><b>Esterification:</b> acid + alcohol → ester + H₂O (H⁺).<br><b>Boiling points (similar mass):</b> alkane &lt; ether &lt; aldehyde/ketone &lt; alcohol &lt; carboxylic acid.</p>`}
+
+
+(function(){const KEY='itsdrdan-groups-ui-v1',phone=()=>matchMedia('(max-width:700px)').matches;let ui={};try{ui=JSON.parse(localStorage.getItem(KEY)||'{}')}catch{}
+ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ui))}catch{}};
+ [['howTo',false],['refDetails',false],['journey',false],['videoDetails',false]].forEach(([id,def])=>{const el=$(id);const st=ui[id];el.open=st!==undefined?st:(def==='desk'?!phone():def);el.addEventListener('toggle',()=>{ui[id]=el.open;save()})});
+ if(ui.style&&['mixed','skeletal','condensed'].includes(ui.style))state.style=ui.style;$('styleSel').value=state.style;$('styleSel').onchange=e=>{state.style=e.target.value;ui.style=state.style;save();nextQ()};
+})();
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=show;$('nextBtn').onclick=nextQ;
+$('questionArea').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('option')){}});
+{const rb=$('journeyReset');let armed=0;rb.onclick=()=>{if(!armed){armed=setTimeout(()=>{armed=0;rb.textContent='Reset progress'},4000);rb.textContent='Tap again to confirm reset';return}clearTimeout(armed);armed=0;rb.textContent='Reset progress';journey=jBlank();jSave();renderJourney()}}
+const vd=$('videoDetails'),pl=$('plPlayer');const loadPl=()=>{if(vd.open&&!pl.src)pl.src='https://www.youtube.com/embed/videoseries?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f&rel=0'};vd.addEventListener('toggle',loadPl);loadPl();
+buildModes();renderRef();renderJourney();nextQ();
+
+</script>
+<script id="canvasAutoResize">
+(function(){
+  if(window.parent===window)return;
+  document.body.classList.add('canvas-embedded');
+  const content=document.querySelector('.app');
+  if(!content)return;
+  let lastSent=0,pending=false,stopped=false;
+  function measure(){const css=getComputedStyle(document.body);const extra=['paddingTop','paddingBottom','marginTop','marginBottom','borderTopWidth','borderBottomWidth'].reduce((sum,key)=>sum+(parseFloat(css[key])||0),0);return Math.ceil(content.getBoundingClientRect().height+extra)}
+  function sync(){pending=false;if(stopped)return;const height=measure();if(!Number.isFinite(height)||height<=0||Math.abs(height-lastSent)<2)return;lastSent=height;window.parent.postMessage({subject:'lti.frameResize',height},'*')}
+  function schedule(){if(pending||stopped)return;pending=true;requestAnimationFrame(sync)}
+  const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;
+  if(resizeObserver)resizeObserver.observe(content);
+  const mutationObserver=new MutationObserver(schedule);
+  mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});
+  window.addEventListener('resize',schedule);
+  window.addEventListener('load',schedule);
+  content.addEventListener('load',schedule,true);
+  content.addEventListener('toggle',schedule,true);
+  if(document.fonts)document.fonts.ready.then(schedule);
+  window.addEventListener('pagehide',()=>{stopped=true;resizeObserver?.disconnect();mutationObserver.disconnect()});
+  window.addEventListener('pageshow',event=>{if(event.persisted){stopped=false;lastSent=0;resizeObserver?.observe(content);mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});schedule()}});
+  schedule();
+})();
+</script>
+</body></html>

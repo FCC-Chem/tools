@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sweet Structures • ItsDrDan • CHEM 3B</title>
+<style>
+:root{--ink:#22313b;--muted:#5c6a75;--line:#e4dfd3;--card:#fffefa;--blue:#4a9fd6;--blue-d:#3b82b4;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:linear-gradient(120deg,#f1faf4 0%,#fffaf1 45%,#fdf1f1 100%);min-height:100vh;line-height:1.45}
+.app{max-width:1280px;margin:0 auto;padding:14px 14px 40px}
+.hidden{display:none!important}
+button,select,input{font:inherit;color:inherit}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 6px 20px #26343c10;padding:18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 22px;border-radius:24px;background:linear-gradient(120deg,#fff,#f4f9ff);border:1px solid var(--line);box-shadow:0 8px 24px #26343c10}
+.hero h1{margin:6px 0 4px;font-size:clamp(26px,3.4vw,38px);line-height:1.1;font-weight:900;letter-spacing:-.01em}
+.hero h1 .a{color:#d96b5f}.hero h1 .b{color:#3f94c9}
+.hero .subtitle{margin:0;color:var(--muted);font-size:15px}
+.badge{display:inline-block;background:#f1ece2;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.hero-emoji{font-size:64px;line-height:1;filter:drop-shadow(0 4px 6px #0002)}
+details.directions{margin:10px 0;padding:0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f6f2ff,#f0f8ff);box-shadow:0 4px 0 #9fb6e833,0 8px 16px #26343c0d}
+details.directions>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;display:flex;justify-content:space-between;align-items:center;min-height:48px;border-radius:16px}
+details.directions>summary::-webkit-details-marker{display:none}
+details.directions>summary:hover{background:#ffffff80}
+details.directions>summary:focus-visible,.collapsible>summary:focus-visible{outline:3px solid #5b7fd1;outline-offset:2px}
+.sum-hint{font-size:13px;font-weight:900;color:#fff;background:#4a6fc4;padding:6px 14px;border-radius:999px}
+.sum-hint:after{content:" ▾"}
+details.directions[open]>summary:after{content:"Hide ▴";font-size:13px;font-weight:900;color:#4a6fc4}
+details.directions[open] .sum-hint{display:none}
+details.directions ol{margin:0 18px 6px;padding-left:22px;line-height:1.6}
+details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12px;padding:9px 12px;font-size:14px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0}
+.mode-btn{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:4px;border-radius:16px;background:linear-gradient(145deg,#ffffffa6,var(--mb));padding:10px 12px 12px;display:grid;grid-template-columns:44px 1fr;grid-template-areas:"i n" "i s";column-gap:10px;align-items:center;min-height:62px;transition:transform .15s}
+.mode-btn:hover{transform:translateY(-2px)}
+.mode-btn.active{border-color:var(--md);border-bottom-width:5px;box-shadow:0 0 0 3px var(--ma);background:linear-gradient(145deg,#fff,var(--mb))}.mode-btn.active .mode-name{color:var(--md)}.mode-btn.active .mode-icon{background:var(--md);color:#fff}
+.mode-icon{grid-area:i;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#ffffffbc;color:#344952}
+.mode-icon svg{width:28px;height:28px}
+.mode-name{grid-area:n;font-weight:900;font-size:17px;line-height:1.2}
+.mode-btn small{grid-area:s;font-size:12px;color:#4c5a65;font-weight:600;margin-top:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-areas:"card side" "card ref" "card vid";gap:14px;align-items:start;margin-top:10px}
+#practice{grid-area:card}#journey{grid-area:side}#refDetails{grid-area:ref}#videoDetails{grid-area:vid}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.mode-title{margin:0;font-size:26px;font-weight:900}
+.score{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{background:#f1ece2;border-radius:999px;padding:7px 13px;font-weight:800;font-size:14px}
+.action{border:0;border-radius:14px;padding:13px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px}
+.action.primary{background:var(--blue);color:#fff}.action.primary:hover{background:var(--blue-d)}
+.action.secondary{background:#f1ece2}.action.secondary:hover{background:#e8e1d3}
+.action.next{background:#263840;color:#fff}.action:disabled{opacity:.55;cursor:default}
+#nextBtn{min-height:44px;padding:8px 18px}
+.footer-note{color:var(--muted);font-size:13px;margin:8px 0}
+.progress-note{margin:8px 0 6px}
+.style-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:15px;font-weight:800}
+.style-row select{min-height:40px;border-radius:12px;border:2px solid var(--line);background:#fff;padding:4px 10px;font-weight:700}
+.prompt{font-size:21px;font-weight:800;margin:12px 0 8px;line-height:1.35}
+.struct{display:flex;justify-content:center;align-items:center;background:#fff;border:2px dashed #e2dccd;border-radius:16px;padding:8px;margin:8px 0 12px;min-height:130px;overflow-x:auto}
+.struct svg.mol{max-width:100%;height:auto}
+.condensed{font-size:30px;font-weight:700;letter-spacing:.02em;font-family:Georgia,'Times New Roman',serif;padding:18px 8px;text-align:center;word-break:break-word}
+.condensed sub{font-size:.62em}
+.options{display:grid;gap:10px;margin:8px 0 4px}
+.cols2{grid-template-columns:repeat(2,minmax(0,1fr))}.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.option{display:flex;align-items:center;gap:10px;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:58px;font-size:18px;font-weight:700;cursor:pointer;transition:transform .12s}
+.option:hover:not(:disabled){transform:translateY(-1px);border-color:#9bc3e0}
+.option.selected{border-color:var(--blue);background:#eaf5fd;box-shadow:0 0 0 3px #4a9fd633}
+.option.wrong{border-color:#d9776f;background:#fdeeed}
+.option.right{border-color:#4fa36a;background:#e8f7ec}
+.option:disabled{cursor:default}
+.opt-letter{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#f1ece2;display:grid;place-items:center;font-size:14px;font-weight:900}
+.opt-body{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-width:0;gap:2px}
+.struct-opts .opt-body svg.mol{max-width:100%;height:auto}
+.optname{font-size:14px;color:var(--muted);font-weight:800}
+.rxn{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;background:#fff;border:2px dashed #e2dccd;border-radius:16px;padding:8px;margin:8px 0 12px}
+.rxn svg.mol{max-width:100%;height:auto}
+.plus{font-size:26px;font-weight:900;color:#6b7a85;padding:0 4px}
+.ptext{font-size:22px;font-weight:800;padding:0 6px}
+.rarrow{display:inline-flex;flex-direction:column;align-items:center;font-size:34px;font-weight:900;line-height:1;margin:0 6px}
+.rlab{font-size:14px;font-weight:800;color:#3b5f7a;text-align:center;line-height:1.1;min-height:14px}.rlab small{display:block;font-size:11px;font-weight:700;color:#6b7a85}
+.qmark{font-size:40px;font-weight:900;color:#c08a2e;padding:0 10px}
+.btn-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:12px}
+.hintbox{display:none;background:#fff6d6;border:1px solid #f0dc94;border-radius:14px;padding:10px 14px;margin-top:10px;font-weight:600}
+.hintbox.show{display:block}
+.feedback{margin-top:10px;border-radius:14px;padding:0;line-height:1.5;font-size:16px}
+.feedback.good{background:#e8f7ec;border:1px solid #bfe5c9;padding:12px 14px}
+.feedback.bad{background:#fdeeed;border:1px solid #f1c5c1;padding:12px 14px}
+.collapsible,.journey{padding:0}
+.collapsible>summary,.journey>summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:900;font-size:17px;min-height:48px;display:flex;align-items:center;gap:8px}
+.collapsible>summary::-webkit-details-marker,.journey>summary::-webkit-details-marker{display:none}
+.collapsible>summary:after,.journey>summary:after{content:'▸';margin-left:auto;font-size:16px;transition:transform .15s}
+.collapsible[open]>summary:after,.journey[open]>summary:after{transform:rotate(90deg)}
+.collapsible>.body,.journey>.body{padding:0 16px 14px}
+.journey{background:linear-gradient(120deg,#fff8e6,#eef6ff)}
+.journey-chip{white-space:nowrap;margin-left:auto;margin-right:8px;background:#fff;border:2px solid #f0cf86;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:900}
+.xp-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;font-weight:800;font-size:14px}
+.xp-track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.xp-fill{height:100%;background:linear-gradient(90deg,#8fd8c8,#f7c968);width:0;transition:width .3s}
+.xp-note{font-size:12.5px;color:var(--muted);margin:8px 0}
+.mode-xp{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0;font-size:11.5px;font-weight:700;color:var(--muted)}
+.mode-xp div{background:#fff;border-radius:10px;padding:6px 8px}.mode-xp b{display:block;font-size:18px;color:var(--ink)}
+.jbadges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.jbadge{border:2px dashed #d5dce2;border-radius:12px;padding:8px 10px;font-size:13px;opacity:.55;background:#fff}
+.jbadge.earned{opacity:1;border:2px solid #f0cf86;background:#fff8e6}.jbadge .bt{font-weight:900;font-size:14px}
+.journey-reset{margin-top:12px;font-size:14px;min-height:42px;padding:6px 14px;border-radius:12px;border:2px solid #d5dce2;background:#fff;cursor:pointer}
+.table-scroll{overflow-x:auto}
+.ref-table{width:100%;border-collapse:collapse;font-size:14px}.ref-table th,.ref-table td{border:1px solid #e6e0d2;padding:6px 8px;text-align:left}.ref-table th{background:#f4f0fb}.ref-table td.g{font-weight:900}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;font-size:17px;box-shadow:0 8px 24px #0002;pointer-events:none;transition:.3s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.celebrate{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confetti{position:absolute;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.source-note{margin-top:16px}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "side" "ref" "vid"}.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+ .app{padding:10px 10px 30px}
+ .hero{padding:10px 14px}.hero .subtitle{display:none}.hero h1{font-size:24px}.hero-emoji{font-size:44px}.badge{font-size:11px;padding:4px 8px}
+ .sum-hint{padding:4px 10px;font-size:12px}
+ .mode-grid{gap:8px}.mode-btn{grid-template-columns:34px 1fr;padding:8px 8px 10px;min-height:52px}.mode-btn small{display:none}.mode-icon{width:34px;height:34px}.mode-icon svg{width:22px;height:22px}.mode-name{font-size:14px}
+ .card{padding:14px}.prompt{font-size:18px}.condensed{font-size:24px}
+ .cols3{grid-template-columns:1fr}.options:not(.struct-opts){grid-template-columns:1fr}.option{min-width:0}.opt-body{overflow-wrap:anywhere}.option{font-size:16px;padding:8px 10px}
+ .btn-row{grid-template-columns:1fr 1fr;position:sticky;bottom:0;z-index:5;background:linear-gradient(#fff0,#fffcf6 22%);padding:10px 0 8px;margin-bottom:0}.btn-row .primary{grid-column:1/-1}
+ #nextBtn{flex:1 1 100%}
+ .mode-xp{grid-template-columns:repeat(2,1fr)}
+}
+.video-wrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.struct.pair{gap:18px;flex-wrap:wrap}.pairitem{display:flex;flex-direction:column;align-items:center}.struct-opts .opt-body svg.mol{max-width:100%;height:auto}.cols4{grid-template-columns:repeat(4,1fr)}.cols1{grid-template-columns:1fr}
+@media(max-width:700px){.cols4{grid-template-columns:repeat(2,1fr)}.options.struct-opts{grid-template-columns:repeat(2,1fr)}}
+
+.mode-btn[data-mode=classify],#practice[data-mode=classify]{--mb:#fff0dc;--ma:#e2b878;--md:#a8661b}
+.mode-btn[data-mode=fischer],#practice[data-mode=fischer]{--mb:#e6f2ff;--ma:#92bbdc;--md:#2a6a9e}
+.mode-btn[data-mode=haworth],#practice[data-mode=haworth]{--mb:#f0e8fc;--ma:#b99bd8;--md:#6b44a0}
+.mode-btn[data-mode=stereo],#practice[data-mode=stereo]{--mb:#e7f6e9;--ma:#8bbf95;--md:#2f7a43}
+.mode-btn[data-mode=disacc],#practice[data-mode=disacc]{--mb:#e3f7f6;--ma:#7cc3bf;--md:#1d7873}
+.mode-btn[data-mode=react],#practice[data-mode=react]{--mb:#fde7e7;--ma:#e09a9a;--md:#a83a3a}
+#practice[data-mode]{border-top:6px solid var(--md)}
+.mode-tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--md);border-radius:999px;padding:3px 10px;margin-right:8px;vertical-align:middle}
+@media(max-width:700px){.mode-title{font-size:21px}.mode-tag{font-size:11px;padding:2px 8px;margin-right:6px}}
+</style></head>
+<body>
+<div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
+<div class="app">
+<section class="hero"><div><span class="badge">🍬 Sweet Structures • ItsDrDan • CHEM 3B</span>
+<h1><span class="a">Sweet</span> <span class="b">Structures</span></h1>
+<p class="subtitle">Classify sugars, read Fischer and Haworth structures, and master linkages and reactions.</p></div><div class="hero-emoji" aria-hidden="true">🍯</div></section>
+<details class="directions" id="howTo"><summary id="howToTitle">📘 How to use this game <span class="sum-hint">Tap to open</span></summary>
+<ol><li><strong>Pick a mode.</strong> Classify Sugars, Fischer Projections, Haworth Rings, Stereochemistry, Di- &amp; Polysaccharides or Sugar Reactions.</li>
+<li><strong>Choose an answer</strong> and press Check Answer. Wrong choices are marked so you can try again.</li>
+<li><strong>Need help?</strong> Hint gives a clue. Show Answer reveals the solution but earns no point.</li>
+<li><strong>Earn XP and badges</strong> for independent answers and streaks. Progress is saved in this browser only.</li></ol>
+<p class="tip"><strong>Tip:</strong> For D-sugars, an OH on the right in a Fischer projection points down in the Haworth ring.</p></details>
+<nav class="mode-grid" id="modeGrid" aria-label="Choose a study mode"></nav>
+<div class="main">
+<section class="card" id="practice">
+<div class="toprow"><h2 class="mode-title" id="modeTitle">Classify Sugars</h2><div class="score"><span class="pill">Correct: <span id="correct">0</span></span><span class="pill">Streak: <span id="streak">0</span> 🔥</span><span class="pill">Assisted: <span id="assisted">0</span></span><button class="action next" id="nextBtn">New Question ↻</button></div></div>
+<p class="footer-note progress-note" id="progressLabel"></p>
+<div id="questionArea"></div>
+<div class="btn-row"><button class="action primary" id="checkBtn">Check Answer</button><button class="action secondary" id="hintBtn">Hint</button><button class="action secondary" id="showBtn">Show Answer</button></div>
+<div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+</section>
+<details class="card journey" id="journey"><summary>🧭 Chemistry Journey <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary><div class="body">
+<div class="xp-row"><span id="xpLevel">Level 1</span><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><span id="xpText">0 / 100 XP</span></div>
+<p class="xp-note">Earn 10 XP for each independent answer (+2 per streak step, up to +10) and 2 XP for a reveal. Saved in this browser only.</p>
+<div class="mode-xp" id="modeXp"></div><div class="jbadges" id="jbadges"></div><button class="journey-reset" id="journeyReset" type="button">Reset progress</button></div></details>
+<details class="card collapsible" id="refDetails"><summary>🧠 Reference &amp; rules</summary><div class="body" id="refBody"></div></details>
+</div>
+<p class="footer-note source-note">Practice topics follow the CHEM 3B carbohydrate chapter. All questions and structures are generated for this game.</p>
+</div>
+<script>
+/* ===== Carbohydrate engine ===== */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=id=>document.getElementById(id);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickOne=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function bag(list){let b=[],last=null;return ()=>{if(!b.length){b=shuf(list);if(b[b.length-1]===last&&b.length>1)b.unshift(b.pop())}last=b.pop();return last}}
+/* sides: 'R'/'L' for each Fischer stereocenter top to bottom; 'X' = CH2 (deoxy, not a stereocenter) */
+const SUG={
+ glyceraldehyde:{type:'aldo',n:3,sides:['R']},
+ dihydroxyacetone:{type:'keto',n:3,sides:[]},
+ erythrose:{type:'aldo',n:4,sides:['R','R']},
+ threose:{type:'aldo',n:4,sides:['L','R']},
+ erythrulose:{type:'keto',n:4,sides:['R']},
+ ribose:{type:'aldo',n:5,sides:['R','R','R']},
+ arabinose:{type:'aldo',n:5,sides:['L','R','R']},
+ xylose:{type:'aldo',n:5,sides:['R','L','R']},
+ lyxose:{type:'aldo',n:5,sides:['L','L','R']},
+ ribulose:{type:'keto',n:5,sides:['R','R']},
+ xylulose:{type:'keto',n:5,sides:['L','R']},
+ allose:{type:'aldo',n:6,sides:['R','R','R','R']},
+ altrose:{type:'aldo',n:6,sides:['L','R','R','R']},
+ glucose:{type:'aldo',n:6,sides:['R','L','R','R']},
+ mannose:{type:'aldo',n:6,sides:['L','L','R','R']},
+ gulose:{type:'aldo',n:6,sides:['R','R','L','R']},
+ idose:{type:'aldo',n:6,sides:['L','R','L','R']},
+ galactose:{type:'aldo',n:6,sides:['R','L','L','R']},
+ talose:{type:'aldo',n:6,sides:['L','L','L','R']},
+ psicose:{type:'keto',n:6,sides:['R','R','R']},
+ fructose:{type:'keto',n:6,sides:['L','R','R']},
+ sorbose:{type:'keto',n:6,sides:['R','L','R']},
+ tagatose:{type:'keto',n:6,sides:['L','L','R']}
+};
+const SZ=['','','','tri','tetr','pent','hex'];
+const sugName=(k,L)=>k==='dihydroxyacetone'?'1,3-dihydroxyacetone':(L?'L-':'D-')+k;
+const sugKind=k=>{const s=SUG[k];return (s.type==='aldo'?'aldo':'keto')+SZ[s.n]+'ose'};
+const chiralCount=k=>SUG[k].sides.filter(x=>x!=='X').length;
+const mirror=sd=>sd.map(x=>x==='R'?'L':x==='L'?'R':x);
+const sidesOf=(k,L)=>L?mirror(SUG[k].sides):SUG[k].sides.slice();
+function rel(a,b){const A=SUG[a.k],B=SUG[b.k];if(A.n!==B.n||A.deoxy||B.deoxy)return 'none';if(A.type!==B.type)return 'structural';const x=sidesOf(a.k,a.L),y=sidesOf(b.k,b.L);if(x.length!==y.length)return 'none';const d=x.filter((v,i)=>v!==y[i]).length;if(d===0)return 'same';if(d===x.length)return 'enantiomer';if(d===1)return 'epimer';return 'diastereomer'}
+const COL={O:'#c0392b',C:'#2d3f4b'};
+function tsp(label){return label.split(/(\d)/).map(p=>/^\d$/.test(p)?'<tspan dy="5" font-size="11">'+p+'</tspan>':(p&&/\d/.test(label)&&label.indexOf(p)>0?'<tspan dy="-5">'+p+'</tspan>':p)).join('')}
+function txt(x,y,label,color,size,anchor){return `<text x="${x}" y="${y+6}" text-anchor="${anchor||'middle'}" fill="${color||COL.C}" font-size="${size||17}" font-weight="800" font-family="Inter,Helvetica,Arial,sans-serif" stroke="#fff" stroke-width="5" stroke-linejoin="round" paint-order="stroke">${tsp(label)}</text>`}
+const ln=(x1,y1,x2,y2,w)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#2d3f4b" stroke-width="${w||2.4}" stroke-linecap="round"/>`;
+function fischerSVG(k,L,opt){opt=opt||{};const s=SUG[k],sd=sidesOf(k,L);const sc=opt.scale||1;const cx=70,gap=40;let y=22,out='';const nodes=[];
+ const topLabel=s.type==='aldo'?'CHO':'CH2OH';out+=txt(cx-6,y,topLabel,null,null,'start');nodes.push(y);let yy=y;
+ const seq=[];if(s.type==='keto')seq.push({kind:'co'});sd.forEach(v=>seq.push({kind:'c',v}));
+ let prev=yy+10;
+ seq.forEach(it=>{yy+=gap;out+=ln(cx,prev,cx,yy-(it.kind==='co'?8:0));
+  if(it.kind==='co'){out+=ln(cx+11,yy-3,cx+27,yy-3,2.2)+ln(cx+11,yy+3,cx+27,yy+3,2.2)+txt(cx,yy,'C')+txt(cx+37,yy,'O',COL.O);prev=yy+10}
+  else if(it.v==='X'){out+=ln(cx-22,yy,cx+22,yy);out+=txt(cx-36,yy,'H');out+=txt(cx+36,yy,'H');prev=yy}
+  else{out+=ln(cx-24,yy,cx+24,yy);const l=it.v==='L';out+=txt(cx-40,yy,l?'HO':'H',l?COL.O:COL.C);out+=txt(cx+40,yy,l?'H':'OH',l?COL.C:COL.O);prev=yy}});
+ yy+=gap;out+=ln(cx,prev,cx,yy-10);out+=txt(cx-6,yy,'CH2OH',null,null,'start');
+ const w=140,h=yy+24;return `<svg class="mol" viewBox="0 0 ${w} ${h}" width="${(w*sc).toFixed(0)}" height="${(h*sc).toFixed(0)}" role="img" aria-label="Fischer projection" xmlns="http://www.w3.org/2000/svg">${out}</svg>`}
+/* Haworth: ring carbons get {up,down} labels */
+function havSpec(k,anom){const s=SUG[k];const sd=s.sides;
+ const lab=(v)=>v==='R'?{up:'H',down:'OH'}:{up:'OH',down:'H'};
+ const aOH=anom==='α'?{up:'H',down:'OH'}:{up:'OH',down:'H'};
+ if(s.type==='aldo'&&s.n===6)return {size:6,ring:[{c:'C1',...aOH},{c:'C2',...lab(sd[0])},{c:'C3',...lab(sd[1])},{c:'C4',...lab(sd[2])},{c:'C5',up:'CH2OH',down:'H'}]};
+ if(s.type==='aldo'&&s.n===5)return {size:5,ring:[{c:'C1',...aOH},{c:'C2',...lab(sd[0])},{c:'C3',...lab(sd[1])},{c:'C4',up:'CH2OH',down:'H'}]};
+ if(s.type==='keto'&&s.n===6){const c2=anom==='α'?{up:'CH2OH',down:'OH'}:{up:'OH',down:'CH2OH'};return {size:5,ring:[{c:'C2',...c2},{c:'C3',...lab(sd[0])},{c:'C4',...lab(sd[1])},{c:'C5',up:'CH2OH',down:'H'}]}}
+ return null}
+const hl=(x,ox,y,l)=>l==='CH2OH'?txt(x-6,y,l,COL.C,16,'start'):(l==='OH'?txt(x+ox-6.5,y,l,COL.O,16,'start'):txt(x+ox,y,l,COL.C,16));
+function haworthSVG(k,anom,opt){opt=opt||{};const sp=havSpec(k,anom),sc=opt.scale||1,keto=SUG[k].type==='keto';let P,order,front;
+ if(sp.size===6){P={O:[190,56],C1:[240,92],C2:[170,130],C3:[75,130],C4:[28,92],C5:[108,56]};order=['O','C1','C2','C3','C4','C5'];front=['C2','C3']}
+ else if(keto){P={O:[178,44],C2:[244,88],C3:[216,138],C4:[124,138],C5:[96,88]};order=['O','C2','C3','C4','C5'];front=['C3','C4']}
+ else{P={O:[178,44],C1:[244,88],C2:[216,138],C3:[124,138],C4:[96,88]};order=['O','C1','C2','C3','C4'];front=['C2','C3']}
+ let out='';for(let i=0;i<order.length;i++){const A=order[i],B=order[(i+1)%order.length],a=P[A],b=P[B];out+=ln(a[0],a[1],b[0],b[1],(A===front[0]&&B===front[1])?5.5:2.6)}
+ out+=txt(P.O[0],P.O[1],'O',COL.O);const colr=l=>l==='OH'?COL.O:COL.C;
+ sp.ring.forEach(r=>{const p=P[r.c];const fr=front.includes(r.c),bk=!fr&&r.c!=='C1'&&!(keto&&r.c==='C2')&&r.c!=='C4'?1:0;const du=fr?24:30,dd=bk?24:30,ox=(r.c==='C1'||(keto&&r.c==='C2'))?0:0;out+=ln(p[0],p[1],p[0]+ox*0,p[1]-du)+ln(p[0],p[1],p[0],p[1]+dd)+hl(p[0],ox,p[1]-du-10,r.up)+hl(p[0],ox,p[1]+dd+10,r.down);out+=`<text x="${(p[0]+(125-p[0])*.24).toFixed(0)}" y="${(p[1]+(88-p[1])*.24+4).toFixed(0)}" text-anchor="middle" font-size="11" fill="#8a96a0" font-family="Inter,sans-serif">${r.c.slice(1)}</text>`});
+ const w=sp.size===6?270:320,h=190;return `<svg class="mol" viewBox="0 0 ${w} ${h}" width="${(w*sc).toFixed(0)}" height="${(h*sc).toFixed(0)}" role="img" aria-label="Haworth projection" xmlns="http://www.w3.org/2000/svg">${out}</svg>`}
+const HSTEM={glucose:'glucopyranose',galactose:'galactopyranose',mannose:'mannopyranose',fructose:'fructofuranose',ribose:'ribofuranose'};
+const havName=(k,a)=>`${a}-D-${HSTEM[k]}`;
+
+/* ===== Question generators ===== */
+const ALLK=Object.keys(SUG);
+const KINDS=['aldotriose','ketotriose','aldotetrose','ketotetrose','aldopentose','ketopentose','aldohexose','ketohexose'];
+const nice=k=>k==='dihydroxyacetone'?'1,3-dihydroxyacetone':k;
+const clsBag=bag(['draw','name','draw']),fiBag=bag(['dl','id','id','dl']),haBag=bag(['anomer','ring','match','anomer','match']),stBag=bag(['count','rel','rel','count']),diBag=bag(['comp','source','link','poly','red','red','digest']),rxBag=bag(['benedict','benedict','ox','red','hydro','ferment','cond']);
+const relBag=bag(['enantiomer','epimer','structural','none']);
+function kindWhy(k){const s=SUG[k];return `${sugKind(k)}: ${s.n} carbons (${SZ[s.n]}ose) and ${s.type==='aldo'?'an aldehyde (–CHO) at C1, so it is an aldose':'a ketone (C=O) at C2, so it is a ketose'}.`}
+function genClassify(){const k=pickOne(ALLK);const L=Math.random()<.25&&chiralCount(k)>0;const ans=sugKind(k),s=SUG[k];
+ const sw=(s.type==='aldo'?'keto':'aldo')+SZ[s.n]+'ose';const others=KINDS.filter(x=>x!==ans);const alt=[sw,...shuf(others.filter(x=>x!==sw))].slice(0,3);const opts=shuf([ans,...alt]);const showDraw=clsBag()==='draw';
+ const prompt=showDraw?`<p class="prompt">What type of monosaccharide is shown?</p><div class="struct">${fischerSVG(k,L)}</div>`:`<p class="prompt">${esc(nice(k)[0].toUpperCase()+nice(k).slice(1))} contains ${s.n} carbons and ${s.type==='aldo'?'an aldehyde group':'a ketone group'}. How is it classified?</p>`;
+ return {kind:'classify',html:prompt,options:opts.map(o=>({key:o,html:o})),answer:ans,hint:'Count the carbons for the size (tri-, tetr-, pent-, hex-). Look at the top: –CHO means aldo-, a C=O in the middle (at C2) means keto-.',why:kindWhy(k)+(showDraw?` This is ${sugName(k,L)}.`:''),cols:2}}
+function dOrL(k,L){return L?'L':'D'}
+function genFischer(){const t=fiBag();
+ if(t==='dl'){const k=pickOne(ALLK.filter(x=>chiralCount(x)>0));const L=Math.random()<.5;const sd=sidesOf(k,L).filter(x=>x!=='X');const last=sd[sd.length-1];
+  return {kind:'fischer',html:`<p class="prompt">Is this a D-sugar or an L-sugar?</p><div class="struct">${fischerSVG(k,L)}</div>`,options:[{key:'D',html:'D-sugar'},{key:'L',html:'L-sugar'}],answer:last==='R'?'D':'L',hint:'Look at the chiral carbon farthest from the carbonyl (the one just above the bottom CH2OH). OH on the right = D, OH on the left = L.',why:`The last chiral carbon has its –OH on the ${last==='R'?'right, so it is a D-sugar':'left, so it is an L-sugar'}. This is ${sugName(k,L)}.`,cols:2}}
+ const pool=ALLK.filter(x=>chiralCount(x)>0);const k=pickOne(pool);const L=Math.random()<.3;
+ const sibs=shuf(pool.filter(x=>x!==k&&SUG[x].n===SUG[k].n&&SUG[x].type===SUG[k].type));const cand=[{k,L}];
+ if(sibs.length)cand.push({k:sibs[0],L});cand.push({k,L:!L});sibs.slice(1).forEach(x=>cand.push({k:x,L}));cand.push({k:pickOne(pool.filter(x=>x!==k&&!sibs.includes(x))),L:Math.random()<.3});
+ const seen=new Set([sugName(k,L)]),opts=[{k,L}];for(const c of cand.slice(1)){const nme=sugName(c.k,c.L);if(!seen.has(nme)){seen.add(nme);opts.push(c);if(opts.length===4)break}}
+ for(const x of shuf(pool)){if(opts.length>=4)break;const nme=sugName(x,false);if(!seen.has(nme)){seen.add(nme);opts.push({k:x,L:false})}}
+ const hintMap={glucose:'D-glucose: OH on right, left, right, right (C2–C5).',galactose:'D-galactose differs from glucose at C4 (OH left).',mannose:'D-mannose differs from glucose at C2 (OH left).'};
+ return {kind:'fischer',html:`<p class="prompt">Which sugar is shown?</p><div class="struct">${fischerSVG(k,L)}</div>`,options:shuf(opts).map(o=>({key:sugName(o.k,o.L),html:sugName(o.k,o.L)})),answer:sugName(k,L),hint:'Read the OH positions from the top chiral carbon down (R = right, L = left). Compare with D-glucose: right, left, right, right. Galactose differs at C4 and mannose at C2.',why:`Reading the OH positions top to bottom gives ${sidesOf(k,L).map(x=>x==='R'?'right':x==='L'?'left':'none (CH₂)').join(', ')}. This is ${sugName(k,L)}.`,cols:2}}
+const HS=['glucose','galactose','mannose','fructose','ribose'];
+function genHaworth(){const t=haBag();const k=pickOne(HS);const a=pickOne(['α','β']);const nameOf=havName(k,a);
+ if(t==='anomer'){const kk=pickOne(['glucose','galactose','mannose','fructose','ribose']);const aa=a;return {kind:'haworth',html:`<p class="prompt">This is a D-${kk} ring. Is it the α or the β anomer?</p><div class="struct">${haworthSVG(kk,aa)}</div>`,options:[{key:'α',html:'α anomer'},{key:'β',html:'β anomer'}],answer:aa,hint:kk==='fructose'?'For D-fructose the anomeric carbon is C2. α has the anomeric –OH pointing down (trans to the terminal CH₂OH on C5); β has it pointing up.':'Find the anomeric carbon (C1, next to the ring O). For D-sugars: –OH pointing DOWN = α, –OH pointing UP = β.',why:`The anomeric –OH points ${aa==='α'?'down, so this is the α anomer':'up, so this is the β anomer'}: ${havName(kk,aa)}.`,cols:2}}
+ if(t==='ring'){const sameRing=HS.filter(x=>x!==k&&(HSTEM[x].includes('pyran')===HSTEM[k].includes('pyran')));const other=[havName(k,a==='α'?'β':'α'),havName(sameRing[0],a),havName(pickOne(HS.filter(x=>x!==k&&x!==sameRing[0])),pickOne(['α','β']))];const names=[...new Set([nameOf,...other])];for(const x of shuf(HS)){if(names.length>=4)break;const n2=havName(x,pickOne(['α','β']));if(!names.includes(n2))names.push(n2)}
+  return {kind:'haworth',html:`<p class="prompt">Name this ring form.</p><div class="struct">${haworthSVG(k,a)}</div>`,options:shuf(names.slice(0,4)).map(o=>({key:o,html:o})),answer:nameOf,hint:'Count the ring atoms: 6 (5 C + O) is a pyranose, 5 (4 C + O) is a furanose. Then check the anomeric –OH (down = α, up = β) and the OH positions to tell glucose, galactose and mannose apart.',why:`${nameOf}: a ${HSTEM[k].includes('pyran')?'six-membered (pyranose)':'five-membered (furanose)'} ring with the anomeric –OH ${a==='α'?'down (α)':'up (β)'}.`,cols:2}}
+ const epi={glucose:['galactose','mannose'],galactose:['glucose','mannose'],mannose:['glucose','galactose'],fructose:[],ribose:[]}[k];const opts=[{k,a},{k,a:a==='α'?'β':'α'}];epi.forEach(e=>opts.push({k:e,a}));for(const x of shuf(HS)){if(opts.length>=4)break;if(!opts.some(o=>o.k===x&&o.a===a)&&!(HSTEM[x].includes('pyran')!==HSTEM[k].includes('pyran')&&opts.length>2&&false))opts.push({k:x,a})}
+ const uniq=[];const seen=new Set();for(const o of opts){const n=havName(o.k,o.a);if(!seen.has(n)){seen.add(n);uniq.push(o)}}
+ return {kind:'haworth',html:`<p class="prompt">Which structure is <strong>${nameOf}</strong>?</p><p class="footer-note">Down = α at the anomeric carbon. Compare the OH positions on C2, C3 and C4.</p>`,options:shuf(uniq.slice(0,4)).map(o=>({key:havName(o.k,o.a),html:haworthSVG(o.k,o.a,{scale:.62})})),answer:nameOf,hint:'First find the anomeric carbon and decide α or β. Then compare C2–C4 with glucose: galactose has C4 –OH up, mannose has C2 –OH up.',why:`${nameOf}: ${k==='fructose'?'five-membered ring, anomeric C2':'anomeric C1'} –OH ${a==='α'?'down':'up'}${k==='glucose'?'. In glucose the –OH on C2 and C4 point down and on C3 up.':k==='galactose'?'. Compared with glucose, C4 –OH points up.':k==='mannose'?'. Compared with glucose, C2 –OH points up.':'.'}`,cols:2,struct:true}}
+const REL={enantiomer:['Enantiomers','mirror images: every chiral carbon is reversed (D and L forms of the same sugar).'],epimer:['Epimers','they differ at only ONE chiral carbon.'],structural:['Structural isomers','same formula but a different functional group (aldose vs ketose).'],none:['Not isomers','they have different formulas (different numbers of carbons).']};
+function genStereo(){const t=stBag();
+ if(t==='count'){const k=pickOne(ALLK);const L=Math.random()<.3&&chiralCount(k)>0;const c=chiralCount(k);const set=new Set([c]);[c+1,c+2,Math.max(0,c-1),c+3,c-2].forEach(x=>{if(x>=0&&set.size<4)set.add(x)});const opts=[...set].sort((a,b)=>a-b);
+  return {kind:'stereo',html:`<p class="prompt">How many chiral carbons are in this molecule?</p><div class="struct">${fischerSVG(k,L)}</div>`,options:opts.map(o=>({key:String(o),html:String(o)})),answer:String(c),hint:'Chiral carbons are the carbons that carry both an H and an OH on the sides. The carbonyl carbon, the C=O carbon and the end CH₂OH carbons are not chiral.',why:`${sugName(k,L)} has ${c} chiral carbon${c===1?'':'s'}${k==='deoxyribose'?'':k==='dihydroxyacetone'?' (no carbon has four different groups)':''}.`,cols:4}}
+ const cat=relBag();let a,b,tries=0;const lib=ALLK;
+ while(tries++<500){const A={k:pickOne(lib),L:Math.random()<.3},B={k:pickOne(lib),L:Math.random()<.3};const r=rel(A,B);if(r===cat&&(cat!=='enantiomer'||A.k===B.k)&&(cat!=='none'||SUG[A.k].n!==SUG[B.k].n)){a=A;b=B;break}}
+ if(!a){a={k:'glucose',L:false};b={k:'galactose',L:false}}
+ const r=rel(a,b);
+ return {kind:'stereo',html:`<p class="prompt">How are these two sugars related?</p><div class="struct pair"><div class="pairitem">${fischerSVG(a.k,a.L,{scale:.9})}<span class="optname">${sugName(a.k,a.L)}</span></div><div class="pairitem">${fischerSVG(b.k,b.L,{scale:.9})}<span class="optname">${sugName(b.k,b.L)}</span></div></div>`,options:Object.keys(REL).map(x=>({key:x,html:REL[x][0]})),answer:r,hint:'First compare the formulas (carbons and C=O type). If they match, compare the OH positions: all reversed = enantiomers, only one different = epimers.',why:`${sugName(a.k,a.L)} and ${sugName(b.k,b.L)} are ${REL[r][0].toLowerCase()}: ${REL[r][1]}${r==='epimer'?' ('+epimerAt(a,b)+')':''}`,cols:2}}
+function epimerAt(a,b){const A=SUG[a.k],x=sidesOf(a.k,a.L),y=sidesOf(b.k,b.L);const i=x.findIndex((v,j)=>v!==y[j]);const off=A.type==='aldo'?2:3;return `they differ at C${i+off}`}
+const DI={maltose:{comp:'glucose + glucose',link:'α(1→4)',alt:'malt sugar',src:'malted grains and the breakdown of starch',red:true},lactose:{comp:'galactose + glucose',link:'β(1→4)',alt:'milk sugar',src:'milk and dairy products',red:true},sucrose:{comp:'glucose + fructose',link:'α(1→2)β',alt:'table sugar',src:'sugar cane and sugar beets',red:false}};
+const POLY={amylose:{desc:'an unbranched plant starch with α(1→4) links',link:'α(1→4)'},amylopectin:{desc:'a branched plant starch with α(1→4) links and α(1→6) branch points',link:'α(1→4) and α(1→6)'},glycogen:{desc:'a highly branched glucose polymer stored in animal liver and muscle',link:'α(1→4) and α(1→6)'},cellulose:{desc:'an unbranched structural polymer of glucose with β(1→4) links in plant cell walls',link:'β(1→4)'}};
+function genDisacc(){const t=diBag();const dn=Object.keys(DI);
+ if(t==='comp'){const d=pickOne(dn);const all=['glucose + glucose','galactose + glucose','glucose + fructose','galactose + fructose'];return {kind:'disacc',html:`<p class="prompt">Which monosaccharides are joined in <strong>${d}</strong>?</p>`,options:shuf(all).map(o=>({key:o,html:o})),answer:DI[d].comp,hint:'Maltose = two glucose, lactose = galactose + glucose, sucrose = glucose + fructose.',why:`${d[0].toUpperCase()+d.slice(1)} (${DI[d].alt}) is made of ${DI[d].comp}.`,cols:2}}
+ if(t==='source'){const d=pickOne(dn);const opts=shuf([...dn,'amylose']);const what=pickOne(['alt','src']);const q=what==='alt'?`Which carbohydrate is known as <strong>${DI[d].alt}</strong>?`:`Which disaccharide is found in <strong>${DI[d].src}</strong>?`;return {kind:'disacc',html:`<p class="prompt">${q}</p>`,options:(what==='alt'?opts.slice(0,4):shuf(dn.concat(['glycogen']))).map(o=>({key:o,html:o})),answer:d,hint:'Maltose = malt sugar, lactose = milk sugar, sucrose = table sugar.',why:`${d[0].toUpperCase()+d.slice(1)} is ${DI[d].alt}, found in ${DI[d].src}. It contains ${DI[d].comp}.`,cols:2}}
+ if(t==='link'){const items=[['maltose','α(1→4)'],['lactose','β(1→4)'],['sucrose','α(1→2)β'],['amylose','α(1→4)'],['cellulose','β(1→4)']];const it=pickOne(items);return {kind:'disacc',html:`<p class="prompt">What glycosidic linkage joins the monosaccharides in <strong>${it[0]}</strong>?</p>`,options:['α(1→4)','β(1→4)','α(1→6)','α(1→2)β'].map(o=>({key:o,html:o})),answer:it[1],hint:'Starch, maltose = α(1→4). Cellulose and lactose = β(1→4). Sucrose = α(1→2)β (both anomeric carbons are used). α(1→6) makes the branches in amylopectin and glycogen.',why:`${it[0][0].toUpperCase()+it[0].slice(1)} has ${it[1]} glycosidic bonds.`,cols:2}}
+ if(t==='poly'){const p=pickOne(Object.keys(POLY));return {kind:'disacc',html:`<p class="prompt">Which polysaccharide is ${POLY[p].desc}?</p>`,options:shuf(Object.keys(POLY)).map(o=>({key:o,html:o})),answer:p,hint:'Amylose = unbranched starch, amylopectin = branched starch, glycogen = animal storage (very branched), cellulose = plant structure with β links.',why:`${p[0].toUpperCase()+p.slice(1)} is ${POLY[p].desc}. Its glucose units are joined by ${POLY[p].link} bonds.`,cols:2}}
+ if(t==='red'){const sug=['glucose','fructose','galactose','maltose','lactose','sucrose'];if(Math.random()<.5){const reds=shuf(sug.filter(x=>x!=='sucrose')).slice(0,3);return {kind:'disacc',html:`<p class="prompt">Which of these is <strong>NOT</strong> a reducing sugar?</p>`,options:shuf(['sucrose',...reds]).map(o=>({key:o,html:o})),answer:'sucrose',hint:'A reducing sugar has a free anomeric carbon (a hemiacetal that can open to an aldehyde). Sucrose uses both anomeric carbons in its glycosidic bond.',why:'Sucrose is not a reducing sugar: the α(1→2)β linkage ties up both anomeric carbons, so the rings cannot open. Glucose, fructose, galactose, maltose and lactose give a positive Benedict test.',cols:2}}
+  const x=pickOne(sug);const yes=x!=='sucrose';return {kind:'disacc',html:`<p class="prompt">Is <strong>${x}</strong> a reducing sugar?</p>`,options:[{key:'yes',html:'Yes: it has a free anomeric carbon'},{key:'no',html:'No: both anomeric carbons are in the glycosidic bond'}],answer:yes?'yes':'no',hint:'Monosaccharides are reducing. Disaccharides are reducing only if one anomeric carbon is still free (maltose, lactose). Sucrose is not.',why:yes?`${x[0].toUpperCase()+x.slice(1)} is a reducing sugar (positive Benedict test)${['fructose'].includes(x)?': in base the ketose rearranges to an aldose-like form':''}.`:'Sucrose is not a reducing sugar because both anomeric carbons are tied up in its glycosidic bond.',cols:2}}
+ return {kind:'disacc',html:`<p class="prompt">Humans cannot digest <strong>cellulose</strong>. Why?</p>`,options:[{key:'a',html:'We lack the enzyme that breaks β(1→4) bonds'},{key:'b',html:'It contains fructose instead of glucose'},{key:'c',html:'It has α(1→4) bonds that amylase cannot reach'},{key:'d',html:'It is too soluble in water'}],answer:'a',hint:'Starch uses α bonds that our amylase can break. Cellulose uses β(1→4) bonds.',why:'Cellulose is a polymer of glucose joined by β(1→4) bonds. Humans have enzymes for α bonds (amylase) but not the cellulase needed for β bonds, so cellulose passes through as dietary fiber.',cols:1}}
+const ACID={glucose:'gluconic acid',galactose:'galactonic acid',mannose:'mannonic acid',ribose:'ribonic acid',xylose:'xylonic acid'},ALD={glucose:'sorbitol (glucitol)',galactose:'galactitol',mannose:'mannitol',ribose:'ribitol',xylose:'xylitol'};
+function genReact(){const t=rxBag();const ks=Object.keys(ACID);
+ if(t==='benedict'){const sug=['glucose','fructose','galactose','maltose','lactose','sucrose','ribose'];const x=pickOne(sug);const pos=x!=='sucrose';return {kind:'react',html:`<p class="prompt">A solution of <strong>${x}</strong> is heated with Benedict's reagent (blue Cu²⁺). What do you observe?</p>`,options:[{key:'pos',html:'Positive: orange-red precipitate of Cu₂O'},{key:'neg',html:'Negative: the solution stays blue'}],answer:pos?'pos':'neg',hint:'Benedict\'s reagent reacts with reducing sugars (free aldehyde or hemiacetal). Cu²⁺ (blue) is reduced to Cu₂O (orange-red).',why:pos?`${x[0].toUpperCase()+x.slice(1)} is a reducing sugar, so Cu²⁺ is reduced to orange-red Cu₂O.`:'Sucrose is not a reducing sugar, so there is no color change.',cols:2}}
+ if(t==='ox'){const k=pickOne(ks);const names=Object.values(ACID);const wrong=shuf(ks.filter(x=>x!==k)).slice(0,2).map(x=>ACID[x]);const opts=shuf([ACID[k],...wrong,ALD[k]]);return {kind:'react',html:`<p class="prompt">Mild oxidation of the –CHO group of D-${k} (as in Benedict's test) gives which product?</p>`,options:opts.map(o=>({key:o,html:o})),answer:ACID[k],hint:'Oxidizing an aldehyde gives a carboxylic acid: the sugar becomes an "-onic acid".',why:`The aldehyde group oxidizes to –COOH, giving ${ACID[k]}. (Reduction would give the sugar alcohol ${ALD[k]}.)`,cols:2}}
+ if(t==='red'){const k=pickOne(ks);const wrong=shuf(ks.filter(x=>x!==k)).slice(0,2).map(x=>ALD[x]);const opts=shuf([ALD[k],...wrong,ACID[k]]);return {kind:'react',html:`<p class="prompt">Reduction (adding H₂) of the –CHO group of D-${k} gives which product?</p>`,options:opts.map(o=>({key:o,html:o})),answer:ALD[k],hint:'Reducing the C=O gives an alcohol, so the product is a sugar alcohol ending in "-itol".',why:`The aldehyde becomes –CH₂OH, giving the sugar alcohol ${ALD[k]}.`,cols:2}}
+ if(t==='hydro'){const d=pickOne(Object.keys(DI));const all=['glucose + glucose','galactose + glucose','glucose + fructose','galactose + fructose'];return {kind:'react',html:`<p class="prompt">Acid or the enzyme hydrolyzes <strong>${d}</strong> (adds H₂O). What are the products?</p>`,options:shuf(all).map(o=>({key:o,html:o})),answer:DI[d].comp,hint:'Hydrolysis breaks the glycosidic bond and returns the original monosaccharides.',why:`Hydrolysis of ${d} gives ${DI[d].comp}.`,cols:2}}
+ if(t==='ferment'){return {kind:'react',html:`<p class="prompt">Yeast ferments glucose without oxygen. What are the main products?</p>`,options:['Ethanol + CO₂','Lactic acid only','Sorbitol + water','Gluconic acid + H₂'].map(o=>({key:o,html:o})),answer:'Ethanol + CO₂',hint:'This is the fermentation used to make bread and alcoholic drinks: C₆H₁₂O₆ → 2 C₂H₅OH + 2 CO₂.',why:'Yeast ferments glucose to ethanol and carbon dioxide: C₆H₁₂O₆ → 2 C₂H₅OH + 2 CO₂.',cols:2}}
+ const d=pickOne(Object.keys(DI));return {kind:'react',html:`<p class="prompt">Which disaccharide forms when <strong>${DI[d].comp.replace(' + ',' and ')}</strong> join with loss of H₂O?</p>`,options:shuf(Object.keys(DI).concat(['cellulose'])).map(o=>({key:o,html:o})),answer:d,hint:'Match the two monosaccharides: glucose + glucose = maltose; galactose + glucose = lactose; glucose + fructose = sucrose.',why:`${DI[d].comp} → ${d} + H₂O (a condensation reaction forming the ${DI[d].link} glycosidic bond).`,cols:2}}
+const GEN={classify:genClassify,fischer:genFischer,haworth:genHaworth,stereo:genStereo,disacc:genDisacc,react:genReact};
+
+/* ===== UI state, journey, rendering ===== */
+const MODES=[
+ {id:'classify',title:'Classify Sugars',short:'Aldose, ketose and carbon count',icon:'<path d="M24 6v36M24 14h-10M24 24h10M24 34h-10"/><circle cx="24" cy="6" r="3"/>'},
+ {id:'fischer',title:'Fischer Projections',short:'D/L and identify the sugar',icon:'<path d="M24 6v36M12 16h24M12 28h24"/>'},
+ {id:'haworth',title:'Haworth Rings',short:'α/β, pyranose and furanose',icon:'<path d="M14 18 24 12l12 6v14l-12 6-10-6z"/>'},
+ {id:'stereo',title:'Stereochemistry',short:'Chiral carbons, epimers, enantiomers',icon:'<path d="M10 14h10v10H10zM28 24h10v10H28z"/>'},
+ {id:'disacc',title:'Di- & Polysaccharides',short:'Linkages, sources, reducing sugars',icon:'<circle cx="14" cy="24" r="8"/><circle cx="34" cy="24" r="8"/><path d="M22 24h4"/>'},
+ {id:'react',title:'Sugar Reactions',short:'Benedict, oxidation, reduction, hydrolysis',icon:'<path d="M6 24h30m-8-8 8 8-8 8"/><circle cx="42" cy="24" r="3"/>'}
+];
+const JKEY='itsdrdan-carbs-journey-v1';
+const jBlank=()=>({xp:0,correct:0,assisted:0,best:0,modes:{},badges:{}});
+let journey=jBlank();try{const j=JSON.parse(localStorage.getItem(JKEY)||'null');if(j&&typeof j==='object')journey=Object.assign(jBlank(),j)}catch{}
+const jSave=()=>{try{localStorage.setItem(JKEY,JSON.stringify(journey))}catch{}};
+const BADGES=[
+ {id:'first',t:'🌱 First Answer',d:'Answer your first question',ok:j=>j.correct>=1},
+ {id:'ten',t:'🔟 Ten Correct',d:'10 independent answers',ok:j=>j.correct>=10},
+ {id:'fifty',t:'🏅 Fifty Correct',d:'50 independent answers',ok:j=>j.correct>=50},
+ {id:'streak5',t:'🔥 Hot Streak',d:'5 correct in a row',ok:j=>j.best>=5},
+ {id:'streak10',t:'⚡ On Fire',d:'10 correct in a row',ok:j=>j.best>=10},
+ {id:'fischer',t:'📐 Fischer Fan',d:'10 correct in Fischer Projections',ok:j=>(j.modes.fischer||0)>=10},
+ {id:'ring',t:'⬡ Ring Master',d:'10 correct in Haworth Rings',ok:j=>(j.modes.haworth||0)>=10},
+ {id:'sweet',t:'🍬 Sugar Scientist',d:'10 correct in Sugar Reactions',ok:j=>(j.modes.react||0)>=10},
+ {id:'explorer',t:'🧭 Explorer',d:'Answer in all six modes',ok:j=>MODES.every(m=>(j.modes[m.id]||0)>0)}
+];
+let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600)}
+function renderJourney(){const lvl=Math.floor(journey.xp/100)+1,into=journey.xp%100;$('jChip').textContent=`Level ${lvl} • ${journey.xp} XP`;$('xpLevel').textContent='Level '+lvl;$('xpFill').style.width=into+'%';$('xpText').textContent=into+' / 100 XP';
+ $('modeXp').innerHTML=MODES.map(m=>`<div><b>${journey.modes[m.id]||0}</b>${m.title}</div>`).join('');
+ $('jbadges').innerHTML=BADGES.map(b=>`<div class="jbadge ${journey.badges[b.id]?'earned':''}"><div class="bt">${b.t}</div>${b.d}</div>`).join('')}
+function awardXP(assisted){const before=Math.floor(journey.xp/100);if(assisted){journey.xp+=2;journey.assisted++}else{journey.xp+=10+Math.min(state.streak,5)*2;journey.correct++;journey.modes[state.mode]=(journey.modes[state.mode]||0)+1;journey.best=Math.max(journey.best,state.streak)}
+ BADGES.forEach(b=>{if(!journey.badges[b.id]&&b.ok(journey)){journey.badges[b.id]=1;toast('Badge earned: '+b.t)}});if(Math.floor(journey.xp/100)>before)toast('Level up! You reached level '+(Math.floor(journey.xp/100)+1));jSave();renderJourney()}
+
+const state={mode:'classify',q:null,selected:null,done:false,revealed:false,correct:0,streak:0,assisted:0};
+function buildModes(){$('modeGrid').innerHTML=MODES.map(m=>`<button class="mode-btn ${m.id===state.mode?'active':''}" data-mode="${m.id}" aria-pressed="${m.id===state.mode}"><span class="mode-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${m.icon}</svg></span><span class="mode-name">${m.title}</span><small>${m.short}</small></button>`).join('');
+ $('modeGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;buildModes();nextQ();if(matchMedia('(max-width:700px)').matches)requestAnimationFrame(()=>requestAnimationFrame(()=>{const c=$('practice');window.scrollTo({top:Math.max(0,scrollY+c.getBoundingClientRect().top-8),behavior:'smooth'})}))})}
+function fb(kind,html){const f=$('feedback');f.className='feedback '+kind;f.innerHTML=html}
+function nextQ(){let q;try{q=GEN[state.mode]()}catch(e){console.error(e);q=GEN[state.mode]()}state.q=q;state.selected=null;state.done=false;state.revealed=false;$('hintBox').className='hintbox';$('hintBox').textContent='';fb('','');
+ $('modeTitle').innerHTML='<span class="mode-tag">Mode</span>'+esc(MODES.find(m=>m.id===state.mode).title);$('practice').dataset.mode=state.mode;
+ const grid=`<div class="options cols${q.cols||2}${q.struct?' struct-opts':''}" role="group" aria-label="Answer choices">${q.options.map((o,i)=>`<button type="button" class="option" data-key="${esc(o.key)}" aria-pressed="false"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-body">${o.html}</span></button>`).join('')}</div>`;
+ $('questionArea').innerHTML=q.html+grid;
+ $('questionArea').querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(state.done)return;state.selected=b.dataset.key;$('questionArea').querySelectorAll('.option').forEach(x=>{const on=x===b;x.classList.toggle('selected',on);x.classList.remove('wrong');x.setAttribute('aria-pressed',on?'true':'false')})});
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);$('progressLabel').textContent=`${MODES.find(m=>m.id===state.mode).short}`;updateStats()}
+function updateStats(){$('correct').textContent=state.correct;$('streak').textContent=state.streak;$('assisted').textContent=state.assisted}
+function finish(){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
+ $('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===q.answer)b.classList.add('right')});
+ if(state.revealed){state.assisted++;state.streak=0;fb('good','👀 '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
+ else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+q.why);awardXP(false)}updateStats()}
+function check(){if(state.done)return;if(!state.selected){fb('bad','Choose an answer first.');return}
+ if(state.selected!==state.q.answer){state.streak=0;updateStats();$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+esc(state.q.hint));return}
+ finish()}
+function hint(){if(state.done)return;$('hintBox').textContent='💡 '+state.q.hint;$('hintBox').className='hintbox show'}
+function show(){if(state.done)return;state.revealed=true;state.selected=state.q.answer;finish()}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const box=$('celebrate'),cols=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#b9a3e6','#f2a8c4'];for(let i=0;i<55;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.top='-20px';p.style.background=cols[i%6];p.style.animationDelay=Math.random()*.5+'s';box.appendChild(p);setTimeout(()=>p.remove(),3600)}}
+const REF=[['Aldose','–CHO at C1','aldo-','glucose'],['Ketose','C=O at C2','keto-','fructose'],['D-sugar','Last chiral C: OH on right','D-','D-glucose'],['α anomer','Anomeric OH down (D-sugar)','α-','α-D-glucopyranose'],['β anomer','Anomeric OH up (D-sugar)','β-','β-D-glucopyranose'],['Pyranose','6-membered ring (5 C + O)','-pyranose','glucose'],['Furanose','5-membered ring (4 C + O)','-furanose','fructose, ribose'],['Epimers','Differ at ONE chiral C','','glucose / galactose'],['Reducing sugar','Free anomeric C','positive Benedict','maltose, lactose'],['Glycosidic bond','Joins two sugars (–H₂O)','α or β (1→4)','sucrose α(1→2)β']];
+function renderRef(){$('refBody').innerHTML=`<div class="table-scroll"><table class="ref-table"><thead><tr><th>Term</th><th>Key feature</th><th>Name</th><th>Example</th></tr></thead><tbody>${REF.map(r=>`<tr>${r.map((c,i)=>`<td${i===0?' class="g"':''}>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="footer-note"><b>Fischer projections</b> match the CHEM 3B Exam #3 reference sheet (23 sugars, all D-forms).<br><b>D-glucose Fischer:</b> OH on C2–C5 = right, left, right, right. Galactose differs at C4, mannose at C2.<br><b>Haworth (D-sugars):</b> right in Fischer = down, left = up; CH₂OH is up.<br><b>Linkages:</b> maltose α(1→4); lactose β(1→4); sucrose α(1→2)β; amylose α(1→4); amylopectin and glycogen add α(1→6) branches; cellulose β(1→4).<br><b>Benedict's test:</b> reducing sugars give orange-red Cu₂O. Sucrose does not.</p>`}
+
+
+(function(){const KEY='itsdrdan-carbs-ui-v1',phone=()=>matchMedia('(max-width:700px)').matches;let ui={};try{ui=JSON.parse(localStorage.getItem(KEY)||'{}')}catch{}
+ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ui))}catch{}};
+ [['howTo',false],['refDetails',false],['journey',false]].forEach(([id,def])=>{const el=$(id);const st=ui[id];el.open=st!==undefined?st:(def==='desk'?!phone():def);el.addEventListener('toggle',()=>{ui[id]=el.open;save()})});
+
+})();
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=show;$('nextBtn').onclick=nextQ;
+$('questionArea').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('option')){}});
+{const rb=$('journeyReset');let armed=0;rb.onclick=()=>{if(!armed){armed=setTimeout(()=>{armed=0;rb.textContent='Reset progress'},4000);rb.textContent='Tap again to confirm reset';return}clearTimeout(armed);armed=0;rb.textContent='Reset progress';journey=jBlank();jSave();renderJourney()}}
+buildModes();renderRef();renderJourney();nextQ();
+
+</script>
+<script id="canvasAutoResize">
+(function(){
+  if(window.parent===window)return;
+  document.body.classList.add('canvas-embedded');
+  const content=document.querySelector('.app');
+  if(!content)return;
+  let lastSent=0,pending=false,stopped=false;
+  function measure(){const css=getComputedStyle(document.body);const extra=['paddingTop','paddingBottom','marginTop','marginBottom','borderTopWidth','borderBottomWidth'].reduce((sum,key)=>sum+(parseFloat(css[key])||0),0);return Math.ceil(content.getBoundingClientRect().height+extra)}
+  function sync(){pending=false;if(stopped)return;const height=measure();if(!Number.isFinite(height)||height<=0||Math.abs(height-lastSent)<2)return;lastSent=height;window.parent.postMessage({subject:'lti.frameResize',height},'*')}
+  function schedule(){if(pending||stopped)return;pending=true;requestAnimationFrame(sync)}
+  const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;
+  if(resizeObserver)resizeObserver.observe(content);
+  const mutationObserver=new MutationObserver(schedule);
+  mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});
+  window.addEventListener('resize',schedule);
+  window.addEventListener('load',schedule);
+  content.addEventListener('load',schedule,true);
+  content.addEventListener('toggle',schedule,true);
+  if(document.fonts)document.fonts.ready.then(schedule);
+  window.addEventListener('pagehide',()=>{stopped=true;resizeObserver?.disconnect();mutationObserver.disconnect()});
+  window.addEventListener('pageshow',event=>{if(event.persisted){stopped=false;lastSent=0;resizeObserver?.observe(content);mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});schedule()}});
+  schedule();
+})();
+</script>
+</body></html>
