@@ -68,6 +68,7 @@ jobs:
           lewisstructures  lewisstructures
           metric           metric
           moles            mole
+          organic          functional-groups
           polyatomic       polyatomicion
           quantumchemistry quantumchemistry
           reactions        reactions
