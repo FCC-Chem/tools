@@ -63,11 +63,13 @@ jobs:
           done <<'EOF'
           elements         elements
           gaslaws          gaslaws
+          chem1bready      chem1bready
           ionicformula     naming
           lewisstructures  lewisstructures
           metric           metric
           moles            mole
           polyatomic       polyatomicion
+          quantumchemistry quantumchemistry
           reactions        reactions
           redox            redox
           sigfig           sigfigs
