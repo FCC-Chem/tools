@@ -1,0 +1,30 @@
+{
+  "title": "Quantum Quest — Quantum Chemistry Study Game",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 1A",
+  "description": "Practice light and photons, the photoelectric effect, Bohr transitions, quantum numbers, electron configurations, orbital diagrams, and periodic properties. Includes 508 practice problems, contextual diagrams, typed configurations, hints, answer explanations, mixed practice, XP, and achievements.",
+  "icon": "⚛️",
+  "tags": [
+    "chemistry",
+    "CHEM 1A",
+    "quantum chemistry",
+    "electromagnetic radiation",
+    "photons",
+    "photoelectric effect",
+    "Bohr model",
+    "hydrogen-like ions",
+    "de Broglie wavelength",
+    "uncertainty principle",
+    "quantum numbers",
+    "radial nodes",
+    "angular nodes",
+    "electron configurations",
+    "orbital diagrams",
+    "periodic trends",
+    "ionization energy",
+    "electron affinity",
+    "magnetism"
+  ],
+  "version": "3",
+  "status": "working"
+}
