@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Moley, the Stoichiometry Quest mascot"><defs><radialGradient id="mbg" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#fdf4ff"/><stop offset="1" stop-color="#e6e9ff"/></radialGradient><linearGradient id="mfur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c7a8a"/><stop offset="1" stop-color="#6b5a6c"/></linearGradient><linearGradient id="mliq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ff0d2"/><stop offset="1" stop-color="#5fcfab"/></linearGradient></defs>
+<circle cx="60" cy="60" r="58" fill="url(#mbg)"/>
+<path d="M97 17l2.2 5.3 5.3 2.2-5.3 2.2L97 32l-2.2-5.3-5.3-2.2 5.3-2.2Z" fill="#ffc94d"/><circle cx="19" cy="34" r="2.6" fill="#ffb3c7"/><circle cx="104" cy="52" r="2" fill="#a9b4ff"/>
+<ellipse cx="60" cy="98" rx="33" ry="20" fill="url(#mfur)"/>
+<ellipse cx="31" cy="50" rx="4.5" ry="5.5" fill="#6b5a6c"/><ellipse cx="89" cy="50" rx="4.5" ry="5.5" fill="#6b5a6c"/>
+<ellipse cx="60" cy="60" rx="31" ry="29" fill="url(#mfur)"/>
+<ellipse cx="60" cy="69" rx="20" ry="15" fill="#d9cbd6"/>
+<path d="M30 45q30-12 60 0" fill="none" stroke="#5a67d8" stroke-width="5" stroke-linecap="round"/>
+<circle cx="47" cy="40" r="9" fill="#dff7ff" stroke="#5a67d8" stroke-width="3.5"/><circle cx="73" cy="40" r="9" fill="#dff7ff" stroke="#5a67d8" stroke-width="3.5"/><path d="M43 37.5q3-3 6-1M69 37.5q3-3 6-1" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+<ellipse cx="49" cy="58" rx="4" ry="5" fill="#2b2140"/><ellipse cx="71" cy="58" rx="4" ry="5" fill="#2b2140"/><circle cx="50.4" cy="56.2" r="1.6" fill="#fff"/><circle cx="72.4" cy="56.2" r="1.6" fill="#fff"/>
+<ellipse cx="38" cy="66" rx="5" ry="3.4" fill="#ff9fb6" opacity=".75"/><ellipse cx="82" cy="66" rx="5" ry="3.4" fill="#ff9fb6" opacity=".75"/>
+<path d="M44 71q-4-4 0-7M42 75q-6-1-8 1M76 71q4-4 0-7M78 75q6-1 8 1" stroke="#4a3d4c" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M60 59.5c6.5 0 10 3.6 10 7.2 0 3.8-4.6 6-10 6s-10-2.2-10-6c0-3.6 3.5-7.2 10-7.2Z" fill="#ff7f9f"/><ellipse cx="57" cy="63.6" rx="3.2" ry="1.9" fill="#ffd0dc"/>
+<path d="M55.5 76q4.5 4 9 0" fill="none" stroke="#5b3b33" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M53 82h14v6l9 16q2 5-4 5H48q-6 0-4-5l9-16Z" fill="#fff" stroke="#5a67d8" stroke-width="3" stroke-linejoin="round"/>
+<path d="M48.5 97h23l4 7q1.6 3.5-2.4 3.5H47q-4 0-2.4-3.5Z" fill="url(#mliq)"/><circle cx="56" cy="101" r="1.7" fill="#fff" opacity=".85"/><circle cx="63" cy="99" r="1.2" fill="#fff" opacity=".85"/><path d="M51 82h18" stroke="#5a67d8" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="44" cy="96" rx="7.5" ry="6" fill="#ffb3c6" stroke="#d97a96" stroke-width="1.8"/><ellipse cx="76" cy="96" rx="7.5" ry="6" fill="#ffb3c6" stroke="#d97a96" stroke-width="1.8"/><path d="M48 92.5l3-1M49 96h3M48 99.5l3 1M72 92.5l-3-1M71 96h-3M72 99.5l-3 1" stroke="#fff6f8" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

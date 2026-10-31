@@ -37,7 +37,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 .mode-name{grid-area:n;font-weight:900;font-size:17px;line-height:1.2}
 .mode-btn small{grid-area:s;font-size:12px;color:#4c5a65;font-weight:600;margin-top:2px}
 .mode-btn[data-mode=identify]{--mb:#e7f6e9;--ma:#7caf86}.mode-btn[data-mode=product]{--mb:#e6f2ff;--ma:#82afd2}.mode-btn[data-mode=reactant]{--mb:#f0e8fc;--ma:#ad8cce}.mode-btn[data-mode=full]{--mb:#fde7e7;--ma:#d48a8a}.mode-btn[data-mode=name]{--mb:#fff0dc;--ma:#d6ab66}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-areas:"card side" "card ref" "card vid";gap:14px;align-items:start;margin-top:10px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-areas:"card ref" "card side" "card vid";gap:14px;align-items:start;margin-top:10px}
 #practice{grid-area:card}#journey{grid-area:side}#refDetails{grid-area:ref}#videoDetails{grid-area:vid}
 .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .mode-title{margin:0;font-size:26px;font-weight:900}
@@ -51,6 +51,17 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 .footer-note{color:var(--muted);font-size:13px;margin:8px 0}
 .style-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:15px;font-weight:800;flex-wrap:wrap}
 .style-row select{min-height:40px;border-radius:12px;border:2px solid var(--line);background:#fff;padding:4px 10px;font-weight:700}
+.stylepick{margin:12px 0 8px;padding:10px 12px 12px;border-radius:16px;background:linear-gradient(120deg,#f4f9ff,#f6f2ff);border:2px solid #c9dbee}
+.sp-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-bottom:8px}
+.sp-label{font-weight:900;font-size:17px}.sp-note{font-size:13px;color:var(--muted);font-weight:600}
+.sp-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sp-btn{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;padding:8px 6px 8px;border-radius:14px;border:2px solid #b9ccd9;border-bottom-width:4px;background:#fff;cursor:pointer;min-height:96px;transition:transform .12s}
+.sp-btn:hover{transform:translateY(-1px);border-color:#82afd2}
+.sp-btn.on{border-color:#3b82b4;background:#eaf5fd;box-shadow:0 0 0 3px #4a9fd633}
+.sp-ex{flex:1;display:grid;place-items:center;min-height:52px;pointer-events:none}.sp-ex svg{max-width:100%;height:auto;max-height:62px}
+.sp-ex .condensed{font-size:17px;padding:0}
+.sp-mix{font-size:13px;font-weight:800;color:#3b5f7a;line-height:1.25;text-align:center}
+.sp-name{font-weight:900;font-size:15px}.sp-btn.on .sp-name:before{content:'✓ ';color:#3b82b4}
 .steps{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
 .stepchip{border-radius:999px;padding:5px 12px;font-size:13px;font-weight:900;background:#f1ece2;color:#6b7a85}
 .stepchip.now{background:#263840;color:#fff}.stepchip.done{background:#dff3e5;color:#2f7a48}
@@ -111,6 +122,8 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 .tbtn{min-height:48px;padding:9px 13px;border-radius:10px;border:2px solid #71899c;background:#fff;box-shadow:0 2px 3px #16334b0c;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink)}
 .tbtn:hover{background:#f6fafc}
 .tbtn.on{background:#dceef0;border-color:#327780;box-shadow:0 2px 0 #327780}
+.ws-wrap{position:relative}.selbar{display:none}.selbar.show{display:flex;position:absolute;left:8px;right:8px;top:8px;z-index:2;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 8px;background:#eaf5fdee;backdrop-filter:blur(2px);border:2px solid #9fd0f2;border-radius:13px;padding:6px 10px;font-size:14px;box-shadow:0 4px 12px #2a5a7a1a}
+.selbar.bottom{top:auto;bottom:8px}.selbtns{display:flex;gap:8px}.selbtns .tbtn{min-height:40px;padding:5px 11px;font-size:14px}
 .tbtn.clean{background:#fff5da;border-color:#8b6d33;display:inline-flex;align-items:center;gap:6px}.tbtn.clean svg{width:22px;height:22px;flex:none}
 .audit span{background:#f1ece2;border-radius:999px;padding:4px 10px}
 .audit .over{background:#fdeeed;color:#a2382f}
@@ -154,7 +167,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 .confetti{position:absolute;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
 .video-wrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "side" "ref" "vid"}.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-btn:last-child{grid-column:1/-1}}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "ref" "side" "vid"}.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-btn:last-child{grid-column:1/-1}}
 @media(max-width:700px){
  .app{padding:10px 10px 30px}
  .hero{padding:10px 14px}.hero .subtitle{display:none}.hero h1{font-size:24px}.hero-logo{width:60px;flex-basis:60px}.badge{font-size:11px;padding:4px 8px}
@@ -163,21 +176,89 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
  .card{padding:12px}.prompt{font-size:18px}.namechip{font-size:16px;padding:8px 10px}
  .options{grid-template-columns:1fr!important}.option{font-size:16px;padding:8px 10px}
  .pad{padding:6px}.tb{min-height:42px;padding:4px 9px;font-size:14px}.toolrow .lab{min-width:100%;margin-bottom:-2px}
+ .sp-btns{grid-template-columns:repeat(2,minmax(0,1fr))}.sp-btn{min-height:84px}.sp-note{display:none}
  .btn-row{grid-template-columns:1fr 1fr;position:sticky;bottom:0;z-index:5;background:linear-gradient(#fff0,#fffcf6 22%);padding:10px 0 8px;margin-bottom:0}.btn-row .primary{grid-column:1/-1}
  #nextBtn{flex:1 1 100%}
  body.drawing .btn-row{position:static;background:none}
+ .selhint{display:none}.selbar.show{flex-wrap:nowrap;padding:5px 8px}.selbtns .tbtn{min-height:38px;padding:4px 9px}
  .toolpanel{padding:10px;gap:7px}.tbtn{padding:8px 11px;font-size:14px;min-height:46px}
  .padbar{gap:6px}.grp{width:100%;flex-direction:row;align-items:center;gap:6px}.grp .cap{width:44px;flex:0 0 44px;padding:0;font-size:10px}
  .seg{flex:1;display:grid;grid-auto-flow:column;grid-auto-columns:1fr}.seg button{padding:4px 2px;min-width:0;font-size:14px}.seg .tx{display:inline;font-size:11px}.seg.tools button,.seg.acts button{flex-direction:column;gap:0}
  .rxn{padding:6px}.rarrow{min-width:78px;margin:0 4px}.rlab{font-size:13px;white-space:normal}.molitem svg.mol{max-height:120px;width:auto}
 }
+
+/* ================= polish: Bond Voyage theme ================= */
+body{background:radial-gradient(circle at 8% -5%,#dff0ff 0,transparent 38%),radial-gradient(circle at 95% 5%,#ffe6df 0,transparent 34%),radial-gradient(circle at 50% 110%,#e3f7f1 0,transparent 45%),linear-gradient(120deg,#f3faff 0%,#fffaf2 50%,#fff3f1 100%);background-attachment:fixed}
+.hero{position:relative;overflow:hidden;padding:18px 26px 30px;border:1px solid #d9e6f1;background:linear-gradient(115deg,#ffffff 0%,#f0f8ff 55%,#fff1ee 100%);box-shadow:0 12px 30px #2a5a7a14}
+.hero:after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:26px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 26'%3E%3Cpath d='M0 14 Q15 4 30 14 T60 14 T90 14 T120 14 V26 H0Z' fill='%23cfe7f8'/%3E%3Cpath d='M0 19 Q15 11 30 19 T60 19 T90 19 T120 19 V26 H0Z' fill='%23bfe9df' opacity='.8'/%3E%3C/svg%3E") repeat-x;background-size:120px 26px;opacity:.9;pointer-events:none}
+.hero h1{font-size:clamp(32px,4.4vw,50px);letter-spacing:-.02em;margin:6px 0 4px}
+.hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#2f8fd0,#43b6a8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .subtitle{font-size:15.5px;max-width:720px}
+.badge{background:#fff;border:1px solid #e3dccd;box-shadow:0 2px 6px #0000000a}
+.hero-logo{width:104px;flex:0 0 104px;position:relative;z-index:1}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+.hero-logo.bob{animation:bob 4.5s ease-in-out infinite;transform-origin:50% 80%}
+@media (prefers-reduced-motion:reduce){.hero-logo.bob{animation:none}}
+details.directions{background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
+.mode-btn{border-width:2px;border-bottom-width:5px;box-shadow:0 4px 12px #2634400d;transition:transform .15s,box-shadow .15s}
+.mode-btn:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018}
+.mode-btn.active{transform:translateY(-2px);box-shadow:0 10px 22px #26344020;outline-offset:3px}
+.mode-icon{background:var(--ma);color:#fff;box-shadow:inset 0 -3px 0 #0000001a}
+.mode-btn.active .mode-icon{transform:scale(1.06)}
+#practice{position:relative;overflow:hidden;border:1px solid #dfe8ef;box-shadow:0 12px 30px #2a5a7a12}
+#practice:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#e0675a,#f7c968,#43b6a8,#2f8fd0,#ad8cce)}
+.mode-title{font-size:28px;letter-spacing:-.01em}
+.stat{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:76px;padding:5px 10px;border-radius:14px;border:1px solid #0000000d;line-height:1.05}
+.stat b{font-size:22px;font-weight:900}.stat small{font-size:11.5px;font-weight:800;color:#4c5a65;margin-top:2px}
+.st-c{background:#e5f6ea}.st-s{background:#fff1d1}.st-a{background:#efe8fb}
+.stat.pop b{animation:pop .45s ease}
+@keyframes pop{40%{transform:scale(1.35)}}
+.rxn{border:2px solid #e1ebf3;background:radial-gradient(circle at 50% 0%,#f7fbff 0,#ffffff 70%);box-shadow:inset 0 2px 8px #2a5a7a0a;border-radius:18px;padding:14px}
+.namechip{background:linear-gradient(180deg,#f7fbff,#eaf4fd);box-shadow:0 2px 0 #b8d4ea}
+.qchip{background:repeating-linear-gradient(135deg,#fffaf0 0 8px,#fff3dc 8px 16px)}
+.prompt{font-size:22px}
+.option{border-bottom-width:4px;box-shadow:0 3px 8px #2634400a}
+.option:hover:not(:disabled){box-shadow:0 8px 16px #26344014}
+.option .opt-letter{background:#e6f2ff;color:#3b82b4}
+.option.selected .opt-letter{background:#4a9fd6;color:#fff}
+.option.right .opt-letter{background:#4fa36a;color:#fff}.option.wrong .opt-letter{background:#d9776f;color:#fff}
+.action{transition:transform .08s,box-shadow .12s,filter .12s}
+.action:active:not(:disabled){transform:translateY(2px)}
+.action.primary{background:linear-gradient(180deg,#5cb2e6,#3b8ccb);box-shadow:0 4px 0 #2d73a8,0 8px 16px #3b8ccb33}
+.action.primary:hover{filter:brightness(1.05);background:linear-gradient(180deg,#5cb2e6,#3b8ccb)}
+#hintBtn{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
+#hintBtn:hover{background:#ffedb0}
+#showBtn{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
+#showBtn:hover{background:#e6dcf8}
+.action.next{background:linear-gradient(180deg,#2f4650,#22343c);box-shadow:0 4px 0 #142128}
+.stepchip{border:1px solid #0000000d}.stepchip.now{background:linear-gradient(90deg,#2f8fd0,#43b6a8)}
+.feedback.good{border:0;border-left:7px solid #4fa36a;background:linear-gradient(90deg,#e6f6ea,#f4fbf6);box-shadow:0 4px 12px #4fa36a1a}
+.feedback.bad{border:0;border-left:7px solid #d9776f;background:linear-gradient(90deg,#fdecea,#fff7f6);box-shadow:0 4px 12px #d9776f1a}
+.hintbox{border:0;border-left:7px solid #efc94c;background:linear-gradient(90deg,#fff5d2,#fffbec)}
+.collapsible,.journey{border:1px solid #dfe8ef;box-shadow:0 8px 22px #2a5a7a10}
+#refDetails>summary{background:linear-gradient(120deg,#f2ecff,#eaf5ff);border-radius:22px 22px 0 0}
+#videoDetails>summary{background:linear-gradient(120deg,#fff1e6,#fdeef2);border-radius:22px 22px 0 0}
+#refDetails:not([open])>summary,#videoDetails:not([open])>summary{border-radius:22px}
+#refDetails>.body{padding-top:12px}#videoDetails>.body{padding-top:8px}
+.refcard{border-left:5px solid #c9b6ec;box-shadow:0 2px 6px #0000000a}
+.refcard:nth-child(5n+1){border-left-color:#7caf86}.refcard:nth-child(5n+2){border-left-color:#82afd2}.refcard:nth-child(5n+3){border-left-color:#d6ab66}.refcard:nth-child(5n+4){border-left-color:#d48a8a}
+.toolpanel{background:linear-gradient(180deg,#f3f8fb,#ecf3f7)}
+.stylepick{box-shadow:0 4px 12px #2a5a7a0d}
+@media(max-width:700px){.hero{padding:12px 14px 26px}.hero h1{font-size:30px}.hero-logo{width:66px;flex-basis:66px}.stat{min-width:0;flex:1}.score{width:100%}.score .stat{flex:1}.mode-title{font-size:24px}}
+.vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin:2px 0 10px}
+.vidtag{font-size:11.5px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#c0645a}
+.vidtitle{font-weight:900;font-size:15.5px;line-height:1.25;margin:2px 0}
+.vidnote{font-size:13px;color:var(--muted)}
+.vidmore{display:grid;gap:6px;margin-top:10px}.vidmore-h{font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.vidalt{text-align:left;border:1px solid #e3dccd;background:#fff;border-radius:12px;padding:7px 10px;font-weight:800;font-size:14px;cursor:pointer}.vidalt:hover{background:#f6fafc;border-color:#9bc3e0}.vidalt small{display:block;font-weight:600;color:var(--muted);font-size:12px}
+.linkbtn{border:0;background:none;padding:0;color:#2f7fbf;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-size:inherit}
 </style></head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
 <div class="app">
 <section class="hero"><div><span class="badge">⛵ Organic Reactions • ItsDrDan • CHEM 3B</span>
 <h1><span class="a">Bond</span> <span class="b">Voyage!</span></h1>
-<p class="subtitle">Set sail through organic reactions: bonds break, bonds form. Name the reaction, then draw and name what goes in and what comes out.</p></div><div class="hero-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Bond Voyage logo: a sailboat with a molecule sail">
+<p class="subtitle">Set sail through organic reactions: bonds break, bonds form. Name the reaction, then draw and name what goes in and what comes out.</p></div><div class="hero-logo bob"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Bond Voyage logo: a sailboat with a molecule sail">
 <circle cx="48" cy="48" r="46" fill="#eaf5fd" stroke="#b8d4ea" stroke-width="3"/>
 <path d="M48 14v52" stroke="#5b4636" stroke-width="3.2" stroke-linecap="round"/>
 <path d="M48 17l23 6-23 6z" fill="#f7c968" stroke="#d6a43c" stroke-width="1.5" stroke-linejoin="round"/>
@@ -194,6 +275,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 <details class="directions" id="howTo"><summary>📘 How to use this game <span class="sum-hint">Tap to open</span></summary>
 <ol><li><strong>Pick a mode.</strong> Identify the Reaction, Draw the Product, Draw the Reactant, or Full Reaction (all three steps).</li>
 <li><strong>Draw on the pad.</strong> With ✏️ Draw on, tap empty space to place an atom, tap an atom to grow a new bond from it, or drag from one atom to another to connect them. Tap a bond to cycle single → double → triple.</li>
+<li><strong>🪢 Lasso:</strong> drag a loop around part of your drawing to select it, then drag it to a new spot or delete it in one tap.</li>
 <li><strong>Pick the element first</strong> (C, O, N, Cl, Br) for new atoms. Use 🔁 Swap to change an atom you already drew, and ± Charge for O⁻ or N⁺ ions.</li>
 <li><strong>Hydrogens are automatic.</strong> Every corner and line end is a carbon. Hydrogens fill in to give C four bonds, N three and O two.</li>
 <li><strong>Two products?</strong> Draw them as two separate molecules in the same box. You don't need to draw water or inorganic ions such as Na⁺ or Cl⁻.</li>
@@ -202,12 +284,12 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 <nav class="mode-grid" id="modeGrid" aria-label="Choose a study mode"></nav>
 <div class="main">
 <section class="card" id="practice">
-<div class="toprow"><h2 class="mode-title" id="modeTitle">Identify the Reaction</h2><div class="score"><span class="pill">Correct: <span id="correct">0</span></span><span class="pill">Streak: <span id="streak">0</span> 🔥</span><span class="pill">Assisted: <span id="assisted">0</span></span><button class="action next" id="nextBtn">New Question ↻</button></div></div>
-<div class="style-row"><label for="styleSel">Structure style</label><select id="styleSel"><option value="skeletal">Skeletal (line)</option><option value="condensed">Condensed</option><option value="expanded">Expanded</option><option value="mixed">Mixed</option></select>
-<label for="setSel" style="margin-left:8px">Reactions</label><select id="setSel"><option value="all">All reactions</option><option value="hydrocarbon">Alkanes &amp; alkenes</option><option value="alcohol">Alcohols, aldehydes &amp; ketones</option><option value="acid">Acids, esters, amines &amp; amides</option></select></div>
+<div class="toprow"><h2 class="mode-title" id="modeTitle">Identify the Reaction</h2><div class="score"><span class="stat st-c"><b id="correct">0</b><small>✅ Correct</small></span><span class="stat st-s"><b id="streak">0</b><small>🔥 Streak</small></span><span class="stat st-a"><b id="assisted">0</b><small>👀 Assisted</small></span><button class="action next" id="nextBtn">New Question ↻</button></div></div>
+<div class="stylepick" id="stylePick"><div class="sp-head"><span class="sp-label">🔬 Show structures as</span><span class="sp-note">Changes every structure in the questions, hints and answers.</span></div><div class="sp-btns" id="spBtns" role="radiogroup" aria-label="Structure style"></div></div>
+<div class="style-row"><label for="setSel">Reactions</label><select id="setSel"><option value="all">All reactions</option><option value="hydrocarbon">Alkanes &amp; alkenes</option><option value="alcohol">Alcohols, aldehydes &amp; ketones</option><option value="acid">Acids, esters, amines &amp; amides</option></select></div>
 <div class="steps" id="stepChips"></div>
 <div id="questionArea"></div>
-<div class="btn-row"><button class="action primary" id="checkBtn">Check Answer</button><button class="action secondary" id="hintBtn">Hint</button><button class="action secondary" id="showBtn">Show Answer</button></div>
+<div class="btn-row"><button class="action primary" id="checkBtn">Check Answer</button><button class="action secondary" id="hintBtn">💡 Hint</button><button class="action secondary" id="showBtn">👀 Show Answer</button></div>
 <div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>
 </section>
 <details class="card journey" id="journey"><summary>🧭 Chemistry Journey <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary><div class="body">
@@ -215,7 +297,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 <p class="xp-note">Earn 10 XP for each independent answer (+2 per streak step, up to +10), 10 bonus XP for a Full Reaction, and 2 XP for a reveal. Saved in this browser only.</p>
 <div class="mode-xp" id="modeXp"></div><div class="jbadges" id="jbadges"></div><button class="journey-reset" id="journeyReset" type="button">Reset progress</button></div></details>
 <details class="card collapsible" id="refDetails"><summary>🧠 Reaction reference</summary><div class="body" id="refBody"></div></details>
-<details class="card collapsible" id="videoDetails"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><p class="footer-note">CHEM 3B video playlist. Try the problem first, then pause a video to practice.</p><div class="video-wrap"><iframe id="plPlayer" title="Dr. Dan CHEM 3B playlist" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="footer-note"><a href="https://www.youtube.com/playlist?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f" target="_blank" rel="noopener">Open the playlist on YouTube ↗</a></p></div></details>
+<details class="card collapsible" id="videoDetails"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><div id="vidCard" class="vidcard"></div><div class="video-wrap"><iframe id="plPlayer" title="Dr. Dan video for this question" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div id="vidMore" class="vidmore"></div><p class="footer-note"><button type="button" class="linkbtn" id="vidPlaylist">📺 Browse the whole CHEM 3B playlist</button> · <a href="https://www.youtube.com/playlist?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f" target="_blank" rel="noopener">Open on YouTube ↗</a></p></div></details>
 </div>
 <p class="footer-note">Reactions follow the CHEM 3B organic chapters (alkanes through amides). Major products are shown; cis/trans isomers are not distinguished. All questions and structures are generated for this game.</p>
 </div>
@@ -574,7 +656,7 @@ function mcType(r){const general=!r.noClass&&Math.random()<.4;const excl=r.excl|
  if(general){const ans=r.cls;const pool=shuf(CLS.filter(c=>c!==ans&&!excl.includes(c)));const opts=shuf([ans,...pool.slice(0,3)]);
   return {kind:'mc',prompt:'Which general class of reaction is this?',options:opts.map(o=>({key:o,html:esc(o)})),answer:ans,
    hint:'Compare reactants and products: did something add across a double bond, swap, leave as water, gain O, gain H, split with water, or transfer H⁺?',
-   why:`<b>${esc(ans)}</b>: ${CLSD[ans]} Specifically, this is <b>${esc(r.type)}</b>.`}}
+   why:`<b>${esc(ans)}</b>: ${CLSD[ans]}${r.type.toLowerCase()!==ans.toLowerCase()?` Specifically, this is <b>${esc(r.type)}</b>.`:''}`}}
  const ans=r.type;const conf=shuf((CONF[ans]||[]).filter(c=>!excl.includes(c)));const rest=shuf(SPEC.filter(s=>s!==ans&&!conf.includes(s)&&!excl.includes(s)));
  const opts=shuf([ans,...conf.slice(0,2),...rest.slice(0,1)]);
  return {kind:'mc',prompt:'What type of reaction is this?',options:opts.map(o=>({key:o,html:esc(o)})),answer:ans,
@@ -625,10 +707,12 @@ function arrowHTML(cond){const parts=String(cond||'').split(/,\s*/).filter(Boole
 
 /* ================= drawing pad ================= */
 let W=640,H=320;const CBL=56,MARG=26;
-const D={atoms:[],bonds:[],nid:1,hist:[],preview:null};let tool='draw',curEl='C',curOrder=1;
+const D={atoms:[],bonds:[],nid:1,hist:[],preview:null,lasso:null};const SEL=new Set();
+function inPoly(p,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)c=!c}return c}
+function deleteSel(){if(!SEL.size)return;snap();const n=SEL.size;D.atoms=D.atoms.filter(a=>!SEL.has(a.id));D.bonds=D.bonds.filter(b=>!SEL.has(b.a)&&!SEL.has(b.b));SEL.clear();drawWS();toast(`Deleted ${n} atom${n>1?'s':''}`)}let tool='draw',curEl='C',curOrder=1;
 const byId=id=>D.atoms.find(a=>a.id===id);
 function snap(){D.hist.push(JSON.stringify([D.atoms,D.bonds,D.nid]));if(D.hist.length>80)D.hist.shift()}
-function undo(){const s=D.hist.pop();if(!s)return;const [a,b,n]=JSON.parse(s);D.atoms=a;D.bonds=b;D.nid=n;drawWS()}
+function undo(){const s=D.hist.pop();if(!s)return;SEL.clear();const [a,b,n]=JSON.parse(s);D.atoms=a;D.bonds=b;D.nid=n;drawWS()}
 function padGraph(){const idx={};D.atoms.forEach((a,i)=>idx[a.id]=i);return {atoms:D.atoms.map(a=>({el:a.el,charge:a.charge||0})),bonds:D.bonds.map(b=>({a:idx[b.a],b:idx[b.b],o:b.o}))}}
 function svgPt(e){const s=$('ws'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(s.getScreenCTM().inverse())}
 function atomAt(p,r,excl){let best=null,bd=r||24;D.atoms.forEach(a=>{if(a.id===excl)return;const d=Math.hypot(a.x-p.x,a.y-p.y);if(d<bd){bd=d;best=a}});return best}
@@ -662,29 +746,37 @@ function addRing(){snap();let cx=W/2,cy=H/2;if(D.atoms.length){const mx=Math.max
 function syncPadButtons(){document.querySelectorAll('[data-tool]').forEach(b=>{const on=b.dataset.tool===tool;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
  document.querySelectorAll('[data-ord]').forEach(b=>{const on=tool==='draw'&&Number(b.dataset.ord)===curOrder;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
  document.querySelectorAll('[data-el]').forEach(b=>{const on=b.dataset.el===curEl;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});updatePadHelp()}
-function setTool(t){tool=t;syncPadButtons()}
-function setEl(e){curEl=e;if(tool!=='draw'&&tool!=='swap')tool='draw';syncPadButtons()}
-function setOrd(o){curOrder=o;tool='draw';syncPadButtons()}
-const HELP={draw:'Bond tool: tap empty space to add an atom, tap an atom to grow a bond from it, or drag from one atom to another to connect them. Tap a bond to change single/double/triple.',swap:'Swap atom: tap an atom to change it to the element selected in the top row.',charge:'Charge: tap an O to make O⁻ or an N to make N⁺. Tap again to remove it.',move:'Move: drag atoms to tidy your drawing.',erase:'Erase: tap an atom or a bond to delete it.'};
+function setTool(t){if(t==='erase'&&SEL.size){deleteSel();return}tool=t;if(t!=='lasso'&&t!=='move')SEL.clear();syncPadButtons();drawWS()}
+function setEl(e){curEl=e;SEL.clear();if(tool!=='draw'&&tool!=='swap')tool='draw';syncPadButtons()}
+function setOrd(o){curOrder=o;tool='draw';SEL.clear();syncPadButtons();drawWS()}
+const HELP={draw:'Bond tool: tap empty space to add an atom, tap an atom to grow a bond from it, or drag from one atom to another to connect them. Tap a bond to change single/double/triple.',swap:'Swap atom: tap an atom to change it to the element selected in the top row.',charge:'Charge: tap an O to make O⁻ or an N to make N⁺. Tap again to remove it.',move:'Move: drag atoms to tidy your drawing.',lasso:'Lasso: drag a loop around part of your drawing to select it. Then drag any selected atom to move the whole group, or delete the group. Tap empty space to deselect.',erase:'Erase: tap an atom or a bond to delete it.'};
 function updatePadHelp(){const h=$('padHelp');if(h)h.textContent=HELP[tool]}
 function padHTML(){const ph=matchMedia('(max-width:700px)').matches;W=ph?400:640;H=ph?400:320;
  const B=(attr,label,extra)=>`<button type="button" class="tbtn ${extra||''}" ${attr} aria-pressed="false">${label}</button>`;
  const broom='<svg viewBox="0 0 30 30" aria-hidden="true"><path d="M21 3L12 18" stroke="#907451" stroke-width="4" stroke-linecap="round"/><path d="M9 15L18 20L15 28L3 21Z" fill="#f6cd68" stroke="#c18d36" stroke-width="1.5"/><path d="M10 18L6 22M13 20L9 24M15 21L12 26" stroke="#c18d36" stroke-width="1.3"/></svg>';
  return `<div class="pad"><h3 class="padtitle">Your line-angle drawing</h3>
 <div class="toolpanel">${[['C','+ Carbon'],['O','+ O'],['N','+ N'],['Cl','+ Cl'],['Br','+ Br']].map(([e,n])=>B(`data-el="${e}"`,n)).join('')}</div>
-<div class="toolpanel">${B('data-ord="1"','— Single')}${B('data-ord="2"','═ Double')}${B('data-ord="3"','≡ Triple')}${B('data-tool="swap"','🔁 Swap atom')}${B('data-tool="charge"','± Charge')}${B('data-tool="move"','✋ Move')}${B('data-tool="erase"','⌫ Erase')}
+<div class="toolpanel">${B('data-ord="1"','— Single')}${B('data-ord="2"','═ Double')}${B('data-ord="3"','≡ Triple')}${B('data-tool="swap"','🔁 Swap atom')}${B('data-tool="charge"','± Charge')}${B('data-tool="move"','✋ Move')}${B('data-tool="lasso"','🪢 Lasso')}${B('data-tool="erase"','⌫ Erase')}
 <button type="button" class="tbtn clean" id="padClean">${broom}Clean Up</button>${B('id="padUndo"','↶ Undo')}${B('id="padClear"','Clear')}${B('id="padRing"','⬡ Six-carbon ring')}</div>
-<div class="ws-wrap"><svg id="ws" viewBox="0 0 ${W} ${H}" role="application" aria-label="Drawing pad for skeletal structures" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="ws-wrap"><div class="selbar" id="selBar" aria-live="polite"></div><svg id="ws" viewBox="0 0 ${W} ${H}" role="application" aria-label="Drawing pad for skeletal structures" xmlns="http://www.w3.org/2000/svg"></svg></div>
 <div class="audit" id="padAudit"></div><p class="padhelp" id="padHelp"></p></div>`}
 function bindPad(){document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));document.querySelectorAll('[data-el]').forEach(b=>b.onclick=()=>setEl(b.dataset.el));document.querySelectorAll('[data-ord]').forEach(b=>b.onclick=()=>setOrd(Number(b.dataset.ord)));
- $('padRing').onclick=addRing;$('padClean').onclick=cleanUp;$('padUndo').onclick=undo;$('padClear').onclick=()=>{if(!D.atoms.length)return;snap();D.atoms=[];D.bonds=[];drawWS()};
+ $('padRing').onclick=addRing;$('padClean').onclick=cleanUp;$('padUndo').onclick=undo;$('padClear').onclick=()=>{if(!D.atoms.length)return;snap();D.atoms=[];D.bonds=[];SEL.clear();drawWS()};
  syncPadButtons();
  const svg=$('ws');let press=null;
- svg.onpointerdown=e=>{if(e.button>0)return;const p=svgPt(e);const a=atomAt(p);press={p,atom:a,bond:a?-1:bondAt(p),moved:false,snapped:false};if(a){press.ox=a.x;press.oy=a.y}svg.setPointerCapture(e.pointerId);e.preventDefault()};
- svg.onpointermove=e=>{if(!press)return;const p=svgPt(e);if(Math.hypot(p.x-press.p.x,p.y-press.p.y)>9)press.moved=true;if(!press.moved||!press.atom)return;
+ svg.onpointerdown=e=>{if(e.button>0)return;const p=svgPt(e);const a=atomAt(p);press={p,atom:a,bond:a?-1:bondAt(p),moved:false,snapped:false};if(a){press.ox=a.x;press.oy=a.y}
+  if((tool==='lasso'||tool==='move')&&a&&SEL.has(a.id)){press.group=D.atoms.filter(x=>SEL.has(x.id)).map(x=>({a:x,ox:x.x,oy:x.y}))}else if(tool==='lasso'){press.lasso=true;D.lasso=[p]}svg.setPointerCapture(e.pointerId);e.preventDefault()};
+ svg.onpointermove=e=>{if(!press)return;const p=svgPt(e);if(Math.hypot(p.x-press.p.x,p.y-press.p.y)>9)press.moved=true;
+  if(press.group){if(!press.moved)return;if(!press.snapped){snap();press.snapped=true}let dx=p.x-press.p.x,dy=p.y-press.p.y;press.group.forEach(q=>{dx=Math.max(MARG-q.ox,Math.min(W-MARG-q.ox,dx));dy=Math.max(MARG-q.oy,Math.min(H-MARG-q.oy,dy))});press.group.forEach(q=>{q.a.x=q.ox+dx;q.a.y=q.oy+dy});drawWS();return}
+  if(press.lasso){const l=D.lasso,last=l[l.length-1];if(Math.hypot(p.x-last.x,p.y-last.y)>4){l.push(p);drawWS()}return}if(!press.moved||!press.atom)return;
   if(tool==='move'){if(!press.snapped){snap();press.snapped=true}press.atom.x=clampX(press.ox+p.x-press.p.x);press.atom.y=clampY(press.oy+p.y-press.p.y);drawWS()}
   else if(tool==='draw'){D.preview={x1:press.atom.x,y1:press.atom.y,x2:p.x,y2:p.y};drawWS()}};
  svg.onpointerup=e=>{if(!press)return;const pr=press;press=null;D.preview=null;if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);const p=svgPt(e);
+  if(pr.group){if(!pr.moved&&tool==='move'){}drawWS();return}
+  if(tool==='lasso'){const l=D.lasso||[];D.lasso=null;
+   if(pr.moved&&l.length>=3){SEL.clear();D.atoms.forEach(a=>{if(inPoly(a,l))SEL.add(a.id)});if(!SEL.size)toast('Nothing inside the loop. Circle the atoms you want.')}
+   else if(pr.atom){SEL.has(pr.atom.id)?SEL.delete(pr.atom.id):SEL.add(pr.atom.id)}else SEL.clear();
+   drawWS();return}
   if(tool==='move'){drawWS();return}
   if(tool==='draw'){
    if(pr.atom&&!pr.moved){growFrom(pr.atom);return}
@@ -694,18 +786,26 @@ function bindPad(){document.querySelectorAll('[data-tool]').forEach(b=>b.onclick
   if(tool==='swap'&&pr.atom){snap();pr.atom.el=curEl;pr.atom.charge=0;drawWS();return}
   if(tool==='charge'&&pr.atom){const a=pr.atom;if(a.el==='O'){snap();a.charge=a.charge?0:-1}else if(a.el==='N'){snap();a.charge=a.charge?0:1}else{toast('Charges here: O⁻ or N⁺');return}drawWS();return}
   if(tool==='erase'){if(pr.atom){snap();D.atoms=D.atoms.filter(a=>a.id!==pr.atom.id);D.bonds=D.bonds.filter(b=>b.a!==pr.atom.id&&b.b!==pr.atom.id)}else if(pr.bond>=0){snap();D.bonds.splice(pr.bond,1)}drawWS()}};
- svg.onpointercancel=()=>{press=null;D.preview=null;drawWS()};
+ svg.onpointercancel=()=>{press=null;D.preview=null;D.lasso=null;drawWS()};
  drawWS()}
+function updateSelBar(){const bar=$('selBar');if(!bar)return;[...SEL].forEach(id=>{if(!byId(id))SEL.delete(id)});
+ if(!SEL.size){bar.className='selbar';bar.innerHTML='';return}
+ const ys=D.atoms.filter(x=>SEL.has(x.id)).map(x=>x.y),cy=ys.reduce((u,v)=>u+v,0)/ys.length;
+ bar.className='selbar show'+(cy<H/2?' bottom':'');bar.innerHTML=`<span>🪢 <b>${SEL.size} selected</b><span class="selhint">, drag the group to move it</span></span><span class="selbtns"><button type="button" class="tbtn" id="selDel">🗑 Delete</button><button type="button" class="tbtn" id="selClr">✕ Deselect</button></span>`;
+ $('selDel').onclick=deleteSel;$('selClr').onclick=()=>{SEL.clear();drawWS()}}
 function drawWS(){const svg=$('ws');if(!svg)return;const g=padGraph(),adj=adjOf(g),pos=D.atoms.map(a=>({x:a.x,y:a.y}));
- if(!D.atoms.length){svg.innerHTML=`<text x="${W/2}" y="${H/2-10}" text-anchor="middle" fill="#7a8894" font-size="19" font-weight="700">Tap here to place your first carbon.</text><text x="${W/2}" y="${H/2+20}" text-anchor="middle" fill="#7a8894" font-size="15">${W<500?'Tap it again to grow a zig-zag chain.':'Then tap that atom again and again to grow a zig-zag chain.'}</text>`;$('padAudit').innerHTML='';return}
+ if(!D.atoms.length){SEL.clear();updateSelBar();svg.innerHTML=`<text x="${W/2}" y="${H/2-10}" text-anchor="middle" fill="#7a8894" font-size="19" font-weight="700">Tap here to place your first carbon.</text><text x="${W/2}" y="${H/2+20}" text-anchor="middle" fill="#7a8894" font-size="15">${W<500?'Tap it again to grow a zig-zag chain.':'Then tap that atom again and again to grow a zig-zag chain.'}</text>`;$('padAudit').innerHTML='';return}
  const lab=g.atoms.map((a,i)=>a.el!=='C'||!adj[i].length);
  const over=g.atoms.map((_,i)=>hCount(g,adj,i)<0);
- let s=bondsSVG(g,pos,lab);
+ let s='';D.bonds.forEach(b=>{if(SEL.has(b.a)&&SEL.has(b.b)){const A=byId(b.a),B=byId(b.b);s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#9fd0f2" stroke-width="14" stroke-linecap="round" opacity=".75"/>`}});
+ D.atoms.forEach(a=>{if(SEL.has(a.id))s+=`<circle cx="${a.x}" cy="${a.y}" r="15" fill="#d6ecfb" stroke="#3b8ccb" stroke-width="2"/>`});
+ s+=bondsSVG(g,pos,lab);
  D.bonds.forEach(b=>{const A=byId(b.a),B=byId(b.b);s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="transparent" stroke-width="20"/>`});
+ if(D.lasso&&D.lasso.length>1)s+=`<polygon points="${D.lasso.map(q=>q.x.toFixed(1)+','+q.y.toFixed(1)).join(' ')}" fill="#4a9fd61f" stroke="#3b8ccb" stroke-width="2" stroke-dasharray="7 5" stroke-linejoin="round"/>`;
  if(D.preview){const q=D.preview;s+=`<line x1="${q.x1}" y1="${q.y1}" x2="${q.x2}" y2="${q.y2}" stroke="#4a9fd6" stroke-width="3" stroke-dasharray="6 5"/>`}
  g.atoms.forEach((a,i)=>{const p=pos[i];if(over[i])s+=`<circle cx="${p.x}" cy="${p.y}" r="17" fill="#fdeeed" stroke="#d9776f" stroke-width="2"/>`;
   if(a.el==='C'&&adj[i].length)s+=`<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#9fb3c2"/>`;else s+=atomLabel(g,adj,pos,i,true)});
- svg.innerHTML=s;
+ svg.innerHTML=s;updateSelBar();
  const cs=comps(g);$('padAudit').innerHTML=`<span>Your drawing: <b>${cs.map(c=>fHTML(formula(c).text)).join(' + ')}</b></span><span>${cs.length} molecule${cs.length>1?'s':''}</span>`+
   g.atoms.map((a,i)=>over[i]?`<span class="over">${a.el}${a.charge?(a.charge>0?'⁺':'⁻'):''} has too many bonds (max ${valence(a.el,a.charge)})</span>`:'').join('')}
 
@@ -772,7 +872,7 @@ function fb(kind,html){const f=$('feedback');f.className='feedback '+kind;f.inne
 function nextQ(){let q=null;for(let i=0;i<5&&!q;i++){try{q=buildQuestion(state.mode)}catch(e){console.error(e)}}
  state.q=q;state.step=0;state.assistedQ=false;state.done=false;state.qStyle=state.style==='mixed'?pick(['skeletal','condensed','expanded']):state.style;
  $('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title;renderStep(true)}
-function renderStep(fresh){const q=state.q,st=q.steps[state.step];state.selected=null;state.stepDone=false;
+function renderStep(fresh){const q=state.q,st=q.steps[state.step];state.selected=null;state.stepDone=false;setTimeout(()=>{try{updateVideo()}catch(e){console.error(e)}},0);
  $('hintBox').className='hintbox';$('hintBox').innerHTML='';fb('','');
  $('stepChips').innerHTML=q.steps.length>1?q.steps.map((s,i)=>`<span class="stepchip ${i<state.step?'done':i===state.step?'now':''}">${i<state.step?'✓ ':''}${i+1}. ${s.label}</span>`).join(''):'';
  let html='';
@@ -785,10 +885,10 @@ function renderStep(fresh){const q=state.q,st=q.steps[state.step];state.selected
  $('questionArea').innerHTML=html;
  if(st.kind==='name'){const ni=$('nameIn');ni.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});if(!fresh&&!matchMedia('(max-width:700px)').matches)ni.focus()}
  if(st.kind==='mc')$('questionArea').querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(state.stepDone)return;state.selected=b.dataset.key;$('questionArea').querySelectorAll('.option').forEach(x=>{const on=x===b;x.classList.toggle('selected',on);x.classList.remove('wrong');x.setAttribute('aria-pressed',on)})});
- else if(st.kind==='draw'){D.atoms=[];D.bonds=[];D.hist=[];D.preview=null;bindPad()}
+ else if(st.kind==='draw'){D.atoms=[];D.bonds=[];D.hist=[];D.preview=null;D.lasso=null;SEL.clear();bindPad()}
  document.body.classList.toggle('drawing',st.kind==='draw');
  ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);updateStats()}
-function updateStats(){$('correct').textContent=state.correct;$('streak').textContent=state.streak;$('assisted').textContent=state.assisted}
+function updateStats(){[['correct',state.correct],['streak',state.streak],['assisted',state.assisted]].forEach(([id,v])=>{const el=$(id);if(el.textContent!==String(v)){el.textContent=v;const t=el.parentElement;t.classList.remove('pop');void t.offsetWidth;t.classList.add('pop')}})}
 function answerHTML(st){if(st.kind==='mc')return '';const alt=st.accept[0];return `<div class="rxn">${alt.map(s=>`<span class="molitem">${structHTML(s,'skeletal')}</span>`).join('<span class="plus">+</span>')}</div>`}
 function stepSolved(revealed,note){const q=state.q,st=q.steps[state.step];state.stepDone=true;if(st.kind==='name'&&$('nameIn'))$('nameIn').disabled=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);
  if(st.kind==='mc')$('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===st.answer)b.classList.add('right')});
@@ -797,11 +897,11 @@ function stepSolved(revealed,note){const q=state.q,st=q.steps[state.step];state.
  let extra=st.kind==='draw'?(revealed?`<div><b>Answer:</b></div>${answerHTML(st)}`:''):'';
  if(st.kind==='draw'&&st.accept.length>1&&revealed)extra+=`<small>Other correct answers are also accepted for this one.</small>`;
  if(st.kind==='name'){const S=nameSets(st.comp.name);extra=`<div>${revealed?'<b>Answer:</b> ':''}<b>${esc(S.prim)}</b>${S.show.length>1?` <small>(also accepted: ${S.show.slice(1).map(esc).join(', ')})</small>`:''}</div>`+(note?`<div><small>${note}</small></div>`:'')}
- const fullRx=last&&state.mode!=='identify'?`<div><b>Full reaction:</b></div>${rxnHTML(q.r,{re:'struct',pr:'struct'},'skeletal')}`:'';
+ const fullRx=last&&state.mode!=='identify'?`<div><b>Full reaction:</b></div>${rxnHTML(q.r,{re:'struct',pr:'struct'},state.qStyle)}`:'';
  const saltNote=last&&q.r.salt?` <i>The salt formed is ${esc(q.r.salt)}.</i>`:'';
  if(!last){fb('good',(revealed?'👀 ':'✅ Correct! ')+st.why+extra+`<div><button type="button" class="action primary contBtn" id="contBtn">Continue to step ${state.step+2} →</button></div>`);$('contBtn').onclick=()=>{state.step++;renderStep();$('practice').scrollIntoView({behavior:'smooth',block:'start'})};return}
  state.done=true;
- if(state.assistedQ){state.assisted++;state.streak=0;fb('good','👀 '+st.why+saltNote+extra+fullRx+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
+ if(state.assistedQ){state.assisted++;state.streak=0;fb('good','👀 '+st.why+saltNote+extra+fullRx+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small><div style="margin-top:6px"><button type="button" class="linkbtn" id="fbVid">🎥 Review this with Dr. Dan’s video</button></div>');if($('fbVid'))$('fbVid').onclick=openVideo;awardXP(true)}
  else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+st.why+saltNote+extra+fullRx);awardXP(false)}
  updateStats()}
 function check(){if(state.stepDone)return;const st=state.q.steps[state.step];
@@ -816,7 +916,8 @@ function hint(){if(state.stepDone)return;const q=state.q,st=q.steps[state.step];
  if(st.kind==='draw'&&st.hintShow==='re')h+=`<div style="margin-top:6px">Here are the reactant structures:</div>${rxnHTML(q.r,{re:'struct',pr:'hidden'},state.qStyle)}`;
  if(st.kind==='draw'&&st.hintShow==='pr')h+=`<div style="margin-top:6px">Here is the product structure:</div>${rxnHTML(q.r,{re:'name',pr:'struct',hideIdx:st.view.hideIdx},state.qStyle)}`;
  if(st.kind==='name'&&st.view.pr==='hidden'&&state.mode==='name')h+=`<div style="margin-top:6px">${esc(r_hint(q.r))}</div>`;
- $('hintBox').innerHTML=h;$('hintBox').className='hintbox show'}
+ const vv=videosFor()[0];if(vv)h+=`<div style="margin-top:8px"><button type="button" class="linkbtn" id="hintVid">🎥 Stuck? Watch Dr. Dan explain this (${mmss(vv.t)}, ${esc(vv.note||'video')})</button></div>`;
+ $('hintBox').innerHTML=h;$('hintBox').className='hintbox show';if($('hintVid'))$('hintVid').onclick=openVideo}
 const r_hint=r=>'Reaction clue: '+r.hint;
 function show(){if(state.stepDone)return;const st=state.q.steps[state.step];if(st.kind==='mc')state.selected=st.answer;stepSolved(true)}
 function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const box=$('celebrate'),cols=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#b9a3e6','#f2a8c4'];for(let i=0;i<55;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.top='-20px';p.style.background=cols[i%6];p.style.animationDelay=Math.random()*.5+'s';box.appendChild(p);setTimeout(()=>p.remove(),3600)}}
@@ -840,16 +941,64 @@ const REF=[
 function renderRef(){$('refBody').innerHTML=`<div class="refcards">${REF.map(r=>`<div class="refcard"><div class="rh"><b>${esc(r[0])}</b><span class="rc">${esc(r[1])}</span></div><div class="rr">${esc(r[2])}</div><div>${esc(r[3])}</div><div class="rx">e.g. ${esc(r[4])}</div></div>`).join('')}</div>
 <p class="footer-note"><b>Oxidation ladder:</b> 1° alcohol ⇄ aldehyde → carboxylic acid; 2° alcohol ⇄ ketone. Reduction runs the arrows backward.<br><b>Markovnikov:</b> “the rich get richer”: H goes to the C=C carbon that already has more H atoms.<br><b>Condensation vs hydrolysis:</b> condensation releases water to join two molecules; hydrolysis uses water to split one apart.</p>`}
 
-const UIKEY='itsdrdan-orgrxn-ui-v2';let ui={};try{ui=JSON.parse(localStorage.getItem(UIKEY)||'{}')}catch(e){}
+const UIKEY='itsdrdan-orgrxn-ui-v3';let ui={};try{ui=JSON.parse(localStorage.getItem(UIKEY)||'{}')}catch(e){}
 const saveUI=()=>{ui.mode=state.mode;ui.style=state.style;ui.set=state.set;try{localStorage.setItem(UIKEY,JSON.stringify(ui))}catch(e){}};
-(function(){const phone=matchMedia('(max-width:1000px)').matches;[['howTo',false],['refDetails',!phone],['journey',!phone],['videoDetails',!phone]].forEach(([id,def])=>{const el=$(id);el.open=ui[id]!==undefined?ui[id]:def;el.addEventListener('toggle',()=>{ui[id]=el.open;saveUI()})});
+(function(){const phone=matchMedia('(max-width:1000px)').matches;[['howTo',false],['refDetails',true],['journey',!phone],['videoDetails',!phone]].forEach(([id,def])=>{const el=$(id);el.open=ui[id]!==undefined?ui[id]:def;el.addEventListener('toggle',()=>{ui[id]=el.open;saveUI()})});
  if(['skeletal','condensed','expanded','mixed'].includes(ui.style))state.style=ui.style;if(['all','hydrocarbon','alcohol','acid'].includes(ui.set))state.set=ui.set;if(MODES.some(m=>m.id===ui.mode))state.mode=ui.mode;
- $('styleSel').value=state.style;$('setSel').value=state.set;
- $('styleSel').onchange=e=>{state.style=e.target.value;saveUI();state.qStyle=state.style==='mixed'?pick(['skeletal','condensed','expanded']):state.style;const keep=state.q&&state.q.steps[state.step].kind==='draw';if(keep){const snapD=JSON.stringify([D.atoms,D.bonds,D.nid]);renderStep();const [a,b,n]=JSON.parse(snapD);D.atoms=a;D.bonds=b;D.nid=n;drawWS()}else renderStep()};
+ $('setSel').value=state.set;
+ const SP=[['skeletal','Line (skeletal)',()=>structHTML('CCCO','skeletal',.55)],['condensed','Condensed',()=>`<div class="condensed">${condHTML('CH3CH2CH2OH')}</div>`],['expanded','Expanded',()=>structHTML('CCCO','expanded',.42)],['mixed','Mixed',()=>'<div class="sp-mix">🔀 a different<br>style each question</div>']];
+ $('spBtns').innerHTML=SP.map(([v,n,ex])=>`<button type="button" class="sp-btn" data-style="${v}" role="radio" aria-checked="false"><span class="sp-ex" aria-hidden="true">${ex()}</span><span class="sp-name">${n}</span></button>`).join('');
+ const markStyle=()=>document.querySelectorAll('.sp-btn').forEach(b=>{const on=b.dataset.style===state.style;b.classList.toggle('on',on);b.setAttribute('aria-checked',on)});markStyle();
+ document.querySelectorAll('.sp-btn').forEach(b=>b.onclick=()=>{if(b.dataset.style===state.style)return;applyStyle(b.dataset.style)});
+ function applyStyle(v){state.style=v;markStyle();saveUI();state.qStyle=state.style==='mixed'?pick(['skeletal','condensed','expanded']):state.style;const keep=state.q&&state.q.steps[state.step].kind==='draw';const nameV=$('nameIn')?$('nameIn').value:'';if(state.stepDone){toast('Style updated for the next question');return}if(keep){const snapD=JSON.stringify([D.atoms,D.bonds,D.nid]);renderStep();const [a,b,n]=JSON.parse(snapD);D.atoms=a;D.bonds=b;D.nid=n;drawWS()}else{renderStep();if($('nameIn'))$('nameIn').value=nameV}}
  $('setSel').onchange=e=>{state.set=e.target.value;saveUI();nextQ()}})();
+document.addEventListener('keydown',e=>{if(!SEL.size)return;const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'))return;if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();deleteSel()}else if(e.key==='Escape'){SEL.clear();drawWS()}});
 $('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=show;$('nextBtn').onclick=nextQ;
 {const rb=$('journeyReset');let armed=0;rb.onclick=()=>{if(!armed){armed=setTimeout(()=>{armed=0;rb.textContent='Reset progress'},4000);rb.textContent='Tap again to confirm reset';return}clearTimeout(armed);armed=0;rb.textContent='Reset progress';journey=jBlank();jSave();renderJourney()}}
-const vd=$('videoDetails'),pl=$('plPlayer');const loadPl=()=>{if(vd.open&&!pl.src)pl.src='https://www.youtube.com/embed/videoseries?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f&rel=0'};vd.addEventListener('toggle',loadPl);loadPl();
+/* ================= the right video for each question ================= */
+const PLAYLIST='PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f';
+const VT={'Dcun-l5jM9w':'Addition Reactions of Alkenes and Markovnikov’s Rule','l3Sb_GWBano':'Dehydration Reactions of Alcohols and Zaitsev’s Rule','veiUgkx_Dlc':'Oxidation of Alcohols: Classification and the Reaction','K0oEXP7JBZU':'Reduction Reactions of Aldehydes and Ketones','2pwJ5G0uOtA':'How to Make Esters through Esterification','vfSSUIcgzTY':'Hydrolysis of Esters: Acid and Base (Saponification)','HU4KHyptdVA':'Hydrolysis Reactions of Amides with Acids and Bases','1KPqZ2pp9bg':'Formation of Hemiacetals and Acetals','whVLjQhx3FI':'Cyclic Acetals and Ketals','2MsgPQYwsjA':'Types of Chemical Reactions','M7VkdbGkPXY':'Lipids: Hydrogenation of Unsaturated Fats','gO3YPk_2lTE':'Lipids: Saponification of Triacylglycerides','xbsGe976lZ4':'Organic Chemistry: An Introduction (Part 2)','gSKpPWYVnTU':'Organic Chemistry: An Introduction (Part 1)','b4DBut72xEI':'Drawing Alkenes: Expanded, Condensed & Skeletal Formulas','9lxWINhQtUc':'Naming Alkanes with Branches','JutTTWvB2wQ':'Identifying and Naming Cis and Trans Alkenes','nN-RMEEbjLI':'How to Name Ethers in 3 Easy Steps'};
+const V=(id,t,note)=>({id,t:t||0,note:note||''});
+const RXV={combustion:[V('2MsgPQYwsjA',728,'Combustion section')],
+ substitution:[V('xbsGe976lZ4',226,'Alkyl halides'),V('Dcun-l5jM9w',276,'Compare: halogen ADDITION to alkenes')],
+ hydrogenation:[V('Dcun-l5jM9w',126,'Hydrogenation'),V('M7VkdbGkPXY',0,'Hydrogenating fats')],
+ halogenAdd:[V('Dcun-l5jM9w',276,'Halogenation (adding X₂)')],
+ hydrohalogenation:[V('Dcun-l5jM9w',532,'Adding HX'),V('Dcun-l5jM9w',613,'Markovnikov’s rule')],
+ hydration:[V('Dcun-l5jM9w',929,'Hydration'),V('Dcun-l5jM9w',613,'Markovnikov’s rule')],
+ dehydration:[V('l3Sb_GWBano',0,'Dehydration of alcohols'),V('l3Sb_GWBano',104,'Finding the major product')],
+ ox1Ald:[V('veiUgkx_Dlc',198,'1° alcohol → aldehyde'),V('veiUgkx_Dlc',85,'Classifying 1°, 2°, 3° alcohols')],
+ ox1Acid:[V('veiUgkx_Dlc',304,'Aldehyde → carboxylic acid'),V('veiUgkx_Dlc',198,'1° alcohol → aldehyde')],
+ oxAldAcid:[V('veiUgkx_Dlc',304,'Aldehyde → carboxylic acid')],
+ ox2:[V('veiUgkx_Dlc',356,'2° alcohol → ketone'),V('veiUgkx_Dlc',85,'Classifying 1°, 2°, 3° alcohols')],
+ reduction:[V('K0oEXP7JBZU',5,'Reducing aldehydes and ketones')],
+ esterification:[V('2pwJ5G0uOtA',5,'Esterification')],
+ esterHydrolysis:[V('vfSSUIcgzTY',86,'Acid hydrolysis'),V('vfSSUIcgzTY',436,'Compare: base hydrolysis')],
+ saponification:[V('vfSSUIcgzTY',436,'Saponification (base hydrolysis)'),V('gO3YPk_2lTE',0,'Saponification of fats')],
+ amidation:[V('HU4KHyptdVA',1006,'Amides as condensation products'),V('HU4KHyptdVA',5,'Amide hydrolysis (the reverse reaction)')],
+ amideHydrolysis:[V('HU4KHyptdVA',248,'Acid hydrolysis → ammonium salt'),V('HU4KHyptdVA',5,'Cutting the amide bond')],
+ amideBase:[V('HU4KHyptdVA',327,'Base hydrolysis → carboxylate salt'),V('HU4KHyptdVA',5,'Cutting the amide bond')],
+ hemiacetal:[V('1KPqZ2pp9bg',11,'Hemiacetals'),V('whVLjQhx3FI',0,'Cyclic acetals and ketals')],
+ acetal:[V('1KPqZ2pp9bg',326,'Hemiacetal → acetal'),V('whVLjQhx3FI',0,'Cyclic acetals and ketals')],
+ neutralAcid:[V('HU4KHyptdVA',327,'Neutralizing a carboxylic acid with base'),V('vfSSUIcgzTY',832,'Naming carboxylate salts')],
+ neutralAmine:[V('HU4KHyptdVA',248,'Amines as bases: making an ammonium salt')]};
+const NAMEV={alkane:V('9lxWINhQtUc',0,'Naming alkanes'),halide:V('9lxWINhQtUc',0,'Naming the carbon chain'),alkene:V('JutTTWvB2wQ',0,'Naming alkenes'),alkyne:V('JutTTWvB2wQ',0,'Naming with multiple bonds'),ether:V('nN-RMEEbjLI',0,'Naming ethers'),acetal:V('nN-RMEEbjLI',0,'Naming –OR (alkoxy) groups'),carboxylate:V('vfSSUIcgzTY',832,'Naming carboxylate salts')};
+const mmss=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+function videosFor(){const q=state.q;if(!q)return [];const st=q.steps[state.step];let list=(RXV[q.r.key]||[]).slice();
+ if(q.r.key==='reduction'&&/ketone|anone/.test(q.r.reactants[0].name))list=[V('K0oEXP7JBZU',204,'Reducing ketones → 2° alcohols'),V('K0oEXP7JBZU',152,'Reducing aldehydes → 1° alcohols')];
+ else if(q.r.key==='reduction')list=[V('K0oEXP7JBZU',152,'Reducing aldehydes → 1° alcohols'),V('K0oEXP7JBZU',204,'Reducing ketones → 2° alcohols')];
+ if(st&&st.kind==='name'){const gl=gList(parseSmi(st.comp.smi)),k=GPRI.find(x=>gl.includes(x))||'alkane';if(NAMEV[k])list.unshift(NAMEV[k])}
+ if(st&&st.kind==='draw'&&st.label==='Draw reactant')list.unshift(V('b4DBut72xEI',0,'Drawing from a name: expanded, condensed and skeletal'));
+ const seen=new Set();return list.filter(v=>{const k=v.id+'@'+v.t;if(seen.has(k))return false;seen.add(k);return true}).slice(0,3)}
+const vd=$('videoDetails'),pl=$('plPlayer');let curVid=null,playlistMode=false;
+function embedSrc(v){return `https://www.youtube.com/embed/${v.id}?start=${v.t}&rel=0`}
+function playVid(v,force){curVid=v;playlistMode=false;$('vidCard').innerHTML=`<div class="vidtag">🎯 Matched to this question</div><div class="vidtitle">${esc(VT[v.id]||'Dr. Dan video')}</div><div class="vidnote">▶ Starts at <b>${mmss(v.t)}</b>${v.note?' · '+esc(v.note):''}</div>`;
+ const src=embedSrc(v);if(vd.open&&(force||pl.dataset.src!==src)){pl.src=src;pl.dataset.src=src}}
+function updateVideo(){const list=videosFor();if(!list.length)return;playVid(list[0]);
+ $('vidMore').innerHTML=list.length>1?`<div class="vidmore-h">Also helpful</div>`+list.slice(1).map((v,i)=>`<button type="button" class="vidalt" data-i="${i+1}">▶ ${esc(v.note||VT[v.id])} <small>${esc(VT[v.id]||'')} · ${mmss(v.t)}</small></button>`).join(''):'';
+ document.querySelectorAll('.vidalt').forEach(b=>b.onclick=()=>playVid(list[Number(b.dataset.i)],true))}
+function openVideo(){vd.open=true;if(curVid)playVid(curVid,true);vd.scrollIntoView({behavior:'smooth',block:'center'})}
+$('vidPlaylist').onclick=()=>{playlistMode=true;const src=`https://www.youtube.com/embed/videoseries?list=${PLAYLIST}&rel=0`;pl.src=src;pl.dataset.src=src;$('vidCard').innerHTML='<div class="vidtag">📺 Whole CHEM 3B playlist</div><div class="vidnote">Pick any video. A new question switches back to its matched video.</div>'};
+vd.addEventListener('toggle',()=>{if(vd.open&&curVid&&!pl.dataset.src)playVid(curVid,true)});
 buildModes();renderRef();renderJourney();nextQ();
 </script>
 <script id="canvasAutoResize">

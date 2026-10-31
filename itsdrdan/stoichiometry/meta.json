@@ -1,8 +1,8 @@
 {
-  "title": "Stoichiometry Study Game",
+  "title": "Stoichiometry Quest",
   "author": "Dr. Dan",
   "course": "CHEM 3A / CHEM 1A",
-  "description": "Interactive stoichiometry practice using coefficients in balanced chemical equations. Modes include mixed practice, mass stoichiometry, solution stoichiometry with titration and percent m/m and m/v, ideal gas stoichiometry and gas identity, limiting reactants and leftovers, and percent yield. Includes significant-figure feedback, factor-card setup with flipping for every question (with separate stages for two-reactant problems), worked solutions, scoring, and an embedded Yellow Sheet periodic table. Contextual video help links each generated question to relevant lessons on Dr. Dan’s YouTube channel, primarily the CHEM 3A Chapter 11 stoichiometry playlist.",
+  "description": "Stoichiometry study game for CHEM 3A (default) and CHEM 1A. A 9-level Learn Trail (recipe ratios, mole ratios, moles to moles, grams to moles, grams to grams, gases at STP, solution stoichiometry, limiting reactant, percent yield) gives worked examples and step-by-step guided practice with a conversion map. Practice Quests cover mass, solution, gas (STP and ideal gas law), limiting reactant, and percent yield, plus CHEM 1A Reaction to Stoichiometry and Challenge Mode. Includes common-mistake feedback, significant-figure checking, factor-card setup, XP, ranks, and achievements, the embedded Yellow Sheet, and matched videos from Dr. Dan's YouTube channel. Add ?course=1A to the URL to open in CHEM 1A.",
   "tags": [
     "stoichiometry",
     "balanced chemical equations",
@@ -19,7 +19,11 @@
     "CHEM 3A",
     "CHEM 1A",
     "YouTube video help",
-    "CHEM 3A Chapter 11"
+    "CHEM 3A Chapter 11",
+    "worked examples",
+    "step-by-step",
+    "gas stoichiometry at STP",
+    "XP and achievements"
   ],
   "status": "working"
 }
