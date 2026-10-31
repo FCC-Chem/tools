@@ -62,13 +62,16 @@ jobs:
             fi
           done <<'EOF'
           elements         elements
+          functionalgroups functional-groups-studio
           gaslaws          gaslaws
           chem1bready      chem1bready
+          carbohydrates    carbohydrates
           ionicformula     naming
           lewisstructures  lewisstructures
           metric           metric
           moles            mole
           organic          functional-groups
+          organicreactions organic-reactions
           polyatomic       polyatomicion
           quantumchemistry quantumchemistry
           reactions        reactions
