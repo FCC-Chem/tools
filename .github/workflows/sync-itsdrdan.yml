@@ -50,7 +50,11 @@ jobs:
             mkdir -p "itsdrdan/$folder"
             cp /tmp/src/index.html "itsdrdan/$folder/index.html"
             if [ -f /tmp/src/meta.json ]; then
-              cp /tmp/src/meta.json "itsdrdan/$folder/meta.json"
+              if python3 -m json.tool /tmp/src/meta.json > /dev/null 2>&1; then
+                cp /tmp/src/meta.json "itsdrdan/$folder/meta.json"
+              else
+                echo "::warning::ItsDrDan/$repo meta.json is not valid JSON; kept the old one"
+              fi
             fi
             if [ -d /tmp/src/assets ]; then
               rm -rf "itsdrdan/$folder/assets"
