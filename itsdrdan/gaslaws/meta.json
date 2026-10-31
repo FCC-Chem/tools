@@ -1,8 +1,8 @@
 {
-  "title": "Gas Laws Study Game — Under Pressure with ItsDrDan",
+  "title": "Under Pressure: Gas Laws — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3A and CHEM 1A",
-  "description": "Responsive gas-law practice with Gas Theory, Changing Conditions, Mixtures & Wet Gases, Ideal Gas Lab, Mystery Gas, Mixed Practice, and a 10-question readiness check. CHEM 1A adds RMS speed, molecular-speed distributions, Graham’s law of effusion, more advanced gas-mixture calculations, and coefficient-box reaction stoichiometry. Uses atm, mmHg, torr, kelvin conversions, mL/L conversions, Dalton’s law, mole fractions, gas collection over water, ideal-gas molar mass and density, and common gas identification. CHEM 3A Ideal Gas Lab includes 15% guided reaction questions; optional real-gas challenges occur in 3% of CHEM 1A Mixed Practice and are excluded from the quiz. Includes guided steps, solution maps, completed work, hints, answer reveals, homework-style unit entry, scientific notation input, scoring, streaks, XP, celebrations, a particle playground, an embedded ItsDrDan lesson, and performance-based study recommendations.",
+  "description": "Gas-law practice built on Dr. Dan's Lectures 15–16. Learn Trail (6 stops: Gas Basics, Changing Conditions, One Set of Conditions, Gas Mixtures, Gas Reactions, and Speed & Real Gases for 1A) with worked examples, guided steps and solo practice. Practice Quests with Mixed Practice, a 10-question Readiness Check with a study plan, and topic quests. Gas-law problems start with picking the right equation card (shown as fractions, no names), with feedback on which variables change. Opens on CHEM 3A (use ?course=1A for CHEM 1A). Covers units and KMT, Boyle, Charles, Gay-Lussac, Avogadro, combined and ideal gas laws, STP molar volume, molar mass and mystery gases (gas density for CHEM 1A only), Dalton's law, gas collected over water, gas stoichiometry, and for CHEM 1A RMS speed, Graham's law and van der Waals real gases. Includes hints, worked solutions, mistake detection (°C vs K, mL vs L, mmHg vs atm), sig-fig coaching, E-notation input, XP, achievements, a particle playground with a piston (He, diatomic N₂, Xe), Yellow Sheet reference and matched ItsDrDan videos.",
   "tags": [
     "chemistry",
     "CHEM 3A",
@@ -26,8 +26,12 @@
     "Graham law",
     "effusion",
     "real gas",
-    "readiness quiz"
+    "readiness quiz",
+    "equation cards",
+    "mixed practice",
+    "STP",
+    "density"
   ],
-  "version": "22",
+  "version": "34",
   "status": "working"
 }

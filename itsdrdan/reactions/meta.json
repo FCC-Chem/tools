@@ -1,8 +1,11 @@
 {
-  "title": "Chemical Reactions: Predicting, Balancing, and Net Ionic Equations",
+  "title": "Reaction Rumble — Chemical Reactions",
   "author": "Dr. Dan",
-  "course": ["CHEM 3A", "CHEM 1A"],
-  "description": "Interactive chemistry practice game with 116 reaction examples. Students balance equations, predict products using reaction recipes and charge balancing, assign phases of matter, write complete ionic equations, and cancel spectator ions to form net ionic equations. Includes 49 guided net ionic examples, solubility rules adapted from the course green sheet, gas evolution and neutralization references, formatted chemical equation entry, hints, answer checking, celebrations, and embedded lessons from Dr. Dan's Chapter 10 playlist.",
+  "course": [
+    "CHEM 3A",
+    "CHEM 1A"
+  ],
+  "description": "Reaction Rumble: balance equations, predict products, and write complete and net ionic equations, with a CHEM 3A / CHEM 1A course switch (3A gets Beginner, Intermediate and Champion levels). 222 reactions with a live atom counter, an animated particle view (spectator ions, precipitates, gases), tutor-style feedback on common mistakes, and a 60-second Blitz Challenge with 9 decks: reaction types, solubility, activity series, what drives a double displacement, Mix it! (named solutions), spot the spectator, balanced or not, true/false concepts, and a mixed bag. Includes the Green Sheet, XP, achievements, and Dr. Dan's Chapter 10 and solubility videos.",
   "tags": [
     "chemistry",
     "chemical reactions",
@@ -22,9 +25,15 @@
     "net ionic equations",
     "spectator ions",
     "CHEM 3A",
-    "CHEM 1A"
+    "CHEM 1A",
+    "activity series",
+    "Blitz challenge",
+    "particle view",
+    "Green Sheet"
   ],
   "type": "interactive study tool",
-  "version": "1.0",
-  "status": "working"
+  "version": "23",
+  "status": "working",
+  "logo": "logo.png",
+  "icon": "⚡"
 }

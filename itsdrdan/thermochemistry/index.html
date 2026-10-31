@@ -1,134 +1,721 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thermochemistry Study Game — ItsDrDan</title><style>
-:root{--ink:#29364d;--muted:#637087;--line:#dbe2ef;--blue:#5467bb;--mint:#e5f6ef;--rose:#fff0ed;--gold:#fff4d9}*{box-sizing:border-box}body{margin:0;background:radial-gradient(at 8% 0%,#e6eaff,transparent 45%),radial-gradient(at 95% 0%,#ffe9d9,transparent 40%),#f7f9fc;color:var(--ink);font:clamp(17px,1.1vw,20px)/1.55 Helvetica,"Segoe UI",Arial,sans-serif}button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:13px;background:white;padding:12px 17px;font-weight:700}button:hover:not(:disabled){filter:brightness(.97);transform:translateY(-1px)}button:disabled{cursor:not-allowed;opacity:.55}button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #5476ce;outline-offset:3px}.app{max-width:1440px;margin:auto;padding:24px}.hero{display:flex;align-items:center;gap:25px;padding:28px;border:1px solid #d9dfee;border-radius:26px;background:linear-gradient(120deg,#e7edff,#fff0e0)}.hero h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.12;margin:4px 0 10px;letter-spacing:-.03em}.eyebrow{font-size:.8rem;letter-spacing:.13em;font-weight:800;color:#6a6292;text-transform:uppercase}.hero p{margin:0}.thermo-icon{width:95px;flex:none}.course{display:flex;gap:12px;margin:20px 0}.course button{flex:1;font-size:1.2rem;padding:17px}.course .selected{background:#e1f3ec;border:2px solid #81b6a0}.course button:disabled{background:#e9ebef}.intro{padding:18px 22px;background:white;border:1px solid var(--line);border-radius:18px}.intro ol{margin:8px 0;padding-left:24px}.modes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:20px 0}.mode{min-height:110px;text-align:left;box-shadow:0 4px 0 #26364a14;border:2px solid transparent;background:#e7edff}.mode:nth-child(2){background:#eee7fb}.mode:nth-child(3){background:#e5f6ef}.mode:nth-child(4){background:#fff0df}.mode:nth-child(5){background:#ffe9ee}.mode b{display:block;font-size:1.13rem;line-height:1.3}.mode small{display:block;margin-top:7px;font-weight:400;font-size:.82rem}.mode.active{border-color:#596bc1}.mode.active b:after{content:' ✓'}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(310px,1fr);gap:22px;align-items:start}.panel{background:white;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 8px 24px #34486609;min-width:0}.practice-top{display:grid;grid-template-columns:1fr;gap:12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{text-align:center;padding:10px;background:#f1f4fb;border-radius:12px}.stat b{display:block;font-size:1.4rem}.stat small{font-size:.78rem}.new{width:100%;background:#e9edff;min-height:55px}.badge{display:inline-block;font-size:.84rem;font-weight:800;background:#f1edfa;border-radius:8px;padding:5px 10px;margin:18px 0 8px}h2{font-size:clamp(1.4rem,2vw,1.8rem);line-height:1.3;margin:8px 0 12px}h3{font-size:1.2rem;margin:16px 0 8px}.story{margin:12px 0}.small,small{font-size:.87rem;color:var(--muted)}.directions{padding:12px 15px;background:#f5f7ff;border-radius:12px;margin:12px 0}.chart{margin:16px 0;border:1px solid #e0e5f1;border-radius:14px;background:#fcfdff;padding:8px;overflow-x:auto}.chart svg{width:100%;height:auto;display:block;min-width:290px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}.field{display:block;padding:12px;border:2px solid transparent;border-radius:12px;background:#f7f8fc}.field span{display:block;font-size:1.04rem;font-weight:700;margin-bottom:8px}.field input,.field select{width:100%;padding:12px;border:1px solid #cbd5e7;border-radius:10px;background:#fff}.field.good{border-color:#65ab86;background:#eaf8ef}.field.bad{border-color:#d85b6d;background:#fff0f2}.field small{display:block;margin-top:5px}.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}.actions button{min-height:57px}.primary{background:#586bc4;color:white;border:0}.hint-btn{background:#fff3d7}.show-btn{background:#eee8fa}.feedback{display:none;padding:16px;border-radius:14px;margin-top:16px;font-size:1.04rem}.feedback.good{display:block;background:#e5f6eb;border:2px solid #64ad86;color:#215d3d}.feedback.bad{display:block;background:#fff0f1;border:3px solid #d36a78;color:#873345}.feedback b{display:block;font-size:1.2rem;margin-bottom:4px}.hint-box{padding:16px;background:#fff7df;border-radius:14px;margin-top:14px}.completed{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:15px;background:#f6faf8}.completed summary{font-weight:800;cursor:pointer}.completed li{padding:10px 0;border-bottom:1px solid #dce8e2}.completed li:last-child{border:0}.completed ol{padding-left:24px}.answer-line{color:#345884}.toggle{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.95rem;margin-top:18px}.toggle input{width:23px;height:23px}.map{padding:15px;background:#eff3ff;border-radius:14px;margin:18px 0}.map summary{font-weight:800;cursor:pointer}.route{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.route span{padding:8px 12px;background:white;border:1px solid #d3dced;border-radius:9px}.reference details{margin:12px 0;border-bottom:1px solid var(--line);padding-bottom:12px}.reference summary{font-weight:800;cursor:pointer}.reference table{border-collapse:collapse;width:100%;font-size:.86rem;margin:10px 0}.reference th,.reference td{padding:8px 5px;border-bottom:1px solid var(--line);text-align:left}.formula{padding:12px;background:#f3f1fb;border-radius:12px;font:1.1rem/1.7 Cambria,Georgia,serif;margin:8px 0}.endo{background:#edf6df;padding:2px 5px;border-radius:4px}.exo{background:#ffe8e9;padding:2px 5px;border-radius:4px}.fraction{display:inline-flex;vertical-align:middle;flex-direction:column;text-align:center;margin:2px 6px}.fraction span:first-child{border-bottom:1px solid currentColor;padding:0 6px}.fraction span:last-child{padding:0 6px}.math{font-family:Cambria,Georgia,serif;font-size:1.07rem;overflow-wrap:anywhere}.confetti{position:fixed;top:-30px;pointer-events:none;z-index:5;animation:fall 4.3s ease-in forwards}@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}.bottom-new{width:100%;margin-top:18px;background:#e4f5ed}.footer{text-align:center;margin:24px;color:var(--muted);font-size:.85rem}a{color:#4d64ae}.source-note{margin-top:18px}.mode-caption{font-weight:700;color:#5b6585}.unit-chip{font-weight:800;color:#5765a5}.study-note{border-left:4px solid #8e9bd0;padding-left:12px}.chart-note{font-size:.82rem;text-align:center;color:var(--muted)}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.modes{grid-template-columns:repeat(3,1fr)}.reference{order:2}.app{padding:18px}}@media(max-width:580px){.app{padding:12px}.hero{padding:20px;gap:12px}.thermo-icon{width:62px}.course{gap:8px}.course button{padding:12px 7px;font-size:1rem}.modes{grid-template-columns:repeat(2,1fr);gap:9px}.mode{padding:12px;min-height:104px}.panel{padding:17px}.actions{grid-template-columns:1fr}.chart{padding:3px}.course small{display:block}.hero h1{font-size:2rem}.hero p{font-size:.95rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-
-.switch-control{padding:13px 16px;border:1px solid #d1dbec;border-radius:13px;background:#f0f4ff;cursor:pointer}.switch-control input{appearance:none;flex:none;width:50px;height:28px;border:1px solid #adb9d1;border-radius:30px;background:#c9d2e1;position:relative;cursor:pointer;transition:background .2s}.switch-control input:before{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:white;box-shadow:0 1px 3px #27365040;transition:transform .2s}.switch-control input:checked{background:#6275c2;border-color:#6275c2}.switch-control input:checked:before{transform:translateX(22px)}.reaction-equation{margin:18px 0;padding:20px;border:1px solid #d9dfef;border-radius:15px;background:linear-gradient(120deg,#f0f5ff,#fff2df);font-size:clamp(1.1rem,2vw,1.45rem);line-height:1.9;overflow-wrap:anywhere}.energy-term{padding:3px 7px;background:#fff1c4;border-radius:6px;color:#855732}.reaction-arrow{font-size:1.3em;color:#5369ae}
-
-/* Button typography: clear titles, readable supporting text, consistent spacing. */
-button{font-family:"Avenir Next",Avenir,"Segoe UI",Helvetica,Arial,sans-serif;font-weight:650;letter-spacing:.005em;line-height:1.35}
-.course button{font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:750;letter-spacing:.015em}
-.course button small{font-size:.82em;font-weight:500;letter-spacing:0;line-height:1.4}
-.mode{padding:18px 16px;min-height:132px;display:flex;flex-direction:column;justify-content:flex-start;gap:9px}
-.mode b{font-family:"Avenir Next",Avenir,"Segoe UI",Helvetica,Arial,sans-serif;font-size:clamp(1.12rem,1.35vw,1.3rem);font-weight:750;letter-spacing:-.015em;line-height:1.3;text-wrap:balance}
-.mode small{margin:0;font-family:"Avenir Next",Avenir,"Segoe UI",Helvetica,Arial,sans-serif;font-size:clamp(.92rem,1.04vw,1.02rem);line-height:1.45;letter-spacing:0;font-weight:450;color:#4d5e78;text-wrap:pretty}
-.actions button,.new,.bottom-new{font-size:clamp(1rem,1.15vw,1.12rem);font-weight:700;letter-spacing:.005em}
-@media(max-width:580px){.mode{padding:15px 13px;min-height:134px;gap:8px}.mode b{font-size:1.12rem}.mode small{font-size:.94rem;line-height:1.45}}
-
-
-.mode.active{border:3px solid #4555ad;background:linear-gradient(135deg,#edf0ff,#e2f4ed);box-shadow:0 0 0 3px #c9d1fa,0 6px 16px #43519220;position:relative}.mode.active b:after{content:' ✓ Selected';font-size:.78em;color:#334392}.lessons{margin-top:24px;padding:24px;background:#f7f8ff;border:1px solid #d7deee;border-radius:22px}.video-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:18px}.video-player{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;background:#18243e}.video-list{display:flex;flex-direction:column;gap:10px}.video-item{display:flex;text-align:left;gap:12px;align-items:center;width:100%;padding:10px;border:2px solid #dae1ef;border-radius:12px;background:white;color:#253755}.video-item img{width:112px;aspect-ratio:16/9;object-fit:cover;border-radius:7px}.video-item.active{border-color:#4b61b3;background:#eaf0ff}.video-item span{font-size:1rem}.video-item small{display:block;margin-top:5px;font-weight:400}.video-chapters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.video-chapters button{background:#fff;border:1px solid #c8d3e9;border-radius:9px;padding:9px 12px} .lesson-links{font-size:1rem;line-height:1.6}
-@media(max-width:760px){.video-layout{grid-template-columns:1fr}.lessons{padding:16px}.video-item img{width:100px}}
-
-/* Mixed practice is a centered feature button below all five topic modes. */
-.modes .mode[data-mode="mixed"]{grid-column:1/-1;justify-self:center;width:60%;min-height:145px;align-items:center;justify-content:center;text-align:center;padding:22px 24px;background:#e7edff}
-.modes .mode[data-mode="mixed"] b{font-size:clamp(1.35rem,2vw,1.6rem)}
-.modes .mode[data-mode="mixed"] small{font-size:clamp(1rem,1.2vw,1.1rem)}
-.modes .mode[data-mode="mixed"].active{background:linear-gradient(135deg,#edf0ff,#e2f4ed)}
-@media(max-width:1000px){.modes .mode[data-mode="mixed"]{width:80%}}
-@media(max-width:580px){.modes .mode[data-mode="mixed"]{width:100%;min-height:145px}}
-
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thermochemistry • Dr. Dan</title>
+<meta name="description" content="Thermochemistry practice for CHEM 3A and CHEM 1A: phase changes, q = mcΔT, q = nΔH, heating curves, calorimetry, Hess's law, formation enthalpies and enthalpy stoichiometry.">
+<style>
+:root{
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#5d6883;--faint:#8a93ab;--line:#e3e6f0;--line2:#d5d9e8;
+ --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
+ --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
+ --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
+ --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--serif:Cambria,"Times New Roman",serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--topbar) + 12px)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+*{transition:none!important;animation:none!important}}
+body{margin:0;background:linear-gradient(180deg,#eef0fb 0,var(--bg) 340px);color:var(--ink);font:16.5px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid #6b77e6;outline-offset:2px}
+[hidden],.hidden{display:none!important}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
+.topbar{position:sticky;top:0;z-index:50;background:#ffffffe6;backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.tb{max-width:1180px;margin:auto;height:var(--topbar);padding:0 16px;display:flex;align-items:center;gap:12px}
+.tb-brand{display:flex;align-items:center;gap:9px;font-weight:750;letter-spacing:-.01em;white-space:nowrap;margin-right:auto}
+.tb-brand img{width:40px;height:40px;display:block}
+.seg{display:inline-flex;background:#eef0f6;border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:none;border-radius:9px;padding:7px 14px;font-weight:700;color:var(--muted);min-height:38px;white-space:nowrap}
+.seg button.active{background:#fff;color:var(--accent-d);box-shadow:0 1px 3px #1f2a4426}
+.tb-xp{display:flex;align-items:center;gap:9px;min-width:170px}
+.tb-xp .ico{font-size:1.25rem;width:34px;height:34px;display:grid;place-items:center;background:var(--lav);border-radius:10px}
+.tb-xp b{display:block;font-size:.82rem;line-height:1.1}
+.tb-xp small{display:block;font-size:.72rem;color:var(--faint);font-weight:600}
+.xpbar{height:6px;width:120px;background:#e9eaf3;border-radius:9px;overflow:hidden;margin:4px 0 2px}
+.xpbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea);border-radius:9px;transition:width .5s}
+.tb-streak{font-weight:750;font-size:.9rem;padding:6px 10px;border-radius:10px;background:var(--rose);color:var(--rose-ink);white-space:nowrap}
+.tb-btn{border:1px solid var(--line2);background:#fff;border-radius:11px;padding:7px 12px;font-weight:700;color:#3d4a73;min-height:40px;white-space:nowrap}
+.tb-btn:hover{background:var(--accent-soft)}
+#course{padding:4px;gap:4px;border-radius:14px;background:#e9ebf5}
+#course button{min-height:48px;padding:8px 22px;font-size:1.08rem;font-weight:800;border-radius:11px;letter-spacing:.01em}
+#course button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+.wrap{max-width:1180px;margin:auto;padding:22px 16px 56px}
+.intro{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:12px}
+.intro-title{display:flex;align-items:center;gap:18px}
+.intro-mascot{width:96px;height:96px;flex:none;filter:drop-shadow(0 6px 14px #4b57d126)}
+.eyebrow{margin:0;font-size:.78rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:2px 0 4px;font-size:clamp(1.7rem,3.6vw,2.4rem);letter-spacing:-.025em;line-height:1.1}
+.lede{margin:0;color:var(--muted);max-width:620px}
+.seg.big{padding:4px}
+.seg.big button{padding:10px 18px;font-size:1rem;min-height:46px}
+.howto{list-style:none;margin:6px 0 14px;padding:0;display:flex;gap:8px;flex-wrap:wrap}
+.howto li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 6px;font-size:.95rem;color:#38446a}
+.howto i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.mode-switch button{display:flex;align-items:center;gap:14px;text-align:left;border:2px solid var(--line2);background:#fff;border-radius:18px;padding:14px 18px;min-height:88px;box-shadow:var(--shadow);transition:border-color .15s,background .15s}
+.mode-switch button:hover{border-color:#aab2ea}
+.mode-switch b{display:block;font-size:1.25rem;letter-spacing:-.01em}
+.mode-switch small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}
+.ms-ico{font-size:1.8rem;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);display:grid;place-items:center;flex:none}
+.mode-switch button.active{border-color:var(--accent);background:linear-gradient(135deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.mode-switch button.active b{color:var(--accent-d)}
+.mode-switch button.active .ms-ico{background:var(--accent);filter:saturate(1.1)}
+.pick-head{font-size:1rem;margin:0 0 10px;color:#38446a}
+.big-next{font-size:1.08rem!important;min-height:56px!important;padding:12px 24px!important}
+@media(max-width:680px){.howto{gap:6px}
+.howto li{font-size:.86rem;padding:5px 11px 5px 5px}
+.mode-switch{gap:8px}
+.mode-switch button{flex-direction:column;align-items:flex-start;gap:6px;padding:12px;min-height:0}
+.mode-switch b{font-size:1.08rem}
+.mode-switch small{font-size:.8rem}
+.ms-ico{width:40px;height:40px;font-size:1.4rem}}
+.picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:10px;margin-bottom:18px}
+.pick{position:relative;display:grid;grid-template-columns:auto 1fr;gap:4px 11px;align-items:start;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:12px 13px;box-shadow:var(--shadow);transition:border-color .15s,transform .15s}
+.pick:hover{border-color:#b9bfe8;transform:translateY(-1px)}
+.pick.active{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.pick .ico{grid-row:span 3;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;background:var(--tint,#eef0fe);color:var(--accent-d)}
+.pick b{font-size:.97rem;line-height:1.25}
+.pick small{color:var(--muted);font-size:.8rem;line-height:1.35}
+.pick .num{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);line-height:1.2}
+.pick.done .num{color:var(--mint-ink)}
+.pick .foot{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:6px}
+.stars{color:#eba52c;font-size:.9rem;letter-spacing:1px}
+.stars .dim{color:#d5d9e6}
+.meter{flex:1;height:5px;background:#eceef5;border-radius:9px;overflow:hidden}
+.meter span{display:block;height:100%;background:#5cb892;border-radius:9px}
+.swipe-hint{display:none;font-size:.8rem;color:var(--faint);margin:-10px 0 14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);min-width:0}
+main.panel{padding:22px;scroll-margin-top:calc(var(--topbar) + 10px)}
+.play-head{display:flex;justify-content:space-between;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-bottom:14px}
+.play-title{margin:0;font-size:1.18rem;font-weight:750;letter-spacing:-.01em}
+.play-title .link-btn{font-size:.9rem;margin-left:4px}
+.link-btn{border:0;background:none;color:var(--accent-d);font-weight:650;text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
+.btn{border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;font-weight:650;color:#34416a;min-height:48px}
+.btn:hover{background:#f6f7fc}
+.btn.primary,button.primary{background:var(--accent);border:1px solid var(--accent);color:#fff;border-radius:12px;padding:10px 18px;font-weight:700;min-height:48px}
+.btn.primary:hover,button.primary:hover{background:var(--accent-d)}
+.btn.soft{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tag{font-size:.76rem;font-weight:700;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}
+.question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:18px}
+.work{overflow-x:auto;white-space:nowrap;padding:8px 10px;background:#f4f5fc;border-radius:9px;font-family:var(--serif);font-size:1.05rem}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.done .g-title{color:var(--mint-ink)}
+.choice-box{margin-top:16px;display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.choice{border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;min-height:54px;font-size:1.04rem;font-weight:650;color:#2b3760;box-shadow:0 1px 2px #1f2a4412}
+.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.choice.small{min-height:44px;padding:7px 13px;font-size:.98rem}
+.choice.right{border-color:#3a9a71;background:var(--mint)}
+.choice.wrong{border-color:#d4677a;background:var(--rose)}
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;scroll-margin-top:calc(var(--topbar) + 20px)}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
+.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
+.feedback.info{display:block;background:var(--amber);color:var(--amber-ink);border:1px solid var(--amber-line)}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
+.actions .btn{display:flex;align-items:center;justify-content:center;gap:7px}
+.next-row{display:flex;justify-content:flex-end;margin-top:16px}
+#bottomNext{min-width:220px}
+.note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
+.section{margin-top:18px;padding:20px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.section-head h2{margin:0;font-size:1.15rem;letter-spacing:-.01em}
+.section-head span{color:var(--faint);font-weight:650;font-size:.88rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}
+.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}
+.stat strong{display:block;font-size:1.3rem;line-height:1.2}
+.stat small{color:var(--muted);font-weight:650;font-size:.76rem}
+.stat.rank{background:var(--lav)}
+.stat.rank strong{font-size:1.02rem}
+.section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:650}
+.reset-btn.armed{background:var(--rose)}
+details.section{padding:0}
+details.section>summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:750;font-size:1.08rem}
+details.section>summary::-webkit-details-marker{display:none}
+details.section>summary::after{content:'▾';color:var(--faint);transition:transform .2s}
+details[open].section>summary::after{transform:rotate(180deg)}
+details.section>summary small{display:block;font-weight:500;color:var(--muted);font-size:.85rem}
+dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;width:min(1100px,calc(100vw - 16px));max-height:92vh}
+dialog::backdrop{background:#15182b80}
+.modal-head{position:sticky;top:0;z-index:2;background:#fff;padding:10px 14px;border-bottom:1px solid var(--line);display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.modal-head strong{font-size:1.02rem;margin-right:auto}
+.close-btn{order:3}
+@media(max-width:680px){.close-btn{order:2}}
+.close-btn{width:42px;height:42px;border:1px solid var(--line2);border-radius:10px;background:#fff;font:600 1.3rem/1 Arial,sans-serif;color:#3d4a73}
+.modal-body{overflow:auto;padding:14px;max-height:calc(92vh - 64px)}
+.toasts{position:fixed;right:16px;bottom:16px;z-index:1100;display:grid;gap:9px;max-width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #ddd6f7;border-radius:14px;padding:11px 14px;box-shadow:0 12px 34px #1f2a4430;animation:pop .3s ease;font-size:.9rem;transition:opacity .5s,transform .5s}
+.toast.out{opacity:0;transform:translateY(10px)}
+.toast-icon{font-size:1.5rem}
+#celebrationCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
+@media(max-width:900px){.stat-row{grid-template-columns:repeat(2,1fr)}
+.stat.rank{grid-column:1/-1}
+.tb-xp{min-width:0}
+.xpbar{width:80px}}
+@media(max-width:680px){:root{--topbar:64px}
+body{font-size:16px}
+#course button{min-height:46px;padding:6px 14px;font-size:1rem}
+.tb-xp{display:none}
+.tb{gap:8px;padding:0 10px}
+.tb-brand span,.tb-btn span,.tb-xp div{display:none}
+.tb-brand{margin-right:auto}
+.seg button{padding:6px 11px}
+.wrap{padding:16px 10px 48px}
+.lede{display:block!important;font-size:.92rem}
+.intro-mascot{width:64px;height:64px}
+.intro-title{gap:12px}
+.lede{display:none}
+.intro{margin-bottom:8px}
+.intro .seg.big{width:100%}
+.intro .seg.big button{flex:1}
+.picker{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:9px;margin:0 -10px 16px;padding:2px 10px 8px;scroll-padding:0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pick{flex:0 0 72%;max-width:250px;scroll-snap-align:start}
+.swipe-hint{display:block}
+main.panel{padding:14px;border-radius:16px}
+.question{padding:13px}
+.actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.actions .btn{flex-direction:column;gap:2px;font-size:.8rem;padding:8px 4px;min-height:58px}
+.play-head .btn{width:100%}
+#bottomNext{width:100%}
+.next-row{justify-content:stretch}
+.section{padding:15px}}
+.intro h1 .t1{color:#e0675a}
+.intro h1 .t2{background:linear-gradient(90deg,#4b57d1,#2aa198);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro-mascot{border-radius:24px;background:#fdf3e6}
+.tb-brand img{border-radius:10px}
+.hint-btn{background:var(--amber)!important;border-color:var(--amber-line)!important;color:var(--amber-ink)!important}
+.sol-btn{background:var(--lav)!important;border-color:#d9cff5!important;color:#5a3f9e!important}
+.slider{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-weight:650;font-size:.94rem}
+.slider b{color:var(--accent-d)}
+.slider input{grid-column:1/-1;width:100%;accent-color:var(--accent);height:30px}
+.foot-note{text-align:center;color:var(--faint);font-size:.84rem;margin:22px 0 0}
+.foot-note a{color:var(--accent-d)}
+@media(max-width:680px){.tb-brand img{width:34px;height:34px}
+#course button{padding:6px 10px!important;font-size:.95rem!important}
+.tb-btn{padding:7px 9px}
+.tb-streak{padding:6px 7px}}
+body{background:radial-gradient(circle at 8% 12%,#ffe9e2 0,transparent 26%),radial-gradient(circle at 92% 6%,#dff3ec 0,transparent 24%),radial-gradient(circle at 70% 60%,#ece8ff 0,transparent 30%),linear-gradient(180deg,#f2f1fb,#f6f7fb 600px)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#fff 0%,#fff8f2 45%,#f1f4ff 100%);border:1px solid #e9e6f6;border-radius:26px;padding:20px 22px;box-shadow:0 10px 30px #4b57d112;align-items:center}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::before{width:180px;height:180px;right:-40px;top:-60px;background:radial-gradient(circle at 35% 35%,#ffffffcc,#ffd9cf 60%,#ffc2b4);opacity:.55}
+.hero::after{width:90px;height:90px;right:120px;bottom:-40px;background:radial-gradient(circle at 35% 35%,#fff,#cfe0ff 65%,#b6cbff);opacity:.6}
+.hero .bub{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,#d8f1e7 70%);opacity:.7}
+.intro h1{font-size:clamp(1.9rem,4vw,2.7rem)}
+.howto{margin-top:14px}
+.picker.units{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.pick.unit{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 14px 12px;border-radius:18px;background:linear-gradient(160deg,var(--tint) 0,#fff 62%);border:1.5px solid color-mix(in srgb,var(--tint) 70%,#c9cde6);min-height:132px;position:relative}
+.pick.unit .ico{width:46px;height:46px;border-radius:14px;font-size:1.45rem;background:#fff;box-shadow:0 2px 8px #1f2a4414;grid-row:auto}
+.pick.unit b{font-size:1rem;margin-top:4px}
+.pick.unit small{font-size:.8rem}
+.pick.unit .meter{width:100%;flex:none;margin-top:auto;height:6px;background:#fff}
+.pick.unit .stop{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--accent-d);font-weight:800;font-size:.8rem;display:grid;place-items:center;box-shadow:0 1px 4px #1f2a4422}
+.pick.unit.done .stop{background:#3a9a71;color:#fff}
+.pick.unit.active{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d12e,0 8px 22px #4b57d11f;transform:translateY(-2px)}
+main.panel{position:relative;overflow:hidden;border-radius:24px}
+main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#f6a59a,#f7cf73,#8fd8b8,#8db5f5,#b79af0)}
+.question{background:linear-gradient(180deg,#fff,#fbfbff);border-radius:18px;box-shadow:inset 0 0 0 1px #eef0f8}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media(max-width:680px){.hero{padding:14px;border-radius:20px}
+.hero::before{width:110px;height:110px}
+.hero::after{display:none}
+.pick.unit{flex:0 0 46%;min-height:120px;max-width:200px}}
+.pick.unit{border:2px solid var(--ma);border-bottom-width:5px;background:linear-gradient(145deg,#ffffffb0,var(--mb));box-shadow:0 4px 12px #2634400d;transition:transform .15s,box-shadow .15s;min-height:0;padding:12px 12px 12px;display:grid;grid-template-columns:46px 1fr;column-gap:11px;align-items:center}
+.pick.unit:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018;border-color:var(--ma)}
+.pick.unit.active{outline:3px solid var(--ma);outline-offset:3px;transform:translateY(-2px);box-shadow:0 10px 22px #26344020;background:linear-gradient(145deg,#fff,var(--mb));border-color:var(--ma)}
+.pick.unit .ico{background:var(--ma);color:#fff;box-shadow:inset 0 -3px 0 #0000001a;width:46px;height:46px;border-radius:13px;font-size:1.4rem;grid-row:1}
+.pick.unit .ptxt{display:block;min-width:0}
+.pick.unit b{display:block;font-weight:850;font-size:1rem;line-height:1.2;margin:0}
+.pick.unit small{display:block;font-weight:600;color:#4c5a65;font-size:.8rem;margin-top:2px}
+.pick.unit .meter{grid-column:1/-1;margin-top:10px;background:#ffffffc0;height:6px}
+.pick.unit .meter span{background:var(--ma)}
+.pick.unit .stop{top:-9px;right:-7px;border:2px solid var(--ma);color:#3d4a5a}
+.pick.unit.done .stop{background:#3a9a71;border-color:#3a9a71}
+.picker.units{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.featured{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 6px}
+.feature{display:flex;align-items:center;gap:16px;text-align:left;border-radius:20px;padding:18px 20px;min-height:104px;border:2px solid var(--fa);border-bottom-width:6px;background:linear-gradient(140deg,#fff 0,var(--fb) 100%);box-shadow:0 6px 18px #2634400f;transition:transform .15s,box-shadow .15s}
+.feature:hover{transform:translateY(-3px);box-shadow:0 12px 26px #2634401c}
+.feature.active{outline:3px solid var(--fa);outline-offset:3px}
+.feature b{display:block;font-size:1.35rem;font-weight:900;letter-spacing:-.01em;color:#25304f}
+.feature small{display:block;color:#4c5a65;font-weight:600;font-size:.92rem;margin-top:2px}
+.f-ico{flex:none;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;font-size:2rem;background:var(--fa);box-shadow:inset 0 -4px 0 #0000001f}
+.feature.mixed{--fa:#7d8ce0;--fb:#e5e9ff}
+.feature.check{--fa:#e0b23c;--fb:#fff3cf}
+.divider{display:flex;align-items:center;gap:12px;margin:16px 2px 14px;color:var(--faint);font-weight:750;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.divider::before,.divider::after{content:"";flex:1;height:2px;background:repeating-linear-gradient(90deg,#d5d9ea 0 8px,transparent 8px 14px)}
+.big-next,.btn.primary{background:linear-gradient(180deg,#6b78e6,#4b57d1)!important;border:0!important;color:#fff!important;font-weight:850;border-radius:14px!important;box-shadow:0 4px 0 #3640a8,0 8px 16px #4b57d133!important;transition:transform .08s,box-shadow .12s,filter .12s}
+.big-next:hover,.btn.primary:hover{filter:brightness(1.06)}
+.big-next:active,.btn.primary:active,.actions .btn:active,.choice:active{transform:translateY(3px);box-shadow:0 1px 0 #3640a8!important}
+.actions .btn{border-radius:14px;font-weight:850;font-size:1.02rem;border:0!important;min-height:52px;transition:transform .08s,filter .12s}
+.hint-btn{background:linear-gradient(180deg,#fff3c4,#ffe28a)!important;color:#6b4f00!important;box-shadow:0 4px 0 #e0bb4a,0 8px 14px #e0bb4a33}
+.sol-btn{background:linear-gradient(180deg,#f1eaff,#ddd0fb)!important;color:#4d3794!important;box-shadow:0 4px 0 #b9a5e8,0 8px 14px #b9a5e833}
+.actions .btn:hover{filter:brightness(1.03)}
+#next{border:2px solid #cfd5e6;border-bottom-width:4px;border-radius:14px;font-weight:800;background:#fff}
+.choice{display:inline-flex;align-items:center;gap:10px;text-align:left;border:2px solid #dcdfee;border-bottom-width:4px;border-radius:16px;padding:9px 16px 9px 10px;min-height:56px;box-shadow:0 3px 8px #2634400a;transition:transform .12s,box-shadow .12s}
+.choice-box .choice{flex:1 1 calc(50% - 9px)}
+.choice:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 16px #26344014;border-color:#9aa4ee;background:#fff}
+.opt-letter{flex:none;width:30px;height:30px;border-radius:50%;background:#e8ebff;color:#4b57d1;display:grid;place-items:center;font-size:.85rem;font-weight:900;font-family:var(--font)}
+.choice.right{border-color:#4fa36a}
+.choice.right .opt-letter{background:#4fa36a;color:#fff}
+.choice.wrong{border-color:#d9776f}
+.choice.wrong .opt-letter{background:#d9776f;color:#fff}
+.choice.small{border-bottom-width:3px;padding:7px 14px;min-height:46px}
+.mode-switch button{border-width:2px;border-bottom-width:5px;border-radius:20px}
+.mode-switch button.active{border-color:var(--accent)}
+@media(max-width:680px){.featured{grid-template-columns:1fr;gap:10px}
+.feature{min-height:80px;padding:12px 14px;gap:12px}
+.f-ico{width:50px;height:50px;font-size:1.6rem}
+.feature b{font-size:1.15rem}
+.pick.unit{flex:0 0 78%;max-width:280px}
+.choice-box .choice{flex-basis:100%}
+.actions .btn{font-size:.85rem;min-height:58px}}
+.picker.units{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.pick.unit{grid-template-columns:40px 1fr;column-gap:9px;padding:11px 10px}
+.pick.unit .ico{width:40px;height:40px;font-size:1.25rem}
+.pick.unit b{font-size:.95rem}
+.howto{justify-content:center}
+input,select{font:inherit;color:inherit}
+summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #5476ce;outline-offset:3px}
+.story{margin:12px 0}
+.small,small{font-size:.87rem;color:var(--muted)}
+.directions{padding:12px 15px;background:#f5f7ff;border-radius:12px;margin:12px 0}
+.chart{margin:16px 0;border:1px solid #e0e5f1;border-radius:14px;background:#fcfdff;padding:8px;overflow-x:auto}
+.chart svg{width:100%;height:auto;display:block;min-width:290px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}
+.field{display:block;padding:12px;border:2px solid transparent;border-radius:12px;background:#f7f8fc}
+.field span{display:block;font-size:1.04rem;font-weight:700;margin-bottom:8px}
+.field input,.field select{width:100%;padding:12px;border:1px solid #cbd5e7;border-radius:10px;background:#fff}
+.field.good{border-color:#65ab86;background:#eaf8ef}
+.field.bad{border-color:#d85b6d;background:#fff0f2}
+.field small{display:block;margin-top:5px}
+.completed{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:15px;background:#f6faf8}
+.completed summary{font-weight:800;cursor:pointer}
+.completed li{padding:10px 0;border-bottom:1px solid #dce8e2}
+.completed li:last-child{border:0}
+.completed ol{padding-left:24px}
+.answer-line{color:#345884}
+.map{padding:15px;background:#eff3ff;border-radius:14px;margin:18px 0}
+.map summary{font-weight:800;cursor:pointer}
+.route{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.route span{padding:8px 12px;background:white;border:1px solid #d3dced;border-radius:9px}
+.formula{padding:12px;background:#f3f1fb;border-radius:12px;font:1.1rem/1.7 Cambria,Georgia,serif;margin:8px 0}
+.endo{background:#edf6df;padding:2px 5px;border-radius:4px}
+.exo{background:#ffe8e9;padding:2px 5px;border-radius:4px}
+.fraction{display:inline-flex;vertical-align:middle;flex-direction:column;text-align:center;margin:2px 6px}
+.fraction span:first-child{border-bottom:1px solid currentColor;padding:0 6px}
+.fraction span:last-child{padding:0 6px}
+.math{font-family:Cambria,Georgia,serif;font-size:1.07rem;overflow-wrap:anywhere}
+.confetti{position:fixed;top:-30px;pointer-events:none;z-index:5;animation:fall 4.3s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+.unit-chip{font-weight:800;color:#5765a5}
+.study-note{border-left:4px solid #8e9bd0;padding-left:12px}
+.chart-note{font-size:.82rem;text-align:center;color:var(--muted)}
+@media(max-width:580px){.chart{padding:3px}}
+.reaction-equation{margin:18px 0;padding:20px;border:1px solid #d9dfef;border-radius:15px;background:linear-gradient(120deg,#f0f5ff,#fff2df);font-size:clamp(1.1rem,2vw,1.45rem);line-height:1.9;overflow-wrap:anywhere}
+.energy-term{padding:3px 7px;background:#fff1c4;border-radius:6px;color:#855732}
+.reaction-arrow{font-size:1.3em;color:#5369ae}
 .challenge-notice{margin:20px 0 12px;padding:18px 20px;background:linear-gradient(120deg,#fff0d4,#ffe4dc);border:2px solid #d69348;border-left:7px solid #cd7b30;border-radius:15px;color:#663a1b}
-.challenge-notice strong{display:block;font-size:clamp(1.2rem,2vw,1.45rem);line-height:1.3;margin-bottom:7px}.challenge-notice span{display:block;font-size:1rem;line-height:1.5}.challenge-notice[hidden]{display:none}
-.chem1a{grid-template-columns:repeat(3,minmax(0,1fr))}.cancel-term{color:#a54747;text-decoration-thickness:2px}.yield{display:inline-block;margin:0 12px}#reference1a table{width:100%}@media(max-width:580px){.chem1a{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.lookup-panel{padding:16px;margin:18px 0;background:#f2f5ff;border:2px solid #c4d0ef;border-radius:16px}.lookup-panel[hidden]{display:none}
-
-.course button{font-size:clamp(1.4rem,2.6vw,1.85rem);font-weight:800;min-height:80px;padding:22px 18px}
-.mode-finale{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:85%;justify-self:center}
-.modes .mode-finale .mode{width:100%;min-height:152px;padding:22px;align-items:center;justify-content:center;text-align:center}
-.modes .mode-finale .mode[data-mode="mixed"]{grid-column:auto;width:100%;min-height:152px}
-.mode-finale .mode b{font-size:clamp(1.35rem,2vw,1.6rem)}.mode-finale .mode small{font-size:1.04rem}.mode-finale [data-mode="advanced"]{background:#fff0da}
-.quest-panel{margin-top:20px;padding:22px;border-radius:22px;background:linear-gradient(115deg,#edf0ff,#e7f5f0);border:1px solid #cbd9e7}.quest-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}.quest-heading h2{margin:4px 0 12px}.quest-heading>strong{font-size:1.35rem;color:#4359a0}.xp-track,.step-progress{height:13px;border-radius:20px;background:#dce3f0;overflow:hidden}.xp-track>div,.step-progress>div{height:100%;background:linear-gradient(90deg,#6d80d0,#59ad91);border-radius:20px;transition:width .35s ease}.step-progress{height:9px;margin:6px 0 15px}.quest-badges{display:flex;gap:10px;flex-wrap:wrap}.quest-badge{padding:10px 13px;border-radius:13px;border:1px dashed #bac6d8;background:#f5f7fb;color:#64738a;font-weight:700}.quest-badge small{display:block;font-size:.78rem;margin-top:4px}.quest-badge.earned{background:#fff4d6;border:1px solid #d3ab58;color:#76541e}
-@media(max-width:580px){.course button{font-size:1.45rem;padding:18px 10px}.mode-finale{width:100%;gap:10px}.modes .mode-finale .mode{padding:15px 10px}.mode-finale .mode b{font-size:1.22rem}.mode-finale .mode small{font-size:.94rem}.quest-panel{padding:16px}}
-
-.hess-board{margin:20px 0;padding:18px;border-radius:20px;background:#f3f5ff;border:2px solid #c6d1ef}.hess-board[hidden]{display:none}.hess-target{padding:22px;border:3px solid #76ac96;border-radius:17px;background:#e8f6ee;text-align:center;font:1.5rem/1.5 Cambria,Georgia,serif}.hess-target small{display:block;font:800 1rem/1.4 Helvetica,Arial,sans-serif;color:#376a54;margin-bottom:9px}.hess-headings,.hess-row{display:grid;grid-template-columns:90px minmax(0,1fr) 140px;gap:12px;align-items:center}.hess-headings{margin:20px 0 12px;text-align:center;font-size:.87rem}.hess-row{margin:14px 0}.hess-mult{text-align:center;font-weight:800}.hess-mult span{display:block}.hess-mult input{width:100%;min-height:52px;border:2px solid #9baadd;border-radius:11px;background:white;text-align:center;padding:8px}.hess-mult input[aria-invalid="true"]{border-color:#d36a78;background:#fff0f1}.hess-card{padding:22px 16px;min-height:132px;width:100%;background:white;border:2px solid #a6b5dd;box-shadow:0 5px 0 #b6c3e540;font:1.28rem/1.6 Cambria,Georgia,serif;overflow-wrap:anywhere}.hess-card small{display:block;color:#50679c;font:750 .9rem/1.4 Helvetica,Arial,sans-serif;margin-bottom:10px}.hess-card>span{display:block;font:500 .8rem/1.4 Helvetica,Arial,sans-serif;color:#637087;margin-top:10px}.hess-card[aria-pressed="true"]{background:#fff3e3;border-color:#d3a06a}.hess-card:disabled{opacity:1;cursor:default}.hess-dh{text-align:right;padding:16px 8px;border-radius:12px;background:#e9eefb;font-size:1rem}.hess-dh strong{font-size:1.25rem;display:inline-block;overflow-wrap:anywhere}.hess-sum{padding:16px;border-radius:12px;background:white;font:1.14rem/1.9 Cambria,Georgia,serif}.hess-canceled{color:#a35454;text-decoration-thickness:2px;background:#ffe7e740}.hess-net{padding:18px;border:2px dashed #99b9a7;border-radius:13px;margin-top:12px;font:1.3rem/1.7 Cambria,Georgia,serif}.hess-net small{display:block}.hess-reset{margin:12px 0;background:#eee8fa}.hess-invalid{padding:14px;background:#fff0f1;color:#873345;border-radius:12px}
-@media(max-width:650px){.hess-board{padding:12px}.hess-headings,.hess-row{grid-template-columns:64px minmax(0,1fr) 92px;gap:7px}.hess-card{padding:15px 9px;font-size:1.1rem}.hess-dh{padding:12px 5px;font-size:.85rem}.hess-dh strong{font-size:1.02rem}.hess-target{padding:16px;font-size:1.25rem}.hess-headings{font-size:.72rem}}
-
-.hess-card,.hess-target,.hess-net{min-width:0;overflow-wrap:normal}.hess-card>div,.hess-target>div,.hess-net>div{width:100%;min-width:0;white-space:nowrap;word-break:normal;overflow-wrap:normal;font-size:clamp(1rem,1.7vw,1.5rem);line-height:1.6}.hess-card .yield,.hess-target .yield,.hess-net .yield{margin:0 .3em}.hess-card .fraction,.hess-target .fraction,.hess-net .fraction{margin:.1em .15em}.hess-card .fraction span,.hess-target .fraction span,.hess-net .fraction span{padding:0 .15em}
-@media(max-width:650px){.hess-headings{display:none}.hess-row{grid-template-columns:72px minmax(0,1fr);gap:10px}.hess-mult{grid-column:1;grid-row:1}.hess-dh{grid-column:2;grid-row:1;text-align:right}.hess-card{grid-column:1/-1;grid-row:2;padding:18px 10px}.hess-target-row>div:first-child{display:none}.hess-target{grid-column:1/-1;grid-row:2}.hess-target-row .hess-dh{grid-column:1/-1;grid-row:1}.hess-dh strong{font-size:1.2rem}}
-
-.cancel-equation{display:grid;grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr);gap:8px;align-items:center;padding:16px 10px;background:white;border-radius:14px}.cancel-side{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.cancel-species{font:1.15rem/1.6 Cambria,Georgia,serif;padding:9px 10px;border:2px solid #bdc9e7;background:#eff3ff}.cancel-species:disabled{opacity:1;background:#f7f8fc;cursor:default}.cancel-species.selected{border:3px solid #546fc6;background:#dfe9ff;box-shadow:0 0 0 3px #afc1ed55}.cancel-piece{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}.canceled-chip{padding:9px;background:#ffece9;border-radius:10px;font:1.1rem/1.6 Cambria,Georgia,serif}.cancel-arrow{text-align:center;font-size:1.7rem}.cancel-controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.cancel-plus{font-size:1.2rem;color:#637087}
-@media(max-width:500px){.cancel-species{font-size:1rem;padding:7px}.cancel-equation{padding:12px 6px;gap:4px;grid-template-columns:minmax(0,1fr) 25px minmax(0,1fr)}}
-.hess-nearby-controls{padding:18px;margin:18px 0;background:#e7edf9;border:2px solid #aabce1;border-radius:15px}.hess-nearby-controls p{margin:0 0 12px}.hess-nearby-controls .actions{grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)}.hess-nearby-controls .actions button{min-width:0;font-size:1rem;padding:13px 10px}@media(max-width:580px){.hess-nearby-controls{padding:13px}.hess-nearby-controls .actions{grid-template-columns:repeat(2,minmax(0,1fr))}.hess-nearby-controls .primary{grid-column:1/-1}}
-
-.coefficient-equation{grid-column:1/-1;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;padding:20px 12px;border:2px solid #c5d2e9;border-radius:17px;background:#f4f7ff}.coefficient-term.field{display:inline-flex;align-items:center;gap:9px;padding:7px;background:white;white-space:nowrap;min-width:0}.coefficient-term.field input{width:62px;min-width:62px;min-height:52px;text-align:center;padding:9px;font-size:1.25rem;border:2px solid #a5b8df}.coefficient-term.field span{display:inline;margin:0;font:1.4rem/1.5 Cambria,Georgia,serif;white-space:nowrap}.coefficient-plus{font-size:1.3rem}.coefficient-arrow{font-size:1.8rem;margin:0 5px}.coefficient-term.field.bad{border-color:#d36a78;background:#fff0f1}.coefficient-term.field.good{border-color:#64ad86;background:#edf9f0}
-@media(max-width:580px){.coefficient-equation{gap:7px;padding:14px 8px}.coefficient-term.field{gap:6px;padding:5px}.coefficient-term.field input{width:48px;min-width:48px;padding:6px}.coefficient-term.field span{font-size:1.18rem}}
-.hero .thermo-icon{width:clamp(92px,11vw,145px);height:auto;aspect-ratio:1;object-fit:contain;border-radius:22px;flex:none}@media(max-width:580px){.hero .thermo-icon{width:84px;border-radius:16px}}
-#thermoProgress{margin:24px 0;padding:20px 24px;border:1px solid #dbe2ef;border-radius:20px;background:#fff}#thermoProgress>summary{font-weight:800;font-size:1.12rem;color:#425f83;cursor:pointer}#thermoProgress[open]>summary{margin-bottom:20px}.thermo-quiz-mode{grid-column:1/-1;width:min(100%,570px);justify-self:center;text-align:center!important;min-height:100px!important;background:#f0e9ff!important}.thermo-quiz-report{padding:22px;margin-top:22px;border:2px solid #9cbea9;border-radius:20px;background:#f1f8f3}.thermo-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:15px;margin:18px 0}.thermo-review-card{background:white;border:1px solid #d6e4dc;padding:17px;border-radius:15px}.thermo-review-card h3{margin:0 0 10px}.thermo-review-card p{font-size:.96rem}.thermo-review-card button{width:100%}.thermo-quiz-report[hidden]{display:none!important}#modes.modes{display:block;margin:22px 0 26px}.mode-section-label{font-size:1.04rem;font-weight:800;color:#4d6481;margin:0 0 12px}.skill-mode-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}.chem1a .skill-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.mode-divider{display:flex;align-items:center;gap:15px;margin:24px 0 17px;color:#66758a;font-size:.9rem;font-weight:750;text-align:center}.mode-divider:before,.mode-divider:after{content:'';height:1px;background:#cbd7e5;flex:1}.review-mode-grid{display:grid;gap:14px;max-width:1060px;margin:0 auto}.three-review-modes{grid-template-columns:repeat(3,minmax(0,1fr))}.two-review-modes{grid-template-columns:repeat(2,minmax(0,1fr));max-width:800px}.review-mode-grid .mode{width:100%;min-height:110px;text-align:center;padding:17px 14px}.review-mode-grid .mode b{font-size:clamp(1.05rem,1.6vw,1.35rem)}.review-mode-grid .mode small{font-size:.88rem;line-height:1.45}.review-mode-grid .mode[data-mode="mixed"]{background:#e9edff}.review-mode-grid .mode[data-mode="advanced"]{background:#fff0dd}.review-mode-grid .mode[data-mode="quiz"]{background:#eee8fa}.skill-mode-grid .mode{min-height:125px}@media(max-width:1100px){.skill-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:580px){.skill-mode-grid,.chem1a .skill-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.review-mode-grid{gap:8px}.review-mode-grid .mode{padding:13px 8px;min-height:125px}.review-mode-grid .mode b{font-size:1rem;overflow-wrap:normal}.review-mode-grid .mode small{font-size:.76rem}.mode-divider{font-size:.8rem;gap:9px}.skill-mode-grid .mode{min-height:125px}}.xp-bonus-layer{position:fixed;inset:0;z-index:120;pointer-events:none;overflow:hidden}.xp-bonus-banner{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);width:min(340px,88vw);padding:19px 25px;text-align:center;background:linear-gradient(125deg,#fff7cc,#ffe2c9);border:3px solid #e4b95f;border-radius:22px;box-shadow:0 9px 35px #64503035;color:#70501e;animation:xp-bonus-pop .5s ease-out}.xp-bonus-banner strong{display:block;font-size:1.65rem}.xp-bonus-banner span{display:block;margin-top:5px;font-weight:750;font-size:1.08rem}.xp-bonus-piece{position:absolute;animation-delay:var(--delay);animation-fill-mode:both}.bonus-balloon{bottom:-70px;animation-name:xp-balloon-rise;animation-duration:4.8s;animation-timing-function:ease-out}.bonus-firework{height:10px;width:10px;border-radius:50%;animation-name:xp-firework-burst;animation-duration:2.5s;animation-iteration-count:2;box-shadow:0 0 6px #e4bf6a}@keyframes xp-bonus-pop{from{opacity:0;transform:translateX(-50%) scale(.7)}to{opacity:1;transform:translateX(-50%) scale(1)}}@keyframes xp-balloon-rise{from{transform:translate(0,0);opacity:0}12%{opacity:1}to{transform:translate(var(--drift),-120vh);opacity:0}}@keyframes xp-firework-burst{0%{transform:translate(0,0) scale(.2);opacity:0}10%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}@media(prefers-reduced-motion:reduce){.xp-bonus-banner{animation:none}.xp-bonus-piece{display:none}}/* Override the original full-row Mixed Practice rule inside the new review row. */
-#modes .review-mode-grid>.mode,#modes .review-mode-grid>.mode[data-mode="mixed"],#modes .review-mode-grid>.mode[data-mode="advanced"],#modes .review-mode-grid>.mode[data-mode="quiz"]{grid-column:auto;grid-row:auto;justify-self:stretch;width:100%;min-width:0;min-height:120px;padding:18px 14px;align-items:center;justify-content:center;text-align:center}
-#modes .review-mode-grid{display:grid;gap:15px;padding:18px;background:#eef3fa;border:1px solid #cbd9e9;border-radius:20px;max-width:1100px;margin:0 auto}
-#modes .three-review-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
-#modes .two-review-modes{grid-template-columns:repeat(2,minmax(0,1fr));max-width:820px}
-#modes .mode-divider{display:block;margin:25px 0 15px;text-align:center;color:#48617e;font-weight:800;font-size:1rem}
-#modes .mode-divider:before,#modes .mode-divider:after{display:none}
-#modes .mode-separator{display:block;width:100%;height:0;border:0;border-top:3px solid #b1c4dc;margin:0 0 16px}
-#modes .mode-divider>span{display:inline-block;padding:5px 16px;background:#e7eef8;border-radius:30px}
-@media(max-width:580px){#modes .review-mode-grid{padding:10px;gap:8px}#modes .review-mode-grid>.mode,#modes .review-mode-grid>.mode[data-mode="mixed"],#modes .review-mode-grid>.mode[data-mode="advanced"],#modes .review-mode-grid>.mode[data-mode="quiz"]{padding:13px 7px;min-height:130px}#modes .review-mode-grid>.mode b{font-size:.96rem;line-height:1.3}#modes .review-mode-grid>.mode small{font-size:.74rem}#modes .mode-divider{font-size:.9rem}}
-.play-guide{padding:clamp(19px,2.5vw,29px);background:linear-gradient(125deg,#fff,#f5f8ff);border:1px solid #d5e1ee;border-radius:24px}.guide-kicker{font-size:.77rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#617aa1}.play-guide-heading h2{font-size:clamp(1.4rem,2.3vw,1.9rem);color:#355474;margin:7px 0 8px}.play-guide-heading>p{color:#64768c;margin-bottom:20px}.quick-start{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:0!important;margin:0!important}.quick-start>li{display:flex;gap:12px;align-items:flex-start;padding:18px!important;background:white;border:1px solid #dce5ef;border-radius:17px}.guide-number{display:grid;place-items:center;flex:0 0 32px;height:32px;background:#e4edff;color:#476894;border-radius:50%;font-weight:850}.quick-start strong{font-size:1.05rem;color:#385674}.quick-start p{font-size:.96rem;line-height:1.6;margin:7px 0 0}.guide-help-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:18px 0}.guide-help-row>div{padding:16px 18px;background:#edf4f7;border-radius:15px}.guide-help-row>div:nth-child(2){background:#f0edfa}.guide-help-row>div:nth-child(3){background:#fff5df}.guide-help-row strong{color:#425e79}.guide-help-row p{font-size:.94rem;line-height:1.6;margin:7px 0 0}.guide-extra{border-top:1px solid #d9e3ee;padding:14px 0 0}.guide-extra summary{font-weight:800;color:#486481;cursor:pointer}.guide-extra ul{padding-left:24px;font-size:.95rem}.guide-extra li{padding:5px 0}.guide-xp-note{font-size:.9rem;line-height:1.6;color:#61718a;margin:15px 0 0}@media(max-width:1000px){.quick-start,.guide-help-row{grid-template-columns:1fr}.guide-help-row{gap:10px}.quick-start>li{padding:16px!important}}.question-data{margin:19px 0;padding:16px 18px;background:#f5f9ff;border:1px solid #cbdced;border-radius:16px;overflow-x:auto}.question-data table{width:100%;border-collapse:collapse;font-size:clamp(.96rem,1.2vw,1.08rem)}.question-data caption{text-align:left;font-size:1.12rem;font-weight:800;color:#395a7a;padding:0 0 12px}.question-data th,.question-data td{padding:11px 12px;text-align:left;border-bottom:1px solid #dce6f1}.question-data thead th{background:#e5eef9;color:#3f6082;font-size:.9rem}.question-data tbody th{font-weight:600}.question-data tbody td:nth-child(2){font-variant-numeric:tabular-nums;font-weight:750;white-space:nowrap}.question-data tbody td:last-child{white-space:nowrap}.question-data tbody tr:last-child>*{border-bottom:0}.question-data p{margin:13px 0 0;line-height:1.5}.question-data[hidden]{display:none!important}@media(max-width:580px){.question-data{padding:13px 9px}.question-data th,.question-data td{padding:10px 7px;font-size:.9rem}}.hint-box ol{padding-left:1.4em;margin:.65em 0}.hint-box li{margin:.45em 0;line-height:1.55}.hint-box strong{font-size:1.08rem}
-.field .unit-required{display:block;padding:11px 13px;margin:5px 0;background:#fff2cd;border:2px solid #dcae4a;border-radius:10px;color:#664900;font-weight:750;line-height:1.45;font-size:1rem}.field .unit-required strong{font-size:1.1em}.field input::placeholder{color:#77879a;opacity:1}
-
-.collapsible-guide>summary,.topic-directions>summary{font-weight:800;font-size:1.08rem;cursor:pointer;color:#40567c;line-height:1.5}.collapsible-guide>summary small{font-weight:500;display:inline-block;margin-left:10px}.collapsible-guide[open]>summary{margin-bottom:18px}.topic-directions{margin:12px 0;padding:12px 15px;border:1px solid #d9e2f1;background:#f5f7ff;border-radius:12px}.topic-directions .directions{padding:4px 0 0;margin:9px 0 0}.field .answer-input-row{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;margin:0}.field.compact-answer .answer-input-row input{width:180px;max-width:100%;min-width:0;flex:0 1 180px;padding:11px 12px}.field .answer-unit{font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:850;color:#304b74;line-height:1.3;overflow-wrap:anywhere;max-width:48%;padding:5px 7px;border-radius:8px;background:#eaf0fc}.field .typed-unit-note{font-weight:750;color:#795714;background:#fff4d8;padding:8px 10px;border-radius:8px;margin-top:10px;line-height:1.5}.collapsible-guide:not([open]){padding-top:15px;padding-bottom:15px}@media(max-width:520px){.field.compact-answer .answer-input-row input{width:155px;flex-basis:155px}.field .answer-unit{font-size:1.1rem}.collapsible-guide>summary small{display:block;margin:4px 0 0}.field .answer-input-row{gap:9px}}
-
-
-/* v30 compact layout: question visible on the first screen, less scrolling on desktop and phone */
-html body .app{padding-top:14px}
-html body .hero{padding:12px 20px;gap:16px;border-radius:22px}
-html body .hero .thermo-icon{width:60px;border-radius:14px}
-html body .hero h1{font-size:clamp(1.4rem,2.4vw,2rem);margin:0;line-height:1.1}
-html body .hero .eyebrow{margin:0 0 2px;font-size:.7rem}
-html body .hero p{margin:3px 0 0;font-size:.95rem;line-height:1.35}
-html body .course{margin:10px 0;gap:10px}
-html body .course button{padding:8px 12px;font-size:1.05rem;min-height:46px}
-html body .mode-picker{margin:10px 0}
-html body .mode-picker>summary{display:none}
-html body .modes{margin:0;display:block}
-html body .modes .mode-section-label{margin:2px 2px 6px;font-size:.9rem}
-html body .skill-mode-grid,html body .review-mode-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))!important;gap:8px!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
-html body .review-mode-grid{margin-top:8px!important}
-html body .mode-divider{display:none!important}
-html body .skill-mode-grid .mode,html body .review-mode-grid .mode,html body .mode{min-height:0!important;padding:10px 12px!important;gap:0;justify-content:center;width:auto!important;grid-column:auto!important;justify-self:stretch!important;text-align:left;box-shadow:0 3px 0 #26364a14}
-html body .review-mode-grid .mode{text-align:center}
-html body .mode.active{padding-right:12px!important}
-html body .mode.active b:after{content:' ✓'!important;font-size:1em!important}
-html body .mode small{display:none}
-html body .mode b,html body .review-mode-grid .mode b{font-size:1rem;line-height:1.2}
-html body .practice-top{grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
-html body .stats{gap:8px}
-html body .stat{padding:5px 10px}
-html body .stat b{font-size:1.25rem}
-html body .new{min-height:50px;padding:8px 18px;white-space:nowrap}
-@media(min-width:900px){html body .app{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);column-gap:12px;align-content:start}html body .app>*{grid-column:1/-1}html body .app>.hero{grid-column:1;grid-row:1}html body .app>.course{grid-column:2;grid-row:1;align-self:stretch;margin:0;display:grid;grid-template-rows:1fr 1fr;gap:8px}html body .app>.course button{min-height:0;padding:6px 12px}html body .app>#playGuide{margin-top:12px}}
-html body .layout{align-items:start}
-html body .layout>aside{position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto;overscroll-behavior:contain}
-html body #practice .actions{position:sticky;bottom:0;z-index:6;margin:14px -4px 0;padding:10px 4px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,#fff0,#fff 22%)}
-html body #practice{scroll-margin-top:8px}
-@media(max-width:899px){
- html body .app{padding:10px}
- html body .hero{padding:10px 12px;gap:10px;border-radius:18px}
- html body .hero .thermo-icon{width:46px}
- html body .hero h1{font-size:1.3rem}
- html body .hero .eyebrow,html body .hero p{display:none}
- html body .course{margin:8px 0;gap:8px}
- html body .course button{min-height:44px;font-size:.98rem;padding:6px}
- html body .mode-picker{border:2px solid #cfd9ee;border-radius:14px;background:#fff}
- html body .mode-picker>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:50px;padding:6px 14px;font-weight:700;cursor:pointer;list-style:none}
- html body .mode-picker>summary::-webkit-details-marker{display:none}
- html body .mode-picker>summary:after{content:"▾";font-size:1.1rem}
- html body .mode-picker[open]>summary:after{content:"▴"}
- html body .mode-picker>.modes{padding:8px}
- html body .modes .mode-section-label,html body .mode-divider{display:none}
- html body .skill-mode-grid,html body .review-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- html body .review-mode-grid{margin-top:8px}
- html body .skill-mode-grid .mode,html body .review-mode-grid .mode,html body .mode{min-height:52px!important;padding:7px 9px!important}
- html body .mode b,html body .review-mode-grid .mode b{font-size:.9rem}
- html body .practice-top{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
- html body .stat{padding:4px 2px}
- html body .stat b{font-size:1.05rem}
- html body .stat small{font-size:.66rem}
- html body .new{min-height:48px;font-size:.92rem;padding:6px 8px;white-space:normal}
- html body .layout>aside{position:static;max-height:none;overflow:visible}
- html body #practice .actions{gap:6px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}
- html body #practice .actions button{min-height:48px;font-size:.82rem;line-height:1.15;padding:6px 4px}
+.challenge-notice strong{display:block;font-size:clamp(1.2rem,2vw,1.45rem);line-height:1.3;margin-bottom:7px}
+.challenge-notice span{display:block;font-size:1rem;line-height:1.5}
+.challenge-notice[hidden]{display:none}
+.cancel-term{color:#a54747;text-decoration-thickness:2px}
+.yield{display:inline-block;margin:0 12px}
+#reference1a table{width:100%}
+.lookup-panel{padding:16px;margin:18px 0;background:#f2f5ff;border:2px solid #c4d0ef;border-radius:16px}
+.lookup-panel[hidden]{display:none}
+.xp-track,.step-progress{height:13px;border-radius:20px;background:#dce3f0;overflow:hidden}
+.xp-track>div,.step-progress>div{height:100%;background:linear-gradient(90deg,#6d80d0,#59ad91);border-radius:20px;transition:width .35s ease}
+.step-progress{height:9px;margin:6px 0 15px}
+.hess-board{margin:20px 0;padding:18px;border-radius:20px;background:#f3f5ff;border:2px solid #c6d1ef}
+.hess-board[hidden]{display:none}
+.hess-target{padding:22px;border:3px solid #76ac96;border-radius:17px;background:#e8f6ee;text-align:center;font:1.5rem/1.5 Cambria,Georgia,serif}
+.hess-target small{display:block;font:800 1rem/1.4 Helvetica,Arial,sans-serif;color:#376a54;margin-bottom:9px}
+.hess-headings,.hess-row{display:grid;grid-template-columns:90px minmax(0,1fr) 140px;gap:12px;align-items:center}
+.hess-headings{margin:20px 0 12px;text-align:center;font-size:.87rem}
+.hess-row{margin:14px 0}
+.hess-mult{text-align:center;font-weight:800}
+.hess-mult span{display:block}
+.hess-mult input{width:100%;min-height:52px;border:2px solid #9baadd;border-radius:11px;background:white;text-align:center;padding:8px}
+.hess-mult input[aria-invalid="true"]{border-color:#d36a78;background:#fff0f1}
+.hess-card{padding:22px 16px;min-height:132px;width:100%;background:white;border:2px solid #a6b5dd;box-shadow:0 5px 0 #b6c3e540;font:1.28rem/1.6 Cambria,Georgia,serif;overflow-wrap:anywhere}
+.hess-card small{display:block;color:#50679c;font:750 .9rem/1.4 Helvetica,Arial,sans-serif;margin-bottom:10px}
+.hess-card>span{display:block;font:500 .8rem/1.4 Helvetica,Arial,sans-serif;color:#637087;margin-top:10px}
+.hess-card[aria-pressed="true"]{background:#fff3e3;border-color:#d3a06a}
+.hess-card:disabled{opacity:1;cursor:default}
+.hess-dh{text-align:right;padding:16px 8px;border-radius:12px;background:#e9eefb;font-size:1rem}
+.hess-dh strong{font-size:1.25rem;display:inline-block;overflow-wrap:anywhere}
+.hess-sum{padding:16px;border-radius:12px;background:white;font:1.14rem/1.9 Cambria,Georgia,serif}
+.hess-canceled{color:#a35454;text-decoration-thickness:2px;background:#ffe7e740}
+.hess-net{padding:18px;border:2px dashed #99b9a7;border-radius:13px;margin-top:12px;font:1.3rem/1.7 Cambria,Georgia,serif}
+.hess-net small{display:block}
+.hess-reset{margin:12px 0;background:#eee8fa}
+.hess-invalid{padding:14px;background:#fff0f1;color:#873345;border-radius:12px}
+@media(max-width:650px){.hess-board{padding:12px}
+.hess-headings,.hess-row{grid-template-columns:64px minmax(0,1fr) 92px;gap:7px}
+.hess-card{padding:15px 9px;font-size:1.1rem}
+.hess-dh{padding:12px 5px;font-size:.85rem}
+.hess-dh strong{font-size:1.02rem}
+.hess-target{padding:16px;font-size:1.25rem}
+.hess-headings{font-size:.72rem}}
+.hess-card,.hess-target,.hess-net{min-width:0;overflow-wrap:normal}
+.hess-card>div,.hess-target>div,.hess-net>div{width:100%;min-width:0;white-space:nowrap;word-break:normal;overflow-wrap:normal;font-size:clamp(1rem,1.7vw,1.5rem);line-height:1.6}
+.hess-card .yield,.hess-target .yield,.hess-net .yield{margin:0 .3em}
+.hess-card .fraction,.hess-target .fraction,.hess-net .fraction{margin:.1em .15em}
+.hess-card .fraction span,.hess-target .fraction span,.hess-net .fraction span{padding:0 .15em}
+@media(max-width:650px){.hess-headings{display:none}
+.hess-row{grid-template-columns:72px minmax(0,1fr);gap:10px}
+.hess-mult{grid-column:1;grid-row:1}
+.hess-dh{grid-column:2;grid-row:1;text-align:right}
+.hess-card{grid-column:1/-1;grid-row:2;padding:18px 10px}
+.hess-target-row>div:first-child{display:none}
+.hess-target{grid-column:1/-1;grid-row:2}
+.hess-target-row .hess-dh{grid-column:1/-1;grid-row:1}
+.hess-dh strong{font-size:1.2rem}}
+.cancel-equation{display:grid;grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr);gap:8px;align-items:center;padding:16px 10px;background:white;border-radius:14px}
+.cancel-side{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.cancel-species{font:1.15rem/1.6 Cambria,Georgia,serif;padding:9px 10px;border:2px solid #bdc9e7;background:#eff3ff}
+.cancel-species:disabled{opacity:1;background:#f7f8fc;cursor:default}
+.cancel-species.selected{border:3px solid #546fc6;background:#dfe9ff;box-shadow:0 0 0 3px #afc1ed55}
+.cancel-piece{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.canceled-chip{padding:9px;background:#ffece9;border-radius:10px;font:1.1rem/1.6 Cambria,Georgia,serif}
+.cancel-arrow{text-align:center;font-size:1.7rem}
+.cancel-controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.cancel-plus{font-size:1.2rem;color:#637087}
+@media(max-width:500px){.cancel-species{font-size:1rem;padding:7px}
+.cancel-equation{padding:12px 6px;gap:4px;grid-template-columns:minmax(0,1fr) 25px minmax(0,1fr)}}
+.hess-nearby-controls{padding:18px;margin:18px 0;background:#e7edf9;border:2px solid #aabce1;border-radius:15px}
+.hess-nearby-controls p{margin:0 0 12px}
+.hess-nearby-controls .actions{grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)}
+.hess-nearby-controls .actions button{min-width:0;font-size:1rem;padding:13px 10px}
+@media(max-width:580px){.hess-nearby-controls{padding:13px}
+.hess-nearby-controls .actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hess-nearby-controls .primary{grid-column:1/-1}}
+.coefficient-equation{grid-column:1/-1;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;padding:20px 12px;border:2px solid #c5d2e9;border-radius:17px;background:#f4f7ff}
+.coefficient-term.field{display:inline-flex;align-items:center;gap:9px;padding:7px;background:white;white-space:nowrap;min-width:0}
+.coefficient-term.field input{width:62px;min-width:62px;min-height:52px;text-align:center;padding:9px;font-size:1.25rem;border:2px solid #a5b8df}
+.coefficient-term.field span{display:inline;margin:0;font:1.4rem/1.5 Cambria,Georgia,serif;white-space:nowrap}
+.coefficient-plus{font-size:1.3rem}
+.coefficient-arrow{font-size:1.8rem;margin:0 5px}
+.coefficient-term.field.bad{border-color:#d36a78;background:#fff0f1}
+.coefficient-term.field.good{border-color:#64ad86;background:#edf9f0}
+@media(max-width:580px){.coefficient-equation{gap:7px;padding:14px 8px}
+.coefficient-term.field{gap:6px;padding:5px}
+.coefficient-term.field input{width:48px;min-width:48px;padding:6px}
+.coefficient-term.field span{font-size:1.18rem}}
+.thermo-quiz-report{padding:22px;margin-top:22px;border:2px solid #9cbea9;border-radius:20px;background:#f1f8f3}
+.thermo-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:15px;margin:18px 0}
+.thermo-review-card{background:white;border:1px solid #d6e4dc;padding:17px;border-radius:15px}
+.thermo-review-card h3{margin:0 0 10px}
+.thermo-review-card p{font-size:.96rem}
+.thermo-review-card button{width:100%}
+.thermo-quiz-report[hidden]{display:none!important}
+.three-review-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.two-review-modes{grid-template-columns:repeat(2,minmax(0,1fr));max-width:800px}
+.xp-bonus-layer{position:fixed;inset:0;z-index:120;pointer-events:none;overflow:hidden}
+.xp-bonus-banner{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);width:min(340px,88vw);padding:19px 25px;text-align:center;background:linear-gradient(125deg,#fff7cc,#ffe2c9);border:3px solid #e4b95f;border-radius:22px;box-shadow:0 9px 35px #64503035;color:#70501e;animation:xp-bonus-pop .5s ease-out}
+.xp-bonus-banner strong{display:block;font-size:1.65rem}
+.xp-bonus-banner span{display:block;margin-top:5px;font-weight:750;font-size:1.08rem}
+.xp-bonus-piece{position:absolute;animation-delay:var(--delay);animation-fill-mode:both}
+.bonus-balloon{bottom:-70px;animation-name:xp-balloon-rise;animation-duration:4.8s;animation-timing-function:ease-out}
+.bonus-firework{height:10px;width:10px;border-radius:50%;animation-name:xp-firework-burst;animation-duration:2.5s;animation-iteration-count:2;box-shadow:0 0 6px #e4bf6a}
+@keyframes xp-bonus-pop{from{opacity:0;transform:translateX(-50%) scale(.7)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes xp-balloon-rise{from{transform:translate(0,0);opacity:0}12%{opacity:1}to{transform:translate(var(--drift),-120vh);opacity:0}}
+@keyframes xp-firework-burst{0%{transform:translate(0,0) scale(.2);opacity:0}10%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
+@media(prefers-reduced-motion:reduce){.xp-bonus-banner{animation:none}
+.xp-bonus-piece{display:none}}
+.question-data{margin:19px 0;padding:16px 18px;background:#f5f9ff;border:1px solid #cbdced;border-radius:16px;overflow-x:auto}
+.question-data table{width:100%;border-collapse:collapse;font-size:clamp(.96rem,1.2vw,1.08rem)}
+.question-data caption{text-align:left;font-size:1.12rem;font-weight:800;color:#395a7a;padding:0 0 12px}
+.question-data th,.question-data td{padding:11px 12px;text-align:left;border-bottom:1px solid #dce6f1}
+.question-data thead th{background:#e5eef9;color:#3f6082;font-size:.9rem}
+.question-data tbody th{font-weight:600}
+.question-data tbody td:nth-child(2){font-variant-numeric:tabular-nums;font-weight:750;white-space:nowrap}
+.question-data tbody td:last-child{white-space:nowrap}
+.question-data tbody tr:last-child>*{border-bottom:0}
+.question-data p{margin:13px 0 0;line-height:1.5}
+.question-data[hidden]{display:none!important}
+@media(max-width:580px){.question-data{padding:13px 9px}
+.question-data th,.question-data td{padding:10px 7px;font-size:.9rem}}
+.hint-box ol{padding-left:1.4em;margin:.65em 0}
+.hint-box li{margin:.45em 0;line-height:1.55}
+.hint-box strong{font-size:1.08rem}
+.field .unit-required{display:block;padding:11px 13px;margin:5px 0;background:#fff2cd;border:2px solid #dcae4a;border-radius:10px;color:#664900;font-weight:750;line-height:1.45;font-size:1rem}
+.field .unit-required strong{font-size:1.1em}
+.field input::placeholder{color:#77879a;opacity:1}
+.topic-directions>summary{font-weight:800;font-size:1.08rem;cursor:pointer;color:#40567c;line-height:1.5}
+.topic-directions{margin:12px 0;padding:12px 15px;border:1px solid #d9e2f1;background:#f5f7ff;border-radius:12px}
+.topic-directions .directions{padding:4px 0 0;margin:9px 0 0}
+.field .answer-input-row{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;margin:0}
+.field.compact-answer .answer-input-row input{width:180px;max-width:100%;min-width:0;flex:0 1 180px;padding:11px 12px}
+.field .answer-unit{font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:850;color:#304b74;line-height:1.3;overflow-wrap:anywhere;max-width:48%;padding:5px 7px;border-radius:8px;background:#eaf0fc}
+.field .typed-unit-note{font-weight:750;color:#795714;background:#fff4d8;padding:8px 10px;border-radius:8px;margin-top:10px;line-height:1.5}
+@media(max-width:520px){.field.compact-answer .answer-input-row input{width:155px;flex-basis:155px}
+.field .answer-unit{font-size:1.1rem}
+.field .answer-input-row{gap:9px}}
+/* ---------- v31: thermochemistry on the Study Games look ---------- */
+button{cursor:pointer;border:1px solid var(--line2);border-radius:12px;background:#fff;padding:10px 15px;font-weight:650;line-height:1.35}
+button:disabled{cursor:not-allowed}
+select{font:inherit;color:inherit}
+a{color:var(--accent-d)}
+.intro h1 .t1{color:#e0675a}.intro h1 .t2{background:linear-gradient(90deg,#f08a4b,#c2569a 45%,#4b57d1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro-mascot{border-radius:24px;background:#fff3e8;object-fit:contain}
+.tb-brand img{border-radius:10px;object-fit:contain}
+.hero::before{background:radial-gradient(circle at 35% 35%,#ffffffcc,#ffd0b8 60%,#ffb08f)}
+.hero::after{background:radial-gradient(circle at 35% 35%,#fff,#ffe2b8 65%,#ffc98a)}
+/* mascot: a gentle warm bob, like rising heat */
+.intro-mascot{animation:warmBob 5.5s ease-in-out infinite;transform-origin:50% 80%}
+.tb-brand img{animation:warmBob 5.5s ease-in-out infinite;animation-delay:-2s}
+@keyframes warmBob{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-6px) rotate(-2deg)}50%{transform:translateY(-2px) rotate(1.5deg)}75%{transform:translateY(-8px) rotate(2deg)}}
+.intro-mascot:hover{animation-duration:1.4s}
+/* course switch */
+#course button.selected{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+/* featured + topic cards */
+#modes{margin-bottom:18px}
+.featured{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.feature.mixed{--fa:#7d8ce0;--fb:#e5e9ff}.feature.check{--fa:#e0b23c;--fb:#fff3cf}.feature.advanced{--fa:#e47b5c;--fb:#ffe6dc}
+.feature.active b::after,.pick.unit.active b::after{content:" ✓";color:var(--accent-d)}
+#modes .picker.units{margin-bottom:0}
+.pick.unit{min-height:76px}
+/* play panel */
+.play-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#new{border:2px solid #cfd5e6;border-bottom-width:4px;border-radius:14px;font-weight:800;background:#fff;min-height:48px;padding:8px 16px;color:#34416a}
+#new:hover{background:#f6f7fc}
+.tag-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 8px}
+#badge{font-size:.76rem;font-weight:800;color:var(--accent-d);background:var(--accent-soft);border-radius:99px;padding:4px 11px}
+.step-progress{height:8px;margin:2px 0 14px;background:#eceef5}
+.step-progress>div,.xp-track>div{background:linear-gradient(90deg,#f6a59a,#f7cf73,#8fd8b8,#8db5f5)}
+.question{margin-bottom:14px}
+#questionTitle{margin:0 0 6px;font-size:1.25rem;letter-spacing:-.01em;line-height:1.3}
+.story{font-size:1.08rem;font-weight:550;margin:0;overflow-wrap:anywhere}
+.question .question-data{margin:14px 0 0;background:#fff}
+.question #visual:not(:empty){margin-top:12px}
+.challenge-notice{margin:0 0 14px;padding:12px 16px;border-radius:16px;border:1.5px dashed #e3a266;border-left:1.5px dashed #e3a266;background:linear-gradient(90deg,#fff1df,#fff)}
+.challenge-notice strong{font-size:1.02rem;margin-bottom:2px}.challenge-notice span{font-size:.92rem;color:#7a5530}
+.step-card{border:2px solid #c9cff3;border-radius:18px;background:linear-gradient(180deg,#f7f8ff,#fff);padding:14px 16px;margin-top:14px;box-shadow:0 6px 18px #4b57d10f}
+.step-card #stepTitle{margin:0 0 2px;font-size:1.05rem;color:var(--accent-d)}
+.step-card #stepTitle::before{content:"✏️ ";}
+.step-card #stepPrompt{margin:0 0 12px;color:#38446a}
+.fields{gap:12px}
+.field{background:#fff;border:1.5px solid var(--line);border-radius:14px}
+.field>span{font-size:.98rem}
+.field input,.field select{border:1px solid var(--line2);border-radius:11px;min-height:50px;font-size:1.08rem}
+.field small{font-size:.8rem;color:var(--faint)}
+.field.good{border-color:#7cc9a6;background:var(--mint)}.field.bad{border-color:var(--rose-line);background:var(--rose)}
+.field.has-choices{grid-column:1/-1}
+.field .choice-box{margin-top:2px}
+.field .choice-box .choice{font-size:1rem;min-height:52px}
+.field .choice.picked{border-color:var(--accent);background:var(--accent-soft)}
+.field .choice.picked .opt-letter{background:var(--accent);color:#fff}
+.field .choice.wrong{border-color:#d9776f;background:var(--rose)}.field .choice.right{border-color:#4fa36a;background:var(--mint)}
+.topic-directions{margin:12px 0 0;background:var(--amber);border:1px solid var(--amber-line);border-radius:14px;padding:10px 14px}
+.topic-directions>summary{font-size:.95rem;color:#6b4f00}
+.topic-directions .directions{background:none;padding:4px 0 0;margin:4px 0 0;color:#5b4714;font-size:.95rem}
+#practice .actions{margin-top:14px}
+#practice .actions .btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px}
+.show-btn{background:linear-gradient(180deg,#f1eaff,#ddd0fb)!important;color:#4d3794!important;box-shadow:0 4px 0 #b9a5e8,0 8px 14px #b9a5e833}
+.feedback b{display:block;font-size:1.08rem;margin-bottom:3px}
+.hint-box{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);background:var(--amber);border:1px solid var(--amber-line);color:#5b4714}
+.helpers{display:grid;gap:10px;margin-top:16px}
+.map{margin:0;background:var(--accent-soft);border:1px solid #d9ddf3;border-radius:14px;padding:11px 14px}
+.map summary{font-weight:750;color:var(--accent-d)}
+.route span{border-radius:10px;font-size:.92rem}
+.completed{margin:0;border-radius:14px;padding:11px 14px;background:#f3fbf7;border-color:#cbe9db}
+.completed summary{color:var(--mint-ink)}
+.mini-switches{display:flex;gap:8px;flex-wrap:wrap}
+.mini-switch{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:650;color:var(--muted);background:#f5f6fa;border:1px solid var(--line);border-radius:99px;padding:5px 12px 5px 6px;cursor:pointer}
+.mini-switch input{appearance:none;width:34px;height:20px;border-radius:20px;background:#cfd5e4;position:relative;margin:0;cursor:pointer;transition:background .15s;flex:none}
+.mini-switch input::before{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px #1f2a4440;transition:transform .15s}
+.mini-switch input:checked{background:var(--accent)}.mini-switch input:checked::before{transform:translateX(14px)}
+.bottom-new{width:100%;margin-top:16px}
+.lookup-panel{border-radius:16px;border:1.5px solid #d9ddf3;background:#f7f8ff}
+.hess-board{border-radius:18px;border:1.5px solid #d9ddf3;background:linear-gradient(135deg,#f5f3ff,#f0f8ff)}
+.thermo-quiz-report{border-radius:20px;border:1.5px solid var(--mint-line);background:var(--mint)}
+.thermo-review-card{border-radius:14px}
+/* progress */
+.stat-row{grid-template-columns:1.8fr repeat(4,1fr)}
+.stat.rank strong{font-size:1.02rem}.stat.rank small{display:block}
+#questXP{font-size:.82rem;color:#5a3f9e;font-weight:800}
+.xp-track{height:10px;margin:0 0 14px;background:#eceef5}
+.quest-badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.quest-badge{display:block;border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;background:#fafbfd;color:#7a8299;font-weight:700;font-size:.88rem}
+.quest-badge small{display:block;font-size:.74rem;font-weight:500;margin-top:2px;color:var(--faint)}
+.quest-badge.earned{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--ink)}
+.xp-rule{margin:0;font-size:.82rem;color:var(--faint)}
+/* extra panels */
+.panel-body{padding:0 20px 20px}
+.panel-body>p{margin:0 0 10px;color:var(--muted);font-size:.95rem}
+#heatExplorer{margin-top:18px}
+#heatExplorer .fields{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+#heatExplorer .field input[type=range]{min-height:30px;padding:0;accent-color:var(--accent);border:0}
+#heatExplorer .directions{background:var(--accent-soft);border-radius:12px;padding:10px 14px}
+.video-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.video-player{width:100%;aspect-ratio:16/9;border:0;border-radius:var(--r-md);background:#1e2538;display:block}
+.video-list{display:grid;gap:8px;align-content:start}
+.video-item{display:flex;gap:11px;text-align:left;align-items:start;border:1px solid var(--line);background:#fafbff;border-radius:12px;padding:9px;color:var(--ink);width:100%}
+.video-item img{width:96px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:none;background:#e6e8f2}
+.video-item span{font-size:.88rem;font-weight:700;line-height:1.3}.video-item small{display:block;font-weight:500;color:var(--muted);font-size:.74rem;margin-top:2px}
+.video-item.active{border-color:var(--accent);background:var(--accent-soft)}
+.video-chapters{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.video-chapters button{border-radius:99px;padding:6px 12px;font-size:.85rem}
+.lesson-links{border-top:1px solid var(--line);margin:14px 0 0;padding-top:10px;font-size:.92rem}
+#lessonContext{font-weight:500;color:var(--muted);font-size:.85rem}
+/* reference dialog */
+.ref-body details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 8px;background:#fbfbfe}
+.ref-body summary{font-weight:750;cursor:pointer;color:#2e3a8c}
+.ref-body details[open]>summary{margin-bottom:6px}
+.ref-body table{border-collapse:collapse;width:100%;font-size:.88rem;margin:8px 0}
+.ref-body th,.ref-body td{padding:6px 5px;border-bottom:1px solid var(--line);text-align:left}
+.ref-body .formula{background:var(--accent-soft);color:#26326a}
+.ref-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px;align-items:start}
+.ref-tips{margin:0;padding-left:20px;font-size:.92rem}.ref-tips li{margin:4px 0}
+@media(max-width:900px){.video-layout{grid-template-columns:minmax(0,1fr)}.stat-row{grid-template-columns:repeat(2,1fr)}.ref-cols{grid-template-columns:1fr}}
+@media(max-width:680px){
+ .pick.unit{flex:0 0 46%!important;max-width:none!important;min-height:0}
+ #modes .picker.units{display:grid;grid-template-columns:1fr 1fr;overflow:visible;margin:0;padding:0;gap:8px}
+ .pick.unit .ptxt small{display:none}
+ .featured{grid-template-columns:1fr}
+ .step-card{padding:12px}
+ .panel-body{padding:0 12px 14px}
+ #practice .actions .btn{flex-direction:column;gap:2px;font-size:.85rem;min-height:58px;padding:6px 4px}
+ #new{width:100%}
 }
-</style></head><body><div class="app"><header class="hero"><img class="thermo-icon" src="data:image/webp;base64,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" alt="Beaker Buddy, a smiling beaker with a thermometer" width="145" height="145"><div><div class="eyebrow">ItsDrDan · Chemistry practice</div><h1>Thermochemistry</h1><p>Warm up your skills. Follow the heat, spot the phase change, and build your solution one step at a time.</p></div></header><div class="course" aria-label="Course selection"><button id="course3a" class="selected" aria-pressed="true">🧪 CHEM 3A</button><button id="course1a" aria-pressed="false">⚗️ CHEM 1A</button></div><details class="intro play-guide collapsible-guide" id="playGuide" open><summary>📖 Directions & study tips <small>Click to minimize or expand</small></summary><div class="play-guide-heading"><span class="guide-kicker">Your thermochemistry study path</span><h2 id="playGuideTitle">Pick a skill. Try a step. Build confidence.</h2><p>Start with practice, then use the quiz to decide what to study next.</p></div><ol class="quick-start"><li><span class="guide-number" aria-hidden="true">1</span><div><strong>Choose your course</strong><p>Select <b>CHEM 3A</b> or <b>CHEM 1A</b> above. Each course has its own topics, XP, and achievements.</p></div></li><li><span class="guide-number" aria-hidden="true">2</span><div><strong>Choose how to study</strong><p>Pick a <b>practice skill</b> to focus on one topic. Below the divider, choose <b>Mixed Practice</b> for variety or the <b>10-Question Check</b> for a study plan.</p></div></li><li><span class="guide-number" aria-hidden="true">3</span><div><strong>Work one step at a time</strong><p>Read the question, enter your answer, and select <b>Check Step</b>. Correct work is saved as you go. Finish all steps, then select <b>New Question</b>.</p></div></li></ol><div class="guide-help-row"><div><strong>💡 Stuck?</strong><p><b>Help: How to solve</b> explains the approach without calculating the final answer. <b>Show Step</b> reveals the solution and makes the problem assisted—helpful practice, but no XP.</p></div><div><strong>🧭 Need a plan?</strong><p>Open <b>Solution map</b> for the steps ahead and <b>Completed work</b> to review saved steps. Their switches keep these sections open.</p></div><div><strong>🏆 Ready to check yourself?</strong><p>The quiz has 10 problems for your course. Help is available; using it marks the topic for review. Reveals are off. Missed, retried, and skipped problems also guide your review recommendations.</p></div></div><details class="guide-extra"><summary>Answer tips & special activities</summary><ul><li><b>Follow the answer box.</b> It tells you which units and significant figures to use. Type units only when the box says <b>Type the unit with your number</b>: J, kJ, g, or degC.</li><li><b>Keep extra calculator digits between steps.</b> Round the final answer as requested. Follow the question’s instructions about heat absorbed, heat released, and signs.</li><li><b>Scientific notation works.</b> You can enter 2.70E3 or 2.70 × 10^3. Displayed scientific notation uses raised exponents, such as 2.70 × 10<sup>3</sup>.</li><li><b>Challenge problems take more steps.</b> CHEM 3A combines heating and phase changes. CHEM 1A combines reaction and energy skills.</li><li><b>Hess’s Law cards:</b> flip reactions and enter multipliers, then select <b>Check Setup</b> to unlock cancellation. Match species on opposite sides before calculating the final enthalpy.</li><li><b>Use the study tools.</b> References, data tables, and Dr. Dan’s videos are available for review. A formation-data question may ask you to find table values first.</li></ul></details><p class="guide-xp-note">✨ Your progress lives below the questions: earn <b>20 XP</b> per unassisted practice problem, with a <b>20% chance of double XP</b>. Hints are free. Each course levels up separately; quizzes do not change XP.</p></details><details class="mode-picker" id="modePicker" open><summary id="modeSummary">Skill</summary><nav class="modes" id="modes" aria-label="Practice modes"></nav></details><div class="layout"><main class="panel" id="practice" tabindex="-1"><div class="practice-top"><div class="stats"><div class="stat"><b id="score">0</b><small>Correct</small></div><div class="stat"><b id="streak">0</b><small>Streak</small></div><div class="stat"><b id="assisted">0</b><small>Assisted</small></div></div><button class="new" id="new">New Question →</button></div><div id="challengeNotice" class="challenge-notice" hidden><strong>🔥 Challenge Problem · Extra challenge!</strong><span>This problem takes multiple steps. Work through one stage at a time, and use the hints or Solution Map when you need help.</span></div><div class="badge" id="badge"></div><div class="step-progress" id="stepProgress" role="progressbar" aria-label="Completed problem steps" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div id="stepProgressFill"></div></div><div class="mode-caption" id="modeCaption"></div><h2 id="questionTitle"></h2><p class="story" id="story"></p><section id="questionData" class="question-data" hidden aria-label="Given reference data"></section><div id="visual"></div><section id="hessBoard" class="hess-board" hidden aria-label="Interactive Hess reaction cards"></section><section id="formationLookup" class="lookup-panel" hidden><h3>📖 Search the complete formation-data table</h3><p>Use the element sections to find each formula and physical state. Copy <b>ΔH<sup>°</sup><sub>f</sub> in kJ/mol</b> from the first numeric column.</p><p><a href="https://openstax.org/books/chemistry-2e/pages/g-standard-thermodynamic-properties-for-selected-substances" target="_blank" rel="noopener">Open the full OpenStax table in a new tab ↗</a></p><iframe id="formationFrame" title="OpenStax Appendix G: standard thermodynamic properties" loading="lazy" style="width:100%;height:480px;border:1px solid #bbc9e1;border-radius:12px"></iframe><p class="small">If the embedded page is blank or blocked, use the link above. Keep the table open while you enter the values.</p></section><label class="toggle switch-control"><input type="checkbox" id="mapExpand" role="switch">Always show Solution Map</label><div id="solutionMap"></div><details class="topic-directions" id="problemDirections" open><summary>🧭 Directions for this topic</summary><div class="directions" id="directions"></div></details><h3 id="stepTitle"></h3><p id="stepPrompt"></p><div class="fields" id="fields"></div><div class="actions"><button class="primary" id="check">Check Step</button><button class="hint-btn" id="hint">💡 Help: How to solve</button><button class="show-btn" id="show">Show Step</button></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div><div class="hint-box" id="hintBox" hidden></div><label class="toggle switch-control"><input type="checkbox" id="expand" role="switch">Always show Completed Work</label><details class="completed" id="completed" hidden><summary>Completed work <span id="completedCount"></span></summary><ol id="completedList"></ol></details><button id="bottomNew" class="bottom-new" hidden>New Question →</button><section id="quizReport" class="thermo-quiz-report" hidden aria-live="polite"></section></main><aside class="panel reference"><h2>References & hints</h2><div id="reference1a" hidden><details open><summary>CHEM 1A energy equations</summary><div class="formula">ΔU = q + w<br>w = −P<sub>ext</sub>ΔV<br>ΔH = ΔU + PΔV (constant pressure)<br>q<sub>p</sub> = ΔH (only PV work)<br>q<sub>v</sub> = ΔU (rigid bomb)<br>q<sub>cal</sub> = C<sub>cal</sub>ΔT<br>q<sub>rxn</sub> = −(q<sub>solution</sub> + q<sub>cal</sub>)<br>q<sub>hot</sub> + q<sub>cold</sub> = 0<br>1 L·atm = 101.325 J</div></details><details><summary>Hess’s law: equation matching</summary><ol><li>Compare each given equation with the target.</li><li>Reverse an equation when needed and reverse the sign of ΔH.</li><li>Multiply or divide every coefficient and ΔH by the same factor.</li><li>Add the equations. Cancel equal amounts of identical species on opposite sides.</li><li>Add adjusted enthalpies. Check that the remaining equation is the target.</li></ol></details><details><summary>Formation enthalpy quick table</summary><p>ΔH<sup>°</sup><sub>rxn</sub> = ΣnΔH<sup>°</sup><sub>f</sub>(products) − ΣnΔH<sup>°</sup><sub>f</sub>(reactants). Values below are in kJ/mol at 298.15 K. Match the physical state.</p><div id="formationTable"></div><p class="small">Selected data from <a href="https://openstax.org/books/chemistry-2e/pages/g-standard-thermodynamic-properties-for-selected-substances" target="_blank" rel="noopener">OpenStax Chemistry 2e, Appendix G</a>. Elements in their standard states have zero formation enthalpy. C(s) here means graphite.</p></details><details><summary>Enthalpy stoichiometry</summary><p>Balance first. The stated ΔH belongs to the whole equation, not automatically to one mole.</p><div class="formula">grams ÷ molar mass → moles<br>q = n × ΔH / ν (ν = balanced coefficient of the specified species)</div><p>For a missing formation value, substitute all known coefficient-weighted terms into products − reactants, then solve for the unknown.</p></details></div><details open><summary>Choose the right equation</summary><div class="formula">Temperature changes: q = mcΔT<br>ΔT = T<sub>f</sub> − T<sub>i</sub><br>Phase changes: q = nΔH<br>Mass to moles: n = m / molar mass<br>Multiple stages: q<sub>total</sub> = q₁ + q₂ + …</div><p>Use <b>q = mcΔT</b> on a slope. Use <b>q = nΔH</b> on a plateau at a transition temperature. A pure substance changes phase at constant temperature at a fixed pressure.</p><p><span class="endo">Endothermic: q &gt; 0</span><br><span class="exo">Exothermic: q &lt; 0</span></p></details><details><summary>Phase-change recipes</summary><table><thead><tr><th>Change</th><th>Name</th><th>Heat</th></tr></thead><tbody><tr><td>Solid → liquid</td><td>Melting</td><td>Absorbed</td></tr><tr><td>Liquid → solid</td><td>Freezing</td><td>Released</td></tr><tr><td>Liquid → gas</td><td>Vaporization</td><td>Absorbed</td></tr><tr><td>Gas → liquid</td><td>Condensation</td><td>Released</td></tr><tr><td>Solid → gas</td><td>Sublimation</td><td>Absorbed</td></tr><tr><td>Gas → solid</td><td>Deposition</td><td>Released</td></tr></tbody></table><p>Boiling is vaporization at the boiling point. Evaporation also changes liquid to gas, but can occur below the boiling point.</p></details><details><summary>Reading diagrams and curves</summary><ul><li>Phase diagram: vertical axis is pressure; horizontal axis is temperature.</li><li>A boundary separates two phases that can coexist in equilibrium.</li><li>The triple point is where solid, liquid, and gas coexist in equilibrium.</li><li>A heating-curve slope means temperature is changing within a phase.</li><li>A plateau means phase change; energy changes intermolecular potential energy rather than temperature.</li><li>Plateau heat = end heat coordinate − start heat coordinate.</li></ul><p class="small">The phase diagram here is schematic, for a typical substance with a positive solid–liquid boundary slope. It is not water’s phase diagram.</p></details><details><summary>Specific heat reference</summary><table><thead><tr><th>Substance</th><th>c, J/(g·°C)</th></tr></thead><tbody id="heatTable"></tbody></table><p class="small">Use the value supplied in each question. The lecture uses 2.42 for ethanol in its chart and 2.46 in its challenge example; challenge questions here use the stated 2.46.</p></details><details><summary>Phase-change data</summary><table><thead><tr><th>Substance</th><th>Molar mass<br>g/mol</th><th>ΔH<br>kJ/mol</th></tr></thead><tbody><tr><td>Water, fusion</td><td>18.02</td><td>6.02</td></tr><tr><td>Water, vaporization</td><td>18.02</td><td>40.70</td></tr><tr><td>Ethanol, vaporization</td><td>46.07</td><td>37.0</td></tr><tr><td>Chromium, fusion</td><td>52.00</td><td>20.5</td></tr><tr><td>Thorium, fusion</td><td>232.04</td><td>16.00</td></tr></tbody></table><p class="small">These classroom values are supplied for practice. Positive fusion and vaporization values become negative for freezing and condensation.</p></details><details><summary>Units and rearrangements</summary><div class="formula">1 kJ = 1000 J<br>1 cal = 4.184 J<br>1 kcal = 1 food Cal = 1000 cal<br>m = q / (cΔT)<br>c = q / (mΔT)<br>T<sub>f</sub> = T<sub>i</sub> + q/(mc)<br>K = °C + 273.15<br>°F = 1.8(°C) + 32</div><p>A temperature <b>difference</b> of 1 °C equals a difference of 1 K. Use °C throughout this game.</p></details><p class="source-note small">Based on Dr. Dan’s Lecture 18 and thermochemistry homework Questions 13–33. Randomized practice uses the same methods with new quantities.</p><p><a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener">More chemistry help with ItsDrDan ↗</a></p><button id="reset">Reset practice score</button></aside></div><details id="thermoProgress" class="quest-panel" open><summary>🏅 Experience & achievements</summary><div class="quest-heading"><div><span class="eyebrow">Your thermal quest</span><h2 id="questRank">Level 1 · Heat Explorer</h2></div><strong id="questXP">0 XP</strong></div><div class="xp-track" role="progressbar" id="xpTrack" aria-label="Progress to next level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="xpFill"></div></div><p id="questNext" class="small"></p><div id="questBadges" class="quest-badges"></div><p id="legacyProgressNote" class="small" hidden></p><p class="small">Earn 20 XP per unassisted practice problem, with a 20% chance of a surprise DOUBLE XP reward (40 XP)! Hints are free. CHEM 3A and CHEM 1A each have their own XP, levels, streaks, and achievements. Quiz results stay separate.</p></details><section id="heatExplorer" class="lessons" hidden><h2>🧊 Try it: equal heat, different samples</h2><p>Both samples start at 20 °C. Change the masses and materials, then add the same heat to each. This model stays within a single phase and uses constant specific heats; it does not model melting or boiling.</p><div class="fields"><label class="field"><span>Sample A material</span><select id="modelMaterialA"><option value="4.184">Water</option><option value=".903">Aluminum</option><option value=".385">Copper</option></select></label><label class="field"><span>Sample A mass (g)</span><input id="modelMassA" type="range" min="50" max="200" step="10" value="100"></label><label class="field"><span>Sample B material</span><select id="modelMaterialB"><option value=".903">Aluminum</option><option value="4.184">Water</option><option value=".385">Copper</option></select></label><label class="field"><span>Sample B mass (g)</span><input id="modelMassB" type="range" min="50" max="200" step="10" value="100"></label><label class="field"><span>Heat added to each sample (J)</span><input id="modelEnergy" type="range" min="0" max="1000" step="25" value="500"></label></div><div id="modelBars" style="display:flex;align-items:flex-end;gap:35px;min-height:170px;margin:15px"></div><p id="modelReadout" class="directions" aria-live="polite"></p></section><section class="lessons" id="thermoLessons"><details id="phetDetails"><summary style="font-size:1.3rem;font-weight:750">🔬 Explore PhET: Intro only</summary><p>Drag a thermometer onto the objects. Heat or cool water, oil, and blocks; compare their temperature changes. Turn on Energy Symbols and place a warm object in cooler water to follow the energy transfer.</p><p><b>Think about it:</b> Does equal heating give equal temperature changes? Which way does energy move when objects touch? How does adding more material affect the temperature change?</p><button id="loadPhet" class="primary">Load PhET Intro</button><div id="phetContainer"></div><p class="small">Simulation by <a href="https://phet.colorado.edu" target="_blank" rel="noopener">PhET Interactive Simulations, University of Colorado Boulder</a>, licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Requires internet. <a href="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html?screens=1" target="_blank" rel="noopener">Open Intro in a separate tab ↗</a></p></details><details id="future1a"><summary>CHEM 1A: additional practice available</summary><p>Switch to CHEM 1A above for heat and work, calorimetry, heat exchange, Hess’s law, formation enthalpies, and reaction-energy stoichiometry. These advanced topics are separate from CHEM 3A practice.</p></details><p class="small">Additional original practice inspired by <a href="https://openstax.org/books/chemistry-2e/pages/5-exercises" target="_blank" rel="noopener">OpenStax Chemistry 2e, Chapter 5 exercises</a>: energy comparisons, sample heat capacity, identifying specific heat, and heating a container with water.</p></section><section class="lessons" aria-labelledby="lessonHeading"><h2 id="lessonHeading">▶ Learn with Dr. Dan</h2><p id="lessonContext"></p><div class="video-layout"><div><iframe id="lessonPlayer" class="video-player" title="Dr. Dan chemistry lesson" src="https://www.youtube.com/embed/udPzY15vH1w" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div id="videoChapters" class="video-chapters"></div><p class="small">Play here, choose a lesson from the thumbnails, or open it on YouTube if embedded playback is unavailable.</p></div><div id="videoList" class="video-list" aria-label="Video lessons"></div></div><p class="lesson-links"><a id="watchLesson" href="https://www.youtube.com/watch?v=udPzY15vH1w" target="_blank" rel="noopener">Open selected lesson on YouTube ↗</a> · <a href="https://www.youtube.com/@itsdrdan/search?query=Chapter%207" target="_blank" rel="noopener">Find more CHEM 3A Chapter 7 lessons ↗</a></p></section><footer class="footer">ItsDrDan · CHEM 3A & CHEM 1A · Independent practice, no grade submission · Compact answers & collapsible directions · v30</footer></div><script>
+.chart{max-width:680px;margin-left:auto;margin-right:auto}
+.choice{align-items:center}
+.ref-cols:has(#reference1a[hidden]){grid-template-columns:1fr}
+.hess-step .step-card,.hess-step #practice .actions,#practice.hess-step>.actions{display:none}
+/* v32 Heat Explorer */
+.hx-lede{margin:0 0 12px;color:var(--muted)}
+.hx-heat{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"f l o" "f r r";align-items:center;gap:2px 12px;background:linear-gradient(90deg,#fff1e4,#fff8ef);border:1.5px solid #f3cfaa;border-radius:16px;padding:10px 16px;margin-bottom:14px}
+.hx-flame{grid-area:f;font-size:1.9rem}.hx-heat label{grid-area:l;font-weight:650;color:#7a4a1c}.hx-heat input{grid-area:r;width:100%;accent-color:#e5793f;height:30px}
+.hx-heat output{grid-area:o;font-weight:850;font-size:1.25rem;color:#b5531d;background:#fff;border-radius:10px;padding:2px 10px;box-shadow:0 1px 3px #b5531d22}
+.hx-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hx-card{border:2px solid var(--line2);border-bottom-width:5px;border-radius:18px;background:#fff;padding:12px 14px;display:grid;gap:10px;align-content:start}
+.hx-card[data-s=A]{border-color:#f2b9a3;background:linear-gradient(180deg,#fff7f3,#fff 40%)}.hx-card[data-s=B]{border-color:#a9bdf0;background:linear-gradient(180deg,#f3f6ff,#fff 40%)}
+.hx-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.hx-top b{font-size:1.08rem}
+.hx-dt{font-weight:850;font-size:.92rem;border-radius:99px;padding:3px 10px;background:#ffe9dc;color:#b5531d}
+.hx-mats{display:flex;flex-wrap:wrap;gap:6px}
+.hx-mat{display:flex;flex-direction:column;align-items:flex-start;padding:5px 10px;border-radius:11px;border:1.5px solid var(--line2);background:#fff;line-height:1.15;min-height:44px}
+.hx-mat b{font-size:.86rem}.hx-mat small{font-size:.68rem;color:var(--faint);font-weight:600}
+.hx-mat.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 2px 0 #4b57d155}.hx-mat.on b{color:var(--accent-d)}
+.hx-stage{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:10px;min-height:170px;padding:10px 6px 6px;border-radius:14px;background:repeating-linear-gradient(0deg,#f6f7fb 0 2px,transparent 2px 22px),#fcfcff;border:1px solid var(--line)}
+.hx-obj{justify-self:center;align-self:end;border-radius:12px;transition:width .3s,height .3s,box-shadow .4s;border:1.5px solid #0000001f}
+.hx-obj.water{border-radius:6px 6px 16px 16px;border:2.5px solid #7fb2e6;border-top:0;background-clip:padding-box}
+.hx-thermo{display:flex;flex-direction:column;align-items:center;justify-self:center}
+.hx-tube{position:relative;width:16px;height:130px;border-radius:9px 9px 0 0;background:#fff;border:2px solid #c3cbe0;border-bottom:0;overflow:hidden}
+.hx-fill{position:absolute;left:2px;right:2px;bottom:0;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#ff8a5c,#e0473a);transition:height .45s cubic-bezier(.3,.9,.4,1)}.hx-fill.off{background:repeating-linear-gradient(180deg,#e0473a 0 6px,#ff8a5c 6px 12px)}
+.hx-start{position:absolute;left:-2px;right:-2px;bottom:12.5%;border-top:2px dashed #5b6cc0}
+.hx-bulb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffb39a,#e0473a 70%);border:2px solid #c3cbe0;margin-top:-4px}
+.hx-temp{align-self:center;text-align:left}.hx-temp b{display:block;font-size:1.45rem;font-weight:850;color:#c0452f;line-height:1.1}.hx-temp small{color:var(--faint);font-size:.75rem;font-weight:600}
+.hx-mass{display:grid;grid-template-columns:1fr auto;gap:0 8px;font-weight:650;font-size:.92rem}.hx-mass b{color:var(--accent-d)}.hx-mass input{grid-column:1/-1;width:100%;accent-color:var(--accent);height:28px}
+.hx-work{font-family:var(--serif);font-size:.98rem;background:#f4f5fc;border-radius:10px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.hx-work .fraction{font-size:.92em}
+.hx-verdict{margin:14px 0 10px;padding:12px 15px;border-radius:14px;background:var(--mint);border:1px solid var(--mint-line);color:var(--mint-ink);font-size:1rem}
+.hx-tries{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:.85rem;color:var(--faint);font-weight:700}
+.hx-tries button{border-radius:99px;padding:6px 12px;font-size:.85rem;border:1.5px dashed #b9c1e6;background:#fff;color:var(--accent-d)}
+.hx-tries button:hover{border-style:solid;background:var(--accent-soft)}
+.particle-chart{max-width:420px}
+@media(max-width:680px){.hx-grid{gap:8px}.hx-card{padding:10px 9px;gap:8px}.hx-stage{grid-template-columns:1fr auto;min-height:150px}.hx-temp{grid-column:1/-1;text-align:center}.hx-tube{height:105px}.hx-mat{padding:4px 7px;min-height:40px}.hx-mat small{display:none}.hx-work{font-size:.8rem;white-space:normal}.hx-top{flex-direction:column;align-items:flex-start;gap:4px}.hx-heat{padding:9px 12px}}
+.hx-thermo{position:relative}
+.hx-scale{position:absolute;left:-30px;top:0;height:130px;width:26px}
+.hx-scale span{position:absolute;right:0;transform:translateY(50%);font-size:.66rem;font-weight:700;color:var(--faint)}
+.hx-scale span:first-child{color:#5b6cc0}
+@media(max-width:680px){.hx-scale{height:105px}}
+
+</style></head>
+<body><div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="app">
+<header class="topbar"><div class="tb">
+ <div class="tb-brand"><img alt="" width="40" height="40"><span>Thermochemistry</span></div>
+ <div class="seg" id="course" role="group" aria-label="Course"><button type="button" id="course3a" class="selected" aria-pressed="true">CHEM 3A</button><button type="button" id="course1a" aria-pressed="false">CHEM 1A</button></div>
+ <div class="tb-xp"><span class="ico" id="rankIcon" aria-hidden="true">🌱</span><div><b id="rankName">Heat Explorer</b><div class="xpbar" aria-hidden="true"><span id="tbXpFill"></span></div><small id="xpShort">0 XP</small></div></div>
+ <div class="tb-streak" title="Current streak">🔥 <b id="streak">0</b></div>
+ <button type="button" class="tb-btn" id="referenceBtn" aria-label="Open the reference sheet">📘 <span>Reference</span></button>
+</div></header>
+<div class="wrap">
+ <section class="intro hero"><div class="intro-title"><img class="intro-mascot" src="data:image/webp;base64,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" alt="Beaker Buddy, a smiling beaker with a thermometer" width="96" height="96"><div><p class="eyebrow">🔥 Thermochemistry · ItsDrDan · CHEM 3A • 1A</p><h1><span class="t1">Thermo</span><span class="t2">chemistry</span></h1><p class="lede">Follow the heat, spot the phase change, and solve one step at a time.</p></div></div></section>
+ <ol class="howto" aria-label="How to play"><li><i>1</i><span>Pick your class</span></li><li><i>2</i><span>Pick a topic</span></li><li><i>3</i><span>Solve one <b>step</b> at a time</span></li></ol>
+ <section id="modes" aria-label="Practice topics"></section>
+ <main class="panel" id="practice" tabindex="-1">
+  <div class="play-head"><h2 class="play-title"><span id="modeCaption"></span></h2><button type="button" id="new">New question →</button></div>
+  <div class="tag-row"><span id="badge"></span></div>
+  <div class="step-progress" id="stepProgress" role="progressbar" aria-label="Completed problem steps" aria-valuemin="0" aria-valuenow="0" aria-valuemax="1"><div id="stepProgressFill"></div></div>
+  <div id="challengeNotice" class="challenge-notice" hidden><strong>🔥 Challenge problem</strong><span>This one has several steps. Take them one at a time.</span></div>
+  <section class="question"><h3 id="questionTitle"></h3><p class="story" id="story"></p><section id="questionData" class="question-data" hidden aria-label="Given reference data"></section><div id="visual"></div></section>
+  <section id="hessBoard" class="hess-board" hidden aria-label="Interactive Hess reaction cards"></section>
+  <section id="formationLookup" class="lookup-panel" hidden><h3>📖 Find the values in the formation-data table</h3><p>Find each formula and physical state. Copy <b>ΔH<sup>°</sup><sub>f</sub> in kJ/mol</b> from the first number column.</p><p><a href="https://openstax.org/books/chemistry-2e/pages/g-standard-thermodynamic-properties-for-selected-substances" target="_blank" rel="noopener">Open the full OpenStax table in a new tab ↗</a></p><iframe id="formationFrame" title="OpenStax Appendix G: standard thermodynamic properties" loading="lazy" style="width:100%;height:480px;border:1px solid var(--line2);border-radius:12px;background:#fff"></iframe><p class="small">Blank? Use the link above.</p></section>
+  <details class="topic-directions" id="problemDirections"><summary>🧭 How to do this topic</summary><div class="directions" id="directions"></div></details>
+  <div class="step-card"><h3 id="stepTitle"></h3><p id="stepPrompt"></p><div class="fields" id="fields"></div></div>
+  <div class="actions"><button type="button" class="btn primary" id="check">Check Step</button><button type="button" class="btn hint-btn" id="hint">💡 Hint</button><button type="button" class="btn show-btn" id="show">Show Step</button></div>
+  <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+  <div class="hint-box" id="hintBox" hidden></div>
+  <div class="helpers">
+   <div id="solutionMap"></div>
+   <details class="completed" id="completed" hidden><summary>✅ My completed work <span id="completedCount"></span></summary><ol id="completedList"></ol></details>
+   <div class="mini-switches"><label class="mini-switch"><input type="checkbox" id="mapExpand" role="switch">Keep solution map open</label><label class="mini-switch"><input type="checkbox" id="expand" role="switch">Keep my work open</label></div>
+  </div>
+  <button type="button" id="bottomNew" class="btn primary big-next bottom-new" hidden>Next question →</button>
+  <section id="quizReport" class="thermo-quiz-report" hidden aria-live="polite"></section>
+ </main>
+ <section id="heatExplorer" class="panel section" hidden><div class="section-head"><h2>🧊 Heat Explorer</h2><span>Same heat · different samples</span></div>
+  <p class="hx-lede">Both samples start at <b>20 °C</b>. Pick a material and mass for each, then add heat. Which one warms up more?</p>
+  <div class="hx-heat"><span class="hx-flame" aria-hidden="true">🔥</span><label for="modelEnergy">Heat added to <b>each</b> sample</label><input id="modelEnergy" type="range" min="0" max="2000" step="50" value="500"><output id="hxQ">500 J</output></div>
+  <div class="hx-grid">
+   <div class="hx-card" data-s="A"><div class="hx-top"><b>Sample A</b><span class="hx-dt" id="hxDtA"></span></div>
+    <div class="hx-mats" id="hxMatsA" role="group" aria-label="Sample A material"></div>
+    <div class="hx-stage"><div class="hx-obj" id="hxObjA"></div><div class="hx-thermo"><div class="hx-scale"><span style="bottom:12.5%">20°</span><span style="bottom:50%">50°</span><span style="bottom:87.5%">80°</span></div><div class="hx-tube"><div class="hx-fill" id="hxFillA"></div><div class="hx-start"></div></div><div class="hx-bulb"></div></div><div class="hx-temp" id="hxTA"></div></div>
+    <label class="hx-mass">Mass <b id="hxMA">100 g</b><input id="modelMassA" type="range" min="25" max="250" step="5" value="100"></label>
+    <div class="hx-work" id="hxWorkA"></div>
+    <select id="modelMaterialA" hidden></select></div>
+   <div class="hx-card" data-s="B"><div class="hx-top"><b>Sample B</b><span class="hx-dt" id="hxDtB"></span></div>
+    <div class="hx-mats" id="hxMatsB" role="group" aria-label="Sample B material"></div>
+    <div class="hx-stage"><div class="hx-obj" id="hxObjB"></div><div class="hx-thermo"><div class="hx-scale"><span style="bottom:12.5%">20°</span><span style="bottom:50%">50°</span><span style="bottom:87.5%">80°</span></div><div class="hx-tube"><div class="hx-fill" id="hxFillB"></div><div class="hx-start"></div></div><div class="hx-bulb"></div></div><div class="hx-temp" id="hxTB"></div></div>
+    <label class="hx-mass">Mass <b id="hxMB">100 g</b><input id="modelMassB" type="range" min="25" max="250" step="5" value="100"></label>
+    <div class="hx-work" id="hxWorkB"></div>
+    <select id="modelMaterialB" hidden></select></div>
+  </div>
+  <p id="modelReadout" class="hx-verdict" aria-live="polite"></p>
+  <div class="hx-tries"><span>Try:</span><button type="button" data-try="water-al">Water vs aluminum</button><button type="button" data-try="mass">Same metal, double the mass</button><button type="button" data-try="gold">Gold vs water</button></div>
+  <div id="modelBars" hidden></div>
+ </section>
+ <section class="panel section" id="thermoProgress"><div class="section-head"><h2>Progress &amp; achievements</h2><span id="questXP">0 XP</span></div>
+  <div class="stat-row"><div class="stat rank"><strong id="questRank">Level 1 · Heat Explorer</strong><small id="questNext"></small></div><div class="stat"><strong id="score">0</strong><small>Correct</small></div><div class="stat"><strong id="streak2">0</strong><small>Streak</small></div><div class="stat"><strong id="bestStreak">0</strong><small>Best streak</small></div><div class="stat"><strong id="assisted">0</strong><small>Assisted</small></div></div>
+  <div class="xp-track" role="progressbar" id="xpTrack" aria-label="Progress to next level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="xpFill"></div></div>
+  <div id="questBadges" class="quest-badges"></div>
+  <p id="legacyProgressNote" class="xp-rule" hidden></p>
+  <div class="section-foot"><p class="xp-rule">+20 XP for each problem solved without Show Step · 20% chance of double XP · Hints are free · 3A and 1A keep separate progress</p><button type="button" class="reset-btn" id="reset">↻ Reset my progress</button></div>
+ </section>
+ <details class="panel section" id="thermoLessons"><summary><span>🔬 PhET Simulation<small>Heat water, oil and blocks. Watch where the energy goes.</small></span></summary>
+  <div class="panel-body"><p>Drag a thermometer onto the objects. Does equal heating give equal temperature changes? Which way does energy move when objects touch?</p>
+   <button type="button" id="loadPhet" class="btn primary">Load PhET Intro</button><div id="phetContainer"></div>
+   <p class="small">Simulation by <a href="https://phet.colorado.edu" target="_blank" rel="noopener">PhET Interactive Simulations, University of Colorado Boulder</a>, licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Needs internet. <a href="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html?screens=1" target="_blank" rel="noopener">Open in a new tab ↗</a></p>
+   <p class="small" id="future1a">Switch to <b>CHEM 1A</b> for heat and work, calorimetry, Hess’s law, formation enthalpies and enthalpy stoichiometry.</p>
+  </div></details>
+ <details class="panel section" id="videoSection"><summary><span>🎬 Learn with Dr. Dan<small id="lessonContext"></small></span></summary>
+  <div class="panel-body"><div class="video-layout"><div><iframe id="lessonPlayer" class="video-player" title="Dr. Dan chemistry lesson" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div id="videoChapters" class="video-chapters"></div></div><div id="videoList" class="video-list" aria-label="Video lessons"></div></div>
+   <p class="lesson-links"><a id="watchLesson" href="https://www.youtube.com/watch?v=udPzY15vH1w" target="_blank" rel="noopener">Watch on YouTube ↗</a> · <a href="https://www.youtube.com/@itsdrdan/search?query=Chapter%207" target="_blank" rel="noopener">More Chapter 7 lessons ↗</a></p></div></details>
+ <p class="foot-note">ItsDrDan · Fresno City College · Practice only, nothing is graded · <a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">YouTube @itsdrdan ↗</a></p>
+</div>
+</div>
+<dialog id="referenceDialog"><div class="modal-head"><strong>📘 Reference</strong><button type="button" class="close-btn" id="closeRef" aria-label="Close">✕</button></div>
+ <div class="modal-body ref-body"><div class="ref-cols"><div>
+  <details open><summary>Choose the right equation</summary><div class="formula">Temperature changes: q = mcΔT<br>ΔT = T<sub>f</sub> − T<sub>i</sub><br>Phase changes: q = nΔH<br>Mass to moles: n = m / molar mass<br>Multiple stages: q<sub>total</sub> = q₁ + q₂ + …</div><p>Use <b>q = mcΔT</b> on a slope. Use <b>q = nΔH</b> on a flat plateau (a phase change at one temperature).</p><p><span class="endo">Endothermic: q &gt; 0</span> &nbsp; <span class="exo">Exothermic: q &lt; 0</span></p></details>
+  <details><summary>Phase-change recipes</summary><table><thead><tr><th>Change</th><th>Name</th><th>Heat</th></tr></thead><tbody><tr><td>Solid → liquid</td><td>Melting</td><td>Absorbed</td></tr><tr><td>Liquid → solid</td><td>Freezing</td><td>Released</td></tr><tr><td>Liquid → gas</td><td>Vaporization</td><td>Absorbed</td></tr><tr><td>Gas → liquid</td><td>Condensation</td><td>Released</td></tr><tr><td>Solid → gas</td><td>Sublimation</td><td>Absorbed</td></tr><tr><td>Gas → solid</td><td>Deposition</td><td>Released</td></tr></tbody></table></details>
+  <details><summary>Reading diagrams and curves</summary><ul><li>Phase diagram: vertical axis is pressure; horizontal axis is temperature.</li><li>A boundary separates two phases that can coexist in equilibrium.</li><li>The triple point is where solid, liquid, and gas coexist in equilibrium.</li><li>A heating-curve slope means temperature is changing within a phase.</li><li>A plateau means phase change; energy changes intermolecular potential energy rather than temperature.</li><li>Plateau heat = end heat coordinate − start heat coordinate.</li></ul><p class="small">The phase diagram here is schematic, for a typical substance with a positive solid–liquid boundary slope. It is not water’s phase diagram.</p></details>
+  <details><summary>Specific heat reference</summary><table><thead><tr><th>Substance</th><th>c, J/(g·°C)</th></tr></thead><tbody id="heatTable"></tbody></table><p class="small">Use the value supplied in each question. The lecture uses 2.42 for ethanol in its chart and 2.46 in its challenge example; challenge questions here use the stated 2.46.</p></details>
+  <details><summary>Phase-change data</summary><table><thead><tr><th>Substance</th><th>Molar mass<br>g/mol</th><th>ΔH<br>kJ/mol</th></tr></thead><tbody><tr><td>Water, fusion</td><td>18.02</td><td>6.02</td></tr><tr><td>Water, vaporization</td><td>18.02</td><td>40.70</td></tr><tr><td>Ethanol, vaporization</td><td>46.07</td><td>37.0</td></tr><tr><td>Chromium, fusion</td><td>52.00</td><td>20.5</td></tr><tr><td>Thorium, fusion</td><td>232.04</td><td>16.00</td></tr></tbody></table><p class="small">These classroom values are supplied for practice. Positive fusion and vaporization values become negative for freezing and condensation.</p></details>
+  <details><summary>Units and rearrangements</summary><div class="formula">1 kJ = 1000 J<br>1 cal = 4.184 J<br>1 kcal = 1 food Cal = 1000 cal<br>m = q / (cΔT)<br>c = q / (mΔT)<br>T<sub>f</sub> = T<sub>i</sub> + q/(mc)<br>K = °C + 273.15</div><p>A temperature <b>difference</b> of 1 °C equals a difference of 1 K.</p></details>
+  <details><summary>Answer tips</summary><ul class="ref-tips"><li>The answer box tells you the unit and sig figs. Type a unit only when it says to (J, kJ, g or degC).</li><li>Keep extra calculator digits between steps. Round only the final answer.</li><li>Scientific notation: type <b>2.70E3</b> or <b>2.70*10^3</b>.</li><li><b>Hint</b> is free. <b>Show Step</b> gives the answer, but the problem earns no XP.</li></ul></details>
+ </div><div>
+  <div id="reference1a" hidden>
+   <details open><summary>CHEM 1A energy equations</summary><div class="formula">ΔU = q + w<br>w = −P<sub>ext</sub>ΔV<br>ΔH = ΔU + PΔV (constant pressure)<br>q<sub>p</sub> = ΔH (only PV work)<br>q<sub>v</sub> = ΔU (rigid bomb)<br>q<sub>cal</sub> = C<sub>cal</sub>ΔT<br>q<sub>rxn</sub> = −(q<sub>solution</sub> + q<sub>cal</sub>)<br>q<sub>hot</sub> + q<sub>cold</sub> = 0<br>1 L·atm = 101.325 J</div></details>
+   <details><summary>Hess’s law: equation matching</summary><ol><li>Compare each given equation with the target.</li><li>Reverse an equation when needed and flip the sign of ΔH.</li><li>Multiply or divide every coefficient and ΔH by the same factor.</li><li>Add the equations. Cancel equal amounts of the same species on opposite sides.</li><li>Add the adjusted enthalpies. Check that what is left is the target.</li></ol></details>
+   <details><summary>Formation enthalpy table</summary><p>ΔH<sup>°</sup><sub>rxn</sub> = ΣnΔH<sup>°</sup><sub>f</sub>(products) − ΣnΔH<sup>°</sup><sub>f</sub>(reactants). Values in kJ/mol at 298.15 K. Match the physical state.</p><div id="formationTable"></div><p class="small">Selected data from <a href="https://openstax.org/books/chemistry-2e/pages/g-standard-thermodynamic-properties-for-selected-substances" target="_blank" rel="noopener">OpenStax Chemistry 2e, Appendix G</a>. Elements in their standard states are zero. C(s) means graphite.</p></details>
+   <details><summary>Enthalpy stoichiometry</summary><p>Balance first. The ΔH belongs to the whole equation as written.</p><div class="formula">grams ÷ molar mass → moles<br>q = n × ΔH / ν (ν = coefficient of that species)</div></details>
+  </div>
+  <p class="small">Based on Dr. Dan’s Lecture 18 and thermochemistry homework. Extra practice inspired by <a href="https://openstax.org/books/chemistry-2e/pages/5-exercises" target="_blank" rel="noopener">OpenStax Chemistry 2e, Chapter 5</a>.</p>
+ </div></div></div></dialog>
+<script>
+
 'use strict';
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function rnd(n){if(globalThis.crypto?.getRandomValues){const a=new Uint32Array(1);crypto.getRandomValues(a);return Math.floor(a[0]/4294967296*n)}return Math.floor(Math.random()*n)}
@@ -156,9 +743,61 @@ const MODES=[['mixed','✦ Mixed Practice','Randomized skills from every mode'],
 const DIRECTIONS={explore:'Compare the samples using q = mcΔT. Predict first, then adjust the interactive model below to investigate. Heat flows from warmer objects to cooler objects.',identify:'Read the transition, graph, or reaction. Identify the process and whether the system absorbs or releases heat.',sensible:'Stay within one phase. Find ΔT = Tf − Ti, choose the rearrangement for your unknown, and keep units consistent.',latent:'At a transition temperature, use q = nΔH. Convert grams to moles first; use a negative sign for freezing or condensation.',challenge:'Break the path into stages. Use mcΔT on slopes, nΔH on plateaus, then add signed heat values in the same unit.'};
 const HEATS=[['Water',4.184],['Lead',.128],['Gold',.128],['Silver',.235],['Copper',.385],['Iron',.449],['Aluminum',.903],['Ethanol',2.42],['Bismuth',.130],['Diamond',.509]];
 const CHANGES=[['Solid','Liquid','Melting',1],['Liquid','Solid','Freezing',-1],['Liquid','Gas','Vaporization',1],['Gas','Liquid','Condensation',-1],['Solid','Gas','Sublimation',1],['Gas','Solid','Deposition',-1]];
-function phaseDiagram(type){const paths={Melting:[175,150,345,150],Freezing:[345,150,175,150],Vaporization:[360,148,550,148],Condensation:[550,148,360,148],Sublimation:[112,270,350,270],Deposition:[350,270,112,270]};const a=paths[type];return `<div class="chart"><svg viewBox="0 0 650 390" role="img" aria-label="Schematic pressure versus temperature phase diagram. ${a?'Follow the arrow from its circular starting point to its arrowhead.':'Point A is the intersection of all three phase boundaries.'}"><defs><marker id="phaseArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#de785d"/></marker></defs><path d="M65 45V335H605" fill="none" stroke="#52647f" stroke-width="2"/><text x="330" y="377" text-anchor="middle" font-size="19" fill="#384b68">Temperature →</text><text x="25" y="185" text-anchor="middle" transform="rotate(-90 25 185)" font-size="19" fill="#384b68">Pressure →</text><path d="M80 305Q170 285 240 230L300 55M240 230Q385 190 505 110" fill="none" stroke="#677ec3" stroke-width="4"/><text x="125" y="105" font-size="23" fill="#50618a">SOLID</text><text x="340" y="95" font-size="23" fill="#50618a">LIQUID</text><text x="440" y="285" font-size="23" fill="#50618a">GAS</text><circle cx="240" cy="230" r="7" fill="#7568a7"/>${a?`<circle cx="${a[0]}" cy="${a[1]}" r="6" fill="#de785d"/><path d="M${a[0]} ${a[1]}L${a[2]} ${a[3]}" stroke="#de785d" stroke-width="5" marker-end="url(#phaseArrow)"/><text x="420" y="35" font-size="17" fill="#8e543e">● start → finish</text>`:'<text x="218" y="254" font-size="22" fill="#7568a7">A</text>'}</svg><p class="chart-note">Schematic only · typical positive solid–liquid slope · axes have no numerical scale</p></div>`}
-function curveSVG(points,highlight=-1,unit='kJ',cooling=false){const xmax=Math.max(...points.map(p=>p[0]))*1.06,tmin=Math.min(...points.map(p=>p[1]))-10,tmax=Math.max(...points.map(p=>p[1]))+15,X=x=>70+x/xmax*540,Y=t=>310-(t-tmin)/(tmax-tmin)*250;let grid='',labels='';for(const x of [...new Set(points.map(p=>p[0]))]){grid+=`<path d="M${X(x)} 60V310" stroke="#e1e7f2"/>`;labels+=`<text x="${X(x)}" y="335" text-anchor="middle" font-size="15">${Number(x.toFixed(1))}</text>`}const ticks=[...new Set(points.map(p=>p[1]))].sort((a,b)=>a-b);for(const t of ticks){grid+=`<path d="M70 ${Y(t)}H610" stroke="#e1e7f2"/>`;labels+=`<text x="62" y="${Y(t)+5}" text-anchor="end" font-size="15">${t}</text>`}return `<div class="chart"><svg viewBox="0 0 660 390" role="img" aria-label="Temperature versus heat ${cooling?'removed':'added'} curve. ${highlight>=0?'Segment '+String.fromCharCode(65+highlight)+' is highlighted.':'Read the displayed segment endpoints.'}"><g font-family="Helvetica,Arial" fill="#425671">${grid}<path d="M70 48V310H620" stroke="#52647f" stroke-width="2" fill="none"/>${points.slice(1).map((p,i)=>`<path d="M${X(points[i][0])} ${Y(points[i][1])}L${X(p[0])} ${Y(p[1])}" stroke="${i===highlight?'#e8825c':'#667ac4'}" stroke-width="${i===highlight?8:4}" fill="none"/><circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4" fill="#667ac4"/><text x="${(X(p[0])+X(points[i][0]))/2}" y="${(Y(p[1])+Y(points[i][1]))/2-13}" text-anchor="middle" font-size="18" font-weight="700">${String.fromCharCode(65+i)}</text>`).join('')}${labels}<text x="345" y="372" text-anchor="middle" font-size="18">Heat ${cooling?'removed':'added'} (${unit}) →</text><text x="23" y="180" transform="rotate(-90 23 180)" text-anchor="middle" font-size="18">Temperature (°C)</text></g></svg></div>`}
-function particles(state){let circles='';const positions=state==='Solid'?Array.from({length:16},(_,i)=>[105+(i%4)*38,45+Math.floor(i/4)*38]):state==='Liquid'?[[85,130],[125,124],[165,136],[205,129],[90,166],[133,168],[174,169],[216,168],[83,202],[123,204],[165,209],[208,203],[240,145],[246,183],[65,175],[190,101]]:[[75,55],[180,45],[280,65],[120,115],[240,133],[75,196],[177,218],[283,213]];positions.forEach(([x,y])=>circles+=`<circle cx="${x}" cy="${y}" r="13" fill="#a8c4ed" stroke="#6c8ab6" stroke-width="2"/>`);return `<div class="chart"><svg viewBox="0 0 350 260" role="img" aria-label="Particle arrangement: identify the state from particle spacing and order."><rect x="30" y="15" width="290" height="225" rx="10" fill="#f4f8ff" stroke="#bbc9e1"/>${circles}</svg></div>`}
+/* v32 visuals: phase diagram, heating/cooling curves, particle diagrams */
+const HALO='paint-order="stroke" stroke="#fff" stroke-width="5" stroke-linejoin="round"';
+function phaseDiagram(type){
+ const paths={Melting:[175,150,345,150],Freezing:[345,150,175,150],Vaporization:[365,148,530,148],Condensation:[530,148,365,148],Sublimation:[112,270,350,270],Deposition:[350,270,112,270]};const a=paths[type];
+ const SG='M80 305Q170 285 240 230',SL='M240 230L303 45',LG='M240 230Q385 190 505 110';
+ const arrow=a?`<circle cx="${a[0]}" cy="${a[1]}" r="8" fill="#fff" stroke="#e0675a" stroke-width="4"/><path d="M${a[0]} ${a[1]}L${a[2]+(a[2]>a[0]?-14:14)} ${a[3]}" stroke="#e0675a" stroke-width="5" stroke-linecap="round"/><path d="M${a[2]} ${a[3]}l${a[2]>a[0]?-20:20} -11v22z" fill="#e0675a" stroke="#e0675a" stroke-width="2" stroke-linejoin="round"/>`:'';
+ const legend=a?`<g transform="translate(424 22)"><rect width="168" height="28" rx="14" fill="#fff" stroke="#f0c9c0"/><circle cx="18" cy="14" r="5" fill="#fff" stroke="#e0675a" stroke-width="3"/><text x="30" y="19" font-size="14" fill="#9c4a3a" font-weight="700">start</text><path d="M72 14h42" stroke="#e0675a" stroke-width="3"/><path d="M124 14l-11 -6v12z" fill="#e0675a"/><text x="130" y="19" font-size="14" fill="#9c4a3a" font-weight="700">end</text></g>`:'';
+ const tp=a?'':`<circle cx="240" cy="230" r="15" fill="none" stroke="#7568a7" stroke-width="2.5" stroke-dasharray="4 3"/><text x="262" y="262" font-size="24" font-weight="800" fill="#5a4c95" ${HALO}>A</text>`;
+ return `<div class="chart"><svg viewBox="0 0 650 395" role="img" aria-label="Schematic pressure versus temperature phase diagram. ${a?'Follow the arrow from its open circle to its arrowhead.':'Point A is where all three phase boundaries meet.'}"><g font-family="ui-sans-serif,system-ui,Segoe UI,Helvetica,Arial">
+<rect x="65" y="45" width="540" height="290" fill="#fff4e6"/>
+<path d="M65 45H303L240 230Q170 285 80 305L65 307Z" fill="#ece8fb"/>
+<defs><linearGradient id="liqFade" gradientUnits="userSpaceOnUse" x1="470" y1="0" x2="580" y2="0"><stop offset="0" stop-color="#e4f1fc"/><stop offset="1" stop-color="#fff4e6"/></linearGradient></defs><path d="M303 45H580L505 110Q385 190 240 230Z" fill="url(#liqFade)"/>
+<path d="${SG}" fill="none" stroke="#5b6cc0" stroke-width="4" stroke-linecap="round"/><path d="${SL}" fill="none" stroke="#5b6cc0" stroke-width="4" stroke-linecap="round"/><path d="${LG}" fill="none" stroke="#5b6cc0" stroke-width="4" stroke-linecap="round"/>
+<circle cx="240" cy="230" r="6" fill="#5b6cc0"/>
+<text x="150" y="112" font-size="22" font-weight="800" letter-spacing="2" fill="#6b5aa6" text-anchor="middle">SOLID</text>
+<text x="420" y="88" font-size="22" font-weight="800" letter-spacing="2" fill="#3f78a8" text-anchor="middle">LIQUID</text>
+<text x="470" y="290" font-size="22" font-weight="800" letter-spacing="2" fill="#b0703a" text-anchor="middle">GAS</text>
+<path d="M65 40V335H610" fill="none" stroke="#52647f" stroke-width="2.5"/><path d="M65 36l-6 10h12z M616 335l-10 -6v12z" fill="#52647f"/>
+<text x="335" y="368" text-anchor="middle" font-size="18" font-weight="650" fill="#384b68">Temperature</text>
+<text x="28" y="190" text-anchor="middle" transform="rotate(-90 28 190)" font-size="18" font-weight="650" fill="#384b68">Pressure</text>
+${arrow}${legend}${tp}</g></svg><p class="chart-note">Schematic only · typical substance (not water) · no numerical scale</p></div>`}
+function curveSVG(points,highlight=-1,unit='kJ',cooling=false){
+ const xmax=Math.max(...points.map(p=>p[0]))*1.05,tmin=Math.min(...points.map(p=>p[1])),tmax=Math.max(...points.map(p=>p[1])),pad=(tmax-tmin)*.1||10,lo=tmin-pad,hi=tmax+pad,
+  L=78,R=625,T=40,B=318,X=x=>L+x/xmax*(R-L),Y=t=>B-(t-lo)/(hi-lo)*(B-T);
+ const spread=(vals,min)=>{const s=[...vals].sort((a,b)=>a.p-b.p);for(let i=1;i<s.length;i++)if(s[i].p-s[i-1].p<min)s[i].p=s[i-1].p+min;return s;};
+ let grid='',labels='';
+ const xs=[...new Set(points.map(p=>p[0]))],ts=[...new Set(points.map(p=>p[1]))];
+ for(const x of xs)grid+=`<path d="M${X(x)} ${T}V${B}" stroke="#e6e9f3" stroke-dasharray="3 4"/>`;
+ for(const t of ts)grid+=`<path d="M${L} ${Y(t)}H${R}" stroke="#e6e9f3" stroke-dasharray="3 4"/>`;
+ // x labels: drop a close label to a second row instead of overlapping
+ const xl=xs.map(x=>({x,p:X(x)})).sort((a,b)=>a.p-b.p);let last=-99,row=0;for(const o of xl){row=o.p-last<34&&row===0?1:0;if(row===0)last=o.p;labels+=`<text x="${o.p}" y="${B+24+row*17}" text-anchor="middle" font-size="15" font-weight="600">${Number(o.x.toFixed(1))}</text>`;}
+ // y labels: nudge apart so they never collide
+ const yl=spread(ts.map(t=>({t,p:-Y(t)})),18);for(const o of yl)labels+=`<text x="${L-9}" y="${-o.p+5}" text-anchor="end" font-size="15" font-weight="600">${o.t}</text>`;
+ let segs='',dots='',letters='';
+ points.slice(1).forEach((p,i)=>{const a=points[i],x1=X(a[0]),y1=Y(a[1]),x2=X(p[0]),y2=Y(p[1]),on=i===highlight,flat=Math.abs(y2-y1)<2;
+  segs+=`<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${on?'#ef7f5a':'#5b6cc0'}" stroke-width="${on?9:5}" stroke-linecap="round" fill="none"/>`;
+  const mx=(x1+x2)/2,my=(y1+y2)/2,len=Math.hypot(x2-x1,y2-y1)||1,nx=(y1-y2)/len,ny=(x2-x1)/len,s=ny>0?-1:1,off=flat?20:22;
+  let lx=mx+nx*off*s,ly=my+ny*off*s;if(lx<L+16){lx=mx-nx*off*s;ly=my-ny*off*s;}
+  letters+=`<text x="${lx}" y="${ly+6}" text-anchor="middle" font-size="19" font-weight="800" fill="${on?'#c24f2c':'#3b4a8c'}" ${HALO}>${String.fromCharCode(65+i)}</text>`;});
+ points.forEach(p=>dots+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="5" fill="#fff" stroke="#5b6cc0" stroke-width="3"/>`);
+ return `<div class="chart"><svg viewBox="0 0 660 395" role="img" aria-label="Temperature versus heat ${cooling?'removed':'added'} curve. ${highlight>=0?'Segment '+String.fromCharCode(65+highlight)+' is highlighted.':'Read the displayed segment endpoints.'}"><g font-family="ui-sans-serif,system-ui,Segoe UI,Helvetica,Arial" fill="#425671"><rect x="${L}" y="${T}" width="${R-L}" height="${B-T}" fill="#fbfbff"/>${grid}<path d="M${L} ${T-8}V${B}H${R+10}" stroke="#52647f" stroke-width="2.5" fill="none"/>${segs}${dots}${letters}${labels}<text x="${(L+R)/2}" y="382" text-anchor="middle" font-size="17" font-weight="650">Heat ${cooling?'removed':'added'} (${unit}) →</text><text x="24" y="${(T+B)/2}" transform="rotate(-90 24 ${(T+B)/2})" text-anchor="middle" font-size="17" font-weight="650">Temperature (°C)</text></g></svg></div>`}
+function particles(state){
+ const r=14;let pos=[];
+ if(state==='Solid'){for(let row=0;row<4;row++)for(let c=0;c<6;c++)pos.push([105+c*29,224-row*29]);}
+ else if(state==='Liquid'){const J=[3,-2,1,-3,2,0,-1,3,-2,1,2,-3,0,2,-1,1,-2,3,0,-2,1,2];let k=0;for(const [y,x0,n] of [[224,84,8],[198,98,7],[172,84,8]])for(let i=0;i<n;i++){if(y===172&&(i===3||i===7))continue;pos.push([x0+i*28.5+J[k%J.length]*.5,y+J[(k+5)%J.length]*.5]);k++;}}
+ else {pos=[[92,70,1,-1],[205,58,-1,1],[270,120,1,1],[150,135,-1,-1],[96,205,1,1],[228,200,-1,1]];}
+ const grad=`<defs><radialGradient id="ball" cx="35%" cy="32%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#b9cff3"/><stop offset="1" stop-color="#6f8fd0"/></radialGradient></defs>`;
+ let body='';
+ if(state==='Solid')body+=pos.map(([x,y])=>`<path d="M${x-r-4} ${y}h-3M${x+r+4} ${y}h3" stroke="#a9b6d6" stroke-width="2" stroke-linecap="round"/>`).join('');
+ if(state==='Gas')body+=pos.map(([x,y,dx,dy])=>{const L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,px=-uy,py=ux;return [[-7,12],[0,20],[7,12]].map(([o,len])=>`<path d="M${(x-ux*(r+5)+px*o).toFixed(1)} ${(y-uy*(r+5)+py*o).toFixed(1)}l${(-ux*len).toFixed(1)} ${(-uy*len).toFixed(1)}" stroke="#a9b6d6" stroke-width="2.5" stroke-linecap="round"/>`).join('')}).join('');
+ body+=pos.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#ball)" stroke="#5a78b8" stroke-width="1.5"/>`).join('');
+ return `<div class="chart particle-chart"><svg viewBox="0 0 350 270" role="img" aria-label="Particle arrangement: identify the state from particle spacing and order.">${grad}<rect x="40" y="20" width="270" height="226" rx="14" fill="#f7f9ff" stroke="#b9c6e2" stroke-width="2"/><path d="M44 242H306" stroke="#d5dcee" stroke-width="4" stroke-linecap="round"/>${body}</svg></div>`}
+
+
+
 
 const ENERGY_REACTIONS=[
  {left:'CH4(g) + 2 O2(g)',right:'CO2(g) + 2 H2O(l)',energySide:'right'},
@@ -272,7 +911,37 @@ function explore(){const kind=draw('explore-kind',['material','mass','direction'
  else{title='Same temperature change, different heat';story=`Equal ${m} g samples of water and ${a[0].toLowerCase()} warm by ${dt} °C. Which absorbs more heat?`;answer='Water';options=['Water',a[0],'Same heat'];explain='For equal mass and ΔT, q is proportional to c. Water’s larger c requires more heat.';}
  return {topic:'explore',title,story,steps:[stage('Make a prediction','Select the best answer. Use the model below to explore after predicting.',[choice('prediction','Prediction',answer,options)],explain,'Compare mass and specific heat in q = mcΔT. For heat direction, compare initial temperatures.')]};
 }
-function modelHeat(){const energy=Number($('modelEnergy').value),ma=Number($('modelMassA').value),mb=Number($('modelMassB').value),ca=Number($('modelMaterialA').value),cb=Number($('modelMaterialB').value),ta=20+energy/(ma*ca),tb=20+energy/(mb*cb);$('modelReadout').innerHTML=`<b>Sample A: ${ta.toFixed(1)} °C</b> · ΔT = ${(ta-20).toFixed(1)} °C<br><b>Sample B: ${tb.toFixed(1)} °C</b> · ΔT = ${(tb-20).toFixed(1)} °C<br>Each absorbs ${energy} J. A: ${ma} g; B: ${mb} g.`;$('modelBars').innerHTML=[ta,tb].map((t,i)=>`<div><b>Sample ${i?'B':'A'}</b><div style="height:${Math.max(8,Math.min(140,(t-20)*2))}px;background:${i?'#99b3ef':'#f2b29b'};width:65px;border-radius:10px 10px 0 0"></div><span>${t.toFixed(1)} °C</span></div>`).join('');}
+/* v32 Heat Explorer */
+const HX_MATS=[['Water',4.184,'💧'],['Aluminum',0.903,'⬜'],['Iron',0.449,'⬛'],['Copper',0.385,'🟫'],['Gold',0.128,'🟨']];
+const HX_LOOK={Water:'linear-gradient(180deg,#d7ecff 0,#9fcaf3 100%)',Aluminum:'linear-gradient(135deg,#f4f6fa,#c4cad6 55%,#e8ebf1)',Iron:'linear-gradient(135deg,#9aa0ab,#5d636e 55%,#868c97)',Copper:'linear-gradient(135deg,#f3b98f,#c4703f 55%,#e59a6b)',Gold:'linear-gradient(135deg,#ffe58a,#d6a422 55%,#f5cf55)'};
+const HX={A:'Water',B:'Aluminum'};
+function hxSetup(){for(const s of ['A','B']){const sel=$('modelMaterial'+s);sel.innerHTML=HX_MATS.map(([n,c])=>'<option value="'+c+'">'+n+'</option>').join('');
+ $('hxMats'+s).innerHTML=HX_MATS.map(([n,c])=>'<button type="button" class="hx-mat" data-mat="'+n+'"><b>'+n+'</b><small>c = '+c+'</small></button>').join('');
+ $('hxMats'+s).onclick=e=>{const b=e.target.closest('[data-mat]');if(!b)return;HX[s]=b.dataset.mat;modelHeat();};}
+ for(const id of ['modelMassA','modelMassB','modelEnergy'])$(id).oninput=modelHeat;
+ document.querySelector('.hx-tries').onclick=e=>{const b=e.target.closest('[data-try]');if(!b)return;const t=b.dataset.try;
+  const set=(a,ma,bb,mb,q)=>{HX.A=a;HX.B=bb;$('modelMassA').value=ma;$('modelMassB').value=mb;$('modelEnergy').value=q;};
+  if(t==='water-al')set('Water',100,'Aluminum',100,1000);if(t==='mass')set('Copper',50,'Copper',100,800);if(t==='gold')set('Gold',100,'Water',100,600);modelHeat();};}
+function modelHeat(){const q=Number($('modelEnergy').value);$('hxQ').textContent=q+' J';const out={};
+ for(const s of ['A','B']){const [name,c]=HX_MATS.find(m=>m[0]===HX[s]),m=Number($('modelMass'+s).value),dt=q/(m*c),T=20+dt;out[s]={name,c,m,dt,T};
+  $('modelMaterial'+s).value=String(c);$('hxMats'+s).querySelectorAll('.hx-mat').forEach(b=>b.classList.toggle('on',b.dataset.mat===name));
+  $('hxM'+s).textContent=m+' g';
+  const size=Math.round(46+Math.sqrt(m/250)*58),glow=Math.min(1,dt/40),obj=$('hxObj'+s);
+  obj.style.width=size+'px';obj.style.height=(name==='Water'?Math.round(size*1.05):size)+'px';obj.style.background=HX_LOOK[name];obj.className='hx-obj'+(name==='Water'?' water':'');
+  obj.style.boxShadow='0 0 '+Math.round(6+glow*26)+'px '+Math.round(glow*10)+'px rgba(255,120,60,'+(0.08+glow*.55).toFixed(2)+'), inset 0 -6px 0 rgba(0,0,0,.08)';
+  const pct=Math.max(0,Math.min(100,(T-10)/(90-10)*100));$('hxFill'+s).style.height=pct+'%';$('hxFill'+s).classList.toggle('off',T>90);
+  $('hxT'+s).innerHTML='<b>'+T.toFixed(1)+' °C</b><small>'+(T>90?'off the scale!':'final temperature')+'</small>';
+  $('hxDt'+s).textContent='ΔT = +'+dt.toFixed(1)+' °C';
+  $('hxWork'+s).innerHTML='ΔT = <span class="fraction"><span>q</span><span>m·c</span></span> = <span class="fraction"><span>'+q+' J</span><span>'+m+' g × '+c+' J/(g·°C)</span></span> = <b>'+dt.toFixed(1)+' °C</b>';}
+ const A=out.A,B=out.B,ha=A.m*A.c,hb=B.m*B.c;let v;
+ if(q===0)v='Add some heat with the 🔥 slider.';
+ else if(Math.abs(ha-hb)/Math.max(ha,hb)<0.02)v='Both samples warm about the <b>same</b>. Their m × c values match ('+ha.toFixed(0)+' J/°C).';
+ else{const big=ha<hb?'A':'B',sm=big==='A'?B:A,bg=big==='A'?A:B,ratio=sm.m*sm.c/(bg.m*bg.c);
+  const why=bg.name!==sm.name&&bg.c<sm.c&&bg.m<=sm.m?bg.name+' has a lower specific heat, so each gram needs less energy per °C.':bg.name===sm.name?'Same material, but less mass: the same heat is shared by fewer grams.':'Compare m × c: '+bg.m+' g × '+bg.c+' is smaller than '+sm.m+' g × '+sm.c+'.';
+  v='<b>Sample '+big+' warms '+ratio.toFixed(1)+'× more</b> than Sample '+(big==='A'?'B':'A')+'. '+why;}
+ $('modelReadout').innerHTML='💡 '+v;}
+hxSetup();modelHeat();
+
 const generators={identify,sensible,latent,challenge,explore};let course='3A',mode='mixed',q,index=0,history=[],revealed=false,finished=false,previous={},recentQ={};
 const COURSE_PROGRESS_KEY='itsdrdan-thermo-course-progress-v2',emptyScore=()=>({correct:0,streak:0,assisted:0,xp:0,bestStreak:0,challengeCorrect:0});
 let courseScores={'3A':emptyScore(),'1A':emptyScore()},legacyProgress=null;
@@ -498,7 +1167,7 @@ function nextThermoQuestion(){if(!thermoQuiz){fresh();return;}if(thermoQuiz.resu
 function thermoQuizReport(){const review=QUIZ_REVIEW[thermoQuiz.course],results=thermoQuiz.results,total=results.filter(r=>r.first).length;$('quizReport').hidden=false;$('quizReport').innerHTML='<h2>🧭 '+thermoQuiz.course+' thermochemistry study plan</h2><p><b>'+total+' / 10 problems correct without retries, help, or skips.</b> This is a study snapshot, not a course grade. Each multistep problem counts once; a retry or use of Help in any step marks that topic for review.</p><div class="thermo-review-grid">'+Object.entries(review).map(([topic,[label,advice,chapter]])=>{const attempted=results.filter(r=>r.topic===topic),correct=attempted.filter(r=>r.first).length;return '<article class="thermo-review-card"><h3>'+esc(label)+'</h3><b>'+correct+' / '+attempted.length+' · '+(correct===attempted.length?'Strong start':correct===0?'Priority review':'Keep practicing')+'</b><p>'+esc(advice)+'</p><p class="small">'+esc(chapter)+'</p><button type="button" data-quiz-practice="'+topic+'">Practice this skill →</button></article>';}).join('')+'</div><p>Redo a missed problem without notes, then try another example before taking a fresh check.</p><button type="button" id="retakeThermoQuiz" class="primary">Take a new randomized check</button>';$('new').disabled=true;$('bottomNew').hidden=true;$('quizReport').scrollIntoView({block:'start',behavior:'auto'});}
 modeButtons=function(){const list=availableModes(),finalIDs=course==='1A'?['mixed','advanced']:['mixed'],button=([id,title,caption])=>'<button type="button" class="mode '+(mode===id?'active':'')+'" data-mode="'+id+'" title="'+caption+'" aria-pressed="'+(mode===id)+'"><b>'+title+'</b><small>'+caption+'</small></button>',practice=list.filter(m=>!finalIDs.includes(m[0])),finals=finalIDs.map(id=>list.find(m=>m[0]===id));finals.push(['quiz','🏆 10-Question Check','Course-specific quiz & study plan']);$('modes').innerHTML='<div class="mode-section-label">Choose a skill to practice</div><div class="skill-mode-grid">'+practice.map(button).join('')+'</div><div class="mode-divider"><hr class="mode-separator"><span>Mixed practice & readiness check</span></div><div class="review-mode-grid '+(course==='1A'?'three-review-modes':'two-review-modes')+'">'+finals.map(button).join('')+'</div>';updateModeSummary();};
 
-function updateModeSummary(){const b=document.querySelector('#modes .mode.active b');$('modeSummary').innerHTML='<span>Skill: <b>'+(b?b.textContent:'Mixed Practice')+'</b></span>'}
+function updateModeSummary(){}
 const practiceRender=render;render=function(){practiceRender();$('quizReport').hidden=true;$('thermoLessons').hidden=!!thermoQuiz;$('new').disabled=false;$('reset').disabled=!!thermoQuiz;$('new').textContent=thermoQuiz?'Skip question · counts for review':'New Question →';$('bottomNew').textContent=thermoQuiz?(thermoQuiz.position===9?'View study plan →':'Next quiz question →'):'New Question →';if(thermoQuiz){$('badge').textContent='Quiz '+(thermoQuiz.position+1)+' of 10 · '+(finished?'Complete':'Step '+(index+1)+' of '+q.steps.length);$('hint').disabled=false;$('show').disabled=true;$('problemDirections').hidden=true;$('solutionMap').innerHTML='';$('heatExplorer').hidden=true;document.querySelectorAll('[data-hess-action="show"]').forEach(b=>b.disabled=true);}else $('problemDirections').hidden=false;};
 const practiceFeedback=feedback;feedback=function(kind,text,title){if(thermoQuiz&&kind==='bad')thermoQuiz.mistake=true;practiceFeedback(kind,text,title);};
 const practiceSave=save;save=function(){if(thermoQuiz){score=structuredClone(thermoQuiz.practiceScore);return;}practiceSave();};
@@ -509,10 +1178,10 @@ $('hessBoard').oninput=e=>{if(!q.hessGame||index>0||finished)return;const input=
 $('course3a').onclick=()=>selectCourse('3A');$('course1a').onclick=()=>selectCourse('1A');
 $('loadPhet').onclick=()=>{$('phetContainer').innerHTML='<iframe title="PhET Energy Forms and Changes — Intro" src="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html?screens=1" style="width:100%;height:clamp(380px,65vw,650px);border:0;margin-top:16px" allowfullscreen></iframe>';$('loadPhet').hidden=true};for(const id of ['modelMaterialA','modelMaterialB','modelMassA','modelMassB','modelEnergy'])$(id).oninput=modelHeat;modelHeat();
 $('videoList').onclick=e=>{const b=e.target.closest('[data-video]');if(b)playLesson(b.dataset.video)};$('videoChapters').onclick=e=>{const b=e.target.closest('[data-time]');if(b)playLesson(selectedLesson,Number(b.dataset.time))};
-$('modes').onclick=e=>{const b=e.target.closest('[data-mode]');if(!b)return;if(b.dataset.mode==='quiz')startThermoQuiz();else{endThermoQuiz();mode=b.dataset.mode;fresh();}$('practice').focus({preventScroll:true});};$('new').onclick=nextThermoQuestion;$('bottomNew').onclick=()=>{nextThermoQuestion();if(!thermoQuiz||thermoQuiz.results.length<10)$('practice').scrollIntoView({block:'start',behavior:'auto'})};$('check').onclick=check;$('hint').onclick=hint;$('show').onclick=show;$('expand').onchange=()=>{$('completed').open=$('expand').checked;saveDisplayPreferences()};$('mapExpand').onchange=()=>{const map=$('mapDetails');if(map)map.open=$('mapExpand').checked;saveDisplayPreferences()};$('fields').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();check()}};$('reset').onclick=()=>{if(confirm('Reset practice progress for CHEM '+course+' only?')){score=emptyScore();save();fresh()}};
-(function(){const mq=matchMedia('(max-width:899px)');const sync=()=>{$('modePicker').open=!mq.matches};sync();mq.addEventListener?mq.addEventListener('change',sync):mq.addListener(sync);$('modes').addEventListener('click',e=>{if(e.target.closest('[data-mode]')&&mq.matches){$('modePicker').open=false;setTimeout(()=>$('practice').scrollIntoView({block:'start',behavior:'smooth'}),80)}});$('new').addEventListener('click',()=>{if(mq.matches)setTimeout(()=>$('practice').scrollIntoView({block:'start',behavior:'smooth'}),60)})})();
-try{const prefs=JSON.parse(localStorage.getItem('itsdrdan-thermo-directions-v2')||'{}');$('playGuide').open=prefs.intro===true;$('problemDirections').open=prefs.topic!==false;}catch{}
-for(const id of ['playGuide','problemDirections'])$(id).addEventListener('toggle',()=>{try{localStorage.setItem('itsdrdan-thermo-directions-v2',JSON.stringify({intro:$('playGuide').open,topic:$('problemDirections').open}));}catch{}});
+$('modes').onclick=e=>{const b=e.target.closest('[data-mode]');if(!b)return;if(b.dataset.mode==='quiz')startThermoQuiz();else{endThermoQuiz();mode=b.dataset.mode;fresh();}$('practice').focus({preventScroll:true});};$('new').onclick=nextThermoQuestion;$('bottomNew').onclick=()=>{nextThermoQuestion();if(!thermoQuiz||thermoQuiz.results.length<10)$('practice').scrollIntoView({block:'start',behavior:'auto'})};$('check').onclick=()=>check();$('hint').onclick=()=>hint();$('show').onclick=()=>show();$('expand').onchange=()=>{$('completed').open=$('expand').checked;saveDisplayPreferences()};$('mapExpand').onchange=()=>{const map=$('mapDetails');if(map)map.open=$('mapExpand').checked;saveDisplayPreferences()};$('fields').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();check()}};$('reset').onclick=()=>{if(confirm('Reset practice progress for CHEM '+course+' only?')){score=emptyScore();save();fresh()}};
+
+try{const prefs=JSON.parse(localStorage.getItem('itsdrdan-thermo-directions-v2')||'{}');$('problemDirections').open=prefs.topic!==false;}catch{}
+$('problemDirections').addEventListener('toggle',()=>{try{localStorage.setItem('itsdrdan-thermo-directions-v2',JSON.stringify({topic:$('problemDirections').open}));}catch{}});
 try{const prefs=JSON.parse(localStorage.getItem('itsdrdan-thermo-display')||'{}');$('mapExpand').checked=prefs.map===true;$('expand').checked=prefs.work===true;}catch{}
 $('formationTable').innerHTML=dataTable(Object.keys(FORMATION));$('heatTable').innerHTML=HEATS.map(([name,c])=>'<tr><td>'+esc(name)+'</td><td>'+c+'</td></tr>').join('');save();modeButtons();fresh();if(new URLSearchParams(window.location.search).get('course')?.toUpperCase()==='1A')selectCourse('1A');
 // Optional iframe height messages for compatible Canvas wrappers.
@@ -524,4 +1193,46 @@ $('quizReport').onclick=e=>{const b=e.target.closest('[data-quiz-practice]');if(
 function thermoBonus(earned){const layer=document.createElement('div');layer.className='xp-bonus-layer';layer.setAttribute('aria-hidden','true');const banner=document.createElement('div');banner.className='xp-bonus-banner';banner.innerHTML='<strong>✨ DOUBLE XP!</strong><span>+'+earned+' XP · Surprise bonus!</span>';layer.append(banner);if(!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches){const fireworks=Math.random()<.5;for(let i=0;i<(fireworks?42:14);i++){const piece=document.createElement('span');piece.className='xp-bonus-piece '+(fireworks?'bonus-firework':'bonus-balloon');piece.style.setProperty('--delay',(Math.random()*1.2)+'s');piece.style.left=(8+Math.random()*84)+'vw';if(fireworks){const angle=i*Math.PI*2/14;piece.style.top=(25+Math.floor(i/14)*20)+'vh';piece.style.left=[25,70,45][Math.floor(i/14)]+'vw';piece.style.setProperty('--dx',Math.cos(angle)*140+'px');piece.style.setProperty('--dy',Math.sin(angle)*140+'px');piece.style.background=['#82b3eb','#efa689','#c9a0de','#86cbaa','#edc260'][i%5];}else{piece.textContent='🎈';piece.style.fontSize=(28+Math.random()*24)+'px';piece.style.setProperty('--drift',(Math.random()*100-50)+'px');}layer.append(piece);}}document.body.append(layer);setTimeout(()=>layer.remove(),6500);}
 
 if(legacyProgress?.correct){$('legacyProgressNote').hidden=false;$('legacyProgressNote').textContent='Previous shared progress: '+legacyProgress.correct+' completed problems ('+(legacyProgress.correct*20)+' XP). It is retained on this device as a legacy record, not assigned to either course because its course history was not recorded.';}
+
+/* ===== v31 Study Games look: topic cards, top bar, reference dialog, choice buttons ===== */
+const MODE_LOOK={mixed:['🎲','#7d8ce0','#e5e9ff'],quiz:['🏆','#e0b23c','#fff3cf'],advanced:['🔥','#e47b5c','#ffe6dc'],
+ identify:['❄️','#8a9be0','#eaeefe'],sensible:['🌡️','#e39a72','#fff0e6'],latent:['💧','#6fa8d6','#e6f2ff'],explore:['🧊','#6fb3b3','#e3f5f5'],challenge:['🔥','#d98a8a','#fde7e7'],
+ basics:['🌡️','#e39a72','#fff0e6'],energy:['⚡','#d6ab4a','#fff6dc'],calorimetry:['☕','#b98d6c','#f8ede4'],hess:['🧩','#ad8cce','#f0e8fc'],formation:['📋','#6fa8d6','#e6f2ff'],enthalpy:['🧪','#7caf86','#e7f6e9']};
+const MODE_BLURB={mixed:'Every topic, shuffled. The best way to study!',quiz:'10 questions, then a study plan',advanced:'Big problems that combine skills'};
+const modeName=t=>String(t).replace(/^[^A-Za-z0-9]+\s*/,'');
+modeButtons=function(){const list=availableModes(),finalIDs=course==='1A'?['mixed','advanced']:['mixed'];
+ const practice=list.filter(m=>!finalIDs.includes(m[0])),finals=finalIDs.map(id=>list.find(m=>m[0]===id));finals.push(['quiz','🏆 10-Question Check',course==='1A'?'Skill Check prep · 10 questions + study plan':'10 questions + a study plan']);
+ const feat=([id,title,cap])=>{const [ic]=MODE_LOOK[id]||['✦'];return '<button type="button" class="feature mode '+(id==='quiz'?'check':id)+(mode===id?' active':'')+'" data-mode="'+id+'" aria-pressed="'+(mode===id)+'"><span class="f-ico" aria-hidden="true">'+ic+'</span><span><b>'+esc(modeName(title))+'</b><small>'+esc(id==='quiz'?cap:MODE_BLURB[id]||cap)+'</small></span></button>';};
+ const card=([id,title,cap])=>{const [ic,ma,mb]=MODE_LOOK[id]||['✦','#8a9be0','#eef0fe'];return '<button type="button" class="pick unit mode'+(mode===id?' active':'')+'" data-mode="'+id+'" aria-pressed="'+(mode===id)+'" style="--ma:'+ma+';--mb:'+mb+'"><span class="ico" aria-hidden="true">'+ic+'</span><span class="ptxt"><b>'+esc(modeName(title))+'</b><small>'+esc(cap)+'</small></span></button>';};
+ $('modes').innerHTML='<div class="featured">'+finals.map(feat).join('')+'</div><div class="divider"><span>or practice one topic</span></div><div class="picker units">'+practice.map(card).join('')+'</div>';};
+/* top bar + progress row mirror the course score */
+const RANK_ICONS=['🌱','🔥','⚡','🏅','🏆'],RANK_NAMES=['Heat Explorer','Energy Apprentice','Thermal Trailblazer','Enthalpy Hero','Thermochemistry Champion'];
+const baseRenderQuest=renderQuest;renderQuest=function(){baseRenderQuest();const xp=score.xp??score.correct*20,level=Math.floor(xp/100)+1,k=Math.min(level-1,RANK_NAMES.length-1);
+ $('rankIcon').textContent=RANK_ICONS[k];$('rankName').textContent=RANK_NAMES[k];$('xpShort').textContent=xp+' XP · Level '+level;$('tbXpFill').style.width=(xp%100)+'%';
+ $('questRank').textContent=RANK_ICONS[k]+' Level '+level+' · '+RANK_NAMES[k];$('questXP').textContent='CHEM '+course+' · '+xp+' XP';
+ $('streak2').textContent=score.streak||0;$('bestStreak').textContent=Math.max(score.bestStreak||0,score.streak||0);
+ if($('score'))$('score').textContent=score.correct||0;if($('streak'))$('streak').textContent=score.streak||0;if($('assisted'))$('assisted').textContent=score.assisted||0;};
+/* choices become big letter buttons (the hidden select still holds the answer) */
+function enhanceChoices(){const s=q?.steps?.[index];if(!s)return;const choiceFields=s.fields.filter(f=>f.options);
+ for(const f of choiceFields){const sel=$('input-'+f.id),label=$('field-'+f.id);if(!sel||!label||label.querySelector('.choice-box'))continue;label.classList.add('has-choices');sel.hidden=true;
+  const box=document.createElement('div');box.className='choice-box';box.setAttribute('role','group');
+  box.innerHTML=f.options.map((o,i)=>'<button type="button" class="choice" data-val="'+esc(o)+'"'+(finished?' disabled':'')+'><span class="opt-letter">'+'ABCDEFGH'[i]+'</span><span class="opt-body">'+optionDisplay(o)+'</span></button>').join('');
+  sel.after(box);const tip=label.querySelector('small');if(tip&&tip.textContent.startsWith('Choose an option'))tip.textContent=s.fields.length>1?'Tap one answer.':'Tap the correct answer.';
+  box.onclick=e=>{const b=e.target.closest('.choice');if(!b||b.disabled)return;sel.value=b.dataset.val;box.querySelectorAll('.choice').forEach(x=>x.classList.toggle('picked',x===b));box.querySelectorAll('.wrong').forEach(x=>x.classList.remove('wrong'));
+   const allSet=s.fields.every(g=>($('input-'+g.id)?.value||'').trim()!=='');if(s.fields.length===1||(allSet&&s.fields.every(g=>g.options)))check();};}}
+function markChoices(){const s=q?.steps?.[index];if(!s)return;for(const f of s.fields){if(!f.options)continue;const label=$('field-'+f.id),b=label?.querySelector('.choice.picked');if(!b)continue;if(label.classList.contains('bad')){b.classList.add('wrong');b.classList.remove('picked');}}}
+const baseCheckStep=check;check=function(){baseCheckStep();markChoices();};
+const v31Render=render;render=function(){v31Render();enhanceChoices();$('practice').classList.toggle('hess-step',!!q.hessGame&&index<2&&!finished);$('heatExplorer').hidden=q.topic!=='explore'||!!thermoQuiz;};
+/* reference dialog */
+$('referenceBtn').onclick=()=>{const d=$('referenceDialog');d.showModal?d.showModal():d.setAttribute('open','');};
+$('closeRef').onclick=()=>$('referenceDialog').close();
+$('referenceDialog').addEventListener('click',e=>{if(e.target===$('referenceDialog'))$('referenceDialog').close();});
+/* two-tap reset (confirm() is blocked inside some Canvas frames) */
+$('reset').onclick=()=>{const b=$('reset');if(!b.classList.contains('armed')){b.classList.add('armed');b.textContent='Tap again to reset CHEM '+course;setTimeout(()=>{b.classList.remove('armed');b.textContent='↻ Reset my progress';},4000);return;}
+ b.classList.remove('armed');b.textContent='↻ Reset my progress';score=emptyScore();save();fresh();};
+/* after picking a topic, bring the question into view */
+$('modes').addEventListener('click',e=>{if(!e.target.closest('[data-mode]'))return;setTimeout(()=>{const t=$('practice').getBoundingClientRect().top;if(t<60||t>innerHeight*.55)$('practice').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});},60);});
+modeButtons();renderQuest();render();
+
+(function(){const src=document.querySelector('.intro-mascot').src;document.querySelector('.tb-brand img').src=src;const l=document.createElement('link');l.rel='icon';l.href=src;document.head.appendChild(l);})();
 </script></body></html>
