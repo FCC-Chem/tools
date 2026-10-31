@@ -1,8 +1,20 @@
 {
-  "title": "Element Name and Symbol Memorization Game (Health Sciences Edition)",
-  "author": "Dr. Dan",
-  "course": "CHEM 3A",
-  "description": "Memorize the first 20 elements plus other important elements that are commonly found within the healthcare field",
-  "tags": ["periodic table", "elements"],
+  "title": "Element Symbol Study Lab",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3A and CHEM 1A",
+  "description": "Practice element names and symbols using the first 20 elements, a health-science essentials set, or a combined set. Includes name-to-symbol and symbol-to-name questions, capitalization checks, hints, missed-element review, a study reference, accuracy tracking, and saved progress.",
+  "icon": "⚛️",
+  "tags": [
+    "chemistry",
+    "CHEM 3A",
+    "CHEM 1A",
+    "elements",
+    "element names",
+    "element symbols",
+    "periodic table",
+    "first 20 elements",
+    "health sciences",
+    "memorization"
+  ],
   "status": "working"
 }
