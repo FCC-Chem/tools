@@ -229,7 +229,7 @@ const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({
 const rnd=n=>Math.floor(Math.random()*n),shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a},pick=a=>a[rnd(a.length)];
 const MOLU=46;
 function molSVG(m,sc){if(m.skel)return skelSVG(m,sc);const A=m.a.map(a=>({el:a[0],x:a[1]*MOLU,y:a[2]*MOLU,lp:a[3]||0,ch:a[4]||0,lab:a[5]||''}));
- const xs=A.map(a=>a.x),ys=A.map(a=>a.y),pad=34,minx=Math.min(...xs)-pad-(m.br?14:0),miny=Math.min(...ys)-pad,W=Math.max(...xs)-minx+pad+(m.br?30:0),H=Math.max(...ys)-miny+pad;
+ const xs=A.map(a=>a.x),ys=A.map(a=>a.y),pad=34+(A.some(a=>Math.abs(a.ch)>1)?9:0),minx=Math.min(...xs)-pad-(m.br?14:0),miny=Math.min(...ys)-pad,W=Math.max(...xs)-minx+pad+(m.br?30:0),H=Math.max(...ys)-miny+pad;
  const S='#2d3f4b';let o='';const dirs=A.map(()=>[]);
  (m.b||[]).forEach(([i,j,ord])=>{const a=A[i],b=A[j],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l,px=-uy,py=ux;dirs[i].push(Math.atan2(dy,dx));dirs[j].push(Math.atan2(-dy,-dx));
   const x1=a.x+ux*12,y1=a.y+uy*12,x2=b.x-ux*12,y2=b.y-uy*12;(ord===1?[0]:ord===2?[-3.2,3.2]:[-4.8,0,4.8]).forEach(of=>{o+=`<line x1="${(x1+px*of).toFixed(1)}" y1="${(y1+py*of).toFixed(1)}" x2="${(x2+px*of).toFixed(1)}" y2="${(y2+py*of).toFixed(1)}" stroke="${S}" stroke-width="2.4" stroke-linecap="round"/>`})});
@@ -240,7 +240,7 @@ function molSVG(m,sc){if(m.skel)return skelSVG(m,sc);const A=m.a.map(a=>({el:a[0
    for(let k=0;k<a.lp;k++){let best=null,bs=-1;cand.forEach(c=>{const ad=t=>{let x=Math.abs(c-t)%(2*Math.PI);return x>Math.PI?2*Math.PI-x:x};const d=(taken.length?Math.min(...taken.map(ad)):9)+0.001*pick.reduce((a,p)=>a+ad(p),0);if(d>bs+1e-6){bs=d;best=c}});pick.push(best);taken.push(best)}
    pick.forEach(c=>{const dg=Math.abs(Math.sin(2*c))>0.5,rr=dg?(a.el.length>1?25:22):15,cx=a.x+Math.cos(c)*rr,cy=a.y+Math.sin(c)*rr,px=-Math.sin(c)*4.2,py=Math.cos(c)*4.2;o+=`<circle cx="${(cx+px).toFixed(1)}" cy="${(cy+py).toFixed(1)}" r="2.3" fill="${S}"/><circle cx="${(cx-px).toFixed(1)}" cy="${(cy-py).toFixed(1)}" r="2.3" fill="${S}"/>`})}
   o+=`<text x="${a.x.toFixed(1)}" y="${(a.y+6.3).toFixed(1)}" text-anchor="middle" font-size="18" font-weight="800" font-family="Nunito,Inter,Helvetica,Arial,sans-serif" fill="${a.el==='C'||a.el==='H'?S:'#c0473b'}" stroke="#fff" stroke-width="5" stroke-linejoin="round" paint-order="stroke">${a.el}</text>`;
-  if(a.ch)o+=`<text x="${(a.x+Math.cos(a.chA)*21).toFixed(1)}" y="${(a.y+Math.sin(a.chA)*21+5).toFixed(1)}" text-anchor="middle" font-size="14" font-weight="900" fill="${S}" font-family="Inter,Helvetica,Arial,sans-serif">${a.ch>0?(a.ch>1?a.ch:'')+'+':(a.ch<-1?-a.ch:'')+'−'}</text>`;
+  if(a.ch){const cr=Math.abs(a.ch)>1?30:21;o+=`<text x="${(a.x+Math.cos(a.chA)*cr).toFixed(1)}" y="${(a.y+Math.sin(a.chA)*cr+5).toFixed(1)}" text-anchor="middle" font-size="14" font-weight="900" fill="${S}" font-family="Inter,Helvetica,Arial,sans-serif">${a.ch>0?(a.ch>1?a.ch:'')+'+':(a.ch<-1?-a.ch:'')+'−'}</text>`;}
   if(a.lab)o+=`<circle cx="${(a.x-15).toFixed(1)}" cy="${(a.y+17).toFixed(1)}" r="8.5" fill="#fff1d6" stroke="#e8973a" stroke-width="1.5"/><text x="${(a.x-15).toFixed(1)}" y="${(a.y+21).toFixed(1)}" text-anchor="middle" font-size="11.5" font-weight="900" fill="#b4691c" font-family="Inter,Helvetica,Arial,sans-serif">${a.lab}</text>`});
  if(m.br){const yb=miny+8,yt=miny+H-8,xl=minx+8,xr=minx+W-24;o+=`<path d="M${xl+7} ${yb}H${xl}V${yt}H${xl+7}M${xr-7} ${yb}H${xr}V${yt}H${xr-7}" fill="none" stroke="${S}" stroke-width="2"/><text x="${xr+3}" y="${miny+20}" font-size="15" font-weight="900" fill="${S}" font-family="Inter,Helvetica,Arial,sans-serif">${esc(m.br)}</text>`}
  return `<svg viewBox="${minx.toFixed(1)} ${miny.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" width="${W.toFixed(0)}" height="${H.toFixed(0)}" style="max-width:100%;height:auto" role="img" aria-label="Lewis structure">${o}</svg>`}
@@ -254,7 +254,9 @@ function skelSVG(m,sc){const U=(sc||1)*30,A=m.a.map(a=>({t:a[0],x:a[1]*U,y:a[2]*
  (m.b||[]).forEach(([i,j,ord])=>{const a=A[i],b=A[j],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l;let px=-uy,py=ux;
   const x1=a.x+(show(a)?ux*11:0),y1=a.y+(show(a)?uy*11:0),x2=b.x-(show(b)?ux*11:0),y2=b.y-(show(b)?uy*11:0);
   const ln=(x1,y1,x2,y2)=>`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${S}" stroke-width="2.3" stroke-linecap="round"/>`;
-  if(ord===0){const g=show(a)&&show(b)?0:0;o+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#2f7fbf" stroke-width="2.6" stroke-dasharray="2 5" stroke-linecap="round"/>`}
+  if(ord===4){const w=5.5;o+=`<polygon points="${x1.toFixed(1)},${y1.toFixed(1)} ${(x2+px*w).toFixed(1)},${(y2+py*w).toFixed(1)} ${(x2-px*w).toFixed(1)},${(y2-py*w).toFixed(1)}" fill="${S}" stroke="${S}" stroke-width="1" stroke-linejoin="round"/>`}
+  else if(ord===5){const n=7;for(let k=1;k<=n;k++){const f=k/n,w=0.8+5*f,cx=x1+(x2-x1)*f,cy=y1+(y2-y1)*f;o+=`<line x1="${(cx+px*w).toFixed(1)}" y1="${(cy+py*w).toFixed(1)}" x2="${(cx-px*w).toFixed(1)}" y2="${(cy-py*w).toFixed(1)}" stroke="${S}" stroke-width="1.9" stroke-linecap="round"/>`}}
+  else if(ord===0){const g=show(a)&&show(b)?0:0;o+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#2f7fbf" stroke-width="2.6" stroke-dasharray="2 5" stroke-linecap="round"/>`}
   else if(ord===1)o+=ln(x1,y1,x2,y2);
   else if(ord===3)[-4.4,0,4.4].forEach(f=>{o+=ln(x1+px*f,y1+py*f,x2+px*f,y2+py*f)});
   else{const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,rc=ringCen(i,j)||cen;if((rc[0]-mx)*px+(rc[1]-my)*py<0){px=-px;py=-py}const inner=!show(a)&&!show(b)&&A.length>3;
