@@ -2,7 +2,7 @@
   "title": "Bond Voyage! Organic Reactions",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Practice CHEM 3B organic reactions five ways: Identify the Reaction, Draw the Product, Draw the Reactant, Name It, and Full Reaction (reactant, reaction type, product, then name). Students draw on a built-in pad with automatic hydrogens and a lasso tool, and can switch between skeletal, condensed, expanded, or mixed structures. Covers alkanes and alkenes; alcohols, aldehydes, and ketones; and carboxylic acids, esters, amines, and amides. Naming accepts common alternate names. Includes a pop-out reaction reference, hints, answer reveals, XP, streaks, medal badges, and a Dr. Dan video matched to each question.",
+  "description": "Practice CHEM 3B organic reactions five ways: Identify the Reaction, Draw the Product, Draw the Reactant, Name It, and Full Reaction (reactant, reaction type, product, then name). Students draw on a built-in pad with automatic hydrogens and a lasso tool, and can switch between skeletal, condensed, expanded, or mixed structures. Covers alkanes and alkenes; alcohols, aldehydes, and ketones; and carboxylic acids, esters, amines, and amides. Naming accepts common alternate names. Includes a pop-out reaction reference, hints, answer reveals, XP, streaks, medal badges, and a Dr. Dan video matched to each question. New Exam Practice mode: 157 final-exam style multiple-choice reaction questions from Final Boss, with drawn structures and reagent arrows, a topic filter, hints and explanations.",
   "icon": "⛵",
   "tags": [
     "chemistry",
@@ -23,5 +23,6 @@
     "IUPAC naming"
   ],
   "logo": "logo.png",
-  "status": "working"
+  "status": "working",
+  "version": "10"
 }

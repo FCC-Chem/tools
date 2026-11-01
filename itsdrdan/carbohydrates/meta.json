@@ -2,7 +2,7 @@
   "title": "Sweet Structures — Carbohydrates",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Practice CHEM 3B carbohydrates in six modes: Classify Sugars, Fischer Projections, Haworth Rings, Stereochemistry, Di- & Polysaccharides, and Sugar Reactions. Covers aldoses and ketoses, D and L sugars, converting Fischer projections to Haworth rings, alpha and beta anomers, glycosidic linkages, and common sugar reactions. Includes hints, answer reveals, XP, streaks, and achievement badges.",
+  "description": "Practice CHEM 3B carbohydrates in seven modes: Classify Sugars, Fischer Projections, Haworth Rings, Stereochemistry, Di- & Polysaccharides, Sugar Reactions, and Exam Practice. Covers aldoses and ketoses, D and L sugars, converting Fischer projections to Haworth rings, alpha and beta anomers, glycosidic linkages, and common sugar reactions. Includes hints, answer reveals, XP, streaks, and achievement badges. Exam Practice serves 63 final-exam style multiple-choice carbohydrate questions from Final Boss, with drawn Fischer and Haworth structures, a topic filter, hints and explanations.",
   "icon": "🍬",
   "tags": [
     "chemistry",
@@ -19,6 +19,6 @@
     "glycosidic bonds",
     "sugar reactions"
   ],
-  "version": "9",
+  "version": "10",
   "status": "working"
 }
