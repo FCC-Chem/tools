@@ -294,6 +294,30 @@ body{font-weight:600}
 .jb-num{font-size:11px;font-weight:800;color:#8a959d;margin-top:2px}.jb-done{font-size:12px;font-weight:900;color:#3f9a58;margin-top:3px}
 @media(max-width:700px){.mode-btn{grid-template-columns:40px 1fr}.mode-btn .mode-icon,.mode-btn.active .mode-icon{width:38px;height:38px;border-radius:12px}.mode-btn .mode-icon svg{width:30px;height:30px}.btn-row .action{padding:10px 8px;white-space:nowrap;font-size:16px}.btn-row .action .bi{margin-right:5px;width:19px;height:19px}.jbadges{grid-template-columns:1fr 1fr}.jbadge{flex-direction:column;text-align:center}.jbadge .jb-txt{width:100%}}
 .toast.badge{padding:8px 16px 8px 10px}.bt-wrap{display:flex;align-items:center;gap:10px}.bt-wrap small{display:block;font-size:12px;color:#a07a1c;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.bt-wrap b{font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:18px}
+
+/* ===== drawn reaction arrow (matches Bond Voyage!) ===== */
+.rxn .rarrow{display:inline-flex;flex-direction:column;align-items:stretch;justify-content:center;min-width:130px;margin:0 10px;font-size:16px;flex:0 0 auto}
+.rxn .rlab{font-size:15px;font-weight:800;color:#3b5f7a;text-align:center;line-height:1.2;min-height:18px;max-width:200px;padding:0 12px 4px 4px}
+.rxn .rg{display:block;transform:none;padding:6px 0}
+.rxn .arrline{position:relative;display:block;height:3.5px;background:#2d3f4b;border-radius:2px;margin:0 14px 0 0}
+.rxn .arrline::after{content:'';position:absolute;right:-14px;top:50%;transform:translateY(-50%);border-left:17px solid #2d3f4b;border-top:8.5px solid transparent;border-bottom:8.5px solid transparent}
+/* smaller screens: stay on one line, shrink the molecules and the arrow instead of stacking */
+@media(max-width:700px){
+ .rxn{flex-direction:row;flex-wrap:nowrap;gap:4px;padding:8px 6px}
+ .rxn > svg.mol{flex:0 1 auto;min-width:0;max-width:100%;height:auto}
+ .rxn .plus{font-size:20px;padding:0 1px;flex:none}
+ .rxn .ptext{font-size:17px;padding:0 2px;flex:none}
+ .rxn .qmark{font-size:30px;padding:0 4px;flex:none}
+ .rxn .rarrow{flex-direction:column;align-items:stretch;min-width:84px;max-width:110px;margin:0 4px;gap:0}
+ .rxn .rlab{order:0;font-size:12px;text-align:center;white-space:normal;max-width:110px;padding:0 10px 3px 2px;min-height:14px}
+ .rxn .rg{order:0;padding:4px 0}
+ .rxn .arrline{width:auto;height:3px;margin:0 11px 0 0}
+ .rxn .arrline::after{left:auto;right:-11px;top:50%;bottom:auto;transform:translateY(-50%);border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:13px solid #2d3f4b;border-right:0}
+}
+@media(max-width:380px){
+ .rxn .rarrow{min-width:64px;margin:0 2px}
+ .rxn .rlab{font-size:11px}
+}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 <body>
@@ -334,7 +358,7 @@ body{font-weight:600}
 
 </div>
 <p class="footer-note source-note">Practice topics follow the CHEM 3B organic chemistry chapters (hydrocarbons through amides). Questions are generated for this game. Med Molecules structures are real compounds drawn without stereochemistry; fun facts are for learning, not medical advice.</p>
-<p class="footer-note privacy-note">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</p>
+<p class="footer-note privacy-note">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
 </div>
 <script>
 /* ===== Chemistry engine: structure model, layout, SVG, SMILES, condensed formula ===== */
@@ -787,7 +811,7 @@ function genReactBr(k){const mk=s=>({mol:bd(s)});const V=s=>s&&brValid(s);const 
  if(!react||!correct)return null;
  const wr=uniqOpts(correct,wrongs,[[NO],[mk(R.br('alkane'))]]);if(wr.length<3)return null;
  const options=shuf([correct,...wr]).map(p=>({key:partKey(p),html:partsHTML(p),struct:true}));
- return {kind:'react',branched:true,rx:{react:react.map(p=>p.mol?smiles(p.mol):p.t),correct:correct.map(p=>p.mol?smiles(p.mol):p.t),title},html:`<p class="prompt">${title}: predict the major product.</p><div class="rxn">${partsHTML(react,1)}<span class="rarrow"><span class="rlab">${arrow}</span><span class="rg">→</span></span><span class="qmark">?</span></div>`,options,answer:partKey(correct),hint,why,cols:2,struct:true}}
+ return {kind:'react',branched:true,rx:{react:react.map(p=>p.mol?smiles(p.mol):p.t),correct:correct.map(p=>p.mol?smiles(p.mol):p.t),title},html:`<p class="prompt">${title}: predict the major product.</p><div class="rxn">${partsHTML(react,1)}<span class="rarrow"><span class="rlab">${arrow}</span><span class="rg" role="img" aria-label="reaction arrow"><span class="arrline"></span></span></span><span class="qmark">?</span></div>`,options,answer:partKey(correct),hint,why,cols:2,struct:true}}
 
 function genReact(){const k=reactBag();if(k!=='hydration'&&Math.random()<.6){let q=null;try{q=genReactBr(k)}catch(e){console.error(e)}if(q)return q}let react,arrow,correct,wrongs,why,hint,title,fill=[[NO],[{mol:bd({f:'alkane',n:3})}]];
  const mk=s=>({mol:bd(s)});
@@ -807,7 +831,7 @@ function genReact(){const k=reactBag();if(k!=='hydration'&&Math.random()<.6){let
  else {const n=rnd(1,4);const salt=M([...Cs(n),nd('N','NH3+','NH₃⁺',{smi:'[NH3+]'})]);react=[mk({f:'amine1',n,p:1}),{t:'HCl'}];arrow='';correct=[{mol:salt},{t:'Cl⁻'}];wrongs=[[NO],[mk({f:'amide1',a:n+1>5?5:n+1}),H2O],[mk({f:'halo',n,p:1,X:'Cl'}),{t:'NH₃'}],[mk({f:'alcohol',n:Math.max(2,n),p:1}),{t:'HCl'}]];why=`An amine is a weak base. It accepts H⁺ from HCl to form an ammonium salt: ${ST[n]}ylammonium chloride.`;hint='Amines act as bases: the N lone pair picks up an H⁺ from the acid to give an ammonium ion with Cl⁻.';title='Amine plus acid'}
  const wr=uniqOpts(correct,wrongs,fill);
  const options=shuf([correct,...wr]).map(p=>({key:partKey(p),html:partsHTML(p),struct:true}));
- return {kind:'react',rx:{react:react.map(p=>p.mol?smiles(p.mol):p.t),correct:correct.map(p=>p.mol?smiles(p.mol):p.t),title},html:`<p class="prompt">${title}: predict the major product.</p><div class="rxn">${partsHTML(react,1)}<span class="rarrow"><span class="rlab">${arrow}</span><span class="rg">→</span></span><span class="qmark">?</span></div>`,options,answer:partKey(correct),hint,why,cols:2,struct:true}}
+ return {kind:'react',rx:{react:react.map(p=>p.mol?smiles(p.mol):p.t),correct:correct.map(p=>p.mol?smiles(p.mol):p.t),title},html:`<p class="prompt">${title}: predict the major product.</p><div class="rxn">${partsHTML(react,1)}<span class="rarrow"><span class="rlab">${arrow}</span><span class="rg" role="img" aria-label="reaction arrow"><span class="arrline"></span></span></span><span class="qmark">?</span></div>`,options,answer:partKey(correct),hint,why,cols:2,struct:true}}
 /* ===== Med Molecules mode: real drugs & biomolecules with lettered groups ===== */
 const MGN=Object.assign({},GN,{phenol:'Phenol'});
 const MGD=Object.assign({},GD,{phenol:'has an –OH attached directly to a benzene (aromatic) ring carbon.',halide:'has a halogen (F, Cl, Br or I) attached to a carbon.',aromatic:'is a benzene ring: six carbons in a ring with alternating double bonds.',alcohol:'has an –OH on a carbon that has only single bonds (not a ring of alternating double bonds).'});
