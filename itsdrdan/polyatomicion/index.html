@@ -786,6 +786,7 @@
       }
     }
   </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 
 <body>
@@ -946,6 +947,7 @@
       <strong>Included:</strong> all polyatomic ions explicitly shown in the uploaded
       green sheet, including both acetate formulas. The study deck contains
       <strong><span id="totalIonCount"></span> unique ion names</strong>.
+      <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</div>
     </section>
   </div>
 
@@ -1440,6 +1442,16 @@
       answerInput.focus();
     }
 
+    function ddLog(ok) {
+      try {
+        const q = currentQuestion;
+        if (!q || q.ddLogged || !window.ddTrack) return;
+        q.ddLogged = 1;
+        const g = groupSelect.options[groupSelect.selectedIndex];
+        ddTrack({ game: "polyatomic", course: "3A", mode: q.direction === "nameToFormula" ? "Name → Formula" : "Formula → Name", topic: g ? g.text : "", correct: !!ok });
+      } catch (e) {}
+    }
+
     function checkAnswer() {
       if (answeredCurrent) {
         return;
@@ -1462,6 +1474,7 @@
           ? isFormulaCorrect(answer, ion)
           : isNameCorrect(answer, ion);
 
+      ddLog(correct);
       attemptedQuestions++;
 
       if (correct) {
@@ -1519,6 +1532,7 @@
       }
 
       const ion = currentQuestion.ion;
+      ddLog(false);
       currentWasMissed = true;
       attemptedQuestions++;
       streak = 0;

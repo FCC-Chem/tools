@@ -132,7 +132,8 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 #practice[data-mode]{border-top:6px solid var(--md)}
 .mode-tag{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--md);border-radius:999px;padding:3px 10px;margin-right:8px;vertical-align:middle}
 @media(max-width:700px){.mode-title{font-size:21px}.mode-tag{font-size:11px;padding:2px 8px;margin-right:6px}}
-</style></head>
+</style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
+</head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
 <div class="app">
@@ -161,6 +162,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 <details class="card collapsible" id="refDetails"><summary>🧠 Reference &amp; rules</summary><div class="body" id="refBody"></div></details>
 </div>
 <p class="footer-note source-note">Practice topics follow the CHEM 3B carbohydrate chapter. All questions and structures are generated for this game.</p>
+<p class="footer-note source-note">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</p>
 </div>
 <script>
 /* ===== Carbohydrate engine ===== */
@@ -341,12 +343,13 @@ function nextQ(){let q;try{q=GEN[state.mode]()}catch(e){console.error(e);q=GEN[s
  $('questionArea').querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(state.done)return;state.selected=b.dataset.key;$('questionArea').querySelectorAll('.option').forEach(x=>{const on=x===b;x.classList.toggle('selected',on);x.classList.remove('wrong');x.setAttribute('aria-pressed',on?'true':'false')})});
  ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);$('progressLabel').textContent=`${MODES.find(m=>m.id===state.mode).short}`;updateStats()}
 function updateStats(){$('correct').textContent=state.correct;$('streak').textContent=state.streak;$('assisted').textContent=state.assisted}
-function finish(){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
+function finish(){ddLog(!state.revealed);state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
  $('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===q.answer)b.classList.add('right')});
  if(state.revealed){state.assisted++;state.streak=0;mascot('normal');fb('good','👀 '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
  else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+q.why);awardXP(false);mascot(state.streak>=3?'wow':'happy',3500)}updateStats()}
+function ddLog(ok){try{const q=state.q;if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const m=MODES.find(x=>x.id===state.mode);ddTrack({game:'carbohydrates',course:'3B',mode:'Practice',topic:m?m.title:state.mode,correct:!!ok});}catch(e){}}
 function check(){if(state.done)return;if(!state.selected){fb('bad','Choose an answer first.');return}
- if(state.selected!==state.q.answer){state.streak=0;updateStats();mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+esc(state.q.hint));return}
+ if(state.selected!==state.q.answer){ddLog(false);state.streak=0;updateStats();mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+esc(state.q.hint));return}
  finish()}
 function hint(){if(state.done)return;$('hintBox').textContent='💡 '+state.q.hint;$('hintBox').className='hintbox show'}
 function show(){if(state.done)return;state.revealed=true;state.selected=state.q.answer;finish()}

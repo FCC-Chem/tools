@@ -6,7 +6,7 @@
     "CHEM 3A": "Chapter 5: The Mole and Chemical Formulas",
     "CHEM 1A": "Chapter 3: Composition of Substances and Solutions (OpenStax 3.1–3.4)"
   },
-  "description": "Mole practice for CHEM 3A Chapter 5 (default) and CHEM 1A Chapter 3. Learn Trail stops with worked examples and step-by-step help: What Is a Mole?, Molar Mass, Grams ↔ Moles, Atoms in a Formula, the Mole Road Map, Percent Composition, Empirical Formula, Molecular Formula, and for CHEM 1A Hydrates, Combustion Analysis, and Molarity & Dilution. Practice Quests (Mixed, Mole Road Map with 1–5 step trips, Molar Mass Lab, Percent Composition, Formula Finder, CHEM 1A Solution Lab) and a 10-question Skill Check Prep with a study plan. Includes a picture for every Learn Trail stop, a hands-on Mole Machine (pick a substance, slide the mass, watch moles and particles change), an interactive Mole Road Map, conversion-factor cards with decoys, common-mistake feedback, sig-fig coaching with Yellow Sheet values (Avogadro's number 6.0221 × 10²³), formula answers, E-notation input, XP, ranks, achievements, the Yellow Sheet, and matched ItsDrDan videos that jump to the right moment. Add ?course=1A to open in CHEM 1A.",
+  "description": "Mole practice for CHEM 3A Chapter 5 (default) and CHEM 1A Chapter 3. Learn Trail stops with worked examples and step-by-step help (including 'pick the factor' steps): What Is a Mole?, Molar Mass, Grams ↔ Moles, Atoms in a Formula, Mole Sense, the Mole Road Map, Percent Composition, Empirical Formula, Molecular Formula, and for CHEM 1A Hydrates, Combustion Analysis, and Molarity & Dilution. Practice Quests (adaptive Mixed Practice, Mole Sense no-calculator concept checks, Health Science word problems with IV bags, tablets and millimoles, Mole Road Map with 1–5 step trips, Molar Mass Lab, Percent Composition, Formula Finder, CHEM 1A Solution Lab) and a 10-question Skill Check Prep with a study plan. Includes a picture for every Learn Trail stop, a hands-on Mole Machine (pick a substance, slide the mass, watch moles and particles change), an interactive Mole Road Map, conversion-factor cards with decoys, diatomic-gas traps, common-mistake and calculator (EE key) feedback, factor cards open by default for CHEM 3A, sig-fig coaching with Yellow Sheet values (Avogadro's number 6.0221 × 10²³), formula answers, E-notation input, XP, ranks, achievements, the Yellow Sheet, and matched ItsDrDan videos that jump to the right moment. Add ?course=1A to open in CHEM 1A.",
   "tags": [
     "chemistry",
     "CHEM 3A",
@@ -32,7 +32,11 @@
     "significant figures",
     "skill check",
     "XP and achievements",
-    "Mole Machine"
+    "Mole Machine",
+    "mole sense",
+    "diatomic elements",
+    "health science",
+    "millimoles"
   ],
   "logo": "logo.png",
   "status": "working"

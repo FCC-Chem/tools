@@ -536,6 +536,7 @@
 
   footer{padding:8px 16px; text-align:center; font-size:.7rem; color:#7f978a;}
 </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 <body class="quiz-mode">
 
@@ -743,7 +744,7 @@
   </div>
 </main>
 
-<footer>Ionic, Covalent &amp; Acid Nomenclature · Study / Quiz + Free Builder Mode · intro chemistry digital toolkit</footer>
+<footer>Ionic, Covalent &amp; Acid Nomenclature · Study / Quiz + Free Builder Mode · intro chemistry digital toolkit<br><span class="dd-privacy">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</span></footer>
 
 <script>
 (function(){
@@ -2190,8 +2191,11 @@ function updateQuizStats(){
   streakChip.textContent = `Streak: ${quizStats.streak}`;
 }
 
+function ddLog(ok){try{if(!quizQuestion||quizQuestion.ddLogged||!window.ddTrack)return;quizQuestion.ddLogged=1;const b=document.querySelector('.practice-btn[data-practice="'+practiceMode+'"]');ddTrack({game:'ionicformula',course:'3A',mode:b?b.textContent.trim():'Quiz',topic:questionKicker.textContent.trim(),correct:!!ok})}catch(e){}}
+
 function markQuizResult(ok, message){
   if(!quizAnswered){
+    ddLog(ok);
     quizStats.attempted++;
     if(ok){
       quizStats.correct++;
@@ -2278,6 +2282,7 @@ document.getElementById('quizHintBtn').addEventListener('click', ()=>{
 document.getElementById('quizRevealBtn').addEventListener('click', ()=>{
   if(!quizQuestion) return;
   if(!quizAnswered){
+    ddLog(false);
     quizStats.attempted++;
     quizStats.streak = 0;
     quizAnswered = true;

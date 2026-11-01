@@ -354,6 +354,7 @@
       }
     }
   </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 
 <body>
@@ -483,6 +484,7 @@
 
     <div class="footer">
       Scientific notation answers may be entered using E notation, such as <strong>1.20e3</strong>.
+      <div style="margin-top:6px;font-size:0.8rem;">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</div>
     </div>
   </main>
 
@@ -970,6 +972,13 @@
         }
       }
 
+      function ddLog(ok) {
+        try {
+          if (!current || answeredCurrent || !window.ddTrack) return;
+          ddTrack({game: "sigfig", course: "3A", mode: mode === "mixed" ? "Mixed Practice" : "Practice", topic: modeLabels[currentType] || "", correct: !!ok});
+        } catch (e) {}
+      }
+
       function checkAnswer() {
         if (!current || answeredCurrent) return;
 
@@ -981,10 +990,12 @@
           return;
         }
 
+        const ddOk = isCorrect(value, current);
+        ddLog(ddOk);
         attempted++;
         answeredCurrent = true;
 
-        if (isCorrect(value, current)) {
+        if (ddOk) {
           correct++;
           feedbackEl.className = "feedback good";
           feedbackEl.innerHTML = `<strong>Correct!</strong> ${current.reason}`;

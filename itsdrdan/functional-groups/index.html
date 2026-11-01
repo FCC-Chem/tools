@@ -109,6 +109,7 @@
     .name-option { padding: 9px 5px; font-size: .9rem; }
   }
 </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -156,7 +157,7 @@
       </div>
     </section>
   </main>
-  <div class="tiny-note">Each round includes every functional group once. Mixed Practice uses both question directions. Only the first selection counts toward the score.</div>
+  <div class="tiny-note">Each round includes every functional group once. Mixed Practice uses both question directions. Only the first selection counts toward the score.<br>This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</div>
 </div>
 
 <script>
@@ -328,7 +329,16 @@ function choosePicture(btn, selected, correct) {
   showNext();
 }
 
+function ddLog(ok, name) {
+  try {
+    if (!window.ddTrack) return;
+    const labels = {'picture-name': 'Picture → Name', 'name-picture': 'Name → Picture', 'mixed': 'Mixed Practice'};
+    ddTrack({game: 'organic', course: '3B', mode: labels[mode] || 'Practice', topic: name || '', correct: !!ok});
+  } catch (e) {}
+}
+
 function registerCorrect(correct) {
+  ddLog(true, correct);
   score++;
   streak++;
   best = Math.max(best, streak);
@@ -338,6 +348,7 @@ function registerCorrect(correct) {
 }
 
 function registerIncorrect(selected, correct) {
+  ddLog(false, correct);
   streak = 0;
   feedback.textContent = `✗ You chose ${selected}. Correct answer: ${correct}.`;
   feedback.className = 'feedback bad';

@@ -420,6 +420,7 @@
         }
     }
 </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 
 <body>
@@ -620,6 +621,7 @@
 
     <div class="footer">
         SI Prefix Challenge
+        <div style="margin-top:6px;font-size:0.75rem;">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</div>
     </div>
 
 </div>
@@ -1039,6 +1041,13 @@ function prefixNameOrSymbolIsCorrect(input) {
     return prefixNameIsCorrect(input) || prefixSymbolIsCorrect(input);
 }
 
+function ddLog(ok) {
+    try {
+        if (questionAnswered || !window.ddTrack) return;
+        ddTrack({game: 'metric', course: currentCourse === "CHEM1A" ? '1A' : '3A', mode: 'Practice', topic: document.getElementById("questionType").textContent, correct: !!ok});
+    } catch (e) {}
+}
+
 function checkAnswer() {
     if (questionAnswered) {
         newQuestion();
@@ -1077,6 +1086,7 @@ function checkAnswer() {
         isCorrect = prefixNameOrSymbolIsCorrect(userAnswer);
     }
 
+    ddLog(isCorrect);
     attempts++;
 
     if (isCorrect) {
@@ -1132,6 +1142,8 @@ function skipQuestion() {
     feedback.innerHTML =
         "<strong>Answer:</strong><br><br>" +
         getCompleteAnswer();
+
+    ddLog(false);
 
     addMissedPrefix(currentPrefix);
     streak = 0;

@@ -1,13 +1,15 @@
 {
-  "title": "Functional Groups Studio",
+  "title": "Organic Origins (Hydrocarbons to Amides)",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Spot, name, and draw organic compounds, then predict how they react. Six modes: Spot the Group, 1°/2°/3° classification, Name It, Draw It, Predict the Product, and Properties. Covers the CHEM 3B organic chapters from hydrocarbons through amides, with skeletal, condensed, or mixed structure styles. Includes hints, answer reveals, XP, streaks, achievement badges, and a Dr. Dan CHEM 3B video playlist.",
+  "description": "The starting point for CHEM 3B organic chemistry: spot, name, and draw organic compounds, then predict how they react. Eight modes: Spot the Group, 1°/2°/3° classification, Name It, Draw It, Predict the Product, Properties, Med Molecules (labeled groups in 123 real drugs, metabolism intermediates, biomolecules and benzene derivatives, with nursing, dental, anesthesia, imaging and A&P fun facts), and a 60-second Blitz round. Name It and Draw It include Challenge problems with multi-branched IUPAC names (ethyl, propyl, butyl, isopropyl, sec-butyl, isobutyl, tert-butyl). Structures in skeletal, one-line condensed, or branched condensed style. Includes hints, step-by-step naming explanations, XP, streaks, badges, and a Dr. Dan CHEM 3B video playlist.",
   "icon": "🧪",
   "tags": [
     "chemistry",
     "CHEM 3B",
     "organic chemistry",
+    "hydrocarbons",
+    "organic nomenclature",
     "functional groups",
     "primary secondary tertiary",
     "IUPAC naming",
@@ -15,8 +17,17 @@
     "skeletal structures",
     "condensed structures",
     "physical properties",
-    "organic reactions"
+    "organic reactions",
+    "pharmaceuticals",
+    "biomolecules",
+    "nursing",
+    "dental hygiene",
+    "benzene derivatives",
+    "IUPAC challenge",
+    "branched alkanes",
+    "blitz",
+    "metabolism"
   ],
-  "version": "1",
+  "version": "17",
   "status": "working"
 }

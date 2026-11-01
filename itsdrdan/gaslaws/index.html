@@ -293,7 +293,8 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 .howto{justify-content:center}
 .skills{justify-content:center}
 @media(max-width:680px){.skills{flex-wrap:wrap;overflow-x:visible;margin:0 0 12px;padding:0;gap:6px}.skill{padding:6px 11px;font-size:.88rem;min-height:40px}}
-</style></head>
+</style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
+</head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="app">
 <header class="topbar"><div class="tb">
@@ -352,7 +353,7 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
   <div class="section-foot"><button type="button" class="link-btn" id="moreBadges"></button><button type="button" class="reset-btn" id="reset">↻ Reset my progress</button></div>
  </section>
  <details class="panel section" id="videoSection"><summary><span>🎬 Learn with Dr. Dan<small id="videoSub">Picked for the current question</small></span></summary><div class="video-body"><div class="lesson-layout"><div><div class="lesson-player"><iframe id="lessonPlayer" title="Dr. Dan video lesson" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p class="note-small"><a id="lessonExternal" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></p></div><div class="video-list" id="videoList"></div></div></div></details>
- <p class="foot-note">ItsDrDan · Fresno City College · Practice only, nothing is graded · <a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">YouTube @itsdrdan ↗</a></p>
+ <p class="foot-note">ItsDrDan · Fresno City College · Practice only, nothing is graded · <a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">YouTube @itsdrdan ↗</a><br>This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.</p>
 </div>
 </div>
 <dialog id="referenceDialog"><div class="modal-head"><strong>Reference</strong><button type="button" class="close-btn" id="closeRef" aria-label="Close">✕</button><div class="seg" id="sheetTabs"><button type="button" class="active" data-sheet="laws">Gas equations</button><button type="button" data-sheet="pt">Periodic table</button><button type="button" data-sheet="conv">Conversions</button></div></div>
@@ -561,7 +562,7 @@ function genAvog(){const c=C(),g=pick(['He','Ar','N2','O2','CO2','Ne']);const n1
 /* Level 6: Combined */
 function genCombined(){const c=C(),vu=pick(['L','mL']),stp=Math.random()<.2,pu=c==='3A'?'atm':pick(['atm','atm','mmHg']);
  const t1=stp?0:rint(-20,60);let t2;do{t2=rint(-40,150)}while(Math.abs(t2-t1)<15);
- const P1v=stp?1.00:pu==='atm'?rnd(0.600,3.00):rnd(500,999),V1v=vu==='L'?rnd(1.00,25.0):rnd(150,900);
+ const P1v=stp?(pu==='atm'?1.00:760):pu==='atm'?rnd(0.600,3.00):rnd(500,999),V1v=vu==='L'?rnd(1.00,25.0):rnd(150,900);
  let P2v=pu==='atm'?rnd(0.400,6.00):rnd(400,999,3);const mixed=c==='1A'&&!stp&&pu==='mmHg'&&Math.random()<.4;let pu2=pu;if(mixed){pu2='atm';P2v=rnd(0.500,2.50);}const P2same=P2v/PU[pu2]*PU[pu];
  const what=Math.random()<.7||c==='3A'?'V':'P';
  const pre=stp?`A ${meas(V1v,vu)} balloon at STP (${meas(1,'atm')} and 273 K)`:`A gas sample occupies ${meas(V1v,vu)} at ${meas(P1v,pu)} and ${tC(t1)}.`;
@@ -863,7 +864,7 @@ function renderCards(){const q=S.q,box=byId('cardPick');box.hidden=!q.eq;if(!q.e
  if(q.cardOK){const c=cardBy(q.eq);box.innerHTML='<div class="card-done"><span class="eqcard picked"><span class="eqf">'+c.html()+'</span></span><div><b>✓ '+c.name+'</b><small>'+cardWhy(q).replace(/ So use .*$/,'')+'</small></div></div>';return;}
  box.innerHTML='<div class="card-head"><b>🃏 Step 1 · Pick the equation card</b><small>Which variables change? Which stay the same?</small></div><div class="eqcards" role="group" aria-label="Equation cards">'+CARDS.map((c,i)=>'<button type="button" class="eqcard c'+i+(q.cardTried?.includes(c.k)?' wrong':'')+'" data-card="'+c.k+'"'+(q.cardTried?.includes(c.k)?' disabled':'')+'><span class="eqf">'+c.html()+'</span></button>').join('')+'</div><div class="g-msg" id="cardMsg"></div>';}
 function pickCard(k){const q=S.q;if(q.cardOK)return;if(k===q.eq){q.cardOK=true;if(q.realMode)byId('topicTag').textContent=q.realMode;if(!q.cardTried?.length){addXP(2);}renderCards();renderGuide();toastCard(q);(byId('guide').hidden?byId('answerRow'):byId('guide')).scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});return;}
- q.cardTried=[...(q.cardTried||[]),k];q.failed=1;renderCards();const m=byId('cardMsg');m.className='g-msg bad';m.innerHTML='Not that card. '+cardMiss(q,k);}
+ ddLog(q,false);q.cardTried=[...(q.cardTried||[]),k];q.failed=1;renderCards();const m=byId('cardMsg');m.className='g-msg bad';m.innerHTML='Not that card. '+cardMiss(q,k);}
 function toastCard(q){const el=byId('cardPick').querySelector('.picked');el&&el.animate&&!reduceMotion()&&el.animate([{transform:'rotateY(90deg)'},{transform:'none'}],{duration:350,easing:'ease-out'});}
 function renderGuide(){const q=S.q,box=byId('guide'),has=q.guide?.length&&!q.quiz,cardLock=!!q.eq&&!q.cardOK,on=S.guideOn&&has&&!cardLock;byId('guideToggleLabel').classList.toggle('hidden',!has||S.view==='learn'||cardLock);box.hidden=!on;
  const lock=cardLock||(S.view==='learn'&&on&&S.gi<q.guide.length&&!q.scored);byId('answerRow').classList.toggle('hidden',lock||q.kind==='choice');byId('choiceBox').classList.toggle('hidden',lock||q.kind!=='choice');updateCoach();if(!on)return;
@@ -880,13 +881,15 @@ function stepChoice(k){const q=S.q,s=q.guide[S.gi];if(k!==s.answer){byId('guide'
 function feedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.innerHTML=(type!=='info'?'<div class="result-title"><span>'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Great job!','Under control!']):S.q.quiz?'Not quite':'Not correct yet, try again')+'</strong></div>':'')+html;
  byId('bottomNext').hidden=!((type==='good'&&S.q.scored)||(S.q.quiz&&S.q.done));byId('skipQ').hidden=!(S.view==='learn'||(S.q.quiz&&!S.q.done))||!!S.q.scored;updateCoach();if(type!=='good')el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 function tried(q){if(!q.tried){q.tried=1;P.attempts++;save();renderStatus();}}
-function wrong(q){if(!q.failed){q.failed=1;P.streak=0;save();renderStatus();}}
-function score(q){if(q.scored)return '';q.scored=1;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp=3;
+function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.quiz?levelById(q.lvl):q.level&&levelById(q.level);
+ ddTrack({game:'gaslaws',course:S.course,mode:q.quiz?'Readiness Check':q.level?'Learn Trail':'Practice',topic:L?L.title:(q.realMode||q.mode||''),correct:!!ok});}catch(e){}}
+function wrong(q){ddLog(q,false);if(!q.failed){q.failed=1;P.streak=0;save();renderStatus();}}
+function score(q){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=1;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp=3;
  if(!q.solutionShown){P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;
   if(q.level){const b=P.levels[q.level]||0;P.levels[q.level]=Math.min(6,b+(solo?2:1));if(b<6&&P.levels[q.level]>=6){xp+=50;toast(levelById(q.level).icon,'Level mastered!',levelById(q.level).title+' (+50 XP)');}renderTrail();}}
  if(q.guide&&S.gi<q.guide.length&&S.guideOn){S.gi=q.guide.length;renderGuide();}addXP(xp);celebrate();checkAch();return ' <span class="xp-pop">+'+xp+' XP</span>';}
 function trapMsg(q,n){for(const t of q.traps||[])if(Number.isFinite(t.v)&&t.v!==0&&Math.abs(n-t.v)<=Math.abs(t.v)*.012&&Math.abs(t.v-q.answer)>Math.abs(q.answer)*.02)return t.msg;return '';}
-function quizResult(q,right,extra=''){q.done=1;q.quizRight=right;S.quiz.results[S.quiz.i]=right;byId('answer').disabled=true;byId('check').disabled=true;byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);
+function quizResult(q,right,extra=''){ddLog(q,right);q.done=1;q.quizRight=right;S.quiz.results[S.quiz.i]=right;byId('answer').disabled=true;byId('check').disabled=true;byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);
  if(right){P.correct++;P.streak++;P.best=Math.max(P.best,P.streak);addXP(10);celebrate();}else{P.streak=0;save();renderStatus();}
  if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?'good':'bad',(right?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
 function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
@@ -900,7 +903,7 @@ function checkChoice(k){const q=S.q;if(q.done||q.scored)return;tried(q);const bt
  if(q.quiz){if(k!==q.answer)byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');return quizResult(q,k===q.answer);}
  if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);wrong(q);feedback('bad','Not that one. '+(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.'));}}
 function hint(){const q=S.q;q.usedHelp=true;const i=Math.min(S.hint,q.hints.length-1);byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>💡 Hint '+(i+1)+' of '+q.hints.length+'</h3>'+q.hints[i];S.hint=Math.min(i+1,q.hints.length-1);}
-function solution(){const q=S.q;q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function solution(){const q=S.q;ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 /* readiness check */
 function startQuiz(){const core=S.course==='3A'?['units','kmt','boyle','temp','avog','combined','ideal','stp','molar','dalton','wet','stoich']:['kmt','boyle','temp','combined','ideal','stp','molar','dalton','wet','stoich','rms','graham','real'];
  const must=S.course==='3A'?['boyle','combined','ideal','stp','dalton']:['combined','ideal','molar','dalton','stoich'];const rest=shuffle(core.filter(x=>!must.includes(x))).slice(0,10-must.length);

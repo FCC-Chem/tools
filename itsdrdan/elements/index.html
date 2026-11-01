@@ -506,6 +506,7 @@
       .element .name{font-size:.64rem}
     }
   </style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
 </head>
 
 <body>
@@ -652,6 +653,7 @@
 
     <p class="footer-note">
       Standalone HTML • GitHub Pages ready • No API key required
+      <br>This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.
     </p>
   </main>
 
@@ -858,6 +860,14 @@
       return normalizedName(entered) === normalizedName(current.name);
     }
 
+    function ddLog(ok){
+      try{
+        if(!current || answeredCurrent || !window.ddTrack) return;
+        const sel = els.setSelect.options[els.setSelect.selectedIndex];
+        ddTrack({game:"elements", course:"3A", mode:els.questionType.textContent, topic:sel ? sel.text : "", correct:!!ok});
+      }catch(e){}
+    }
+
     function checkAnswer(){
       if(!current || answeredCurrent) return;
 
@@ -869,6 +879,7 @@
       }
 
       const ok = isCorrectAnswer();
+      ddLog(ok);
       answeredCurrent = true;
       els.answerInput.disabled = true;
       els.checkBtn.disabled = true;
@@ -926,6 +937,7 @@
 
     function revealAnswer(){
       if(!current || answeredCurrent || revealedCurrent) return;
+      ddLog(false);
       revealedCurrent = true;
       answeredCurrent = true;
       els.answerInput.disabled = true;

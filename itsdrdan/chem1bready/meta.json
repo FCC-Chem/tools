@@ -1,8 +1,8 @@
 {
-  "title": "CHEM 1B Readiness Quest — ItsDrDan",
+  "title": "Bridge to 1B — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 1A and CHEM 1B",
-  "description": "Interactive review game for students preparing for CHEM 1B. Includes Skill Labs, randomized Mixed Practice, and a 12-question Readiness Check with a personalized study plan based on performance, recommended practice modes, concept checklists, and OpenStax Chemistry 2e chapter references. Practice acid–base and solution stoichiometry, titrations, limiting reactants and leftovers, dissolution and ion concentrations, predicting and balancing reactions, net ionic equations, Lewis structures, VSEPR geometry, polarity, hybridization, molecular orbital theory, core chemistry skills, matter and energy, and REDOX. REDOX Refresh includes 128 exercises across oxidation states, role identification, activity series, half-reactions, and acidic and basic balancing. Calculation problems feature solution maps with progressively unlocked worked steps. Includes hints, answer reveals, completed-work review, embedded Dr. Dan video lessons, scoring, streaks, celebration animations, a cheerful atom mascot, and responsive design.",
+  "description": "CHEM 1B readiness review (CHEM 1A → CHEM 1B). Learn Trail with 11 stops: watch a worked example step by step, then solve one yourself. Practice Quests with Mixed Practice and 11 topics: Core Toolkit, Mole Match (limiting reactants), Acid–Base Stoichiometry and titrations, Dissolution Lab (ions and concentrations), Predicting & Balancing, Reactions in Water (net ionic, precipitation, neutralization), REDOX Refresh, Lewis Workshop (interactive Lewis builder), Shape & Hybridization, MO Explorer, and Matter & Energy. A 12-question Readiness Check weighted toward what CHEM 1B uses most (acid–base and solution stoichiometry, ions in water, REDOX, energy) gives a personal review plan with OpenStax Chemistry 2e chapters. Includes solution maps, hints, step reveals, Yellow and Green Sheets, XP, ranks, achievements, and matched ItsDrDan videos. Add ?mode=check to open the Readiness Check.",
   "tags": [
     "chemistry",
     "CHEM 1A",
@@ -34,8 +34,15 @@
     "half reactions",
     "acidic redox",
     "basic redox",
-    "guided practice"
+    "guided practice",
+    "learn trail",
+    "worked examples",
+    "XP and achievements"
   ],
-  "version": "17",
-  "status": "working"
+  "status": "working",
+  "chapters": {
+    "CHEM 1A": "Review of Chapters 1–11 and intro REDOX (OpenStax Chemistry 2e)",
+    "CHEM 1B": "Prerequisite review before CHEM 1B"
+  },
+  "logo": "logo.png"
 }
