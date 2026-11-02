@@ -21,7 +21,9 @@ is what lets a contributor who publishes twenty games through one launcher be
 counted as twenty tools, not one.
 
 The page is grouped into one section per author, largest contributor first
-(tool count, then total opens when usage counts exist, then name).
+(tool count, then total opens when usage counts exist, then name). Each
+section shows SHOW_FIRST cards and folds the rest behind a "Show N more"
+button; any search or filter unfolds everything so a match is never hidden.
 
 Authorship is structural, not conventional. The author name is derived from the
 folder, so a contributor who forgets meta.json entirely still gets a correctly
@@ -47,6 +49,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKIP_PREFIXES = (".", "_")
 SKIP_NAMES = {"scripts", "workshop", "node_modules"}
 MAX_CARD_TAGS = 6   # shown on a card when meta.json gives no cardTags; all tags remain searchable
+SHOW_FIRST = 3      # cards visible per author before "Show N more"; searching or filtering shows all
 
 STATUS_LABELS = {
     "working": ("Working", "#1f6f43"),
@@ -601,6 +604,7 @@ def render_section(sec, counts=None):
       <div class="grid">
 {cards}
       </div>
+      <button class="more" type="button" hidden></button>
     </section>"""
 
 
@@ -697,6 +701,11 @@ def render(sections, counts=None, gc_code=""):
   .sec-lnk:hover {{ filter:brightness(1.12); }}
   @media (max-width:620px) {{ .sec-links {{ margin-left:0; }} }}
   .grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }}
+  .more {{ display:block; width:100%; margin-top:14px; padding:10px 16px; font-family:inherit;
+           font-size:0.9rem; color:var(--accent); background:var(--panel);
+           border:1px dashed var(--accent); border-radius:8px; cursor:pointer; }}
+  .more:hover {{ background:#eef5f0; }}
+  .more[hidden] {{ display:none; }}
   .card {{ border:1px solid var(--border); border-radius:10px; padding:18px;
            background:var(--panel); display:flex; flex-direction:column; }}
   .card-head {{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }}
@@ -800,26 +809,43 @@ def render(sections, counts=None, gc_code=""):
   var filter = 'all';
   var kind = 'all';
 
+  var SHOW = {SHOW_FIRST};   // cards shown per author until "Show N more" is clicked
   function apply() {{
     var term = q.value.trim().toLowerCase();
     var author = who ? who.value : 'all';
+    // Any search or filter unfolds every section: a match must never sit
+    // behind a "Show more" button.
+    var filtering = !!term || filter !== 'all' || kind !== 'all' || author !== 'all';
     var shown = 0;
-    cards.forEach(function (c) {{
-      var okText = !term || c.dataset.search.indexOf(term) !== -1;
-      var okStat = filter === 'all' || c.dataset.status === filter ||
-        (filter === 'working' && c.dataset.status === 'stable');
-      var okWho  = author === 'all' || c.dataset.author === author;
-      var okKind = kind === 'all' || c.dataset.kind === kind;
-      var vis = okText && okStat && okWho && okKind;
-      c.style.display = vis ? '' : 'none';
-      if (vis) shown++;
-    }});
-    // An author whose every card is filtered out disappears with them.
     sections.forEach(function (s) {{
-      var any = Array.prototype.some.call(s.querySelectorAll('.card'), function (c) {{
-        return c.style.display !== 'none';
+      var open = filtering || s.classList.contains('open');
+      var vis = 0, folded = 0;
+      // DOM order, so this respects the current sort.
+      Array.prototype.forEach.call(s.querySelectorAll('.card'), function (c) {{
+        var okText = !term || c.dataset.search.indexOf(term) !== -1;
+        var okStat = filter === 'all' || c.dataset.status === filter ||
+          (filter === 'working' && c.dataset.status === 'stable');
+        var okWho  = author === 'all' || c.dataset.author === author;
+        var okKind = kind === 'all' || c.dataset.kind === kind;
+        var match = okText && okStat && okWho && okKind;
+        if (match) vis++;
+        var fold = match && !open && vis > SHOW;
+        if (fold) folded++;
+        c.style.display = (match && !fold) ? '' : 'none';
       }});
-      s.style.display = any ? '' : 'none';
+      shown += vis;
+      // An author whose every card is filtered out disappears with them.
+      s.style.display = vis ? '' : 'none';
+      var btn = s.querySelector('.more');
+      if (folded) {{
+        btn.textContent = 'Show ' + folded + ' more \u25BE';
+        btn.hidden = false;
+      }} else if (!filtering && open && vis > SHOW) {{
+        btn.textContent = 'Show fewer \u25B4';
+        btn.hidden = false;
+      }} else {{
+        btn.hidden = true;
+      }}
     }});
     none.style.display = (shown === 0 && cards.length) ? 'block' : 'none';
   }}
@@ -845,7 +871,7 @@ def render(sections, counts=None, gc_code=""):
       }}).forEach(function (c) {{ grid.appendChild(c); }});
     }});
   }}
-  if (sortSel) {{ sortSel.addEventListener('change', resort); resort(); }}
+  if (sortSel) {{ sortSel.addEventListener('change', function () {{ resort(); apply(); }}); resort(); }}
 
   // Count clicks on each card's main button. Sends only the tool's folder
   // name; no cookies and nothing about the person.
@@ -864,6 +890,13 @@ def render(sections, counts=None, gc_code=""):
 
   q.addEventListener('input', apply);
   if (who) who.addEventListener('change', apply);
+  sections.forEach(function (s) {{
+    s.querySelector('.more').addEventListener('click', function () {{
+      s.classList.toggle('open');
+      apply();
+    }});
+  }});
+  apply();   // fold each section to SHOW cards on load
   document.querySelectorAll('.fbtn').forEach(function (b) {{
     b.addEventListener('click', function () {{
       document.querySelectorAll('.fbtn').forEach(function (x) {{ x.classList.remove('on'); }});
