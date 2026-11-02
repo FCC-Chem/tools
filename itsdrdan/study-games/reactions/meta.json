@@ -5,7 +5,7 @@
     "CHEM 3A",
     "CHEM 1A"
   ],
-  "description": "Reaction Rumble: balance equations, predict products, and write complete and net ionic equations, with a CHEM 3A / CHEM 1A course switch (3A gets Beginner, Intermediate and Champion levels). 222 reactions with a live atom counter, an animated particle view (spectator ions, precipitates, gases), tutor-style feedback on common mistakes, and a 60-second Blitz Challenge with 9 decks: reaction types, solubility, activity series, what drives a double displacement, Mix it! (named solutions), spot the spectator, balanced or not, true/false concepts, and a mixed bag. New: no-reaction problems and a \"does it react?\" check in Predict and Net Ionic, a Formulas/Names switch for reactants (Names by default in CHEM 1A), and Skill Check Prep with weak-spot tracking. Includes the Green Sheet, XP, achievements, and Dr. Dan's Chapter 10 and solubility videos.",
+  "description": "Reaction Rumble: balance equations, predict products, and write complete and net ionic equations, with a CHEM 3A / CHEM 1A course switch (3A gets Beginner, Intermediate and Champion levels). 222 reactions with a live atom counter, an animated particle view (spectator ions, precipitates, gases), tutor-style feedback on common mistakes, and a 60-second Blitz Challenge with 15 decks: reaction types, solubility, activity series, what drives a double displacement, Mix it! (named solutions), spot the spectator, balanced or not, true/false concepts, a mixed bag, and four exam-style decks (which precipitate, coefficient of…, pick the net ionic, name → formula) plus three CHEM 1A-only decks: activity series, which pair reacts, and particle-picture beakers. New: no-reaction problems and a \"does it react?\" check in Predict and Net Ionic, a Formulas/Names switch for reactants (Names by default in CHEM 1A), and Skill Check Prep with weak-spot tracking. Includes the Green Sheet, XP, achievements, and Dr. Dan's Chapter 10 and solubility videos. Skill Check Prep mixes typed items (balance, predict products, write the net ionic) with the multiple choice, adapts to weak spots, reviews misses, and links each skill to the matching video. Animated ion mascots react to graded answers.",
   "tags": [
     "chemistry",
     "chemical reactions",
@@ -32,10 +32,12 @@
     "Green Sheet",
     "no reaction",
     "chemical names",
-    "Skill Check Prep"
+    "Skill Check Prep",
+    "particle diagrams",
+    "activity series water"
   ],
   "type": "interactive study tool",
-  "version": "28",
+  "version": "31",
   "status": "working",
   "logo": "logo.png",
   "icon": "⚡"

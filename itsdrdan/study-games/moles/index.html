@@ -250,6 +250,10 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 .answer input{min-width:0}
 @media(max-width:680px){.chapter-chip a{margin-left:0}.feature-card{padding:12px}.fc-go{display:none}}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
+
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="app">
@@ -897,7 +901,7 @@ function guideAdvance(earned){const q=state.q;if(earned){P.guideSteps++;addXP(2)
 function guideMsg(type,html){const el=byId('guideMsg');if(el){el.className='g-msg '+type;el.innerHTML=html;}}
 function checkGuideStep(){const s=state.q.guide[state.guideIdx],raw=byId('guideInput').value.trim();if(!raw){guideMsg('info','Type a number first.');return}const n=parseValue(raw);if(!Number.isFinite(n)){guideMsg('info','Type a number such as 0.250 or 6.02E23.');return}
  const tol=s.exact?1e-9:s.tolAbs?Math.max(s.tolAbs,Math.abs(s.answer)*.002):Math.max(Math.abs(s.answer)*.015,1e-30);if(Math.abs(n-s.answer)<=tol){guideAdvance(true);return}
- const f=s.factor;let tip='Not yet. '+(f?'Check whether to multiply or divide, then try again.':'Recheck your arithmetic.');
+ const f=s.factor,dg=ddDiagnose(n,s.answer,s.unit);let tip='Not yet. '+(dg?dg.msg:f?'Check whether to multiply or divide, then try again.':'Recheck your arithmetic.');
  if(f&&Math.abs(f.value)>0){const prev=s.answer/f.value;if(Math.abs(n-prev/f.value)<=Math.abs(prev/f.value)*.015)tip='Close! You divided when you should multiply (or the factor is upside down). Make the old unit cancel.';}
  guideMsg('bad',tip+(s.setup?' Tap “Show me the setup” if you are stuck.':''));}
 function guideChoice(key){const q=state.q,s=q.guide[state.guideIdx];if(key===s.answer){guideAdvance(true);return}q.guideMiss=true;guideMsg('bad',(s.wrongWhy&&s.wrongWhy[key])||'Not that one. Look back at your earlier steps.');}
@@ -905,7 +909,25 @@ function guideChoice(key){const q=state.q,s=q.guide[state.guideIdx];if(key===s.a
 /* ===================== Answer checking ===================== */
 function setFeedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.setAttribute('role',type==='bad'?'alert':'status');el.innerHTML=(type==='good'||type==='bad'?'<div class="result-title"><span aria-hidden="true">'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Holy moley, nice!','Nailed it!']):'Not correct yet, try again')+'</strong></div>':'')+'<div>'+html+'</div>';byId('bottomNext').hidden=!(type==='good'&&state.q?.scored);byId('skipQ').hidden=(state.view!=='learn'&&!state.quiz)||!!state.q?.scored;if(state.q)updateCoach();if(type==='bad'){el.focus({preventScroll:true});el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}}
 function countAttempt(q){if(!q.attempted){q.attempted=true;P.attempts++;save();renderStatus();}}
-function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.level&&levelById(q.level);ddTrack({game:'moles',course:state.course,mode:state.quiz?'Skill Check Prep':L?'Learn Trail':'Practice',topic:L?L.title:({road:'Mole Road Map',molar:'Molar Mass',percent:'Percent Composition',formula:'Empirical & Molecular Formulas',sense:'Mole Sense',health:'Health-science mole problems',solution:'Solution moles'}[q.modeKey||state.mode]||q.modeKey||state.mode||''),correct:!!ok});}catch(e){}}
+
+/* Mistake catchers (shared across ItsDrDan games): name the slip in a wrong numeric answer instead of "check your work".
+   ddDiagnose(entered, answer, unit) → {code, msg} or null. Codes feed the anonymous stats (slip column). */
+function ddDiagnose(entered,answer,unit){const a=Number(answer),x=Number(entered);if(!Number.isFinite(x)||!Number.isFinite(a)||a===0)return null;
+ const near=(p,v,tol=.006)=>Math.abs(p-v)<=Math.max(Math.abs(v)*tol,1e-12),r=x/a,u=String(unit||'');
+ if(near(x,a,.05))return {code:'close',msg:'Very close: rounding drifted. Keep extra digits until the last step, then round at the end.'};
+ if(near(r,-1))return {code:'sign',msg:'Right size, wrong sign. Check the direction (released vs absorbed, used up vs formed, later minus earlier).'};
+ if(near(r,1000)||near(r,.001)){if(/J/.test(u))return {code:'kJ-J',msg:'Off by a factor of 1000: J vs kJ. Check which one is asked for.'};if(/mol|L/.test(u)&&!/^M/.test(u))return {code:'mL-L',msg:'Off by a factor of 1000: mL ↔ L (or mmol ↔ mol). Divide mL by 1000 to get liters.'};if(/g/.test(u))return {code:'g-kg',msg:'Off by a factor of 1000: g ↔ kg or mg ↔ g. Check the mass unit.'};return {code:'x1000',msg:'Off by a factor of 1000 (10³). Check a unit prefix or the exponent; on the calculator use EE, as in 2.5E-3.'};}
+ if(/K|°C/.test(u)&&(near(x,a+273.15,.002)||near(x,a-273.15,.002)))return {code:'273',msg:'Off by 273: convert between °C and K (K = °C + 273.15).'};
+ if(!near(a,1)&&near(x*a,1))return {code:'inverted',msg:'Looks inverted (1 ÷ the right answer). Check what goes on top and what goes on the bottom of the fraction.'};
+ if(near(r,100)||near(r,.01))return {code:'power10',msg:/%/.test(u)?'Off by 100: a percent is the fraction × 100.':'Off by a factor of 100. Check a unit conversion or a power of ten.'};
+ for(const n of [1,2,4,5,6])if(near(r,10**n)||near(r,10**-n))return {code:'power10',msg:'Off by a power of ten (10'+String(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d])+'). Check the exponent; on the calculator use EE, as in 2.5E-3.'};
+ for(const [k,txt] of [[2,'2'],[.5,'½'],[3,'3'],[1/3,'⅓'],[4,'4'],[.25,'¼'],[1.5,'3⁄2'],[2/3,'2⁄3']])if(near(r,k))return {code:'ratio',msg:'Off by a factor of '+txt+'. A coefficient or mole ratio was probably skipped or flipped.'};
+ if(near(r,22.4)||near(r,1/22.4))return {code:'ratio',msg:'Off by 22.4: that molar volume is only for a gas at STP. Check whether the problem is at STP, and whether this quantity is a gas.'};
+ if(near(r,6.022e23)||near(r,1/6.022e23))return {code:'power10',msg:'Off by Avogadro’s number: you have particles where moles were asked, or the reverse.'};
+ return null;}
+
+function ddSlip(q,code){if(q&&!q.firstSlip)q.firstSlip=code||'other';}
+function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.level&&levelById(q.level);ddTrack({game:'moles',course:state.course,mode:state.quiz?'Skill Check Prep':L?'Learn Trail':'Practice',topic:L?L.title:({road:'Mole Road Map',molar:'Molar Mass',percent:'Percent Composition',formula:'Empirical & Molecular Formulas',sense:'Mole Sense',health:'Health-science mole problems',solution:'Solution moles'}[q.modeKey||state.mode]||q.modeKey||state.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?'':(q.firstSlip||'')});}catch(e){}}
 function markWrong(q){ddLog(q,false);if(!q.failed){q.failed=true;P.streak=0;P.miss=P.miss||{};if(q.modeKey)P.miss[q.modeKey]=(P.miss[q.modeKey]||0)+1;save();renderStatus();}if(state.quiz)state.quiz.items[state.quiz.i].missed=true;}
 function scoreCorrect(q,extra=''){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=true;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp;
  if(q.solutionShown){xp=3;}else{P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;if(!q.failed&&q.sf)P.sigFirst++;}
@@ -920,17 +942,17 @@ function checkAnswer(){const q=state.q;if(q.scored){setFeedback('good','Already 
  const raw=byId('answer').value.trim();if(!raw){setFeedback('info','Enter an answer first.');return}
  if(q.kind==='formula'){const comp=parseFormula(raw);if(!comp){setFeedback('info','Type a formula using element symbols and numbers, like <b>C2H6O</b> or <b>Fe2O3</b>. Capital letters matter (Co is cobalt, CO is carbon monoxide).');return}countAttempt(q);
   if(sameComp(comp,q.answerComp)){setFeedback('good','Correct! '+fhtml(q.answer)+'.'+scoreCorrect(q));return}
-  markWrong(q);const k=Object.keys(q.answerComp),ratios=k.map(e=>(comp[e]||0)/q.answerComp[e]);let msg='Check your mole ratios. Divide every mole amount by the smallest one.';
+  ddSlip(q,'formula');markWrong(q);const k=Object.keys(q.answerComp),ratios=k.map(e=>(comp[e]||0)/q.answerComp[e]);let msg='Check your mole ratios. Divide every mole amount by the smallest one.';
   if(k.every(e=>comp[e])&&Object.keys(comp).length===k.length&&ratios.every(r=>Math.abs(r-ratios[0])<1e-9)&&ratios[0]!==1)msg=ratios[0]>1?'Same ratio, but not the smallest whole numbers'+(q.mode==='Molecular formula'?'. Check n = molar mass ÷ empirical formula mass.':'. Divide all subscripts by a common factor.'):(q.mode==='Molecular formula'?'That’s the empirical formula. Multiply every subscript by n = molar mass ÷ empirical formula mass.':'Close: multiply all subscripts by the same whole number.');
   else if(Object.keys(comp).some(e=>!q.answerComp[e]))msg='Your formula has an element that is not in this compound. Check capital letters.';
   setFeedback('bad',msg+helpTip(q));return}
  const n=parseValue(raw);if(!Number.isFinite(n)){setFeedback('info','Enter a number, such as 0.0472 or 4.72 × 10⁻² (you may type 4.72E-2).');return}countAttempt(q);
- if(q.kind==='integer'){if(Math.abs(n-q.answer)<1e-9)setFeedback('good','Correct! '+(q.finalExplain||q.answer)+scoreCorrect(q));else{markWrong(q);setFeedback('bad',(q.mode==='Hydrates'?'Check your mole ratio: x = mol H₂O ÷ mol anhydrous salt.':'Count again. A subscript after parentheses multiplies everything inside.')+helpTip(q));}return}
- if(q.dp!=null){if(Math.abs(n-q.answer)<=(q.tolAbs||.015)){setFeedback('good','Correct! '+q.answer.toFixed(q.dp)+' '+unitHTML(q.unit)+'.'+(Math.abs(n-q.answer)>1e-9?' (Using the Yellow Sheet and the addition rule, report '+q.answer.toFixed(q.dp)+'.)':'')+scoreCorrect(q));}else{markWrong(q);setFeedback('bad','Recount the atoms of each element (watch the parentheses), then multiply by the Yellow Sheet atomic masses and add.'+helpTip(q));}return}
+ if(q.kind==='integer'){if(Math.abs(n-q.answer)<1e-9)setFeedback('good','Correct! '+(q.finalExplain||q.answer)+scoreCorrect(q));else{const dg=ddDiagnose(n,q.answer,'');ddSlip(q,dg&&(dg.code==='inverted'||dg.code==='ratio')?dg.code:'other');markWrong(q);setFeedback('bad',(q.mode==='Hydrates'?'Check your mole ratio: x = mol H₂O ÷ mol anhydrous salt.':'Count again. A subscript after parentheses multiplies everything inside.')+helpTip(q));}return}
+ if(q.dp!=null){if(Math.abs(n-q.answer)<=(q.tolAbs||.015)){setFeedback('good','Correct! '+q.answer.toFixed(q.dp)+' '+unitHTML(q.unit)+'.'+(Math.abs(n-q.answer)>1e-9?' (Using the Yellow Sheet and the addition rule, report '+q.answer.toFixed(q.dp)+'.)':'')+scoreCorrect(q));}else{const dg=ddDiagnose(n,q.answer,q.unit);ddSlip(q,dg?dg.code:'other');markWrong(q);setFeedback('bad',(dg&&dg.code!=='close'?dg.msg+' ':'')+'Recount the atoms of each element (watch the parentheses), then multiply by the Yellow Sheet atomic masses and add.'+helpTip(q));}return}
  const target=Number(q.answer.toPrecision(q.sf)),tol=Math.max(Math.abs(target)*.006,Math.abs(q.answer)*1e-9);
- if(Math.abs(n-target)>tol){markWrong(q);const alt=(q.alts||[]).find(a=>Math.abs(n-a.v)<=Math.abs(a.v)*.012);setFeedback('bad',(alt?alt.msg:sanityMsg(q,n)||'Check your setup: does every unit cancel? Then check the arithmetic.')+helpTip(q));return}
+ if(Math.abs(n-target)>tol){const alt=(q.alts||[]).find(a=>Math.abs(n-a.v)<=Math.abs(a.v)*.012),sane=alt?'':sanityMsg(q,n),dg=alt||sane?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,alt?'trap':sane?'power10':dg?dg.code:'other');markWrong(q);setFeedback('bad',(alt?alt.msg:sane||(dg?dg.msg:'Check your setup: does every unit cancel? Then check the arithmetic.'))+helpTip(q));return}
  if(sfCount(raw)!==q.sf){setFeedback('info','<b>Your math is right!</b> Now round to '+q.sf+' significant figures: '+escape(fmt(q.answer,q.sf))+'. Enter it that way to score.'+(q.sfWhy?' '+q.sfWhy:''));return}
- {const step=Math.pow(10,Math.floor(Math.log10(Math.abs(target)))-q.sf+1);if(Math.abs(n-target)>step*1.001){markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, using the Yellow Sheet molar masses without rounding them early.'+helpTip(q));return}}
+ {const step=Math.pow(10,Math.floor(Math.log10(Math.abs(target)))-q.sf+1);if(Math.abs(n-target)>step*1.001){ddSlip(q,'close');markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, using the Yellow Sheet molar masses without rounding them early.'+helpTip(q));return}}
  setFeedback('good','Correct! '+escape(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+scoreCorrect(q));}
 function sanityMsg(q,n){const isCount=/^(molecules|atoms|formula units) /.test(q.unit),r=n/q.answer,k=Math.round(Math.log10(Math.abs(r)));
  if(n>0&&k!==0&&Math.abs(Math.log10(Math.abs(r))-k)<.004)return '<b>Your digits are right, but the power of 10 is off by '+Math.abs(k)+'.</b> '+((q.steps||[]).some(f=>f.name==='Avogadro’s number')?'Calculator tip: type 6.0221 <b>EE</b> 23 (or 6.0221 <b>×10ˣ</b> 23). Typing “× 10 EE 23” adds an extra factor of 10.':'Check the decimal point and any mg ↔ g (1000) steps.');
@@ -939,11 +961,11 @@ function sanityMsg(q,n){const isCount=/^(molecules|atoms|formula units) /.test(q
  if(n<0)return 'A count or mass can’t be negative.';return '';}
 function helpTip(q){if(state.quiz)return ' Try a hint if you are stuck.';return state.guideOn||!q.guide?.length?' Try a hint if you are stuck.':(state.view==='learn'?' Tip: tap <b>Try with help</b> above to go one step at a time.':' Tip: turn on <b>Step-by-step help</b> to check each step.');}
 function checkChoice(key){const q=state.q;countAttempt(q);byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>{if(b.dataset.choice===key)b.classList.add(key===q.answer?'right':'wrong')});
- if(key===q.answer){byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);setFeedback('good',(q.finalExplain||'Correct!')+scoreCorrect(q));}else{markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||'Not that one. Use the hint or the step-by-step help.');}}
+ if(key===q.answer){byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);setFeedback('good',(q.finalExplain||'Correct!')+scoreCorrect(q));}else{ddSlip(q,'choice');markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||'Not that one. Use the hint or the step-by-step help.');}}
 
 /* ===================== Hints and solutions ===================== */
 function hint(){const q=state.q,i=Math.min(state.hintIndex,q.hints.length-1);q.usedHelp=true;byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>Hint '+(i+1)+' of '+q.hints.length+'</h3>'+escape(q.hints[i]).replace(/\b([A-Z][a-z]?\d*(?:[A-Z][a-z]?\d*)*)\b/g,s=>/\d/.test(s)?fhtml(s):s);state.hintIndex=Math.min(i+1,q.hints.length-1);}
-function solution(){const q=state.q;q.usedHelp=true;q.solutionShown=true;let html='<h3>Worked solution</h3>';
+function solution(){const q=state.q;q.usedHelp=true;if(!q.attempted&&!q.firstSlip)q.firstSlip='revealed';q.solutionShown=true;let html='<h3>Worked solution</h3>';
  if(q.guide&&q.guide.length)html+='<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+escape(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>';
  if(q.steps&&q.steps.length)html+='<div class="stepnote">All together:</div><div class="solution-chain">'+amount(q.given)+q.steps.map(f=>' <b>×</b> '+factHTML(f)).join('')+' <b>=</b> '+escape(fmt(q.answer,q.sf||4))+' '+unitHTML(q.unit)+'</div>';
  if(q.sf&&q.steps&&q.steps.length){const lim=[['the given value',q.given.sf||3],...q.steps.filter(f=>f.sf!==Infinity).map(f=>[f.name.toLowerCase()+' ('+(f.name==='Avogadro’s number'?NA_TEXT:f.name==='Molar mass'?(f.top.text!=='1'?f.top.text:f.bot.text):f.top.text)+')',f.sf])];html+='<div class="stepnote">Sig figs: '+lim.map(([t,s])=>escape(t)+' has '+s).join('; ')+'. Exact numbers (subscripts, 1000 mg = 1 g, “1 mol”) don’t count. Keep the fewest: <b>'+q.sf+'</b>.</div>';}

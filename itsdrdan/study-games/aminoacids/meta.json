@@ -1,0 +1,27 @@
+{
+  "title": "Peptide Party — Amino Acids & Proteins",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3B",
+  "description": "Practice CHEM 3B amino acids and proteins in seven modes: Amino Acids & R Groups, Condense & Hydrolyze, Codon Decoder, Name That Peptide, Protein Structure, R-Group Interactions, and Exam Practice. Students build peptides by tapping the –OH and H that leave as water, cut peptide bonds by adding water, translate mRNA with a codon chart, name peptides with 3- and 1-letter codes, identify primary to quaternary structure from diagrams, and match side-chain pairs to salt bridges, hydrogen bonds, disulfide bonds and hydrophobic interactions. Exam Practice serves 65 final-exam style questions from Final Boss.",
+  "icon": "🧬",
+  "tags": [
+    "chemistry",
+    "CHEM 3B",
+    "biochemistry",
+    "amino acids",
+    "proteins",
+    "peptide bonds",
+    "condensation",
+    "hydrolysis",
+    "zwitterions",
+    "codons",
+    "translation",
+    "protein structure",
+    "salt bridges",
+    "disulfide bonds",
+    "denaturation"
+  ],
+  "version": "7",
+  "status": "working",
+  "logo": "logo.png"
+}

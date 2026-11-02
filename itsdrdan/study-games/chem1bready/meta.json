@@ -2,7 +2,7 @@
   "title": "Bridge to 1B — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 1A and CHEM 1B",
-  "description": "CHEM 1B readiness review (CHEM 1A → CHEM 1B). Learn Trail with 11 stops: watch a worked example step by step, then solve one yourself. Practice Quests with Mixed Practice and 11 topics: Core Toolkit, Mole Match (limiting reactants), Acid–Base Stoichiometry and titrations, Dissolution Lab (ions and concentrations), Predicting & Balancing, Reactions in Water (net ionic, precipitation, neutralization), REDOX Refresh, Lewis Workshop (interactive Lewis builder), Shape & Hybridization, MO Explorer, and Matter & Energy. A 12-question Readiness Check weighted toward what CHEM 1B uses most (acid–base and solution stoichiometry, ions in water, REDOX, energy) gives a personal review plan with OpenStax Chemistry 2e chapters. Includes solution maps, hints, step reveals, Yellow and Green Sheets, XP, ranks, achievements, and matched ItsDrDan videos. Add ?mode=check to open the Readiness Check.",
+  "description": "CHEM 1B readiness review (CHEM 1A → CHEM 1B). Learn Trail with 13 stops: watch a worked example step by step, then solve one yourself. Practice Quests with a Daily 5 (five questions a day on what you missed or haven’t seen lately, with a day streak), Mixed Practice tuned to the CHEM 1B unit you are in (kinetics, equilibrium, acid–base, solubility, thermo, electrochem), and 13 topics: Core Toolkit, Mole Match (limiting reactants), Acid–Base Stoichiometry and titrations, Dissolution Lab (ions and concentrations), Predicting & Balancing, Reactions in Water (net ionic, precipitation, neutralization), REDOX Refresh, Lewis Workshop (interactive Lewis builder), Shape & Hybridization, MO Explorer, Matter & Energy, Kinetics & Equilibrium Prep (rates from coefficients, K-ready molarities and partial pressures, ICE change rows), and 1B Math Gym (log and ln, undoing logs, solving inside a log, slopes with units from a plot, exponents from initial-rate tables, quadratics, the small-x shortcut and 5% rule, kJ vs J with R). Wrong answers get mistake-specific feedback (factor of 1000, missing 273, flipped sign, inverted ratio, log vs ln). A 12-question Readiness Check weighted toward what CHEM 1B uses most gives a personal review plan with OpenStax Chemistry 2e chapters. Includes solution maps, hints, step reveals, TI-36X Pro key tips, Yellow and Green Sheets, XP, ranks, achievements, and matched ItsDrDan videos. Add ?mode=check for the Readiness Check or ?mode=daily for the Daily 5.",
   "tags": [
     "chemistry",
     "CHEM 1A",
@@ -37,12 +37,24 @@
     "guided practice",
     "learn trail",
     "worked examples",
-    "XP and achievements"
+    "XP and achievements",
+    "daily 5",
+    "spaced practice",
+    "logarithms",
+    "natural log",
+    "exponents",
+    "slope",
+    "initial rates",
+    "quadratic formula",
+    "small-x approximation",
+    "kinetics prep",
+    "equilibrium prep",
+    "TI-36X Pro"
   ],
   "status": "working",
   "chapters": {
     "CHEM 1A": "Review of Chapters 1–11 and intro REDOX (OpenStax Chemistry 2e)",
-    "CHEM 1B": "Prerequisite review before CHEM 1B"
+    "CHEM 1B": "Prerequisite review before CHEM 1B; math warm-ups for Chapters 12–17"
   },
   "logo": "logo.png"
 }

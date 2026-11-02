@@ -294,6 +294,10 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 .skills{justify-content:center}
 @media(max-width:680px){.skills{flex-wrap:wrap;overflow-x:visible;margin:0 0 12px;padding:0;gap:6px}.skill{padding:6px 11px;font-size:.88rem;min-height:40px}}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
+
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="app">
@@ -881,8 +885,26 @@ function stepChoice(k){const q=S.q,s=q.guide[S.gi];if(k!==s.answer){byId('guide'
 function feedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.innerHTML=(type!=='info'?'<div class="result-title"><span>'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Great job!','Under control!']):S.q.quiz?'Not quite':'Not correct yet, try again')+'</strong></div>':'')+html;
  byId('bottomNext').hidden=!((type==='good'&&S.q.scored)||(S.q.quiz&&S.q.done));byId('skipQ').hidden=!(S.view==='learn'||(S.q.quiz&&!S.q.done))||!!S.q.scored;updateCoach();if(type!=='good')el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 function tried(q){if(!q.tried){q.tried=1;P.attempts++;save();renderStatus();}}
+
+/* Mistake catchers (shared across ItsDrDan games): name the slip in a wrong numeric answer instead of "check your work".
+   ddDiagnose(entered, answer, unit) → {code, msg} or null. Codes feed the anonymous stats (slip column). */
+function ddDiagnose(entered,answer,unit){const a=Number(answer),x=Number(entered);if(!Number.isFinite(x)||!Number.isFinite(a)||a===0)return null;
+ const near=(p,v,tol=.006)=>Math.abs(p-v)<=Math.max(Math.abs(v)*tol,1e-12),r=x/a,u=String(unit||'');
+ if(near(x,a,.05))return {code:'close',msg:'Very close: rounding drifted. Keep extra digits until the last step, then round at the end.'};
+ if(near(r,-1))return {code:'sign',msg:'Right size, wrong sign. Check the direction (released vs absorbed, used up vs formed, later minus earlier).'};
+ if(near(r,1000)||near(r,.001)){if(/J/.test(u))return {code:'kJ-J',msg:'Off by a factor of 1000: J vs kJ. Check which one is asked for.'};if(/mol|L/.test(u)&&!/^M/.test(u))return {code:'mL-L',msg:'Off by a factor of 1000: mL ↔ L (or mmol ↔ mol). Divide mL by 1000 to get liters.'};if(/g/.test(u))return {code:'g-kg',msg:'Off by a factor of 1000: g ↔ kg or mg ↔ g. Check the mass unit.'};return {code:'x1000',msg:'Off by a factor of 1000 (10³). Check a unit prefix or the exponent; on the calculator use EE, as in 2.5E-3.'};}
+ if(/K|°C/.test(u)&&(near(x,a+273.15,.002)||near(x,a-273.15,.002)))return {code:'273',msg:'Off by 273: convert between °C and K (K = °C + 273.15).'};
+ if(!near(a,1)&&near(x*a,1))return {code:'inverted',msg:'Looks inverted (1 ÷ the right answer). Check what goes on top and what goes on the bottom of the fraction.'};
+ if(near(r,100)||near(r,.01))return {code:'power10',msg:/%/.test(u)?'Off by 100: a percent is the fraction × 100.':'Off by a factor of 100. Check a unit conversion or a power of ten.'};
+ for(const n of [1,2,4,5,6])if(near(r,10**n)||near(r,10**-n))return {code:'power10',msg:'Off by a power of ten (10'+String(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d])+'). Check the exponent; on the calculator use EE, as in 2.5E-3.'};
+ for(const [k,txt] of [[2,'2'],[.5,'½'],[3,'3'],[1/3,'⅓'],[4,'4'],[.25,'¼'],[1.5,'3⁄2'],[2/3,'2⁄3']])if(near(r,k))return {code:'ratio',msg:'Off by a factor of '+txt+'. A coefficient, mole ratio, or conversion factor was probably skipped or flipped.'};
+ if(near(r,22.4)||near(r,1/22.4))return {code:'ratio',msg:'Off by 22.4: that molar volume is only for a gas at STP. Check whether the problem is at STP, and whether this quantity is a gas.'};
+ if(near(r,6.022e23)||near(r,1/6.022e23))return {code:'power10',msg:'Off by Avogadro’s number: you have particles where moles were asked, or the reverse.'};
+ return null;}
+
+function ddSlip(q,code){if(q&&!q.firstSlip)q.firstSlip=code||'other';}
 function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.quiz?levelById(q.lvl):q.level&&levelById(q.level);
- ddTrack({game:'gaslaws',course:S.course,mode:q.quiz?'Readiness Check':q.level?'Learn Trail':'Practice',topic:L?L.title:(q.realMode||q.mode||''),correct:!!ok});}catch(e){}}
+ ddTrack({game:'gaslaws',course:S.course,mode:q.quiz?'Readiness Check':q.level?'Learn Trail':'Practice',topic:L?L.title:(q.realMode||q.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?'':(q.firstSlip||'')});}catch(e){}}
 function wrong(q){ddLog(q,false);if(!q.failed){q.failed=1;P.streak=0;save();renderStatus();}}
 function score(q){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=1;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp=3;
  if(!q.solutionShown){P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;
@@ -893,17 +915,18 @@ function quizResult(q,right,extra=''){ddLog(q,right);q.done=1;q.quizRight=right;
  if(right){P.correct++;P.streak++;P.best=Math.max(P.best,P.streak);addXP(10);celebrate();}else{P.streak=0;save();renderStatus();}
  if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?'good':'bad',(right?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
 function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
- if(q.kind==='abs'){const ok=Math.abs(n-q.answer)<=q.tol;if(q.quiz)return quizResult(q,ok);return ok?feedback('good','Correct! '+esc(q.shown)+'.'+score(q)):(wrong(q),feedback('bad',(trapMsg(q,n)||'Check your setup. Remember K = °C + 273.15.')));}
+ if(q.kind==='abs'){const ok=Math.abs(n-q.answer)<=q.tol;if(!ok){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}if(q.quiz)return quizResult(q,ok);return ok?feedback('good','Correct! '+esc(q.shown)+'.'+score(q)):(wrong(q),feedback('bad',(trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg||'Check your setup. Remember K = °C + 273.15.')));}
  const close=Math.abs(n-q.answer)<=Math.abs(q.answer)*.01;
+ if(!close){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}
  if(q.quiz)return quizResult(q,close);
- if(!close){wrong(q);const t=trapMsg(q,n);return feedback('bad',t||'Check your setup and arithmetic. Try a hint or the step-by-step help.');}
+ if(!close){wrong(q);const t=trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg;return feedback('bad',t||'Check your setup and arithmetic. Try a hint or the step-by-step help.');}
  const [lo,hi]=sfRange(raw);if(q.sf&&(q.sf<lo||q.sf>hi))return feedback('info','<b>Your math is right!</b> Now round to '+q.sf+' significant figures: '+esc(fmt(q.answer,q.sf))+'.');
  feedback('good','Correct! '+esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+score(q));}
 function checkChoice(k){const q=S.q;if(q.done||q.scored)return;tried(q);const btn=byId('choiceBox').querySelector('[data-choice="'+CSS.escape(k)+'"]');btn?.classList.add(k===q.answer?'right':'wrong');
- if(q.quiz){if(k!==q.answer)byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');return quizResult(q,k===q.answer);}
- if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);wrong(q);feedback('bad','Not that one. '+(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.'));}}
+ if(q.quiz){if(k!==q.answer){ddSlip(q,'choice');byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');}return quizResult(q,k===q.answer);}
+ if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);ddSlip(q,'choice');wrong(q);feedback('bad','Not that one. '+(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.'));}}
 function hint(){const q=S.q;q.usedHelp=true;const i=Math.min(S.hint,q.hints.length-1);byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>💡 Hint '+(i+1)+' of '+q.hints.length+'</h3>'+q.hints[i];S.hint=Math.min(i+1,q.hints.length-1);}
-function solution(){const q=S.q;ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function solution(){const q=S.q;if(!q.tried&&!q.firstSlip)q.firstSlip='revealed';ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 /* readiness check */
 function startQuiz(){const core=S.course==='3A'?['units','kmt','boyle','temp','avog','combined','ideal','stp','molar','dalton','wet','stoich']:['kmt','boyle','temp','combined','ideal','stp','molar','dalton','wet','stoich','rms','graham','real'];
  const must=S.course==='3A'?['boyle','combined','ideal','stp','dalton']:['combined','ideal','molar','dalton','stoich'];const rest=shuffle(core.filter(x=>!must.includes(x))).slice(0,10-must.length);

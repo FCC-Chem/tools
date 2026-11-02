@@ -1,8 +1,8 @@
 {
-  "title": "Functional Group Identification Flashcard Game",
+  "title": "Functional Group Flashcards",
   "author": "Dr. Dan",
   "course": "CHEM 3B",
-  "description": "Interactive flashcard-style study game for identifying 16 common organic functional groups. Includes Picture to Name, Name to Picture, and Mixed Practice modes. Students practice recognizing alkanes, alkenes, alkynes, arenes, haloalkanes, alcohols, aldehydes, ketones, thiols, sulfides, disulfides, amines, amides, esters, ethers, and carboxylic acids.",
+  "description": "Flashcards and quizzes for the 16 CHEM 3B functional groups (alkane to amide). Study mode flips cards with a key feature, a real example and where you meet it in health care; then Picture to Name, Name to Picture, Real Molecules (condensed formulas) and Mixed quizzes. Tracks mastery per group, XP and badges.",
   "tags": [
     "functional groups",
     "organic chemistry",
