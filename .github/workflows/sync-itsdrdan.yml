@@ -1,17 +1,17 @@
 name: Sync Dr. Dan's games from his personal repos
 
 # Dr. Dan develops each game in his own repo (github.com/ItsDrDan/<repo>).
-# This workflow copies the latest index.html, meta.json and any assets/
-# folder from those repos into itsdrdan/<folder>/ here, so he only ever
-# edits in one place.
+# This workflow gathers all of them into ONE catalog entry,
+# itsdrdan/study-games/, with a launcher page that sorts the games by course.
+# The game list comes from his study hub (ItsDrDan/games, data/hub.js), so a
+# new game appears here as soon as it is on the hub. See
+# .github/scripts/sync_itsdrdan.py for details.
 #
 # Runs every hour, and can be run on demand from the Actions tab
 # ("Sync Dr. Dan's games..." -> Run workflow).
 #
 # Only the itsdrdan/ folder is ever touched. Edits made to itsdrdan/
 # directly in this repo WILL be overwritten -- change the personal repo.
-#
-# To add a game: add a line to the list below (personal repo, folder here).
 
 on:
   schedule:
@@ -32,65 +32,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy latest files from ItsDrDan repos
+      - name: Copy Dr. Dan's games into itsdrdan/study-games
         id: sync
         run: |
-          while read -r repo folder; do
-            [ -z "$repo" ] && continue
-            echo "== ItsDrDan/$repo -> itsdrdan/$folder"
-            rm -rf /tmp/src
-            if ! git clone -q --depth 1 "https://github.com/ItsDrDan/$repo" /tmp/src; then
-              echo "::warning::Could not fetch ItsDrDan/$repo; skipping it"
-              continue
-            fi
-            if [ ! -s /tmp/src/index.html ]; then
-              echo "::warning::ItsDrDan/$repo has no index.html; skipping it"
-              continue
-            fi
-            mkdir -p "itsdrdan/$folder"
-            cp /tmp/src/index.html "itsdrdan/$folder/index.html"
-            if [ -f /tmp/src/meta.json ]; then
-              if python3 -m json.tool /tmp/src/meta.json > /dev/null 2>&1; then
-                cp /tmp/src/meta.json "itsdrdan/$folder/meta.json"
-              else
-                echo "::warning::ItsDrDan/$repo meta.json is not valid JSON; kept the old one"
-              fi
-            fi
-            if [ -d /tmp/src/assets ]; then
-              rm -rf "itsdrdan/$folder/assets"
-              cp -r /tmp/src/assets "itsdrdan/$folder/assets"
-            fi
-          done <<'EOF'
-          elements         elements
-          functionalgroups functional-groups-studio
-          gaslaws          gaslaws
-          chem1bready      chem1bready
-          carbohydrates    carbohydrates
-          ionicformula     naming
-          lewisstructures  lewisstructures
-          metric           metric
-          moles            mole
-          organic          functional-groups
-          organicreactions organic-reactions
-          polyatomic       polyatomicion
-          quantumchemistry quantumchemistry
-          reactions        reactions
-          redox            redox
-          sigfig           sigfigs
-          stoichiometry    stoichiometry
-          thermochemistry  thermochemistry
-          EOF
+          python3 .github/scripts/sync_itsdrdan.py
 
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add itsdrdan
+          git add -A itsdrdan
           if git diff --cached --quiet; then
             echo "Nothing changed."
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            git diff --cached --stat
-            git commit -m "Sync Dr. Dan's games from his personal repos"
-            git push
+            git diff --cached --stat | tail -5
+            git commit -q -m "Sync Dr. Dan's games from his personal repos"
+            # A colleague may have pushed while this ran; put this commit on top of theirs.
+            git pull -q --rebase origin main
+            git push -q
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 

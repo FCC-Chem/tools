@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Dan's Chemistry Study Games</title>
+<!-- Built automatically by .github/scripts/sync_itsdrdan.py from ItsDrDan/games (data/hub.js).
+     Do not edit here: changes are overwritten on the next sync. -->
+<style>
+:root{
+  --ink:#3a3157;--muted:#6f6889;--line:#ece4f4;--bg:#fff8f1;
+  --brand:#7563d9;--edge:#5a4d96;
+  --c3A:#2a9478;--c3A-bg:#d9f4ea;--c1A:#5468d4;--c1A-bg:#e3e8ff;--c1B:#d9654f;--c1B-bg:#ffe5dc;--c3B:#9555bd;--c3B-bg:#f1e3fa;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,"Segoe UI",system-ui,-apple-system,sans-serif;font-weight:600;line-height:1.5}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(120deg,#ffe9f0 0%,#f1ebff 45%,#e3f6ff 75%,#e9fbef 100%);padding:28px 0 24px}
+.brand{display:flex;gap:16px;align-items:center}
+.brand svg{width:64px;height:64px;flex:0 0 auto}
+h1{margin:0;font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+.sub{margin:4px 0 0;color:var(--muted);font-size:1rem}
+.sub a{color:var(--edge);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px}
+.chip{font:inherit;font-weight:800;font-size:1rem;min-height:44px;padding:0 18px;border-radius:999px;border:2px solid #e2d8f2;background:#fff;color:#4d4470;cursor:pointer}
+.chip:hover{border-color:var(--brand)}
+.chip[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+.count{color:var(--muted);font-size:.95rem;margin:8px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;padding-bottom:36px}
+.game{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 8px 28px #5a4d9614}
+.top{display:flex;gap:14px;align-items:center}
+.icon{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;background:#efe9ff;color:var(--edge);flex:0 0 auto;overflow:hidden}
+.icon img{width:100%;height:100%;object-fit:cover}
+.icon svg{width:34px;height:34px}
+.game h2{margin:0;font-size:1.12rem;font-weight:850;line-height:1.25}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:999px;color:var(--c);background:var(--cb)}
+.tag[data-c="3A"]{--c:var(--c3A);--cb:var(--c3A-bg)}.tag[data-c="1A"]{--c:var(--c1A);--cb:var(--c1A-bg)}
+.tag[data-c="1B"]{--c:var(--c1B);--cb:var(--c1B-bg)}.tag[data-c="3B"]{--c:var(--c3B);--cb:var(--c3B-bg)}
+.game p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.play,.copy{font:inherit;font-weight:800;min-height:44px;padding:0 18px;border-radius:999px;display:inline-flex;align-items:center;text-decoration:none;cursor:pointer}
+.play{background:var(--brand);color:#fff;border:2px solid var(--edge);box-shadow:0 3px 0 var(--edge)}
+.play:hover{box-shadow:0 5px 0 var(--edge)}
+.copy{background:#fff;color:var(--edge);border:2px solid #d9cfee}
+.copy:hover{background:#f4f0ff}
+footer{border-top:1px solid var(--line);padding:18px 0 28px;color:var(--muted);font-size:.88rem}
+@media (max-width:520px){.brand svg{width:48px;height:48px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-cards" viewBox="0 0 256 256"><g fill="currentColor"><path d="M192,88V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8H184A8,8,0,0,1,192,88Z" opacity="0.2"/><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"/></g></symbol><symbol id="i-flask" viewBox="0 0 256 256"><g fill="currentColor"><path d="M208,216H48a8,8,0,0,1-6.86-12.12l30.48-50.8h0c13.23-2.48,32-1.41,56.37,10.92,32.25,16.33,54.75,12.91,67.5,7.65h0l19.34,32.23A8,8,0,0,1,208,216Z" opacity="0.2"/><path d="M221.69,199.77,160,96.92V40h8a8,8,0,0,0,0-16H88a8,8,0,0,0,0,16h8V96.92L34.31,199.77A16,16,0,0,0,48,224H208a16,16,0,0,0,13.72-24.23ZM110.86,103.25A7.93,7.93,0,0,0,112,99.14V40h32V99.14a7.93,7.93,0,0,0,1.14,4.11L183.36,167c-12,2.37-29.07,1.37-51.75-10.11-15.91-8.05-31.05-12.32-45.22-12.81ZM48,208l28.54-47.58c14.25-1.73,30.31,1.85,47.82,10.72,19,9.61,35,12.88,48,12.88a69.89,69.89,0,0,0,19.55-2.7L208,208Z"/></g></symbol><symbol id="i-formula" viewBox="0 0 256 256"><g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="56" width="224" height="144" rx="24" fill="currentColor" opacity=".2" stroke="none"/><rect x="16" y="56" width="224" height="144" rx="24"/><text x="128" y="152" font-size="76" fill="currentColor" font-family="Inter,system-ui,sans-serif" font-weight="800" text-anchor="middle" stroke="none">NaCl</text></g></symbol><symbol id="i-ion" viewBox="0 0 256 256"><g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M44 40H24V216H44M212 40H232V216H212"/><path d="M128 132V64M128 132L76 172M128 132L180 172"/><circle cx="128" cy="132" r="28" fill="#fff"/><circle cx="128" cy="132" r="28" fill="currentColor" opacity=".2" stroke="none"/><circle cx="128" cy="60" r="18" fill="#fff"/><circle cx="72" cy="176" r="18" fill="#fff"/><circle cx="184" cy="176" r="18" fill="#fff"/><text x="220" y="36" font-size="44" fill="currentColor" font-family="Inter,system-ui,sans-serif" font-weight="800" text-anchor="middle" stroke="none">2−</text></g></symbol><symbol id="i-measure" viewBox="0 0 256 256"><g fill="currentColor"><path d="M229.66,90.34,90.34,229.66a8,8,0,0,1-11.31,0L26.34,177a8,8,0,0,1,0-11.31L165.66,26.34a8,8,0,0,1,11.31,0L229.66,79A8,8,0,0,1,229.66,90.34Z" opacity="0.2"/><path d="M235.32,73.37,182.63,20.69a16,16,0,0,0-22.63,0L20.68,160a16,16,0,0,0,0,22.63l52.69,52.68a16,16,0,0,0,22.63,0L235.32,96A16,16,0,0,0,235.32,73.37ZM84.68,224,32,171.31l32-32,26.34,26.35a8,8,0,0,0,11.32-11.32L75.31,128,96,107.31l26.34,26.35a8,8,0,0,0,11.32-11.32L107.31,96,128,75.31l26.34,26.35a8,8,0,0,0,11.32-11.32L139.31,64l32-32L224,84.69Z"/></g></symbol><symbol id="i-sigfig" viewBox="0 0 256 256"><g fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="52" width="216" height="152" rx="24" fill="currentColor" opacity=".2" stroke="none"/><rect x="20" y="52" width="216" height="152" rx="24"/><text x="128" y="152" font-size="84" fill="currentColor" font-family="Inter,system-ui,sans-serif" font-weight="800" text-anchor="middle" stroke="none">3.50</text><path d="M56 176H92M118 176H154M170 176H206"/></g></symbol></svg>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="ItsDrDan atom logo">
+  <circle cx="300" cy="300" r="296" fill="#111"/>
+  <circle cx="300" cy="300" r="240" fill="#3aaef0"/>
+  <circle cx="300" cy="300" r="176" fill="#ee2424"/>
+  <g fill="none" stroke="#fff" stroke-width="27">
+    <ellipse cx="300" cy="300" rx="266" ry="112" transform="rotate(-76 300 300)"/>
+    <ellipse cx="300" cy="300" rx="266" ry="112" transform="rotate(-14 300 300)"/>
+    <ellipse cx="300" cy="300" rx="266" ry="112" transform="rotate(45 300 300)"/>
+  </g>
+  <circle cx="300" cy="300" r="80" fill="#fff"/>
+  <circle cx="300" cy="300" r="58" fill="#fdd34d"/>
+  <g fill="#fdd34d" stroke="#fff" stroke-width="16">
+    <circle cx="364" cy="42" r="22"/><circle cx="236" cy="558" r="22"/>
+    <circle cx="558" cy="236" r="22"/><circle cx="42" cy="364" r="22"/>
+    <circle cx="488" cy="488" r="22"/><circle cx="112" cy="112" r="22"/>
+  </g>
+</svg>
+      <div>
+        <h1>Dr. Dan's Chemistry Study Games</h1>
+        <p class="sub">Free practice games for CHEM 3A, 1A, 1B and 3B by Dr. Dan (ItsDrDan). Pick a course, then press Play.
+          Chapter guides and videos live on the <a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener">full study hub</a>.</p>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="chips" role="group" aria-label="Filter by course">
+    <button class="chip" data-f="all" aria-pressed="true">All</button>
+    <button class="chip" data-f="3A" aria-pressed="false">CHEM 3A</button>
+    <button class="chip" data-f="1A" aria-pressed="false">CHEM 1A</button>
+    <button class="chip" data-f="3B" aria-pressed="false">CHEM 3B</button>
+    <button class="chip" data-f="1B" aria-pressed="false">CHEM 1B</button>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div class="grid" id="grid"></div>
+</main>
+<footer>
+  <div class="wrap">Game design and chemistry by ItsDrDan. I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</div>
+</footer>
+<script>
+const GAMES = [
+ {
+  "id": "sigfig",
+  "title": "Significant Figures",
+  "blurb": "Count significant figures in measured and exact numbers, in standard and scientific notation.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "sigfig"
+ },
+ {
+  "id": "metric",
+  "title": "SI Prefix Challenge",
+  "blurb": "Practice metric prefixes and powers of ten, one conversion at a time.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "measure"
+ },
+ {
+  "id": "algebratrainer",
+  "title": "Algebra for Chemistry",
+  "blurb": "Rearrange chemistry equations one step at a time, then plug in the numbers with TI-36X Pro keystroke help.",
+  "courses": [
+   "3A",
+   "1A",
+   "1B"
+  ],
+  "icon": "scales",
+  "logo": "logos/algebratrainer.webp"
+ },
+ {
+  "id": "elements",
+  "title": "Element Symbol Study Lab",
+  "blurb": "Learn element names and symbols, starting with the first 20 and a health-science set.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "periodic",
+  "logo": "logos/elements.webp"
+ },
+ {
+  "id": "polyatomic",
+  "title": "Polyatomic Ions (Green Sheet)",
+  "blurb": "Match polyatomic ion names, formulas, and charges from the green sheet.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "ion"
+ },
+ {
+  "id": "ionicformula",
+  "title": "Naming & Formulas",
+  "blurb": "Turn names into formulas and formulas into names: ionic, polyatomic, acids, and covalent.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "formula"
+ },
+ {
+  "id": "quantumchemistry",
+  "title": "Quantum Quest",
+  "blurb": "Light, Bohr model, orbital diagrams, electron configurations, and periodic trends. Pick 3A or 1A.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "orbital",
+  "logo": "logos/quantumchemistry.webp"
+ },
+ {
+  "id": "lewisstructures",
+  "title": "Lewis Structure Studio",
+  "blurb": "Build Lewis structures, then predict shape and polarity. 3B adds condensed and skeletal drawing.",
+  "courses": [
+   "3A",
+   "1A",
+   "3B"
+  ],
+  "icon": "molecule",
+  "logo": "logos/lewisstructures.webp"
+ },
+ {
+  "id": "reactions",
+  "title": "Reaction Rumble (Chemical Reactions)",
+  "blurb": "Balance, predict products, write net ionic equations, and race the 60-second Blitz.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "reaction",
+  "logo": "logos/reactions.webp"
+ },
+ {
+  "id": "redox",
+  "title": "LEO Goes GER! (Redox)",
+  "blurb": "Oxidation states, activity series, and balancing redox by half-reactions in acid and base.",
+  "courses": [
+   "3A",
+   "1A",
+   "1B"
+  ],
+  "icon": "battery",
+  "logo": "logos/redox.webp"
+ },
+ {
+  "id": "moles",
+  "title": "The Mole",
+  "blurb": "Avogadro’s number, molar mass, the Mole Road Map, percent composition, and empirical and molecular formulas.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "pile",
+  "logo": "logos/moles.webp"
+ },
+ {
+  "id": "stoichiometry",
+  "title": "Stoichiometry",
+  "blurb": "Mass, solution, and gas stoichiometry, limiting reactants, percent yield, and titrations.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "scales",
+  "logo": "logos/stoichiometry.webp"
+ },
+ {
+  "id": "gaslaws",
+  "title": "Under Pressure (Gas Laws)",
+  "blurb": "Gas laws, ideal gas calculations, mixtures, wet gases, and mystery gases.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "gauge",
+  "logo": "logos/gaslaws.webp"
+ },
+ {
+  "id": "thermochemistry",
+  "title": "Thermochemistry",
+  "blurb": "Specific heat, phase changes, calorimetry, Hess's law, and enthalpies of formation.",
+  "courses": [
+   "3A",
+   "1A"
+  ],
+  "icon": "fire",
+  "logo": "logos/thermochemistry.webp"
+ },
+ {
+  "id": "chem1bready",
+  "title": "Bridge to 1B (CHEM 1B Readiness)",
+  "blurb": "A 1A review with a readiness check and a personal study plan before you start 1B.",
+  "courses": [
+   "1A",
+   "1B"
+  ],
+  "icon": "bridge",
+  "logo": "logos/chem1bready.webp"
+ },
+ {
+  "id": "organic",
+  "title": "Functional Group Flashcards",
+  "blurb": "Recognize 16 common organic functional groups from pictures and names.",
+  "courses": [
+   "3B",
+   "1A"
+  ],
+  "icon": "cards"
+ },
+ {
+  "id": "functionalgroups",
+  "title": "Organic Origins (Hydrocarbons to Amides)",
+  "blurb": "Start here for 3B: spot, classify, name, and draw organic compounds, then predict how they react.",
+  "courses": [
+   "3B"
+  ],
+  "icon": "organic",
+  "logo": "logos/functionalgroups.webp"
+ },
+ {
+  "id": "organicreactions",
+  "title": "Bond Voyage! Organic Reactions",
+  "blurb": "Identify reactions and draw reactants and products for the 3B organic chapters.",
+  "courses": [
+   "3B"
+  ],
+  "icon": "reaction",
+  "logo": "logos/organicreactions.webp"
+ },
+ {
+  "id": "carbohydrates",
+  "title": "Sweet Structures (Carbohydrates)",
+  "blurb": "Fischer and Haworth projections, D/L sugars, anomers, glycosidic links, and sugar reactions.",
+  "courses": [
+   "3B"
+  ],
+  "icon": "sugar",
+  "logo": "logos/carbohydrates.webp"
+ },
+ {
+  "id": "finalexam",
+  "title": "Final Exam Review",
+  "blurb": "Final Boss! Timed practice finals, an exam-day mode, topic training, and weak-spot review.",
+  "courses": [
+   "3A",
+   "3B",
+   "1A",
+   "1B"
+  ],
+  "icon": "exam",
+  "logo": "logos/finalexam.webp"
+ }
+];
+const ORDER = ['3A', '1A', '3B', '1B'];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const grid = document.getElementById('grid');
+const count = document.getElementById('count');
+
+function card(g) {
+  const art = g.logo
+    ? `<img src="${esc(g.logo)}" alt="" loading="lazy">`
+    : `<svg aria-hidden="true"><use href="#i-${esc(g.icon || 'flask')}"/></svg>`;
+  const tags = ORDER.filter(c => g.courses.includes(c))
+    .map(c => `<span class="tag" data-c="${c}">CHEM ${c}</span>`).join('');
+  return `<article class="game">
+    <div class="top"><div class="icon">${art}</div><h2>${esc(g.title)}</h2></div>
+    <div class="tags">${tags}</div>
+    <p>${esc(g.blurb)}</p>
+    <div class="actions">
+      <a class="play" href="${esc(g.id)}/">Play</a>
+      <button class="copy" type="button" data-id="${esc(g.id)}">Copy link</button>
+    </div>
+  </article>`;
+}
+
+function show(filter) {
+  const list = filter === 'all' ? GAMES : GAMES.filter(g => g.courses.includes(filter));
+  grid.innerHTML = list.map(card).join('');
+  count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}` + (filter === 'all' ? '' : ` for CHEM ${filter}`);
+  document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.f === filter)));
+}
+
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => show(b.dataset.f)));
+
+grid.addEventListener('click', e => {
+  const b = e.target.closest('.copy');
+  if (!b) return;
+  const url = new URL(b.dataset.id + '/', location.href).href;
+  const done = () => { b.textContent = 'Copied!'; setTimeout(() => (b.textContent = 'Copy link'), 1500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url));
+  else prompt('Copy this link:', url);
+});
+
+show('all');
+</script>
+</body>
+</html>

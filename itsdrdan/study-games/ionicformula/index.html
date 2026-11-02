@@ -897,9 +897,11 @@ function buildGreenSheetOxyanions(){
   return ions;
 }
 
+// Real ions only: the -ite rule also produces names for ions that don't exist (borite, carbonite, silicite, iodite).
+const NOT_REAL_IONS = /(^|\s|hydrogen)(borite|carbonite|silicite|iodite)$/;
 const ANIONS = [
   ...MONATOMIC_ANIONS,
-  ...buildGreenSheetOxyanions(),
+  ...buildGreenSheetOxyanions().filter(a=>!NOT_REAL_IONS.test(a.name)),
   ...GREEN_SHEET_COMMON_ANIONS,
 ];
 
@@ -976,15 +978,16 @@ function buildOxyacidPool(){
   return acids;
 }
 
-const ACIDS = [...BINARY_ACIDS, ...buildOxyacidPool()];
+// Real acids only (no borous, carbonous, silicous or iodous acid; telluric acid is really H6TeO6, so it is left out).
+const NOT_REAL_ACIDS = new Set(['borous acid','carbonous acid','silicous acid','iodous acid','telluric acid']);
+const ACIDS = [...BINARY_ACIDS, ...buildOxyacidPool().filter(a=>!NOT_REAL_ACIDS.has(a.name))];
 
 
 // ---------- Binary covalent nomenclature pool ----------
 // Prefixes run from mono- through deca-.  The first element never uses mono-
 // when its subscript is 1; the second element always uses a numerical prefix
-// and is converted to an -ide name.  The quiz intentionally includes both
-// familiar molecules and chemically fanciful combinations so students must
-// apply the naming rules rather than recognize memorized compounds.
+// and is converted to an -ide name.  The quiz uses real molecules only
+// (see REAL_COVALENT), so students practice the rules on substances that exist.
 const COVALENT_PREFIXES = ['', 'mono', 'di', 'tri', 'tetra', 'penta', 'hexa', 'hepta', 'octa', 'nona', 'deca'];
 
 const COVALENT_ELEMENTS = [
@@ -1027,7 +1030,18 @@ function covalentName(first, second, firstCount, secondCount){
 }
 
 // A few familiar examples are included deliberately, while the rest of the
-// quiz can generate "fake" but rule-valid names such as heptaiodine decafluoride.
+// quiz draws from REAL_COVALENT.
+// Real binary covalent compounds (first element, second element, counts). Together they use every prefix from
+// mono- to deca- except octa- (e.g. P4S9 nona-, S2F10 and P4O10 deca-, Cl2O7 and IF7 hepta-).
+const REAL_COVALENT = [
+  ['C','O',1,1],['C','O',1,2],['C','S',1,2],['C','Cl',1,4],['C','Br',1,4],['C','F',1,4],['N','O',1,1],['N','O',1,2],['N','O',2,1],
+  ['N','O',2,3],['N','O',2,4],['N','O',2,5],['N','F',1,3],['N','Cl',1,3],['N','F',2,4],['S','O',1,2],['S','O',1,3],['S','F',1,4],
+  ['S','F',1,6],['S','F',2,10],['S','Cl',1,2],['S','Cl',2,2],['S','N',4,4],['P','Cl',1,3],['P','Cl',1,5],['P','Br',1,3],['P','F',1,5],
+  ['P','F',1,3],['P','O',4,6],['P','O',4,10],['P','S',4,3],['P','S',4,9],['P','S',4,10],['B','F',1,3],['B','Cl',1,3],['B','Br',1,3],
+  ['B','O',2,3],['Si','O',1,2],['Si','Cl',1,4],['Si','F',1,4],['Si','Br',1,4],['Si','N',3,4],['Se','O',1,2],['Se','O',1,3],['Se','F',1,6],
+  ['Se','Cl',1,4],['I','F',1,5],['I','F',1,7],['I','Cl',1,1],['I','Cl',1,3],['I','Br',1,1],['I','O',2,5],['Br','F',1,3],['Br','F',1,5],
+  ['Br','Cl',1,1],['Cl','F',1,3],['Cl','F',1,5],['Cl','O',2,1],['Cl','O',2,7],['Cl','O',1,2],['O','F',1,2],
+];
 const COVALENT_EXAMPLES = [
   {first:'C', second:'O', firstCount:1, secondCount:1},   // carbon monoxide
   {first:'C', second:'O', firstCount:1, secondCount:2},   // carbon dioxide
@@ -1036,7 +1050,6 @@ const COVALENT_EXAMPLES = [
   {first:'P', second:'Cl',firstCount:1, secondCount:3},   // phosphorus trichloride
   {first:'P', second:'Cl',firstCount:1, secondCount:5},   // phosphorus pentachloride
   {first:'S', second:'F', firstCount:1, secondCount:6},   // sulfur hexafluoride
-  {first:'I', second:'F', firstCount:7, secondCount:10},  // heptaiodine decafluoride (rule-practice example)
 ];
 
 function covalentElement(sym){ return COVALENT_ELEMENTS.find(e=>e.sym===sym); }
@@ -1053,13 +1066,11 @@ function makeCovalentQuestion(direction){
     firstCount = ex.firstCount;
     secondCount = ex.secondCount;
   } else {
-    first = randomItem(COVALENT_ELEMENTS);
-    do { second = randomItem(COVALENT_ELEMENTS); } while(second.sym === first.sym);
-
-    // Include 1 frequently enough to practice dropping mono- on the first element,
-    // while still giving substantial practice with the larger prefixes.
-    firstCount = Math.random() < .28 ? 1 : 2 + Math.floor(Math.random()*9);
-    secondCount = 1 + Math.floor(Math.random()*10);
+    const [a, b, n1, n2] = randomItem(REAL_COVALENT);
+    first = covalentElement(a);
+    second = covalentElement(b);
+    firstCount = n1;
+    secondCount = n2;
   }
 
   const formula = covalentFormula(first, second, firstCount, secondCount);
@@ -1493,7 +1504,7 @@ function correctFormulaVariantsPlain(cIon, aIon, counts){
 
 function correctName(cIon, aIon){
   let cname = cIon.name.toLowerCase();
-  if(cIon.type === 2) cname += ` (${cIon.roman})`;
+  if(cIon.type === 2) cname += `(${cIon.roman})`;
   return `${cname} ${aIon.name}`;
 }
 

@@ -25,6 +25,7 @@ Run:  python3 scripts/build_catalog.py
 """
 
 import json
+import re
 import html
 import sys
 from pathlib import Path
@@ -367,6 +368,10 @@ def find_tools():
                 "description": str(meta.get("description") or "No description yet."),
                 "tags": [str(t) for t in tags],
                 "status": status,
+                # Optional card color, e.g. "accent": "#7563d9". Only a plain
+                # #rrggbb value is accepted; anything else keeps the default.
+                "accent": (str(meta.get("accent") or "")
+                           if re.fullmatch(r"#[0-9a-fA-F]{6}", str(meta.get("accent") or "")) else ""),
                 "has_readme": (tool_dir / "README.md").exists(),
                 "spec": spec,
             })
@@ -413,7 +418,8 @@ def render_card(t):
         " ".join(t["tags"]), t["kind"], t["requires"]
     ]).lower())
 
-    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}">
+    accent_style = f' style="--accent:{t["accent"]}"' if t["accent"] else ""
+    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}"{accent_style}>
         <div class="card-head">
           <h3>{title_html}</h3>
           <span class="status" style="background:{status_color}">{status_label}</span>

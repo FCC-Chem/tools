@@ -1,0 +1,17 @@
+{
+  "title": "Dr. Dan's Chemistry Study Games",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3A, CHEM 1A, CHEM 3B, CHEM 1B",
+  "description": "20 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
+  "tags": [
+    "study games",
+    "practice",
+    "CHEM 3A",
+    "CHEM 1A",
+    "CHEM 1B",
+    "CHEM 3B",
+    "final exam review"
+  ],
+  "status": "working",
+  "accent": "#7563d9"
+}

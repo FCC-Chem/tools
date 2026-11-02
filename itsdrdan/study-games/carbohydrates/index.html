@@ -281,8 +281,8 @@ function niceTicks(lo,hi,n){const span=hi-lo,step0=span/(n||5),mag=Math.pow(10,M
 function fPlot(f){const W=420,H=270,L=58,R=16,T=14,B=46,pw=W-L-R,ph=H-T-B,X=f.x,Y=f.y;
  const sx=v=>L+(v-X.min)/(X.max-X.min)*pw,sy=v=>T+ph-(v-Y.min)/(Y.max-Y.min)*ph;let o='';
  o+=`<rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="#fff" stroke="${FS}" stroke-width="1.6"/>`;
- (X.ticks||niceTicks(X.min,X.max,5)).forEach(v=>{const x=sx(v);o+=`<line x1="${x}" y1="${T+ph}" x2="${x}" y2="${T+ph+5}" stroke="${FS}"/>`+svgT(x,T+ph+19,X.fmt?X.fmt.replace('#',v):v,'font-size="12" text-anchor="middle"');if(f.grid)o+=`<line x1="${x}" y1="${T}" x2="${x}" y2="${T+ph}" stroke="#e7edf2"/>`});
- if(!Y.noTicks)(Y.ticks||niceTicks(Y.min,Y.max,5)).forEach(v=>{const y=sy(v);o+=`<line x1="${L-5}" y1="${y}" x2="${L}" y2="${y}" stroke="${FS}"/>`+svgT(L-8,y+4,v,'font-size="12" text-anchor="end"');if(f.grid)o+=`<line x1="${L}" y1="${y}" x2="${L+pw}" y2="${y}" stroke="#e7edf2"/>`});
+ (X.ticks||niceTicks(X.min,X.max,5)).forEach(v=>{const x=sx(v);o+=`<line x1="${x}" y1="${T+ph}" x2="${x}" y2="${T+ph+5}" stroke="${FS}"/>`+svgT(x,T+ph+19,X.fmt?X.fmt.replace('#',v):v,'font-size="12" text-anchor="middle"');if(f.grid)o+=`<line x1="${x}" y1="${T}" x2="${x}" y2="${T+ph}" stroke="#c9d6e0" stroke-dasharray="3 3"/>`});
+ if(!Y.noTicks)(Y.ticks||niceTicks(Y.min,Y.max,5)).forEach(v=>{const y=sy(v);o+=`<line x1="${L-5}" y1="${y}" x2="${L}" y2="${y}" stroke="${FS}"/>`+svgT(L-8,y+4,v,'font-size="12" text-anchor="end"');if(f.grid)o+=`<line x1="${L}" y1="${y}" x2="${L+pw}" y2="${y}" stroke="#c9d6e0" stroke-dasharray="3 3"/>`});
  o+=svgT(L+pw/2,H-8,X.label||'','font-size="13" font-weight="700" text-anchor="middle"')+svgT(16,T+ph/2,Y.label||'',`font-size="13" font-weight="700" text-anchor="middle" transform="rotate(-90 16 ${T+ph/2})"`);
  (f.series||[]).forEach((s,k)=>{const col=s.color||(f.mono?FS:PCOL[k%PCOL.length]);const P=s.pts.map(p=>[sx(p[0]),sy(p[1])]);
   if(s.dots)P.forEach(p=>{o+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.6" fill="${col}"/>`});
