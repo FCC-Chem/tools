@@ -119,7 +119,8 @@ is worse than no tool.
 - Optional card extras: `summary` (one short line shown on the card instead
   of the full `description`; the description is still searched),
   `cardTags` (the few tags shown on the card; all `tags` are still searched),
-  and `accent` (a `#rrggbb` color for that card's buttons).
+  `accent` (a `#rrggbb` color for that card's buttons), and `pinned`
+  (`true` keeps the card at the top of the catalog).
 - Keep the structural layout and styling. Consistency across the catalog
   is a feature — faculty recognize the shape of these pages.
 

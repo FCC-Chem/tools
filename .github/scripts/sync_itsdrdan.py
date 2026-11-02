@@ -31,6 +31,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 AUTHOR = ROOT / "itsdrdan"
 DEST = AUTHOR / "study-games"
+# Short topic names for the catalog card. A game not listed here uses the
+# words in parentheses in its hub title, or the title itself.
+TOPICS = {
+    "sigfig": "Sig figs", "metric": "Metric prefixes", "algebratrainer": "Algebra",
+    "elements": "Element symbols", "polyatomic": "Polyatomic ions", "ionicformula": "Naming",
+    "moles": "Moles", "stoichiometry": "Stoichiometry", "gaslaws": "Gas laws",
+    "thermochemistry": "Thermochemistry", "reactions": "Reactions", "redox": "Redox",
+    "quantumchemistry": "Quantum", "lewisstructures": "Lewis structures",
+    "chem1bready": "1B readiness", "organic": "Functional groups",
+    "functionalgroups": "Organic families", "organicreactions": "Organic reactions",
+    "carbohydrates": "Carbohydrates", "finalexam": "Final exam review",
+}
 TEMPLATE = ROOT / ".github" / "itsdrdan" / "launcher.html"
 OWNER = "https://github.com/ItsDrDan"
 
@@ -62,6 +74,13 @@ def read_hub(hub_dir):
             "hub_logo": g.get("logo") or "",
         })
     return games
+
+
+def topic(g):
+    if g["id"] in TOPICS:
+        return TOPICS[g["id"]]
+    m = re.search(r"\(([^)]+)\)", g["title"])
+    return (m.group(1) if m else g["title"]).strip()
 
 
 def copy_game(src, dst):
@@ -145,7 +164,7 @@ def main():
     meta = {
         "title": "Dr. Dan's Chemistry Study Games",
         "author": "Dr. Dan (ItsDrDan)",
-        "summary": f"{len(listed)} study games in one place, sorted by course.",
+        "summary": " · ".join(topic(g) for g in listed),
         "course": ", ".join(f"CHEM {c}" for c in courses),
         "description": f"{len(listed)} practice games in one place, sorted by course: significant figures and the mole "
                        "through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic "
@@ -154,9 +173,10 @@ def main():
         # Every game title is a hidden tag, so catalog search finds this card.
         "tags": ["study games", "practice", "CHEM 3A", "CHEM 1A", "CHEM 1B", "CHEM 3B", "final exam review"]
                 + [g["title"] for g in listed],
-        "cardTags": ["study games", "final exam review"],
+        "cardTags": ["study games"],
         "status": "working",
         "accent": "#7563d9",
+        "pinned": True,
     }
     (DEST / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     shutil.rmtree(work, ignore_errors=True)

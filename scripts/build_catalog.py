@@ -377,6 +377,7 @@ def find_tools():
                 "status": status,
                 # Optional card color, e.g. "accent": "#7563d9". Only a plain
                 # #rrggbb value is accepted; anything else keeps the default.
+                "pinned": meta.get("pinned") is True,
                 "accent": (str(meta.get("accent") or "")
                            if re.fullmatch(r"#[0-9a-fA-F]{6}", str(meta.get("accent") or "")) else ""),
                 "has_readme": (tool_dir / "README.md").exists(),
@@ -386,6 +387,8 @@ def find_tools():
         if not found_any:
             warnings.append(f"{author_dir.name}/ contains no tools - skipped")
 
+    # "pinned": true in meta.json puts a card first; order is otherwise unchanged.
+    tools.sort(key=lambda t: not t["pinned"])
     return tools, warnings
 
 
@@ -450,7 +453,7 @@ def render_card(t, counts=None):
     opens = (counts or {}).get(t["folder"], 0)
     opens_html = (f'\n        <div class="opens">Opened {opens:,} time{"s" if opens != 1 else ""}</div>'
                   if counts is not None and opens > 0 else "")
-    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}" data-folder="{e(t['folder'])}" data-opens="{opens}"{accent_style}>
+    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}" data-folder="{e(t['folder'])}" data-opens="{opens}" data-pinned="{1 if t['pinned'] else 0}"{accent_style}>
         <div class="card-head">
           <h3>{title_html}</h3>
           <span class="status" style="background:{status_color}">{status_label}</span>
@@ -505,8 +508,8 @@ def render(tools, counts=None, gc_code=""):
 
     sort_sel = (
         '    <select id="sort" aria-label="Sort tools">'
-        '<option value="az">Sort: by author</option>'
-        '<option value="opens">Sort: most opened</option></select>'
+        '<option value="opens" selected>Sort: most opened</option>'
+        '<option value="az">Sort: by author</option></select>'
         if counts else ""
     )
     gc_url = f"https://{gc_code}.goatcounter.com/count" if gc_code else ""
@@ -674,6 +677,8 @@ def render(tools, counts=None, gc_code=""):
   function resort() {{
     var byOpens = sortSel && sortSel.value === 'opens';
     cards.slice().sort(function (a, b) {{
+      var p = (+b.dataset.pinned || 0) - (+a.dataset.pinned || 0);
+      if (p) return p;
       if (byOpens) {{
         var d = (+b.dataset.opens || 0) - (+a.dataset.opens || 0);
         if (d) return d;
@@ -681,7 +686,7 @@ def render(tools, counts=None, gc_code=""):
       return cards.indexOf(a) - cards.indexOf(b);
     }}).forEach(function (c) {{ grid.appendChild(c); }});
   }}
-  if (sortSel) sortSel.addEventListener('change', resort);
+  if (sortSel) {{ sortSel.addEventListener('change', resort); resort(); }}
 
   // Count clicks on each card's main button. Sends only the tool's folder
   // name; no cookies and nothing about the person.
