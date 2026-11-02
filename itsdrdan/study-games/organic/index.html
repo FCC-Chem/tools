@@ -63,6 +63,7 @@ details[open]>summary .sum-hint{background:#fff;color:var(--brand);border:1.5px 
 .struct .el{font:900 26px Nunito,sans-serif;fill:var(--C)}
 .struct .O{fill:var(--O)}.struct .N{fill:var(--N)}.struct .S{fill:var(--S)}.struct .X{fill:var(--X)}
 .struct .sub{font-size:16px}.struct .R{fill:#7d7399}
+.struct circle.lp{stroke:none;fill:var(--C)}.struct circle.lp.O{fill:var(--O)}.struct circle.lp.N{fill:var(--N)}.struct circle.lp.S{fill:var(--S)}.struct circle.lp.X{fill:var(--X)}
 .struct line,.struct polyline,.struct polygon,.struct path{stroke:var(--C);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .prompt.short{min-height:110px}
 .bigname{font-size:clamp(30px,6vw,52px);font-weight:900;letter-spacing:-.02em;text-align:center;color:var(--brand)}
@@ -169,7 +170,7 @@ details.journey>summary::-webkit-details-marker{display:none}
   <button class="journey-reset" id="journeyReset" type="button">Reset progress</button></details>
 </div>
 
-<p class="footer-note">Generic structures use R for any carbon group (R and R′ can be different). Example compounds are real molecules; the “where you’ll meet it” notes are for learning, not medical advice.</p>
+<p class="footer-note">Generic structures use R for any carbon group (R and R′ can be different); dots are lone pairs. Example compounds are real molecules; the “where you’ll meet it” notes are for learning, not medical advice.</p>
 <p class="footer-note">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
 </div>
 
@@ -236,7 +237,7 @@ const NS = 'http://www.w3.org/2000/svg';
 function svgEl(tag, attrs, ...kids) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); for (const kid of kids) e.append(kid); return e; }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 function atomText(x, y, t, cls) {
-  const el = svgEl('text', {x, y, class: 'el ' + (cls || ''), 'text-anchor': 'middle', 'dominant-baseline': 'central'});
+  const el = svgEl('text', {x, y: y + 9, class: 'el ' + (cls || ''), 'text-anchor': 'middle'});   // baseline +0.35em puts the capital letter's centre on the bond end (works in Safari too)
   // subscripts: H2 -> H₂ handled with tspans so the digit sits low
   const parts = String(t).split(/(\d+)/);
   parts.forEach((p, i) => { if (!p) return; const ts = svgEl('tspan', i % 2 ? {class: 'sub', dy: '7'} : (i ? {dy: '-7'} : {})); ts.textContent = p; el.append(ts); });
@@ -270,12 +271,36 @@ function drawGroup(g, opts = {}) {
   const xs = pos.map(p => p[0]), ys = pos.map(p => p[1]);
   const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
   const ox = 160 - (minx + maxx) / 2, oy = 92 - (miny + maxy) / 2;
-  const radius = t => t === '' ? 0 : t.length >= 3 ? 30 : t.length === 2 ? 19 : 15;
+  const radius = t => t === '' ? 0 : t.length > 1 ? 16 : 15;   // bonds end at the first symbol of a label
   for (const [i, j, order] of d.bonds) {
     const [x1, y1] = pos[i], [x2, y2] = pos[j];
     svg.append(bondLine(x1 + ox, y1 + oy, x2 + ox, y2 + oy, order, radius(d.atoms[i][0]), radius(d.atoms[j][0])));
   }
-  d.atoms.forEach(([t, , , cls], i) => { if (t) svg.append(atomText(pos[i][0] + ox, pos[i][1] + oy, t, cls)); });
+  const multi = [];
+  d.atoms.forEach(([t, , , cls], i) => { if (!t) return; const el = atomText(pos[i][0] + ox, pos[i][1] + oy, t, cls); svg.append(el); if (t.length > 1) multi.push([el, pos[i][0] + ox]); });
+  // multi-letter labels (NH₂, R′): anchor the FIRST atom symbol on the bond end, not the middle of the whole label
+  if (multi.length) {
+    const tmp = svgEl('svg', {style: 'position:absolute;left:-9999px;top:-9999px;width:320px;height:180px', viewBox: '0 0 320 180', class: 'struct'}); document.body.append(tmp);
+    for (const [el, x] of multi) { const probe = el.cloneNode(true); tmp.append(probe); let w = 0; try { w = probe.getSubStringLength(0, 1); } catch { w = 18; } el.setAttribute('text-anchor', 'start'); el.setAttribute('x', x - w / 2); for (const ts of el.querySelectorAll('tspan')) if (ts.hasAttribute('x')) ts.removeAttribute('x'); }
+    tmp.remove();
+  }
+  // lone pairs: O and S get 2, N gets 1, a halogen gets 3, placed in the gaps between bonds
+  const PAIRS = {O: 2, S: 2, N: 1, X: 3};
+  d.atoms.forEach(([t, , , cls], i) => {
+    const n = PAIRS[cls]; if (!n || opts.noPairs) return;
+    const [cx, cy] = [pos[i][0] + ox, pos[i][1] + oy];
+    const taken = [];
+    for (const [a, b] of d.bonds) { const j = a === i ? b : b === i ? a : -1; if (j < 0) continue; taken.push(Math.atan2(pos[j][1] - pos[i][1], pos[j][0] - pos[i][0])); }
+    if (t.length > 1) taken.push(0);                      // the rest of a label like NH₂ sits to the right
+    // free direction = opposite the average bond direction; spread the pairs around it like a textbook drawing
+    let fx = 0, fy = 0; for (const a of taken) { fx -= Math.cos(a); fy -= Math.sin(a); }
+    const f = Math.hypot(fx, fy) < 1e-6 ? -Math.PI / 2 : Math.atan2(fy, fx);
+    const angles = n === 1 ? [f] : n === 2 ? [f - Math.PI / 3, f + Math.PI / 3] : [f, f - Math.PI / 2, f + Math.PI / 2];
+    for (const best of angles) {
+      const dist = 24, px = cx + Math.cos(best) * dist, py = cy + Math.sin(best) * dist, nx = -Math.sin(best) * 5, ny = Math.cos(best) * 5;
+      for (const sgn of [-1, 1]) svg.append(svgEl('circle', {cx: px + nx * sgn, cy: py + ny * sgn, r: 3.2, class: 'lp ' + cls}));
+    }
+  });
   if (d.note && !opts.noNote) { const n = svgEl('text', {x: 160, y: 168, class: 'el R', 'text-anchor': 'middle', style: 'font-size:15px;font-weight:800'}); n.textContent = d.note; svg.append(n); }
   return svg;
 }
@@ -289,7 +314,7 @@ const KEY = 'itsdrdan-fgflash';
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } };
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch {} };
 const P = Object.assign({xp: 0, best: 0, mastery: {}, badges: {}, answered: 0, studied: {}}, load());
-const S = {mode: 'study', correct: 0, streak: 0, q: null, answered: false, tries: 0, hinted: false, deck: [], i: 0, picked: null, flipIdx: 0};
+const S = {mode: 'study', correct: 0, streak: 0, q: null, answered: false, tries: 0, hinted: false, deck: [], i: 0, picked: null, flipIdx: 0, order: GROUPS.map((_, i) => i), shuffled: false};
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); };
 
@@ -315,7 +340,7 @@ function renderJourney() {
 const mlevel = id => { const m = P.mastery[id] || {run: 0, seen: 0}; return m.run >= 3 ? 3 : m.run >= 1 ? 2 : m.seen ? 1 : 0; };
 function renderMastery() {
   const g = $('mgrid'); g.innerHTML = '';
-  for (const grp of GROUPS) { const t = document.createElement('div'); t.className = 'mtile l' + mlevel(grp.id); t.append(drawGroup(grp, {noNote: true}), document.createTextNode(label(grp))); const m = P.mastery[grp.id]; const s = document.createElement('small'); s.textContent = m && m.seen ? `${m.right || 0}/${m.seen} right` : 'not yet'; t.append(s); g.append(t); }
+  for (const grp of GROUPS) { const t = document.createElement('div'); t.className = 'mtile l' + mlevel(grp.id); t.append(drawGroup(grp, {noNote: true, noPairs: true}), document.createTextNode(label(grp))); const m = P.mastery[grp.id]; const s = document.createElement('small'); s.textContent = m && m.seen ? `${m.right || 0}/${m.seen} right` : 'not yet'; t.append(s); g.append(t); }
   const mastered = GROUPS.filter(x => mlevel(x.id) === 3).map(x => x.id);
   if (['aldehyde', 'ketone', 'acid', 'ester', 'amide'].every(x => mastered.includes(x))) award('carbonyl');
   if (['thiol', 'sulfide', 'disulfide'].every(x => mastered.includes(x))) award('sulfur');
@@ -346,19 +371,20 @@ function updateStats() { $('sCorrect').textContent = S.correct; $('sStreak').tex
 /* ----- Study: flip cards ----- */
 function renderStudy() {
   const area = $('area'); S.flipIdx = Math.min(S.flipIdx, 15);
-  const g = GROUPS[S.flipIdx];
-  area.innerHTML = `<p class="kicker">Tap the card to flip it. Card ${S.flipIdx + 1} of 16.</p>
+  const g = GROUPS[S.order[S.flipIdx]];
+  area.innerHTML = `<p class="kicker">Tap the card to flip it. Card ${S.flipIdx + 1} of 16${S.shuffled ? ' · shuffled' : ''}.</p>
   <div class="flash" id="flash" tabindex="0" role="button" aria-label="Flashcard: tap to flip"><div class="inner">
     <div class="face front"><div id="frontStruct"></div><span class="tap">tap to flip ↻</span></div>
     <div class="face back"><h3>${esc(g.name)}</h3><p class="key">${esc(g.key)}</p><p class="ex"><b>Spot it:</b> ${esc(g.spot)}</p><p class="ex"><b>Example:</b> ${g.ex[0][0]} — ${esc(g.ex[0][1])}${g.ex[0][2] ? ' (' + esc(g.ex[0][2]) + ')' : ''}</p><p class="ex"><b>Where you’ll meet it:</b> ${esc(g.meet)}</p></div>
   </div></div>
-  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / 16</span><button class="action primary" id="nextCard" type="button">Next ›</button></div>`;
+  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / 16</span><button class="action primary" id="nextCard" type="button">Next ›</button><button class="action" id="shuffleBtn" type="button" title="${S.shuffled ? 'Back to textbook order' : 'Shuffle the deck'}">${S.shuffled ? '↕ In order' : '🔀 Shuffle'}</button></div>`;
   $('frontStruct').append(drawGroup(g));
   const flash = $('flash');
   const flip = () => { flash.classList.toggle('flipped'); if (flash.classList.contains('flipped')) { P.studied[g.id] = 1; save(); award('first'); if (Object.keys(P.studied).length === 16) award('deck'); } };
   flash.addEventListener('click', flip); flash.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } });
   $('prevCard').onclick = () => { S.flipIdx = (S.flipIdx + 15) % 16; renderStudy(); };
   $('nextCard').onclick = () => { S.flipIdx = (S.flipIdx + 1) % 16; renderStudy(); };
+  $('shuffleBtn').onclick = () => { S.shuffled = !S.shuffled; S.order = S.shuffled ? shuffle(GROUPS.map((_, i) => i)) : GROUPS.map((_, i) => i); S.flipIdx = 0; renderStudy(); toast(S.shuffled ? 'Deck shuffled' : 'Back in order'); };
   updateStats();
 }
 
