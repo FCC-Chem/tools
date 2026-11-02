@@ -366,6 +366,12 @@ def find_tools():
                 "author": str(meta.get("author") or prettify(author_dir.name)),
                 "course": str(meta.get("course") or ""),
                 "description": str(meta.get("description") or "No description yet."),
+                # Optional short card text. When present, the card shows
+                # "summary" and "cardTags"; the full description and tags
+                # are still searched.
+                "summary": str(meta.get("summary") or ""),
+                "card_tags": [str(x) for x in meta.get("cardTags", [])]
+                             if isinstance(meta.get("cardTags"), list) else None,
                 "tags": [str(t) for t in tags],
                 "status": status,
                 # Optional card color, e.g. "accent": "#7563d9". Only a plain
@@ -388,7 +394,8 @@ def render_card(t):
     src = f"https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}"
 
     course = f'<span class="course">{e(t["course"])}</span>' if t["course"] else ""
-    tags = "".join(f'<span class="tag">{e(tag)}</span>' for tag in t["tags"])
+    shown_tags = t["tags"] if t["card_tags"] is None else t["card_tags"]
+    tags = "".join(f'<span class="tag">{e(tag)}</span>' for tag in shown_tags)
     readme = (
         f'<a class="lnk" href="{e(t["folder"])}/README.md">Notes</a>'
         if t["has_readme"] else ""
@@ -414,7 +421,7 @@ def render_card(t):
                  f'          <a class="lnk" href="{src}">Source</a>\n          {readme}')
 
     search_blob = e(" ".join([
-        t["title"], t["author"], t["course"], t["description"],
+        t["title"], t["author"], t["course"], t["summary"], t["description"],
         " ".join(t["tags"]), t["kind"], t["requires"]
     ]).lower())
 
@@ -424,7 +431,7 @@ def render_card(t):
           <h3>{title_html}</h3>
           <span class="status" style="background:{status_color}">{status_label}</span>
         </div>
-        <p class="desc">{e(t['description'])}</p>
+        <p class="desc">{e(t['summary'] or t['description'])}</p>
         <div class="meta">
           <span class="author">{e(t['author'])}</span>
           {course}

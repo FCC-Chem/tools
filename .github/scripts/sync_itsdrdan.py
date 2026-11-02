@@ -145,12 +145,16 @@ def main():
     meta = {
         "title": "Dr. Dan's Chemistry Study Games",
         "author": "Dr. Dan (ItsDrDan)",
+        "summary": f"{len(listed)} study games in one place, sorted by course.",
         "course": ", ".join(f"CHEM {c}" for c in courses),
         "description": f"{len(listed)} practice games in one place, sorted by course: significant figures and the mole "
                        "through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic "
                        "reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link "
                        "for Canvas.",
-        "tags": ["study games", "practice", "CHEM 3A", "CHEM 1A", "CHEM 1B", "CHEM 3B", "final exam review"],
+        # Every game title is a hidden tag, so catalog search finds this card.
+        "tags": ["study games", "practice", "CHEM 3A", "CHEM 1A", "CHEM 1B", "CHEM 3B", "final exam review"]
+                + [g["title"] for g in listed],
+        "cardTags": ["study games", "final exam review"],
         "status": "working",
         "accent": "#7563d9",
     }

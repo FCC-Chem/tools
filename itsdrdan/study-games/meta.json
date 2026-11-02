@@ -1,6 +1,7 @@
 {
   "title": "Dr. Dan's Chemistry Study Games",
   "author": "Dr. Dan (ItsDrDan)",
+  "summary": "20 study games in one place, sorted by course.",
   "course": "CHEM 3A, CHEM 1A, CHEM 3B, CHEM 1B",
   "description": "20 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
   "tags": [
@@ -10,6 +11,30 @@
     "CHEM 1A",
     "CHEM 1B",
     "CHEM 3B",
+    "final exam review",
+    "Significant Figures",
+    "SI Prefix Challenge",
+    "Algebra for Chemistry",
+    "Element Symbol Study Lab",
+    "Polyatomic Ions (Green Sheet)",
+    "Naming & Formulas",
+    "Quantum Quest",
+    "Lewis Structure Studio",
+    "Reaction Rumble (Chemical Reactions)",
+    "LEO Goes GER! (Redox)",
+    "The Mole",
+    "Stoichiometry",
+    "Under Pressure (Gas Laws)",
+    "Thermochemistry",
+    "Bridge to 1B (CHEM 1B Readiness)",
+    "Functional Group Flashcards",
+    "Organic Origins (Hydrocarbons to Amides)",
+    "Bond Voyage! Organic Reactions",
+    "Sweet Structures (Carbohydrates)",
+    "Final Exam Review"
+  ],
+  "cardTags": [
+    "study games",
     "final exam review"
   ],
   "status": "working",
