@@ -127,9 +127,16 @@ is worse than no tool.
   to the folder names.
 - Optional card extras: `summary` (one short line shown on the card instead
   of the full `description`; the description is still searched),
-  `cardTags` (the few tags shown on the card; all `tags` are still searched),
-  `accent` (a `#rrggbb` color for that card's buttons), and `pinned`
-  (`true` keeps the card at the top of the catalog).
+  `accent` (a `#rrggbb` color for that card's buttons and picture band),
+  `pinned` (`true` keeps the card first within its author's section), and
+  `image` (a picture file inside the tool folder, e.g. `"thumb.png"`).
+- **Card picture.** Every card has a picture band. The builder uses, in
+  order: `meta.json` `image`; a file named `thumb.webp/png/jpg/svg` in the
+  tool folder; for a collection member, `../logos/<tool>.*`; otherwise a
+  generic line icon chosen from the title and tags. Tags, course and author
+  are not shown on the card (the section header names the author); all of
+  them are still searched. A square image around 200 px works best; it is
+  shown whole on a tinted field, never cropped.
 - Keep the structural layout and styling. Consistency across the catalog
   is a feature — faculty recognize the shape of these pages.
 

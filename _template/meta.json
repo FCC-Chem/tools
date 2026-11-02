@@ -4,5 +4,6 @@
   "course": "CHEM 1A",
   "description": "One sentence describing what this tool does and who it helps.",
   "tags": ["example"],
-  "status": "wip"
+  "status": "wip",
+  "image": "thumb.png (optional - a square picture in this folder; delete this line to get a generic icon)"
 }

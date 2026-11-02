@@ -48,7 +48,99 @@ from datetime import datetime, timezone
 ROOT = Path(__file__).resolve().parent.parent
 SKIP_PREFIXES = (".", "_")
 SKIP_NAMES = {"scripts", "workshop", "node_modules"}
-MAX_CARD_TAGS = 6   # shown on a card when meta.json gives no cardTags; all tags remain searchable
+IMAGE_EXTS = (".webp", ".png", ".jpg", ".jpeg", ".svg", ".gif")
+THUMB_STEM = "thumb"   # <tool>/thumb.<ext> is picked up automatically
+
+# =====================================================================
+# Generic card icons.
+#
+# A tool with no image of its own gets a line icon chosen from its title,
+# tags and folder name. First match wins, so the list is ordered from
+# specific to general. Each icon is a 24x24 stroke path drawn in the
+# card's accent color. Drop a thumb.png into the tool folder (or set
+# "image" in meta.json) and the icon is replaced on the next build.
+# =====================================================================
+ICON_PATHS = {
+    "flask":     "M9 3h6M10 3v6l-5.4 9.9A1.5 1.5 0 0 0 5.9 21h12.2a1.5 1.5 0 0 0 1.3-2.1L14 9V3M7.5 16h9",
+    "balance":   "M12 4v17M7 21h10M12 6 5 8M12 6l7 2M2.5 15 5 8l2.5 7a2.5 2.5 0 0 1-5 0ZM16.5 15 19 8l2.5 7a2.5 2.5 0 0 1-5 0Z",
+    "burette":   "M11 2h2v10h-2ZM13 4h1.5M13 7h1.5M13 10h1.5M9.5 12.5h5l-1 2.5h-3ZM12 16.5V18M9 22h6l-1.5-3h-3Z",
+    "molecule":  "M12 5.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM5 20.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM19 20.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 5.5v5M12 10.5l-5.5 5.5M12 10.5l5.5 5.5",
+    "piston":    "M6 8h12v13H6ZM6 13h12M12 13V4M9 4h6M9.5 17h.01M14.5 18.5h.01M12 15.8h.01M10.5 19.8h.01",
+    "magnifier": "M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13ZM15.5 15.5 21 21M8 10.5h5M10.5 8v5",
+    "ruler":     "M3 16 16 3l5 5L8 21ZM7 12l2 2M10 9l2 2M13 6l2 2M5.5 14.5 7 16",
+    "terminal":  "M3 5h18v14H3ZM7 9l3 3-3 3M12 15h5",
+    "ions":      "M7 15.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM17 17.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM5 11h4M7 9v4M15 13h4",
+    "algebra":   "M2 14l2.5 4L9 6h12M12 11l5 7M17 11l-5 7",
+    "atom":      "M12 13.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4ZM3 12a9 3.5 0 1 0 18 0a9 3.5 0 1 0-18 0M7.5 4.21a9 3.5 60 1 0 9 15.58a9 3.5 60 1 0-9-15.58M7.5 19.79a9 3.5-60 1 0 9-15.58a9 3.5-60 1 0-9 15.58",
+    "thermo":    "M12 3a2.5 2.5 0 0 0-2.5 2.5v8.3a4 4 0 1 0 5 0V5.5A2.5 2.5 0 0 0 12 3ZM12 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM12 15.5v-8M16 7h3M16 10h3",
+    "redox":     "M4 8h13M14 5l3 3-3 3M20 16H7M10 13l-3 3 3 3",
+    "reaction":  "M6 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM6 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM6 9v3M10.5 10.5h4M12.5 8.5l2 2-2 2M19 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM4 21h16",
+    "exam":      "M6 3h12v18H6ZM9 3V1.5h6V3M9 9l1.5 1.5L13 8M9 14l1.5 1.5L13 13M14.5 9H16M14.5 14H16",
+    "ring":      "M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9ZM12 7.5l3.9 2.25v4.5L12 16.5l-3.9-2.25v-4.5Z",
+    "grid":      "M3 3h4v4H3ZM10 3h4v4h-4ZM17 3h4v4h-4ZM3 10h4v4H3ZM10 10h4v4h-4ZM17 10h4v4h-4ZM3 17h4v4H3ZM10 17h4v4h-4ZM17 17h4v4h-4Z",
+    "embed":     "M3 5h18v14H3ZM7 10l-2 2 2 2M17 10l2 2-2 2M13.5 9l-3 6",
+}
+
+# (icon, keywords) -- matched against title, tags and folder name, in order.
+ICON_RULES = [
+    ("embed",     ("canvas embed", "iframe", "wrapper")),
+    ("burette",   ("titration", "acid-base", "acid base", "acids and bases", "ph scale", "ph curve", "neutralization")),
+    ("balance",   ("stoichiometry", "stoich", "molar mass", "mole ", "moles", "limiting")),
+    ("piston",    ("gas law", "gas laws", "pressure", "kinetic molecular")),
+    ("thermo",    ("thermochem", "thermo", "heat", "calorim", "enthalpy")),
+    ("redox",     ("redox", "oxidation", "reduction")),
+    ("ring",      ("carbohydrate", "sugar", "saccharide")),
+    ("molecule",  ("lewis", "model kit", "modeling", "vsepr", "molecular shape", "bond",
+                   "organic", "functional group", "hydrocarbon", "structure")),
+    ("atom",      ("quantum", "orbital", "electron config", "atomic structure")),
+    ("ions",      ("ionic", "nomenclature", "naming", "polyatomic", "formula")),
+    ("grid",      ("element symbol", "periodic", "element study")),
+    ("algebra",   ("algebra", "rearrang", "math")),
+    ("reaction",  ("reaction", "equation", "balancing", "particle", "mixture")),
+    ("ruler",     ("dimensional analysis", "unit", "metric", "si prefix", "sig fig",
+                   "significant", "measurement", "conversion")),
+    ("exam",      ("final exam", "exam review", "readiness", "review", "quiz")),
+    ("magnifier", ("mystery", "investigat", "detective", "case")),
+]
+
+
+def pick_icon(t):
+    """Keyword match over the tool's words. Scripts always get the terminal."""
+    if t["kind"] == "script":
+        return "terminal"
+    blob = " ".join([t["title"], " ".join(t["tags"]), t["folder"].split("/")[-1].replace("-", " ")]).lower()
+    for icon, keys in ICON_RULES:
+        if any(k in blob for k in keys):
+            return icon
+    return "flask"
+
+
+def find_image(tool_dir, meta, rel, collection_dir=None, warnings=None):
+    """Where a card's picture comes from, in order:
+
+        meta.json "image"            a file inside the tool folder
+        <tool>/thumb.<ext>           by convention
+        <collection>/logos/<tool>.*  what the study-games sync ships
+
+    Returns a path relative to the repository root, or "" for none.
+    """
+    declared = str(meta.get("image") or "").strip()
+    if declared:
+        cand = (tool_dir / declared)
+        inside = cand.resolve().is_relative_to(tool_dir.resolve()) if hasattr(Path, "is_relative_to") else True
+        if inside and cand.is_file() and cand.suffix.lower() in IMAGE_EXTS:
+            return f"{rel}/{declared}"
+        if warnings is not None:
+            warnings.append(f'{rel}/meta.json "image": {declared} not found inside the tool folder - ignored')
+    for ext in IMAGE_EXTS:
+        if (tool_dir / f"{THUMB_STEM}{ext}").is_file():
+            return f"{rel}/{THUMB_STEM}{ext}"
+    if collection_dir is not None:
+        for ext in IMAGE_EXTS:
+            cand = collection_dir / "logos" / f"{tool_dir.name}{ext}"
+            if cand.is_file():
+                return f"{rel.rsplit('/', 1)[0]}/logos/{tool_dir.name}{ext}"
+    return ""
 SHOW_FIRST = 3      # cards visible per author before "Show N more"; searching or filtering shows all
 
 STATUS_LABELS = {
@@ -321,7 +413,7 @@ def is_collection(tool_dir):
     )
 
 
-def tool_entry(author_dir, tool_dir, rel, warnings):
+def tool_entry(author_dir, tool_dir, rel, warnings, collection_dir=None):
     """Build one catalog record. Never raises."""
     meta = read_meta(tool_dir, rel, warnings)
 
@@ -361,7 +453,7 @@ def tool_entry(author_dir, tool_dir, rel, warnings):
     title = str(meta.get("title") or prettify(tool_dir.name))
     title = re.sub(rf"\s*[—–-]\s*{re.escape(author_dir.name)}\s*$", "", title, flags=re.I).strip() or title
 
-    return {
+    t = {
         "folder": rel,
         "author_slug": author_dir.name,
         "kind": kind,
@@ -390,6 +482,9 @@ def tool_entry(author_dir, tool_dir, rel, warnings):
         "has_readme": (tool_dir / "README.md").exists(),
         "spec": spec,
     }
+    t["image"] = find_image(tool_dir, meta, rel, collection_dir, warnings)
+    t["icon"] = "" if t["image"] else pick_icon(t)
+    return t
 
 
 def find_tools():
@@ -440,7 +535,7 @@ def find_tools():
                 for sub in members:
                     found_any = True
                     sub_rel = f"{rel}/{sub.name}"
-                    t = tool_entry(author_dir, sub, sub_rel, warnings)
+                    t = tool_entry(author_dir, sub, sub_rel, warnings, collection_dir=tool_dir)
                     # A game inside a collection inherits the launcher's
                     # display name and accent when its own meta.json has
                     # none, so one author's section reads as one author.
@@ -524,11 +619,13 @@ def render_card(t, counts=None):
     status_label, status_color = STATUS_LABELS[t["status"]]
     src = f"https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}"
 
-    course = f'<span class="course">{e(t["course"])}</span>' if t["course"] else ""
-    # Without an explicit cardTags list, only the first few tags fit on a
-    # card. Every tag is still in the search blob below.
-    shown_tags = t["tags"][:MAX_CARD_TAGS] if t["card_tags"] is None else t["card_tags"]
-    tags = "".join(f'<span class="tag">{e(tag)}</span>' for tag in shown_tags)
+    # The picture band: the tool's own image, or a generic line icon.
+    if t["image"]:
+        art = f'<img src="{e(t["image"])}" alt="" loading="lazy">'
+    else:
+        art = (f'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" '
+               f'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+               f'<path d="{ICON_PATHS[t["icon"]]}"/></svg>')
     readme = (
         f'<a class="lnk" href="{e(t["folder"])}/README.md">Notes</a>'
         if t["has_readme"] else ""
@@ -563,16 +660,11 @@ def render_card(t, counts=None):
     opens_html = (f'\n        <div class="opens">Opened {opens:,} time{"s" if opens != 1 else ""}</div>'
                   if counts is not None and opens > 0 else "")
     return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}" data-folder="{e(t['folder'])}" data-opens="{opens}" data-pinned="{1 if t['pinned'] else 0}"{accent_style}>
-        <div class="card-head">
-          <h3>{title_html}</h3>
-          <span class="status" style="background:{status_color}">{status_label}</span>
+        <div class="thumb">{art}
+          <span class="status" style="background:{status_color}">{status_label}</span>{kind_badge}
         </div>
-        <p class="desc">{e(t['summary'] or t['description'])}</p>
-        <div class="meta">
-          <span class="author">{e(t['author'])}</span>
-          {course}
-        </div>{opens_html}
-        <div class="tags">{kind_badge}{tags}</div>
+        <h3>{title_html}</h3>
+        <p class="desc">{e(t['summary'] or t['description'])}</p>{opens_html}
         <div class="links">
           {links}
         </div>
@@ -706,9 +798,20 @@ def render(sections, counts=None, gc_code=""):
            border:1px dashed var(--accent); border-radius:8px; cursor:pointer; }}
   .more:hover {{ background:#eef5f0; }}
   .more[hidden] {{ display:none; }}
-  .card {{ border:1px solid var(--border); border-radius:10px; padding:18px;
-           background:var(--panel); display:flex; flex-direction:column; }}
-  .card-head {{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }}
+  .card {{ border:1px solid var(--border); border-radius:10px; padding:0 18px 18px;
+           background:var(--panel); display:flex; flex-direction:column; overflow:hidden; }}
+  /* Picture band: a tinted field with the tool's image or a line icon
+     centered in it. Images are shown whole (contained), never cropped,
+     because most are small square logos. */
+  .thumb {{ position:relative; height:132px; margin:0 -18px 14px;
+            display:flex; align-items:center; justify-content:center;
+            color:var(--accent); background:#e8ece9;
+            background:color-mix(in srgb, var(--accent) 12%, #fff);
+            border-bottom:1px solid var(--border); }}
+  .thumb img {{ max-height:100px; max-width:60%; object-fit:contain; border-radius:12px; }}
+  .thumb svg {{ width:64px; height:64px; opacity:0.9; }}
+  .thumb .status {{ position:absolute; top:10px; right:10px; }}
+  .thumb .kind {{ position:absolute; bottom:10px; left:10px; }}
   .card h3 {{ margin:0 0 8px; font-size:1.1rem; }}
   .card h3 a {{ color:var(--fg); text-decoration:none; }}
   .card h3 a:hover {{ color:var(--accent); text-decoration:underline; }}
@@ -718,7 +821,7 @@ def render(sections, counts=None, gc_code=""):
   /* Long descriptions are clamped on the card; the full text is still
      searched and still shown on the tool's own page. */
   .desc {{ margin:0 0 12px; font-size:0.92rem; color:#333;
-           display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical;
+           display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
            overflow:hidden; }}
   .meta {{ font-size:0.83rem; color:var(--muted); margin-bottom:10px; }}
   .author {{ font-weight:600; color:#444; }}
