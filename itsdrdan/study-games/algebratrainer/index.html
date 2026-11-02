@@ -482,6 +482,7 @@ function numTxt(x,p){p=prec(p);let s;
  if(a!==0&&(a<1e-3||a>=1e5||a>=Math.pow(10,p.sf))){const e=x.toExponential(p.sf-1),[m,ex]=e.split('e');const k=+ex;
   return{html:m.replace('-','−')+' × 10'+String(k).split('').map(c=>SUP[c]||c).join(''),plain:m+'E'+k,sf:p.sf}}
  s=x.toPrecision(p.sf);if(/e/.test(s)){s=(+s).toString()}
+ if(!s.includes('.')&&countSF(s)<p.sf)s+='.'; // 400 to 3 sig figs is written "400."
  return{html:s.replace('-','−'),plain:s,sf:p.sf}}
 function countSF(str){let s=String(str).trim().replace(/^[+-]/,'');const m=s.match(/^([\d.]+)(?:e[+-]?\d+)?$/i);if(!m)return 0;s=m[1];
  const hasDot=s.includes('.');let d=s.replace('.','').replace(/^0+/,'');if(!hasDot)d=d.replace(/0+$/,'');return Math.max(d.length,hasDot?1:0)}

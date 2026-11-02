@@ -1142,6 +1142,10 @@ function inputFamily(t){if(/oicacid$|icacid$/.test(t))return ['acid'];if(/amide$
  if(/(oate|ate)(ion)?$/.test(t))return ['ester','carboxylate'];if(/one$|ketone$/.test(t))return ['ketone'];if(/ol$|alcohol$/.test(t))return ['alcohol','hemiacetal'];if(/al$|aldehyde$/.test(t))return ['aldehyde'];
  if(/ene$|ylene$/.test(t))return ['alkene'];if(/yne$/.test(t))return ['alkyne'];if(/ane$/.test(t))return ['alkane','halide','ether','acetal'];return null}
 function checkName(input,comp){const t=normName(input);if(!t)return {ok:false,msg:'Type a name first.'};const S=nameSets(comp.name);
+ // Older 'n-' (normal) names like n-propanol are accepted, with a note. (N-methyl amine names are a different thing and get no note.)
+ const typed=String(input).toLowerCase().trim().replace(/[‐‑‒–—―−]/g,'-').replace(/\s+/g,' ');
+ const nNormal=/^n ?[- ] ?(propyl|butyl|pentyl|hexyl) ?(alcohol|amine)$|^n ?[- ] ?(propanol|butanol|pentanol|hexanol)$/.test(typed);
+ if(S.full.has(t)&&nNormal)return {ok:true,note:`Technically correct: the “n-” (normal, meaning an unbranched chain) name is an older naming style. We don’t use it in CHEM 3B, so write the IUPAC name: <b>${esc(S.prim)}</b>.`};
  if(S.full.has(t))return {ok:true};if(S.part.has(t))return {ok:true,note:`Counted as correct. The complete name includes the locant: <b>${esc(S.prim)}</b>.`};
  const g=parseSmi(comp.smi),gl=gList(g),main=GPRI.find(k=>gl.includes(k))||'alkane',fam=inputFamily(t);
  const nod=x=>x.replace(/\d/g,'');if([...S.full].some(v=>nod(v)===nod(t)&&v!==t))return {ok:false,msg:'Almost! The chain and the ending are right. Check the locant number: which carbon is the group on? Number from the end closest to the group.'};
@@ -1191,7 +1195,7 @@ function buildQuestion(mode){
   if(useS){orgP.forEach((p,k)=>{pr=pr.split(p.name).join(k?'the other product shown':'the product shown')});pr=cap(pr)}
   steps.push(Object.assign(drawStepFor(r.reactants,idx,r.rev.alts,pr,r.hint,why),{view:{re:'hidden',pr:useS?'bare':'name',hideIdx:idx},hintShow:'pr',typeLabel:r.type}))}
  else if(mode==='name'){const doR=canNameRe(r)&&(!r.draw||Math.random()<.3);
-  if(doR){const i=r.rev.idx[0];steps.push(Object.assign(nameStep(r.reactants[i],'Name the starting material (the “?”) that formed the product shown.',{re:'hidden',pr:'bare',hideIdx:[i]},'Name reactant',why),{typeLabel:r.type}))}
+  if(doR){const i=r.rev.idx[0];steps.push(Object.assign(nameStep(r.reactants[i],'Name the starting material (the “?”) that formed the '+(orgP.length>1?'products':'product')+' shown.',{re:'hidden',pr:'bare',hideIdx:[i]},'Name reactant',why),{typeLabel:r.type}))}
   else{const i=pick(r.draw),p=r.products[i];steps.push(nameStep(p,`Name the ${orgP.length>1?groupWord(p)+' product':'organic product'} of this reaction.`,{re:'bare',pr:'hidden'},'Name product',why))}}
  else{const orgIdx=r.reactants.map((p,i)=>p.smi?i:-1).filter(i=>i>=0);const nameStart=struct&&orgIdx.length===1;
   if(nameStart)steps.push(nameStep(r.reactants[orgIdx[0]],'Step 1: name the reactant shown.',{re:'bare',pr:'hidden'},'Name reactant','Good. Now decide what kind of reaction this is.'));
