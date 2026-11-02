@@ -116,6 +116,10 @@ is worse than no tool.
 - Update `meta.json`: `title`, `author`, `course`, `description`, `tags`,
   and `status` (`working` or `wip`). All optional; the builder falls back
   to the folder names.
+- Optional card extras: `summary` (one short line shown on the card instead
+  of the full `description`; the description is still searched),
+  `cardTags` (the few tags shown on the card; all `tags` are still searched),
+  and `accent` (a `#rrggbb` color for that card's buttons).
 - Keep the structural layout and styling. Consistency across the catalog
   is a feature — faculty recognize the shape of these pages.
 

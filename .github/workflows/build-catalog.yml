@@ -13,6 +13,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '41 12 * * *'   # daily, about 4-5 AM Pacific, to refresh "Opened N times"
 
 permissions:
   contents: read
@@ -34,7 +36,20 @@ jobs:
         with:
           python-version: '3.12'
 
+      # Optional: click counts from GoatCounter. Does nothing until the
+      # GOATCOUNTER_CODE variable and GOATCOUNTER_TOKEN secret are added
+      # (Settings -> Secrets and variables -> Actions). Never fails the build.
+      - name: Fetch usage counts
+        env:
+          GOATCOUNTER_CODE: ${{ vars.GOATCOUNTER_CODE }}
+          GOATCOUNTER_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
+          USAGE_FILE: ${{ runner.temp }}/usage.json
+        run: python3 .github/scripts/fetch_usage.py || true
+
       - name: Build catalog
+        env:
+          GOATCOUNTER_CODE: ${{ vars.GOATCOUNTER_CODE }}
+          USAGE_FILE: ${{ runner.temp }}/usage.json
         run: python3 scripts/build_catalog.py
 
       - name: Fail if the catalog is empty or malformed

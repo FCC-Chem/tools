@@ -25,6 +25,7 @@ Run:  python3 scripts/build_catalog.py
 """
 
 import json
+import os
 import re
 import html
 import sys
@@ -388,7 +389,27 @@ def find_tools():
     return tools, warnings
 
 
-def render_card(t):
+def load_usage():
+    """Optional click counts, written by .github/scripts/fetch_usage.py.
+
+    Returns (counts, code). counts is None when no usage file exists, which
+    keeps the page exactly as it was before counting was added.
+    """
+    code = os.environ.get("GOATCOUNTER_CODE", "").strip().lower()
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,40}", code):
+        code = ""
+    counts = None
+    path = os.environ.get("USAGE_FILE", "")
+    if path and Path(path).is_file():
+        try:
+            raw = json.loads(Path(path).read_text(encoding="utf-8"))
+            counts = {str(k): int(v) for k, v in raw.items()}
+        except (ValueError, TypeError, AttributeError) as e:
+            print(f"  warning: could not read usage file ({e}) - no counts shown", file=sys.stderr)
+    return counts, code
+
+
+def render_card(t, counts=None):
     e = html.escape
     status_label, status_color = STATUS_LABELS[t["status"]]
     src = f"https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}"
@@ -426,7 +447,10 @@ def render_card(t):
     ]).lower())
 
     accent_style = f' style="--accent:{t["accent"]}"' if t["accent"] else ""
-    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}"{accent_style}>
+    opens = (counts or {}).get(t["folder"], 0)
+    opens_html = (f'\n        <div class="opens">Opened {opens:,} time{"s" if opens != 1 else ""}</div>'
+                  if counts is not None and opens > 0 else "")
+    return f"""      <article class="card" data-search="{search_blob}" data-status="{t['status']}" data-author="{e(t['author_slug'])}" data-kind="{t['kind']}" data-folder="{e(t['folder'])}" data-opens="{opens}"{accent_style}>
         <div class="card-head">
           <h3>{title_html}</h3>
           <span class="status" style="background:{status_color}">{status_label}</span>
@@ -435,7 +459,7 @@ def render_card(t):
         <div class="meta">
           <span class="author">{e(t['author'])}</span>
           {course}
-        </div>
+        </div>{opens_html}
         <div class="tags">{kind_badge}{tags}</div>
         <div class="links">
           {links}
@@ -443,11 +467,11 @@ def render_card(t):
       </article>"""
 
 
-def render(tools):
+def render(tools, counts=None, gc_code=""):
     built = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     if tools:
-        cards = "\n".join(render_card(t) for t in tools)
+        cards = "\n".join(render_card(t, counts) for t in tools)
         empty = ""
     else:
         cards = ""
@@ -478,6 +502,16 @@ def render(tools):
         '    </div>'
         if len(kinds) > 1 else ""
     )
+
+    sort_sel = (
+        '    <select id="sort" aria-label="Sort tools">'
+        '<option value="az">Sort: by author</option>'
+        '<option value="opens">Sort: most opened</option></select>'
+        if counts else ""
+    )
+    gc_url = f"https://{gc_code}.goatcounter.com/count" if gc_code else ""
+    gc_note = (' · Clicks on each tool\'s main button are counted (no cookies, nothing about you) '
+               'so the most-used tools can rise to the top.' if gc_code else "")
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -511,7 +545,7 @@ def render(tools):
   .controls {{ display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }}
   #q {{ flex:1; min-width:220px; padding:11px 14px; font-size:1rem;
         border:1px solid var(--border); border-radius:8px; font-family:inherit; }}
-  #who {{ padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
+  #who, #sort {{ padding:11px 14px; font-size:0.95rem; border:1px solid var(--border);
           border-radius:8px; font-family:inherit; background:#fff; cursor:pointer; }}
   .filters {{ display:flex; gap:6px; }}
   .fbtn, .kbtn {{ padding:10px 16px; border:1px solid var(--border); background:#fff;
@@ -530,6 +564,7 @@ def render(tools):
   .desc {{ margin:0 0 12px; font-size:0.92rem; color:#333; flex:1; }}
   .meta {{ font-size:0.83rem; color:var(--muted); margin-bottom:10px; }}
   .author {{ font-weight:600; color:#444; }}
+  .opens {{ font-size:0.8rem; color:var(--muted); margin:-4px 0 10px; }}
   .course:before {{ content:" · "; }}
   .tags {{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }}
   .tag {{ font-size:0.72rem; background:#e8ece9; color:#31513f;
@@ -589,6 +624,7 @@ def render(tools):
       <button class="fbtn" data-f="wip">In progress</button>
     </div>
 {kind_sel}
+{sort_sel}
   </div>
 
   <div class="grid" id="grid">
@@ -598,7 +634,7 @@ def render(tools):
   <p class="none" id="none">Nothing matches that search.</p>
 
   <footer>
-    <strong>{len(tools)} tool{"s" if len(tools) != 1 else ""}</strong> · rebuilt automatically {built}<br>
+    <strong>{len(tools)} tool{"s" if len(tools) != 1 else ""}</strong> · rebuilt automatically {built}{gc_note}<br>
     <a href="https://github.com/FCC-Chem/tools">Source on GitHub</a> ·
     <a href="https://github.com/FCC-Chem/tools/discussions">Discussions</a> ·
     <a href="https://github.com/FCC-Chem/tools/issues/new">Request a tool</a><br>
@@ -633,6 +669,35 @@ def render(tools):
     none.style.display = (shown === 0 && cards.length) ? 'block' : 'none';
   }}
 
+  var grid = document.getElementById('grid');
+  var sortSel = document.getElementById('sort');   // present only when counts exist
+  function resort() {{
+    var byOpens = sortSel && sortSel.value === 'opens';
+    cards.slice().sort(function (a, b) {{
+      if (byOpens) {{
+        var d = (+b.dataset.opens || 0) - (+a.dataset.opens || 0);
+        if (d) return d;
+      }}
+      return cards.indexOf(a) - cards.indexOf(b);
+    }}).forEach(function (c) {{ grid.appendChild(c); }});
+  }}
+  if (sortSel) sortSel.addEventListener('change', resort);
+
+  // Count clicks on each card's main button. Sends only the tool's folder
+  // name; no cookies and nothing about the person.
+  var GC = {json.dumps(gc_url)};
+  if (GC) {{
+    grid.addEventListener('click', function (ev) {{
+      var a = ev.target.closest('.lnk.primary');
+      var card = a && a.closest('.card');
+      if (!card) return;
+      var u = GC + '?e=true&p=' + encodeURIComponent('open/' + card.dataset.folder) +
+              '&t=' + encodeURIComponent(card.querySelector('h3').textContent.trim()) +
+              '&rnd=' + Math.random().toString(36).slice(2);
+      try {{ fetch(u, {{ mode: 'no-cors', keepalive: true }}); }} catch (e) {{}}
+    }});
+  }}
+
   q.addEventListener('input', apply);
   if (who) who.addEventListener('change', apply);
   document.querySelectorAll('.fbtn').forEach(function (b) {{
@@ -665,7 +730,8 @@ def main():
     for w in warnings:
         print(f"  warning: {w}", file=sys.stderr)
 
-    (ROOT / "index.html").write_text(render(tools), encoding="utf-8")
+    counts, gc_code = load_usage()
+    (ROOT / "index.html").write_text(render(tools, counts, gc_code), encoding="utf-8")
     print(f"Catalog rebuilt: {len(tools)} tool(s)")
     for t in tools:
         print(f"  - {t['folder']}  ({t['author']}, {t['status']})")
