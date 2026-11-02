@@ -11,8 +11,8 @@ The game list comes from Dr. Dan's study hub (ItsDrDan/games, data/hub.js), so a
 game added to the hub shows up here automatically. Each game's files come from
 its own repo, ItsDrDan/<game>.
 
-The catalog builder only looks two folders deep (<author>/<tool>/index.html),
-so the games nested inside study-games/ do not get cards of their own.
+The catalog builder treats study-games/ as a collection: each game gets its
+own card in Dr. Dan's section, and the launcher is offered as an "open all" link.
 
 Everything else in itsdrdan/ is removed. Nothing outside itsdrdan/ is touched.
 If one game repo can't be fetched, its previous copy is kept.

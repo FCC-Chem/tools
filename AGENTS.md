@@ -23,6 +23,15 @@ The author folder is the source of truth for attribution. Never place a
 tool at the top level, and never write into another author's folder --
 copy into the current author's folder instead.
 
+A tool folder whose subfolders each contain their own `index.html` is a
+*collection* (example: `itsdrdan/study-games/`, filled by a sync workflow).
+The catalog lists each subfolder as its own card under that author and
+offers the collection's `index.html` as an "open all" link. Do not nest
+deeper than `<author>/<collection>/<tool>/`.
+
+The catalog home page is grouped by author, largest contributor first
+(tool count, then total opens, then name).
+
 ## Two kinds of tool
 
 **Web tools** (`index.html`) run in the browser and are the default.

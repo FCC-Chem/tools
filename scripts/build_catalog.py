@@ -12,6 +12,17 @@ An "author folder" is any top-level directory that does not start with . or _
 and is not in SKIP_NAMES. A "tool folder" is any directory inside it that
 contains an index.html.
 
+Collections. A tool folder whose own subfolders contain index.html files is a
+*collection* (e.g. itsdrdan/study-games/, which the sync workflow fills with
+one game per subfolder plus a launcher page). Each subfolder becomes its own
+card, attributed to the author, and the collection's index.html is offered in
+the author's section header as an "open all" link rather than as a card. This
+is what lets a contributor who publishes twenty games through one launcher be
+counted as twenty tools, not one.
+
+The page is grouped into one section per author, largest contributor first
+(tool count, then total opens when usage counts exist, then name).
+
 Authorship is structural, not conventional. The author name is derived from the
 folder, so a contributor who forgets meta.json entirely still gets a correctly
 attributed card. meta.json "author" overrides the folder name when someone
@@ -35,6 +46,7 @@ from datetime import datetime, timezone
 ROOT = Path(__file__).resolve().parent.parent
 SKIP_PREFIXES = (".", "_")
 SKIP_NAMES = {"scripts", "workshop", "node_modules"}
+MAX_CARD_TAGS = 6   # shown on a card when meta.json gives no cardTags; all tags remain searchable
 
 STATUS_LABELS = {
     "working": ("Working", "#1f6f43"),
@@ -282,14 +294,114 @@ def read_meta(tool_dir, rel, warnings):
         return {}
 
 
+def is_tool_dir(p):
+    """A browser tool announces itself with index.html; a script tool has no
+    index.html, so meta.json is what marks the folder as a deliberate
+    contribution rather than clutter."""
+    return p.is_dir() and not p.name.startswith(SKIP_PREFIXES) and (
+        (p / "index.html").exists() or (p / "meta.json").exists()
+    )
+
+
+def is_collection(tool_dir):
+    """A tool folder that itself contains tool folders with index.html.
+
+    Asset folders (logos/, assets/) have no index.html and do not count,
+    so an ordinary tool with a subfolder of images is never mistaken for
+    a collection.
+    """
+    if not (tool_dir / "index.html").exists():
+        return False
+    return any(
+        p.is_dir() and not p.name.startswith(SKIP_PREFIXES) and (p / "index.html").exists()
+        for p in tool_dir.iterdir()
+    )
+
+
+def tool_entry(author_dir, tool_dir, rel, warnings):
+    """Build one catalog record. Never raises."""
+    meta = read_meta(tool_dir, rel, warnings)
+
+    tags = meta.get("tags", [])
+    if not isinstance(tags, list):
+        tags = []
+
+    status = str(meta.get("status", "wip")).lower()
+    if status not in STATUS_LABELS:
+        status = "wip"
+
+    has_html = (tool_dir / "index.html").exists()
+
+    # "web" tools open in the browser. "script" tools are run
+    # locally and have no live URL. Declared kind wins; otherwise
+    # the presence of index.html decides.
+    kind = str(meta.get("kind", "")).lower()
+    if kind not in ("web", "script"):
+        kind = "web" if has_html else "script"
+    if kind == "web" and not has_html:
+        warnings.append(
+            f'{rel}/ declares kind "web" but has no index.html - treating as script'
+        )
+        kind = "script"
+
+    spec = next((f for f in ("SPEC.md", "spec.md") if (tool_dir / f).exists()), None)
+    entry_file = str(meta.get("entry") or "")
+    if not entry_file and kind == "script":
+        found = sorted(
+            p.name for p in tool_dir.iterdir()
+            if p.is_file() and p.suffix in (".py", ".sh", ".ps1", ".rb", ".js")
+        )
+        entry_file = found[0] if found else ""
+
+    # A title that ends in the author's own handle ("Gas Laws — ItsDrDan")
+    # is redundant inside that author's section, so the suffix is dropped.
+    title = str(meta.get("title") or prettify(tool_dir.name))
+    title = re.sub(rf"\s*[—–-]\s*{re.escape(author_dir.name)}\s*$", "", title, flags=re.I).strip() or title
+
+    return {
+        "folder": rel,
+        "author_slug": author_dir.name,
+        "kind": kind,
+        "entry": entry_file,
+        "requires": str(meta.get("requires") or ("Python 3" if kind == "script" else "")),
+        "title": title,
+        # Folder name is the fallback author. meta.json only overrides
+        # it to provide a nicer display name.
+        "author": str(meta.get("author") or prettify(author_dir.name)),
+        "course": str(meta.get("course") or ""),
+        "description": str(meta.get("description") or "No description yet."),
+        # Optional short card text. When present, the card shows
+        # "summary" and "cardTags"; the full description and tags
+        # are still searched.
+        "summary": str(meta.get("summary") or ""),
+        "card_tags": [str(x) for x in meta.get("cardTags", [])]
+                     if isinstance(meta.get("cardTags"), list) else None,
+        "tags": [str(t) for t in tags],
+        "status": status,
+        # "pinned": true keeps this card first within its author's section.
+        "pinned": meta.get("pinned") is True,
+        # Optional card color, e.g. "accent": "#7563d9". Only a plain
+        # #rrggbb value is accepted; anything else keeps the default.
+        "accent": (str(meta.get("accent") or "")
+                   if re.fullmatch(r"#[0-9a-fA-F]{6}", str(meta.get("accent") or "")) else ""),
+        "has_readme": (tool_dir / "README.md").exists(),
+        "spec": spec,
+    }
+
+
 def find_tools():
-    """Walk <author>/<tool>/index.html.
+    """Walk <author>/<tool>/index.html, descending one more level into
+    collections (see module docstring).
 
     Author comes from the directory, so attribution survives a missing or
     broken meta.json. That is the whole reason for nesting: naming
     discipline is not required for the catalog to be correct.
+
+    Returns (tools, collections, warnings). collections maps author_slug
+    to a list of {"folder", "title", "count"} launcher pages.
     """
     tools = []
+    collections = {}
     warnings = []
 
     for author_dir in sorted(ROOT.iterdir(), key=lambda p: p.name.lower()):
@@ -310,86 +422,78 @@ def find_tools():
         found_any = False
 
         for tool_dir in sorted(author_dir.iterdir(), key=lambda p: p.name.lower()):
-            if not tool_dir.is_dir():
+            if not is_tool_dir(tool_dir):
                 continue
-            if tool_dir.name.startswith(SKIP_PREFIXES):
-                continue
-            # A browser tool announces itself with index.html; a script
-            # tool has no index.html, so meta.json is what marks the
-            # folder as a deliberate contribution rather than clutter.
-            if not (tool_dir / "index.html").exists() and not (tool_dir / "meta.json").exists():
+            rel = f"{author_dir.name}/{tool_dir.name}"
+
+            if is_collection(tool_dir):
+                # The launcher page is not a card; its games are.
+                launcher_meta = read_meta(tool_dir, rel, warnings)
+                members = [
+                    p for p in sorted(tool_dir.iterdir(), key=lambda p: p.name.lower())
+                    if p.is_dir() and not p.name.startswith(SKIP_PREFIXES)
+                    and (p / "index.html").exists()
+                ]
+                for sub in members:
+                    found_any = True
+                    sub_rel = f"{rel}/{sub.name}"
+                    t = tool_entry(author_dir, sub, sub_rel, warnings)
+                    # A game inside a collection inherits the launcher's
+                    # display name and accent when its own meta.json has
+                    # none, so one author's section reads as one author.
+                    if not (sub / "meta.json").exists() or t["author"] == prettify(author_dir.name):
+                        t["author"] = str(launcher_meta.get("author") or t["author"])
+                    if not t["accent"] and re.fullmatch(r"#[0-9a-fA-F]{6}", str(launcher_meta.get("accent") or "")):
+                        t["accent"] = str(launcher_meta["accent"])
+                    tools.append(t)
+                collections.setdefault(author_dir.name, []).append({
+                    "folder": rel,
+                    "title": str(launcher_meta.get("title") or prettify(tool_dir.name)),
+                    "count": len(members),
+                })
                 continue
 
             found_any = True
-            rel = f"{author_dir.name}/{tool_dir.name}"
-            meta = read_meta(tool_dir, rel, warnings)
-
-            tags = meta.get("tags", [])
-            if not isinstance(tags, list):
-                tags = []
-
-            status = str(meta.get("status", "wip")).lower()
-            if status not in STATUS_LABELS:
-                status = "wip"
-
-            has_html = (tool_dir / "index.html").exists()
-
-            # "web" tools open in the browser. "script" tools are run
-            # locally and have no live URL. Declared kind wins; otherwise
-            # the presence of index.html decides.
-            kind = str(meta.get("kind", "")).lower()
-            if kind not in ("web", "script"):
-                kind = "web" if has_html else "script"
-            if kind == "web" and not has_html:
-                warnings.append(
-                    f'{rel}/ declares kind "web" but has no index.html - treating as script'
-                )
-                kind = "script"
-
-            spec = next((f for f in ("SPEC.md", "spec.md") if (tool_dir / f).exists()), None)
-            entry_file = str(meta.get("entry") or "")
-            if not entry_file and kind == "script":
-                found = sorted(
-                    p.name for p in tool_dir.iterdir()
-                    if p.is_file() and p.suffix in (".py", ".sh", ".ps1", ".rb", ".js")
-                )
-                entry_file = found[0] if found else ""
-
-            tools.append({
-                "folder": rel,
-                "author_slug": author_dir.name,
-                "kind": kind,
-                "entry": entry_file,
-                "requires": str(meta.get("requires") or ("Python 3" if kind == "script" else "")),
-                "title": str(meta.get("title") or prettify(tool_dir.name)),
-                # Folder name is the fallback author. meta.json only overrides
-                # it to provide a nicer display name.
-                "author": str(meta.get("author") or prettify(author_dir.name)),
-                "course": str(meta.get("course") or ""),
-                "description": str(meta.get("description") or "No description yet."),
-                # Optional short card text. When present, the card shows
-                # "summary" and "cardTags"; the full description and tags
-                # are still searched.
-                "summary": str(meta.get("summary") or ""),
-                "card_tags": [str(x) for x in meta.get("cardTags", [])]
-                             if isinstance(meta.get("cardTags"), list) else None,
-                "tags": [str(t) for t in tags],
-                "status": status,
-                # Optional card color, e.g. "accent": "#7563d9". Only a plain
-                # #rrggbb value is accepted; anything else keeps the default.
-                "pinned": meta.get("pinned") is True,
-                "accent": (str(meta.get("accent") or "")
-                           if re.fullmatch(r"#[0-9a-fA-F]{6}", str(meta.get("accent") or "")) else ""),
-                "has_readme": (tool_dir / "README.md").exists(),
-                "spec": spec,
-            })
+            tools.append(tool_entry(author_dir, tool_dir, rel, warnings))
 
         if not found_any:
             warnings.append(f"{author_dir.name}/ contains no tools - skipped")
 
-    # "pinned": true in meta.json puts a card first; order is otherwise unchanged.
-    tools.sort(key=lambda t: not t["pinned"])
-    return tools, warnings
+    return tools, collections, warnings
+
+
+def group_by_author(tools, collections, counts=None):
+    """Order sections: most tools first, then most opened, then name A-Z.
+
+    Display name is the most common "author" string across that person's
+    cards, so one stray meta.json with a different spelling does not
+    retitle the whole section.
+    """
+    by_slug = {}
+    for t in tools:
+        by_slug.setdefault(t["author_slug"], []).append(t)
+
+    sections = []
+    for slug, items in by_slug.items():
+        names = {}
+        for t in items:
+            names[t["author"]] = names.get(t["author"], 0) + 1
+        display = max(names.items(), key=lambda kv: (kv[1], -len(kv[0])))[0]
+        opens = sum((counts or {}).get(t["folder"], 0) for t in items)
+        # "pinned": true in meta.json puts a card first within its author's
+        # section; order is otherwise unchanged.
+        items.sort(key=lambda t: not t["pinned"])
+        sections.append({
+            "slug": slug,
+            "name": display,
+            "tools": items,
+            "count": len(items),
+            "opens": opens,
+            "collections": collections.get(slug, []),
+        })
+
+    sections.sort(key=lambda s: (-s["count"], -s["opens"], s["name"].lower()))
+    return sections
 
 
 def load_usage():
@@ -418,7 +522,9 @@ def render_card(t, counts=None):
     src = f"https://github.com/FCC-Chem/tools/tree/main/{e(t['folder'])}"
 
     course = f'<span class="course">{e(t["course"])}</span>' if t["course"] else ""
-    shown_tags = t["tags"] if t["card_tags"] is None else t["card_tags"]
+    # Without an explicit cardTags list, only the first few tags fit on a
+    # card. Every tag is still in the search blob below.
+    shown_tags = t["tags"][:MAX_CARD_TAGS] if t["card_tags"] is None else t["card_tags"]
     tags = "".join(f'<span class="tag">{e(tag)}</span>' for tag in shown_tags)
     readme = (
         f'<a class="lnk" href="{e(t["folder"])}/README.md">Notes</a>'
@@ -470,29 +576,54 @@ def render_card(t, counts=None):
       </article>"""
 
 
-def render(tools, counts=None, gc_code=""):
+def render_section(sec, counts=None):
+    e = html.escape
+    cards = "\n".join(render_card(t, counts) for t in sec["tools"])
+    n = sec["count"]
+    src = f"https://github.com/FCC-Chem/tools/tree/main/{e(sec['slug'])}"
+
+    launchers = "".join(
+        f'\n        <a class="sec-lnk primary" href="{e(c["folder"])}/">'
+        f'Open all {c["count"]} in one page →</a>'
+        for c in sec["collections"]
+    )
+    opens = (f' · opened {sec["opens"]:,} time{"s" if sec["opens"] != 1 else ""}'
+             if counts is not None and sec["opens"] > 0 else "")
+
+    return f"""    <section class="author-sec" id="a-{e(sec['slug'])}" data-author="{e(sec['slug'])}">
+      <div class="sec-head">
+        <h2>{e(sec['name'])}</h2>
+        <span class="sec-count">{n} tool{"s" if n != 1 else ""}{opens}</span>
+        <span class="sec-links">{launchers}
+        <a class="sec-lnk" href="{src}">Folder on GitHub</a>
+        </span>
+      </div>
+      <div class="grid">
+{cards}
+      </div>
+    </section>"""
+
+
+def render(sections, counts=None, gc_code=""):
     built = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    tools = [t for s in sections for t in s["tools"]]
 
-    if tools:
-        cards = "\n".join(render_card(t, counts) for t in tools)
-        empty = ""
+    if sections:
+        body = "\n".join(render_section(s, counts) for s in sections)
     else:
-        cards = ""
-        empty = ('      <p class="empty">No tools yet. Copy <code>_template/</code> into '
-                 '<code>yourname/toolname/</code> to get started.</p>')
+        body = ('      <p class="empty">No tools yet. Copy <code>_template/</code> into '
+                '<code>yourname/toolname/</code> to get started.</p>')
 
-    # Author dropdown, built from whoever actually has tools.
-    seen = {}
-    for t in tools:
-        seen.setdefault(t["author_slug"], t["author"])
+    # Author dropdown doubles as a jump list: picking one hides the other
+    # sections. Order matches the page (largest contributor first).
     opts = "".join(
-        f'<option value="{html.escape(slug)}">{html.escape(name)}</option>'
-        for slug, name in sorted(seen.items(), key=lambda kv: kv[1].lower())
+        f'<option value="{html.escape(s["slug"])}">{html.escape(s["name"])} ({s["count"]})</option>'
+        for s in sections
     )
     author_sel = (
         f'<select id="who" aria-label="Filter by author">'
         f'<option value="all">All authors</option>{opts}</select>'
-        if len(seen) > 1 else ""
+        if len(sections) > 1 else ""
     )
 
     # Only worth showing once both kinds actually exist.
@@ -507,9 +638,9 @@ def render(tools, counts=None, gc_code=""):
     )
 
     sort_sel = (
-        '    <select id="sort" aria-label="Sort tools">'
+        '    <select id="sort" aria-label="Sort tools within each author">'
         '<option value="opens" selected>Sort: most opened</option>'
-        '<option value="az">Sort: by author</option></select>'
+        '<option value="az">Sort: A to Z</option></select>'
         if counts else ""
     )
     gc_url = f"https://{gc_code}.goatcounter.com/count" if gc_code else ""
@@ -554,6 +685,17 @@ def render(tools, counts=None, gc_code=""):
   .fbtn, .kbtn {{ padding:10px 16px; border:1px solid var(--border); background:#fff;
            border-radius:8px; cursor:pointer; font-size:0.9rem; font-family:inherit; }}
   .fbtn.on, .kbtn.on {{ background:var(--accent); color:#fff; border-color:var(--accent); }}
+  .author-sec {{ margin:0 0 40px; }}
+  .sec-head {{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+               border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:16px; }}
+  .sec-head h2 {{ margin:0; font-size:1.35rem; }}
+  .sec-count {{ color:var(--muted); font-size:0.9rem; }}
+  .sec-links {{ margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }}
+  .sec-lnk {{ font-size:0.82rem; text-decoration:none; color:var(--accent);
+              border:1px solid var(--accent); padding:5px 11px; border-radius:6px; }}
+  .sec-lnk.primary {{ background:var(--accent); color:#fff; }}
+  .sec-lnk:hover {{ filter:brightness(1.12); }}
+  @media (max-width:620px) {{ .sec-links {{ margin-left:0; }} }}
   .grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }}
   .card {{ border:1px solid var(--border); border-radius:10px; padding:18px;
            background:var(--panel); display:flex; flex-direction:column; }}
@@ -564,7 +706,11 @@ def render(tools, counts=None, gc_code=""):
   .status {{ color:#fff; font-size:0.68rem; font-weight:700; padding:3px 8px;
              border-radius:20px; white-space:nowrap; text-transform:uppercase;
              letter-spacing:0.03em; }}
-  .desc {{ margin:0 0 12px; font-size:0.92rem; color:#333; flex:1; }}
+  /* Long descriptions are clamped on the card; the full text is still
+     searched and still shown on the tool's own page. */
+  .desc {{ margin:0 0 12px; font-size:0.92rem; color:#333;
+           display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical;
+           overflow:hidden; }}
   .meta {{ font-size:0.83rem; color:var(--muted); margin-bottom:10px; }}
   .author {{ font-weight:600; color:#444; }}
   .opens {{ font-size:0.8rem; color:var(--muted); margin:-4px 0 10px; }}
@@ -574,7 +720,7 @@ def render(tools, counts=None, gc_code=""):
           padding:3px 8px; border-radius:4px; }}
   .kind {{ font-size:0.72rem; background:#3a3f44; color:#fff; font-weight:600;
            padding:3px 8px; border-radius:4px; }}
-  .links {{ display:flex; gap:8px; flex-wrap:wrap; }}
+  .links {{ display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }}
   .lnk {{ font-size:0.85rem; text-decoration:none; color:var(--accent);
           border:1px solid var(--accent); padding:6px 12px; border-radius:6px; }}
   .lnk.primary {{ background:var(--accent); color:#fff; }}
@@ -630,14 +776,13 @@ def render(tools, counts=None, gc_code=""):
 {sort_sel}
   </div>
 
-  <div class="grid" id="grid">
-{cards}
-{empty}
+  <div id="catalog">
+{body}
   </div>
   <p class="none" id="none">Nothing matches that search.</p>
 
   <footer>
-    <strong>{len(tools)} tool{"s" if len(tools) != 1 else ""}</strong> · rebuilt automatically {built}{gc_note}<br>
+    <strong>{len(tools)} tool{"s" if len(tools) != 1 else ""}</strong> from {len(sections)} author{"s" if len(sections) != 1 else ""} · rebuilt automatically {built}{gc_note}<br>
     <a href="https://github.com/FCC-Chem/tools">Source on GitHub</a> ·
     <a href="https://github.com/FCC-Chem/tools/discussions">Discussions</a> ·
     <a href="https://github.com/FCC-Chem/tools/issues/new">Request a tool</a><br>
@@ -669,22 +814,36 @@ def render(tools, counts=None, gc_code=""):
       c.style.display = vis ? '' : 'none';
       if (vis) shown++;
     }});
+    // An author whose every card is filtered out disappears with them.
+    sections.forEach(function (s) {{
+      var any = Array.prototype.some.call(s.querySelectorAll('.card'), function (c) {{
+        return c.style.display !== 'none';
+      }});
+      s.style.display = any ? '' : 'none';
+    }});
     none.style.display = (shown === 0 && cards.length) ? 'block' : 'none';
   }}
 
-  var grid = document.getElementById('grid');
+  var catalog = document.getElementById('catalog');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.author-sec'));
   var sortSel = document.getElementById('sort');   // present only when counts exist
+  // Reorders cards inside each author's section. Section order itself is
+  // fixed at build time (largest contributor first).
   function resort() {{
     var byOpens = sortSel && sortSel.value === 'opens';
-    cards.slice().sort(function (a, b) {{
-      var p = (+b.dataset.pinned || 0) - (+a.dataset.pinned || 0);
-      if (p) return p;
-      if (byOpens) {{
-        var d = (+b.dataset.opens || 0) - (+a.dataset.opens || 0);
-        if (d) return d;
-      }}
-      return cards.indexOf(a) - cards.indexOf(b);
-    }}).forEach(function (c) {{ grid.appendChild(c); }});
+    sections.forEach(function (s) {{
+      var grid = s.querySelector('.grid');
+      var mine = Array.prototype.slice.call(grid.querySelectorAll('.card'));
+      mine.slice().sort(function (a, b) {{
+        var p = (+b.dataset.pinned || 0) - (+a.dataset.pinned || 0);
+        if (p) return p;
+        if (byOpens) {{
+          var d = (+b.dataset.opens || 0) - (+a.dataset.opens || 0);
+          if (d) return d;
+        }}
+        return cards.indexOf(a) - cards.indexOf(b);
+      }}).forEach(function (c) {{ grid.appendChild(c); }});
+    }});
   }}
   if (sortSel) {{ sortSel.addEventListener('change', resort); resort(); }}
 
@@ -692,7 +851,7 @@ def render(tools, counts=None, gc_code=""):
   // name; no cookies and nothing about the person.
   var GC = {json.dumps(gc_url)};
   if (GC) {{
-    grid.addEventListener('click', function (ev) {{
+    catalog.addEventListener('click', function (ev) {{
       var a = ev.target.closest('.lnk.primary');
       var card = a && a.closest('.card');
       if (!card) return;
@@ -730,16 +889,19 @@ def render(tools, counts=None, gc_code=""):
 
 
 def main():
-    tools, warnings = find_tools()
+    tools, collections, warnings = find_tools()
 
     for w in warnings:
         print(f"  warning: {w}", file=sys.stderr)
 
     counts, gc_code = load_usage()
-    (ROOT / "index.html").write_text(render(tools, counts, gc_code), encoding="utf-8")
-    print(f"Catalog rebuilt: {len(tools)} tool(s)")
-    for t in tools:
-        print(f"  - {t['folder']}  ({t['author']}, {t['status']})")
+    sections = group_by_author(tools, collections, counts)
+    (ROOT / "index.html").write_text(render(sections, counts, gc_code), encoding="utf-8")
+    print(f"Catalog rebuilt: {len(tools)} tool(s) from {len(sections)} author(s)")
+    for s in sections:
+        print(f"  {s['name']} ({s['slug']}): {s['count']} tool(s)")
+        for t in s["tools"]:
+            print(f"    - {t['folder']}  ({t['status']})")
 
 
 if __name__ == "__main__":
