@@ -1,0 +1,13 @@
+{
+  "title": "Helix Hustle: Nucleic Acids — ItsDrDan",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3B",
+  "chapters": {
+    "CHEM 3B": "Chapter 12: Nucleic Acids and Protein Synthesis"
+  },
+  "description": "CHEM 3B nucleic acids practice in 4 main options that reveal topics (students can mix several): Building Blocks (name the base from a drawn structure, purine or pyrimidine, DNA or RNA, ribose vs deoxyribose, tap the 1′, 2′, 3′ or 5′ carbon, nucleoside vs nucleotide, naming and abbreviations like dAMP and ATP), DNA & RNA Structure (phosphodiester backbone, reading 5′→3′, typing complementary strands, counting hydrogen bonds, Chargaff’s rules, the double helix, DNA vs RNA and the three RNA types), Replication & Transcription (label a drawn replication fork: helicase, leading strand, Okazaki fragments, ligase; typing mRNA from a template strand; splicing introns and exons; RNA polymerase and regulation) and Translation & Mutations (typing amino acid sequences from mRNA with a codon chart, start and stop codons, anticodons and a drawn tRNA, ribosome P and A sites, translation steps, classifying point and frameshift mutations from real sequences, mutagens, viruses, reverse transcriptase, antivirals, antibiotics and mRNA vaccines). Every structure and diagram is drawn by the game. Typed answers get mistake-specific feedback (T in RNA, reversed strand, copied instead of paired, read past the stop codon). Skill Check Prep: 10 questions, one per learning goal, then a study plan. Final-exam review: Final Boss nucleic acid questions. Step-by-step help, hints, a reference sheet with the full codon chart, XP, ranks, 10 achievements, a DNA helix mascot and ItsDrDan videos.",
+  "tags": ["CHEM 3B", "chemistry", "biochemistry", "nucleic acids", "DNA", "RNA", "nucleotides", "nucleosides", "purines", "pyrimidines", "ribose", "deoxyribose", "phosphodiester", "base pairing", "hydrogen bonds", "Chargaff", "double helix", "replication", "helicase", "DNA polymerase", "Okazaki fragments", "ligase", "transcription", "mRNA", "tRNA", "rRNA", "introns", "exons", "splicing", "genetic code", "codons", "anticodons", "translation", "ribosome", "mutations", "frameshift", "viruses", "reverse transcriptase", "skill check", "XP and achievements"],
+  "icon": "🧬",
+  "logo": "logo.png",
+  "status": "working"
+}

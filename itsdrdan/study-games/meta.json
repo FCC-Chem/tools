@@ -1,9 +1,9 @@
 {
   "title": "Dr. Dan's Chemistry Study Games",
   "author": "Dr. Dan (ItsDrDan)",
-  "summary": "Sig figs · Metric prefixes · Algebra · Element symbols · Polyatomic ions · Naming · Quantum · Lewis structures · Reactions · Redox · Moles · Stoichiometry · Gas laws · Thermochemistry · 1B readiness · Functional groups · Organic families · Organic reactions · Carbohydrates · Amino Acids & Proteins · Final exam review",
+  "summary": "Sig figs · Metric prefixes · Algebra · Element symbols · Polyatomic ions · Naming · Quantum · Lewis structures · Reactions · Redox · Moles · Stoichiometry · Gas laws · Thermochemistry · 1B readiness · Functional groups · Organic families · Organic reactions · Carbohydrates · Amino Acids & Proteins · Enzymes & Vitamins · Lipids · Nucleic Acids & Protein Synthesis · Metabolism · Final exam review",
   "course": "CHEM 3A, CHEM 1A, CHEM 3B, CHEM 1B",
-  "description": "21 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
+  "description": "25 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
   "tags": [
     "study games",
     "practice",
@@ -32,6 +32,10 @@
     "Bond Voyage! Organic Reactions",
     "Sweet Structures (Carbohydrates)",
     "Peptide Party (Amino Acids & Proteins)",
+    "Enzyme Engine (Enzymes & Vitamins)",
+    "Lipid Lab (Lipids)",
+    "Helix Hustle (Nucleic Acids & Protein Synthesis)",
+    "Metabolic Marathon (Metabolism)",
     "Final Exam Review"
   ],
   "cardTags": [
