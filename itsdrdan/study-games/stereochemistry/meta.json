@@ -1,0 +1,11 @@
+{
+  "title": "Mirror Match — Stereochemistry",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3B",
+  "description": "Practice CHEM 3B stereochemistry (Sections 3.2, 5.5, 8.2–8.3 and 10.1) from 5 main options: Chiral Carbons (key terms, spot the labeled chiral carbon, count chiral carbons in drawn molecules and amino acids, 2ⁿ stereoisomers), Isomer Relationships (identical, enantiomers, diastereomers or constitutional isomers from wedge-and-dash drawings, including flipped and rotated drawings), Cis & Trans (alkenes and rings), Fischer & D/L (D or L sugars and amino acids, compare Fischer projections, pick the enantiomer) and Health & Clinic (chiral drugs: thalidomide, racemic ibuprofen, single-enantiomer drugs, receptors). Every structure is generated and checked by code. Skill Check Prep gives 10 questions and a study plan; Exam Practice uses the textbook's chirality and isomer question banks. Mistake-specific feedback, step-by-step help, a cheat sheet, XP, ranks, 11 achievements and Mira the mirror mascot.",
+  "icon": "🪞",
+  "tags": ["CHEM 3B", "XP and achievements", "chirality", "chiral carbons", "stereoisomers", "enantiomers", "diastereomers", "constitutional isomers", "wedge and dash", "cis-trans isomers", "Fischer projections", "D and L sugars", "L-amino acids", "epimers", "meso", "racemic mixture", "chiral drugs", "skill check", "nursing", "dental hygiene", "chemistry"],
+  "version": "1",
+  "status": "working",
+  "logo": "logo.svg"
+}

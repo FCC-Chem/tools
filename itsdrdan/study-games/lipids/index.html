@@ -289,6 +289,38 @@ svg.mol{width:100%;height:auto;display:block}
 .choice.right:disabled{opacity:1}
 @media(max-width:760px){#art,.sol-art,.choices.grid .choice{overflow-x:auto;justify-content:flex-start}#art svg.mol,.sol-art svg.mol,.choices.grid .choice svg.mol{min-width:min(calc(var(--vbw) * .8px),640px);flex:none}#art::-webkit-scrollbar{height:6px}}
 
+/* topic chips v3: tidy grid of equal tiles */
+.chips-wrap{padding:4px 16px 16px}
+.chips{gap:14px}
+.chip-group{border-top:1px solid var(--line);padding-top:12px}.chip-group:first-child{border-top:0;padding-top:2px}
+.chip-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.chip-cat{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--ink)}
+.chip-count{font-size:.8rem;font-weight:700;color:var(--faint)}
+.chip-all{margin-left:auto;border:1px solid var(--line2);background:#fff;border-radius:9px;padding:6px 12px;min-height:36px;font-weight:800;font-size:.85rem;color:var(--accent-d)}
+.chip-all:hover{background:var(--accent-soft)}
+.chip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:8px}
+.chips .chip{position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:10px 12px;min-height:54px;font-weight:800;font-size:.95rem;line-height:1.25;color:#3d4a73;overflow:hidden}
+.chips .chip::before{content:none}
+.chips .chip:hover{border-color:#aab2ea}
+.chips .chip .chk{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--line2);background:#fff}
+.chips .chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d)}
+.chips .chip.on .chk{background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5 9-10' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--accent)}
+.chip-txt{display:flex;flex-direction:column;min-width:0}.chip-txt small{font-weight:700;font-size:.74rem;color:var(--faint);margin-top:1px}
+.chip-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#eceef5}.chip-bar i{display:block;height:100%;background:#5cb892}
+@media(max-width:760px){.chips-wrap{padding:2px 12px 12px}.chip-grid{grid-template-columns:1fr 1fr;gap:7px}.chips .chip{padding:9px 10px;font-size:.88rem;min-height:52px;gap:8px}.chips .chip .chk{width:19px;height:19px}}
+@media(max-width:360px){.chip-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.play-head{flex-wrap:nowrap;margin-bottom:8px}.play-left{flex:1}.play-title{font-size:1.05rem;line-height:1.2}#skipBtn{flex:none;padding:8px 12px;min-height:44px;font-size:.9rem}}
+.lab{margin-top:10px}.lab .isteps{margin:0 0 8px;padding-left:22px;color:var(--muted);font-size:.95rem}.lab .bench{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;overflow-x:auto}
+.lab svg.labmol{width:100%;height:auto;display:block;min-width:min(calc(var(--vbw) * .74px),720px)}
+.lab .bench{scrollbar-width:thin}
+.hitbox{fill:#eef0fe;stroke:#9fb0ff;stroke-width:1.5;stroke-dasharray:4 3;cursor:pointer}.hitbox:hover{fill:#dde2fd}.hitbox.sel{fill:#c9d1ff;stroke:#4b57d1;stroke-dasharray:none;stroke-width:2.5}
+.ftok.hit{cursor:pointer}
+.lab .ibar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:10px}.lab .ibar .btn{min-height:48px}.lab .wcount{margin-left:auto;font-weight:800;color:var(--muted)}
+.lab .istatus{margin-top:8px;font-size:.98rem;min-height:1.4em}.lab .istatus.ok{color:var(--mint-ink)}.lab .istatus.warn{color:var(--amber-ink)}
+@media(max-width:760px){.lab .wcount{margin-left:0;width:100%}.lab .ibar .btn{flex:1}}
+@media(max-width:760px){.lab svg.labmol{min-width:min(calc(var(--vbw) * 1.05px),980px)}.lab .bench::after{content:'Swipe sideways to see the whole chain →';display:block;font-size:.75rem;color:var(--faint);padding:2px 6px 0;position:sticky;left:0}}
+.choice .ctext{min-width:0}.choices.grid .choice .ctext{display:block;width:100%;overflow-x:auto}
+
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -324,7 +356,7 @@ svg.mol{width:100%;height:auto;display:block}
   <div id="playArea">
    <div class="quiz-bar" id="quizBar" hidden><span></span></div>
    <div class="tags"><span class="tag" id="topicTag"></span><span class="tag" id="subTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
-   <section class="question"><div class="equation" id="equation"></div><div id="art"></div><p class="prompt" id="prompt"></p></section>
+   <section class="question"><div class="equation" id="equation"></div><div id="art"></div><p class="prompt" id="prompt"></p><div id="lab" class="lab" hidden></div></section>
    <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><span class="unit" id="unit"></span><button type="button" class="btn primary" id="checkBtn">Check</button></div>
    <div class="choices" id="choices" hidden></div>
    <p class="typing-note" id="typingNote"></p>
@@ -363,9 +395,19 @@ const FONT = 'Nunito,Arial,sans-serif';
 const r1 = v => Math.round(v * 10) / 10;
 // formula text → SVG tspans with subscripts / charges ("CH3(CH2)14COO^-" ; "^+" "^-" make superscripts)
 function ftxt(s, sz) {
-  const sub = Math.round(sz * 0.7);
-  return String(s).replace(/\^([+\-−]|\d?[+\-−])/g, (m, c) => `<tspan baseline-shift="super" font-size="${sub}">${c.replace('-', '−')}</tspan>`)
-    .replace(/([A-Za-z\)])(\d+)/g, (m, a, d) => `${a}<tspan baseline-shift="sub" font-size="${sub}">${d}</tspan>`);
+  const small = Math.round(sz * 0.7), dSub = Math.round(sz * 0.28), dSup = -Math.round(sz * 0.4);
+  // split into [text, shift] runs: digits after a letter or ")" are subscripts; ^+ ^- ^2+ are superscripts
+  const runs = []; const src = String(s); let i = 0;
+  const push = (t, sh) => { if (!t) return; const last = runs[runs.length - 1]; if (last && last[1] === sh) last[0] += t; else runs.push([t, sh]); };
+  while (i < src.length) {
+    const ch = src[i];
+    if (ch === '^') { const m = src.slice(i + 1).match(/^(\d?[+\-−])/); if (m) { push(m[1].replace('-', '−'), dSup); i += 1 + m[1].length; continue; } }
+    if (/\d/.test(ch) && i && /[A-Za-z\)]/.test(src[i - 1])) { let j = i; while (j < src.length && /\d/.test(src[j])) j++; push(src.slice(i, j), dSub); i = j; continue; }
+    push(ch, 0); i++;
+  }
+  let cur = 0, out = '';
+  runs.forEach(([t, sh]) => { const e = t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); const dy = sh - cur; cur = sh; out += sh || dy ? `<tspan dy="${dy}"${sh ? ` font-size="${small}"` : ''}>${e}</tspan>` : e; });
+  return out;
 }
 // HTML version of a formula: CH3(CH2)7CH=CH… → CH<sub>3</sub>…
 const fhtml = s => String(s).replace(/\^([+\-−])/g, (m, c) => `<sup>${c.replace('-', '−')}</sup>`).replace(/([A-Za-z\)])(\d+)/g, '$1<sub>$2</sub>');
@@ -381,6 +423,12 @@ function dbl(a, b, toward, o = {}) {
   const off = o.off || 6, sh = 0.17;
   const p = [a[0] + dx * sh + nx * off, a[1] + dy * sh + ny * off], q = [b[0] - dx * sh + nx * off, b[1] - dy * sh + ny * off];
   return Ln(a, b, o) + Ln(p, q, o);
+}
+
+// double bond drawn symmetrically about the bond axis (for C=O ending in an atom label)
+function dblC(a, b, o = {}) {
+  const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy), nx = -dy / L * 2.8, ny = dx / L * 2.8;
+  return Ln([a[0] + nx, a[1] + ny], [b[0] + nx, b[1] + ny], o) + Ln([a[0] - nx, a[1] - ny], [b[0] - nx, b[1] - ny], o);
 }
 
 /* ---- chain layout: beam search over turn directions so cis bonds bend, trans bonds stay straight,
@@ -447,11 +495,11 @@ function faSVG(f, opts = {}) {
     } else g += Ln(pts[i], pts[i + 1], { c: col });
   }
   // carboxyl
-  g += dbl(pts[0], [pts[0][0] + (up[0] - pts[0][0]) * 0.78, pts[0][1] + (up[1] - pts[0][1]) * 0.78], pts[1], { off: 5 });
-  g += T(up[0] - 2, up[1] - 2, 'O', { a: 'end' });
-  g += Ln(pts[0], [pts[0][0] + (dn[0] - pts[0][0]) * 0.72, pts[0][1] + (dn[1] - pts[0][1]) * 0.72]);
-  if (opts.salt) g += T(dn[0] + 4, dn[1] + 12, `O^- ${opts.salt}^+`, { a: 'end', raw: false });
-  else g += T(dn[0] + 4, dn[1] + 12, 'HO', { a: 'end' });
+  g += dblC(pts[0], [pts[0][0] + (up[0] - pts[0][0]) * 0.66, pts[0][1] + (up[1] - pts[0][1]) * 0.66]);
+  g += T(up[0], up[1] + 6, 'O', { a: 'middle' });
+  g += Ln(pts[0], [pts[0][0] + (dn[0] - pts[0][0]) * 0.66, pts[0][1] + (dn[1] - pts[0][1]) * 0.66]);
+  if (opts.salt) g += T(dn[0] + 6.5, dn[1] + 6, `${opts.salt}^+ ^-O`, { a: 'end' });
+  else g += T(dn[0] + 6.5, dn[1] + 6, 'HO', { a: 'end' });
   // numbers
   if (opts.num || opts.omega) pts.forEach((p, i) => {
     const show = opts.num ? (opts.numOnly ? opts.numOnly.includes(i) : true) : (opts.omegaOnly ? opts.omegaOnly.includes(i) : true);
@@ -463,7 +511,7 @@ function faSVG(f, opts = {}) {
     const vl2 = Math.hypot(vx, vy) || 1;
     g += T(p[0] + vx / vl2 * 15, p[1] + vy / vl2 * 15 + 5, lab, { a: 'middle', size: 11.5, fill: opts.omega ? '#7a4fd0' : '#5b6684', w: 800 });
   });
-  if (opts.subs) opts.subs.forEach(([i, lab]) => { const p = pts[i], a = pts[i - 1], b = pts[i + 1]; let vx = 2 * p[0] - a[0] - b[0], vy = 2 * p[1] - a[1] - b[1]; const vl = Math.hypot(vx, vy) || 1; vx /= vl; vy /= vl; g += Ln(p, [p[0] + vx * S * 0.7, p[1] + vy * S * 0.7]); g += T(p[0] + vx * S * 1.05, p[1] + vy * S * 1.05 + 6, lab, { a: 'middle' }); });
+  if (opts.subs) opts.subs.forEach(([i, lab]) => { const p = pts[i], a = pts[i - 1], b = pts[i + 1]; let vx = 2 * p[0] - a[0] - b[0], vy = 2 * p[1] - a[1] - b[1]; const vl = Math.hypot(vx, vy) || 1; vx /= vl; vy /= vl; g += Ln(p, [p[0] + vx * S * 0.66, p[1] + vy * S * 0.66]); g += T(p[0] + vx * S - 6.5, p[1] + vy * S + 6, lab, { a: 'start' }); });
   if (opts.hl) opts.hl.forEach(i => { const p = pts[i]; g += `<circle cx="${r1(p[0])}" cy="${r1(p[1])}" r="9" fill="${HI}" fill-opacity=".22" stroke="${HI}" stroke-width="2.2"/>`; });
   if (opts.tap) pts.forEach((p, i) => { g += `<circle class="atom" data-atom="${i}" cx="${r1(p[0])}" cy="${r1(p[1])}" r="11" tabindex="0" role="button" aria-label="carbon ${opts.tapLabels ? opts.tapLabels(i) : 'atom ' + (i + 1)}"/>`; });
   const label = opts.label || `Line structure of a ${n}-carbon fatty acid${opts.salt ? ' salt' : ''} with ${db.length} carbon–carbon double bond${db.length === 1 ? '' : 's'}`;
@@ -505,17 +553,58 @@ function tokW(t, sz) { // em-width estimate (Nunito 800), digits after a letter 
   return w * sz;
 }
 // tokens: 'text' | {t:'C', up:'O'} (C=O drawn above) | {t:'P', up:'O', dn:'O^-'} ; returns {g, x (end), c:[centers of tokens]}
+let ROWID = 0;
 function row(x, y, toks, o = {}) {
-  const sz = o.size || 17; let g = '', cx = x; const centers = [];
-  toks.forEach(tk => {
+  const sz = o.size || 17, id = o.id || 'r' + (++ROWID); let g = `<g class="frow" data-id="${id}" data-x0="${r1(x)}"${o.alignTo ? ` data-align="${o.alignTo}"` : ''}${o.after ? ` data-after="${o.after}" data-gap="${o.gap || 30}"` : ''}>`, cx = x; const centers = [];
+  toks.forEach((tk, k) => {
     const t = typeof tk === 'string' ? tk : tk.t, w = tokW(t, sz), mid = cx + w / 2;
-    g += T(cx, y, t, { size: sz, fill: tk.fill || o.fill || INK });
-    if (tk.up) { g += Ln([mid - 3, y - sz * 0.86], [mid - 3, y - sz * 1.5], { w: 2 }) + Ln([mid + 3, y - sz * 0.86], [mid + 3, y - sz * 1.5], { w: 2 }); g += T(mid, y - sz * 1.68, tk.up, { size: sz, a: 'middle' }); }
-    if (tk.upS) { g += Ln([mid, y - sz * 0.86], [mid, y - sz * 1.5], { w: 2 }); g += T(mid, y - sz * 1.68, tk.upS, { size: sz, a: 'middle' }); }
-    if (tk.dn) { g += Ln([mid, y + 6], [mid, y + sz * 1.05], { w: 2 }); g += T(mid, y + sz * 2.05, tk.dn, { size: sz, a: 'middle' }); }
+    g += `<text class="ftok${tk.hit ? ' hit' + (tk.sel ? ' sel' : '') : ''}" data-k="${k}"${tk.hit ? ` data-hit="${tk.hit}"` : ''} x="${r1(cx)}" y="${r1(y)}" font-family="${FONT}" font-size="${sz}" font-weight="800" fill="${tk.sel ? '#3c47b8' : tk.fill || o.fill || INK}">${ftxt(t, sz)}</text>`;
+    let d = '';
+    if (tk.up) { d += Ln([-3, y - sz * 0.86], [-3, y - sz * 1.5], { w: 2 }) + Ln([3, y - sz * 0.86], [3, y - sz * 1.5], { w: 2 }) + T(0, y - sz * 1.68, tk.up, { size: sz, a: 'middle' }); }
+    if (tk.dn) { d += Ln([0, y + 6], [0, y + sz * 1.05], { w: 2 }) + T(0, y + sz * 2.05, tk.dn, { size: sz, a: 'middle' }); }
+    // decorations sit over the FIRST letter of the token (the C of "C" or the P of "P")
+    if (d) g += `<g class="fdec" data-k="${k}" transform="translate(${r1(cx + tokW(t[0], sz) / 2)},0)">${d}</g>`;
     centers.push(mid); cx += w;
   });
-  return { g, x: cx, c: centers };
+  if (o.vbTo != null) g += `<line class="fvb" x1="${r1(x + tokW('C', sz) / 2 + 1)}" y1="${r1(y + 7)}" x2="${r1(x + tokW('C', sz) / 2 + 1)}" y2="${r1(o.vbTo)}" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>`;
+  return { g: g + '</g>', x: cx, c: centers, id };
+}
+// After drawing, measure the real text (fonts differ by device) and put every token, C=O oxygen and vertical bond exactly in place.
+function layoutRows(root) {
+  if (typeof document === 'undefined') return;
+  (root || document).querySelectorAll('svg.mol').forEach(svg => {
+    const rows = svg.querySelectorAll('.frow'); if (!rows.length) return;
+    let maxX = 0, ok = true; const pos = {}, ends = {};
+    svg.querySelectorAll('.hitbox').forEach(h => h.remove());
+    rows.forEach(r => {
+      let x = +r.dataset.x0;
+      if (r.dataset.align) { const [rid, k] = r.dataset.align.split(':'); if (pos[rid] && pos[rid][k] != null) x = pos[rid][k]; }
+      if (r.dataset.after) { const e = r.dataset.after.split(',').map(id => ends[id]).filter(v => v != null); if (e.length) x = Math.max(...e) + +r.dataset.gap; }
+      const starts = {};
+      r.querySelectorAll('.ftok').forEach(t => {
+        t.setAttribute('x', x); let len = 0; try { len = t.getComputedTextLength(); } catch (e) {}
+        if (!len) { ok = false; return; }
+        starts[t.dataset.k] = x;
+        const dec = r.querySelector(`.fdec[data-k="${t.dataset.k}"]`);
+        if (dec) { let first = 0; try { first = t.getSubStringLength(0, 1); } catch (e) { first = len; } dec.setAttribute('transform', `translate(${(x + first / 2).toFixed(1)},0)`); }
+        x += len;
+      });
+      pos[r.dataset.id] = starts; ends[r.dataset.id] = x;
+      const vb = r.querySelector('.fvb'), t0 = r.querySelector('.ftok');
+      if (vb && t0) { let cw = 0; try { cw = t0.getSubStringLength(0, 1); } catch (e) {} if (cw) { const vx = (+t0.getAttribute('x') + cw / 2).toFixed(1); vb.setAttribute('x1', vx); vb.setAttribute('x2', vx); } }
+      svg.querySelectorAll(`.fvb-top[data-from="${r.dataset.id}"]`).forEach(l => { const v = r.querySelector('.fvb'); if (v) { l.setAttribute('x1', v.getAttribute('x1')); l.setAttribute('x2', v.getAttribute('x1')); } });
+      svg.querySelectorAll(`.fafter[data-after="${r.dataset.id}"]`).forEach(gg => { gg.setAttribute('transform', `translate(${(x + 4 - +gg.dataset.x).toFixed(1)},0)`); x += 74; });
+      maxX = Math.max(maxX, x);
+    });
+    if (!ok) return;
+    // padded tap targets behind every tappable token
+    svg.querySelectorAll('.ftok.hit').forEach(t => { let b; try { b = t.getBBox(); } catch (e) { return; } const p = 5, rc = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rc.setAttribute('class', 'hitbox' + (t.classList.contains('sel') ? ' sel' : '')); rc.setAttribute('data-hit', t.dataset.hit); rc.setAttribute('x', b.x + 0.5); rc.setAttribute('y', b.y - p); rc.setAttribute('width', Math.max(b.width - 1, 6)); rc.setAttribute('height', b.height + 2 * p); rc.setAttribute('rx', 8);
+      t.parentNode.insertBefore(rc, t); });
+    // grow or shrink the drawing to fit the measured text
+    const vb = svg.viewBox.baseVal, W = Math.max(maxX + 16, svg.dataset.minw ? +svg.dataset.minw : 0);
+    if (Math.abs(W - vb.width) > 2) { const ratio = W / vb.width; svg.setAttribute('viewBox', `0 0 ${W.toFixed(1)} ${vb.height}`); const mw = parseFloat(svg.style.maxWidth); if (mw) svg.style.maxWidth = Math.round(mw * ratio) + 'px'; svg.style.setProperty('--vbw', Math.round(W)); }
+  });
 }
 const vbond = (x, y1, y2) => Ln([x, y1], [x, y2], { w: 2.2 });
 // glycerol-backbone drawing: rows = array of 3 token lists (after the CH2/CH)
@@ -523,9 +612,8 @@ function backbone(rows, o = {}) {
   const sz = 17, rowH = o.rowH || 64, top = 46; let g = '', maxX = 0; const lab = ['CH2', 'CH', 'CH2'];
   const colW = tokW('CH2', sz);
   rows.forEach((tk, i) => {
-    const y = top + i * rowH, r = row(14, y, [lab[i], ...tk], { size: sz });
+    const y = top + i * rowH, r = row(14, y, [lab[i], ...tk], { size: sz, vbTo: i < rows.length - 1 ? y + rowH - 18 : null });
     g += r.g; maxX = Math.max(maxX, r.x);
-    if (i < 2) g += vbond(14 + tokW('C', sz) / 2 + 1, y + 7, y + rowH - 18);
   });
   return { g, W: maxX + 16, H: top + (rows.length - 1) * rowH + (o.extraH || 18) };
 }
@@ -549,23 +637,22 @@ function phosphoSVG(chains, head = 'choline', o = {}) {
 // sphingolipid: sphingosine backbone, fatty acid joined by an AMIDE, and phosphocholine (sphingomyelin) or a sugar (cerebroside)
 function sphingoSVG(f, kind = 'myelin', o = {}) {
   const sz = 16, top = 46, rowH = 62, left = 'CH3(CH2)12CH=CH–', colX = 12 + tokW(left, sz); let g = '';
-  g += row(12, top, [left], { size: sz }).g + row(colX, top, ['CH–OH'], { size: sz }).g;
-  const cxc = colX + tokW('C', sz) / 2 + 1;
-  g += vbond(cxc, top + 7, top + rowH - 18);
-  const y2 = top + rowH, r2 = row(colX, y2, ['CH–NH–', { t: 'C', up: 'O' }, '–' + chainR(f)], { size: sz }); g += r2.g;
-  g += vbond(cxc, y2 + 7, y2 + rowH - 18);
-  const y3 = y2 + rowH; let r3, extraH = 18;
-  if (kind === 'myelin') { r3 = row(colX, y3, ['CH2–O–', { t: 'P', up: 'O', dn: 'O^-' }, '–O–' + HEADS.choline], { size: sz }); extraH = 50; }
+  const r1r = row(12, top, [left, 'CH–OH'], { size: sz }); g += r1r.g;
+  const al = r1r.id + ':1';
+  const y2 = top + rowH, r2 = row(colX, y2, ['CH–NH–', { t: 'C', up: 'O' }, '–' + chainR(f)], { size: sz, alignTo: al, vbTo: y2 + rowH - 18 }); g += r2.g;
+  g += `<line class="fvb fvb-top" data-from="${r2.id}" x1="${r1(colX + tokW('C', sz) / 2 + 1)}" y1="${r1(top + 7)}" x2="${r1(colX + tokW('C', sz) / 2 + 1)}" y2="${r1(y2 - 18)}" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>`;
+  const y3 = y2 + rowH; let r3, extraH = 18, extra = '';
+  if (kind === 'myelin') { r3 = row(colX, y3, ['CH2–O–', { t: 'P', up: 'O', dn: 'O^-' }, '–O–' + HEADS.choline], { size: sz, alignTo: al }); extraH = 50; }
   else {
-    r3 = row(colX, y3, ['CH2–O–'], { size: sz });
+    r3 = row(colX, y3, ['CH2–O–'], { size: sz, alignTo: al });
     const hx = r3.x + 4, hy = y3 - 6, R = 20, hp = [];
     for (let k = 0; k < 6; k++) { const a = Math.PI / 6 + k * Math.PI / 3; hp.push([hx + R + R * Math.cos(a), hy + R * Math.sin(a)]); }
-    let s = ''; for (let k = 0; k < 6; k++) s += Ln(hp[k], hp[(k + 1) % 6], { w: 2.2 });
-    s += `<circle cx="${r1(hp[4][0])}" cy="${r1(hp[4][1])}" r="8" fill="#fff"/>` + T(hp[4][0], hp[4][1] + 6, 'O', { size: 15, a: 'middle' });
-    s += T(hx + R, hy + R + 30, 'galactose', { size: 13, a: 'middle', fill: '#5b6684', w: 700 });
-    r3 = { g: r3.g + s, x: hx + 2 * R + 30 }; extraH = 54;
+    let s2 = ''; for (let k = 0; k < 6; k++) s2 += Ln(hp[k], hp[(k + 1) % 6], { w: 2.2 });
+    s2 += `<circle cx="${r1(hp[4][0])}" cy="${r1(hp[4][1])}" r="8" fill="#fff"/>` + T(hp[4][0], hp[4][1] + 6, 'O', { size: 15, a: 'middle' });
+    s2 += T(hx + R, hy + R + 30, 'galactose', { size: 13, a: 'middle', fill: '#5b6684', w: 700 });
+    extra = `<g class="fafter" data-after="${r3.id}" data-x="${r1(hx)}">${s2}</g>`; extraH = 54; r3 = { g: r3.g, x: hx + 2 * R + 30 };
   }
-  g += r3.g;
+  g += r3.g + extra;
   const W = Math.max(r2.x, r3.x) + 16;
   return svgWrap(W, y3 + extraH, g, o.label || (kind === 'myelin' ? 'Sphingomyelin: a sphingosine backbone with one fatty acid joined by an amide bond and a phosphocholine head' : 'Cerebroside: a sphingosine backbone with one fatty acid joined by an amide bond and a sugar'), 'art mol', ` style="max-width:${Math.round(W * 1.06)}px"`);
 }
@@ -624,9 +711,9 @@ function steroidSVG(kind = 'cholesterol', o = {}) {
   bonds.forEach(b => {
     let p = P(b.a), q = P(b.b);
     if (lab.has(b.b)) q = [p[0] + (q[0] - p[0]) * 0.62, p[1] + (q[1] - p[1]) * 0.62];
-    g += b.d ? dbl(p, q, b.t ? P(b.t) : null) : Ln(p, q);
+    g += b.d ? (lab.has(b.b) ? dblC(p, q) : dbl(p, q, b.t ? P(b.t) : null)) : Ln(p, q);
   });
-  labels.forEach(([k, s, a]) => { const p = P(k); g += T(p[0] + (a === 'end' ? 8 : -6), p[1] + 6, s, { a }); });
+  labels.forEach(([k, s]) => { const p = P(k); g += s === 'O' ? T(p[0], p[1] + 6, s, { a: 'middle' }) : /^O/.test(s) ? T(p[0] - 6.5, p[1] + 6, s, { a: 'start' }) : T(p[0] + 6.5, p[1] + 6, s, { a: 'end' }); });
   return svgWrap((MX - mx) * S, (MY - my) * S, g, o.label || `Line structure of ${kind}: a steroid with four fused rings (three six-membered and one five-membered)`, 'art mol', ` style="max-width:${Math.round((MX - mx) * S * 1.2)}px"`);
 }
 
@@ -641,9 +728,9 @@ function skelSVG(atoms, bonds, labels, o = {}) {
     let p = P(a), q = P(b);
     if (lab.has(b)) q = [p[0] + (q[0] - p[0]) * 0.62, p[1] + (q[1] - p[1]) * 0.62];
     if (lab.has(a)) p = [q[0] + (p[0] - q[0]) * 0.62, q[1] + (p[1] - q[1]) * 0.62];
-    g += d === 2 ? dbl(p, q, t ? (atoms[t] ? P(t) : null) : null) : Ln(p, q);
+    g += d === 2 ? ((lab.has(b) || lab.has(a)) ? dblC(p, q) : dbl(p, q, t ? (atoms[t] ? P(t) : null) : null)) : Ln(p, q);
   });
-  labels.forEach(([k, s, a]) => { const p = P(k); g += T(p[0] + (a === 'end' ? 9 : a === 'middle' ? 0 : -3), p[1] + 6, s, { a: a || 'middle' }); });
+  labels.forEach(([k, s]) => { const p = P(k); g += s === 'O' ? T(p[0], p[1] + 6, s, { a: 'middle' }) : /^O/.test(s) ? T(p[0] - 6.5, p[1] + 6, s, { a: 'start' }) : T(p[0] + 6.5, p[1] + 6, s, { a: 'end' }); });
   return svgWrap((MX - mx) * S, (MY - my) * S, g, o.label || 'Line structure', 'art mol', ` style="max-width:${Math.round((MX - mx) * S * (o.zoom || 1.15))}px"`);
 }
 // zig-zag helper in unit coords: start point, list of headings (degrees)
@@ -801,6 +888,7 @@ const TOPICS = {
   sapon: { label: 'Saponification and soap', video: 'sapon' },
   hydrog: { label: 'Hydrogenation', video: 'hydrog' },
   rancid: { label: 'Rancidity and trans fats', video: 'hydrog' },
+  lab: { label: 'Hands-on: build and break fats', video: 'hydro' },
   classify: { label: 'Name the lipid family', video: null },
   hydrolyzable: { label: 'Hydrolyzable or not?', video: 'hydro' },
   steroid: { label: 'Steroids and hormones', video: null },
@@ -813,7 +901,7 @@ const TOPICS = {
 };
 const CATEGORIES = [
   { id: 'fatty', title: 'Fatty Acids', blurb: 'Saturation, cis/trans, omega, melting points', art: 'cat-fatty', fallback: 'molecule', topics: ['satur', 'cistrans', 'omega', 'locate', 'melt', 'names'] },
-  { id: 'reactions', title: 'Fat Reactions', blurb: 'Build, hydrolyze, saponify, hydrogenate', art: 'cat-reactions', fallback: 'react', topics: ['build', 'hydro', 'sapon', 'hydrog', 'rancid'] },
+  { id: 'reactions', title: 'Fat Reactions', blurb: 'Build, hydrolyze, saponify, hydrogenate', art: 'cat-reactions', fallback: 'react', topics: ['lab', 'build', 'hydro', 'sapon', 'hydrog', 'rancid'] },
   { id: 'families', title: 'Lipid Families', blurb: 'Classify, hydrolyzable, steroids, vitamins', art: 'cat-families', fallback: 'lattice', topics: ['classify', 'hydrolyzable', 'steroid', 'eico', 'vitamin'] },
   { id: 'membranes', title: 'Membranes & Health', blurb: 'Bilayers, transport, the clinic', art: 'cat-membranes', fallback: 'water', topics: ['bilayer', 'transport', 'clinic'] }
 ];
@@ -887,7 +975,7 @@ function genLocate() {
 }
 
 /* melting points */
-const mpBag = bag(['high', 'low', 'order', 'state', 'tag', 'kinks']);
+const mpBag = bag(['high', 'low', 'order', 'state', 'tag', 'kinks', 'wax']);
 function genMelt() {
   const k = mpBag.next(), lab = f => `${f.n} (${sh(f)})`;
   if (k === 'high' || k === 'low') {
@@ -914,6 +1002,13 @@ function genMelt() {
     return orderChoices(mcq({ topic: 'melt', tag: 'Solid or liquid?', prompt: `At room temperature (about 25 °C), is ${lab(f)} a solid or a liquid?`, right: solid ? 'Solid' : 'Liquid',
       wrong: [{ html: solid ? 'Liquid' : 'Solid', why: solid ? 'With no kinks, its chains pack tightly.' : 'Its cis kinks keep the chains from packing.', slip: 'mp' }],
       hint: 'Saturated fatty acids (no kinks) are solids; unsaturated (cis) ones are liquids.', solution: `${cap(f.n)} melts at ${f.mp} °C, so at 25 °C it is a <b>${solid ? 'solid' : 'liquid'}</b>. ${solid ? 'Saturated chains pack like pencils in a box.' : 'Cis kinks keep the chains apart.'}`, flags: { melt: 1 } }), ['Solid', 'Liquid']);
+  }
+  if (k === 'wax') {
+    const a = { acid: pick([14, 16, 18]), alc: pick([16, 18, 20]) }, b2 = { acid: a.acid + pick([2, 4]), alc: a.alc + pick([8, 10, 12]) };
+    const hi = chance(0.5), win = hi ? b2 : a, lose = hi ? a : b2, wx = w => fhtml(`CH3(CH2)${w.acid - 2}COO(CH2)${w.alc - 1}CH3`);
+    return mcq({ topic: 'melt', tag: 'Waxes', prompt: `Which wax has the <b>${hi ? 'higher' : 'lower'}</b> melting point?`, right: wx(win),
+      wrong: [{ html: wx(lose), why: hi ? 'Both waxes are fully saturated, so the one with more carbons has more dispersion forces.' : 'Both are saturated; fewer carbons means weaker dispersion forces and a lower melting point.', slip: 'mp' }, { html: 'They melt at the same temperature', why: 'They have different numbers of carbons.' }], n: 3,
+      hint: 'Both waxes are saturated (no C=C), so compare the total number of carbons.', solution: `<b>${wx(win)}</b>. With no kinks in either wax, the ${hi ? 'longer' : 'shorter'} molecule (${win.acid + win.alc} carbons vs ${lose.acid + lose.alc}) has ${hi ? 'more' : 'fewer'} dispersion forces, so it melts ${hi ? 'higher' : 'lower'}. This is why long-chain waxes like carnauba are hard and firm.`, flags: { melt: 1 } });
   }
   if (k === 'tag') {
     const tri = [['tristearin', '3 stearic acid (18:0)', 3], ['tripalmitin', '3 palmitic acid (16:0)', 2], ['triolein', '3 oleic acid (18:1)', 1], ['trilinolein', '3 linoleic acid (18:2)', 0]];
@@ -972,7 +1067,7 @@ const saltList = (chains, M) => { const m = {}; chains.forEach(f => { const s = 
 const WAX = () => ({ acid: pick([16, 16, 18, 14, 26]), alc: pick([26, 28, 30, 32]) });
 const acidOfC = c => ({ 12: 'lauric acid', 14: 'myristic acid', 16: 'palmitic acid', 18: 'stearic acid', 26: 'cerotic acid' }[c]);
 
-const bdBag = bag(['water', 'wax', 'type', 'tagpick', 'glycerol', 'waxmp']);
+const bdBag = bag(['water', 'wax', 'type', 'tagpick', 'glycerol', 'waxmp', 'oilfat', 'oilfat', 'isomer', 'isomer']);
 function genBuild() {
   const k = bdBag.next();
   if (k === 'water') {
@@ -1001,6 +1096,18 @@ function genBuild() {
   if (k === 'glycerol') return mcq({ topic: 'build', tag: 'Glycerol', prompt: 'Every triacylglycerol, fat, oil and glycerophospholipid is built on glycerol. Which is glycerol?', right: 'HOCH<sub>2</sub>–CHOH–CH<sub>2</sub>OH (3 carbons, 3 OH)',
     wrong: [{ html: 'HOCH<sub>2</sub>–CH<sub>2</sub>OH (2 carbons, 2 OH)', why: 'That is ethylene glycol (antifreeze).', slip: 'glycerol' }, { html: 'CH<sub>3</sub>–CHOH–CH<sub>3</sub> (3 carbons, 1 OH)', why: 'That is isopropyl alcohol.', slip: 'glycerol' }, { html: 'HOCH<sub>2</sub>–CO–CH<sub>2</sub>OH (3 carbons, 2 OH, a C=O)', why: 'That is dihydroxyacetone, a sugar.', slip: 'glycerol' }],
     hint: 'Know it from memory: three carbons, each with one OH.', solution: '<b>Glycerol</b> (propane-1,2,3-triol): three carbons, three –OH groups. Each –OH can form one ester.<div class="sol-art">' + glycerolSVG() + '</div>', flags: { build: 1 } });
+  if (k === 'isomer') {
+    const [X, Y] = shuffle([FA('linoleic'), FA('oleic'), FA('palmitic'), FA('stearic'), FA('myristic')]).slice(0, 2);
+    return mcq({ topic: 'build', tag: 'Isomers', grid: true, n: 3, art: tagSVG([Y, X, X]), prompt: `This triacylglycerol has two ${X.n} chains and one ${Y.n} chain. Which structure is a <b>different isomer</b> made from the same three fatty acids?`, right: tagSVG([X, Y, X]), answerText: `the one with ${Y.n} on the middle carbon (C2)`,
+      wrong: [{ html: tagSVG([X, X, Y]), why: `Moving ${Y.n} from the top carbon to the bottom carbon just turns the same molecule upside down. C1 and C3 of glycerol are both CH₂ ends.`, slip: 'same-molecule' }, { html: tagSVG([Y, Y, X]), why: `That one has two ${Y.n} chains, so it is made from different fatty acids.`, slip: 'chain-count' }],
+      hint: 'Glycerol has two end carbons (CH₂) and one middle carbon (CH). Where can the odd fatty acid go?', solution: `Two isomers are possible: <b>${Y.n} on an end carbon</b> (C1, which is the same as C3 once you flip the drawing) or <b>${Y.n} on the middle carbon</b> (C2). Same formula, different arrangement of the chains. <small>(Mirror-image forms are ignored here.)</small>`, flags: { build: 1 } });
+  }
+  if (k === 'oilfat') {
+    const oil = chance(0.5), food = oil ? pick(['Olive oil', 'Canola oil', 'Corn oil', 'Sunflower oil']) : pick(['Lard', 'Beef tallow', 'Butter']);
+    return mcq({ topic: 'build', tag: 'Fats vs oils', prompt: `${food} is ${oil ? 'a liquid' : 'a solid'} at room temperature. Chemically, it is mostly`, right: `triacylglycerols whose fatty acids are mostly ${oil ? 'unsaturated (cis)' : 'saturated'}`,
+      wrong: [{ html: `triacylglycerols whose fatty acids are mostly ${oil ? 'saturated' : 'unsaturated (cis)'}`, why: oil ? 'Saturated chains pack tightly and make a solid. A liquid needs cis kinks.' : 'Cis kinks keep chains apart and make an oil. A solid fat is mostly saturated.', slip: 'mp' }, { html: 'esters of one long-chain fatty acid and one long-chain alcohol', why: 'That describes a wax, not a fat or oil.', slip: 'wax-fat' }, { html: `triacylglycerols with three identical ${oil ? 'unsaturated' : 'saturated'} fatty acids`, why: 'Natural fats and oils are mixed: each glycerol usually carries two or three different fatty acids.' }],
+      hint: 'Both fats and oils are triacylglycerols. What makes one solid and the other liquid?', solution: `Fats and oils are both <b>mixed triacylglycerols</b>. ${oil ? 'Oils (from plants) are rich in cis-unsaturated chains, whose kinks stop packing: liquid.' : 'Animal fats are rich in saturated chains, which pack tightly: solid.'} Most natural triacylglycerols contain two or three different fatty acids.`, flags: { build: 1 } });
+  }
   if (k === 'waxmp') return mcq({ topic: 'build', tag: 'Waxes', prompt: 'Beeswax and carnauba wax are firm and water-repellent. Structurally, a wax is', right: 'one ester of a long-chain fatty acid and a long-chain alcohol',
     wrong: [{ html: 'three fatty acids esterified to glycerol', why: 'That is a triacylglycerol (fat or oil).', slip: 'wax-fat' }, { html: 'a steroid with four fused rings', why: 'Steroids have no ester.' }, { html: 'a glycerol with a phosphate head', why: 'That is a glycerophospholipid.' }],
     hint: 'Waxes have only one ester link and no glycerol.', solution: 'A wax is <b>one ester</b>: long-chain fatty acid + long-chain alcohol (often 14–36 carbons each). Two long nonpolar tails make it waterproof. Hydrolysis gives one acid and one alcohol (a fat gives three acids and glycerol).', flags: { build: 1 } });
@@ -1033,12 +1140,16 @@ function genHydro() {
     steps: [{ ask: 'Is the reaction done in a base (NaOH or KOH)?', choices: [{ html: 'Yes', ok: false, why: k === 'lipase' ? 'Lipase is an enzyme at body pH.' : 'Acid, not base.' }, { html: 'No', ok: true }], why: 'No base, so the fatty acids stay as acids (–COOH).' }, { ask: 'Which pieces come off? Read the three chains and pick the match.', final: true }], flags: { hydro: 1 } });
 }
 
-const spBag = bag(['products', 'products', 'count', 'micelle', 'clean', 'type', 'koh']);
+const spBag = bag(['products', 'products', 'count', 'micelle', 'clean', 'type', 'koh', 'drain']);
 function genSapon() {
   const k = spBag.next(), ch = mixTag();
   if (k === 'count') return { topic: 'sapon', tag: 'Count the NaOH', kind: 'input', placeholder: 'a whole number', art: tagSVG(ch), prompt: 'How many moles of <b>NaOH</b> are needed to completely saponify 1 mole of this triacylglycerol?', answer: '3',
     check(raw) { const v = parseInt(raw, 10); return v === 3 ? { ok: true } : { ok: false, slip: 'naoh-count', note: 'One OH⁻ for each ester bond, and there are three esters.' }; },
     hint: 'One NaOH per ester bond.', solution: '<b>3 NaOH</b>: three esters, one hydroxide each. The products are glycerol + 3 sodium carboxylates (soap).', flags: { sapon: 1 } };
+  if (k === 'drain') { const fat = pick(['bacon grease (mostly tripalmitin and tristearin)', 'solid beef fat (mostly tristearin)', 'old cooking fat (mostly tripalmitin)']);
+    return mcq({ topic: 'sapon', tag: 'Drain cleaner', prompt: `A kitchen drain is clogged with ${fat}. Why does a lye (NaOH) drain cleaner clear it?`, right: 'NaOH saponifies the fat into glycerol and soap, which both dissolve in water and wash away',
+      wrong: [{ html: 'NaOH hydrogenates the fat, turning it into a liquid oil', why: 'Hydrogenation adds H₂ and makes fats more solid, not less.', slip: 'hydrog-hydrolysis' }, { html: 'NaOH melts the fat by raising its melting point', why: 'Raising a melting point would make the clog harder to clear.' }, { html: 'NaOH oxidizes the C=C bonds so the fat turns rancid and breaks up', why: 'Saturated fats have few C=C bonds, and rancidity does not clear clogs.' }],
+      hint: 'What does a base do to the ester bonds of a fat?', solution: 'Lye <b>saponifies</b> the fat: fat + 3 NaOH → glycerol + 3 sodium carboxylates (soap). Insoluble fat becomes water-soluble products, and the soap even helps lift the leftover grease. The reaction also gives off heat.', flags: { sapon: 1 } }); }
   if (k === 'micelle') return mcq({ topic: 'sapon', tag: 'Micelles', prompt: 'In water, soap molecules form micelles around a grease droplet. Where do the nonpolar hydrocarbon tails point?', right: 'Inward, into the grease, away from water',
     wrong: [{ html: 'Outward, toward the water', why: 'The charged –COO⁻ heads face the water; the tails hide from it.', slip: 'micelle' }, { html: 'Randomly in every direction', why: 'The arrangement is very ordered: tails in, heads out.' }, { html: 'Toward each other in two flat layers', why: 'Two flat layers is a bilayer (phospholipids). Soaps with one tail form spheres.' }],
     hint: 'Like dissolves like.', solution: 'A micelle has a <b>nonpolar core</b> (the tails, dissolved in the grease) and an ionic surface (–COO<sup>−</sup> heads in water). Water carries the whole micelle away.', flags: { sapon: 1 } });
@@ -1262,24 +1373,131 @@ const genClinic = factGen('clinic', [
   { tag: 'Omega-3', q: 'A nurse suggests eating salmon twice a week. Which fatty acids are being recommended?', a: 'Omega-3 fatty acids such as EPA and DHA', w: [['Trans fatty acids', 'Trans fats should be avoided.'], ['Saturated fatty acids like stearic acid', 'These raise LDL.'], ['Omega-9 fatty acids only', 'Salmon is known for omega-3.', 'omega-math']], h: 'Fish oil.', s: 'Fatty fish provide the <b>omega-3</b> acids EPA (20:5) and DHA (22:6), which help lower triglycerides.' }
 ]);
 
+
+/* ======================= HANDS-ON: build and break esters (like Peptide Party) =======================
+   Build: tap a fatty acid's –OH and the H of a glycerol –O–H on the same row, then Remove H₂O.
+   Break: tap the ester bond (the C–O between the C=O carbon and the O), then Add H₂O (or NaOH). */
+const GLAB = ['CH2', 'CH', 'CH2'];
+function esterLab(o) {
+  // o: {mode:'build'|'break', base:'water'|'NaOH'|'KOH', wax:bool, chains:[f], target:[indexes to cut] (break)}
+  const n = o.chains.length, st = { formed: o.chains.map(() => o.mode === 'break'), picks: [], cutSel: null, water: 0, done: false, last: null };
+  let area = null;
+  const R = f => f.R || chainR(f);
+  const alcLabel = i => o.wax ? `CH3(CH2)${o.alcC - 2}CH2` : GLAB[i];
+  function rows() {
+    let g = ''; const top = o.wax ? 50 : 50, rowH = 66;
+    const aIds = o.chains.map((_, i) => 'a' + i), M = o.base === 'KOH' ? 'K' : 'Na';
+    o.chains.forEach((f, i) => {
+      const y = top + i * rowH, vb = !o.wax && i < n - 1 ? y + rowH - 18 : null, hl = st.last === i;
+      if (st.formed[i]) {
+        const hits = o.mode === 'break' && !st.done && !st.cut?.[i];
+        g += row(14, y, [alcLabel(i), { t: hits ? '\u2009–\u2009' : '–', hit: hits ? 'alk-' + i : null, sel: st.cutSel === 'alk-' + i }, { t: 'O', fill: hl ? OK : null }, { t: hits ? '\u2009–\u2009' : '–', hit: hits ? 'acyl-' + i : null, sel: st.cutSel === 'acyl-' + i, fill: hl ? OK : null }, { t: 'C', up: 'O' }, '–' + R(f)], { id: aIds[i], vbTo: vb }).g;
+      } else {
+        const cutDone = o.mode === 'break';
+        const sap = cutDone && o.base !== 'water';
+        g += row(14, y, [alcLabel(i), '–O–', { t: 'H', hit: o.mode === 'build' && !st.done ? 'h-' + i : null, sel: st.picks.includes('h-' + i), fill: cutDone ? OK : null }], { id: aIds[i], vbTo: vb }).g;
+        g += row(0, y, sap ? [{ t: `${M}^+ O^-`, fill: OK }, '–', { t: 'C', up: 'O' }, '–' + R(f)] : [{ t: 'HO', hit: o.mode === 'build' && !st.done ? 'oh-' + i : null, sel: st.picks.includes('oh-' + i), fill: cutDone ? OK : null }, '–', { t: 'C', up: 'O' }, '–' + R(f)], { id: 'b' + i, after: aIds.filter((_, j) => !st.formed[j]).join(','), gap: 34 }).g;
+      }
+    });
+    const H = top + (n - 1) * rowH + 22;
+    return svgWrap(760, H, g, o.mode === 'build' ? 'Glycerol and fatty acids, ready to join' : 'A triacylglycerol to break apart', 'art mol labmol', ` style="max-width:820px"`);
+  }
+  const count = () => st.formed.filter(Boolean).length;
+  function status(msg, kind) { const s = area.querySelector('.istatus'); s.className = 'istatus' + (kind ? ' ' + kind : ''); s.innerHTML = msg || ''; }
+  function render() {
+    area.querySelector('.bench').innerHTML = rows();
+    const w = area.querySelector('.wcount'); if (w) w.innerHTML = o.mode === 'build' ? `H<sub>2</sub>O removed: <b>${st.water}</b>` : `${o.base === 'water' ? 'H<sub>2</sub>O' : o.base} added: <b>${st.water}</b>`;
+    area.querySelector('.go').disabled = st.done; area.querySelector('.undo').disabled = st.done;
+  }
+  const brk = o.mode === 'break', baseTxt = o.base === 'water' ? 'H<sub>2</sub>O' : o.base;
+  function mount(a) {
+    area = a; st.cut = {};
+    a.innerHTML = `<ol class="isteps">${o.mode === 'build' ? `<li>Tap the <b>–OH</b> of a fatty acid and the <b>H</b> of the glycerol –O–H on the same row.</li><li>Press <b>Remove H<sub>2</sub>O</b>. Repeat for every ester bond.</li>` : `<li>Tap the <b>ester bond</b> you want to break (a single bond in –O–C(=O)–).</li><li>Press <b>Add ${baseTxt}</b>.${o.target.length < n ? '' : ' Repeat for every ester bond.'}</li>`}</ol>
+     <div class="bench scrollx"></div><div class="ibar"><button type="button" class="btn primary go">${o.mode === 'build' ? '<span class="drop">💧</span><span>Remove H<sub>2</sub>O</span>' : `<span class="drop">💧</span><span>Add ${baseTxt}</span>`}</button><button type="button" class="btn undo">↺ Start over</button><span class="wcount"></span></div><div class="istatus" role="status" aria-live="polite"></div>`;
+    a.querySelector('.bench').addEventListener('click', e => {
+      const h = e.target.closest('[data-hit]'); if (!h || st.done) return; const id = h.dataset.hit;
+      if (brk) { st.cutSel = st.cutSel === id ? null : id; render(); status(st.cutSel ? `Bond selected. Press <b>Add ${baseTxt}</b>.` : ''); return; }
+      const type = id.split('-')[0]; st.picks = st.picks.filter(p => p.split('-')[0] !== type || p === id); st.picks = st.picks.includes(id) ? st.picks.filter(p => p !== id) : st.picks.concat(id); render(); status('');
+    });
+    a.querySelector('.go').onclick = () => {
+      if (st.done) return;
+      if (!brk) {
+        const oh = st.picks.find(p => p.startsWith('oh-')), hh = st.picks.find(p => p.startsWith('h-'));
+        if (!oh || !hh) { status('Tap one <b>–OH</b> (on a fatty acid) and one <b>H</b> (on a glycerol –O–H), then press Remove H<sub>2</sub>O.', 'warn'); return; }
+        const i = +oh.split('-')[1], j = +hh.split('-')[1];
+        if (i !== j) { st.picks = []; render(); status('Join the fatty acid to the glycerol carbon <b>on the same row</b>: each –OH of glycerol makes its own ester.', 'warn'); st.slip = 'row'; return; }
+        st.formed[i] = true; st.water++; st.picks = []; st.last = i; render();
+        const left = n - count(); status(left ? `💧 One H<sub>2</sub>O out, one ester bond in (green). ${left} more to go.` : `🎉 Every ester bond is made: ${plural(st.water, 'water molecule')} removed. Press <b>Check</b>.`, 'ok');
+        return;
+      }
+      if (!st.cutSel) { status(`Tap an ester bond first, then press Add ${baseTxt}.`, 'warn'); return; }
+      const [kind, ii] = st.cutSel.split('-'), i = +ii;
+      if (kind === 'alk') { st.slip = 'wrong-bond'; st.cutSel = null; render(); status('Not that bond. Hydrolysis breaks the bond between the <b>C=O carbon</b> and the O (the acyl C–O). The O stays with the glycerol as –OH.', 'warn'); return; }
+      st.formed[i] = false; st.cut[i] = true; st.water++; st.cutSel = null; st.last = null; render();
+      const left = o.target.filter(t => !st.cut[t]).length;
+      status(`💧 ${o.base === 'water' ? 'Water' : o.base} split the ester: ${o.base === 'water' ? 'the <b>–OH</b> went to the C=O carbon (a new –COOH) and the <b>H</b>' : `the C=O carbon became a <b>carboxylate salt</b> (–COO<sup>−</sup> ${o.base === 'KOH' ? 'K' : 'Na'}<sup>+</sup>), and an <b>H</b>`} went to the glycerol O (a new –OH).${left ? ` ${left} more to go.` : ' Press <b>Check</b>.'}`, 'ok');
+    };
+    a.querySelector('.undo').onclick = () => { if (st.done) return; st.formed = o.chains.map(() => brk); st.cut = {}; st.picks = []; st.cutSel = null; st.water = 0; st.last = null; render(); status(''); };
+    render();
+  }
+  return {
+    mount,
+    checkI() {
+      if (!brk) { if (count() < n) return { ok: null, msg: `Make all ${plural(n, 'ester bond')} first: tap an –OH and an H on the same row, then Remove H<sub>2</sub>O.` }; return { ok: true }; }
+      const cuts = Object.keys(st.cut).map(Number).sort();
+      if (!cuts.length) return { ok: null, msg: `Tap an ester bond, then press Add ${baseTxt}.` };
+      const want = [...o.target].sort();
+      if (cuts.join() === want.join()) return { ok: true };
+      if (cuts.length < want.length && cuts.every(c => want.includes(c))) return { ok: null, msg: `Good so far. ${plural(want.length - cuts.length, 'more ester bond')} to break.` };
+      return { ok: false, slip: 'lipase-sites', msg: o.target.length < n ? 'Pancreatic lipase cuts the esters on the <b>end</b> carbons of glycerol (C1 and C3) and leaves the middle (C2) fatty acid attached. Press Start over and try again.' : 'Break every ester bond.' };
+    },
+    reveal() { if (brk) { st.formed = o.chains.map((_, i) => !o.target.includes(i)); st.cut = {}; o.target.forEach(t => st.cut[t] = true); st.water = o.target.length; } else { st.formed = o.chains.map(() => true); st.water = n; } st.last = null; render(); status(''); },
+    lock() { st.done = true; render(); }
+  };
+}
+const labBag = bag(['build', 'build', 'wax', 'hyd', 'sap', 'sap', 'koh', 'lipase']);
+function genLab() {
+  const k = labBag.next();
+  if (k === 'wax') {
+    const w = WAX(), acid = FAS.find(f => f.c === w.acid && !f.db.length) || { c: w.acid, db: [], n: acidOfC(w.acid) };
+    const L = esterLab({ mode: 'build', wax: true, alcC: w.alc, chains: [acid] });
+    return { topic: 'lab', tag: 'Build a wax', kind: 'lab', ...L, prompt: `Make a <b>wax</b> from ${acid.n || 'this fatty acid'} and the long-chain alcohol ${fhtml(`CH3(CH2)${w.alc - 2}CH2OH`)}.`, answer: `one ester, 1 H<sub>2</sub>O removed: ${fhtml(`CH3(CH2)${w.acid - 2}COO(CH2)${w.alc - 1}CH3`)}`,
+      hint: 'The acid gives up its –OH; the alcohol gives up the H of its –OH. Together they leave as H₂O.', solution: `One ester bond, so <b>1 H<sub>2</sub>O</b> leaves. The wax is ${fhtml(`CH3(CH2)${w.acid - 2}COO(CH2)${w.alc - 1}CH3`)}: the alcohol’s O stays and links to the acid’s C=O carbon.`, flags: { build: 1 } };
+  }
+  const ch = mixTag();
+  if (k === 'build') {
+    const L = esterLab({ mode: 'build', chains: ch });
+    return { topic: 'lab', tag: 'Build a fat', kind: 'lab', ...L, prompt: `Join glycerol to ${countList(ch)} to make a triacylglycerol. Remove one water for each ester bond.`, answer: '3 ester bonds, 3 H<sub>2</sub>O removed',
+      hint: 'Each ester: the fatty acid’s –OH + the H from a glycerol –O–H leave as H₂O.', solution: `Three ester bonds, <b>3 H<sub>2</sub>O</b> removed. Glycerol’s O atoms stay in the fat and link to each fatty acid’s C=O carbon. This is <b>condensation</b> (esterification).`, flags: { build: 1 } };
+  }
+  const base = k === 'sap' ? 'NaOH' : k === 'koh' ? 'KOH' : 'water', target = k === 'lipase' ? [0, 2] : [0, 1, 2];
+  const L = esterLab({ mode: 'break', base, chains: ch, target });
+  const prods = base === 'water' ? countList(ch) : saltList(ch, base === 'KOH' ? 'potassium' : 'sodium');
+  if (k === 'lipase') return { topic: 'lab', tag: 'Lipase digestion', kind: 'lab', ...L, prompt: 'In the small intestine, <b>pancreatic lipase</b> hydrolyzes the ester bonds on the <b>two end carbons</b> of glycerol (C1 and C3) and leaves the middle one. Break the bonds lipase breaks.', answer: 'the top and bottom ester bonds (C1 and C3)',
+    hint: 'C1 and C3 are the CH₂ carbons at the top and bottom of the glycerol column.', solution: `Lipase cuts the C1 and C3 esters: 2 H<sub>2</sub>O in, giving <b>2 free fatty acids + a 2-monoacylglycerol</b> (glycerol with the ${ch[1].n} still on C2). Bile salts carry these into the intestinal cells, where they are rebuilt into fats.`, flags: { hydro: 1 } };
+  return { topic: 'lab', tag: base === 'water' ? 'Break with water' : `Saponify with ${base}`, kind: 'lab', ...L,
+    prompt: base === 'water' ? 'Completely <b>hydrolyze</b> this triacylglycerol (water with an acid catalyst). Break every ester bond.' : `<b>Saponify</b> this triacylglycerol with ${base}. Break every ester bond.`, answer: `glycerol + ${prods}`,
+    hint: 'Break the single bond between each C=O carbon and the O next to it (the acyl C–O). Not the O–CH₂ bond.', solution: `3 ester bonds broken by 3 ${base === 'water' ? 'H<sub>2</sub>O' : base}: <b>glycerol + ${prods}</b>.${base === 'water' ? ' In acid the fatty acids come off as –COOH.' : ' In base the fatty acids come off as salts (soap).'}`, flags: { [base === 'water' ? 'hydro' : 'sapon']: 1 } };
+}
+
 /* ======================= FINAL-EXAM REVIEW (Final Boss bank) ======================= */
 let BANK = null, BANK_LOADING = null;
 function loadBank() {
   if (BANK || BANK_LOADING) return BANK_LOADING;
-  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/lipids.json').then(r => r.json()).then(items => { BANK = items.filter(x => !x.cs); return BANK; }).catch(() => { BANK = []; return BANK; });
+  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/lipids.json').then(r => r.json()).then(items => { BANK = items.filter(x => !x.cs && !x.s && !(x.f || []).some(g => g && g.type !== 'table')); return BANK; }).catch(() => { BANK = []; return BANK; }); // only questions this page can show in full (no drawn structures or graphs)
   return BANK_LOADING;
 }
 const bankBag = { q: [], next() { if (!this.q.length) this.q = shuffle(BANK || []); return this.q.pop(); } };
 function tableHTML(f) { return `<table class="data">${f.head ? `<thead><tr>${f.head.map(h => `<th>${h}</th>`).join('')}</tr></thead>` : ''}<tbody>${f.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>${f.cap ? `<p class="note-small">${f.cap}</p>` : ''}`; }
 function genFinal() {
   if (!BANK || !BANK.length) return null;
-  const x = bankBag.next(), k = +x.k || 0;
+  const x = bankBag.next(), k = 0; // in the bank the correct answer is always c[0]; x.k is the calculator flag, not the key
   const figs = Array.isArray(x.f) ? x.f.filter(f => f.type === 'table').map(tableHTML).join('') : '';
   return mcq({ topic: 'final', tag: 'Final Boss question', prompt: x.q, art: figs, right: x.c[k], wrong: x.c.filter((c, i) => i !== k).map(c => ({ html: c, why: '' })), hint: x.h, solution: x.w, flags: {}, bankId: x.id });
 }
 
 /* ---------- registry ---------- */
-const GENERATORS = { satur: genSaturFixed, cistrans: genCisTrans, omega: genOmega, locate: genLocate, melt: genMelt, names: genNames, build: genBuild, hydro: genHydro, sapon: genSapon, hydrog: genHydrog, rancid: genRancid, classify: genClassify, hydrolyzable: genHydrolyzable, steroid: genSteroid, eico: genEico, vitamin: genVitamin, bilayer: genBilayer, transport: genTransport, clinic: genClinic, final: genFinal };
+const GENERATORS = { satur: genSaturFixed, cistrans: genCisTrans, omega: genOmega, locate: genLocate, melt: genMelt, names: genNames, build: genBuild, hydro: genHydro, sapon: genSapon, hydrog: genHydrog, rancid: genRancid, classify: genClassify, hydrolyzable: genHydrolyzable, steroid: genSteroid, eico: genEico, vitamin: genVitamin, bilayer: genBilayer, transport: genTransport, clinic: genClinic, final: genFinal, lab: genLab };
 function genSaturFixed() {
   const k = saturBag.next(), opts = ['Saturated', 'Monounsaturated', 'Polyunsaturated'];
   if (k === 'which') {
@@ -1339,7 +1557,7 @@ const VIDEOS = {
   hydrog: { id: 'M7VkdbGkPXY', start: 0, title: 'Hydrogenation of Unsaturated Fats', why: 'H₂ adds to C=C; cis and trans.' }
 };
 // Skill Check Prep: one question per Chapter 9 learning goal
-const SKILL_PLAN = ['classify', 'hydrolyzable', 'satur', 'cistrans', 'omega', 'melt', 'build', 'hydro', 'sapon', 'hydrog', 'transport', 'eico'];
+const SKILL_PLAN = ['classify', 'hydrolyzable', 'satur', 'cistrans', 'omega', 'melt', 'lab', 'build', 'hydro', 'sapon', 'hydrog', 'transport', 'eico'];
 const SKILL_N = 10;
 
 const RANKS = [[0, 'Fatty Acid Freshman'], [60, 'Oil Rookie'], [150, 'Ester Explorer'], [300, 'Soap Maker'], [500, 'Membrane Master'], [800, 'Lipid Legend'], [1200, 'Lipid Lab Director']];
@@ -1397,7 +1615,12 @@ function renderChooser() {
   $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span>${artImg(c.art, c.fallback)}<b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
   const open = CATEGORIES.filter(catOn);
   $('chipsWrap').hidden = !open.length;
-  $('chips').innerHTML = open.map(c => `<div class="chip-row"><span>${c.title}</span>${c.topics.map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="stat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`).join('');
+  $('chips').innerHTML = open.map(c => {
+    const all = c.topics.every(t => state.sel.has(t));
+    return `<div class="chip-group"><div class="chip-head"><span class="chip-cat">${c.title}</span><span class="chip-count">${c.topics.filter(t => state.sel.has(t)).length} of ${c.topics.length} on</span><button type="button" class="chip-all" data-all="${c.id}">${all ? 'None' : 'All'}</button></div>
+     <div class="chip-grid">${c.topics.map(t => { const s = P.topic[t], on = state.sel.has(t), pct = s && s.a ? Math.round(s.c / s.a * 100) : null;
+      return `<button type="button" class="chip${on ? ' on' : ''}" data-topic="${t}" aria-pressed="${on}"><span class="chk" aria-hidden="true"></span><span class="chip-txt">${TOPICS[t].label}${s && s.a ? `<small>${s.c} of ${s.a} right</small>` : ''}</span>${pct != null ? `<span class="chip-bar" aria-hidden="true"><i style="width:${pct}%"></i></span>` : ''}</button>`; }).join('')}</div></div>`;
+  }).join('');
   $('skillCard').classList.toggle('on', !!state.quiz);
   $('finalCard').classList.toggle('on', !state.quiz && state.sel.size === 1 && state.sel.has('final'));
 }
@@ -1442,31 +1665,33 @@ function newQuestion(focus) {
   $('topicTag').textContent = T.label; $('subTag').textContent = q.tag || ''; $('subTag').hidden = !q.tag || q.tag === T.label;
   $('quizTag').hidden = !state.quiz; $('quizBar').hidden = !state.quiz;
   if (state.quiz) { $('quizTag').textContent = `Question ${state.quiz.i + 1} of ${state.quiz.plan.length}`; $('quizBar').firstElementChild.style.width = (state.quiz.i / state.quiz.plan.length * 100) + '%'; }
-  $('equation').innerHTML = q.eq || '';
+  $('equation').innerHTML = scripts(q.eq || '');
   $('art').innerHTML = q.art || '';
-  $('prompt').innerHTML = q.prompt;
-  const isChoice = q.kind === 'choice', isAtom = q.kind === 'atom';
+  $('prompt').innerHTML = scripts(q.prompt);
+  const isChoice = q.kind === 'choice', isAtom = q.kind === 'atom', isLab = q.kind === 'lab';
+  $('lab').hidden = !isLab; $('lab').innerHTML = ''; if (isLab) q.mount($('lab'));
   $('answerRow').hidden = isChoice; $('choices').hidden = !isChoice; $('choices').classList.toggle('grid', !!q.grid);
   const longest = isChoice ? Math.max(...q.choices.map(c => stripTags(c.html).length)) : 0;
   $('choices').classList.toggle('cols1', !q.grid && longest > 58); $('choices').classList.toggle('cols2', !q.grid && longest > 22 && longest <= 58);
   $('unit').innerHTML = q.unit || '';
   const inp = $('answer'); inp.value = ''; inp.disabled = false; inp.placeholder = q.placeholder || 'Type your answer';
-  inp.hidden = isAtom; $('unit').hidden = isAtom; $('checkBtn').textContent = 'Check';
-  if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${q.grid || stripTags(c.html).length <= 2 ? '' : `<span class="letter">${'ABCDEF'[i]}</span>`}${c.html}</button>`).join('');
-  $('typingNote').innerHTML = isChoice ? '' : isAtom ? 'Tap a carbon (a corner or end of the zig-zag), then press Check.' : q.topic === 'names' ? 'Type it like <b>18:2</b>.' : 'Type a whole number.';
+  inp.hidden = isAtom || isLab; $('unit').hidden = isAtom || isLab; $('checkBtn').textContent = 'Check';
+  if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${q.grid || stripTags(c.html).length <= 2 ? '' : `<span class="letter">${'ABCDEF'[i]}</span>`}<span class="ctext">${scripts(c.html)}</span></button>`).join('');
+  $('typingNote').innerHTML = isChoice || isLab ? '' : isAtom ? 'Tap a carbon (a corner or end of the zig-zag), then press Check.' : q.topic === 'names' ? 'Type it like <b>18:2</b>.' : 'Type a whole number.';
   $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   const vk = q.video || T.video; setVideoFor(vk); $('videoBtn').hidden = !vk;
   renderChooser(); paintIcons($('play'));
   setMood('idle');
-  if (focus && !isChoice && !isAtom && !coarse()) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+  if (focus && !isChoice && !isAtom && !isLab && !coarse()) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
 }
 
 /* ---------- checking + scoring ---------- */
 function check() {
   const q = state.q; if (!q) return; if (state.done) return next();
   if (q.kind === 'atom') return checkAtom();
+  if (q.kind === 'lab') { const r = q.checkI(); if (r.ok === null) { setFeedback('info', r.msg); return; } return grade(r.ok, r.slip || 'lab', r.msg || ''); }
   const raw = $('answer').value;
   if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
   const res = q.check(raw); grade(res.ok, res.slip, res.note);
@@ -1518,17 +1743,19 @@ function grade(ok, slip, note) {
 function finishQuestion() {
   $('answer').disabled = true; $('checkBtn').textContent = 'Next';
   if (state.q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (state.q.choices[i].ok) b.classList.add('right'); });
+  if (state.q.kind === 'lab') state.q.lock();
   if (state.q.kind === 'atom') document.querySelectorAll('#art .atom').forEach(a => { if (+a.dataset.atom === state.q.atom) a.classList.add('right'); });
   $('nextBtn').hidden = false;
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = scripts(html); }
 function showSolution() {
   const q = state.q; if (!q) return;
   if (!state.done) {
     if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
     state.done = true; state.helped = true; save(); renderStats();
+    if (q.kind === 'lab') q.reveal();
     setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion();
   }
 }
@@ -1553,13 +1780,13 @@ function setGuide(on) {
 }
 function renderGuide() {
   const q = state.q; if (!q._g) q._g = { at: 0, msg: {} };
-  $('guide').innerHTML = q.steps.map((s, i) => {
+  $('guide').innerHTML = scripts(q.steps.map((s, i) => {
     const cls = i < q._g.at ? 'done' : i === q._g.at ? 'current' : 'later', right = s.choices ? s.choices.find(c => c.ok) : null;
     let body = '';
     if (!s.final && i < q._g.at) body = `<div class="gwhy"><b>${right.html}</b>. ${s.why || ''}</div>`;
-    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}">${c.html}</button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
+    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}"><span class="ctext">${c.html}</span></button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
     return `<div class="gstep ${cls}"><div class="gnum">Step ${i + 1} of ${q.steps.length}</div><div class="gask">${s.ask}</div>${body}</div>`;
-  }).join('');
+  }).join(''));
 }
 function guideChoose(i, k) {
   const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
@@ -1638,6 +1865,7 @@ function renderRules() {
 function bind() {
   document.addEventListener('click', e => {
     const cat = e.target.closest('[data-cat]'); if (cat) return toggleCat(cat.dataset.cat);
+    const al = e.target.closest('[data-all]'); if (al) { const c = CATEGORIES.find(x => x.id === al.dataset.all); state.sel.delete('final'); if (c.topics.every(t => state.sel.has(t))) c.topics.forEach(t => state.sel.delete(t)); else c.topics.forEach(t => state.sel.add(t)); return afterSelect(); }
     const tp0 = e.target.closest('[data-topic]'); if (tp0) return toggleTopic(tp0.dataset.topic);
     const ch = e.target.closest('#choices [data-choice]'); if (ch) return choose(+ch.dataset.choice);
     const g = e.target.closest('[data-g]'); if (g) return guideChoose(+g.dataset.g, +g.dataset.k);
@@ -1651,7 +1879,7 @@ function bind() {
   $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
   $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
   $('answer').addEventListener('focus', () => { if (!state.done && $('mascot').dataset.mood === 'idle') setMood('thinking'); });
-  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; setMood('thinking'); const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; setMood('thinking'); const h = $('hintBox'); h.hidden = false; h.innerHTML = scripts(`<b>Hint:</b> ${state.q.hint}`); };
   $('guideBtn').onclick = () => { setMood('thinking'); state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
   $('solBtn').onclick = showSolution;
   const openRules = () => { renderRules(); setMood('thinking', 2500); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };
@@ -1665,6 +1893,16 @@ function pickAtom(at) {
   document.querySelectorAll('#art .atom').forEach(a => { a.classList.remove('on', 'miss'); a.setAttribute('aria-pressed', 'false'); });
   at.classList.add('on'); at.setAttribute('aria-pressed', 'true'); state.atomSel = +at.dataset.atom;
   if (!state.done && $('mascot').dataset.mood === 'idle') setMood('thinking');
+}
+/* exact drawings: measure text once it is on screen (and again when the web fonts arrive) */
+let relayoutQueued = false;
+function relayout() { if (relayoutQueued) return; relayoutQueued = true; requestAnimationFrame(() => { relayoutQueued = false; try { layoutRows(document); } catch (e) {} }); }
+try { new MutationObserver(ms => { if (ms.some(m => [...m.addedNodes].some(n => n.nodeType === 1 && !n.classList.contains('hitbox')))) relayout(); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+try { document.fonts.ready.then(relayout); document.fonts.addEventListener('loadingdone', relayout); } catch (e) {}
+/* Unicode subscripts (H₂, CO₂, Na⁺) → real <sub>/<sup> outside drawings, so every formula looks the same */
+const SUBS = '₀₁₂₃₄₅₆₇₈₉', SUPS = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁺': '+', '⁻': '−' };
+function scripts(html) {
+  return String(html).split(/(<svg[\s\S]*?<\/svg>)/).map((part, i) => i % 2 ? part : part.replace(/[₀-₉]+/g, m => `<sub>${[...m].map(c => SUBS.indexOf(c)).join('')}</sub>`).replace(/[⁰¹²³⁺⁻]+/g, m => `<sup>${[...m].map(c => SUPS[c]).join('')}</sup>`)).join('');
 }
 function init() {
   load(); bind();

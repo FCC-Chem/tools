@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mirror Match • Stereochemistry • Dr. Dan</title>
+<meta name="description" content="CHEM 3B stereochemistry practice: find chiral carbons, count stereoisomers, tell enantiomers from diastereomers on wedge-and-dash drawings, cis and trans alkenes and rings, D and L sugars and amino acids from Fischer projections, and chiral drugs.">
+<link rel="icon" type="image/webp" href="assets/mascot/mira-idle.webp">
+<style>
+:root{
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#6f7890;--line:#e3e6f0;--line2:#d5d9e8;
+ --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
+ --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
+ --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
+ --font:Nunito,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--font-display:Fredoka,Nunito,system-ui,sans-serif;--serif:Cambria,"Times New Roman",serif}
+*{box-sizing:border-box}html{scroll-padding-top:calc(var(--topbar) + 12px)}
+body{margin:0;background:linear-gradient(180deg,#eef0fb 0,var(--bg) 340px);color:var(--ink);font:16.5px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.tb-brand,.play-title,summary,.btn.primary{font-family:var(--font-display)}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
+[hidden]{display:none!important}
+.ui{width:1.05em;height:1.05em;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:#ffffffe6;backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+html.dd-embedded .topbar{position:relative}
+.tb{max-width:1180px;margin:auto;min-height:var(--topbar);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:1.12rem;white-space:nowrap;margin-right:auto}.tb-brand img{width:40px;height:40px;display:block}
+.seg{display:inline-flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:8px 18px;font-weight:800;color:var(--muted);min-height:46px;white-space:nowrap}
+.seg button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+.tb-xp{display:flex;align-items:center;gap:9px;min-width:160px}.tb-xp .ico{width:34px;height:34px;display:grid;place-items:center;background:var(--lav);border-radius:10px;color:var(--accent-d)}
+.tb-xp b{display:block;font-size:.82rem;line-height:1.1}.tb-xp small{display:block;font-size:.72rem;color:var(--faint);font-weight:700}
+.xpbar{height:6px;width:110px;background:#e9eaf3;border-radius:9px;overflow:hidden;margin:4px 0 2px}.xpbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea);border-radius:9px;transition:width .5s}
+.tb-streak{display:flex;align-items:center;gap:5px;font-weight:800;font-size:.92rem;padding:7px 11px;border-radius:10px;background:var(--rose);color:var(--rose-ink);white-space:nowrap}
+.tb-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;border-radius:11px;padding:7px 13px;font-weight:800;color:#3d4a73;min-height:44px;white-space:nowrap}.tb-btn:hover{background:var(--accent-soft)}
+
+/* page */
+.wrap{max-width:1180px;margin:auto;padding:20px 16px 50px}
+.intro{display:flex;align-items:center;gap:16px;margin-bottom:10px}.intro img{width:112px;height:112px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 14px #4b57d126)}
+.eyebrow{margin:0;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:2px 0 2px;font-size:clamp(1.7rem,3.6vw,2.35rem);line-height:1.1;font-weight:600}
+.lede{margin:0;color:var(--muted)}
+.howto{list-style:none;margin:8px 0 14px;padding:0;display:flex;gap:8px;flex-wrap:wrap}.howto li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 6px;font-size:.95rem;color:#38446a}.howto i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.mode-switch button{display:flex;align-items:center;gap:14px;text-align:left;border:2px solid var(--line2);background:#fff;border-radius:18px;padding:12px 16px;min-height:84px;box-shadow:var(--shadow)}
+.mode-switch button:hover{border-color:#aab2ea}.mode-switch b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.22rem}.mode-switch small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}
+.ms-ico{font-size:1.5rem;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent-d);display:grid;place-items:center;flex:none}
+.mode-switch button.active{border-color:var(--accent);background:linear-gradient(135deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.mode-switch button.active .ms-ico{background:var(--accent);color:#fff}
+
+/* pickers */
+.featured{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.feature-card{display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--line);background:linear-gradient(135deg,#fff,#f7f6ff);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow);min-height:92px}
+.feature-card img{width:60px;height:60px;flex:none}.feature-card b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.15rem}.feature-card small{color:var(--muted);display:block;line-height:1.35}
+.feature-card.active{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.divider{display:flex;align-items:center;gap:12px;margin:14px 2px 12px;color:var(--faint);font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.divider::before,.divider::after{content:"";flex:1;height:2px;background:repeating-linear-gradient(90deg,#d5d9ea 0 8px,transparent 8px 14px)}
+.picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:10px;margin-bottom:16px}
+.pick{display:grid;grid-template-columns:auto 1fr;gap:2px 11px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:11px 12px;box-shadow:var(--shadow);min-height:74px}
+.pick:hover{border-color:#b9bfe8}.pick.active{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.pick img{grid-row:span 3;width:48px;height:48px}.pick b{font-size:.98rem;line-height:1.25}.pick small{color:var(--muted);font-size:.8rem;line-height:1.3}
+.pick .num{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}.pick.done .num{color:var(--mint-ink)}
+.pick .meter{height:5px;background:#eceef5;border-radius:9px;overflow:hidden;margin-top:4px}.pick .meter span{display:block;height:100%;background:#5cb892}
+.stars{color:#eba52c;letter-spacing:1px;font-size:.85rem}.stars .dim{color:#d5d9e6}
+
+/* play panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);min-width:0}
+main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
+.play-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.play-title{margin:0;font-size:1.2rem;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;font-weight:750;color:#34416a;min-height:48px}.btn:hover{background:#f6f7fc}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;font-size:1.02rem}.btn.primary:hover{background:var(--accent-d)}
+.btn.pulse{border-color:var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tag{font-size:.78rem;font-weight:800;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}.tag.quiz{background:var(--lav);color:#4b4590}
+.coach{display:flex;gap:10px;align-items:flex-start;background:var(--accent);color:#fff;border-radius:14px;padding:11px 15px;margin-bottom:12px;font-size:1.04rem;font-weight:700;line-height:1.4}.coach:empty{display:none}
+.question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:16px}
+.equation{text-align:center;font-size:clamp(1.5rem,5vw,2.3rem);font-weight:800;background:var(--accent-soft);border-radius:var(--r-sm);padding:14px;margin-bottom:12px;overflow-x:auto;color:#26326a;letter-spacing:.02em}
+.equation:empty{display:none}.equation.text{font-size:clamp(1.15rem,3.2vw,1.45rem);font-weight:750;letter-spacing:0}
+.equation u{text-decoration-thickness:3px;text-underline-offset:5px;text-decoration-color:#d1344f}
+.equation sup,.prompt sup,.feedback sup,.detail sup{font-size:.62em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.25}.frac>span:first-child{border-bottom:2.5px solid #26326a;padding:0 8px 4px}.frac>span:last-child{padding:4px 8px 0}
+.prompt{font-size:1.25rem;line-height:1.5;font-weight:650;margin:0}
+.art{display:block;width:100%;max-width:680px;margin:6px auto 12px;height:auto}.art.tall{max-width:230px}.art.sq{max-width:250px}
+table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff}table.data th,table.data td{border:1px solid var(--line2);padding:6px 14px;text-align:center}table.data th{background:#f4f5fb;font-weight:800}
+.answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.2rem;min-height:56px;border:1.5px solid var(--line2);border-radius:12px;background:#fff}
+.answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
+.answer .unit{color:var(--muted);font-weight:800;font-size:1.1rem}
+.answer .btn.primary{min-height:56px;padding:0 24px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:14px}
+.choice{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 16px;min-height:56px;font-size:1.06rem;font-weight:750;color:#2b3760;text-align:left}
+.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
+.tapper{display:flex;justify-content:center;align-items:flex-end;flex-wrap:wrap;gap:4px;margin:4px 0 12px}
+.tapper .digit{min-width:52px;height:66px;border:2px solid var(--line2);border-radius:12px;background:#fff;font:800 2rem/1 var(--font);color:#26326a}
+.tapper .digit.on{background:var(--mint);border-color:#3a9a71;color:var(--mint-ink);transform:translateY(-3px);box-shadow:0 4px 10px #23704f22}
+.tapper .digit.miss{border-color:#d4677a;background:var(--rose)}.tapper .pt{font:800 2.2rem/1 var(--font);color:#26326a;padding:0 2px 6px}
+.tapper .rest{font-weight:800;font-size:1.5rem;color:var(--faint);padding:0 6px 14px}
+.typing-note{font-size:.85rem;color:var(--faint);margin:8px 2px 0}
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
+.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
+.feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
+.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
+.detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
+.calc-tip{font-size:.92rem;color:var(--muted);margin-top:8px}
+.next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
+.hl{font-family:var(--font);font-weight:800;letter-spacing:.03em;white-space:nowrap}
+.d-sig{color:#23704f;background:#dff3e8;border-radius:4px;padding:0 1px}.d-lead,.d-trail{color:#9aa1b4}.d-exp{color:#7a8299;white-space:nowrap}.hl .pt{font-style:normal}
+b.d-sig,b.d-lead,b.d-trail{font-weight:800}
+.legend{font-size:.9rem;opacity:.9}
+mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
+.note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
+
+/* guide */
+.guide-toggle{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px 14px;border:1px solid var(--mint-line);border-radius:var(--r-md);background:var(--mint);cursor:pointer;color:var(--mint-ink);font-weight:800}
+.guide-toggle input{width:22px;height:22px;accent-color:#2f8a64;flex:none;margin:0}.guide-toggle small{display:block;font-weight:600;color:#4b6c60;font-size:.84rem}
+.guide{margin-top:10px;display:grid;gap:8px}
+.gstep{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:10px 12px}
+.gstep.current{border:2px solid #8b95ee;box-shadow:0 4px 14px #4b57d114}.gstep.done{background:#f3fbf7;border-color:#cbe9db}.gstep.later{display:none}
+.gstep .gnum{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}.gstep.done .gnum{color:var(--mint-ink)}
+.gstep .gask{font-weight:700;margin:2px 0 8px;font-size:1.05rem}
+.gstep .gchoices{display:flex;flex-wrap:wrap;gap:7px}.gstep .gchoices .choice{min-height:46px;padding:8px 13px;font-size:1rem}
+.gstep .gwhy{margin-top:7px;font-size:.95rem;color:var(--mint-ink)}.gstep .gwhy.bad{color:var(--rose-ink)}
+
+/* learn */
+.example{border:1px solid #d9ddf3;border-radius:var(--r-md);padding:16px;background:#fbfbff;margin-bottom:14px}
+.ex-label{display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.idea{display:flex;gap:11px;background:var(--amber);border:1px solid var(--amber-line);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:12px;color:#5b4714;font-size:1.04rem}
+.idea ul{margin:4px 0 0;padding-left:20px}
+.ex-steps{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}.ex-steps li{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:10px 13px}
+.ex-steps li b.ok{color:var(--mint-ink)}
+.ex-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+
+/* report */
+.report-score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.report-score b{font-size:2.2rem;color:var(--accent-d);font-family:var(--font-display)}
+.report-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:6px}.report-list li{padding:8px 12px;border-radius:12px;background:var(--rose);border:1px solid var(--rose-line)}.report-list li.ok{background:var(--mint);border-color:var(--mint-line)}
+.quiz-bar{height:8px;border-radius:9px;background:#eceef5;overflow:hidden;margin:-2px 0 12px}.quiz-bar span{display:block;height:100%;background:linear-gradient(90deg,#72c9a8,#7884ea)}
+
+/* progress */
+.section{margin-top:18px;padding:20px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#7a8299;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
+.section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.link-btn{border:0;background:none;color:var(--accent-d);font-weight:750;text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
+.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:750}.reset-btn.armed{background:var(--rose)}
+
+/* videos + details */
+details.section{padding:0}details.section>summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:1.1rem}
+details.section>summary::-webkit-details-marker{display:none}details.section>summary::after{content:'▾';color:var(--faint)}details[open].section>summary::after{transform:rotate(180deg)}
+details.section>summary small{display:block;font-family:var(--font);font-weight:600;color:var(--muted);font-size:.86rem}
+.video-body{padding:0 20px 20px}.lesson-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.lesson-player{aspect-ratio:16/9;background:#1e2538;border-radius:var(--r-md);overflow:hidden}.lesson-player iframe{width:100%;height:100%;border:0;display:block}
+.lesson-meta h3{margin:10px 0 2px;font-size:1rem}.lesson-meta a{color:var(--accent-d);font-weight:750}
+.video-list{display:grid;gap:8px;align-content:start}.lesson-card{display:flex;gap:11px;text-align:left;align-items:start;border:1px solid var(--line);background:#fafbff;border-radius:12px;padding:9px;width:100%}
+.lesson-card img{width:96px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:none;background:#e6e8f2}.lesson-card b{display:block;font-size:.9rem;line-height:1.3}.lesson-card small{display:block;color:var(--muted);font-size:.76rem}.lesson-card.active{border-color:var(--accent);background:var(--accent-soft)}
+.chapter-links{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:16px;padding-top:12px;font-size:.92rem}.chapter-links a{color:var(--accent-d);font-weight:750}
+
+/* rules dialog */
+dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;width:min(820px,calc(100vw - 16px));max-height:90vh}dialog::backdrop{background:#15182b80}
+.modal-head{position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head strong{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.close-btn{width:44px;height:44px;border:1px solid var(--line2);border-radius:10px;background:#fff;font-size:1.2rem}
+.modal-body{overflow:auto;padding:16px 18px;max-height:calc(90vh - 70px)}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfbfe}.rule h3{margin:0 0 4px;font-size:1rem}.rule p{margin:3px 0;font-size:.95rem}
+.rule.wide{grid-column:1/-1}
+
+/* toasts + confetti */
+.toasts{position:fixed;right:16px;bottom:16px;z-index:1100;display:grid;gap:9px;max-width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #ddd6f7;border-radius:14px;padding:10px 13px;box-shadow:0 12px 34px #1f2a4430;font-size:.92rem;transition:opacity .5s,transform .5s}.toast img{width:42px;height:42px}.toast.out{opacity:0;transform:translateY(10px)}
+#celebrationCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
+.foot{text-align:center;font-size:.82rem;color:var(--faint);margin:18px 0 6px}
+
+@media(max-width:760px){
+ .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.tb-brand img{width:34px;height:34px}.tb-xp{min-width:0}.tb-xp .xpbar{width:70px}.tb-btn .lbl{display:none}
+ .topbar{position:relative}
+ .seg button{padding:8px 13px}.intro img{width:64px;height:64px}
+ .mode-switch,.featured{grid-template-columns:1fr}.mode-switch button{min-height:70px}
+ .picker{grid-template-columns:1fr 1fr}.pick{grid-template-columns:1fr;padding:10px}.pick img{grid-row:auto;width:40px;height:40px}
+ main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.1rem}
+ .actions{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
+ .lesson-layout,.rule-grid{grid-template-columns:1fr}.answer input{flex:1 1 100%}.answer .btn.primary{flex:1}.next-row .btn.primary{width:100%}
+ .tapper .digit{min-width:42px;height:58px;font-size:1.7rem}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* chooser (v4) */
+.chooser{margin:6px 0 16px}
+.pick-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px;font-size:1.2rem;font-weight:600}.pick-title small{font-family:var(--font);font-weight:700;color:var(--faint);font-size:.88rem}
+.pick-title.small{font-size:1.05rem;margin-top:14px}
+.stepnum{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.9rem;flex:none}
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cat{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;border:2px solid var(--line2);background:#fff;border-radius:20px;padding:16px 12px 14px;box-shadow:var(--shadow);min-height:180px}
+.cat:hover{border-color:#aab2ea}.cat img{width:86px;height:86px}.cat b{font-family:var(--font-display);font-weight:600;font-size:1.15rem;line-height:1.2}.cat small{color:var(--muted);font-size:.86rem;line-height:1.3}
+.cat .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;color:#fff}
+.cat.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.cat.on .tick{background:var(--accent);border-color:var(--accent)}
+.chips-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:6px 16px 16px;margin-top:12px}
+.chips{display:flex;flex-direction:column;gap:10px}.chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.chip-row>span{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);min-width:150px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);background:#fff;border-radius:99px;padding:9px 16px;min-height:46px;font-weight:800;color:#3d4a73}
+.chip::before{content:'';width:18px;height:18px;border-radius:6px;border:2px solid var(--line2);flex:none}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d)}.chip.on::before{background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5 9-10' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--accent)}
+.chip .stat{font-size:.75rem;color:var(--faint);background:none;padding:0;border-radius:0}
+.skill-card{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;text-align:left;border:1px solid #ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);border-radius:var(--r-lg);padding:12px 16px;box-shadow:var(--shadow)}
+.skill-card img{width:58px;height:58px;flex:none}.skill-card b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.15rem}.skill-card small{color:var(--muted)}.skill-card .go{margin-left:auto;font-size:1.4rem;color:var(--accent-d)}
+.skill-card.on{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.empty{padding:26px 16px;text-align:center;color:var(--muted);font-weight:700;font-size:1.08rem;border:2px dashed var(--line2);border-radius:var(--r-md)}
+.empty .ui{transform:rotate(-90deg)}
+.btn[aria-pressed="true"]{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
+.choices.grid{grid-template-columns:1fr 1fr}.choices.grid .choice b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.12rem}.choices.grid .choice small{display:block;font-weight:700;color:var(--muted);font-size:.9rem;margin-top:2px}
+.art.lab{max-width:600px}.lab-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lab-pair figure{margin:0;text-align:center}.lab-pair figcaption{font-weight:800;color:var(--muted)}
+@media(max-width:760px){.cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:150px;padding:12px 8px}.cat img{width:64px;height:64px}.cat b{font-size:1.02rem}.chip-row>span{min-width:100%}.lab-pair{grid-template-columns:1fr}}
+@media(max-width:760px){table.data{font-size:.95rem}table.data th,table.data td{padding:5px 7px}}
+
+.art.equip{max-width:230px}.eq-choice{display:flex;align-items:center;gap:10px}.eq-choice .art.equip{width:64px;height:70px;margin:0;flex:none}.eq-choice span{font-family:var(--font-display);font-weight:600;font-size:1.05rem}
+
+/* mascot */
+.play-left{display:flex;align-items:center;gap:10px;min-width:0}
+.sleuth{width:86px;height:86px;flex:none;object-fit:contain;transform-origin:50% 85%;margin:-10px 0 -8px -6px}
+.sleuth[data-mood="idle"]{animation:sl-float 3.2s ease-in-out infinite}
+.sleuth[data-mood="thinking"]{animation:sl-tilt 2.4s ease-in-out infinite}
+.sleuth[data-mood="correct"]{animation:sl-bounce .7s ease-out 2}
+.sleuth[data-mood="oops"]{animation:sl-wobble .6s ease-in-out 1}
+.sleuth[data-mood="victory"]{animation:sl-bounce .6s ease-out 3}
+@keyframes sl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}92%{transform:translateY(-1px) scaleY(1)}95%{transform:scaleY(.94)}}
+@keyframes sl-tilt{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes sl-bounce{0%,100%{transform:translateY(0)}35%{transform:translateY(-14px) scale(1.06)}60%{transform:translateY(0) scale(.97,1.03)}}
+@keyframes sl-wobble{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg)}45%{transform:rotate(7deg)}70%{transform:rotate(-4deg)}}
+@media(max-width:760px){.sleuth{width:64px;height:64px}.intro img{width:84px;height:84px}}
+@media(prefers-reduced-motion:reduce){.sleuth{animation:none!important}}
+
+/* phone polish */
+.tapper .digits{display:flex;flex-wrap:nowrap;align-items:flex-end;gap:4px}
+@media(max-width:760px){
+ .answer{gap:8px}.answer input{flex:1 1 0;min-width:0}.answer .unit{flex:none;font-size:1.05rem}.answer .btn.primary{flex:1 1 100%}
+ .tapper .digit{min-width:0;width:min(42px,calc((100vw - 96px) / var(--n)));height:56px;font-size:clamp(1.2rem,6vw,1.7rem);padding:0}
+ .tapper .pt{font-size:1.8rem}.tapper .rest{font-size:1.2rem;padding-bottom:12px}
+ .actions .btn{white-space:nowrap;font-size:.95rem;padding:10px 8px}
+ .pair-zoom{grid-template-columns:1fr}
+}
+.pair-zoom{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:640px;margin:0 auto}.pair-zoom figure{margin:0;text-align:center}.pair-zoom figcaption{font-weight:800;color:var(--muted);margin-top:-4px}.pair-zoom svg{width:100%;height:auto;display:block}
+@media(max-width:760px){html{scroll-padding-top:8px}}
+html.dd-embedded{scroll-padding-top:8px}
+@media(max-width:560px){.pair-zoom{grid-template-columns:1fr;max-width:340px}}
+
+
+/* ===== Mirror Match additions ===== */
+.tb-course{font-weight:800;font-size:.86rem;padding:9px 14px;border-radius:12px;background:#f2e8f7;color:#86509b;white-space:nowrap}
+.cats.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.cats.five .cat{min-height:170px}
+.feature-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.feature-row .skill-card{margin-top:0}
+.skill-card.exam{border-color:#c9cdf6;background:linear-gradient(135deg,#f3f4ff,#fff)}
+/* mascot: ChatGPT art when it exists, a drawn stand-in until then */
+.mascot{width:92px;height:92px;flex:none;position:relative;margin:-10px 0 -8px -6px;transform-origin:50% 85%}
+.mascot img,.mascot svg{width:100%;height:100%;display:block;object-fit:contain}
+.mascot[data-mood="idle"]{animation:sl-float 3.2s ease-in-out infinite}
+.mascot[data-mood="thinking"]{animation:sl-tilt 2.4s ease-in-out infinite}
+.mascot[data-mood="correct"]{animation:sl-bounce .7s ease-out 2}
+.mascot[data-mood="oops"]{animation:sl-wobble .6s ease-in-out 1}
+.mascot[data-mood="victory"]{animation:sl-bounce .6s ease-out 3}
+.mascot .sub-piece{transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
+.mascot-say{position:relative;background:#fff;border:1px solid var(--line2);border-radius:14px;padding:6px 12px;font-weight:800;font-size:.92rem;color:#3d4a73;max-width:260px;line-height:1.3}
+.mascot-say:empty{display:none}
+.mascot-say::before{content:'';position:absolute;left:-7px;top:50%;width:12px;height:12px;background:#fff;border-left:1px solid var(--line2);border-bottom:1px solid var(--line2);transform:translateY(-50%) rotate(45deg)}
+@media(max-width:760px){.mascot{width:66px;height:66px}.mascot-say{display:none}}
+@media(prefers-reduced-motion:reduce){.mascot{animation:none!important}}
+/* question text */
+.equation.eqrxn{font-size:clamp(1.05rem,3vw,1.4rem);font-weight:750;letter-spacing:0;line-height:1.5}
+.equation sub,.prompt sub,.choice sub,.feedback sub,.detail sub,.gstep sub,.rule sub,table.ref sub{font-size:.68em}
+.choice sup,.gstep sup,.rule sup,table.ref sup{font-size:.68em}
+.scenario{font-size:1.08rem;line-height:1.5;margin:0 0 10px;padding:10px 14px;border-left:4px solid #c9b6e0;background:#fff;border-radius:0 10px 10px 0}
+.choices.arrows{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choices.arrows .choice{text-align:center;font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.choices.arrows .choice .big{display:block;font-size:2rem;line-height:1.1}
+@media(max-width:560px){.choices.arrows{grid-template-columns:1fr}.choices.arrows .choice .big{display:inline;font-size:1.3rem;margin-right:6px}}
+/* drawn diagrams */
+.dgm{display:block;width:100%;max-width:560px;height:auto;margin:4px auto 12px}
+.dgm.wide{max-width:680px}.dgm.plot{max-width:460px;background:#fff;border:1.5px solid #e1e6f1;border-radius:14px}
+.dgm text{font-family:var(--font);fill:#2e2b38}
+.dgm .lbl{font-weight:800;font-size:14px}
+.dgm .cap{font-weight:700;font-size:12.5px;fill:#4f5a74}
+.dgm .tick{font-size:11px;fill:#4f5a74}
+.hit{cursor:pointer;outline:none}
+.hit .zone{fill:#4b57d1;fill-opacity:0;stroke:#4b57d1;stroke-opacity:0;stroke-width:3;stroke-dasharray:6 5;transition:fill-opacity .15s,stroke-opacity .15s}
+.hit:hover .zone,.hit:focus-visible .zone{fill-opacity:.08;stroke-opacity:.9}
+.hit.right .zone{fill:#2f9a6c;fill-opacity:.2;stroke:#2f9a6c;stroke-opacity:1;stroke-dasharray:none}
+.hit.wrong .zone{fill:#d1344f;fill-opacity:.14;stroke:#d1344f;stroke-opacity:1}
+.hit .curvezone{fill:none;stroke:#4b57d1;stroke-opacity:0;stroke-width:22;stroke-linecap:round}
+.hit:hover .curvezone,.hit:focus-visible .curvezone{stroke-opacity:.12}
+.hit.right .curvezone{stroke:#2f9a6c;stroke-opacity:.28}.hit.wrong .curvezone{stroke:#d1344f;stroke-opacity:.2}
+.done-dgm .hit{cursor:default}
+.tap-note{text-align:center;font-weight:800;color:var(--accent-d);font-size:.95rem;margin:-4px 0 6px}
+/* cheat sheet tables */
+table.ref{width:100%;border-collapse:collapse;font-size:.95rem;background:#fff}
+table.ref th,table.ref td{border:1px solid var(--line2);padding:6px 9px;text-align:left;vertical-align:top}
+table.ref th{background:#f4f5fb;font-weight:800}
+/* exam practice host */
+#examHost{margin-top:4px}#examHost[hidden]{display:none}
+.exam-note{font-size:.92rem;color:var(--muted);margin:0 0 10px}
+@media(max-width:1100px){.cats.five{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.cats.five{grid-template-columns:1fr 1fr}.feature-row{grid-template-columns:1fr}.cats.five .cat{min-height:140px}}
+@media(max-width:560px){.choices.grid{grid-template-columns:1fr 1fr;gap:7px}.choices.grid .choice{padding:6px 4px}.choices.grid .molbox.mini svg{max-width:132px}.play-head{flex-wrap:nowrap}.play-head .btn{min-height:42px;padding:6px 11px;font-size:.9rem;white-space:nowrap}.play-title{font-size:1.05rem}}
+
+.labcard{max-width:560px;margin:0 auto 12px;border:1.5px solid #cfd6ea;border-radius:14px;overflow:hidden;background:#fff}
+.labhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 12px;background:#eef3fb;font-size:.92rem;color:#3d4a73}
+table.data.lab{width:100%;font-size:1rem}table.data.lab td,table.data.lab th{padding:6px 10px}table.data.lab td:first-child{text-align:left}
+table.data.lab td.hi{color:#b4233d;font-weight:800}
+.cats.six{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.molbox{display:inline-flex;flex-direction:column;align-items:center;background:#fff;border:1.5px solid var(--line2);border-radius:14px;padding:8px 12px;max-width:100%}
+.molbox svg{max-width:100%;height:auto}.molbox.mini{padding:4px 6px;border:0}.molbox.mini svg{max-width:150px}
+.molcap{font:800 1.05rem var(--font-display);color:var(--accent-d);margin-top:2px}
+.molpair{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:stretch}
+#art{text-align:center}
+svg.fischer{width:200px;max-width:100%}svg.fischer .fl{font:800 17px Nunito,Inter,Helvetica,Arial,sans-serif;fill:#2e2b38}
+.choices.grid .molbox.mini{background:transparent}.optletter{display:block;font:700 1.15rem var(--font-display);color:var(--accent-d);text-align:center;margin-bottom:2px}
+</style>
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/textbook/css/widget-base.css">
+<script src="https://itsdrdan.github.io/textbook/js/fbx.js" defer></script>
+</head>
+<body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
+<header class="topbar"><div class="tb">
+ <div class="tb-brand"><img data-art="mascot/mira-idle" data-fb-src="logo.svg" alt="">Mirror Match</div>
+ <span class="tb-course">CHEM 3B · Stereo</span>
+ <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Achiral Atom</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
+ <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
+ <button type="button" class="tb-btn" id="rulesBtn" aria-label="Open the stereochemistry cheat sheet"><span data-icon="book" aria-hidden="true"></span><span class="lbl">Cheat sheet</span></button>
+</div></header>
+<div class="wrap">
+ <section class="intro"><img class="intro-logo" data-art="logo-256" data-fb-src="logo.svg" alt="Mirror Match logo"><div><p class="eyebrow">CHEM 3B · Stereochemistry (Sections 3.2, 5.5, 8.2 and 10.1)</p><h1>Mirror Match</h1><p class="lede">Spot chiral carbons, tell enantiomers from diastereomers, and read wedges, dashes and Fischer projections like a pro.</p></div></section>
+ <section class="chooser" aria-labelledby="pickTitle">
+  <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
+  <div class="cats five" id="cats"></div>
+  <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Topics <small>Tap to turn on or off. Mix as many as you like.</small></h3><div class="chips" id="chips"></div></div>
+  <div class="feature-row">
+   <button type="button" class="skill-card" id="skillCard"><img data-art="skillcheck" data-fb="trophy" alt=""><span><b>Skill Check Prep</b><small>10 questions, one per lecture goal, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+   <button type="button" class="skill-card exam" id="examCard"><img data-art="exam" data-fb="medal" alt=""><span><b>Exam Practice</b><small>Final-exam style multiple choice on chirality and isomers.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  </div>
+ </section>
+ <main class="panel" id="play">
+  <div class="play-head"><div class="play-left"><div class="mascot" id="mascot" data-mood="idle" role="img" aria-label="Mira the mirror is waiting"></div><div><h2 class="play-title" id="playTitle"></h2><div class="mascot-say" id="say"></div></div></div><button type="button" id="skipBtn" class="btn">New question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  <div class="coach" id="coach" role="status" aria-live="polite"></div>
+  <div class="empty" id="emptyBox"><span data-icon="arrow" aria-hidden="true"></span> Pick something above to get your first question.</div>
+  <section id="reportBox" class="example" hidden></section>
+  <div id="examHost" hidden><p class="exam-note">Questions in the style of the final exam. Pick an answer; use the hint if you're stuck.</p><div id="fbxHost"></div></div>
+  <div id="playArea" hidden>
+   <div class="quiz-bar" id="quizBar" hidden><span></span></div>
+   <div class="tags"><span class="tag" id="topicTag"></span><span class="tag" id="subTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
+   <section class="question"><div class="equation" id="equation"></div><div id="scenario"></div><div id="art"></div><p class="prompt" id="prompt"></p></section>
+   <div class="choices" id="choices"></div>
+   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
+   <div class="guide" id="guide" hidden></div>
+   <div class="detail" id="hintBox" hidden></div>
+   <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  </div>
+  <p class="note-small" style="opacity:.8">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+ </main>
+ <section class="panel section" aria-labelledby="progressTitle">
+  <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Achiral Atom</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="badges" id="achGrid"></div>
+  <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. Progress is saved on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
+ </section>
+ <details class="panel section" id="videoSection"><summary><span>Learn with Dr. Dan<small id="videoContext">Videos for this chapter</small></span></summary>
+  <div class="video-body"><div class="lesson-layout"><div><div class="lesson-player"><iframe id="player" title="Dr. Dan video lesson" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="lesson-meta"><h3 id="lessonTitle"></h3><a id="lessonLink" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p class="note-small" style="margin-top:4px">If the video won’t play inside Canvas, use the YouTube link.</p></div></div><div class="video-list" id="videoList"></div></div>
+  <div class="chapter-links"><a href="https://www.youtube.com/playlist?list=PLEaxsqCAZKoCKsxdsJLMbZTqSuBQF2z2f" target="_blank" rel="noopener noreferrer">CHEM 3B playlist ↗</a><a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">More from ItsDrDan on YouTube ↗</a><a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener noreferrer">Dr. Dan’s Chemistry Study Hub ↗</a></div></div>
+ </details>
+ <p class="foot">ItsDrDan · Fresno City College · Practice only, nothing is graded</p>
+</div>
+<dialog id="rulesDialog" aria-labelledby="rulesTitle"><div class="modal-head"><strong id="rulesTitle">Stereochemistry Cheat Sheet</strong><button type="button" class="close-btn" id="closeRules" aria-label="Close the cheat sheet">✕</button></div>
+ <div class="modal-body" id="rulesBody"></div></dialog>
+<script>
+/* ===================== Mirror Match: content (CHEM 3B Sections 3.2, 5.5, 8.2–8.3, 10.1) ===================== */
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const chance = p => Math.random() < p;
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function bag(items) { let left = []; return () => { if (!left.length) left = shuffle(items); return left.pop(); }; }
+const fm = s => String(s).replace(/_(\d+)/g, '<sub>$1</sub>').replace(/\^(\d*[+−-])/g, '<sup>$1</sup>');
+const slug = s => String(s).toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+
+function mcq(o) {
+  const wr = o.wrongs.map(w => (Array.isArray(w) ? { t: w[0], why: w[1], slip: w[2] } : { t: w }));
+  const opts = [{ t: o.right, ok: true }, ...wr];
+  const ordered = o.keep ? opts.sort((a, b) => o.keep.indexOf(a.t) - o.keep.indexOf(b.t)) : shuffle(opts);
+  return Object.assign({ kind: 'choice' }, o, {
+    choices: ordered.map(c => ({ html: o.html ? o.html(c.t) : fm(c.t), ok: !!c.ok, why: c.why ? fm(c.why) : '', slip: c.slip || (c.ok ? '' : (o.slipBase || o.topic) + ':' + slug(c.t)) })),
+    answer: o.html ? o.html(o.right) : fm(o.right), solution: fm(o.solution || ''), hint: fm(o.hint || '')
+  });
+}
+function hitq(o) { return Object.assign({ kind: 'hit' }, o, { solution: fm(o.solution || ''), hint: fm(o.hint || ''), answer: fm(o.answer) }); }
+const mkSteps = arr => arr.map(([ask, right, wrongs, why]) => ({ ask: fm(ask), why: fm(why || ''), choices: shuffle([{ html: fm(right), ok: true }, ...wrongs.map(w => ({ html: fm(w), ok: false }))]) })).concat([{ final: true, ask: 'Now pick your answer above.' }]);
+
+/* ===================== molecule builder (zig-zag chains, drawn by FBX.molSVG from the textbook repo) ===================== */
+// A molecule: atoms [{t, x, y, lab}], bonds [[i, j, order]] with order 4 = wedge, 5 = dash (drawn as single bonds in the graph).
+const DX = 1.299, AMP = 0.375, BL = 1.5;
+const HETERO = { OH: 'O', NH2: 'N', Cl: 'Cl', Br: 'Br', F: 'F', SH: 'S' };
+const GROUP_NAME = { CH3: 'CH_3', Et: 'CH_2CH_3', OH: 'OH', NH2: 'NH_2', Cl: 'Cl', Br: 'Br', F: 'F', SH: 'SH' };
+function chainMol(n, subs) { // subs: [{pos, g, slot:'v'|'e'|'ears', stereo:4|5}]  (pos 0..n-1)
+  const m = { atoms: [], bonds: [], chain: [] };
+  const add = (t, x, y) => { m.atoms.push({ t, x, y, lab: '' }); return m.atoms.length - 1; };
+  for (let i = 0; i < n; i++) { m.chain.push(add('C', i * DX, i % 2 ? -AMP : AMP)); if (i) m.bonds.push([i - 1, i, 1]); }
+  const vdir = i => (m.atoms[m.chain[i]].y < 0 ? -1 : 1);
+  const place = (from, g, x, y, ord, ex, ey) => {
+    if (g === 'CH3') { const a = add('C', x, y); m.bonds.push([from, a, ord]); return a; }
+    if (g === 'Et') { const a = add('C', x, y); m.bonds.push([from, a, ord]); const b = add('C', x + ex, y + ey); m.bonds.push([a, b, 1]); return a; }
+    if (g === '=O') { const a = add('O', x, y); m.bonds.push([from, a, 2]); return a; }
+    const a = add(g, x, y); m.bonds.push([from, a, ord]); return a;
+  };
+  subs.forEach(s => {
+    const c = m.chain[s.pos], A = m.atoms[c], vd = vdir(s.pos);
+    if (s.slot === 'e') { const left = s.pos === 0; const nx = A.x + (left ? -DX : DX), ny = A.y > 0 ? -AMP : AMP; s.atom = place(c, s.g, nx, ny, 1, left ? -DX : DX, ny > 0 ? -2 * AMP : 2 * AMP); return; }
+    if (s.slot === 'ears') { const ang = 40 * Math.PI / 180; [-1, 1].forEach(k => place(c, s.g, A.x + k * BL * Math.sin(ang), A.y + vd * BL * Math.cos(ang), 1, k * DX, vd * 0.75)); s.atom = -1; return; }
+    s.atom = place(c, s.g, A.x, A.y + vd * BL, s.stereo || 1, DX, vd * 0.75);
+    s.bond = m.bonds.length - (s.g === 'Et' ? 2 : 1);
+  });
+  m.subs = subs; return m;
+}
+function adjOf(m) { const adj = m.atoms.map(() => []); m.bonds.forEach(([i, j, o]) => { const ord = o === 2 ? 2 : 1; adj[i].push([j, ord]); adj[j].push([i, ord]); }); return adj; }
+const valence = t => ({ C: 4, O: 2, N: 3, S: 2 }[t] || 1);
+function hCount(m, adj, i) { const t = m.atoms[i].t; if (t !== 'C' && t !== 'O' && t !== 'N') return 0; const used = adj[i].reduce((s, [, o]) => s + o, 0); return Math.max(0, valence(t) - used); }
+function canon(m, adj, i, p) { // rooted canonical string of the branch at i (coming from p)
+  const kids = adj[i].filter(([j]) => j !== p).map(([j, o]) => (o === 2 ? '=' : '') + canon(m, adj, j, i)).sort();
+  const t = m.atoms[i].t; return t + (t === 'C' ? 'H' + hCount(m, adj, i) : '') + '(' + kids.join(',') + ')';
+}
+function chiralOf(m) { const adj = adjOf(m); const out = [];
+  m.atoms.forEach((a, i) => { if (a.t !== 'C') return; const h = hCount(m, adj, i); if (h > 1 || adj[i].some(([, o]) => o === 2)) return;
+    const gs = adj[i].map(([j]) => canon(m, adj, j, i)); for (let k = 0; k < h; k++) gs.push('H'); if (gs.length === 4 && new Set(gs).size === 4) out.push(i); });
+  return out; }
+function molCanon(m) { const adj = adjOf(m); return m.atoms.map((_, i) => canon(m, adj, i, -1)).sort()[0]; }
+function formulaOf(m) { const adj = adjOf(m); const c = { C: 0, H: 0 }; m.atoms.forEach((a, i) => { const t = HETERO[a.t] || a.t; c[t] = (c[t] || 0) + 1; c.H += hCount(m, adj, i) + (a.t === 'OH' || a.t === 'SH' ? 1 : a.t === 'NH2' ? 2 : 0); }); const keys = ['C', 'H', ...Object.keys(c).filter(k => k !== 'C' && k !== 'H').sort()].filter(k => c[k]); return keys.map(k => k + (c[k] > 1 ? c[k] : '')).join(''); }
+// describe the group on carbon i that leads to j, for explanations
+function branchName(m, adj, j, i) { const t = m.atoms[j].t; if (t !== 'C' && t !== 'O') return GROUP_NAME[t] || t;
+  const seen = new Set([i]); const st = [j]; let nc = 0, het = []; let dbl = false; while (st.length) { const k = st.pop(); if (seen.has(k)) continue; seen.add(k); const tk = m.atoms[k].t; if (tk === 'C') nc++; else het.push(GROUP_NAME[tk] || tk); adj[k].forEach(([q, o]) => { if (o === 2) dbl = true; if (!seen.has(q)) st.push(q); }); }
+  if (t === 'O') return 'O';
+  if (dbl && het.includes('O') && het.includes('OH') && nc === 1) return 'COOH';
+  if (dbl && nc === 1 && het.length === 1) return 'CHO';
+  if (!het.length) return nc === 1 ? 'CH_3' : nc === 2 ? 'CH_2CH_3' : `a ${nc}-carbon chain`;
+  if (nc === 1 && het.length === 1) return 'CH_2' + het[0];
+  return `a ${nc}-carbon branch with ${het.join(' and ')}`; }
+function groupsAt(m, i) { const adj = adjOf(m); const g = adj[i].map(([j]) => branchName(m, adj, j, i)); for (let k = 0; k < hCount(m, adj, i); k++) g.push('H'); return g; }
+function whyNot(m, i) { const adj = adjOf(m), h = hCount(m, adj, i); if (adj[i].some(([, o]) => o === 2)) return 'it has a double bond, so it has only three groups';
+  if (h >= 2) return `it has ${h} H atoms`; const gs = adj[i].map(([j]) => canon(m, adj, j, i)); if (h) gs.push('H'); const names = groupsAt(m, i);
+  for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) if (gs[a] === gs[b]) return `two of its groups are the same (two ${names[a] === 'CH_3' ? 'CH_3' : names[a]} groups)`; return 'two of its groups are the same'; }
+const toSpec = (m, cap, opts = {}) => ({ skel: true, a: m.atoms.map(a => [a.t, a.x, a.y, 0, 0, a.lab || '']), b: m.bonds.map(b => b.slice()), cap });
+function drawMol(m, opts = {}) { let s = window.FBX ? FBX.molSVG(toSpec(m), opts.scale || 1) : '<p>Loading the drawing…</p>';
+  if (opts.alt) s = s.replace(/aria-label="[^"]*"/, `aria-label="${opts.alt.replace(/"/g, '')}"`); return `<div class="molbox">${s}${opts.cap ? `<div class="molcap">${opts.cap}</div>` : ''}</div>`; }
+function transform(m, mode) { const c = JSON.parse(JSON.stringify(m)); if (mode === 'mirror') c.atoms.forEach(a => { a.x = -a.x; }); if (mode === 'rotate') c.atoms.forEach(a => { a.x = -a.x; a.y = -a.y; }); return c; }
+const pair = (a, b) => `<div class="molpair">${a}${b}</div>`;
+
+/* random chains */
+const SUBG = ['CH3', 'CH3', 'OH', 'Cl', 'Br', 'NH2', 'Et'];
+function randomChain(opts = {}) {
+  for (let tries = 0; tries < 200; tries++) {
+    const n = opts.n || rint(4, 7), k = opts.k != null ? opts.k : rint(1, Math.min(3, n - 2));
+    const pos = shuffle([...Array(n - 2).keys()].map(x => x + 1)).slice(0, k).sort((a, b) => a - b);
+    const subs = pos.map(p => ({ pos: p, g: pick(opts.groups || SUBG), slot: 'v' }));
+    if (opts.ears && chance(0.3)) { const e = pick(pos); const s = subs.find(x => x.pos === e); s.slot = 'ears'; s.g = 'CH3'; }
+    if (opts.endOH && chance(0.3)) subs.push({ pos: chance(0.5) ? 0 : n - 1, g: pick(['OH', 'Cl', 'Br']), slot: 'e' });
+    const m = chainMol(n, subs); m.n = n; m.chiral = chiralOf(m);
+    if (opts.minChiral != null && m.chiral.length < opts.minChiral) continue;
+    if (opts.maxChiral != null && m.chiral.length > opts.maxChiral) continue;
+    if (opts.noMeso && m.chiral.length >= 2) { const adj = adjOf(m); const env = m.chiral.map(i => canon(m, adj, i, -1)); if (new Set(env).size < env.length) continue; }
+    if (opts.stereo && m.chiral.some(i => !m.subs.find(s => m.chain[s.pos] === i && s.slot === 'v'))) continue;
+    return m;
+  }
+  const f = chainMol(4, [{ pos: 1, g: 'OH', slot: 'v' }]); f.n = 4; f.chiral = chiralOf(f); return f;
+}
+const cname = (m, i) => 'C' + (m.chain.indexOf(i) + 1);
+function stereoVersion(m, signs) { // signs: per chiral center, +1 wedge / −1 dash
+  const subs = m.subs.map(s => Object.assign({}, s, { stereo: undefined }));
+  m.chiral.forEach((ci, k) => { const s = subs.find(x => m.chain[x.pos] === ci && x.slot === 'v'); s.stereo = signs[k] > 0 ? 4 : 5; });
+  const r = chainMol(m.n, subs); r.n = m.n; r.chiral = m.chiral; return r;
+}
+
+/* ===================== 1. Chiral carbons ===================== */
+const TERMS = [
+  ['Chiral', 'not superimposable on its mirror image, like your left and right hands'],
+  ['Achiral', 'superimposable on its mirror image'],
+  ['Chiral carbon', 'a carbon bonded to four different groups (also called a stereocenter)'],
+  ['Stereoisomers', 'same atoms bonded in the same order, but arranged differently in space'],
+  ['Constitutional isomers', 'same molecular formula, but the atoms are bonded in a different order'],
+  ['Enantiomers', 'stereoisomers that are nonsuperimposable mirror images of each other'],
+  ['Diastereomers', 'stereoisomers that are NOT mirror images of each other'],
+  ['Racemic mixture', 'a 50:50 mixture of two enantiomers; it does not rotate plane-polarized light'],
+  ['Optically active', 'able to rotate plane-polarized light, as every chiral compound is'],
+  ['Meso compound', 'a molecule with two or more chiral carbons that is still achiral, because one half of it is the mirror image of the other half; it does not rotate plane-polarized light'],
+  ['Fischer projection', 'a flat drawing of a chiral molecule: horizontal lines come toward you, vertical lines go away'],
+  ['Epimers', 'diastereomers that differ at only one chiral carbon, such as D-glucose and D-galactose'],
+  ['Wedge bond', 'a solid triangle bond that points toward you, out of the page'],
+  ['Dash bond', 'a hashed bond that points away from you, behind the page']
+];
+const TERM_CONFUSE = { Enantiomers: 'Diastereomers', Diastereomers: 'Enantiomers', Chiral: 'Achiral', Achiral: 'Chiral', 'Wedge bond': 'Dash bond', 'Dash bond': 'Wedge bond', Stereoisomers: 'Constitutional isomers', 'Constitutional isomers': 'Stereoisomers', 'Racemic mixture': 'Meso compound', 'Meso compound': 'Racemic mixture', Epimers: 'Enantiomers' };
+const termBag = bag(TERMS.map(t => ['def', t]).concat(TERMS.map(t => ['term', t])));
+function genTerms() {
+  const [mode, [term, def]] = termBag();
+  if (mode === 'def') { const others = shuffle(TERMS.filter(t => t[0] !== term)); const conf = TERM_CONFUSE[term]; const wr = (conf ? [TERMS.find(t => t[0] === conf)] : []).concat(others.filter(t => t[0] !== conf)).slice(0, 3);
+    return mcq({ topic: 'terms', tag: term, prompt: `Which definition matches <b>${term}</b>?`, right: def, wrongs: wr.map(w => [w[1], `That describes ${w[0].toLowerCase()}.`]), solution: `<b>${term}:</b> ${def}.`, hint: 'Think about mirror images and whether the atoms are connected in the same order.' }); }
+  const conf = TERM_CONFUSE[term]; const others = shuffle(TERMS.filter(t => t[0] !== term && t[0] !== conf)).slice(0, conf ? 2 : 3).map(t => t[0]);
+  return mcq({ topic: 'terms', tag: term, prompt: `Which term means: <i>${def}</i>?`, right: term, wrongs: (conf ? [conf] : []).concat(others), solution: `<b>${term}:</b> ${def}.`, hint: 'Match the key idea in the definition to the term.' });
+}
+// true if a letter circle sits on a bond, on another letter, or on an atom label (FBX draws letters as r≈9 circles)
+function labelsCollide(svg) {
+  const num = v => parseFloat(v); const C = [...svg.matchAll(/<circle cx="([\d.-]+)" cy="([\d.-]+)" r="(\d+(?:\.\d+)?)"/g)].map(x => [num(x[1]), num(x[2]), num(x[3])]);
+  const Lz = [...svg.matchAll(/<line x1="([\d.-]+)" y1="([\d.-]+)" x2="([\d.-]+)" y2="([\d.-]+)"/g)].map(x => x.slice(1, 5).map(num));
+  const T = [...svg.matchAll(/<text x="([\d.-]+)" y="([\d.-]+)"([^>]*)>([^<]+)</g)].filter(x => /[A-Z]/.test(x[4])).map(x => [num(x[1]) + (/anchor="start"/.test(x[3]) ? 11 : /anchor="end"/.test(x[3]) ? -11 : 0), num(x[2]) - 6]);
+  const segD = (px, py, [x1, y1, x2, y2]) => { const dx = x2 - x1, dy = y2 - y1, L2 = dx * dx + dy * dy || 1; const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / L2)); return Math.hypot(px - x1 - t * dx, py - y1 - t * dy); };
+  return C.some(([x, y, r], k) => Lz.some(l => segD(x, y, l) < r + 4.5) || C.some(([x2, y2, r2], j) => j > k && Math.hypot(x - x2, y - y2) < r + r2 + 2) || T.some(([tx, ty]) => Math.abs(tx - x) < r + 15 && Math.abs(ty - y) < r + 10));
+}
+function genFind() {
+  for (let t = 0; t < 120; t++) {
+    const m = randomChain({ n: rint(5, 7), minChiral: 1, ears: true, endOH: true });
+    const carbons = m.atoms.map((a, i) => i).filter(i => m.atoms[i].t === 'C');
+    const chir = m.chiral.filter(i => m.chain.includes(i));
+    if (!chir.length) continue;
+    const right = pick(chir); const others = shuffle(carbons.filter(i => !m.chiral.includes(i) && m.chain.includes(i) && i !== right)).slice(0, 3);
+    if (others.length < 3) continue;
+    const labs = shuffle(['a', 'b', 'c', 'd']); [right, ...others].forEach((i, k) => m.atoms[i].lab = labs[k]);
+    const L = i => m.atoms[i].lab;
+    const g = groupsAt(m, right).map(fm).join(', ');
+    const art = drawMol(m, { alt: 'Skeletal structure with four carbons labeled a, b, c and d' }); if (labelsCollide(art)) continue;
+    return mcq({ topic: 'find', tag: 'which carbon', art, prompt: 'Which labeled carbon is a <b>chiral carbon</b>?',
+      right: `Carbon ${L(right)}`, wrongs: others.map(i => [`Carbon ${L(i)}`, `Carbon ${L(i)} is not chiral: ${whyNot(m, i)}.`, 'find:' + (whyNot(m, i).startsWith('it has') ? 'two-H' : 'two-same')]),
+      keep: ['Carbon a', 'Carbon b', 'Carbon c', 'Carbon d'],
+      solution: `Carbon ${L(right)} has four different groups: ${g}. The others each fail the test: ${others.map(i => `${L(i)} (${whyNot(m, i)})`).join('; ')}.`,
+      hint: 'A chiral carbon has four DIFFERENT groups. Count the hidden H atoms on each carbon first: any carbon with 2 or 3 H’s is out.',
+      steps: mkSteps([['How many H atoms are on a CH_2 or CH_3 carbon?', '2 or 3, so it cannot be chiral', ['1, so it might be chiral', 'None'], 'A carbon with two or more H atoms has two identical groups.'], ['Next, look at carbons with one H. What must be true of their other three groups?', 'All three must be different from each other', ['At least two must be the same', 'They must all be carbon chains'], 'Four different groups in total, counting the H.']]) });
+  }
+}
+// curated named molecules, built with the same chain builder
+const NAMED = [
+  ['2-butanol', 4, [{ pos: 1, g: 'OH', slot: 'v' }], 1],
+  ['1-butanol', 4, [{ pos: 3, g: 'OH', slot: 'e' }], 0],
+  ['2-chlorobutane', 4, [{ pos: 1, g: 'Cl', slot: 'v' }], 1],
+  ['3-methylhexane', 6, [{ pos: 2, g: 'CH3', slot: 'v' }], 1],
+  ['3-methylpentane', 5, [{ pos: 2, g: 'CH3', slot: 'v' }], 0],
+  ['2-methylbutane', 4, [{ pos: 1, g: 'CH3', slot: 'v' }], 0],
+  ['lactic acid (made by working muscle)', 3, [{ pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: '=O', slot: 'v' }, { pos: 2, g: 'OH', slot: 'e' }], 1],
+  ['alanine (an amino acid)', 3, [{ pos: 1, g: 'NH2', slot: 'v' }, { pos: 2, g: '=O', slot: 'v' }, { pos: 2, g: 'OH', slot: 'e' }], 1],
+  ['glycine (an amino acid)', 2, [{ pos: 0, g: 'NH2', slot: 'e' }, { pos: 1, g: '=O', slot: 'v' }, { pos: 1, g: 'OH', slot: 'e' }], 0],
+  ['threonine (an amino acid)', 4, [{ pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: 'NH2', slot: 'v' }, { pos: 3, g: '=O', slot: 'v' }, { pos: 3, g: 'OH', slot: 'e' }], 2],
+  ['glycerol (in every triglyceride)', 3, [{ pos: 0, g: 'OH', slot: 'e' }, { pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: 'OH', slot: 'e' }], 0],
+  ['2,3-dibromopentane', 5, [{ pos: 1, g: 'Br', slot: 'v' }, { pos: 2, g: 'Br', slot: 'v' }], 2],
+  ['3-chloro-2-butanol', 4, [{ pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: 'Cl', slot: 'v' }], 2],
+  ['2-bromo-4-methylhexane', 6, [{ pos: 1, g: 'Br', slot: 'v' }, { pos: 3, g: 'CH3', slot: 'v' }], 2]
+];
+const namedBag = bag(NAMED);
+function genCount() {
+  let m, name;
+  if (chance(0.45)) { const [nm, n, subs, expect] = namedBag(); m = chainMol(n, subs.map(s => Object.assign({}, s))); m.n = n; m.chiral = chiralOf(m); name = nm; if (m.chiral.length !== expect) console.warn('named count mismatch', nm); }
+  else { m = randomChain({ n: rint(4, 7), ears: true, endOH: true, maxChiral: 3 }); }
+  const n = m.chiral.length; const right = String(n); const opts = ['0', '1', '2', '3', '4'].filter(x => x !== right);
+  const list = m.chiral.map(i => `${cname(m, i)} (${groupsAt(m, i).map(fm).join(', ')})`).join('; ');
+  return mcq({ topic: 'count', tag: name ? name.split(' (')[0] : 'count', art: drawMol(m, { alt: name ? 'Skeletal structure of ' + name : 'Skeletal structure' }), prompt: `${name ? 'This is <b>' + name + '</b>. ' : ''}How many <b>chiral carbons</b> does this molecule have?`,
+    right, wrongs: shuffle(opts).slice(0, 3).map(x => [x, +x > n ? 'Too many: check each carbon for two H atoms or two identical groups.' : 'Too few: look again at every carbon with exactly one H.', +x > n ? 'count:too-many' : 'count:too-few']),
+    keep: ['0', '1', '2', '3', '4'], solution: n ? `${n} chiral carbon${n > 1 ? 's' : ''}: ${list}.` : 'None. Every carbon has two or more H atoms, two identical groups, or a double bond.',
+    hint: 'Go carbon by carbon. Skip CH_2 and CH_3 carbons and C=O carbons. For each CH, list the four groups and check that all four are different.' });
+}
+// molecules with two matching halves (meso form exists): [name, n, subs]
+const MESO = [
+  ['2,3-dibromobutane', 4, [{ pos: 1, g: 'Br', slot: 'v' }, { pos: 2, g: 'Br', slot: 'v' }]],
+  ['2,3-dichlorobutane', 4, [{ pos: 1, g: 'Cl', slot: 'v' }, { pos: 2, g: 'Cl', slot: 'v' }]],
+  ['butane-2,3-diol', 4, [{ pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: 'OH', slot: 'v' }]],
+  ['2,4-dibromopentane', 5, [{ pos: 1, g: 'Br', slot: 'v' }, { pos: 3, g: 'Br', slot: 'v' }]],
+  ['pentane-2,4-diol', 5, [{ pos: 1, g: 'OH', slot: 'v' }, { pos: 3, g: 'OH', slot: 'v' }]],
+  ['3,4-dichlorohexane', 6, [{ pos: 2, g: 'Cl', slot: 'v' }, { pos: 3, g: 'Cl', slot: 'v' }]],
+  ['tartaric acid (found in grapes)', 4, [{ pos: 0, g: '=O', slot: 'v' }, { pos: 0, g: 'OH', slot: 'e' }, { pos: 1, g: 'OH', slot: 'v' }, { pos: 2, g: 'OH', slot: 'v' }, { pos: 3, g: '=O', slot: 'v' }, { pos: 3, g: 'OH', slot: 'e' }]]
+];
+const mesoBag = bag(MESO);
+function genNstereo() {
+  if (chance(0.2)) {
+    const [name, nn, subs] = mesoBag(); const m = chainMol(nn, subs.map(x => Object.assign({}, x))); m.n = nn; m.chiral = chiralOf(m);
+    return mcq({ topic: 'nstereo', tag: 'meso', art: drawMol(m, { alt: 'Skeletal structure of ' + name }), prompt: `This is <b>${name}</b>. Its two halves match. How many <b>stereoisomers</b> does it have?`,
+      right: '3', wrongs: [['4', '2<sup>2</sup> = 4 is the MAXIMUM. Because the two halves match, two of those four drawings are the same molecule (the meso form).', 'nstereo:missed-meso'], ['2', 'There is a pair of enantiomers, but there is also a third, achiral form: the meso compound.', 'nstereo:meso-two'], ['1', 'Two chiral carbons give more than one stereoisomer.', 'nstereo:formula']], keep: ['1', '2', '3', '4'],
+      solution: `There are 2 chiral carbons (${m.chiral.map(i => cname(m, i)).join(' and ')}), so 2<sup>2</sup> = 4 is the most possible. But the two halves of the molecule match, so one arrangement is a <b>meso compound</b>: it has chiral carbons, yet it is its own mirror image (achiral). Total = <b>3</b>: one pair of enantiomers + the meso form.`,
+      hint: '2<sup>n</sup> is the maximum. When the two halves of a molecule are the same, one stereoisomer is meso (its own mirror image), so you get one fewer.' });
+  }
+  const m = randomChain({ n: rint(5, 7), minChiral: 1, maxChiral: 3, noMeso: true });
+  const n = m.chiral.length, right = String(2 ** n);
+  const wr = [...new Set([String(n), String(2 * n), String(n * n), String(2 ** n + 2), '1'])].filter(x => x !== right).slice(0, 3);
+  return mcq({ topic: 'nstereo', tag: `${n} chiral C`, art: drawMol(m, { alt: 'Skeletal structure' }), prompt: 'How many <b>stereoisomers</b> are possible for this molecule?',
+    right, wrongs: wr.map(x => [x, x === String(n) ? 'That is the number of chiral carbons, not the number of stereoisomers.' : x === String(2 * n) ? 'Each chiral carbon doubles the count; it does not just add 2.' : 'Use 2 to the power of the number of chiral carbons.', x === String(n) ? 'nstereo:n-not-2n' : 'nstereo:formula']),
+    solution: `This molecule has ${n} chiral carbon${n > 1 ? 's' : ''} (${m.chiral.map(i => cname(m, i)).join(', ')}), so the number of stereoisomers is 2^${n} = ${2 ** n}.${n > 1 ? ' Its two halves do not match, so there is no meso form to subtract.' : ''}`.replace(/\^(\d)/, '<sup>$1</sup>'),
+    hint: 'Count the chiral carbons (n). The number of stereoisomers is 2<sup>n</sup> (one fewer only if the molecule has two matching halves and a meso form).' });
+}
+
+/* ===================== 2. Isomer relationships ===================== */
+const RELS = ['Identical (same compound)', 'Enantiomers', 'Diastereomers', 'Constitutional isomers'];
+function genRelate() {
+  const k = pick([1, 2, 2, 3]);
+  const m = randomChain({ n: rint(4, 7), minChiral: k, maxChiral: k, noMeso: true, stereo: true, groups: ['CH3', 'OH', 'Cl', 'Br', 'NH2'] });
+  const kk = m.chiral.length; const A = m.chiral.map(() => (chance(0.5) ? 1 : -1));
+  let target = kk === 1 ? pick(['id', 'en']) : pick(['id', 'en', 'di', 'di']);
+  let Bp = A.slice(); if (target === 'en') Bp = A.map(s => -s); if (target === 'di') { const flip = shuffle([...A.keys()]).slice(0, rint(1, kk - 1)); flip.forEach(f => Bp[f] = -Bp[f]); }
+  const mode = target === 'id' ? pick(['mirror', 'rotate']) : pick(['none', 'none', 'mirror', 'rotate']);
+  const drawn = Bp.map(s => s * (mode === 'mirror' ? -1 : 1));
+  const I = stereoVersion(m, A), II = transform(stereoVersion(m, drawn), mode);
+  const inv = Bp.filter((s, i) => s !== A[i]).length;
+  const right = { id: RELS[0], en: RELS[1], di: RELS[2] }[target];
+  const modeNote = mode === 'mirror' ? ' II is drawn flipped over (turned 180° out of the page): the chain runs the other way AND every wedge became a dash and every dash a wedge. Those two changes cancel, so compare carefully: flipping a molecule over never changes it.' : mode === 'rotate' ? ' II is the same drawing turned 180° in the plane of the page; turning a drawing in the plane never changes a chiral carbon.' : '';
+  return mcq({ topic: 'relate', tag: kk + ' chiral C', art: pair(drawMol(I, { cap: 'I', alt: 'Molecule I with wedge and dash bonds' }), drawMol(II, { cap: 'II', alt: 'Molecule II with wedge and dash bonds' })),
+    prompt: 'Molecules I and II are drawn with wedge and dash bonds. How are they related?', right,
+    wrongs: RELS.filter(r => r !== right).map(r => [r, r === RELS[3] ? 'The atoms are connected in the same order in I and II, so they are not constitutional isomers.' : r === RELS[1] ? 'Enantiomers have EVERY chiral carbon reversed.' : r === RELS[2] ? 'Diastereomers have some, but not all, chiral carbons reversed.' : 'Identical molecules have every chiral carbon the same.', 'relate:' + slug(r)]),
+    keep: RELS, solution: `${kk === 1 ? 'There is one chiral carbon' : `There are ${kk} chiral carbons`}, and ${inv === 0 ? 'none of them is' : inv === kk ? (kk === 1 ? 'it is' : 'all of them are') : `${inv} of ${kk} are`} reversed in II compared with I.${modeNote} ${target === 'id' ? 'Same at every center: identical.' : target === 'en' ? 'Every center reversed: enantiomers (mirror images).' : 'Some but not all reversed: diastereomers.'}`,
+    hint: 'Same connectivity? Then compare each chiral carbon: all reversed = enantiomers, some = diastereomers, none = identical. Careful: a drawing flipped left to right reverses every center even if the wedges look the same.',
+    steps: mkSteps([['Are the atoms connected in the same order in I and II?', 'Yes, so they are the same compound or stereoisomers', ['No, so they are constitutional isomers'], 'Same chain and substituents in the same positions.'], ['If every chiral carbon is reversed, the molecules are…', 'enantiomers', ['diastereomers', 'identical'], 'All reversed = mirror images = enantiomers.']]) });
+}
+function genConstit() {
+  const m = randomChain({ n: rint(4, 6), k: rint(1, 2), groups: ['CH3', 'OH', 'Cl', 'Br'], maxChiral: 3 });
+  const target = pick(['id', 'con', 'con', 'diff']); let B;
+  if (target === 'id') B = transform(m, 'rotate');
+  else if (target === 'con') { for (let t = 0; t < 60; t++) { const subs = m.subs.map(s => Object.assign({}, s)); const s = pick(subs.filter(x => x.slot === 'v')); const free = [...Array(m.n - 2).keys()].map(x => x + 1).filter(p => !subs.some(q => q.pos === p)); if (!free.length) break; s.pos = pick(free); const c = chainMol(m.n, subs); if (molCanon(c) !== molCanon(m)) { B = c; break; } } }
+  if (!B || target === 'diff') { const subs = m.subs.map(s => Object.assign({}, s)); B = chainMol(m.n + 1, subs); }
+  const real = molCanon(B) === molCanon(m) ? 'id' : formulaOf(B) === formulaOf(m) ? 'con' : 'diff';
+  const OPTS = ['Identical (same compound)', 'Constitutional isomers', 'Stereoisomers', 'Not isomers (different formulas)'];
+  const right = { id: OPTS[0], con: OPTS[1], diff: OPTS[3] }[real];
+  return mcq({ topic: 'constit', tag: real, art: pair(drawMol(m, { cap: 'I' }), drawMol(B, { cap: 'II' })), prompt: 'How are compounds I and II related?', right,
+    wrongs: OPTS.filter(o => o !== right).map(o => [o, o === OPTS[2] ? 'Stereoisomers need wedges, dashes or cis–trans to differ; these drawings differ in which atoms are bonded.' : o === OPTS[3] ? 'Count the carbons and other atoms: the formulas match.' : o === OPTS[0] ? 'Number the longest chain from each end: the substituents are on different carbons.' : 'Count the atoms: the formulas are different, so they cannot be isomers.', 'constit:' + slug(o)]),
+    keep: OPTS, solution: `Formula of I: ${fm(formulaOf(m).replace(/(\d+)/g, '_$1'))}; formula of II: ${fm(formulaOf(B).replace(/(\d+)/g, '_$1'))}. ${real === 'id' ? 'Same formula and the same connections (II is I turned around): identical.' : real === 'con' ? 'Same formula but the atoms are connected differently: constitutional isomers.' : 'Different formulas: not isomers at all.'}`,
+    hint: 'Step 1: count atoms (same formula?). Step 2: number the chain from either end: are the groups on the same carbons?' });
+}
+
+/* ===================== 3. Cis–trans ===================== */
+const ALK = { CH3: 'CH3', Et: 'Et', Cl: 'Cl', Br: 'Br', H: 'H' };
+function alkeneMol(a1, a2, b1, b2) { // a1/a2 on left carbon (up/down), b1/b2 on right carbon (up/down); 'H' = implicit
+  const m = { atoms: [{ t: 'C', x: 0, y: 0 }, { t: 'C', x: BL, y: 0 }], bonds: [[0, 1, 2]] };
+  const add = (t, x, y) => { m.atoms.push({ t, x, y, lab: '' }); return m.atoms.length - 1; };
+  const put = (from, g, x, y, ex) => { if (g === 'H') return; if (g === 'CH3' || g === 'Et') { const a = add('C', x, y); m.bonds.push([from, a, 1]); if (g === 'Et') { const b = add('C', x + ex, y); m.bonds.push([a, b, 1]); } return; } const a = add(g, x, y); m.bonds.push([from, a, 1]); };
+  const s = 0.75, h = 1.299; put(0, a1, -s, -h, -BL); put(0, a2, -s, h, -BL); put(1, b1, BL + s, -h, BL); put(1, b2, BL + s, h, BL);
+  return m;
+}
+const CNAME = { 'CH3|CH3': '2-butene', 'CH3|Et': '2-pentene', 'Et|CH3': '2-pentene', 'Et|Et': '3-hexene', 'Cl|Cl': '1,2-dichloroethene', 'Br|Br': '1,2-dibromoethene', 'Cl|CH3': '1-chloropropene', 'CH3|Cl': '1-chloropropene', 'Br|CH3': '1-bromopropene', 'CH3|Br': '1-bromopropene' };
+function genCT() {
+  const kind = pick(['simple', 'simple', 'simple', 'none']);
+  if (kind === 'simple') {
+    const g1 = pick(['CH3', 'CH3', 'Et', 'Cl', 'Br']), g2 = g1 === 'Cl' || g1 === 'Br' ? pick([g1, 'CH3']) : pick(['CH3', 'Et']);
+    const cis = chance(0.5); const up1 = chance(0.5);
+    const m = up1 ? alkeneMol(g1, 'H', cis ? g2 : 'H', cis ? 'H' : g2) : alkeneMol('H', g1, cis ? 'H' : g2, cis ? g2 : 'H');
+    const name = CNAME[g1 + '|' + g2]; const right = cis ? 'cis' : 'trans';
+    return mcq({ topic: 'ct', tag: name, art: drawMol(m, { alt: `Skeletal structure of ${cis ? 'cis' : 'trans'} ${name}`.replace(/(cis|trans) /, '') }), prompt: `This is <b>${name}</b>. Is it the cis or the trans isomer?`, right,
+      wrongs: [[cis ? 'trans' : 'cis', cis ? 'The two non-H groups are on the SAME side of the C=C, which is cis.' : 'The two non-H groups are on OPPOSITE sides of the C=C, which is trans.', 'ct:swap'], ['neither: it has no cis–trans isomers', 'Each C=C carbon has two different groups (one is H), so cis and trans forms exist.', 'ct:neither']],
+      keep: ['cis', 'trans', 'neither: it has no cis–trans isomers'], solution: `The two carbon (or halogen) groups are on ${cis ? 'the same side' : 'opposite sides'} of the double bond: <b>${right}-${name}</b>.`,
+      hint: 'Ignore the H atoms. Are the two remaining groups on the same side of the C=C (cis) or across from each other (trans)?' });
+  }
+  const g = pick(['CH3', 'Et', 'Cl']); const other = pick(['CH3', 'Et']); const flip = chance(0.5);
+  const m = flip ? alkeneMol(g, g, other, 'H') : alkeneMol('H', other, g, g);
+  return mcq({ topic: 'ct', tag: 'no cis–trans', art: drawMol(m, { alt: 'Skeletal structure of an alkene' }), prompt: 'Is this alkene cis, trans, or neither?', right: 'neither: it has no cis–trans isomers',
+    wrongs: [['cis', 'One carbon of the C=C has two identical groups, so swapping them gives the same molecule.', 'ct:ignore-same'], ['trans', 'One carbon of the C=C has two identical groups, so there is no cis or trans.', 'ct:ignore-same']], keep: ['cis', 'trans', 'neither: it has no cis–trans isomers'],
+    solution: 'One carbon of the double bond carries two identical groups. Cis–trans isomers need two DIFFERENT groups on EACH carbon of the C=C.', hint: 'Check each C=C carbon: does it have two different groups attached?' });
+}
+function ringMol(size, p2, g1, g2, s1, s2) { // substituents on ring atom 0 and atom p2, wedge(4)/dash(5)
+  const m = { atoms: [], bonds: [] }; const R = BL / (2 * Math.sin(Math.PI / size));
+  for (let i = 0; i < size; i++) { const a = -Math.PI / 2 + 2 * Math.PI * i / size; m.atoms.push({ t: 'C', x: R * Math.cos(a), y: R * Math.sin(a), lab: '' }); if (i) m.bonds.push([i - 1, i, 1]); }
+  m.bonds.push([size - 1, 0, 1]);
+  [[0, g1, s1], [p2, g2, s2]].forEach(([i, g, st]) => { const a = -Math.PI / 2 + 2 * Math.PI * i / size; const out = g !== 'CH3' && Math.abs(Math.cos(a)) > 0.3 ? BL * 1.22 : BL; m.atoms.push({ t: g === 'CH3' ? 'C' : g, x: (R + out) * Math.cos(a), y: (R + out) * Math.sin(a), lab: '' }); m.bonds.push([i, m.atoms.length - 1, st]); });
+  return m;
+}
+function genRingCT() {
+  const size = pick([5, 6, 6]); const p2 = size === 6 ? pick([1, 2, 3]) : pick([1, 2]); const g = pick(['CH3', 'CH3', 'Cl', 'Br', 'OH']);
+  const s1 = pick([4, 5]); const cis = chance(0.5); const s2 = cis ? s1 : (s1 === 4 ? 5 : 4);
+  const m = ringMol(size, p2, g, g, s1, s2); const ring = size === 6 ? 'cyclohexane' : 'cyclopentane'; const pre = { CH3: 'methyl', Cl: 'chloro', Br: 'bromo', OH: 'hydroxy' }[g];
+  const name = g === 'OH' ? `cyclo${size === 6 ? 'hexane' : 'pentane'}-1,${p2 + 1}-diol` : `1,${p2 + 1}-di${pre}${ring}`;
+  const right = cis ? 'cis' : 'trans';
+  return mcq({ topic: 'ringct', tag: name, art: drawMol(m, { alt: `Ring with two substituents drawn with ${s1 === s2 ? 'the same' : 'different'} wedge and dash bonds` }), prompt: `This is a ${name}. Is it the cis or the trans isomer?`, right,
+    wrongs: [[cis ? 'trans' : 'cis', cis ? 'Both groups are on wedges (or both on dashes): same side of the ring = cis.' : 'One group is on a wedge and the other on a dash: opposite faces of the ring = trans.', 'ringct:swap'], ['neither: rings cannot be cis or trans', 'A ring cannot rotate, so two groups are locked on the same face (cis) or opposite faces (trans).', 'ringct:no-ring-ct']],
+    keep: ['cis', 'trans', 'neither: rings cannot be cis or trans'], solution: `${s1 === s2 ? `Both groups are drawn with ${s1 === 4 ? 'wedges (toward you)' : 'dashes (away from you)'}, so they are on the same face of the ring` : 'One group is on a wedge (toward you) and the other on a dash (away from you), so they are on opposite faces'}: <b>${right}</b>-${name}.`,
+    hint: 'Wedge + wedge or dash + dash = same face = cis. Wedge + dash = trans.' });
+}
+
+/* ===================== 4. Fischer projections, D and L ===================== */
+const SUB = s => s.replace(/(\d)/g, d => '₀₁₂₃₄₅₆₇₈₉'[d]);
+// sugar patterns: OH side for each chiral carbon from the top (C2 down); R = right, L = left. All D (last OH on the right).
+const SUGARS = {
+  'glyceraldehyde': { top: 'CHO', p: 'R' }, 'erythrose': { top: 'CHO', p: 'RR' }, 'threose': { top: 'CHO', p: 'LR' },
+  'ribose': { top: 'CHO', p: 'RRR' }, 'arabinose': { top: 'CHO', p: 'LRR' }, 'xylose': { top: 'CHO', p: 'RLR' },
+  'glucose': { top: 'CHO', p: 'RLRR' }, 'mannose': { top: 'CHO', p: 'LLRR' }, 'galactose': { top: 'CHO', p: 'RLLR' }, 'allose': { top: 'CHO', p: 'RRRR' },
+  'fructose': { top: 'CH2OH', second: 'C=O', p: 'LRR' }, 'psicose': { top: 'CH2OH', second: 'C=O', p: 'RRR' }, 'tagatose': { top: 'CH2OH', second: 'C=O', p: 'LLR' },
+  'ribulose': { top: 'CH2OH', second: 'C=O', p: 'RR' }, 'xylulose': { top: 'CH2OH', second: 'C=O', p: 'LR' }
+};
+const flipP = p => p.split('').map(c => (c === 'R' ? 'L' : 'R')).join('');
+function fischerSVG(top, rows, bottom, opts = {}) { // rows: [[left, right], ...]
+  // Even spacing: top group, then each carbon one bond-length apart, then the bottom group the same distance below the last carbon.
+  const W = opts.w || 200, cx = W / 2, gap = 44, seg = 30, lineTop = 30, n = rows.length;
+  const m = n + (opts.second ? 1 : 0), first = lineTop + seg, last = first + gap * (m - 1), lineEnd = last + seg;
+  // carbon-first labels (CHO, CH2OH, COOH, CH3): the C sits centered on the vertical bond
+  const cLabel = (t, yy) => `<text x="${cx}" y="${yy}" text-anchor="start" class="fl"><tspan dx="-0.34em">${SUB(t)}</tspan></text>`;
+  const L = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#2e2b38" stroke-width="2.6"/>`;
+  let s = cLabel(top, lineTop - 8);
+  if (opts.second) { // ketone carbon (C2): written C on the chain, double bond to O on the right
+    const k = first;
+    s += L(cx, lineTop, cx, k - 12) + L(cx, k + 10, cx, lineEnd);
+    s += `<text x="${cx}" y="${k + 6}" text-anchor="middle" class="fl">C</text>`;
+    s += L(cx + 9, k - 3, cx + 36, k - 3) + L(cx + 9, k + 3, cx + 36, k + 3);
+    s += `<text x="${cx + 40}" y="${k + 6}" text-anchor="start" class="fl">O</text>`;
+  } else s += L(cx, lineTop, cx, lineEnd);
+  let y = first - gap;
+  if (opts.second) y += gap;
+  rows.forEach(([l, r]) => { y += gap; s += `<line x1="${cx - 44}" y1="${y}" x2="${cx + 44}" y2="${y}" stroke="#2e2b38" stroke-width="2.6"/><text x="${cx - 47}" y="${y + 5}" text-anchor="end" class="fl">${SUB(l)}</text><text x="${cx + 47}" y="${y + 5}" text-anchor="start" class="fl">${SUB(r)}</text>`; });
+  s += cLabel(bottom, lineEnd + 20);
+  return `<svg class="dgm fischer" viewBox="0 0 ${W} ${lineEnd + 28}" role="img" aria-label="${opts.alt || 'Fischer projection'}">${s}</svg>`;
+}
+// pattern p (R/L per chiral carbon, top to bottom); rot = drawn turned 180° in the plane (CH2OH on top, sides swapped)
+function patFischer(S, p, opts = {}) { let rows = p.split('').map(c => (c === 'R' ? ['H', 'OH'] : ['HO', 'H'])); let top = S.top, bot = 'CH2OH';
+  if (opts.rot) { rows = rows.reverse().map(([l, r]) => [r === 'OH' ? 'HO' : r, l === 'HO' ? 'OH' : l]); [top, bot] = [bot, top]; }
+  const ket = !!S.second && !opts.rot; // a rotated ketose would put C=O second from the bottom; only aldoses are rotated
+  return fischerSVG(top, rows, bot, { second: ket, alt: opts.alt || `Fischer projection: ${top} at the top${opts.rot ? ' (drawn turned 180 degrees)' : ''}, OH on the ${rows.map(r => (r[1] === 'OH' ? 'right' : 'left')).join(', ')}, ${bot} at the bottom` }); }
+function sugarFischer(name, D = true, cap) { const S = SUGARS[name]; const p = D ? S.p : flipP(S.p); const rows = p.split('').map(c => (c === 'R' ? ['H', 'OH'] : ['HO', 'H']));
+  const alt = `Fischer projection: ${S.top} at the top${S.second ? ', C=O second' : ''}, then OH on the ${p.split('').map(c => (c === 'R' ? 'right' : 'left')).join(', ')}, CH2OH at the bottom`;
+  const svg = fischerSVG(S.top, rows, 'CH2OH', { second: !!S.second, alt }); return `<div class="molbox">${svg}${cap ? `<div class="molcap">${cap}</div>` : ''}</div>`; }
+const AAS = { alanine: 'CH3', serine: 'CH2OH', valine: 'CH(CH3)2', cysteine: 'CH2SH', phenylalanine: 'CH2C6H5', leucine: 'CH2CH(CH3)2' };
+function aaFischer(name, L = true) { const R = AAS[name]; const rows = [L ? ['H2N', 'H'] : ['H', 'NH2']]; return `<div class="molbox">${fischerSVG('COOH', rows, R, { alt: `Fischer projection of ${name}: COOH top, ${R} bottom, NH2 on the ${L ? 'left' : 'right'}` })}</div>`; }
+function genDL() {
+  const name = pick(Object.keys(SUGARS)); const D = chance(0.5); const S = SUGARS[name]; const p = D ? S.p : flipP(S.p);
+  const right = D ? 'D' : 'L';
+  return mcq({ topic: 'dl', tag: name, art: sugarFischer(name, D), prompt: `Is this sugar (${name}) the <b>D</b> or the <b>L</b> form?`, right,
+    wrongs: [[D ? 'L' : 'D', 'Look only at the chiral carbon FARTHEST from the C=O (the one just above CH_2OH).', 'dl:wrong-carbon'], ['Neither: sugars are not D or L', 'Every sugar with a chiral carbon is either D or L.', 'dl:neither']], keep: ['D', 'L', 'Neither: sugars are not D or L'],
+    solution: `The bottom chiral carbon (the one just above CH_2OH) has its OH on the <b>${p.slice(-1) === 'R' ? 'right' : 'left'}</b>, so this is <b>${right}-${name}</b>. Only that carbon decides D or L.`,
+    hint: 'Find the chiral carbon farthest from the C=O. OH on the Right = D; OH on the Left = L.' });
+}
+function genAA() {
+  if (chance(0.15)) return mcq({ topic: 'aa', tag: 'glycine', art: `<div class="molbox">${fischerSVG('COOH', [['H2N', 'H']], 'H', { alt: 'Fischer projection of glycine: COOH top, H bottom, NH2 left, H right' })}</div>`, prompt: 'Glycine is shown. Is it the D or the L form?', right: 'Neither: glycine has no chiral carbon',
+    wrongs: [['L', 'Its α-carbon has two H atoms (one on the side, one at the bottom), so it is not chiral.', 'aa:glycine'], ['D', 'Its α-carbon has two H atoms, so it is not chiral.', 'aa:glycine']], solution: 'Glycine’s R group is H, so its α-carbon has two identical groups. It is the only common amino acid with no D or L form.', hint: 'Look at the R group at the bottom.' });
+  const name = pick(Object.keys(AAS)); const L = chance(0.5); const right = L ? 'L' : 'D';
+  return mcq({ topic: 'aa', tag: name, art: aaFischer(name, L), prompt: `This is ${name}. Is it the <b>D</b> or the <b>L</b> form?`, right,
+    wrongs: [[L ? 'D' : 'L', 'With COOH at the top and the R group at the bottom, NH_2 on the LEFT = L.', 'aa:swap'], ['Can’t tell without knowing the R group', `You don’t need to know the R group: with COOH up and the R group down, only the side the NH_2 is on decides D or L.`, 'aa:need-r']], keep: ['D', 'L', 'Can’t tell without knowing the R group'],
+    solution: `COOH is on top and the R group (${fm(AAS[name].replace(/(\d)/g, '_$1'))}) is at the bottom; NH_2 is on the <b>${L ? 'left' : 'right'}</b>, so this is <b>${right}-${name}</b>. ${L ? 'This is the form found in human proteins.' : 'Human proteins use the L form, so this one is not found in our proteins.'}`,
+    hint: 'COOH up, R group down. NH_2 on the Left = L (the form in your proteins); on the Right = D.' });
+}
+const ALDOSE4 = ['glucose', 'mannose', 'galactose', 'allose'], ALDOSE3 = ['ribose', 'arabinose', 'xylose'], KETOSE6 = ['fructose', 'psicose', 'tagatose'], KETOSE5 = ['ribulose', 'xylulose'];
+function genFischRel() {
+  const set = pick([ALDOSE4, ALDOSE4, ALDOSE3, KETOSE6, KETOSE5]); const a = pick(set); const aD = chance(0.7);
+  const target = pick(['en', 'di', 'di', 'id']); let b = a, bD = aD;
+  if (target === 'en') bD = !aD; if (target === 'di') { b = pick(set.filter(x => x !== a)); bD = aD; }
+  const nm = (n, d) => `${d ? 'D' : 'L'}-${n}`;
+  const pa = aD ? SUGARS[a].p : flipP(SUGARS[a].p), pb = bD ? SUGARS[b].p : flipP(SUGARS[b].p); const diff = [...pa].filter((c, i) => c !== pb[i]).length;
+  // identical pairs are never the same picture: II is turned 180° in the page (aldoses only); other answers sometimes get the same twist
+  const aldose = !SUGARS[a].second; const rot = aldose && (target === 'id' || chance(0.25));
+  if (target === 'id' && !aldose) return genFischRel();
+  const II = `<div class="molbox">${patFischer(SUGARS[b], pb, { rot })}<div class="molcap">II</div></div>`;
+  const R = { id: RELS[0], en: RELS[1], di: RELS[2] }[target];
+  const rotNote = rot ? ' II is drawn turned 180° in the page (CH_2OH on top). Turning a Fischer projection 180° is allowed and does not change the molecule, so turn it back (CHO on top) before you compare.' : '';
+  return mcq({ topic: 'fischrel', tag: `${nm(a, aD)} vs ${nm(b, bD)}`, art: pair(sugarFischer(a, aD, 'I'), II), prompt: 'How are sugars I and II related?', right: R,
+    wrongs: RELS.filter(r => r !== R).map(r => [r, r === RELS[3] ? 'Both have the same formula and the same carbon chain; only the OH positions differ.' : r === RELS[1] ? 'Enantiomers have EVERY OH on the opposite side.' : r === RELS[2] ? 'Diastereomers differ at some, but not all, chiral carbons.' : 'Identical sugars have every OH on the same side.', 'fischrel:' + slug(r)]), keep: RELS,
+    solution: `I is ${nm(a, aD)} and II is ${nm(b, bD)}.${rotNote} ${diff === 0 ? 'Every OH is on the same side: identical.' : diff === pa.length ? 'Every OH is on the opposite side: mirror images, enantiomers.' : `${diff} of ${pa.length} chiral carbons differ: diastereomers${diff === 1 ? ' (epimers, since they differ at only one carbon)' : ''}.`}`,
+    hint: rot ? 'One drawing is upside down. Turn it 180° in your head (CHO back on top, every group swaps sides), then compare the OH sides row by row.' : 'Compare the OH sides row by row: all opposite = enantiomers; some = diastereomers; none = identical.' });
+}
+function genMirror() {
+  const name = pick(['glucose', 'galactose', 'mannose', 'ribose', 'fructose', 'tagatose']); const S = SUGARS[name], p = S.p;
+  const optsP = { all: flipP(p), last: p.slice(0, -1) + flipP(p.slice(-1)), first: flipP(p[0]) + p.slice(1), same: p };
+  const draw = q => `<div class="molbox mini">${patFischer(S, q)}</div>`;
+  const order = shuffle(['all', 'last', 'first', 'same']);
+  const html = t => `<b class="optletter">${t}</b>${draw(optsP[order[['A', 'B', 'C', 'D'].indexOf(t)]])}`;
+  const letter = k => ['A', 'B', 'C', 'D'][order.indexOf(k)];
+  return mcq({ topic: 'mirror', tag: name, art: sugarFischer(name, true, `D-${name}`), prompt: `Which Fischer projection is the <b>enantiomer</b> of D-${name}?`, right: letter('all'), html, grid: true,
+    wrongs: [[letter('last'), 'Only the bottom OH is flipped: that changes D to L but is a diastereomer, not the mirror image.', 'mirror:only-last'], [letter('first'), 'Only one OH is flipped: an epimer (diastereomer).', 'mirror:one'], [letter('same'), 'That is the same molecule.', 'mirror:same']],
+    keep: ['A', 'B', 'C', 'D'], solution: `The enantiomer (L-${name}) has <b>every</b> OH on the opposite side${S.second ? '; the C=O and the CH_2OH groups stay where they are' : ''}. Flipping only the bottom OH gives a different sugar, a diastereomer.`, hint: 'A mirror image flips EVERY chiral carbon, not just the one that decides D or L.' });
+}
+
+/* ===================== 5. Health & clinic ===================== */
+const CLINIC = [
+  { q: 'In the late 1950s, thalidomide was given to pregnant women for morning sickness. One enantiomer is a sedative; the other caused severe birth defects. Why would giving only the “safe” enantiomer not have solved the problem?', a: 'The two enantiomers convert into each other in the body', w: ['Enantiomers always have identical effects in the body', 'The safe enantiomer is not chiral', 'The body cannot absorb a single enantiomer'], why: 'Thalidomide’s chiral carbon interconverts in the body, so a pure enantiomer becomes a mixture of both.', h: 'What happens to the chiral carbon once the drug is in the blood?' },
+  { q: 'Why can two enantiomers of a drug have very different effects in the body?', a: 'Enzymes and receptors are chiral, so they fit only one enantiomer well', w: ['Enantiomers have different molecular formulas', 'Enantiomers have different boiling points', 'One enantiomer is always toxic'], why: 'Enzymes and receptors are built from L-amino acids, so they are chiral. Like a left hand in a right glove, only one enantiomer fits the binding site well.', h: 'Think about a hand fitting into a glove.' },
+  { q: 'Ibuprofen is sold as a racemic mixture. What does that mean?', a: 'It contains equal amounts of both enantiomers', w: ['It contains only one enantiomer', 'It has no chiral carbon', 'It is a meso compound'], why: 'A racemic mixture is a 50:50 mix of two enantiomers. Only one ibuprofen enantiomer relieves pain, but the body converts much of the other one into it.', h: 'Racemic = 50:50.' },
+  { q: 'Esomeprazole (Nexium) is the single active enantiomer of omeprazole (Prilosec), which is a 50:50 mixture. The prefix es- tells you that the drug', a: 'contains only one enantiomer', w: ['is an ester', 'is a racemic mixture', 'is achiral'], why: 'Prefixes such as es-, lev(o)- and dex- mark drugs sold as a single enantiomer (escitalopram, levalbuterol, dexmethylphenidate).', h: 'Compare it with the racemic parent drug.' },
+  { q: 'Levalbuterol is an asthma inhaler that contains only one enantiomer of albuterol. What is a respiratory therapist’s main reason a single-enantiomer drug might be chosen?', a: 'Only one enantiomer opens the airways; the other adds no benefit', w: ['The other enantiomer is a different compound with a different formula', 'Single enantiomers cannot be inhaled', 'Racemic drugs are always illegal'], why: 'For many chiral drugs only one enantiomer binds the target receptor; giving just that one can lower the dose and side effects.', h: 'Which enantiomer actually binds the receptor?' },
+  { q: 'Levodopa (L-DOPA), a treatment for Parkinson’s disease, is given as one specific form. What does the L tell you?', a: 'It is one enantiomer, named like the L-amino acids', w: ['It is a lipid', 'It is a racemic mixture', 'It has no chiral carbon'], why: 'L-DOPA is an amino acid derivative; the L form is the one the body’s enzymes convert into dopamine.', h: 'D and L name the two enantiomers.' },
+  { q: 'Levothyroxine is prescribed for an underactive thyroid. The body’s own thyroid hormone is which form?', a: 'The L form, the same as the drug', w: ['The D form', 'A racemic mixture', 'An achiral molecule'], why: 'Thyroxine is made from the amino acid tyrosine, and the body makes the L form; levothyroxine is that same enantiomer.', h: 'Body proteins and amino acids use which form?' },
+  { q: 'Which form of amino acids is used to build the proteins in your body?', a: 'L-amino acids', w: ['D-amino acids', 'A racemic mixture of both', 'Neither; amino acids are achiral'], why: 'Human proteins are built only from L-amino acids (glycine is achiral).', h: 'Think L for “living proteins.”' },
+  { q: 'Which form of glucose does the body use for energy?', a: 'D-glucose', w: ['L-glucose', 'Both equally', 'Neither; glucose is achiral'], why: 'Our enzymes are specific for D-sugars. L-glucose tastes sweet but is not used for energy.', h: 'Natural sugars are almost all D.' },
+  { q: 'One enantiomer of carvone smells like spearmint; its mirror image smells like caraway (rye bread). This shows that', a: 'smell receptors are chiral and tell enantiomers apart', w: ['the two carvones have different formulas', 'carvone is a meso compound', 'only one carvone is chiral'], why: 'Enantiomers have identical boiling points and formulas, but chiral receptors respond to them differently.', h: 'Your nose works like an enzyme’s active site.' },
+  { q: 'Dextromethorphan is a cough suppressant; its enantiomer levomethorphan is a strong opioid painkiller. What do the prefixes dextro- and levo- refer to?', a: 'The two enantiomers, which rotate plane-polarized light in opposite directions', w: ['The number of chiral carbons', 'Two constitutional isomers', 'Whether the drug is an acid or a base'], why: 'Dextro (+) and levo (−) enantiomers rotate polarized light by the same amount in opposite directions, and they can act very differently in the body.', h: 'Dextro = right, levo = left.' },
+  { q: 'Levobupivacaine, a long-acting local anesthetic, is a single enantiomer of bupivacaine. Why was the single enantiomer developed?', a: 'It is less toxic to the heart than the racemic drug', w: ['It contains no amide group', 'It is achiral, so it is safer', 'It has a different molecular formula'], why: 'The two enantiomers of bupivacaine differ in heart toxicity, so the single, safer enantiomer was developed for anesthesia.', h: 'Enantiomers can differ in side effects, not just in benefit.' },
+  { q: 'A dental anesthetic cartridge contains epinephrine to constrict blood vessels. The body’s own epinephrine is one enantiomer. Its mirror image would most likely', a: 'bind the adrenergic receptors much less effectively', w: ['work exactly the same way', 'have a different molecular formula', 'not be chiral'], why: 'Receptors are chiral, so the unnatural enantiomer fits poorly and is much weaker.', h: 'Left hand, right glove.' },
+  { q: 'A polarimeter shows that a solution does not rotate plane-polarized light, even though the drug in it is chiral. The most likely explanation is that the solution is', a: 'a racemic mixture of both enantiomers', w: ['made of a single enantiomer', 'too concentrated', 'an achiral solvent that blocks the light'], why: 'In a racemic mixture the two enantiomers rotate light by equal amounts in opposite directions, so the rotations cancel.', h: 'What happens when +x and −x are added?' }
+];
+const clinicBag = bag(CLINIC);
+function genClinic() { const x = clinicBag(); return mcq({ topic: 'clinic', tag: 'clinic', prompt: x.q, right: x.a, wrongs: x.w, solution: x.why, hint: x.h }); }
+
+/* ===================== topic table ===================== */
+const TOPICS = {
+  terms: { label: 'Key terms', gen: genTerms, video: 'chiral' },
+  find: { label: 'Spot the chiral carbon', gen: genFind, video: 'tips' },
+  count: { label: 'Count chiral carbons', gen: genCount, video: 'tips' },
+  nstereo: { label: 'How many stereoisomers (2ⁿ)', gen: genNstereo, video: 'chiral' },
+  relate: { label: 'Enantiomers or diastereomers?', gen: genRelate, video: 'chiral' },
+  constit: { label: 'Constitutional vs identical', gen: genConstit, video: 'isomers' },
+  ct: { label: 'Cis or trans alkenes', gen: genCT, video: 'cistrans' },
+  ringct: { label: 'Cis or trans rings', gen: genRingCT, video: 'cistrans' },
+  dl: { label: 'D or L sugars', gen: genDL, video: 'fischer' },
+  aa: { label: 'D or L amino acids', gen: genAA, video: 'aa' },
+  fischrel: { label: 'Compare Fischer projections', gen: genFischRel, video: 'fischer' },
+  mirror: { label: 'Pick the enantiomer', gen: genMirror, video: 'fischer' },
+  clinic: { label: 'Chiral drugs & the body', gen: genClinic, video: 'chiral' }
+};
+const CATEGORIES = [
+  { id: 'chiral', title: 'Chiral Carbons', blurb: 'Spot them, count them, 2ⁿ stereoisomers', art: 'cat-chiral', fallback: 'molecule', topics: ['terms', 'find', 'count', 'nstereo'] },
+  { id: 'relate', title: 'Isomer Relationships', blurb: 'Identical, enantiomers, diastereomers, constitutional', art: 'cat-relate', fallback: 'equilibrium', topics: ['relate', 'constit'] },
+  { id: 'cistrans', title: 'Cis & Trans', blurb: 'Alkenes and rings', art: 'cat-cistrans', fallback: 'react', topics: ['ct', 'ringct'] },
+  { id: 'fischer', title: 'Fischer & D/L', blurb: 'Sugars and amino acids', art: 'cat-fischer', fallback: 'checklist', topics: ['dl', 'aa', 'fischrel', 'mirror'] },
+  { id: 'health', title: 'Health & Clinic', blurb: 'Chiral drugs, racemic mixtures, receptors', art: 'cat-health', fallback: 'medal', topics: ['clinic'] }
+];
+function generate(topic) { let q; for (let t = 0; t < 5 && !q; t++) q = TOPICS[topic].gen(); q.topic = topic; return q; }
+
+/* ===================== Mirror Match: game UI ===================== */
+const $ = id => document.getElementById(id);
+const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
+const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
+const STORE = 'ddMirrorMatch.v1';
+// Art: the game's own ChatGPT-made art in stereochemistry/assets/ is used when it exists; otherwise a brand-kit badge stands in.
+const artSrc = n => `assets/${n}.webp`;
+function artImg(name, fb, alt = '', fbSrc = '') { return `<img src="${artSrc(name)}" data-fb="${fb}"${fbSrc ? ` data-fb-src="${fbSrc}"` : ''} alt="${alt}" loading="lazy" onerror="artFallback(this)">`; }
+function artFallback(img) { if (img.dataset.tried) { img.style.visibility = 'hidden'; return; } img.dataset.tried = 1; img.src = img.dataset.fbSrc || BADGE(img.dataset.fb); }
+function wireArt(root = document) { root.querySelectorAll('img[data-art]').forEach(img => { if (img.dataset.wired) return; img.dataset.wired = 1; img.onerror = () => artFallback(img); img.src = artSrc(img.dataset.art); }); }
+
+const VIDEOS = {
+  chiral: { id: 'RudBXy5lTuU', start: 0, title: 'Introduction to chirality, enantiomers and diastereomers', why: 'Chiral carbons, mirror images and how to compare two stereoisomers.' },
+  tips: { id: '4Z7_TvNmeR4', start: 0, title: 'Tips and tricks to finding chiral carbons', why: 'A fast way to find every chiral carbon, with drug examples.' },
+  cistrans: { id: 'JutTTWvB2wQ', start: 0, title: 'Identifying and naming cis and trans alkenes', why: 'When cis–trans isomers exist and how to name them.' },
+  isomers: { id: 'kEkvxf6e-Ro', start: 0, title: 'Drawing isomers: the 18 isomers of octane', why: 'Constitutional isomers and spotting the same compound drawn two ways.' },
+  fischer: { id: 'fBVx-i_Ehmc', start: 0, title: 'Haworth to Fischer projections: glucose and fructose', why: 'Reading Fischer projections and D vs L sugars.' },
+  aa: { id: 'Y_bXmJDoANI', start: 0, title: 'Drawing amino acids and zwitterions', why: 'Amino acid structure, the α-carbon and L-amino acids.' },
+  final: { id: 'oV83y0awOow', start: 0, title: 'Final exam prep: GOB mock test', why: 'Mixed general, organic and biochemistry practice.' }
+};
+// Skill Check Prep: one question for each stereochemistry learning objective (Sections 3.2, 5.5, 8.2, 10.1)
+const SKILL_PLAN = ['terms', 'find', 'count', 'nstereo', 'relate', 'constit', 'ct', 'ringct', 'dl', 'aa', 'fischrel', 'clinic'];
+const SKILL_N = 10;
+
+const RANKS = [[0, 'Achiral Atom'], [60, 'Mirror Image'], [150, 'Chiral Carbon'], [300, 'Wedge Wizard'], [500, 'Enantiomer Expert'], [800, 'Diastereomer Detective'], [1200, 'Stereo Superstar']];
+const tc = (P, ts) => [].concat(ts).reduce((n, t) => n + (P.topic[t] ? P.topic[t].c : 0), 0);
+const ACH = [
+  ['first', 'First Reflection', 'Get your first answer right', 'ach-first', 'stars', P => P.correct >= 1],
+  ['streak5', 'Left Hand, Right Hand', '5 right in a row', 'ach-streak5', 'stars', P => P.best >= 5],
+  ['streak10', 'Perfect Mirror', '10 right in a row', 'ach-streak10', 'trophy', P => P.best >= 10],
+  ['spotter', 'Chiral Spotter', '10 chiral carbon questions right', 'ach-spotter', 'target', P => tc(P, ['find', 'count']) >= 10],
+  ['twon', '2ⁿ Pro', '5 stereoisomer-count questions right', 'ach-twon', 'checklist', P => tc(P, 'nstereo') >= 5],
+  ['relate', 'Relationship Expert', '10 enantiomer/diastereomer questions right', 'ach-relate', 'equilibrium', P => tc(P, ['relate', 'constit']) >= 10],
+  ['cistrans', 'Same Side, Other Side', '10 cis–trans questions right', 'ach-cistrans', 'react', P => tc(P, ['ct', 'ringct']) >= 10],
+  ['fischer', 'Fischer Fluent', '10 Fischer projection questions right', 'ach-fischer', 'molecule', P => tc(P, ['dl', 'aa', 'fischrel', 'mirror']) >= 10],
+  ['clinic', 'Clinic Ready', '8 chiral drug questions right', 'ach-clinic', 'medal', P => tc(P, 'clinic') >= 8],
+  ['skill', 'Skill Check Ready', 'Score 8+ on Skill Check Prep', 'ach-skill', 'trophy', P => (P.bestQuiz || 0) >= 8],
+  ['boss', 'Boss Battle', '10 Exam Practice questions right', 'ach-boss', 'finish', P => (P.examRight || 0) >= 10]
+];
+
+const state = { sel: new Set(), quiz: null, exam: false, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false };
+let P = null;
+const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, noHelp: 0, bestQuiz: 0, examRight: 0, sel: [] });
+function load() {
+  try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); }
+}
+function save() { try { P.sel = [...state.sel]; localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} }
+function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
+
+/* ---------- mascot: Mira the mirror ---------- */
+const MOODS = ['idle', 'thinking', 'correct', 'oops', 'victory'];
+const SAY = {
+  idle: ['Pick an answer. I’ll reflect on it.', 'Ready when you are!', 'Mirror, mirror, on the page…'],
+  thinking: ['Hmm… check every chiral carbon.', 'Same side or opposite?', 'What does the mirror image look like?'],
+  correct: ['Perfect reflection!', 'You nailed the stereo!', 'Superimposable success!', 'Left and right, sorted!', 'Exactly right!'],
+  oops: ['Hmm, that one is a mirror trick.', 'Not quite a match. Try again!', 'Flip it in your head once more.'],
+  victory: ['Stereo superstar!', 'Nothing gets past you!', 'Every center in its place!']
+};
+let mascotArt = null; // null = unknown, true = ChatGPT art loaded, false = drawn stand-in
+function miraSVG(mood) {
+  const ink = '#2e2b38';
+  const eyes = mood === 'thinking' ? `<circle cx="48" cy="52" r="4.5" fill="${ink}"/><circle cx="72" cy="52" r="4.5" fill="${ink}"/><circle cx="49.5" cy="50.5" r="1.6" fill="#fff"/><circle cx="73.5" cy="50.5" r="1.6" fill="#fff"/>`
+    : mood === 'correct' || mood === 'victory' ? `<path d="M42 54q6-8 12 0M66 54q6-8 12 0" fill="none" stroke="${ink}" stroke-width="3.4" stroke-linecap="round"/>`
+    : mood === 'oops' ? `<path d="M43 48l8 7M51 48l-8 7M69 48l8 7M77 48l-8 7" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`
+    : `<circle cx="48" cy="53" r="5" fill="${ink}"/><circle cx="72" cy="53" r="5" fill="${ink}"/><circle cx="49.5" cy="51.5" r="1.8" fill="#fff"/><circle cx="73.5" cy="51.5" r="1.8" fill="#fff"/>`;
+  const mouth = { idle: `<path d="M54 64q6 6 12 0" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`, thinking: `<path d="M55 67h10" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`, correct: `<path d="M51 63q9 11 18 0z" fill="#f2576c" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>`, victory: `<path d="M49 62q11 15 22 0z" fill="#f2576c" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>`, oops: `<path d="M51 68q3-4 6 0t6 0 6 0" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>` }[mood];
+  const extra = mood === 'thinking' ? `<text x="96" y="22" font-family="Fredoka,Nunito,sans-serif" font-weight="700" font-size="20" fill="#4b57d1">?</text>`
+    : mood === 'victory' ? `<path d="M14 26l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1zM104 16l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z" fill="#ffd36b"/>` : mood === 'oops' ? `<path d="M96 40q4 6 0 10q-4-4 0-10z" fill="#9fd3f2"/>` : '';
+  return `<svg viewBox="0 0 120 120" aria-hidden="true">${extra}<rect x="54" y="88" width="12" height="22" rx="5" fill="#c7a6e8" stroke="${ink}" stroke-width="3"/><ellipse cx="60" cy="52" rx="38" ry="42" fill="#c7a6e8" stroke="${ink}" stroke-width="3.2"/><ellipse cx="60" cy="52" rx="30" ry="34" fill="#e9f4fb" stroke="${ink}" stroke-width="2.4"/><path d="M40 30q6-8 16-9" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".9"/>${eyes}${mouth}<circle cx="40" cy="62" r="4" fill="#f6b3c2" opacity=".8"/><circle cx="80" cy="62" r="4" fill="#f6b3c2" opacity=".8"/></svg>`;
+}
+let moodTimer = null;
+function setMood(mood = 'idle', backAfter, quiet) {
+  const m = $('mascot'); if (!m) return;
+  const next = MOODS.includes(mood) ? mood : 'idle';
+  if (mascotArt) m.innerHTML = `<img src="assets/mascot/mira-${next}.webp" alt="">`; else m.innerHTML = miraSVG(next);
+  m.setAttribute('aria-label', `Mira the mirror is ${next === 'oops' ? 'saying oops' : next === 'victory' ? 'celebrating' : next}`);
+  m.dataset.mood = ''; void m.offsetWidth; m.dataset.mood = next;
+  if (!quiet) $('say').textContent = pick(SAY[next]);
+  clearTimeout(moodTimer); if (backAfter) moodTimer = setTimeout(() => setMood(state.done ? 'idle' : 'idle', 0, true), backAfter);
+}
+(function probeMascot() { const i = new Image(); i.onload = () => { mascotArt = true; MOODS.forEach(n => { const j = new Image(); j.src = `assets/mascot/mira-${n}.webp`; }); setMood(($('mascot') && $('mascot').dataset.mood) || 'idle', 0, true); }; i.onerror = () => { mascotArt = false; }; i.src = 'assets/mascot/mira-idle.webp'; })();
+
+/* ---------- stats ---------- */
+function rankOf(xp) { let r = RANKS[0], nx = null; for (let i = 0; i < RANKS.length; i++) if (xp >= RANKS[i][0]) { r = RANKS[i]; nx = RANKS[i + 1] || null; } return { name: r[1], from: r[0], to: nx ? nx[0] : null }; }
+function renderStats() {
+  const r = rankOf(P.xp);
+  $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
+  $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
+  $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
+  $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${artImg(a[3], a[4])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+}
+
+/* ---------- chooser: 5 main options → topic chips ---------- */
+const catOn = c => c.topics.some(t => state.sel.has(t));
+function renderChooser() {
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span>${artImg(c.art, c.fallback, '', c.fbSrc)}<b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  const open = CATEGORIES.filter(catOn);
+  $('chipsWrap').hidden = !open.length;
+  $('chips').innerHTML = open.map(c => `<div class="chip-row"><span>${c.title}</span>${c.topics.map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="stat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`).join('');
+  $('skillCard').classList.toggle('on', !!state.quiz); $('examCard').classList.toggle('on', state.exam);
+}
+function toggleCat(id) {
+  const c = CATEGORIES.find(x => x.id === id);
+  if (catOn(c) && !state.exam && !state.quiz) c.topics.forEach(t => state.sel.delete(t)); else c.topics.forEach(t => state.sel.add(t));
+  afterSelect();
+}
+function toggleTopic(t) { state.sel.has(t) && !state.exam && !state.quiz ? state.sel.delete(t) : state.sel.add(t); afterSelect(); }
+function afterSelect() {
+  state.quiz = null; leaveExam(); save(); renderChooser();
+  if (state.sel.size) newQuestion(); else showEmpty();
+}
+function showEmpty() { state.q = null; $('emptyBox').hidden = false; $('playArea').hidden = true; $('reportBox').hidden = true; $('playTitle').textContent = 'Practice'; $('skipBtn').hidden = true; setMood('idle', 0, true); $('say').textContent = 'Pick a topic and I’ll get to work!'; }
+function scrollToPlay() { try { $('play').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} }
+
+/* ---------- questions ---------- */
+function weightedTopic(pool) {
+  const w = pool.map(t => { const s = P.topic[t]; return 1 + (s && s.a ? 3 * (1 - s.c / s.a) : 1.5); });
+  let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) return pool[i]; }
+  return pool[0];
+}
+let lastTopic = null;
+function makeQuestion() {
+  if (state.quiz) return generate(state.quiz.plan[state.quiz.i]);
+  let pool = [...state.sel]; if (pool.length > 1 && lastTopic) pool = pool.filter(t => t !== lastTopic || chance(0.35));
+  const t = weightedTopic(pool.length ? pool : [...state.sel]); lastTopic = t;
+  return generate(t);
+}
+function newQuestion(focus) {
+  const q = makeQuestion();
+  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false;
+  $('emptyBox').hidden = true; $('reportBox').hidden = true; $('examHost').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
+  const T = TOPICS[q.topic];
+  $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.sel.size > 1 ? 'Mixed practice' : T.label;
+  $('topicTag').textContent = T.label; $('subTag').textContent = q.tag || ''; $('subTag').hidden = !q.tag || q.tag === T.label;
+  $('quizTag').hidden = !state.quiz; $('quizBar').hidden = !state.quiz;
+  if (state.quiz) { $('quizTag').textContent = `Question ${state.quiz.i + 1} of ${state.quiz.plan.length}`; $('quizBar').firstElementChild.style.width = (state.quiz.i / state.quiz.plan.length * 100) + '%'; }
+  const eq = $('equation'); eq.innerHTML = q.eq || ''; eq.className = 'equation' + (q.eq ? ' eqrxn' : '');
+  $('scenario').innerHTML = q.scenario || '';
+  $('art').innerHTML = (q.art || '') + (q.kind === 'hit' ? '<p class="tap-note">Tap the picture to answer.</p>' : '');
+  $('art').classList.remove('done-dgm');
+  $('prompt').innerHTML = q.prompt;
+  const ch = $('choices');
+  ch.hidden = q.kind !== 'choice'; ch.className = 'choices' + (q.grid ? ' grid' : '') + (q.arrows ? ' arrows' : '');
+  ch.innerHTML = q.kind === 'choice' ? q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('') : '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
+  $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
+  setVideoFor(q.video || T.video);
+  renderChooser(); paintIcons($('play'));
+  setMood('idle', 0, true); $('say').textContent = q.kind === 'hit' ? 'Tap the right part of the picture!' : pick(SAY.idle);
+  if (focus && !coarse()) { const first = q.kind === 'hit' ? $('art').querySelector('.hit') : ch.querySelector('.choice'); try { first && first.focus({ preventScroll: true }); } catch (e) {} }
+}
+
+/* ---------- checking + scoring ---------- */
+function choose(i) {
+  const q = state.q; if (state.done) return;
+  const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
+  if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
+  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || ''); }
+}
+function tapHit(id, el) {
+  const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
+  if (id === q.target) { el.classList.add('right'); grade(true, '', ''); return; }
+  const h = q.hits[id] || { why: 'That isn’t it.', slip: q.topic + ':tapped-' + id };
+  el.classList.add('wrong'); setTimeout(() => el.classList.remove('wrong'), 1400);
+  grade(false, h.slip, fm(h.why));
+}
+function ddLog(ok, slip) {
+  try {
+    if (state.logged || !window.ddTrack) return; state.logged = true;
+    const q = state.q;
+    window.ddTrack({ game: 'stereochemistry', course: '3B', mode: state.quiz ? 'Skill Check Prep' : 'Practice', topic: TOPICS[q.topic].label + (q.tag ? ' · ' + q.tag : ''), correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
+  } catch (e) {}
+}
+function bumpTopic(t, ok) { const s = P.topic[t] || (P.topic[t] = { c: 0, a: 0 }); s.a++; if (ok) s.c++; }
+function grade(ok, slip, note) {
+  const q = state.q, first = state.tries === 0; state.tries++;
+  if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok }); }
+  if (ok) {
+    state.done = true;
+    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
+    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
+    P.xp += xp; P.correct++; if (!state.helped && first) P.noHelp++;
+    const big = first && (P.streak === 5 || P.streak === 10 || (P.streak > 0 && P.streak % 25 === 0));
+    setMood(big ? 'victory' : 'correct');
+    setFeedback('good', `<b>${first ? pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Perfect fit!']) : 'Got it now!'}</b> <span class="xp-pop">+${xp} XP</span><div class="sol">${q.solution}</div>`);
+    finishQuestion();
+  } else {
+    if (first) P.streak = 0;
+    setMood('oops', 2400);
+    let msg = `<b>Not quite.</b> ${note || 'Look again and try another answer.'}`;
+    if (state.quiz) { msg += `<div class="sol">Answer: <b>${q.answer}</b>. ${q.solution}</div>`; state.done = true; finishQuestion(); }
+    else if (state.tries >= 2) { msg += '<br>Stuck? Try ' + (q.steps ? '<b>Step by step</b> or ' : '') + '<b>Show answer</b>.'; $('solBtn').classList.add('pulse'); }
+    setFeedback('bad', msg);
+  }
+  save(); renderStats(); checkAch();
+}
+function finishQuestion() {
+  const q = state.q;
+  if (q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) b.classList.add('right'); });
+  if (q.kind === 'hit') { $('art').classList.add('done-dgm'); const t = $('art').querySelector(`[data-hit="${q.target}"]`); if (t) t.classList.add('right'); const n = $('art').querySelector('.tap-note'); if (n) n.remove(); }
+  $('nextBtn').hidden = false;
+  $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
+  if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function showSolution() {
+  const q = state.q; if (!q || state.done) return;
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+  state.done = true; state.helped = true; save(); renderStats();
+  setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion(); setMood('thinking', 2500);
+}
+const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
+function scrollToQuestion() {
+  const el = $('play'), r = el.getBoundingClientRect();
+  const embedded = document.documentElement.classList.contains('dd-embedded');
+  if (embedded || r.top < 0 || r.top > innerHeight * 0.35) { try { el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); } }
+}
+function next() {
+  if (state.quiz) { state.quiz.i++; if (state.quiz.i >= state.quiz.plan.length) { showReport(); scrollToQuestion(); return; } }
+  newQuestion(true); scrollToQuestion();
+}
+
+/* ---------- step by step ---------- */
+function setGuide(on) {
+  const q = state.q; on = !!(on && q && q.steps && q.steps.length);
+  $('guideBtn').setAttribute('aria-pressed', on); $('guide').hidden = !on;
+  if (on) renderGuide();
+}
+function renderGuide() {
+  const q = state.q; if (!q._g) q._g = { at: 0, msg: {} };
+  $('guide').innerHTML = q.steps.map((s, i) => {
+    const cls = i < q._g.at ? 'done' : i === q._g.at ? 'current' : 'later', right = s.choices ? s.choices.find(c => c.ok) : null;
+    let body = '';
+    if (!s.final && i < q._g.at) body = `<div class="gwhy"><b>${right.html}</b>. ${s.why || ''}</div>`;
+    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}">${c.html}</button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
+    return `<div class="gstep ${cls}"><div class="gnum">Step ${i + 1} of ${q.steps.length}</div><div class="gask">${s.ask}</div>${body}</div>`;
+  }).join('');
+}
+function guideChoose(i, k) {
+  const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. Try another.';
+  renderGuide(); setMood(c.ok ? 'correct' : 'thinking', 1600, true);
+}
+
+/* ---------- Skill Check Prep ---------- */
+function startQuiz() {
+  leaveExam();
+  const plan = shuffle(shuffle(SKILL_PLAN).slice(0, SKILL_N));
+  state.quiz = { plan, i: 0, results: [] }; state.guideOn = false;
+  newQuestion(true); renderChooser();
+}
+function showReport() {
+  const z = state.quiz, score = z.results.filter(r => r.ok).length;
+  P.bestQuiz = Math.max(P.bestQuiz || 0, score); save(); checkAch(); renderStats();
+  const missed = [...new Set(z.results.filter(r => !r.ok).map(r => r.topic))];
+  $('playArea').hidden = true; const box = $('reportBox'); box.hidden = false; $('skipBtn').hidden = true;
+  box.innerHTML = `<span class="ex-label">Skill Check Prep results</span><div class="report-score"><b>${score} / ${z.results.length}</b><span>${score >= 9 ? 'Excellent, you are ready!' : score >= 7 ? 'Solid. Polish the topics below.' : 'Good practice. Work on the topics below.'}</span></div>
+   <ul class="report-list">${z.results.map((r, i) => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? '✓' : '✗'} ${i + 1}. ${TOPICS[r.topic].label}${r.tag && r.tag !== TOPICS[r.topic].label ? ' · ' + r.tag : ''}</li>`).join('')}</ul>
+   ${missed.length ? `<p><b>Study plan:</b> practice these topics next.</p><div class="ex-actions"><button type="button" class="btn primary" id="practiceMissed">Practice my missed topics ${ico('arrow')}</button></div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
+   <div class="ex-actions"><button type="button" class="btn" id="quizAgain">Take another Skill Check Prep</button></div>`;
+  state.quiz = null; renderChooser();
+  $('quizAgain').onclick = startQuiz;
+  if ($('practiceMissed')) $('practiceMissed').onclick = () => { state.sel = new Set(missed); afterSelect(); scrollToPlay(); };
+  setMood(score >= 8 ? 'victory' : score >= 6 ? 'correct' : 'thinking');
+  if (score >= 8) confetti();
+}
+
+/* ---------- Exam Practice: Final Boss chirality and isomer questions via the shared FBX module (textbook repo) ---------- */
+let FBXI = null, FBXLOADING = false;
+function enterExam() {
+  state.exam = true; state.quiz = null; state.q = null;
+  $('playArea').hidden = true; $('reportBox').hidden = true; $('emptyBox').hidden = true; $('skipBtn').hidden = true; $('examHost').hidden = false;
+  $('playTitle').textContent = 'Exam Practice'; renderChooser(); setMood('idle', 0, true); $('say').textContent = 'Boss battle! Final-exam style.';
+  setVideoFor('final');
+  if (FBXI || FBXLOADING) return;
+  if (!window.FBX) { $('fbxHost').textContent = 'Exam Practice could not load. Try reloading the page.'; return; }
+  FBXLOADING = true; $('fbxHost').innerHTML = '<p class="note-small">Loading the chirality and isomer exam questions…</p>';
+  Promise.all(['chirality', 'isomers'].map(b => fetch(`https://itsdrdan.github.io/textbook/bank/${b}.json`).then(r => r.json()))).then(([a, b]) => {
+    FBXI = FBX.mount($('fbxHost'), a.concat(b), { topics: [['chirality', 'Chirality', '🪞'], ['isomers', 'Isomers', '🔁']], storageKey: 'itsdrdan-stereo-exam-v1', onAnswer: examAnswer });
+  }).catch(e => { console.error(e); $('fbxHost').textContent = 'Exam Practice could not load the question bank. Check your connection and reload.'; }).finally(() => { FBXLOADING = false; });
+}
+function leaveExam() { if (!state.exam) return; state.exam = false; $('examHost').hidden = true; }
+function examAnswer(item, correct, info) {
+  try { if (window.ddTrack) window.ddTrack({ game: 'stereochemistry', course: '3B', mode: 'Exam Practice', topic: info.topic, correct: !!correct }); } catch (e) {}
+  if (info && info.review) return;
+  if (correct) { P.streak++; P.best = Math.max(P.best, P.streak); P.correct++; P.examRight = (P.examRight || 0) + 1; P.xp += 15 + 2 * Math.min(P.streak, 5); setMood(P.streak >= 5 && P.streak % 5 === 0 ? 'victory' : 'correct'); }
+  else { P.streak = 0; setMood('oops', 2400); }
+  P.tried++; save(); renderStats(); checkAch();
+}
+
+/* ---------- achievements, toasts, confetti ---------- */
+function checkAch() {
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[5](P)) { P.ach[a[0]] = Date.now(); toast(a[3], a[4], 'Achievement unlocked!', a[1]); confetti(); setMood('victory', 0, true); $('say').textContent = `${a[1]} unlocked!`; } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('ach-skill', 'medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  save(); renderStats();
+}
+function toast(art, fb, title, text) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${artImg(art, fb)}<div><b>${title}</b><br>${text}</div>`;
+  $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
+}
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('celebrationCanvas'), x = c.getContext('2d'); c.hidden = false; c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#4b57d1', '#72c9a8', '#f28aa3', '#ffd36b', '#9fb0ff', '#b9a3e6'];
+  const ps = Array.from({ length: 90 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.3, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3, r: 4 + Math.random() * 4, c: pick(cols), a: Math.random() * 6 }));
+  let f = 0; (function step() { x.clearRect(0, 0, c.width, c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += 0.1; x.fillStyle = p.c; x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); x.restore(); }); if (++f < 110) requestAnimationFrame(step); else { x.clearRect(0, 0, c.width, c.height); c.hidden = true; } })();
+}
+
+/* ---------- videos ---------- */
+function setVideoFor(key) {
+  const v = VIDEOS[key] || VIDEOS.chiral, pl = $('player'), src = `https://www.youtube-nocookie.com/embed/${v.id}?rel=0&start=${v.start || 0}`;
+  pl.dataset.src = src; if ($('videoSection').open && pl.src !== src) pl.src = src;
+  $('lessonTitle').textContent = v.title; $('lessonLink').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start || 0}s`;
+  const keys = [key in VIDEOS ? key : 'chiral', ...Object.keys(VIDEOS).filter(k => k !== key)];
+  $('videoList').innerHTML = keys.map(k => { const w = VIDEOS[k]; return `<button type="button" class="lesson-card${k === key ? ' active' : ''}" data-video="${k}"><img src="https://i.ytimg.com/vi/${w.id}/mqdefault.jpg" alt="" loading="lazy"><span><b>${w.title}</b><small>${w.why}</small></span></button>`; }).join('');
+}
+
+/* ---------- cheat sheet ---------- */
+function renderRules() {
+  $('rulesBody').innerHTML = `<div class="rule-grid">
+   <div class="rule"><h3>Chiral carbon</h3><p>A carbon with <b>four different groups</b>. Skip CH<sub>2</sub>, CH<sub>3</sub> and C=O carbons. A molecule with <i>n</i> chiral carbons has up to <b>2<sup>n</sup></b> stereoisomers.</p></div>
+   <div class="rule"><h3>Wedges and dashes</h3><p><b>Wedge</b> = toward you. <b>Dash</b> = away from you. Swapping a wedge and a dash on one carbon reverses that chiral carbon.</p><p>Turning a drawing in the page changes nothing. Flipping it left to right reverses every chiral carbon.</p></div>
+   <div class="rule wide"><h3>How are two structures related?</h3><table class="ref"><thead><tr><th>Check</th><th>Answer</th></tr></thead><tbody>
+   <tr><td>Different formulas</td><td><b>Not isomers</b></td></tr>
+   <tr><td>Same formula, atoms bonded in a different order</td><td><b>Constitutional isomers</b></td></tr>
+   <tr><td>Same connections, every chiral carbon the same</td><td><b>Identical</b></td></tr>
+   <tr><td>Same connections, every chiral carbon reversed (mirror images)</td><td><b>Enantiomers</b></td></tr>
+   <tr><td>Same connections, some but not all reversed</td><td><b>Diastereomers</b> (differ at one carbon: epimers)</td></tr></tbody></table></div>
+   <div class="rule"><h3>Cis and trans</h3><p>Needs two <b>different</b> groups on <b>each</b> C=C carbon. Same side = <b>cis</b>; opposite sides = <b>trans</b>.</p><p>Rings: wedge + wedge or dash + dash = cis; wedge + dash = trans.</p></div>
+   <div class="rule"><h3>Fischer projections</h3><p>Horizontal lines come toward you; vertical lines go away. Never turn a Fischer projection 90°. Turning it 180° in the page is fine (it is the same molecule).</p><p><b>Sugars:</b> the OH on the chiral carbon farthest from C=O: Right = <b>D</b>, Left = <b>L</b>. <b>Amino acids</b> (COOH up, R down): NH<sub>2</sub> on the Left = <b>L</b>.</p></div>
+   <div class="rule"><h3>In the body</h3><p>Natural sugars are <b>D</b>; proteins use <b>L</b>-amino acids. Enzymes and receptors are chiral, so enantiomers of a drug can act very differently. Racemic = 50:50, no net rotation of polarized light.</p></div>
+   <div class="rule wide"><h3>Meso compound (not the same as racemic!)</h3><p>A <b>meso compound</b> has two or more chiral carbons but is still <b>achiral</b>: its two halves are mirror images of each other, so the whole molecule is its own mirror image. Example: 2,3-dibromobutane with one Br on a wedge and one on a dash.</p><p>Because of that, a molecule with two matching halves has <b>fewer</b> than 2<sup>n</sup> stereoisomers: 2,3-dibromobutane has 3 (a pair of enantiomers plus the meso form), not 4.</p><p><b>Racemic mixture</b> = a 50:50 MIXTURE of two different molecules (enantiomers). <b>Meso</b> = ONE molecule. Neither rotates plane-polarized light.</p></div></div>`;
+}
+
+/* ---------- wiring ---------- */
+function bind() {
+  document.addEventListener('click', e => {
+    const cat = e.target.closest('[data-cat]'); if (cat) return toggleCat(cat.dataset.cat);
+    const tp0 = e.target.closest('[data-topic]'); if (tp0) return toggleTopic(tp0.dataset.topic);
+    const ch = e.target.closest('#choices [data-choice]'); if (ch) return choose(+ch.dataset.choice);
+    const g = e.target.closest('[data-g]'); if (g) return guideChoose(+g.dataset.g, +g.dataset.k);
+    const h = e.target.closest('#art [data-hit]'); if (h) return tapHit(h.dataset.hit, h);
+    const v = e.target.closest('[data-video]'); if (v) { setVideoFor(v.dataset.video); const pl = $('player'); pl.src = pl.dataset.src; }
+  });
+  document.addEventListener('keydown', e => { const h = e.target.closest && e.target.closest('#art [data-hit]'); if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tapHit(h.dataset.hit, h); } });
+  $('skillCard').onclick = () => { startQuiz(); scrollToPlay(); };
+  $('examCard').onclick = () => { enterExam(); scrollToPlay(); };
+  $('nextBtn').onclick = next;
+  $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const b = $('hintBox'); b.hidden = false; b.innerHTML = `${ico('bulb')} <b>Hint:</b> ${state.q.hint || 'Reread the question and look for the key word.'}`; setMood('thinking', 2500); };
+  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; setGuide(state.guideOn); if (state.guideOn) { state.helped = true; setMood('thinking', 2000); } };
+  $('solBtn').onclick = showSolution;
+  $('videoBtn').onclick = () => { const d = $('videoSection'); d.open = true; const pl = $('player'); if (pl.src !== pl.dataset.src) pl.src = pl.dataset.src; try { d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} };
+  $('videoSection').addEventListener('toggle', () => { const pl = $('player'); if ($('videoSection').open && pl.src !== pl.dataset.src) pl.src = pl.dataset.src; });
+  $('rulesBtn').onclick = () => { renderRules(); $('rulesDialog').showModal(); };
+  $('closeRules').onclick = () => $('rulesDialog').close();
+  $('rulesDialog').addEventListener('click', e => { if (e.target === $('rulesDialog')) $('rulesDialog').close(); });
+  const rb = $('resetBtn'); let armed = 0;
+  rb.onclick = () => { if (!armed) { armed = 1; rb.classList.add('armed'); rb.textContent = 'Tap again to reset'; setTimeout(() => { armed = 0; rb.classList.remove('armed'); rb.textContent = 'Reset my progress'; }, 3500); return; } P = fresh(); P.migrated = 1; save(); renderStats(); renderChooser(); armed = 0; rb.classList.remove('armed'); rb.textContent = 'Reset my progress'; };
+}
+function init() {
+  load(); bind(); wireArt(); paintIcons();
+  // ?topic=find,relate opens topics directly; ?mode=exam opens Exam Practice
+  let sp; try { sp = new URLSearchParams(location.search); } catch (e) { sp = new URLSearchParams(); }
+  const OLD = {};
+  const topics = (sp.get('topic') || '').split(',').filter(t => TOPICS[t]), mode = sp.get('mode');
+  if (topics.length) state.sel = new Set(topics); else if (OLD[mode]) state.sel = new Set(OLD[mode]); else state.sel = new Set((P.sel || []).filter(t => TOPICS[t]));
+  renderStats(); renderChooser(); P.rankSeen = P.rankSeen || rankOf(P.xp).name;
+  setVideoFor('chiral');
+  if (mode === 'exam') enterExam(); else if (state.sel.size) newQuestion(); else showEmpty();
+  setTimeout(() => { paintIcons(); }, 400);
+  window.addEventListener('load', () => paintIcons());
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+</script>
+</body></html>

@@ -280,6 +280,8 @@ html body .btn-row{margin-top:12px!important}
 }
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div>
@@ -779,29 +781,6 @@ const scoreBadges=document.querySelector('.score');const syncNewQuestionWidth=()
 renderJourney();{const rb=$('journeyReset');let armed=0;rb.onclick=()=>{if(!armed){armed=setTimeout(()=>{armed=0;rb.textContent='Reset Chemistry Journey'},4000);rb.textContent='Tap again to confirm reset';return}clearTimeout(armed);armed=0;rb.textContent='Reset Chemistry Journey';journey=journeyBlank();journeySave();renderJourney()}}
 </script>
 
-<script id="canvasAutoResize">
-(function(){
-  if(window.parent===window)return;
-  document.body.classList.add('canvas-embedded');
-  const content=document.querySelector('.app');
-  if(!content)return;
-  let lastSent=0,pending=false,stopped=false;
-  function measure(){const css=getComputedStyle(document.body);const extra=['paddingTop','paddingBottom','marginTop','marginBottom','borderTopWidth','borderBottomWidth'].reduce((sum,key)=>sum+(parseFloat(css[key])||0),0);return Math.ceil(content.getBoundingClientRect().height+extra)}
-  function sync(){pending=false;if(stopped)return;const height=measure();if(!Number.isFinite(height)||height<=0||Math.abs(height-lastSent)<2)return;lastSent=height;window.parent.postMessage({subject:'lti.frameResize',height},'*')}
-  function schedule(){if(pending||stopped)return;pending=true;requestAnimationFrame(sync)}
-  const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;
-  if(resizeObserver)resizeObserver.observe(content);
-  const mutationObserver=new MutationObserver(schedule);
-  mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});
-  window.addEventListener('resize',schedule);
-  window.addEventListener('load',schedule);
-  content.addEventListener('load',schedule,true);
-  content.addEventListener('toggle',schedule,true);
-  if(document.fonts)document.fonts.ready.then(schedule);
-  window.addEventListener('pagehide',()=>{stopped=true;resizeObserver?.disconnect();mutationObserver.disconnect()});
-  window.addEventListener('pageshow',event=>{if(event.persisted){stopped=false;lastSent=0;resizeObserver?.observe(content);mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});schedule()}});
-  schedule();
-})();
-</script>
+<script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
 </body>
 </html>

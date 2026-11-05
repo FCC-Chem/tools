@@ -410,6 +410,21 @@ function exoDbl(a, b, ra, rb) { const [p, q] = shorten(a, b, ra, rb); const dx =
 const ATOM_R = 9.5;
 // arrowhead at p, pointing away from `from`
 function arrowHead(p, from, col, sz = 13) { const a = Math.atan2(p[1] - from[1], p[0] - from[0]); const L = [p[0] - sz * Math.cos(a - 0.45), p[1] - sz * Math.sin(a - 0.45)], R = [p[0] - sz * Math.cos(a + 0.45), p[1] - sz * Math.sin(a + 0.45)]; return `<path d="M${r1(p[0])} ${r1(p[1])}L${r1(L[0])} ${r1(L[1])}L${r1(R[0])} ${r1(R[1])}z" fill="${col}"/>`; }
+const AW = { C: .70, N: .76, O: .80, P: .64, S: .62, H: .72 };
+// atomLabel: the heavy atom letter is centered on (x, y); pre/post text hangs off its left/right edge
+function atomLabel(x, y, heavy, o = {}) {
+  const sz = o.size || 17, w = (AW[heavy] || .7) * sz, fill = o.fill || (heavy === 'N' ? '#2a4fb8' : heavy === 'O' ? '#c0392b' : heavy === 'P' ? '#b26b00' : INK), yy = y + sz * 0.36;
+  let g = T(x, yy, heavy, { a: 'middle', size: sz, fill });
+  if (o.post) g += T(x + w / 2 - 0.5, yy, o.post, { size: sz, fill });
+  if (o.pre) g += T(x - w / 2 + 0.5, yy, o.pre, { a: 'end', size: sz, fill });
+  return g;
+}
+// a group like NH2 / CH3 / OH / O^- drawn at a bond end; `left` = the bond comes in from the right, so write it H2N, HO, …
+function groupLabel(x, y, grp, left, o = {}) {
+  if (grp === 'O^-') return atomLabel(x, y, 'O', { ...o, post: '^-' });
+  const heavy = grp[0], rest = grp.slice(1);
+  return atomLabel(x, y, heavy, { ...o, [left ? 'pre' : 'post']: rest || undefined });
+}
 const lab = (x, y, s, o = {}) => T(x, y + 6, s, { a: 'middle', size: o.size || 17, fill: o.fill || (s[0] === 'N' ? '#2a4fb8' : s[0] === 'O' ? '#c0392b' : INK), w: 800 });
 
 /* ---- the five bases (unit coordinates, pointy-top hexagon, y down) ----
@@ -441,9 +456,9 @@ function baseBody(b, ox, oy, s, o = {}) {
   });
   D.subs.forEach(([at, d, l, n]) => {
     const dd = o.mirror ? 180 - d : d, p = P(at), v = dirU(dd), q = [p[0] + v[0] * s * 0.95, p[1] + v[1] * s * 0.95];
-    const rq = l.length > 1 ? 14 : ATOM_R;
+    const rq = ATOM_R;
     g += n === 2 ? exoDbl(p, q, R(at), rq) : bondLine(p, q, R(at), rq);
-    g += lab(q[0] + mx * (l === 'NH2' && d === 150 ? -6 : l === 'CH3' ? 6 : 0), q[1], l === 'H' ? 'H' : l, { fill: l[0] === 'N' ? '#2a4fb8' : l[0] === 'O' ? '#c0392b' : INK });
+    g += l === 'H' ? lab(q[0], q[1], 'H') : groupLabel(q[0], q[1], l, v[0] < -0.3);
   });
   Object.keys(U).filter(k => k[0] === 'N').forEach(id => { g += lab(P(id)[0], P(id)[1], 'N'); });
   if (!o.sugar) { // free base: N–H on the attachment nitrogen
@@ -470,7 +485,7 @@ function nucleoSVG(o = {}) {
   g = bondLine(S.C4, S.O, 0, ATOM_R) + bondLine(S.O, S.C1, ATOM_R, 0) + Ln(S.C1, S.C2, { w: 4 }) + `<path d="M${S.C3[0]} ${S.C3[1]}L${S.C2[0]} ${S.C2[1]}" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>` + Ln(S.C3, S.C4, { w: 4 });
   g += lab(S.O[0], S.O[1], 'O');
   // substituents
-  const vert = (p, dy, l, o2 = {}) => { const q = [p[0], p[1] + dy]; return Ln(p, [q[0], q[1] - Math.sign(dy) * 11]) + T(q[0], q[1] + (dy > 0 ? 8 : 4), l, { a: 'middle', size: 16, fill: o2.fill || (l.includes('O') ? '#c0392b' : INK) }); };
+  const vert = (p, dy, l, o2 = {}) => { const q = [p[0], p[1] + dy + Math.sign(dy) * 4]; return Ln(p, [q[0], q[1] - Math.sign(dy) * 10]) + groupLabel(q[0], q[1], l, false, { size: 16, fill: o2.fill || (l.includes('O') ? '#c0392b' : INK) }); };
   g += vert(S.C1, 30, 'H');
   g += vert(S.C2, -26, 'H', { fill: DIM });
   g += vert(S.C3, -26, 'H', { fill: DIM });
@@ -481,19 +496,19 @@ function nucleoSVG(o = {}) {
   const C5 = [S.C4[0], S.C4[1] - 46];
   g += Ln(S.C4, [C5[0], C5[1] + 11]);
   if (phos) {
-    g += T(C5[0], C5[1] + 6, 'CH2', { a: 'middle', size: 16 });
+    g += atomLabel(C5[0], C5[1], 'C', { size: 16, post: 'H2' });
     // O–P chain going left
-    let px = C5[0] - 44; g += Ln([C5[0] - 19, C5[1]], [px + 9, C5[1]], { w: 2.4 }) + lab(px, C5[1], 'O');
+    let px = C5[0] - 44; g += Ln([C5[0] - 9, C5[1]], [px + 9, C5[1]], { w: 2.4 }) + atomLabel(px, C5[1], 'O');
     for (let i = 0; i < phos; i++) {
-      const Px = px - 40; g += Ln([px - 9, C5[1]], [Px + 9, C5[1]], { w: 2.4 }) + lab(Px, C5[1], 'P', { fill: '#b26b00' });
-      g += exoDbl([Px, C5[1]], [Px, C5[1] - 30], 9, 9) + lab(Px, C5[1] - 34, 'O');
-      g += bondLine([Px, C5[1]], [Px, C5[1] + 30], 9, 9) + T(Px, C5[1] + 40, 'O^-', { a: 'middle', size: 16, fill: '#c0392b' });
+      const Px = px - 40; g += Ln([px - 9, C5[1]], [Px + 9, C5[1]], { w: 2.4 }) + atomLabel(Px, C5[1], 'P');
+      g += exoDbl([Px, C5[1]], [Px, C5[1] - 34], 9, 9) + atomLabel(Px, C5[1] - 34, 'O');
+      g += bondLine([Px, C5[1]], [Px, C5[1] + 34], 9, 9) + atomLabel(Px, C5[1] + 34, 'O', { post: '^-' });
       px = Px - 40;
       g += Ln([Px - 9, C5[1]], [px + 9, C5[1]], { w: 2.4 });
-      if (i === phos - 1) g += T(px - 2, C5[1] + 6, 'O^-', { a: 'middle', size: 16, fill: '#c0392b' }); else g += lab(px, C5[1], 'O');
+      g += atomLabel(px, C5[1], 'O', i === phos - 1 ? { pre: '^-' } : {});
     }
   } else {
-    g += T(C5[0], C5[1] + 6, 'CH2OH', { a: 'middle', size: 16 });
+    g += atomLabel(C5[0], C5[1] - 1, 'C', { size: 16, pre: 'HO', post: 'H2' });
   }
   // base
   let top = 30;
@@ -504,12 +519,12 @@ function nucleoSVG(o = {}) {
     g += bb.g + bondLine(S.C1, att, 0, ATOM_R);
     top = 0;
   } else {
-    g += Ln(S.C1, [S.C1[0], S.C1[1] - 26]) + T(S.C1[0], S.C1[1] - 32, 'OH', { a: 'middle', size: 16, fill: '#c0392b' });
+    g += Ln(S.C1, [S.C1[0], S.C1[1] - 26]) + groupLabel(S.C1[0], S.C1[1] - 36, 'OH', false, { size: 16 });
   }
   // prime numbers
   if (o.nums) {
     const pn = (p, t, dx, dy) => T(p[0] + dx, p[1] + dy, t, { size: 13, w: 800, fill: '#7a5bd0', raw: 1 });
-    g += pn(S.C1, '1′', 8, 12) + pn(S.C2, '2′', 9, 18) + pn(S.C3, '3′', -24, 18) + pn(S.C4, '4′', -24, 12) + pn(C5, '5′', 22, -6);
+    g += pn(S.C1, '1′', 8, 12) + pn(S.C2, '2′', 9, 18) + pn(S.C3, '3′', -24, 18) + pn(S.C4, '4′', -24, 12) + pn(C5, '5′', 7, 26);
   }
   // tap targets
   if (o.tap) {
@@ -1309,14 +1324,15 @@ const genViruses = factGen('viruses', [
 let BANK = null, BANK_LOADING = null;
 function loadBank() {
   if (BANK || BANK_LOADING) return BANK_LOADING;
-  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/nucleic.json').then(r => r.json()).then(items => { BANK = items.filter(x => !x.cs); return BANK; }).catch(() => { BANK = []; return BANK; });
+  // only questions this page can show in full (no drawn structures or graphs)
+  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/nucleic.json').then(r => r.json()).then(items => { BANK = items.filter(x => !x.cs && !x.s && !(x.f || []).some(g => g && g.type !== 'table')); return BANK; }).catch(() => { BANK = []; return BANK; });
   return BANK_LOADING;
 }
 const bankBag = { q: [], next() { if (!this.q.length) this.q = shuffle(BANK || []); return this.q.pop(); } };
 function tableHTML(f) { return `<table class="data">${f.head ? `<thead><tr>${f.head.map(h => `<th>${h}</th>`).join('')}</tr></thead>` : ''}<tbody>${f.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>${f.cap ? `<p class="note-small">${f.cap}</p>` : ''}`; }
 function genFinal() {
   if (!BANK || !BANK.length) return null;
-  const x = bankBag.next(), k = +x.k || 0;
+  const x = bankBag.next(), k = 0;   // in the Try It bank the correct answer is ALWAYS c[0]; x.k is the calculator flag, not the key
   const figs = Array.isArray(x.f) ? x.f.filter(f => f.type === 'table').map(tableHTML).join('') : '';
   return mcq({ topic: 'final', tag: 'Final Boss question', prompt: x.q, art: figs, right: x.c[k], wrong: x.c.filter((c, i) => i !== k).map(c => ({ html: c, why: '' })), hint: x.h, solution: x.w, flags: {}, bankId: x.id });
 }

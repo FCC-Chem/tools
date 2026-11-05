@@ -1016,9 +1016,5 @@ LAB.userPaused=false;if('IntersectionObserver' in window)new IntersectionObserve
 (function init(){let c='';try{c=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim()}catch(e){}renderStatus();renderBadges();byId('viewTabs').querySelector('[data-view="learn"]').classList.add('active');setCourse(['3A','1A'].includes(c)?c:DEFAULT_COURSE);})();
 
 </script>
-<script id="canvasAutoResize">/* keeps the Canvas iframe the right height — keep as is */
-(function(){if(window.parent===window)return;const c=document.querySelector('.app');if(!c)return;let last=0,p=false;
- const sync=()=>{p=false;const h=Math.ceil(c.getBoundingClientRect().height+40);if(Math.abs(h-last)<2)return;last=h;window.parent.postMessage({subject:'lti.frameResize',height:h},'*')};
- const s=()=>{if(!p){p=true;requestAnimationFrame(sync)}};new ResizeObserver(s).observe(c);new MutationObserver(s).observe(c,{childList:true,subtree:true,attributes:true});addEventListener('resize',s);c.addEventListener('toggle',s,true);s()})();
-</script>
+<script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
 </body></html>

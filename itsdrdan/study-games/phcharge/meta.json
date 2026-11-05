@@ -1,0 +1,11 @@
+{
+  "title": "Proton Patrol — pH & Charge",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3B",
+  "description": "Practice CHEM 3B acid–base chemistry (Sections 4.10, 6.4, 7.3 and 10.2) from 5 main options: Acids & Bases (acid, base or neither from a drawn structure; rank carboxylic acid > phenol > alcohol), Charge at Body pH (what carboxylic acids, amines, amides, alcohols and phenols do at pH 7.4 and in the stomach; net charge of drawn molecules such as GABA, putrescine and succinic acid), Amino Acids & pI (charge at physiological pH, above/below/at the pI, pick the drawn form, peptide net charge), Salts & Solubility (carboxylate and ammonium salt products and names, why salts dissolve) and Health & Clinic (drug absorption in the stomach vs intestine, local anesthetics in inflamed tissue, buffered lidocaine, hydrochloride salts, ion trapping, blood pH, electrophoresis). Every charge is computed from the drawn structure. Skill Check Prep gives 11 questions and a study plan; Exam Practice uses the textbook's carboxylic acid and amine question banks. Mistake-specific feedback, step-by-step help, a cheat sheet, XP, ranks, 11 achievements and Pip the proton mascot.",
+  "icon": "⚡",
+  "tags": ["CHEM 3B", "XP and achievements", "acids and bases", "carboxylic acids", "amines", "amides", "phenols", "acid strength", "physiological pH", "net charge", "zwitterions", "isoelectric point", "peptide charge", "carboxylate salts", "ammonium salts", "solubility", "drug absorption", "local anesthetics", "blood pH", "skill check", "nursing", "dental hygiene", "chemistry"],
+  "version": "1",
+  "status": "working",
+  "logo": "logo.svg"
+}

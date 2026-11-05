@@ -1103,9 +1103,5 @@ byId('reference').onclick=()=>byId('referenceDialog').showModal();byId('closeRef
  setCourse(c);renderMoleMachine();})();
 
 </script>
-<script id="canvasAutoResize">/* keeps the Canvas iframe the right height — keep as is */
-(function(){if(window.parent===window)return;const c=document.querySelector('.app');if(!c)return;let last=0,p=false;
- const sync=()=>{p=false;const h=Math.ceil(c.getBoundingClientRect().height+40);if(Math.abs(h-last)<2)return;last=h;window.parent.postMessage({subject:'lti.frameResize',height:h},'*')};
- const s=()=>{if(!p){p=true;requestAnimationFrame(sync)}};new ResizeObserver(s).observe(c);new MutationObserver(s).observe(c,{childList:true,subtree:true,attributes:true});addEventListener('resize',s);c.addEventListener('toggle',s,true);s()})();
-</script>
+<script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
 </body></html>

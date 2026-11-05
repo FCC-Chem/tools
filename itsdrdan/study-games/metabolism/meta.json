@@ -2,7 +2,7 @@
   "title": "Metabolic Marathon — Metabolism",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Practice CHEM 3B metabolism (Chapters 13–15) with Mito the marathon mitochondrion. Four groups open 18 topics: Pathways (big picture, glucose pathways, where it happens in the cell, reading diagrams of glycolysis, the citric acid cycle, β-oxidation, the urea cycle and the electron transport chain, putting steps in order), ATP Accounting (NADH/FADH2/ATP counts, fatty acid ATP, carbon tracking, ATP and energy), Reactions & Coenzymes (name the reaction, which coenzyme, predict the product, enzyme classes, vitamins) and Fuel Fates & Health (fed/fasting/exercise scenarios, hormones and regulation, protein and nitrogen, nursing and dental cases). Plus a 10-question Exam Prep Check with a study plan and the Final Boss metabolism questions.",
+  "description": "Practice CHEM 3B metabolism (Chapters 13–15) with Mito the marathon mitochondrion. Five groups open 22 topics: Pathways (big picture, glucose pathways, where it happens in the cell, reading diagrams of glycolysis, the citric acid cycle, β-oxidation, the urea cycle and the electron transport chain, putting steps in order), ATP Accounting (NADH/FADH2/ATP counts, fatty acid ATP, carbon tracking, ATP and energy), Reactions & Coenzymes (name the reaction, which coenzyme, predict the product, enzyme classes, vitamins) and Fuel Fates & Health (fed/fasting/exercise scenarios, hormones and regulation, protein and nitrogen, nursing and dental cases) and Rosa’s Case Files (four case files that follow Rosa, the textbook’s patient with type 2 diabetes, through a low blood sugar in the dental chair, an evening walk, a sick day with ketones and BUN, and her medicines). Plus a 10-question Exam Prep Check with a study plan and the Final Boss metabolism questions.",
   "icon": "⚡",
   "tags": [
     "chemistry",
@@ -25,9 +25,13 @@
     "glycogen",
     "lipogenesis",
     "nitrogen balance",
-    "regulation"
+    "regulation",
+    "case studies",
+    "diabetes",
+    "hypoglycemia",
+    "ketone bodies"
   ],
-  "version": "2",
+  "version": "3",
   "status": "working",
   "logo": "assets/logo-256.webp"
 }

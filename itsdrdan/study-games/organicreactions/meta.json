@@ -2,7 +2,7 @@
   "title": "Bond Voyage! Organic Reactions",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Practice CHEM 3B organic reactions five ways: Identify the Reaction, Draw the Product, Draw the Reactant, Name It, and Full Reaction (reactant, reaction type, product, then name). Students draw on a built-in pad with automatic hydrogens and a lasso tool, and can switch between skeletal, condensed, expanded, or mixed structures. Covers alkanes and alkenes; alcohols, aldehydes, and ketones; and carboxylic acids, esters, amines, and amides. Naming accepts common alternate names. Includes a pop-out reaction reference, hints, answer reveals, XP, streaks, medal badges, and a Dr. Dan video matched to each question. New Exam Practice mode: 157 final-exam style multiple-choice reaction questions from Final Boss, with drawn structures and reagent arrows, a topic filter, hints and explanations.",
+  "description": "Practice CHEM 3B organic reactions eight ways: Identify the Reaction; Pick the Product (multiple choice with drawn structures and mistake-specific feedback such as over-oxidation, anti-Markovnikov, swapped ester halves, acid vs base hydrolysis); Over the Arrow (pick the reagent and conditions); Roadmap (two reactions in a row, e.g. hydration then oxidation, or oxidation then esterification); Draw the Product; Draw the Reactant; Name It; and Full Reaction. A Body chemistry set adds real metabolic and drug reactions (pyruvate to lactate, fumarate to malate, malate to oxaloacetate, ethanol to acetaldehyde, a peptide bond, aspirin hydrolysis), and answers show short 'In the body' notes linking reactions to metabolism, digestion and medicines. Students draw on a built-in pad with automatic hydrogens and a lasso tool, in skeletal, condensed, expanded, or mixed structures. Covers alkanes and alkenes; alcohols, aldehydes, and ketones; and carboxylic acids, esters, amines, and amides. Naming accepts common alternate names. Includes a reaction reference, hints, answer reveals, XP, streaks, medal badges, named-mistake stats, and a Dr. Dan video matched to each question. Exam Practice: 157 final-exam style multiple-choice reaction questions from Final Boss.",
   "icon": "⛵",
   "tags": [
     "chemistry",
@@ -20,9 +20,14 @@
     "amides",
     "drawing structures",
     "skeletal structures",
-    "IUPAC naming"
+    "IUPAC naming",
+    "predict the product",
+    "reagents",
+    "reaction roadmap",
+    "metabolism",
+    "medical chemistry"
   ],
   "logo": "logo.png",
   "status": "working",
-  "version": "11"
+  "version": "13"
 }

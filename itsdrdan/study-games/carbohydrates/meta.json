@@ -2,7 +2,7 @@
   "title": "Sweet Structures — Carbohydrates",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3B",
-  "description": "Practice CHEM 3B carbohydrates in seven modes: Classify Sugars, Fischer Projections, Haworth Rings, Stereochemistry, Di- & Polysaccharides, Sugar Reactions, and Exam Practice. Covers aldoses and ketoses, D and L sugars, converting Fischer projections to Haworth rings, alpha and beta anomers, glycosidic linkages, and common sugar reactions. Includes hints, answer reveals, XP, streaks, and achievement badges. Exam Practice serves 63 final-exam style multiple-choice carbohydrate questions from Final Boss, with drawn Fischer and Haworth structures, a topic filter, hints and explanations.",
+  "description": "Practice CHEM 3B carbohydrates in seven modes: Classify Sugars, Fischer Projections, Haworth Rings, Stereochemistry, Di- & Polysaccharides, Sugar Reactions, and Exam Practice. Covers aldoses and ketoses, D and L sugars, converting Fischer projections to Haworth rings, alpha and beta anomers, glycosidic linkages, and common sugar reactions. Drawn questions ask students to read the glycosidic linkage from Haworth structures of maltose, lactose, sucrose and cellobiose, and to predict oxidation ([O]) and reduction ([H]) products from Fischer projection reaction schemes. Includes hints, answer reveals, XP, streaks, and 11 illustrated achievement badges (including Linkage Detective and Redox Chef), and Ringo the sugar ring and Cubie the sugar cube as mascots who react to each answer. Exam Practice serves 63 final-exam style multiple-choice carbohydrate questions from Final Boss, with drawn Fischer and Haworth structures, a topic filter, hints and explanations. Wrong answers get mistake-specific feedback that names the slip (for example α/β read from the wrong ring, or oxidation vs reduction mixed up). Drawn skill practice: convert Fischer projections to Haworth rings and back (all eight D-aldohexoses), form a disaccharide by condensation and pick the product, and label the anomeric carbons, reducing end and glycosidic oxygen on a drawn disaccharide.",
   "icon": "🍬",
   "tags": [
     "chemistry",
@@ -19,6 +19,6 @@
     "glycosidic bonds",
     "sugar reactions"
   ],
-  "version": "11",
+  "version": "15",
   "status": "working"
 }

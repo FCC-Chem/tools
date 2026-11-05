@@ -671,6 +671,8 @@ window.FBX={version:FBX_VERSION,mount:fbxMount,qHTML,optHTML,molSVG,figBlock,str
 
 })();</script>
 <!--FBX:END-->
+<!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
@@ -808,7 +810,7 @@ Mol.prototype.svg=function(o){o=o||{};const N=this.n,S=INK;let minx=1e9,miny=1e9
   const hitR=ns.length?`<rect class="hitbox" x="${(gx0-4).toFixed(1)}" y="${(gy0-4).toFixed(1)}" width="${(gx1-gx0+8).toFixed(1)}" height="${(gy1-gy0+8).toFixed(1)}" rx="12"/>`:'';
   body+=`<g class="grp${(o.hits||[]).includes(g)?' hit':''}${(o.sel||[]).includes(g)?' picked':''}" data-g="${g}">${hitR}${groups[g].join('')}</g>`}
  const sc=o.scale||1;
- return `<svg class="mol" viewBox="${minx.toFixed(1)} ${miny.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" width="${(W*sc).toFixed(0)}" height="${(H*sc).toFixed(0)}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Helvetica,Arial,sans-serif" role="img"${o.label?` aria-label="${esc(o.label)}"`:''}>${this.over.join('')}${body}</svg>`};
+ return `<svg class="mol" viewBox="${minx.toFixed(1)} ${miny.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" width="${(W*sc).toFixed(0)}" height="${(H*sc).toFixed(0)}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Helvetica,Arial,sans-serif" role="img" aria-label="${esc(o.label||'Structure diagram')}">${this.over.join('')}${body}</svg>`};
 
 /* ring helpers */
 function polyRing(cx,cy,r,n,rot){const v=[];for(let k=0;k<n;k++){const a=(rot+360/n*k)*Math.PI/180;v.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return v}
@@ -1383,28 +1385,5 @@ buildModes();renderRef();renderJourney();initVideos();nextQ();
 $('refDetails').addEventListener('toggle',()=>{if($('refDetails').open)mascot('wow',1800)});$('hintBtn').addEventListener('click',()=>{if(!state.done)mascot('hmm',1500)});
 
 </script>
-<script id="canvasAutoResize">
-(function(){
-  if(window.parent===window)return;
-  document.body.classList.add('canvas-embedded');
-  const content=document.querySelector('.app');
-  if(!content)return;
-  let lastSent=0,pending=false,stopped=false;
-  function measure(){const css=getComputedStyle(document.body);const extra=['paddingTop','paddingBottom','marginTop','marginBottom','borderTopWidth','borderBottomWidth'].reduce((sum,key)=>sum+(parseFloat(css[key])||0),0);return Math.ceil(content.getBoundingClientRect().height+extra)}
-  function sync(){pending=false;if(stopped)return;const height=measure();if(!Number.isFinite(height)||height<=0||Math.abs(height-lastSent)<2)return;lastSent=height;window.parent.postMessage({subject:'lti.frameResize',height},'*')}
-  function schedule(){if(pending||stopped)return;pending=true;requestAnimationFrame(sync)}
-  const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(schedule):null;
-  if(resizeObserver)resizeObserver.observe(content);
-  const mutationObserver=new MutationObserver(schedule);
-  mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});
-  window.addEventListener('resize',schedule);
-  window.addEventListener('load',schedule);
-  content.addEventListener('load',schedule,true);
-  content.addEventListener('toggle',schedule,true);
-  if(document.fonts)document.fonts.ready.then(schedule);
-  window.addEventListener('pagehide',()=>{stopped=true;resizeObserver?.disconnect();mutationObserver.disconnect()});
-  window.addEventListener('pageshow',event=>{if(event.persisted){stopped=false;lastSent=0;resizeObserver?.observe(content);mutationObserver.observe(content,{childList:true,subtree:true,attributes:true,characterData:true});schedule()}});
-  schedule();
-})();
-</script>
+<script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
 </body></html>
