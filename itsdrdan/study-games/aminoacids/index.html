@@ -925,9 +925,9 @@ function genAA(){const t=aaBag();
   return mc({html:P(`Which amino acid has the one-letter code <span class="big1">${one}</span>?`),options:[k,...ds].map(x=>O(x,`${nm(x)} (${x})`)),answer:k,
    hint:'Think of the letters that are NOT the first letter of the name: F, W, Y, K, R, D, E, N, Q.',why:`<b>${one}</b> = ${full(k)}.${mn}`})}
  if(t==='form'){const k=pickOne(['Gly','Ala','Val','Leu','Ser','Phe','Met','Thr']),cond=pickOne(['eq','lo','hi']),ans={eq:'zwit',lo:'acid',hi:'base'}[cond];
-  const ct={eq:'a solution where the <b>pH equals its pI</b>',lo:'a solution where the <b>pH is lower than its pI</b>',hi:'a solution where the <b>pH is higher than its pI</b>'}[cond];
+  const ct={eq:'a solution where the <b>pH equals its pI</b>',lo:'a strongly acidic solution, where the <b>pH is far below its pI</b>',hi:'a strongly basic solution, where the <b>pH is far above its pI</b>'}[cond];
   return mc({html:P(`Which structure is the main form of <b>${nm(k)}</b> in ${ct}?`),options:['acid','zwit','base','unch'].map(f=>O(f,aaSVG(k,f,{scale:.62}))),answer:ans,struct:true,
-   hint:'pH = pI → zwitterion (net 0). pH lower than pI → extra H⁺ around, so the –COO⁻ picks up H⁺ (net +). pH higher than pI → H⁺ is removed from –NH₃⁺ (net −).',
+   hint:'pH = pI → zwitterion (net 0). pH well below pI → extra H⁺ around, so the –COO⁻ picks up H⁺ (net +). pH well above pI → H⁺ is removed from –NH₃⁺ (net −).',
    why:{acid:'Below the pI there is extra H⁺, so the –COO⁻ is protonated to –COOH while the amino group stays –NH₃⁺: net charge <b>positive</b>.',zwit:'At the pI the amino acid is a <b>zwitterion</b>, –NH₃⁺ and –COO⁻, with net charge zero.',base:'Above the pI, H⁺ is removed from the –NH₃⁺, giving –NH₂ while the carboxyl stays –COO⁻: net charge <b>negative</b>.'}[ans]+' The fully uncharged form (–NH₂ and –COOH) is never the main form in water.'})}
  if(t==='charge'){const cond=pickOne(['phys','phys','eq','lo','hi']);let k,ans,why;
   const L={pos:'Positive (+)',zero:'Zero (no net charge)',neg:'Negative (−)'};

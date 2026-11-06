@@ -1289,9 +1289,9 @@ const AOPT={
  hcl:{t:'HCl',w:'HCl gives H⁺ to a base, like the N of an amine.'},
  o2:{t:'O₂, spark',w:'O₂ burns the compound completely to CO₂ and H₂O.'}};
 const ARW={combustion:{a:'o2',n:['x2hv','h2','dehyd']},substitution:{a:'x2hv',n:['x2','hx','h2']},hydrogenation:{a:'h2',n:['h2o','hx','x2']},halogenAdd:{a:'x2',n:['x2hv','hx','h2']},
- hydrohalogenation:{a:'hx',n:['x2','h2o','h2'],x:['hcl']},hydration:{a:'h2o',n:['dehyd','h2','acidhyd','hx']},dehydration:{a:'dehyd',n:['h2o','ox','h2']},
+ hydrohalogenation:{a:'hx',n:['x2','h2o','h2'],x:['hcl']},hydration:{a:'h2o',n:['dehyd','h2','hx'],x:['acidhyd']},dehydration:{a:'dehyd',n:['h2o','ox','h2']},
  ox1Ald:{a:'oxmild',n:['oxx','h2','dehyd'],x:['ox']},ox1Acid:{a:'oxx',n:['oxmild','h2','dehyd'],x:['ox']},oxAldAcid:{a:'ox',n:['h2','dehyd','h2o'],x:['oxmild','oxx']},ox2:{a:'ox',n:['h2','dehyd','h2o'],x:['oxmild','oxx']},
- reduction:{a:'h2',n:['ox','dehyd','h2o']},esterHydrolysis:{a:'acidhyd',n:['basehyd','h2','ox']},amideHydrolysis:{a:'acidhyd',n:['basehyd','h2','ox']},
+ reduction:{a:'h2',n:['ox','dehyd','h2o']},esterHydrolysis:{a:'acidhyd',n:['basehyd','h2','ox'],x:['h2o']},amideHydrolysis:{a:'acidhyd',n:['basehyd','h2','ox'],x:['h2o']},
  saponification:{a:'basehyd',n:['acidhyd','h2','ox'],x:['naoh']},amideBase:{a:'basehyd',n:['acidhyd','h2','ox'],x:['naoh']},neutralAcid:{a:'naoh',n:['hcl','acidhyd','h2'],x:['basehyd']},neutralAmine:{a:'hcl',n:['naoh','acidhyd','h2o'],x:['hx']}};
 function arrowStep(r){const A=ARW[r.key];if(!A)return null;const ex=new Set([A.a,...(A.x||[])]);const near=A.n.filter(k=>!ex.has(k));
  const rest=shuf(Object.keys(AOPT).filter(k=>!ex.has(k)&&!near.includes(k)));const wrong=[...shuf(near).slice(0,2),...shuf([...near.slice(2),...rest]).filter(k=>!near.slice(0,0).includes(k))];

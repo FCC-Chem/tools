@@ -736,7 +736,7 @@ function genPI() {
 function genAAForm() {
   const name = aaBag(); const t = AA[name][1]; const charged = t === 'acidic' || t === 'basic';
   const conds = charged ? [['zwit', 'at physiological pH (7.4)'], ['acid', 'in a strongly acidic solution (well below its pI)'], ['base', 'in a strongly basic solution (well above its pI)']].concat(t === 'acidic' ? [['pi', 'at a pH equal to its pI']] : [])
-    : [['zwit', 'at physiological pH (7.4)'], ['zwit', 'at a pH equal to its pI'], ['acid', 'at a pH below its pI'], ['base', 'at a pH above its pI']];
+    : [['zwit', 'at physiological pH (7.4)'], ['zwit', 'at a pH equal to its pI'], ['acid', 'in a strongly acidic solution (well below its pI)'], ['base', 'in a strongly basic solution (well above its pI)']];
   const [key, cond] = pick(conds);
   const pool = t === 'acidic' ? (key === 'pi' ? ['pi', 'zwit', 'acid', 'base'] : ['zwit', 'acid', 'base', chance(0.5) ? 'pi' : 'unch']) : ['zwit', 'acid', 'base', 'unch'];
   const L = ['A', 'B', 'C', 'D']; const order = shuffle(pool);
@@ -747,7 +747,7 @@ function genAAForm() {
   return mcq({ topic: 'aaform', tag: name + ' · ' + key, prompt: `Which drawing shows <b>${name}</b> ${cond}?`, right: lt(key), html, grid: true,
     wrongs: pool.filter(k => k !== key).map(k => [lt(k), `${lt(k)} shows ${why(k)}`, 'aaform:' + k + '-for-' + key]), keep: L,
     solution: `${lt(key)} shows ${why(key)} ${key === 'zwit' && !charged ? 'Amino acids in your blood exist mainly as zwitterions.' : ''}`,
-    hint: charged ? 'pH 7.4: backbone NH_3<sup>+</sup>/COO<sup>−</sup>, and the side chain is charged too (–COO<sup>−</sup> or N–H<sup>+</sup>). Strong acid: everything protonated. Strong base: everything deprotonated.' : 'Below pI: both groups protonated (+). At pI and pH 7.4: zwitterion (+ and −). Above pI: both deprotonated (−).' });
+    hint: charged ? 'pH 7.4: backbone NH_3<sup>+</sup>/COO<sup>−</sup>, and the side chain is charged too (–COO<sup>−</sup> or N–H<sup>+</sup>). Strong acid: everything protonated. Strong base: everything deprotonated.' : 'Well below pI: both groups protonated (+). At pI and pH 7.4: zwitterion (+ and −). Well above pI: both deprotonated (−).' });
 }
 const PEP = AAN;
 function genPeptide() {

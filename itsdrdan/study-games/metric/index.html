@@ -982,6 +982,7 @@ function normalizeNumberAnswer(input) {
 
 function interpretNumberAnswer(input) {
     let answer = normalizeNumberAnswer(input);
+    if (answer.startsWith('.')) answer = '0' + answer;   // .001 = 0.001
 
     const standardPrefixes = getActivePrefixes();
 
@@ -1027,7 +1028,8 @@ function interpretNumberAnswer(input) {
 }
 
 function prefixNameIsCorrect(input) {
-    return input.trim().toLowerCase() === currentPrefix.name.toLowerCase();
+    const typed = input.trim().toLowerCase().replace(/^deka$/, 'deca');   // US spelling deka- is also correct
+    return typed === currentPrefix.name.toLowerCase();
 }
 
 function prefixSymbolIsCorrect(input) {

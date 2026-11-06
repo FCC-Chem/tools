@@ -176,6 +176,7 @@ details.ti{margin-top:10px;border:1px solid var(--line);border-radius:12px;backg
 .calc .keys button.k2nd{background:#2072dc}
 .calc .keys button.kent{background:#4a505c}
 .calc .keys button.off{opacity:.4;cursor:default}
+.calc .keys button.lit{background:#ffd166;color:#1d2027;box-shadow:0 0 0 3px #ffd16688}
 .calc .keys button.press,.calc .keys button:active{transform:scale(.92);box-shadow:0 0 0 3px #ffd166,0 1px 0 #0008}
 .calc .keys button:focus-visible{outline:3px solid #ffd166}
 .dpad{grid-column:span 2;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,23px);gap:2px;align-self:end}
@@ -607,7 +608,7 @@ function press(k){
  else if(k==='ee')ins({t:'c',v:'E'});
  else if(k==='pi')ins({t:'c',v:'π'});
  else if(k==='sq'){if(s2)lastTok=ins({t:'f',v:'√'});else ins({t:'c',v:'²'})}
- else if(k==='pow'){if(s2)ins({t:'c',v:'⁻¹'});else ins({t:'pow',e:[]})}
+ else if(k==='pow'){if(s2)ins({t:'c',v:'⁻¹'});else{const fr=top();if(fr.tok&&fr.tok.t==='pow'){if(!fr.tok.e.length){frames.pop();const pf=top();pf.list.splice(fr.at,1);pf.i=fr.at}else exitRight()}else ins({t:'pow',e:[]})}}
  else if(k==='lnlog'){const f=top();if(prevLast==='lnlog'&&lastTok&&f.list[f.i-1]===lastTok&&lastTok.t==='f'){lastTok.v=lastTok.v==='ln'?'log':'ln'}else lastTok=ins({t:'f',v:'ln'})}
  else if(k==='expk'){const f=top();if(prevLast==='expk'&&lastTok&&f.tok===lastTok&&!lastTok.e.length){lastTok.b=lastTok.b==='e'?'10':'e'}else lastTok=ins({t:'base',b:'e',e:[]})}
  else if(k==='frac'){const f=top(),prev=f.list[f.i-1];
@@ -649,7 +650,7 @@ function mount(el,cb){root=el;onAns=cb;
  el.addEventListener('keydown',e=>{const m={'+':'add','-':'sub','*':'mul','/':'div','(':'lp',')':'rp','.':'dot','Enter':'enter','=':'enter','Backspace':'del','ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down','^':'pow','Escape':'clear','e':'ee','E':'ee'};
   const k=/^[0-9]$/.test(e.key)?e.key:m[e.key];if(k&&!playing&&!e.ctrlKey&&!e.metaKey){e.preventDefault();press(k);flash(k)}});
  draw()}
-function draw(){if(!screen)return;const ind=root.querySelector('#cInd');ind.textContent=second?'2ND':'';
+function draw(){if(!screen)return;const ind=root.querySelector('#cInd');const fr0=top(),inPow=!!(fr0&&fr0.tok&&fr0.tok.t==='pow');ind.textContent=(second?'2ND ':'')+(inPow?'EXPONENT':'');const pk=root.querySelector('[data-k="pow"]');if(pk)pk.classList.toggle('lit',inPow);
  let h='';hist.slice(-2).forEach((r,k,arr)=>{const res=k===arr.length-1&&showFrac&&frac(r.v)?rFrac(frac(r.v)):fmt(r.v);h+='<div class="hl">'+r.html+'</div><div class="hr">'+res+'</div>'});
  h+='<div class="hl cur">'+rList(entry,top())+'</div>';if(err)h+='<div class="herr">'+esc(err)+'</div>';screen.innerHTML=h;screen.scrollTop=screen.scrollHeight}
 function flash(k){if(!root)return;const b=root.querySelector('[data-k="'+k+'"]');if(!b)return;b.classList.add('press');setTimeout(()=>b.classList.remove('press'),220)}

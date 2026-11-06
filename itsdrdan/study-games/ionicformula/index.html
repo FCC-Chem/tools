@@ -1537,7 +1537,9 @@ function normalize(s){
     .replace(/\s+/g,' ')
     .trim()
     .toLowerCase()
-    .replace(/\s+\(/g, '(');   // "chromium (III)" and "chromium(III)" should both be accepted
+    .replace(/\s+\(/g, '(')   // "chromium (III)" and "chromium(III)" should both be accepted
+    .replace(/\bdek/g, 'dec')   // deka- = deca-
+    .replace(/\b(mon|tetr|pent|hex|hept|oct|non|dec)[ao]oxide\b/g, '$1oxide');   // tetraoxide = tetroxide, decaoxide = decoxide (IUPAC keeps the vowel)
 }
 
 function normalizeFormulaAnswer(s){
@@ -2062,7 +2064,8 @@ function makeQuestion(){
       key = `ionic:${kind}:${direction}:${cIon.id}:${aIon.id}`;
     }
     guard++;
-  } while(key === previousQuestionKey && guard < 30);
+  // Peroxide with a Type II metal (FeO2, CuO2, Hg2O2…) looks like a different oxide when you only see the formula: skip it for Formula → Name.
+  } while((key === previousQuestionKey || (question.kind === 'ionic' && question.direction === 'name' && question.aIon.id === 'O2_2' && question.cIon.type === 2)) && guard < 30);
 
   previousQuestionKey = key;
   return question;
