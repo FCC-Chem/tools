@@ -141,7 +141,7 @@ main.panel{padding:22px;scroll-margin-top:calc(var(--topbar) + 10px)}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.15rem;letter-spacing:-.01em}.section-head span{color:var(--faint);font-weight:650;font-size:.88rem}
 .stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:650;font-size:.76rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.02rem}
 .trail-summary{font-size:.9rem;color:var(--muted);margin:0 0 12px}
-.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}.badge{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;background:#fafbfd;color:var(--faint)}.badge .bi{grid-row:span 2;font-size:1.25rem;filter:grayscale(1);opacity:.5}.badge b{font-size:.86rem;color:#7a8299;line-height:1.2}.badge small{font-size:.74rem;line-height:1.3}.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got .bi{filter:none;opacity:1}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}.badge{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;background:#fafbfd;color:var(--faint)}.badge .bi{grid-row:span 2;font-size:1.25rem;filter:grayscale(1);opacity:.5}.badge b{font-size:.86rem;color:#656c83;line-height:1.2}.badge small{font-size:.74rem;line-height:1.3}.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got .bi{filter:none;opacity:1}
 .section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:650}.reset-btn.armed{background:var(--rose)}
 
 /* videos */
@@ -744,7 +744,7 @@ details.directions>summary::-webkit-details-marker{display:none}
 .feature-card{border-radius:20px}.feature-card .fc-ico svg{width:40px;height:40px}.feature-card b{font-weight:600}
 /* play panel */
 main.play.card{border-top:6px solid var(--acc,#4b57d1);padding-top:16px;background:#fffdf9}
-.play-title{font-weight:600;font-size:1.65rem;line-height:1.15}.play-title small{display:block;font-family:Nunito,sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--acc,#4b57d1)}
+.play-title{font-weight:600;font-size:1.65rem;line-height:1.15}.play-title small{display:block;font-family:Nunito,sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--acc,#4b57d1);color:color-mix(in srgb,var(--acc,#4b57d1) 50%,#1d2433)}
 .ph-btns{display:flex;gap:8px;flex-wrap:wrap}
 .refbtn,.newbtn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:10px 18px;min-height:48px;font-weight:600;font-size:1.02rem;cursor:pointer}
 .refbtn{background:#efe9fb;border:2px solid #cdbff0;color:#3d2f73;box-shadow:0 3px 0 #d8cdf3}
@@ -783,7 +783,7 @@ main.play.card{border-top:6px solid var(--acc,#4b57d1);padding-top:16px;backgrou
 .jbadge.earned{border-color:#f0cf86;background:linear-gradient(135deg,#fffaf0,#fff3d6);box-shadow:0 3px 10px #e0a21b22}.jbadge.earned .bmed{filter:drop-shadow(0 3px 4px #0002);opacity:1}
 .jb-txt{min-width:0;flex:1}.bt{font-weight:600;font-size:.98rem;line-height:1.15}.bd{font-size:.76rem;color:#56637a;line-height:1.25;margin-top:1px}
 .jb-prog{height:6px;border-radius:99px;background:#e9e3d6;margin-top:5px;overflow:hidden}.jb-prog i{display:block;height:100%;background:linear-gradient(90deg,#8fd8c8,#f7c968);border-radius:99px}
-.jb-num{font-size:.7rem;font-weight:800;color:#8a959d;margin-top:2px}.jb-done{font-size:.78rem;font-weight:900;color:#3f9a58;margin-top:3px}
+.jb-num{font-size:.7rem;font-weight:800;color:#626d76;margin-top:2px}.jb-done{font-size:.78rem;font-weight:900;color:#3f9a58;margin-top:3px}
 .journey .review-map-panel{margin:12px 16px 0;background:#fff}
 .journey-reset{margin:12px 16px 16px;background:#fff;border:1.5px solid #e6e0d2;border-radius:12px;padding:8px 14px;font-weight:800;cursor:pointer;color:#3a3a46}
 .collapsible .video-body{padding:0}
@@ -830,7 +830,7 @@ main.play.card{border-top:6px solid var(--acc,#4b57d1);padding-top:16px;backgrou
 .qtiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
 @media(max-width:680px){#featured{grid-template-columns:1fr;gap:8px}.qgroups{display:grid;grid-template-columns:1fr 1fr;gap:6px}.qg{justify-content:center;padding:7px 8px;font-size:.92rem;min-height:44px}.qtiles{grid-template-columns:1fr;gap:8px}.qtiles .pick.tile{max-width:none}}
 /* v36: My Mix */
-.qg.pick-several{border-style:dashed;margin-left:auto}.qg.pick-several.on{background:#3a9a71;border-color:#3a9a71;border-style:solid;box-shadow:0 3px 0 #2c7a58}
+.qg.pick-several{border-style:dashed;margin-left:auto}.qg.pick-several.on{background:#31825f;border-color:#31825f;border-style:solid;box-shadow:0 3px 0 #2c7a58}
 .mix-hint{margin:-4px 0 10px;font-size:.92rem;color:#2c7a58;font-weight:700}
 .pick.tile.choosing{position:relative}
 .selmark{position:absolute;top:8px;right:10px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px dashed #aab2c8;color:#7d8aa6;font-weight:900;font-size:1rem;background:#fff}
@@ -943,7 +943,7 @@ main.play.card{border-top:6px solid var(--acc,#4b57d1);padding-top:16px;backgrou
 @media(max-width:680px){#featured{grid-template-columns:1fr;gap:8px}.week{gap:6px;padding:8px 10px}.week .wk{padding:5px 10px;font-size:.9rem;min-height:38px}}
 
 /* ===== v45 polish: layout rail, icon set, calmer type, fades ===== */
-:root{--muted:#4f5a74;--faint:#6f7890}
+:root{--muted:#4f5a74;--faint:#646c82}
 .ui{width:1.05em;height:1.05em;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .tb-streak .ui{color:#e0785a;margin-right:4px}.tb-xp .ico .ui{width:22px;height:22px}
 .ms-ico .ui{width:26px;height:26px}
@@ -983,7 +983,7 @@ main.play.card{border-top:6px solid var(--acc,#4b57d1);padding-top:16px;backgrou
 @keyframes stepIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.enter{animation:none}}
 /* Math Gym featured tile */
-.tile-new{font-style:normal;font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#3f9a7a;color:#fff;border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.tile-new{font-style:normal;font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#358267;color:#fff;border-radius:99px;padding:1px 7px;margin-left:4px;vertical-align:1px}
 @media(min-width:681px){.picker .pick.tile[data-level="mathgym"],.picker .pick.tile[data-quest="mathgym"]{grid-column:1/-1;grid-template-columns:52px 1fr auto;align-items:center}
  .picker .pick.tile[data-level="mathgym"] .foot,.picker .pick.tile[data-quest="mathgym"] .foot{grid-column:3;grid-row:1;min-width:150px}
  .picker .pick.tile[data-level="mathgym"] small,.picker .pick.tile[data-quest="mathgym"] small{max-width:none}}
@@ -1724,7 +1724,7 @@ const PHYSICAL=[
 ['Kinetic molecular theory','Two ideal gases have the same temperature. They have the same…','Average translational kinetic energy','Average molecular speed','Molecular mass','Density','Average translational kinetic energy depends on absolute temperature; average speeds also depend on mass.'],
 ['Crystal classes','Which solid is a covalent network?','Diamond','Solid argon','NaCl crystal','Solid methane','Diamond has an extended covalent network; molecular or atomic solids are held by intermolecular attractions.'],
 ['Colligative idea','Which changes depend primarily on dissolved-particle count in the ideal dilute limit?','Freezing-point depression','Chemical identity alone determines all effects','Atomic number of the solvent only','Oxidation state changes','Colligative properties depend on solute particle concentration, with electrolyte dissociation affecting particle count.']];
-function physical(){if(Math.random()<.5)return concept('physical','OpenStax 5, 9–11',drawBag('physical',PHYSICAL));const kind=pick(['gas','heat','freeze','enthalpy']);if(kind==='gas'){const P=measure(.85,1.5),V=measure(1,6),T=measure(290,360);return {topic:'physical',source:'OpenStax 9.2',title:'Ideal gas mole calculator',story:`An ideal gas occupies ${fmt(V)} L at ${fmt(P)} atm and ${fmt(T)} K. R = 0.082058 L·atm/(mol·K).`,steps:[step('Find moles','Use n = PV/RT.',[num('n','Gas moles',P*V/(.082058*T),'mol')],da('n = PV/RT =',[FR([Q(fmt(P),'atm'),Q(fmt(V),'L')],[Q('0.082058',['L','atm'],['mol','K']),Q(fmt(T),'K')])],fmt(P*V/(.082058*T))+' mol','atm, L and K cancel, leaving mol.'))]};}if(kind==='heat'){const g=measure(60,150),dT=measure(2,9),heat=g*4.184*dT;return {topic:'physical',source:'OpenStax 5.2',title:'Connect temperature to reaction heat',story:`A solution of mass ${fmt(g)} g warms by ${fmt(dT)} °C. Assume c = 4.184 J/(g·°C), no heat loss, and negligible calorimeter heat.`,steps:[step('Calculate solution heat','qsolution = mcΔT.',[num('q','Solution heat',heat,'J')],da('q<sub>solution</sub> = mcΔT =',[Q(fmt(g),'g'),Q('4.184','J',['g','°C']),Q(fmt(dT),'°C')],fmt(heat)+' J')),step('Determine the reaction heat','The solution gained heat. What is qreaction?',[num('rxn','Reaction heat',-heat,'J'),choice('exo','Process','Exothermic',['Exothermic','Endothermic'])],daLine('q<sub>reaction</sub> = −q<sub>solution</sub> = −('+fmt(heat)+' J) = <b>'+fmt(-heat)+' J</b>')+'The reaction released heat.')]};}if(kind==='freeze'){const molality=measure(.08,.35),i=pick([1,2,3]);return {topic:'physical',source:'OpenStax 11.4',title:'Particle counts and freezing point',story:`An ideal dilute aqueous solution has molality ${fmt(molality)} mol/kg and specified van ’t Hoff factor i = ${i}. Use Kf = 1.86 °C·kg/mol.`,steps:[step('Find the freezing-point depression','Use ΔTf = iKfm.',[num('depression','Positive depression magnitude',i*1.86*molality,'°C')],da('ΔT<sub>f</sub> = iK<sub>f</sub>m =',[Q(i),Q('1.86',['°C','kg'],'mol'),Q(fmt(molality),'mol','kg')],fmt(i*1.86*molality)+' °C')),step('Find the freezing point','Pure water freezes at 0.00 °C at 1 atm.',[num('Tf','Solution freezing point',-i*1.86*molality,'°C')],daLine('T<sub>f</sub> = 0.00 °C − '+fmt(i*1.86*molality)+' °C = <b>'+fmt(-i*1.86*molality)+' °C</b>'))]};}return {topic:'physical',source:'OpenStax 5.3',title:'Formation enthalpies',story:'For CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l), use ΔHf° values (kJ/mol): CH₄ −74.8; O₂ 0; CO₂ −393.5; H₂O(l) −285.8.',steps:[step('Calculate reaction enthalpy','Products minus reactants; multiply each formation enthalpy by its coefficient.',[num('H','ΔH°rxn',-890.3,'kJ per reaction as written')],'<p>ΔH°<sub>rxn</sub> = Σ n ΔH°<sub>f</sub>(products) − Σ n ΔH°<sub>f</sub>(reactants)</p>'+daLine('Products: '+daInline([Q('1','mol CO2'),FR(Q('−393.5','kJ'),Q('1','mol CO2'))]).html+' + '+daInline([Q('2','mol H2O'),FR(Q('−285.8','kJ'),Q('1','mol H2O'))]).html+' = −965.1 kJ')+daLine('Reactants: '+daInline([Q('1','mol CH4'),FR(Q('−74.8','kJ'),Q('1','mol CH4'))]).html+' + '+daInline([Q('2','mol O2'),FR(Q('0','kJ'),Q('1','mol O2'))]).html+' = −74.8 kJ')+daLine('ΔH°<sub>rxn</sub> = −965.1 kJ − (−74.8 kJ) = <b>−890.3 kJ</b> (−890. kJ to 3 significant figures)'))]};}
+function physical(){if(Math.random()<.5)return concept('physical','OpenStax 5, 9–11',drawBag('physical',PHYSICAL));const kind=pick(['gas','heat','freeze','enthalpy']);if(kind==='gas'){const P=measure(.85,1.5),V=measure(1,6),T=measure(290,360);return {topic:'physical',source:'OpenStax 9.2',title:'Ideal gas mole calculator',story:`An ideal gas occupies ${fmt(V)} L at ${fmt(P)} atm and ${fmt(T)} K. R = 0.082058 L·atm/(mol·K).`,steps:[step('Find moles','Use n = PV/RT.',[num('n','Gas moles',P*V/(.082058*T),'mol')],da('n = PV/RT =',[FR([Q(fmt(P),'atm'),Q(fmt(V),'L')],[Q('0.082058',['L','atm'],['mol','K']),Q(fmt(T),'K')])],fmt(P*V/(.082058*T))+' mol','atm, L and K cancel, leaving mol.'))]};}if(kind==='heat'){const g=measure(60,150),dT=measure(2,9),heat=g*4.184*dT;return {topic:'physical',source:'OpenStax 5.2',title:'Connect temperature to reaction heat',story:`A solution of mass ${fmt(g)} g warms by ${fmt(dT)} °C. Assume c = 4.184 J/(g·°C), no heat loss, and negligible calorimeter heat.`,steps:[step('Calculate solution heat','qsolution = mcΔT.',[num('q','Solution heat',heat,'J')],da('q<sub>solution</sub> = mcΔT =',[Q(fmt(g),'g'),Q('4.184','J',['g','°C']),Q(fmt(dT),'°C')],fmt(heat)+' J')),step('Determine the reaction heat','The solution gained heat. What is qreaction?',[num('rxn','Reaction heat',-heat,'J'),choice('exo','Process','Exothermic',['Exothermic','Endothermic'])],daLine('q<sub>reaction</sub> = −q<sub>solution</sub> = −('+fmt(heat)+' J) = <b>'+fmt(-heat)+' J</b>')+'The reaction released heat.')]};}if(kind==='freeze'){const molality=measure(.08,.35),i=pick([1,2,3]);return {topic:'physical',source:'OpenStax 11.4',title:'Particle counts and freezing point',story:`An ideal dilute aqueous solution has molality ${fmt(molality)} mol/kg and specified van ’t Hoff factor i = ${i}. Use Kf = 1.86 °C·kg/mol.`,steps:[step('Find the freezing-point depression','Use ΔTf = iKfm.',[num('depression','Positive depression magnitude',i*1.86*molality,'°C')],da('ΔT<sub>f</sub> = iK<sub>f</sub>m =',[Q(i),Q('1.86',['°C','kg'],'mol'),Q(fmt(molality),'mol','kg')],fmt(i*1.86*molality)+' °C')),step('Find the freezing point','Pure water freezes at 0.00 °C at 1 atm.',[num('Tf','Solution freezing point',-i*1.86*molality,'°C')],daLine('T<sub>f</sub> = 0.00 °C − '+fmt(i*1.86*molality)+' °C = <b>'+fmt(-i*1.86*molality)+' °C</b>'))]};}return {topic:'physical',source:'OpenStax 5.3',title:'Formation enthalpies',story:'For CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l), use ΔHf° values (kJ/mol): CH₄ −74.6; O₂ 0; CO₂ −393.5; H₂O(l) −285.8.',steps:[step('Calculate reaction enthalpy','Products minus reactants; multiply each formation enthalpy by its coefficient.',[num('H','ΔH°rxn',-890.5,'kJ per reaction as written')],'<p>ΔH°<sub>rxn</sub> = Σ n ΔH°<sub>f</sub>(products) − Σ n ΔH°<sub>f</sub>(reactants)</p>'+daLine('Products: '+daInline([Q('1','mol CO2'),FR(Q('−393.5','kJ'),Q('1','mol CO2'))]).html+' + '+daInline([Q('2','mol H2O'),FR(Q('−285.8','kJ'),Q('1','mol H2O'))]).html+' = −965.1 kJ')+daLine('Reactants: '+daInline([Q('1','mol CH4'),FR(Q('−74.6','kJ'),Q('1','mol CH4'))]).html+' + '+daInline([Q('2','mol O2'),FR(Q('0','kJ'),Q('1','mol O2'))]).html+' = −74.6 kJ')+daLine('ΔH°<sub>rxn</sub> = −965.1 kJ − (−74.6 kJ) = <b>−890.5 kJ</b>'))]};}
 const REDOX=[['Zn','Cu','Zn(s) + Cu^2+(aq) → Zn^2+(aq) + Cu(s)',0,2,2,0,'Cu^2+','Zn',2],['Sn','Fe','Sn^2+(aq) + 2Fe^3+(aq) → Sn^4+(aq) + 2Fe^2+(aq)',2,4,3,2,'Fe^3+','Sn^2+',2],['Mg','H','Mg(s) + 2H^+(aq) → Mg^2+(aq) + H2(g)',0,2,1,0,'H^+','Mg',2],['Fe','Ag','Fe(s) + 2Ag^+(aq) → Fe^2+(aq) + 2Ag(s)',0,2,1,0,'Ag^+','Fe',2],['Cl','Br','Cl2(aq) + 2Br^-(aq) → 2Cl^-(aq) + Br2(aq)',0,-1,-1,0,'Cl2','Br^-',2]];
 const REDOX_REFRESH=(()=>{
 const oxQuestions = [
@@ -1890,7 +1890,7 @@ const baseMeta=[
 ];
 // Extra examples apply the same classroom activity-series model.
 const metalsCharge={Li:1,Rb:1,K:1,Ba:2,Ca:2,Na:1,Mg:2,Al:3,Mn:2,Zn:2,Cr:3,Fe:2,Co:2,Ni:2,Sn:2,Pb:2,Cu:2,Ag:1,Hg:2,Pt:2,Au:3};
-for(const [a,b] of [['Mg','Cr'],['Cr','Mg'],['Al','Fe'],['Fe','Al'],['Zn','Ag'],['Ag','Zn'],['Ni','Cu'],['Cu','Ni'],['Fe','Pb'],['Pb','Fe'],['Sn','Cu'],['Cu','Sn'],['Mg','Zn'],['Zn','Mg'],['Co','Ag'],['Ag','Co']]){const yes=metalSeries.indexOf(a)<metalSeries.indexOf(b),ca=metalsCharge[a],cb=metalsCharge[b],g=gcd(ca,cb);activityQuestions.push({rxn:`${a}(s) + ${plainSpecies(b+'^'+cb+'+')}(aq) → ?`,yes,prod:yes?`${cb/g===1?'':cb/g+' '}${plainSpecies(a+'^'+ca+'+')}(aq) + ${ca/g===1?'':ca/g+' '}${b}(s)`:'No reaction',why:yes?`${a} is above ${b}, so ${a} can reduce the ${b} ions in the activity-series model.`:`${a} is below ${b}, so it cannot displace ${b} in the activity-series model.`})}
+for(const [a,b] of [['Mg','Cr'],['Cr','Mg'],['Al','Fe'],['Fe','Al'],['Zn','Ag'],['Ag','Zn'],['Ni','Cu'],['Cu','Ni'],['Fe','Pb'],['Pb','Fe'],['Sn','Cu'],['Cu','Sn'],['Mg','Zn'],['Zn','Mg'],['Co','Ag'],['Ag','Co']]){const yes=metalSeries.indexOf(a)<metalSeries.indexOf(b),ca=metalsCharge[a],cb=metalsCharge[b],g=gcd(ca,cb);activityQuestions.push({rxn:`${a}(s) + ${plainSpecies(b+'^'+(cb===1?'':cb)+'+')}(aq) → ?`,yes,prod:yes?`${cb/g===1?'':cb/g+' '}${plainSpecies(a+'^'+ca+'+')}(aq) + ${ca/g===1?'':ca/g+' '}${b}(s)`:'No reaction',why:yes?`${a} is above ${b}, so ${a} can reduce the ${b} ions in the activity-series model.`:`${a} is below ${b}, so it cannot displace ${b} in the activity-series model.`})}
 // Canonicalize the activity reactant coefficients whenever a displacement occurs.
 for(const q of activityQuestions){if(q.yes&&q.rxn.startsWith('Al(s) + Fe³⁺'))q.prod='Al³⁺(aq) + Fe(s)';}
 
@@ -2011,11 +2011,11 @@ const solids=new Set(['Li','K','Sr','Ba','P4','C','Mg','Al','Na','Fe','S','Ca','
 const otherGases=new Set(['N2','H2','CH4','C2H6','C3H8','C4H10','C2H4','C2H2','C3H6','C3H4','C4H8','SO3']);
 function stateOf(f,d){
  if(f==='H2O')return'l';if(f==='H2O2')return'aq';
- if(f==='H2CO3'||f==='H2SO3')return'aq';
+ if(f==='H2CO3'||f==='H2SO3'||f==='H2SO4')return'aq';
  if(f==='Hg')return'l';if(f==='I2')return's';if(f==='Br2')return'l';if(gases.has(f)||otherGases.has(f)||f==='F2')return'g';
  if(d.cat==='Combination'||d.cat==='Decomposition')return's';
  if(d.cat==='Combustion')return ['C2H6O','C3H8O','C5H12','C6H14'].includes(f)?'l':'g';
- if(f==='NaHCO3'||f==='Na2CO3'||f==='K2CO3'||f==='KCl'||f==='AlCl3'||f==='NaCl')return'aq';
+ if(f==='NaHCO3'||f==='Na2CO3'||f==='K2CO3'||f==='KCl'||f==='AlCl3'||f==='NaCl'||f==='KNO3')return'aq';
  if(insoluble.has(f)||solids.has(f))return's';
  return'aq';
 }
@@ -2044,7 +2044,7 @@ const KE_EQ=[
  {eq:'N2O4(g) ⇌ 2 NO2(g)',a:'N2O4',b:'NO2',ca:1,cb:2,dH:57.2,full:true},
  {eq:'2 NO2(g) ⇌ N2O4(g)',a:'NO2',b:'N2O4',ca:2,cb:1,dH:-57.2,full:true},
  {eq:'2 O3(g) ⇌ 3 O2(g)',a:'O3',b:'O2',ca:2,cb:3,dH:-285,full:true},
- {eq:'H2(g) + I2(g) ⇌ 2 HI(g)',a:'H2',b:'HI',ca:1,cb:2,dH:9.4,two:'I2'},
+ {eq:'H2(g) + I2(g) ⇌ 2 HI(g)',a:'H2',b:'HI',ca:1,cb:2,dH:-9.4,two:'I2'},
  {eq:'PCl5(g) ⇌ PCl3(g) + Cl2(g)',a:'PCl5',b:'PCl3',ca:1,cb:1,dH:87.9,two2:'Cl2'},
  {eq:'2 SO2(g) + O2(g) ⇌ 2 SO3(g)',a:'SO2',b:'SO3',ca:2,cb:2,dH:-198},
  {eq:'N2(g) + 3 H2(g) ⇌ 2 NH3(g)',a:'H2',b:'NH3',ca:3,cb:2,dH:-92.2}];

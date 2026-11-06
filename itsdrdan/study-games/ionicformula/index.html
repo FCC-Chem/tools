@@ -193,7 +193,7 @@
   .zone.cation-zone .zone-label{color:var(--cation); transform:translateX(-22px);}
   .zone.anion-zone .zone-label{color:var(--anion); transform:translateX(22px);}
   .zone .zone-empty{
-    font-size:.78rem; color:#6b8a78; text-align:center;
+    font-size:.78rem; color:#5d7768; text-align:center;
     width:112px; padding:26px 8px; line-height:1.4;
     border:2px dashed var(--green-300); border-radius:8px;
   }
@@ -316,7 +316,7 @@
   .fb-row.bad{background:#fdecea; color:#a03a2e;}
 
   .builder-actions{margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
-  .hint{font-size:.76rem; color:#6b8a78;}
+  .hint{font-size:.76rem; color:#5d7768;}
 
   .log-wrap{
     background:var(--paper); border:1px solid var(--green-200); border-radius:var(--radius);
@@ -329,7 +329,7 @@
   td.formula{font-family:'JetBrains Mono',monospace; font-size:.95rem;}
   tr.correct td{background:#f2fbf4;}
   tr.incorrect td{background:#fdf6f2;}
-  .log-empty{font-size:.82rem; color:#6b8a78; padding:6px 2px;}
+  .log-empty{font-size:.82rem; color:#5d7768; padding:6px 2px;}
   .del-row{border:none; background:none; color:var(--danger); cursor:pointer; font-weight:700; font-size:.85rem;}
 
 
@@ -364,7 +364,7 @@
     gap:12px; flex-wrap:wrap; margin-bottom:12px;
   }
   .quiz-top h2{margin:0; font-size:1rem; color:var(--green-900);}
-  .quiz-top p{margin:3px 0 0; font-size:.8rem; color:#6b8a78;}
+  .quiz-top p{margin:3px 0 0; font-size:.8rem; color:#5d7768;}
   .quiz-stats{display:flex; gap:7px; flex-wrap:wrap;}
   .stat-chip{
     background:var(--green-100); color:var(--green-800); border:1px solid var(--green-200);
@@ -405,7 +405,7 @@
   }
   #quizFormulaInput:focus{border-color:var(--green-600);}
   #quizFormulaInput:empty::before{content:attr(data-placeholder); color:#8aa095; pointer-events:none;}
-  .math-editor-note{margin-top:5px; font-size:.72rem; line-height:1.35; color:#6b8a78;}
+  .math-editor-note{margin-top:5px; font-size:.72rem; line-height:1.35; color:#5d7768;}
   .build-instruction{font-size:.82rem; color:#557263; line-height:1.45;}
   .quiz-actions{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px;}
   #quizPeriodicReferences{margin-top:12px;}
@@ -509,9 +509,9 @@
   .pt-cell:hover{transform:translateY(-2px); box-shadow:0 4px 8px rgba(91,65,103,.14); z-index:2;}
   .periodic-reference.reference-only .pt-cell{cursor:default;}
   .periodic-reference.reference-only .pt-cell:hover{transform:none; box-shadow:none; z-index:auto;}
-  .pt-num{display:block; font-size:.48rem; line-height:1; opacity:.62; text-align:left;}
+  .pt-num{display:block; font-size:.48rem; line-height:1; opacity:.92; text-align:left;}
   .pt-symbol{display:block; font-family:'JetBrains Mono',monospace; font-weight:800; font-size:.87rem; line-height:1.15;}
-  .pt-name{display:block; font-size:.43rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; opacity:.72;}
+  .pt-name{display:block; font-size:.43rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; opacity:.95;}
   .pt-nonmetal{background:#fff1f6;}
   .pt-alkali,.pt-alkaline{background:#fff8e8;}
   .pt-transition{background:#f6effc;}
@@ -539,6 +539,7 @@
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<style>/* sweep 2026-11-05: WCAG AA text contrast (same hues, a little darker) */.cations>h2,.balance-chip.cation{color:#c53863}.anions>h2,.balance-chip.anion{color:#447787}.stat-chip:nth-child(1){color:#a05674}.stat-chip:nth-child(2){color:#487587}.balance-status.empty{color:#66796e}.btn.ghost{opacity:.85}</style>
 </head>
 <body class="quiz-mode">
 
@@ -566,7 +567,7 @@
 </div>
 
 <div class="mode-shell">
-  <div class="mode-switcher" role="tablist" aria-label="Learning mode">
+  <div class="mode-switcher" role="group" aria-label="Learning mode">
     <button class="mode-btn active" id="quizModeBtn" type="button">Study / Quiz Mode</button>
     <button class="mode-btn" id="freeModeBtn" type="button">Free Builder Mode</button>
   </div>
@@ -640,7 +641,7 @@
           <details class="periodic-reference reference-only" id="namePeriodicReference" open>
             <summary>✨ Periodic Table Reference</summary>
             <div class="periodic-note">Use the periodic table as a reference while identifying the elements in the formula.</div>
-            <div class="periodic-table-wrap">
+            <div class="periodic-table-wrap" tabindex="0" aria-label="Periodic table (scrolls sideways)">
               <div class="periodic-table" id="namePeriodicTable"></div>
               <div class="pt-series" id="namePeriodicSeries"></div>
             </div>
@@ -656,7 +657,7 @@
           <details class="periodic-reference" id="periodicReference" open>
               <summary>✨ Periodic Table Reference</summary>
               <div class="periodic-note">Use this as a symbol reference. You can also click an element to insert its symbol into the formula editor.</div>
-              <div class="periodic-table-wrap">
+              <div class="periodic-table-wrap" tabindex="0" aria-label="Periodic table (scrolls sideways)">
                 <div class="periodic-table" id="periodicTable"></div>
                 <div class="pt-series" id="periodicSeries"></div>
               </div>

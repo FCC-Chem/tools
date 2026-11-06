@@ -5,7 +5,7 @@
 <link rel="icon" type="image/webp" href="assets/mascot/sleuth-idle.webp">
 <style>
 :root{
- --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#6f7890;--line:#e3e6f0;--line2:#d5d9e8;
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
  --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
  --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
  --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
@@ -104,7 +104,7 @@ table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff
 .calc-tip{font-size:.92rem;color:var(--muted);margin-top:8px}
 .next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
 .hl{font-family:var(--font);font-weight:800;letter-spacing:.03em;white-space:nowrap}
-.d-sig{color:#23704f;background:#dff3e8;border-radius:4px;padding:0 1px}.d-lead,.d-trail{color:#9aa1b4}.d-exp{color:#7a8299;white-space:nowrap}.hl .pt{font-style:normal}
+.d-sig{color:#23704f;background:#dff3e8;border-radius:4px;padding:0 1px}.d-lead,.d-trail{color:#9aa1b4}.d-exp{color:#656c83;white-space:nowrap}.hl .pt{font-style:normal}
 b.d-sig,b.d-lead,b.d-trail{font-weight:800}
 .legend{font-size:.9rem;opacity:.9}
 mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
@@ -141,7 +141,7 @@ mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
 .stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
-.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#7a8299;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
 .badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
 .section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .link-btn{border:0;background:none;color:var(--accent-d);font-weight:750;text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
@@ -285,7 +285,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <div class="detail" id="hintBox" hidden></div>
    <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
   </div>
-  <p class="note-small" style="opacity:.8">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+  <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
  </main>
 
  <section class="panel section" aria-labelledby="progressTitle">
@@ -1052,7 +1052,7 @@ function zoomScale(o) {
     }
   }
   t += `</g><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#7884ea" stroke-width="4"/>`;
-  t += `<text x="${cx + R - 10}" y="${cy - R + 34}" text-anchor="end" font-size="20" font-weight="800" fill="#7a8299">${unit}</text>`;
+  t += `<text x="${cx + R - 10}" y="${cy - R + 34}" text-anchor="end" font-size="20" font-weight="800" fill="#656c83">${unit}</text>`;
   return t;
 }
 
@@ -1099,7 +1099,7 @@ function instrumentSVG(full, zoomOpts, label) {
   t += `<rect x="${full.x - 40}" y="${full.y - 14}" width="50" height="28" rx="6" fill="none" stroke="#7884ea" stroke-width="2.5"/>`;
   t += `<line x1="${full.x + 10}" y1="${full.y - 14}" x2="${cx - R * 0.72}" y2="${cy - R * 0.7}" stroke="#7884ea" stroke-width="2" stroke-dasharray="5 4"/><line x1="${full.x + 10}" y1="${full.y + 14}" x2="${cx - R * 0.72}" y2="${cy + R * 0.7}" stroke="#7884ea" stroke-width="2" stroke-dasharray="5 4"/>`;
   t += zoomScale({ cx, cy, R, ...zoomOpts });
-  t += `<text x="${cx}" y="${cy + R + 34}" text-anchor="middle" font-size="16" font-weight="700" fill="#7a8299">zoomed in</text>`;
+  t += `<text x="${cx}" y="${cy + R + 34}" text-anchor="middle" font-size="16" font-weight="700" fill="#656c83">zoomed in</text>`;
   return t + '</svg>';
 }
 function twoZoomSVG(a, b, opts, labels, aria) {
@@ -1128,13 +1128,13 @@ function volumetricSVG(kind, cap, tol) {
     t += `<rect x="291" y="95" width="18" height="47" fill="${LAB.liquid}"/><path d="M291 262 L309 262 L302 360 L298 360 Z" fill="${LAB.liquid}" stroke="${LAB.glassLine}" stroke-width="2"/>`;
     t += `<line x1="282" y1="95" x2="318" y2="95" stroke="${LAB.navy}" stroke-width="3"/><text x="326" y="100" font-size="15" font-weight="800" fill="${LAB.navy}">fill line</text>`;
     t += `<text x="300" y="196" text-anchor="middle" font-size="16" font-weight="800" fill="${LAB.navy}">${cap} mL</text><text x="300" y="216" text-anchor="middle" font-size="13" font-weight="800" fill="${LAB.navy}">±${tol} mL</text>`;
-    t += `<text x="360" y="240" font-size="14" font-weight="700" fill="#7a8299">Class A, TD 20 °C</text>`;
+    t += `<text x="360" y="240" font-size="14" font-weight="700" fill="#656c83">Class A, TD 20 °C</text>`;
   } else {
     t += `<rect x="285" y="20" width="30" height="150" rx="4" fill="${LAB.glass}" stroke="${LAB.glassLine}" stroke-width="2.5"/>`;
     t += `<circle cx="300" cy="262" r="92" fill="${LAB.liquid}" stroke="${LAB.glassLine}" stroke-width="2.5"/><rect x="286" y="80" width="28" height="100" fill="${LAB.liquid}"/>`;
     t += `<line x1="276" y1="80" x2="324" y2="80" stroke="${LAB.navy}" stroke-width="3"/><text x="332" y="86" font-size="15" font-weight="800" fill="${LAB.navy}">fill line</text>`;
     t += `<text x="300" y="262" text-anchor="middle" font-size="20" font-weight="800" fill="${LAB.navy}">${cap} mL</text><text x="300" y="286" text-anchor="middle" font-size="15" font-weight="800" fill="${LAB.navy}">±${tol} mL</text>`;
-    t += `<text x="410" y="200" font-size="14" font-weight="700" fill="#7a8299">Class A, TC 20 °C</text>`;
+    t += `<text x="410" y="200" font-size="14" font-weight="700" fill="#656c83">Class A, TC 20 °C</text>`;
   }
   return t + '</svg>';
 }

@@ -70,7 +70,7 @@
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.6px;
-        color: #6b7280;
+        color: #69707d;
         font-weight: bold;
         margin-bottom: 12px;
     }
@@ -154,7 +154,7 @@
 
     .stat-label {
         font-size: 0.76rem;
-        color: #6b7280;
+        color: #69707d;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
@@ -181,7 +181,7 @@
 
     .question-label {
         text-align: center;
-        color: #6b7280;
+        color: #69707d;
         margin-bottom: 8px;
         font-size: 1rem;
     }
@@ -198,7 +198,7 @@
     .question-subtitle {
         text-align: center;
         min-height: 30px;
-        color: #7b8491;
+        color: #68717d;
         font-size: 1.15rem;
         margin-bottom: 25px;
     }
@@ -229,7 +229,7 @@
     .example-text {
         text-align: center;
         margin-top: 9px;
-        color: #7b8491;
+        color: #68717d;
         font-size: 0.84rem;
         min-height: 20px;
     }
@@ -392,7 +392,7 @@
         text-align: center;
         margin-top: 18px;
         font-size: 0.8rem;
-        color: #7b8491;
+        color: #68717d;
     }
 
     @media (max-width: 650px) {
@@ -448,7 +448,7 @@
                 <span class="course-name" id="chem3Label">CHEM 3A</span>
 
                 <label class="switch">
-                    <input type="checkbox" id="courseToggle" checked>
+                    <input type="checkbox" id="courseToggle" checked role="switch" aria-label="CHEM 1A course (off = CHEM 3A)">
                     <span class="slider"></span>
                 </label>
 
@@ -982,6 +982,14 @@ function normalizeNumberAnswer(input) {
 
 function interpretNumberAnswer(input) {
     let answer = normalizeNumberAnswer(input);
+
+    const standardPrefixes = getActivePrefixes();
+
+    for (let i = 0; i < standardPrefixes.length; i++) {
+        if (answer === exponentToStandard(standardPrefixes[i].exponent)) {
+            return standardPrefixes[i].exponent;
+        }
+    }
 
     let powerMatch = answer.match(/^10\^?([+-]?\d+)$/);
 

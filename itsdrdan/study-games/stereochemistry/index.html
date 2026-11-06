@@ -5,7 +5,7 @@
 <link rel="icon" type="image/webp" href="assets/mascot/mira-idle.webp">
 <style>
 :root{
- --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#6f7890;--line:#e3e6f0;--line2:#d5d9e8;
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
  --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
  --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
  --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
@@ -104,7 +104,7 @@ table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff
 .calc-tip{font-size:.92rem;color:var(--muted);margin-top:8px}
 .next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
 .hl{font-family:var(--font);font-weight:800;letter-spacing:.03em;white-space:nowrap}
-.d-sig{color:#23704f;background:#dff3e8;border-radius:4px;padding:0 1px}.d-lead,.d-trail{color:#9aa1b4}.d-exp{color:#7a8299;white-space:nowrap}.hl .pt{font-style:normal}
+.d-sig{color:#23704f;background:#dff3e8;border-radius:4px;padding:0 1px}.d-lead,.d-trail{color:#9aa1b4}.d-exp{color:#656c83;white-space:nowrap}.hl .pt{font-style:normal}
 b.d-sig,b.d-lead,b.d-trail{font-weight:800}
 .legend{font-size:.9rem;opacity:.9}
 mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
@@ -141,7 +141,7 @@ mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
 .stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
-.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#7a8299;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
 .badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
 .section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .link-btn{border:0;background:none;color:var(--accent-d);font-weight:750;text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
@@ -359,7 +359,7 @@ svg.fischer{width:200px;max-width:100%}svg.fischer .fl{font:800 17px Nunito,Inte
    <div class="detail" id="hintBox" hidden></div>
    <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
   </div>
-  <p class="note-small" style="opacity:.8">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+  <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
  </main>
  <section class="panel section" aria-labelledby="progressTitle">
   <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
@@ -621,7 +621,7 @@ function genConstit() {
   const OPTS = ['Identical (same compound)', 'Constitutional isomers', 'Stereoisomers', 'Not isomers (different formulas)'];
   const right = { id: OPTS[0], con: OPTS[1], diff: OPTS[3] }[real];
   return mcq({ topic: 'constit', tag: real, art: pair(drawMol(m, { cap: 'I' }), drawMol(B, { cap: 'II' })), prompt: 'How are compounds I and II related?', right,
-    wrongs: OPTS.filter(o => o !== right).map(o => [o, o === OPTS[2] ? 'Stereoisomers need wedges, dashes or cis–trans to differ; these drawings differ in which atoms are bonded.' : o === OPTS[3] ? 'Count the carbons and other atoms: the formulas match.' : o === OPTS[0] ? 'Number the longest chain from each end: the substituents are on different carbons.' : 'Count the atoms: the formulas are different, so they cannot be isomers.', 'constit:' + slug(o)]),
+    wrongs: OPTS.filter(o => o !== right).map(o => [o, o === OPTS[2] ? (real === 'id' ? 'Neither drawing has wedges, dashes or a C=C, so nothing differs in 3D: II is just I turned around.' : real === 'con' ? 'Stereoisomers need wedges, dashes or cis–trans to differ; these drawings differ in which atoms are bonded.' : 'Count the atoms: the formulas are different, so they cannot be stereoisomers.') : o === OPTS[3] ? 'Count the carbons and other atoms: the formulas match.' : o === OPTS[0] ? (real === 'diff' ? 'Count the atoms: the formulas are different, so they cannot be the same compound.' : 'Number the longest chain from each end: the substituents are on different carbons.') : (real === 'id' ? 'Number the chain from the other end: every group is on the same carbon, so I and II are the same compound, not isomers.' : 'Count the atoms: the formulas are different, so they cannot be isomers.'), 'constit:' + slug(o)]),
     keep: OPTS, solution: `Formula of I: ${fm(formulaOf(m).replace(/(\d+)/g, '_$1'))}; formula of II: ${fm(formulaOf(B).replace(/(\d+)/g, '_$1'))}. ${real === 'id' ? 'Same formula and the same connections (II is I turned around): identical.' : real === 'con' ? 'Same formula but the atoms are connected differently: constitutional isomers.' : 'Different formulas: not isomers at all.'}`,
     hint: 'Step 1: count atoms (same formula?). Step 2: number the chain from either end: are the groups on the same carbons?' });
 }

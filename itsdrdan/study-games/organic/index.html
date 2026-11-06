@@ -5,8 +5,8 @@
 <meta name="description" content="Flashcards and quizzes for the 16 functional groups in CHEM 3B: alkanes to amides. Free study game by ItsDrDan.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='10' width='52' height='44' rx='10' fill='%23f1e3fa' stroke='%239555bd' stroke-width='4'/%3E%3Cpolygon points='32,20 43,26.5 43,39.5 32,46 21,39.5 21,26.5' fill='none' stroke='%239555bd' stroke-width='4'/%3E%3C/svg%3E">
 <style>
-:root{--ink:#3a3157;--muted:#6f6889;--soft:#9a93b3;--line:#ece4f4;--bg:#fff8f1;--card:#fff;
-  --brand:#9555bd;--brand-d:#7a3fa3;--edge:#5a4d96;--gold:#ffb547;
+:root{--ink:#3a3157;--muted:#6f6889;--soft:#6f6691;--line:#ece4f4;--bg:#fff8f1;--card:#fff;
+  --brand:#8c47b7;--brand-d:#7a3fa3;--edge:#5a4d96;--gold:#ffb547;
   --O:#d9534f;--N:#3b6fd6;--S:#c98a00;--X:#3a9d4a;--C:#3a3157;
   --good:#2e9e6a;--good-bg:#e6f7ee;--bad:#d9534f;--bad-bg:#fff0ee;--shadow:0 8px 28px #5a4d9614}
 *{box-sizing:border-box}
@@ -308,7 +308,7 @@ function drawGroup(g, opts = {}) {
 }
 
 /* hero logo: a stack of cards with a benzene on top */
-document.getElementById('heroLogo').innerHTML = `<svg viewBox="0 0 128 128" aria-hidden="true"><rect x="22" y="34" width="86" height="64" rx="12" fill="#ffd6a8" stroke="#5a4d96" stroke-width="3" transform="rotate(8 65 66)"/><rect x="16" y="30" width="86" height="64" rx="12" fill="#e3f0ff" stroke="#5a4d96" stroke-width="3" transform="rotate(-6 59 62)"/><rect x="20" y="30" width="86" height="64" rx="12" fill="#fff" stroke="#5a4d96" stroke-width="3"/><polygon points="63,40 80,50 80,70 63,80 46,70 46,50" fill="#f1e3fa" stroke="#9555bd" stroke-width="4" stroke-linejoin="round"/><path d="M68 47 76 52M76 68 68 73M50 52 50 68" stroke="#9555bd" stroke-width="3.5" stroke-linecap="round"/><circle cx="100" cy="34" r="9" fill="#ffb547"/><path d="M96 34l3 3 6-7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+document.getElementById('heroLogo').innerHTML = `<svg viewBox="0 0 128 128" aria-hidden="true"><rect x="22" y="34" width="86" height="64" rx="12" fill="#ffd6a8" stroke="#5a4d96" stroke-width="3" transform="rotate(8 65 66)"/><rect x="16" y="30" width="86" height="64" rx="12" fill="#e3f0ff" stroke="#5a4d96" stroke-width="3" transform="rotate(-6 59 62)"/><rect x="20" y="30" width="86" height="64" rx="12" fill="#fff" stroke="#5a4d96" stroke-width="3"/><polygon points="63,40 80,50 80,70 63,80 46,70 46,50" fill="#f1e3fa" stroke="#8c47b7" stroke-width="4" stroke-linejoin="round"/><path d="M68 47 76 52M76 68 68 73M50 52 50 68" stroke="#8c47b7" stroke-width="3.5" stroke-linecap="round"/><circle cx="100" cy="34" r="9" fill="#ffb547"/><path d="M96 34l3 3 6-7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 /* ===================== state, XP, mastery ===================== */
 const $ = id => document.getElementById(id);
