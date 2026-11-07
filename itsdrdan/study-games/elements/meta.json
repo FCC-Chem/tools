@@ -1,20 +1,38 @@
 {
-  "title": "Element Symbol Study Lab",
+  "title": "Symbol Safari: Element Symbols — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3A and CHEM 1A",
-  "description": "Practice element names and symbols using the first 20 elements, a health-science essentials set, or a combined set. Includes name-to-symbol and symbol-to-name questions, capitalization checks, hints, missed-element review, a study reference, accuracy tracking, and saved progress.",
-  "icon": "⚛️",
+  "chapters": {
+    "CHEM 3A": "Chapter 2: Atomic Structure (2.5 The Periodic Table, 2.6 Ions) and Chapter 4: Compounds and Chemical Bonds",
+    "CHEM 1A": "Chapter 2: Atoms, Molecules, and Ions (OpenStax 2.3 Atomic Structure and Symbolism, 2.5 The Periodic Table)"
+  },
+  "description": "Element names and symbols practice for CHEM 1A (default) and CHEM 3A (add ?course=3A). Students pick from 4 tiles: Name → Symbol, Symbol → Name, Tricky Symbols (Na, K, Fe, Cu, Ag, Sn, Sb, Au, Hg, Pb, W and the Latin or German names they come from), and Where is it? (find elements on a clickable periodic table by group and period, by name, or by family; family names like alkali metals and halogens; metal, nonmetal or metalloid; group and period; common ions). CHEM 3A covers the first 20 elements, the health-science (body) elements and common ions; CHEM 1A adds the rest of the main group and common transition metals. Element sets: first 20, health-science set, main group, transition metals, or missed elements only, in random or atomic-number order. Symbols are graded case-sensitively, with mistake-specific feedback for capitalization (Co vs CO), Latin-symbol, look-alike and family mix-ups; names accept aluminium, sulphur and caesium. Skill Check Prep: 10 mixed questions, then a study plan. Hints, step-by-step help, Professor Tips, a rules sheet, a hide-the-names study reference, a missed-elements review list, XP, ranks, 10 achievements, and ItsDrDan videos that jump to the right moment.",
+  "icon": "periodic",
   "tags": [
-    "chemistry",
-    "CHEM 3A",
+    "alkali metals",
+    "alkaline earth metals",
     "CHEM 1A",
-    "elements",
+    "CHEM 3A",
+    "CHEM 3A Chapter 2",
+    "chemistry",
+    "common ions",
     "element names",
     "element symbols",
-    "periodic table",
+    "elements",
+    "families",
     "first 20 elements",
+    "groups and periods",
+    "halogens",
     "health sciences",
-    "memorization"
+    "Latin names",
+    "memorization",
+    "metalloids",
+    "metals and nonmetals",
+    "noble gases",
+    "periodic table",
+    "skill check",
+    "transition metals",
+    "XP and achievements"
   ],
   "status": "working"
 }

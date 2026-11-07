@@ -1,1314 +1,1019 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SI Prefix Challenge</title>
-
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prefix Power-Up • SI Prefixes • ItsDrDan</title>
+<meta name="description" content="SI prefix practice for CHEM 3A and CHEM 1A: prefix names, symbols and powers of ten, one-step and two-prefix metric conversions, squared and cubed units, and cm³ = mL.">
 <style>
-    * { box-sizing: border-box; }
+:root{
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
+ --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
+ --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
+ --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
+ --font:Nunito,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--font-display:Fredoka,Nunito,system-ui,sans-serif;--serif:Cambria,"Times New Roman",serif}
+*{box-sizing:border-box}html{scroll-padding-top:calc(var(--topbar) + 12px)}
+body{margin:0;background:linear-gradient(180deg,#eef0fb 0,var(--bg) 340px);color:var(--ink);font:16.5px/1.55 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,.tb-brand,.play-title,summary,.btn.primary{font-family:var(--font-display)}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
+[hidden]{display:none!important}
+.ui{width:1.05em;height:1.05em;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(135deg, #eef7ff, #f6f2ff);
-        color: #1f2937;
-        display: flex;
-        justify-content: center;
-        padding: 30px 15px;
-    }
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:#ffffffe6;backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+html.dd-embedded .topbar{position:relative}
+.tb{max-width:1180px;margin:auto;min-height:var(--topbar);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:1.12rem;white-space:nowrap;margin-right:auto}
+.logo-tile{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#7c87f0,#4b57d1);color:#fff;font-size:1.35rem;flex:none;box-shadow:0 3px 8px #4b57d140}
+.seg{display:inline-flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:8px 18px;font-weight:800;color:var(--muted);min-height:46px;white-space:nowrap}
+.seg button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+.tb-xp{display:flex;align-items:center;gap:9px;min-width:160px}.tb-xp .ico{width:34px;height:34px;display:grid;place-items:center;background:var(--lav);border-radius:10px;color:var(--accent-d)}
+.tb-xp b{display:block;font-size:.82rem;line-height:1.1}.tb-xp small{display:block;font-size:.72rem;color:var(--faint);font-weight:700}
+.xpbar{height:6px;width:110px;background:#e9eaf3;border-radius:9px;overflow:hidden;margin:4px 0 2px}.xpbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea);border-radius:9px;transition:width .5s}
+.tb-streak{display:flex;align-items:center;gap:5px;font-weight:800;font-size:.92rem;padding:7px 11px;border-radius:10px;background:var(--rose);color:var(--rose-ink);white-space:nowrap}
+.tb-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;border-radius:11px;padding:7px 13px;font-weight:800;color:#3d4a73;min-height:44px;white-space:nowrap}.tb-btn:hover{background:var(--accent-soft)}
 
-    .container {
-        width: 100%;
-        max-width: 900px;
-    }
+/* page */
+.wrap{max-width:1180px;margin:auto;padding:20px 16px 50px}
+.intro{display:flex;align-items:center;gap:16px;margin-bottom:10px}
+.intro-logo{width:96px;height:96px;flex:none;border-radius:26px;display:grid;place-items:center;background:linear-gradient(135deg,#f3f4ff,#e4e8ff);color:var(--accent);font-size:3.2rem;box-shadow:0 6px 14px #4b57d126}
+.intro-logo b{font-family:var(--font-display);font-size:1.6rem;line-height:1;color:var(--accent-d)}
+.eyebrow{margin:0;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:2px 0 2px;font-size:clamp(1.7rem,3.6vw,2.35rem);line-height:1.1;font-weight:600}
+.lede{margin:0;color:var(--muted)}
 
-    .header {
-        text-align: center;
-        margin-bottom: 24px;
-    }
+/* play panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);min-width:0}
+main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
+.play-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.play-title{margin:0;font-size:1.2rem;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;font-weight:750;color:#34416a;min-height:48px}.btn:hover{background:#f6f7fc}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;font-size:1.02rem}.btn.primary:hover{background:var(--accent-d)}
+.btn.pulse{border-color:var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tag{font-size:.78rem;font-weight:800;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}.tag.quiz{background:var(--lav);color:#4b4590}
+.question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:16px}
+.equation{text-align:center;font-size:clamp(1.6rem,6vw,2.6rem);font-weight:800;background:var(--accent-soft);border-radius:var(--r-sm);padding:14px;margin-bottom:12px;overflow-x:auto;color:#26326a;letter-spacing:.02em;overflow-wrap:anywhere}
+.equation:empty{display:none}.equation.long{font-size:clamp(1.15rem,4.6vw,2rem)}.equation.text{font-size:clamp(1.1rem,3.4vw,1.4rem);font-weight:750;letter-spacing:0;text-align:left;line-height:1.45}
+.equation sup,.prompt sup,.feedback sup,.detail sup,.gstep sup,.rule sup,table sup,.choice sup{font-size:.62em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.25;margin:2px 1px}.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 6px 3px}.frac>span:last-child{padding:3px 6px 0}
+.paren{font-size:1.6em;font-weight:400;vertical-align:middle;line-height:1}
+.chain{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;margin:4px 0;line-height:1.3}
+.chain .x{color:var(--faint);font-weight:800}
+.cancel{text-decoration:line-through;text-decoration-color:#d1344f;text-decoration-thickness:2px}
+.prompt{font-size:1.2rem;line-height:1.5;font-weight:650;margin:0}
+.answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.2rem;min-height:56px;border:1.5px solid var(--line2);border-radius:12px;background:#fff}
+.answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
+.answer .unit{color:var(--muted);font-weight:800;font-size:1.1rem}
+.answer .btn.primary{min-height:56px;padding:0 24px}
+.choice{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 16px;min-height:56px;font-size:1.06rem;font-weight:750;color:#2b3760;text-align:left}
+.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
+.typing-note{font-size:.88rem;color:var(--faint);margin:8px 2px 0}
+.calc-tip{font-size:.88rem;color:var(--muted);margin:6px 2px 0;padding:7px 11px;border-radius:10px;background:var(--sky)}
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
+.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
+.feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.tip{margin-top:8px;padding:8px 11px;border-radius:10px;background:var(--lav);color:#3c3576;font-size:.95rem}
+.xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
+.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
+.detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
+.next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
+.note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
 
-    .header h1 {
-        margin: 0 0 8px;
-        font-size: 2.3rem;
-        color: #243b64;
-    }
+/* guide */
+.guide{margin-top:10px;display:grid;gap:8px}
+.gstep{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:10px 12px}
+.gstep.current{border:2px solid #8b95ee;box-shadow:0 4px 14px #4b57d114}.gstep.done{background:#f3fbf7;border-color:#cbe9db}.gstep.later{display:none}
+.gstep .gnum{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}.gstep.done .gnum{color:var(--mint-ink)}
+.gstep .gask{font-weight:700;margin:2px 0 8px;font-size:1.05rem}
+.gstep .gchoices{display:flex;flex-wrap:wrap;gap:7px}.gstep .gchoices .choice{min-height:46px;padding:8px 13px;font-size:1rem}
+.gstep .gwhy{margin-top:7px;font-size:.95rem;color:var(--mint-ink)}.gstep .gwhy.bad{color:var(--rose-ink)}
 
-    .header p {
-        margin: 0 auto;
-        color: #667085;
-        line-height: 1.5;
-        max-width: 700px;
-    }
+/* report */
+.example{border:1px solid #d9ddf3;border-radius:var(--r-md);padding:16px;background:#fbfbff;margin-bottom:14px}
+.ex-label{display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.ex-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.report-score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.report-score b{font-size:2.2rem;color:var(--accent-d);font-family:var(--font-display)}
+.report-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:6px}.report-list li{padding:8px 12px;border-radius:12px;background:var(--rose);border:1px solid var(--rose-line)}.report-list li.ok{background:var(--mint);border-color:var(--mint-line)}
+.plan-list{margin:6px 0 0;padding-left:20px}.plan-list li{margin:4px 0}
+.quiz-bar{height:8px;border-radius:9px;background:#eceef5;overflow:hidden;margin:-2px 0 12px}.quiz-bar span{display:block;height:100%;background:linear-gradient(90deg,#72c9a8,#7884ea)}
 
-    .game-card,
-    .settings,
-    .reference-section,
-    .missed-section {
-        background: white;
-        border-radius: 22px;
-        padding: 30px;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.08);
-    }
+/* progress */
+.section{margin-top:18px;padding:20px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
+.missed-list{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}.missed-item{background:var(--rose);color:var(--rose-ink);border:1px solid var(--rose-line);padding:6px 11px;border-radius:10px;font-size:.9rem;font-weight:700}.missed-none{color:var(--faint);font-size:.92rem}
+.section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:750;min-height:44px}.reset-btn.armed{background:var(--rose)}
+h3.sub{font-size:1rem;margin:4px 0 6px}
 
-    .settings,
-    .reference-section,
-    .missed-section {
-        margin-top: 20px;
-    }
+/* videos + details */
+details.section{padding:0}details.section>summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:1.1rem}
+details.section>summary::-webkit-details-marker{display:none}details.section>summary::after{content:'▾';color:var(--faint)}details[open].section>summary::after{transform:rotate(180deg)}
+details.section>summary small{display:block;font-family:var(--font);font-weight:600;color:var(--muted);font-size:.86rem}
+.video-body{padding:0 20px 20px}.lesson-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.lesson-player{aspect-ratio:16/9;background:#1e2538;border-radius:var(--r-md);overflow:hidden}.lesson-player iframe{width:100%;height:100%;border:0;display:block}
+.lesson-meta h3{margin:10px 0 2px;font-size:1rem}.lesson-meta a{color:var(--accent-d);font-weight:750}
+.video-list{display:grid;gap:8px;align-content:start}.lesson-card{display:flex;gap:11px;text-align:left;align-items:start;border:1px solid var(--line);background:#fafbff;border-radius:12px;padding:9px;width:100%}
+.lesson-card img{width:96px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:none;background:#e6e8f2}.lesson-card b{display:block;font-size:.9rem;line-height:1.3}.lesson-card small{display:block;color:var(--muted);font-size:.76rem}.lesson-card.active{border-color:var(--accent);background:var(--accent-soft)}
+.chapter-links{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:16px;padding-top:12px;font-size:.92rem}.chapter-links a{color:var(--accent-d);font-weight:750}
+.howto-d{margin:12px 0 0;border:1px solid var(--line);border-radius:var(--r-md);background:#fff}
+.howto-d>summary{cursor:pointer;padding:11px 15px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}.howto-d>summary::-webkit-details-marker{display:none}
+.howto-d>div{padding:0 16px 14px;color:var(--muted)}.howto-d ul{margin:4px 0;padding-left:20px}
 
-    .course-selector {
-        text-align: center;
-        margin-bottom: 25px;
-        background: #f5f7fb;
-        border-radius: 16px;
-        padding: 18px;
-    }
+/* reference dialog */
+dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;width:min(860px,calc(100vw - 16px));max-height:90vh}dialog::backdrop{background:#15182b80}
+.modal-head{position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head strong{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.close-btn{width:44px;height:44px;border:1px solid var(--line2);border-radius:10px;background:#fff;font-size:1.2rem}
+.modal-body{overflow:auto;padding:16px 18px;max-height:calc(90vh - 70px)}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfbfe}.rule h3{margin:0 0 4px;font-size:1rem}.rule p{margin:3px 0;font-size:.95rem}
+.rule.wide{grid-column:1/-1}
+.table-wrap{overflow-x:auto}
+table.ref{width:100%;border-collapse:collapse;font-size:1rem;background:#fff}table.ref th,table.ref td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:center}table.ref th{background:#f4f5fb;font-weight:800}table.ref tr.core td:first-child{font-weight:800}
+table.ref td.std{font-variant-numeric:tabular-nums;word-break:break-all}
 
-    .course-selector-title {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: #69707d;
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
+/* toasts + confetti */
+.toasts{position:fixed;right:16px;bottom:16px;z-index:1100;display:grid;gap:9px;max-width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #ddd6f7;border-radius:14px;padding:10px 13px;box-shadow:0 12px 34px #1f2a4430;font-size:.92rem;transition:opacity .5s,transform .5s}.toast img{width:42px;height:42px}.toast.out{opacity:0;transform:translateY(10px)}
+#celebrationCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
+.foot{text-align:center;font-size:.82rem;color:var(--faint);margin:18px 0 6px}
 
-    .course-toggle-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 14px;
-    }
+/* chooser */
+.chooser{margin:6px 0 16px}
+.pick-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px;font-size:1.2rem;font-weight:600}.pick-title small{font-family:var(--font);font-weight:700;color:var(--faint);font-size:.88rem}
+.pick-title.small{font-size:1.05rem;margin-top:14px}
+.stepnum{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.9rem;flex:none}
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cat{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;border:2px solid var(--line2);background:#fff;border-radius:20px;padding:16px 12px 14px;box-shadow:var(--shadow);min-height:170px}
+.cat:hover{border-color:#aab2ea}.cat b{font-family:var(--font-display);font-weight:600;font-size:1.15rem;line-height:1.2}.cat small{color:var(--muted);font-size:.86rem;line-height:1.3}
+.cat-ico{width:72px;height:72px;border-radius:22px;display:grid;place-items:center;font-size:2.3rem;background:var(--accent-soft);color:var(--accent-d)}
+.cat[data-cat="onestep"] .cat-ico{background:var(--mint);color:var(--mint-ink)}.cat[data-cat="twostep"] .cat-ico{background:var(--amber);color:var(--amber-ink)}.cat[data-cat="power"] .cat-ico{background:var(--rose);color:var(--rose-ink)}
+.cat .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;color:#fff}
+.cat.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.cat.on .tick{background:var(--accent);border-color:var(--accent)}
+.chips-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:6px 16px 16px;margin-top:12px}
+.chips{display:flex;flex-direction:column;gap:10px}.chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.chip-row>span{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);min-width:150px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);background:#fff;border-radius:99px;padding:9px 16px;min-height:46px;font-weight:800;color:#3d4a73;text-align:left}
+.chip::before{content:'';width:18px;height:18px;border-radius:6px;border:2px solid var(--line2);flex:none}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d)}.chip.on::before{background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5 9-10' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--accent)}
+.chip .stat{font-size:.75rem;color:var(--faint);background:none;padding:0;border-radius:0}
+.skill-card{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;text-align:left;border:1px solid #ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);border-radius:var(--r-lg);padding:12px 16px;box-shadow:var(--shadow)}
+.skill-card img{width:58px;height:58px;flex:none}.skill-card b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.15rem}.skill-card small{color:var(--muted)}.skill-card .go{margin-left:auto;font-size:1.4rem;color:var(--accent-d)}
+.skill-card.on{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+.empty{padding:26px 16px;text-align:center;color:var(--muted);font-weight:700;font-size:1.08rem;border:2px dashed var(--line2);border-radius:var(--r-md)}
+.empty .ui{transform:rotate(-90deg)}
+.btn[aria-pressed="true"]{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
 
-    .course-name {
-        font-weight: bold;
-        font-size: 1rem;
-        color: #667085;
-        transition: 0.2s;
-    }
-
-    .course-name.active {
-        color: #5746c7;
-    }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 64px;
-        height: 34px;
-    }
-
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        inset: 0;
-        background-color: #5746c7;
-        transition: 0.25s;
-        border-radius: 34px;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: 0.25s;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.20);
-    }
-
-    input:checked + .slider:before {
-        transform: translateX(30px);
-    }
-
-    .course-range {
-        margin-top: 11px;
-        color: #667085;
-        font-size: 0.88rem;
-    }
-
-    .stats {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 25px;
-    }
-
-    .stat {
-        background: #f4f7fb;
-        padding: 12px;
-        border-radius: 12px;
-        text-align: center;
-    }
-
-    .stat-label {
-        font-size: 0.76rem;
-        color: #69707d;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .stat-number {
-        font-size: 1.45rem;
-        font-weight: bold;
-        margin-top: 3px;
-        color: #243b64;
-    }
-
-    .question-type {
-        display: table;
-        margin: 0 auto 17px;
-        padding: 7px 15px;
-        border-radius: 100px;
-        background: #eeeafd;
-        color: #5746c7;
-        font-weight: bold;
-        font-size: 0.82rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .question-label {
-        text-align: center;
-        color: #69707d;
-        margin-bottom: 8px;
-        font-size: 1rem;
-    }
-
-    .question-display {
-        text-align: center;
-        font-size: 3rem;
-        font-weight: bold;
-        color: #5746c7;
-        margin: 12px 0 8px;
-        word-break: break-word;
-    }
-
-    .question-subtitle {
-        text-align: center;
-        min-height: 30px;
-        color: #68717d;
-        font-size: 1.15rem;
-        margin-bottom: 25px;
-    }
-
-    .instruction {
-        text-align: center;
-        margin-bottom: 12px;
-        font-weight: bold;
-        color: #374151;
-    }
-
-    .answer-input {
-        width: 100%;
-        padding: 16px;
-        border-radius: 13px;
-        border: 2px solid #ccd4df;
-        font-size: 1.25rem;
-        text-align: center;
-        outline: none;
-        transition: 0.2s;
-    }
-
-    .answer-input:focus {
-        border-color: #5746c7;
-        box-shadow: 0 0 0 4px rgba(87,70,199,0.10);
-    }
-
-    .example-text {
-        text-align: center;
-        margin-top: 9px;
-        color: #68717d;
-        font-size: 0.84rem;
-        min-height: 20px;
-    }
-
-    .button-row {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    button {
-        border: none;
-        border-radius: 12px;
-        padding: 14px 18px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    button:hover {
-        transform: translateY(-1px);
-    }
-
-    .check-btn {
-        flex: 2;
-        background: #5746c7;
-        color: white;
-    }
-
-    .skip-btn {
-        flex: 1;
-        background: #edf0f5;
-        color: #374151;
-    }
-
-    .secondary-controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 25px;
-    }
-
-    .secondary-controls button {
-        flex: 1;
-        min-width: 150px;
-        background: #f3f5f8;
-        color: #374151;
-    }
-
-    .feedback {
-        display: none;
-        margin-top: 20px;
-        padding: 17px;
-        border-radius: 13px;
-        text-align: center;
-        line-height: 1.55;
-    }
-
-    .feedback.correct {
-        display: block;
-        background: #e9f9ef;
-        color: #176b36;
-        border: 1px solid #b8e8c8;
-    }
-
-    .feedback.incorrect {
-        display: block;
-        background: #fff1f0;
-        color: #9d2721;
-        border: 1px solid #f2c0bd;
-    }
-
-    .feedback.info {
-        display: block;
-        background: #eef5ff;
-        color: #28548a;
-        border: 1px solid #c8dcf6;
-    }
-
-    .settings h2,
-    .reference-section h2,
-    .missed-section h2 {
-        text-align: center;
-        color: #243b64;
-        margin-top: 0;
-    }
-
-    .settings-note {
-        text-align: center;
-        color: #667085;
-        margin: -6px 0 18px;
-        font-size: 0.9rem;
-    }
-
-    .settings-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 12px;
-    }
-
-    .checkbox-label {
-        background: #f5f7fb;
-        padding: 10px 15px;
-        border-radius: 10px;
-        cursor: pointer;
-    }
-
-    .checkbox-label input {
-        margin-right: 7px;
-    }
-
-    .reference-section {
-        display: none;
-        overflow-x: auto;
-    }
-
-    .reference-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .reference-table th,
-    .reference-table td {
-        padding: 10px 8px;
-        text-align: center;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .reference-table th {
-        background: #f5f7fb;
-        color: #374151;
-    }
-
-    .reference-table tr:hover {
-        background: #fafbff;
-    }
-
-    .missed-section {
-        display: none;
-    }
-
-    .missed-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-    }
-
-    .missed-item {
-        background: #fff1f0;
-        color: #9d2721;
-        padding: 8px 12px;
-        border-radius: 10px;
-        font-size: 0.9rem;
-    }
-
-    .footer {
-        text-align: center;
-        margin-top: 18px;
-        font-size: 0.8rem;
-        color: #68717d;
-    }
-
-    @media (max-width: 650px) {
-        .game-card,
-        .settings,
-        .reference-section,
-        .missed-section {
-            padding: 20px;
-        }
-
-        .stats {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .question-display {
-            font-size: 2.3rem;
-        }
-
-        .button-row {
-            flex-direction: column;
-        }
-
-        .settings-row {
-            flex-direction: column;
-        }
-    }
+@media(max-width:760px){
+ html{scroll-padding-top:8px}
+ .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.logo-tile{width:34px;height:34px;font-size:1.15rem}.tb-xp{min-width:0}.tb-xp .xpbar{width:70px}.tb-btn .lbl{display:none}
+ .topbar{position:relative}
+ .seg button{padding:8px 13px}.intro-logo{width:64px;height:64px;font-size:2.2rem;border-radius:18px}.intro-logo b{font-size:1.15rem}
+ .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:140px;padding:12px 8px}.cat-ico{width:54px;height:54px;font-size:1.7rem;border-radius:16px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}.chip-row>span{min-width:100%}
+ main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}
+ .actions{grid-template-columns:1fr 1fr}.actions .btn{white-space:nowrap;font-size:.95rem;padding:10px 8px}.stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
+ .lesson-layout,.rule-grid{grid-template-columns:1fr}
+ .answer{gap:8px}.answer input{flex:1 1 0;min-width:0}.answer .unit{flex:none;font-size:1.05rem}.answer .btn.primary{flex:1 1 100%}
+ .next-row .btn.primary{width:100%}
+ table.ref{font-size:.9rem}table.ref th,table.ref td{padding:6px 4px}
+ .lede{font-size:.95rem}
+}
+html.dd-embedded{scroll-padding-top:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
+<body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
+<header class="topbar"><div class="tb">
+ <div class="tb-brand"><span class="logo-tile" data-icon="levels" aria-hidden="true"></span>Prefix Power-Up</div>
+ <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
+ <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Prefix Rookie</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
+ <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
+ <button type="button" class="tb-btn" id="rulesBtn" aria-label="Open the SI prefix table and conversion rules"><span data-icon="book" aria-hidden="true"></span><span class="lbl">Prefix table</span></button>
+</div></header>
 
-<body>
+<div class="wrap">
+ <section class="intro"><div class="intro-logo" aria-hidden="true"><b>10ⁿ</b></div><div><p class="eyebrow" id="eyebrow">CHEM 3A · Chapter 1: Basics of Measurement</p><h1>Prefix Power-Up</h1><p class="lede">Learn the SI prefixes, then use them to convert units. Pick a tile to start.</p></div></section>
+ <section class="chooser" aria-labelledby="pickTitle">
+  <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
+  <div class="cats" id="cats"></div>
+  <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Topics <small>Tap to turn on or off. Mix as many as you like.</small></h3><div class="chips" id="chips"></div></div>
+  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/trophy.webp" alt="" onerror="this.style.visibility='hidden'"><span><b>Skill Check Prep</b><small>10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  <details class="howto-d"><summary><span data-icon="bulb" aria-hidden="true"></span>How to play</summary><div>
+   <ul>
+    <li>Tap one or more tiles above. Each tile opens its topics, which you can turn on or off.</li>
+    <li>Type numbers in decimal or scientific notation. <b>4.5E-6</b>, <b>4.5e-6</b>, <b>4.5×10^-6</b> and <b>4.5*10^-6</b> all work. You can leave the unit off.</li>
+    <li>Prefix symbols are case-sensitive (M is mega, m is milli). No µ key? Type <b>u</b> for micro.</li>
+    <li>Stuck? Use <b>Hint</b>, <b>Step by step</b> (it walks you through the conversion factor) or <b>Show answer</b>.</li>
+    <li><b>Skill Check Prep</b> gives you 10 mixed questions, then a study plan with your weak topics.</li>
+   </ul></div></details>
+ </section>
 
-<div class="container">
+ <main class="panel" id="play">
+  <div class="play-head"><h2 class="play-title" id="playTitle">Practice</h2><button type="button" id="skipBtn" class="btn">New question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  <div class="empty" id="emptyBox"><span data-icon="arrow" aria-hidden="true"></span> Pick something above to get your first question.</div>
+  <section id="reportBox" class="example" hidden></section>
+  <div id="playArea" hidden>
+   <div class="quiz-bar" id="quizBar" hidden><span></span></div>
+   <div class="tags"><span class="tag" id="topicTag"></span><span class="tag" id="subTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
+   <section class="question"><div class="equation" id="equation"></div><p class="prompt" id="prompt"></p></section>
+   <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><span class="unit" id="unit"></span><button type="button" class="btn primary" id="checkBtn">Check</button></div>
+   <p class="typing-note" id="typingNote"></p>
+   <p class="calc-tip" id="calcTip" hidden></p>
+   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
+   <div class="guide" id="guide" hidden></div>
+   <div class="detail" id="hintBox" hidden></div>
+   <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  </div>
+  <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+ </main>
 
-    <div class="header">
-        <h1>SI Prefix Challenge</h1>
-        <p>
-            Practice SI prefix names, symbols, scientific notation,
-            and standard decimal notation.
-        </p>
-    </div>
+ <section class="panel section" aria-labelledby="progressTitle">
+  <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Prefix Rookie</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sAcc">0%</strong><small>Accuracy</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <h3 class="sub">Prefixes to review</h3>
+  <div class="missed-list" id="missedList"></div>
+  <div class="badges" id="achGrid"></div>
+  <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. CHEM 3A and CHEM 1A progress are saved separately on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
+ </section>
 
-    <div class="game-card">
-
-        <div class="course-selector">
-
-            <div class="course-selector-title">Select Course</div>
-
-            <div class="course-toggle-row">
-
-                <span class="course-name" id="chem3Label">CHEM 3A</span>
-
-                <label class="switch">
-                    <input type="checkbox" id="courseToggle" checked role="switch" aria-label="CHEM 1A course (off = CHEM 3A)">
-                    <span class="slider"></span>
-                </label>
-
-                <span class="course-name active" id="chem1Label">CHEM 1A</span>
-
-            </div>
-
-            <div class="course-range" id="courseRange">
-                CHEM 1A Range: tera (10¹²) through femto (10⁻¹⁵)
-            </div>
-
-        </div>
-
-        <div class="stats">
-
-            <div class="stat">
-                <div class="stat-label">Correct</div>
-                <div class="stat-number" id="correctCount">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Attempted</div>
-                <div class="stat-number" id="attemptCount">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Streak</div>
-                <div class="stat-number" id="streakCount">0</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Accuracy</div>
-                <div class="stat-number" id="accuracy">0%</div>
-            </div>
-
-        </div>
-
-        <div class="question-type" id="questionType">
-            Prefix Name → Number
-        </div>
-
-        <div class="question-label" id="questionLabel">
-            What numerical value corresponds to:
-        </div>
-
-        <div class="question-display" id="questionDisplay">
-            kilo
-        </div>
-
-        <div class="question-subtitle" id="questionSubtitle"></div>
-
-        <div class="instruction" id="instruction">
-            Enter your answer:
-        </div>
-
-        <input
-            type="text"
-            id="answer"
-            class="answer-input"
-            placeholder="Enter your answer"
-            autocomplete="off"
-            autocapitalize="none"
-            spellcheck="false"
-        >
-
-        <div class="example-text" id="exampleText"></div>
-
-        <div class="button-row">
-
-            <button
-                class="check-btn"
-                id="checkButton"
-                onclick="checkAnswer()"
-            >
-                Check Answer
-            </button>
-
-            <button
-                class="skip-btn"
-                onclick="skipQuestion()"
-            >
-                Skip
-            </button>
-
-        </div>
-
-        <div class="feedback" id="feedback"></div>
-
-        <div class="secondary-controls">
-
-            <button onclick="newQuestion()">New Question</button>
-            <button onclick="toggleReference()">Reference Table</button>
-            <button onclick="toggleMissed()">Missed Prefixes</button>
-            <button onclick="resetGame()">Reset Score</button>
-
-        </div>
-
-    </div>
-
-    <div class="settings">
-
-        <h2>Question Types</h2>
-
-        <div class="settings-note">
-            Turn question styles on or off to customize practice.
-        </div>
-
-        <div class="settings-row">
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typePrefixNumber" checked>
-                Prefix Name → Number
-            </label>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typeSymbolNumber" checked>
-                Prefix Symbol → Number
-            </label>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typePrefixSymbol" checked>
-                Prefix Name → Symbol
-            </label>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typeSymbolPrefix" checked>
-                Prefix Symbol → Name
-            </label>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typeScientificPrefix" checked>
-                Scientific Notation → Prefix
-            </label>
-
-            <label class="checkbox-label">
-                <input type="checkbox" id="typeStandardPrefix" checked>
-                Standard Notation → Prefix
-            </label>
-
-        </div>
-
-    </div>
-
-    <div class="reference-section" id="referenceSection">
-
-        <h2 id="referenceTitle">SI Prefix Reference</h2>
-
-        <table class="reference-table">
-
-            <thead>
-                <tr>
-                    <th>Prefix</th>
-                    <th>Symbol</th>
-                    <th>Scientific Notation</th>
-                    <th>Standard Notation</th>
-                </tr>
-            </thead>
-
-            <tbody id="referenceBody"></tbody>
-
-        </table>
-
-    </div>
-
-    <div class="missed-section" id="missedSection">
-
-        <h2>Prefixes to Review</h2>
-
-        <div class="missed-list" id="missedList"></div>
-
-    </div>
-
-    <div class="footer">
-        SI Prefix Challenge
-        <div style="margin-top:6px;font-size:0.75rem;">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></div>
-    </div>
-
+ <details class="panel section" id="videoSection"><summary><span>Learn with Dr. Dan<small id="videoContext">Videos picked for the current question</small></span></summary>
+  <div class="video-body"><div class="lesson-layout"><div><div class="lesson-player"><iframe id="player" title="Dr. Dan video lesson" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="lesson-meta"><h3 id="lessonTitle"></h3><a id="lessonLink" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p class="note-small" style="margin-top:4px">If the video won’t play inside Canvas, use the YouTube link.</p></div></div><div class="video-list" id="videoList"></div></div>
+  <div class="chapter-links"><a id="readLink" href="https://chem.libretexts.org/Courses/Fresno_City_College/Introductory_Chemistry_Atoms_First_for_FCC/01%3A__Basics_of_Measurement/1.03%3A_Conversions" target="_blank" rel="noopener noreferrer">Read: Conversions ↗</a><a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">More from ItsDrDan on YouTube ↗</a><a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener noreferrer">Dr. Dan’s Chemistry Study Hub ↗</a></div></div>
+ </details>
+ <p class="foot">ItsDrDan · Fresno City College · Practice only, nothing is graded</p>
 </div>
 
+<dialog id="rulesDialog" aria-labelledby="rulesTitle"><div class="modal-head"><strong id="rulesTitle">SI Prefix Reference</strong><button type="button" class="close-btn" id="closeRules" aria-label="Close the prefix table">✕</button></div>
+ <div class="modal-body" id="rulesBody"></div></dialog>
+
 <script>
-
+/* ===================== Prefix Power-Up: data + question engine ===================== */
+// Every SI prefix the game uses. core = the must-know list (giga through pico). Ranges per course are below.
 const allPrefixes = [
-    { name: "tera",  symbol: "T", exponent: 12 },
-    { name: "giga",  symbol: "G", exponent: 9 },
-    { name: "mega",  symbol: "M", exponent: 6 },
-    { name: "kilo",  symbol: "k", exponent: 3 },
-    { name: "hecto", symbol: "h", exponent: 2 },
-    { name: "deca",  symbol: "da", exponent: 1 },
-    { name: "deci",  symbol: "d", exponent: -1 },
-    { name: "centi", symbol: "c", exponent: -2 },
-    { name: "milli", symbol: "m", exponent: -3 },
-    { name: "micro", symbol: "µ", exponent: -6 },
-    { name: "nano",  symbol: "n", exponent: -9 },
-    { name: "pico",  symbol: "p", exponent: -12 },
-    { name: "femto", symbol: "f", exponent: -15 }
+  { name: 'tera',  symbol: 'T',  exponent: 12,  core: false },
+  { name: 'giga',  symbol: 'G',  exponent: 9,   core: true },
+  { name: 'mega',  symbol: 'M',  exponent: 6,   core: true },
+  { name: 'kilo',  symbol: 'k',  exponent: 3,   core: true },
+  { name: 'hecto', symbol: 'h',  exponent: 2,   core: false },
+  { name: 'deca',  symbol: 'da', exponent: 1,   core: false },
+  { name: 'deci',  symbol: 'd',  exponent: -1,  core: true },
+  { name: 'centi', symbol: 'c',  exponent: -2,  core: true },
+  { name: 'milli', symbol: 'm',  exponent: -3,  core: true },
+  { name: 'micro', symbol: 'µ',  exponent: -6,  core: true },
+  { name: 'nano',  symbol: 'n',  exponent: -9,  core: true },
+  { name: 'pico',  symbol: 'p',  exponent: -12, core: true },
+  { name: 'femto', symbol: 'f',  exponent: -15, core: false }
 ];
-
 const courseSettings = {
-    CHEM1A: {
-        name: "CHEM 1A",
-        maxExponent: 12,
-        minExponent: -15
-    },
+  '3A': { name: 'CHEM 3A', maxExponent: 12, minExponent: -12 },
+  '1A': { name: 'CHEM 1A', maxExponent: 12, minExponent: -15 }
+};
+const getActivePrefixes = (course = '3A') => allPrefixes.filter(p => p.exponent <= courseSettings[course].maxExponent && p.exponent >= courseSettings[course].minExponent);
+const PSYM = Object.fromEntries(allPrefixes.map(p => [p.symbol, p]));
+const PNAME = Object.fromEntries(allPrefixes.map(p => [p.name, p]));
+const byExp = e => allPrefixes.find(p => p.exponent === e) || null;
 
-    CHEM3A: {
-        name: "CHEM 3A",
-        maxExponent: 12,
-        minExponent: -9
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const chance = p => Math.random() < p;
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function pickW(list, wfn) { const w = list.map(wfn); let r = Math.random() * w.reduce((a, b) => a + b, 0); for (let i = 0; i < list.length; i++) { r -= w[i]; if (r <= 0) return list[i]; } return list[list.length - 1]; }
+
+/* ---------- number formatting (exact: a value is coef × 10^e with coef like "4.5") ---------- */
+const supExp = e => (e < 0 ? '−' + -e : '' + e);
+const pow10HTML = e => `10<sup>${supExp(e)}</sup>`;
+function exponentToSuperscript(n) { const m = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' }; return String(n).split('').map(c => m[c]).join(''); }
+function exponentToStandard(exponent) { if (exponent > 0) return '1' + '0'.repeat(exponent); if (exponent < 0) return '0.' + '0'.repeat(Math.abs(exponent) - 1) + '1'; return '1'; }
+function addCommas(s) { if (s.includes('.')) return s; return s.replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function plainOf(coef, e) {                       // "4.5", 3 → "4500"; "4.5", -3 → "0.0045"
+  const digits = coef.replace('.', ''), pt = 1 + e;
+  let s;
+  if (pt <= 0) s = '0.' + '0'.repeat(-pt) + digits;
+  else if (pt >= digits.length) s = digits + '0'.repeat(pt - digits.length);
+  else s = digits.slice(0, pt) + '.' + digits.slice(pt);
+  return addCommas(s);
+}
+const sciOf = (coef, e) => `${coef} × ${pow10HTML(e)}`;
+const numHTML = (coef, e) => (e >= -3 && e <= 4 ? plainOf(coef, e) : sciOf(coef, e));       // how a given value is shown
+function answerHTML(coef, e, unit) {
+  const u = unit ? ' ' + unit : '';
+  if (e >= -2 && e <= 3) return plainOf(coef, e) + u;
+  return sciOf(coef, e) + u + (Math.abs(e) <= 9 ? ` = ${plainOf(coef, e)}${u}` : '');
+}
+const answerText = (coef, e) => `${coef}E${e}`;
+
+/* ---------- reading what a student typed ---------- */
+const SUPS = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
+// Accepts 0.0045, 4.5E-6, 4.5e-6, 4.5×10^-6, 4.5*10^-6, 4.5 x 10^(-6), 4.5×10⁻⁶, 10^-3, 1e-3, .001, 4,500 and a unit at the end.
+function parseNum(raw) {
+  let s = String(raw).trim().replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g, c => SUPS[c]).replace(/[−–—]/g, '-').replace(/\s+/g, '').replace(/,/g, '');
+  s = s.replace(/[a-zµμ°]+[23²³]?$/i, m => (/^e[+-]?\d+$/i.test(m) ? m : ''));      // a typed unit at the end (mg, cm3, mcg)
+  s = s.replace(/[×xX*·∙]/g, 'x').replace(/[()]/g, '');
+  let m = s.match(/^\+?(\d+\.?\d*|\.\d+)(?:x10\^?([+-]?\d+)|[eE]([+-]?\d+))?$/);
+  if (m) { const ex = m[2] ?? m[3]; const v = Number(m[1] + (ex != null ? 'e' + ex : '')); return isFinite(v) ? { v, sci: ex != null } : null; }
+  m = s.match(/^10(?:\^([+-]?\d+)|([+-]\d+))$/);                                        // 10^-3 or 10-3
+  if (m) return { v: Number('1e' + (m[1] ?? m[2])), sci: true };
+  return null;
+}
+// If v = target × 10^K for a whole number K, return K, else null.
+function pow10Offset(v, target, tol = 5e-4) {
+  if (!(v > 0) || !(target > 0)) return null;
+  const k = Math.log10(v / target), K = Math.round(k);
+  return Math.abs(k - K) < tol ? K : null;
+}
+const FORMAT_NOTE = 'Type a number, like 0.0045, 4.5E-6 or 4.5×10^-6.';
+const isMu = t => ['µ', 'μ', 'u'].includes(t);
+function nameMatch(t) { t = t.trim().toLowerCase(); if (t === 'deka') t = 'deca'; return PNAME[t] || null; }
+function symMatch(t) { t = t.trim(); if (isMu(t)) return PNAME.micro; return PSYM[t] || null; }
+
+/* ---------- topics and tiles ---------- */
+const TOPICS = {
+  prefixToNumber:     { label: 'Prefix Name → Number', video: 'prefixes', skill: 'metric.prefixtonumber' },
+  symbolToNumber:     { label: 'Prefix Symbol → Number', video: 'prefixes', skill: 'metric.symboltonumber' },
+  prefixToSymbol:     { label: 'Prefix Name → Symbol', video: 'prefixes', skill: 'metric.prefixtosymbol' },
+  symbolToPrefix:     { label: 'Prefix Symbol → Name', video: 'prefixes', skill: 'metric.symboltoprefix' },
+  scientificToPrefix: { label: 'Scientific Notation → Prefix', video: 'prefixes', skill: 'metric.scientifictoprefix' },
+  standardToPrefix:   { label: 'Standard Notation → Prefix', video: 'prefixes', skill: 'metric.standardtoprefix' },
+  toBase:    { label: 'Prefix → base unit (mg → g)', video: 'prefix_conv', skill: 'metric.tobase' },
+  fromBase:  { label: 'Base unit → prefix (g → mg)', video: 'prefix_conv', skill: 'metric.frombase' },
+  iv:        { label: 'IV volumes: mL ↔ L', video: 'prefix_conv', skill: 'metric.iv', courses: ['3A'] },
+  twoPrefix: { label: 'Prefix → prefix (mg → µg)', video: 'twostep', skill: 'metric.twoprefix' },
+  dose:      { label: 'Doses: mg ↔ mcg (µg)', video: 'dosage', skill: 'metric.dose', courses: ['3A'] },
+  area:      { label: 'Squared units (cm² → m²)', video: 'cubed', skill: 'metric.area' },
+  volume:    { label: 'Cubed units (cm³ → m³)', video: 'cubed', skill: 'metric.volume' },
+  cm3ml:     { label: 'cm³ = mL', video: 'volume', skill: 'metric.cm3ml' }
+};
+const CATEGORIES = [
+  { id: 'prefix', title: 'Prefix ↔ Power of Ten', blurb: 'Symbols, names and factors', icon: 'levels', topics: ['prefixToNumber', 'symbolToNumber', 'prefixToSymbol', 'symbolToPrefix', 'scientificToPrefix', 'standardToPrefix'] },
+  { id: 'onestep', title: 'One-Step Conversions', blurb: 'mg → g, L → mL', icon: 'arrow', topics: ['toBase', 'fromBase', 'iv'] },
+  { id: 'twostep', title: 'Two-Prefix Conversions', blurb: 'mg → µg through the base unit', icon: 'bridge', topics: ['twoPrefix', 'dose'] },
+  { id: 'power', title: 'Squared & Cubed Units', blurb: 'cm², cm³ and cm³ = mL', icon: 'beaker', topics: ['area', 'volume', 'cm3ml'] }
+];
+const topicInCourse = (t, c) => !TOPICS[t].courses || TOPICS[t].courses.includes(c);
+const catTopics = (cat, c) => cat.topics.filter(t => topicInCourse(t, c));
+
+/* ===================== Prefix ↔ power of ten ===================== */
+function pickPrefix(course, o) {
+  if (o.prefix) return PNAME[o.prefix];
+  const list = getActivePrefixes(course);
+  return pickW(list, p => (p.core ? (course === '3A' ? 3 : 2) : 1) * (p.name === o.avoid ? 0.15 : 1));
+}
+const completeAnswer = p => `<b>${p.name}</b> (${p.symbol}) = 10${exponentToSuperscript(p.exponent)} = ${addCommas(exponentToStandard(p.exponent))}`;
+function powChoices(p, course) {
+  const act = getActivePrefixes(course).map(x => x.exponent);
+  const opts = new Set([p.exponent]);
+  [p.exponent - 3, p.exponent + 3, -p.exponent, p.exponent - 1, p.exponent + 1].forEach(e => { if (opts.size < 3 && e !== 0 && act.includes(e)) opts.add(e); });
+  return shuffle([...opts]).map(e => ({ html: pow10HTML(e), ok: e === p.exponent, why: byExp(e) ? `10${exponentToSuperscript(e)} is ${byExp(e).name}.` : '' }));
+}
+function nameChoices(p, course) {
+  const act = getActivePrefixes(course);
+  const opts = new Set([p.name]);
+  const twin = act.find(x => x !== p && x.symbol.toLowerCase() === p.symbol.toLowerCase());
+  if (twin) opts.add(twin.name);
+  if (p.name === 'micro') opts.add('milli');
+  if (p.name === 'milli') opts.add('micro');
+  shuffle(act).forEach(x => { if (opts.size < 3) opts.add(x.name); });
+  return shuffle([...opts]).map(n => ({ html: `${n} (${PNAME[n].symbol})`, ok: n === p.name, why: `${n} is ${PNAME[n].symbol}, 10${exponentToSuperscript(PNAME[n].exponent)}.` }));
+}
+const sizeStep = p => ({
+  ask: `Is <b>${p.name}</b> bigger or smaller than 1?`,
+  choices: [{ html: 'Bigger than 1: positive exponent', ok: p.exponent > 0 }, { html: 'Smaller than 1: negative exponent', ok: p.exponent < 0 }],
+  why: p.exponent > 0 ? 'Prefixes from deca up (da, h, k, M, G, T) make a unit bigger.' : 'Prefixes from deci down (d, c, m, µ, n, p, f) make a unit smaller.'
+});
+const caseStep = p => ({
+  ask: 'Is the symbol a capital or a lowercase letter?',
+  choices: [{ html: 'Capital: mega and bigger (M, G, T)', ok: p.exponent >= 6 }, { html: 'Lowercase: kilo and smaller (k, h, da, d, c, m, µ, n, p, f)', ok: p.exponent < 6 }],
+  why: 'Only the prefixes for 10⁶ and bigger use capital letters.'
+});
+
+// prefix numeric answer: slips exponent-sign, off-by-1000, mu-vs-m, symbol-case
+function checkPow(raw, p, viaSymbol) {
+  const r = parseNum(raw);
+  if (!r) return { ok: false, slip: 'format', note: 'Type a power of ten, like 1E-3, 10^-3 or 0.001.' };
+  const K = pow10Offset(r.v, Number('1e' + p.exponent), 1e-6);
+  if (K === 0) return { ok: true };
+  if (K === null) return { ok: false, slip: 'not-power', note: 'Every prefix is exactly 1 × a power of ten, like 10⁻³ (0.001).' };
+  const ue = p.exponent + K, up = byExp(ue);
+  if (viaSymbol && ((p.symbol === 'M' && ue === -3) || (p.symbol === 'm' && ue === 6))) return { ok: false, slip: 'symbol-case', note: 'Watch the case: capital <b>M</b> is mega (10⁶), lowercase <b>m</b> is milli (10⁻³).' };
+  if (viaSymbol && ((p.name === 'micro' && ue === -3) || (p.name === 'milli' && ue === -6))) return { ok: false, slip: 'mu-vs-m', note: '<b>µ</b> (the Greek letter mu) is micro, 10⁻⁶. Plain <b>m</b> is milli, 10⁻³.' };
+  if (ue === -p.exponent) return { ok: false, slip: 'exponent-sign', note: p.exponent < 0 ? `${p.name} is smaller than 1, so the exponent is <b>negative</b>.` : `${p.name} is bigger than 1, so the exponent is <b>positive</b>.` };
+  if (Math.abs(K) === 3 && p.exponent <= -3 && ue <= -3) return { ok: false, slip: 'off-by-1000', note: `That is ${up ? up.name : pow10HTML(ue)}, 1000 times ${K > 0 ? 'bigger' : 'smaller'}. Milli (10⁻³), micro (10⁻⁶), nano (10⁻⁹) and pico (10⁻¹²) are each 1000 apart.` };
+  return { ok: false, slip: 'wrong-power', note: up ? `${pow10HTML(ue)} is ${up.name} (${up.symbol}).` : 'Check the prefix table.' };
+}
+function checkSymbol(raw, p) {
+  const t = raw.trim();
+  if (t === p.symbol || (p.name === 'micro' && isMu(t))) return { ok: true };
+  if (p.name === 'micro' && t === 'm') return { ok: false, slip: 'mu-vs-m', note: '<b>m</b> is milli. Micro is the Greek letter <b>µ</b> (mu). No µ key? Type <b>u</b>.' };
+  if (p.name === 'milli' && isMu(t)) return { ok: false, slip: 'mu-vs-m', note: '<b>µ</b> is micro (10⁻⁶). Milli is a plain lowercase <b>m</b>.' };
+  if (t.toLowerCase() === p.symbol.toLowerCase()) return { ok: false, slip: 'symbol-case', note: p.exponent >= 6 ? 'Prefixes for 10⁶ and bigger use a <b>capital</b> letter.' : 'Prefixes for 10³ and smaller use a <b>lowercase</b> letter.' };
+  if (nameMatch(t)) return { ok: false, slip: 'name-not-symbol', note: 'That is the name. Type the one- or two-letter symbol, like k for kilo.' };
+  const s = symMatch(t);
+  return { ok: false, slip: 'other', note: s ? `${s.symbol} is ${s.name}.` : '' };
+}
+function checkName(raw, p, sym) {
+  const n = nameMatch(raw);
+  if (n === p) return { ok: true };
+  if (!n && symMatch(raw)) return { ok: false, slip: 'name-not-symbol', note: 'Type the prefix name, like kilo.' };
+  if (n && sym && ((p.name === 'micro' && n.name === 'milli') || (p.name === 'milli' && n.name === 'micro'))) return { ok: false, slip: 'mu-vs-m', note: '<b>µ</b> (Greek mu) is micro. Plain <b>m</b> is milli.' };
+  if (n && sym && n.symbol.toLowerCase() === p.symbol.toLowerCase()) return { ok: false, slip: 'symbol-case', note: 'Watch the case: capital M is mega, lowercase m is milli.' };
+  if (n) return powSlip(p, n);
+  return { ok: false, slip: 'other', note: 'Check the spelling, or open the prefix table.' };
+}
+function checkNameOrSym(raw, p) {
+  const t = raw.trim();
+  if (nameMatch(t) === p || t === p.symbol || (p.name === 'micro' && isMu(t))) return { ok: true };
+  const n = nameMatch(t) || (t.toLowerCase() === p.symbol.toLowerCase() ? null : symMatch(t));
+  if (!n && t.toLowerCase() === p.symbol.toLowerCase()) return { ok: false, slip: 'symbol-case', note: p.exponent >= 6 ? 'Right letter, wrong case: prefixes for 10⁶ and bigger use a capital letter.' : 'Right letter, wrong case: prefixes for 10³ and smaller use a lowercase letter.' };
+  if (p.name === 'micro' && t === 'm') return { ok: false, slip: 'mu-vs-m', note: '<b>m</b> is milli. Micro is <b>µ</b> (type u).' };
+  if (p.name === 'milli' && isMu(t)) return { ok: false, slip: 'mu-vs-m', note: '<b>µ</b> is micro. Milli is a plain <b>m</b>.' };
+  if (n) return powSlip(p, n);
+  return { ok: false, slip: 'other', note: 'Type a prefix name (like milli) or its symbol (like m).' };
+}
+function powSlip(p, n) {
+  if (n.exponent === -p.exponent) return { ok: false, slip: 'exponent-sign', note: `${n.name} is 10${exponentToSuperscript(n.exponent)}: the sign of the exponent is flipped.` };
+  if (Math.abs(n.exponent - p.exponent) === 3 && p.exponent <= -3 && n.exponent <= -3) return { ok: false, slip: 'off-by-1000', note: `${n.name} is 10${exponentToSuperscript(n.exponent)}, 1000 times ${n.exponent > p.exponent ? 'bigger' : 'smaller'}. Milli, micro and nano are each 1000 apart.` };
+  return { ok: false, slip: 'wrong-power', note: `${n.name} is 10${exponentToSuperscript(n.exponent)}.` };
+}
+
+function genPrefix(type, o = {}) {
+  const course = o.course || '3A', p = pickPrefix(course, o);
+  const base = { topic: type, tag: p.name, prefixes: [p.name], video: 'prefixes', p, answerFull: completeAnswer(p), solution: completeAnswer(p) };
+  const std = addCommas(exponentToStandard(p.exponent));
+  if (type === 'prefixToNumber' || type === 'symbolToNumber') {
+    const viaSym = type === 'symbolToNumber';
+    return {
+      ...base, kind: 'num', eq: viaSym ? p.symbol : p.name, value: Number('1e' + p.exponent), answer: `10${exponentToSuperscript(p.exponent)} = ${std}`,
+      prompt: viaSym ? 'What number does this SI prefix <b>symbol</b> stand for? (Symbols are case-sensitive.)' : 'What number does this SI <b>prefix</b> stand for?',
+      placeholder: 'Like 1E-3, 10^-3 or 0.001', check: raw => checkPow(raw, p, viaSym),
+      hint: viaSym ? (p.symbol === 'm' || p.symbol === 'M' ? 'Capital M is mega, lowercase m is milli.' : p.name === 'micro' ? 'µ is the Greek letter mu.' : 'Name the prefix first, then give its power of ten.') : (p.exponent < 0 ? `${p.name} is smaller than 1, so the exponent is negative.` : `${p.name} is bigger than 1, so the exponent is positive.`),
+      steps: [viaSym ? { ask: `Which prefix has the symbol <b>${p.symbol}</b>?`, choices: nameChoices(p, course), why: `${p.symbol} is ${p.name}.` } : null, sizeStep(p), { ask: `Which power of ten is <b>${p.name}</b>?`, choices: powChoices(p, course), why: completeAnswer(p) + '.' }, { final: true, ask: `Type it in the box: <b>1E${p.exponent}</b>, <b>10^${p.exponent}</b>${Math.abs(p.exponent) <= 6 ? ` or <b>${std}</b>` : ''}.` }].filter(Boolean)
+    };
+  }
+  if (type === 'prefixToSymbol') {
+    return {
+      ...base, kind: 'text', eq: p.name, answer: p.symbol + (p.name === 'micro' ? ' (or u)' : ''), answerText: p.symbol, accept: p.name === 'micro' ? ['μ', 'u'] : [], caseSensitive: true,
+      prompt: 'What is the SI <b>symbol</b> for this prefix? (Symbols are case-sensitive.)', placeholder: 'Like k', check: raw => checkSymbol(raw, p),
+      hint: p.exponent >= 6 ? 'Prefixes for 10⁶ and bigger use a capital letter.' : p.name === 'micro' ? 'It is a Greek letter. No µ key? Type u.' : 'Prefixes for 10³ and smaller use a lowercase letter.',
+      steps: [caseStep(p), { ask: `Which symbol is <b>${p.name}</b>?`, choices: shuffle([...new Set([p.symbol, p.name === 'micro' ? 'm' : p.name === 'milli' ? 'µ' : p.symbol.length === 1 ? (p.exponent >= 6 ? p.symbol.toLowerCase() : p.symbol.toUpperCase()) : 'D', pick(['k', 'n', 'c', 'G'].filter(s => s !== p.symbol))])]).map(s => ({ html: s, ok: s === p.symbol, why: PSYM[s] ? `${s} is ${PSYM[s].name}.` : 'Check the case: symbols are case-sensitive.' })), why: completeAnswer(p) + '.' }, { final: true, ask: `Type <b>${p.symbol}</b>${p.name === 'micro' ? ' (or u)' : ''}.` }]
+    };
+  }
+  if (type === 'symbolToPrefix') {
+    return {
+      ...base, kind: 'text', eq: p.symbol, answer: p.name, answerText: p.name, accept: p.name === 'deca' ? ['deka'] : [],
+      prompt: 'Which SI prefix <b>name</b> goes with this symbol? (Symbols are case-sensitive.)', placeholder: 'Like kilo', check: raw => checkName(raw, p, true),
+      hint: p.exponent >= 6 ? 'A capital letter means mega or bigger.' : p.name === 'micro' ? 'µ is the Greek letter mu.' : 'A lowercase letter means kilo or smaller.',
+      steps: [caseStep(p), sizeStep(p), { ask: `Which prefix is <b>${p.symbol}</b>?`, choices: nameChoices(p, course), why: completeAnswer(p) + '.' }, { final: true, ask: `Type the name: <b>${p.name}</b>.` }]
+    };
+  }
+  // scientificToPrefix / standardToPrefix: name or symbol
+  const sci = type === 'scientificToPrefix';
+  return {
+    ...base, kind: 'text', eq: sci ? '10' + exponentToSuperscript(p.exponent) : std, long: !sci && Math.abs(p.exponent) >= 9,
+    answer: `${p.name} (${p.symbol})`, answerText: p.name, accept: p.name === 'micro' ? ['µ', 'μ', 'u'] : p.name === 'deca' ? ['deka', 'da'] : [p.symbol], symAlso: p.symbol,
+    prompt: 'Which SI prefix is this? Type the <b>name</b> or the <b>symbol</b>.', placeholder: 'Like milli or m', check: raw => checkNameOrSym(raw, p),
+    hint: sci ? (p.exponent < 0 ? 'A negative exponent means a prefix smaller than 1.' : 'A positive exponent means a prefix bigger than 1.') : (p.exponent < 0 ? 'Count how many places the 1 is to the right of the decimal point. That is the negative exponent.' : 'Count the zeros. That is the exponent.'),
+    steps: [sci ? sizeStep(p) : { ask: `Write <b>${std}</b> as a power of ten.`, choices: powChoices(p, course), why: p.exponent < 0 ? `The 1 is ${-p.exponent} place${p.exponent === -1 ? '' : 's'} right of the decimal point, so it is 10${exponentToSuperscript(p.exponent)}.` : `There ${p.exponent === 1 ? 'is 1 zero' : `are ${p.exponent} zeros`}, so it is 10${exponentToSuperscript(p.exponent)}.` }, { ask: `Which prefix is 10${exponentToSuperscript(p.exponent)}?`, choices: nameChoices(p, course), why: completeAnswer(p) + '.' }, { final: true, ask: `Type <b>${p.name}</b> or <b>${p.symbol}</b>.` }]
+  };
+}
+
+/* ===================== Conversions: factor-label engine ===================== */
+// A factor is a fraction: num/den, each side { e, u } meaning 10^e u. pow = 2 or 3 for squared/cubed units.
+const side = s => (s.e === 0 ? '1' : pow10HTML(s.e)) + ' ' + s.u;
+const powU = (u, n) => (n > 1 ? `${u}<sup>${n}</sup>` : u);
+function fracHTML(f) {
+  const fr = `<span class="frac"><span>${side(f.num)}</span><span>${side(f.den)}</span></span>`;
+  return f.pow > 1 ? `<span class="paren">(</span>${fr}<span class="paren">)</span><sup>${f.pow}</sup>` : fr;
+}
+const flip = f => ({ num: f.den, den: f.num, pow: f.pow });
+// "1 mg = 10⁻³ g": the side written as 1 goes first
+const relHTML = f => (f.den.e === 0 ? `1 ${f.den.u} = ${side(f.num)}` : `1 ${f.num.u} = ${side(f.den)}`);
+function wrongRel(f) {
+  const s = f.den.e === 0 ? [f.den, f.num] : [f.num, f.den];
+  return `1 ${s[0].u} = ${s[1].e === 0 ? pow10HTML(3) : pow10HTML(-s[1].e)} ${s[1].u}`;
+}
+const prefUnit = (p, u) => (p ? p.symbol : '') + u;
+function chainFor(pf, pt, u, n = 1) {
+  const f = [];
+  if (pf) f.push({ num: { e: pf.exponent, u }, den: { e: 0, u: prefUnit(pf, u) }, pow: n });
+  if (pt) f.push({ num: { e: 0, u: prefUnit(pt, u) }, den: { e: pt.exponent, u }, pow: n });
+  return f;
+}
+function randCoef() { return chance(0.55) ? `${rint(1, 9)}.${rint(1, 9)}` : `${rint(1, 9)}.${rint(0, 9)}${rint(1, 9)}`; }
+const SMALL = ['milli', 'micro', 'nano', 'pico'];
+
+/* convQ: build a conversion question from a factor chain.
+   s = { topic, tag, coef, e0, fromU, toU, ansUnit?, factors, story?, prefixes, note1000?, video } */
+function convQ(s) {
+  const D = s.factors.reduce((a, f) => a + (f.num.e - f.den.e) * f.pow, 0);
+  const Du = s.factors.reduce((a, f) => a + (f.num.e - f.den.e), 0);
+  const powered = s.factors.some(f => f.pow > 1);
+  const eA = s.e0 + D, value = Number(s.coef + 'e' + eA);
+  const ansUnit = s.ansUnit || s.toU;
+  const given = `${numHTML(s.coef, s.e0)} ${s.fromU}`;
+  const small = s.prefixes.filter(n => SMALL.includes(n)).length >= 1 && (s.prefixes.length > 1 || s.prefixes.some(n => n !== 'milli'));
+  const chain = `<div class="chain"><span>${given}</span>${s.factors.map(f => `<span class="x">×</span>${fracHTML(f)}`).join('')}<span class="x">=</span><b>${answerHTML(s.coef, eA, ansUnit)}</b></div>`;
+  const opWord = D < 0 ? 'divide by' : 'multiply by';
+  const steps = [];
+  if (s.factors.length > 1 && !s.customSteps) steps.push({ ask: `Plan the route from ${s.fromU} to ${s.toU}.`, choices: shuffle([{ html: s.route, ok: true }, { html: `${s.fromU} → ${s.toU} in one jump`, why: 'There is no single prefix-to-prefix factor on the prefix table. Go through the base unit.' }]), why: 'Every prefix is defined from the base unit, so go through it.' });
+  s.factors.forEach((f, i) => {
+    if (!s.customSteps) steps.push({ ask: `What does <b>${f.den.e === 0 ? f.den.u : f.num.u}</b> mean?`, choices: shuffle([{ html: relHTML(f), ok: true }, { html: wrongRel(f), why: 'Check the sign: a prefix smaller than 1 has a negative exponent.' }]), why: (() => { const e = f.den.e === 0 ? f.num.e : f.den.e; return e === 0 ? 'They are the same size.' : `${e < 0 ? 'Smaller' : 'Bigger'} than the base unit, so the exponent is ${e < 0 ? 'negative' : 'positive'}.`; })() });
+    if (f.pow > 1) steps.push({ ask: `The unit is ${f.pow === 2 ? 'squared' : 'cubed'}. What do you do with the factor?`, choices: shuffle([{ html: `${f.pow === 2 ? 'Square' : 'Cube'} the whole factor: ${fracHTML(f)}`, ok: true }, { html: `Use ${fracHTML({ ...f, pow: 1 })} once`, why: `${powU(f.den.u, f.pow)} means ${f.den.u} × ${f.den.u}${f.pow === 3 ? ' × ' + f.den.u : ''}, so the factor is used ${f.pow} times.` }]), why: `Raise the number <b>and</b> the unit to the ${f.pow === 2 ? '2nd' : '3rd'} power, so ${powU(f.den.u, f.pow)} cancels.` });
+    steps.push({ ask: `Which way do you write ${s.factors.length > 1 ? `factor ${i + 1}` : 'the conversion factor'}?`, choices: shuffle([{ html: fracHTML(f), ok: true }, { html: fracHTML(flip(f)), why: `Put <b>${powU(f.den.u, f.pow)}</b> on the bottom so it cancels the ${powU(f.den.u, f.pow)} you have.` }]), why: `${powU(f.den.u, f.pow)} on the bottom cancels; ${powU(f.num.u, f.pow)} is left on top.` });
+  });
+  steps.push({ final: true, ask: `Multiply it out: ${given} × ${s.factors.map(fracHTML).join(' × ')}. The powers of ten add up to ${pow10HTML(D)}, so ${D === 0 ? 'the number stays the same' : `${opWord} ${pow10HTML(Math.abs(D)).replace('−', '')}`}. Type your answer.` });
+  const toWord = D < 0 ? 'bigger' : 'smaller';
+  return {
+    topic: s.topic, tag: s.tag, kind: 'num', video: s.video || TOPICS[s.topic].video, prefixes: s.prefixes, calcTip: true,
+    eq: s.story ? s.story : given, story: !!s.story, unit: ansUnit, toU: s.toU, value, coef: s.coef, eA,
+    prompt: s.story ? s.ask : `Convert to <b>${s.toU}</b>.`,
+    placeholder: 'Like 0.0045 or 4.5E-3',
+    answer: answerHTML(s.coef, eA, ansUnit), answerPlain: answerText(s.coef, eA),
+    hint: s.hint || `Start with ${given}. Write a conversion factor with <b>${s.fromU}</b> on the bottom so it cancels.${s.factors.length > 1 ? ' Go through the base unit.' : ''}`,
+    solution: chain + (s.extra || '') + `<div class="tip"><b>Professor Tip:</b> ${s.tipText || `Going to a ${toWord} unit gives a ${D < 0 ? 'smaller' : 'bigger'} number. If the units cancel, the setup is right.`}</div>`,
+    steps, flags: { powered, health: !!s.health },
+    check(raw) {
+      const r = parseNum(raw);
+      if (!r) return { ok: false, slip: 'format', note: FORMAT_NOTE };
+      const K = pow10Offset(r.v, value);
+      if (K === 0) return { ok: true, sci: r.sci };
+      if (K === null) return { ok: false, slip: 'digits-changed', note: `Prefixes only move the decimal point, so the digits stay <b>${s.coef.replace('.', '')}</b>. Check your arithmetic.` };
+      if (powered && K === Du - D) return { ok: false, slip: 'squared-not-squared', note: `The unit is ${s.factors[0].pow === 2 ? 'squared' : 'cubed'}, so the factor must be ${s.factors[0].pow === 2 ? 'squared' : 'cubed'} too. You used it only once.` };
+      if (D !== 0 && K === -2 * D) return { ok: false, slip: 'factor-inverted', note: `Your factor is upside down: you ${D < 0 ? 'multiplied' : 'divided'} by ${pow10HTML(Math.abs(D))} when you should have ${D < 0 ? 'divided' : 'multiplied'}. Going to a ${toWord} unit gives a ${D < 0 ? 'smaller' : 'bigger'} number.` };
+      if (eA !== 0 && K === -2 * eA) return { ok: false, slip: 'exponent-sign', note: `Check the sign of your exponent. The answer is ${eA < 0 ? 'smaller' : 'bigger'} than 1, so its exponent is ${eA < 0 ? 'negative' : 'positive'}.` };
+      if (Math.abs(K) === 3 && (small || s.topic === 'cm3ml')) return { ok: false, slip: 'off-by-1000', note: s.note1000 || `You are off by exactly 1000. Milli (10⁻³), micro (10⁻⁶) and nano (10⁻⁹) are each 1000 apart, so it is easy to mix them up. Recheck each prefix.` };
+      return { ok: false, slip: 'wrong-power', note: `You are off by a factor of ${pow10HTML(Math.abs(K))}. Recheck the power of ten for each prefix.` };
     }
+  };
+}
+
+const UNITS = [
+  { u: 'g', what: 'mass', pre: ['k', 'm', 'µ', 'n', 'p'] },
+  { u: 'm', what: 'length', pre: ['k', 'c', 'd', 'm', 'µ', 'n', 'p', 'f'] },
+  { u: 'L', what: 'volume', pre: ['d', 'c', 'm', 'µ', 'n'] },
+  { u: 's', what: 'time', pre: ['m', 'µ', 'n', 'p', 'f'] },
+  { u: 'Hz', what: 'frequency', pre: ['k', 'M', 'G', 'T'], only: '1A' },
+  { u: 'J', what: 'energy', pre: ['k', 'M'], only: '1A' },
+  { u: 'mol', what: 'amount', pre: ['m', 'µ', 'n'], only: '1A' },
+  { u: 'Pa', what: 'pressure', pre: ['h', 'k', 'M'], only: '1A' }
+];
+function unitPrefixes(U, course) { const act = getActivePrefixes(course); return U.pre.map(s => PSYM[s]).filter(p => act.includes(p)); }
+const unitsFor = course => UNITS.filter(U => !U.only || U.only === course);
+const wP = course => p => (p.core ? 3 : 1);
+function givenExp(course) { return course === '1A' && chance(0.25) ? rint(-5, 5) : rint(-1, 2); }
+
+function genOneStep(dir, o = {}) {
+  const course = o.course || '3A';
+  const U = pick(unitsFor(course)), p = pickW(unitPrefixes(U, course), wP(course));
+  const toBase = dir === 'toBase';
+  const pf = toBase ? p : null, pt = toBase ? null : p;
+  return convQ({
+    topic: dir, tag: `${prefUnit(pf, U.u)} → ${prefUnit(pt, U.u)}`, coef: randCoef(), e0: toBase ? givenExp(course) : (p.exponent < 0 ? rint(-3, 1) : rint(0, 4)),
+    fromU: prefUnit(pf, U.u), toU: prefUnit(pt, U.u), factors: chainFor(pf, pt, U.u), prefixes: [p.name]
+  });
+}
+
+const IV_ITEMS = [
+  ['L', '1.0', 0, 'An IV bag holds {g} of normal saline.'],
+  ['L', '5.0', -1, 'A patient is ordered {g} of lactated Ringer’s solution.'],
+  ['L', '2.5', -1, 'A small IV bag holds {g} of D5W.'],
+  ['L', '1.5', 0, 'A patient received {g} of IV fluid during a shift.'],
+  ['mL', '2.5', 2, 'An IV bag is labeled {g}.'],
+  ['mL', '5.0', 1, 'An IV piggyback bag of antibiotic holds {g}.'],
+  ['mL', '5.0', 2, 'The IV bag on the pole says {g} normal saline.'],
+  ['mL', '1.0', 3, 'A patient drank and received {g} of fluid in total today.']
+];
+function genIV(o = {}) {
+  const [from, coef, e0, txt] = o.item || pick(IV_ITEMS), toL = from === 'mL';
+  return convQ({
+    topic: 'iv', tag: toL ? 'mL → L' : 'L → mL', coef, e0, fromU: from, toU: toL ? 'L' : 'mL', factors: chainFor(toL ? PSYM.m : null, toL ? null : PSYM.m, 'L'), prefixes: ['milli'], health: true,
+    story: txt.replace('{g}', `<b>${numHTML(coef, e0)} ${from}</b>`), ask: `How many <b>${toL ? 'L' : 'mL'}</b> is that?`,
+    tipText: '1 L = 1000 mL. A liter bag is the big one; 50 to 250 mL bags are the small piggybacks.'
+  });
+}
+
+function genTwoPrefix(o = {}) {
+  const course = o.course || '3A';
+  let U, pf, pt;
+  do { U = pick(unitsFor(course)); const ps = unitPrefixes(U, course); pf = pickW(ps, wP(course)); pt = pickW(ps, wP(course)); } while (pf === pt);
+  return convQ({
+    topic: 'twoPrefix', tag: `${prefUnit(pf, U.u)} → ${prefUnit(pt, U.u)}`, coef: randCoef(), e0: rint(-1, 2),
+    fromU: prefUnit(pf, U.u), toU: prefUnit(pt, U.u), factors: chainFor(pf, pt, U.u), prefixes: [pf.name, pt.name],
+    route: `${prefUnit(pf, U.u)} → ${U.u} → ${prefUnit(pt, U.u)} (through the base unit)`
+  });
+}
+
+// Real tablet / label strengths. mcg is how µg is written on medicine labels.
+const DOSES = [
+  ['mg', '1.25', -1, 'levothyroxine (a thyroid medicine)', 'tablet'],
+  ['mg', '2.5', -1, 'digoxin (a heart medicine)', 'tablet'],
+  ['mg', '1', -1, 'clonidine (a blood pressure medicine)', 'tablet'],
+  ['mg', '4', -1, 'folic acid', 'tablet'],
+  ['mcg', '1', 3, 'vitamin B12', 'tablet'],
+  ['mcg', '2.5', 1, 'vitamin D3', 'softgel'],
+  ['mcg', '8.8', 1, 'levothyroxine', 'tablet'],
+  ['mcg', '1.25', 2, 'digoxin', 'tablet']
+];
+function genDose(o = {}) {
+  const [from, coef, e0, drug, form] = o.item || pick(DOSES), toMcg = from === 'mg';
+  const g = `<b>${numHTML(coef, e0)} ${from}</b>`;
+  return convQ({
+    topic: 'dose', tag: toMcg ? 'mg → mcg' : 'mcg → mg', coef, e0, fromU: from === 'mg' ? 'mg' : 'mcg', toU: toMcg ? 'mcg (µg)' : 'mg', ansUnit: toMcg ? 'mcg' : 'mg',
+    factors: (toMcg ? chainFor(PSYM.m, PSYM['µ'], 'g') : chainFor(PSYM['µ'], PSYM.m, 'g')).map(f => ({ ...f, num: { ...f.num, u: f.num.u.replace('µg', 'mcg') }, den: { ...f.den, u: f.den.u.replace('µg', 'mcg') } })), prefixes: ['milli', 'micro'], health: true,
+    story: `One ${form} of ${drug} contains ${g}.`, ask: toMcg ? 'How many <b>mcg</b> (µg) is that?' : 'How many <b>mg</b> is that?',
+    route: toMcg ? 'mg → g → mcg (through the base unit)' : 'mcg → g → mg (through the base unit)',
+    extra: '<p style="margin:6px 0 0">On labels and prescriptions, <b>mcg</b> means µg (microgram).</p>',
+    note1000: 'Off by 1000: mg and mcg (µg) are 1000 apart, so 1 mg = 1000 mcg. Mixing them up is a real medication error, so double-check which one the label uses.',
+    tipText: '1 mg = 1000 mcg. Going from mg to mcg, the number gets bigger. A dose that changes by 1000 is a red flag.'
+  });
+}
+
+function genPower(n, o = {}) {
+  const course = o.course || '3A';
+  const opts = n === 2 ? ['k', 'c', 'm', ''] : (course === '1A' ? ['k', 'd', 'c', 'm', 'µ', ''] : ['d', 'c', 'm', '']);
+  let a, b; do { a = pick(opts); b = pick(opts); } while (a === b || (n === 2 && a === 'k' && b === 'm') || (n === 2 && a === 'm' && b === 'k'));
+  const pf = a ? PSYM[a] : null, pt = b ? PSYM[b] : null;
+  return convQ({
+    topic: n === 2 ? 'area' : 'volume', tag: `${powU(prefUnit(pf, 'm'), n)} → ${powU(prefUnit(pt, 'm'), n)}`, coef: randCoef(), e0: rint(-1, 2),
+    fromU: powU(prefUnit(pf, 'm'), n), toU: powU(prefUnit(pt, 'm'), n), factors: chainFor(pf, pt, 'm', n), prefixes: [pf, pt].filter(Boolean).map(p => p.name),
+    route: `${powU(prefUnit(pf, 'm'), n)} → ${powU('m', n)} → ${powU(prefUnit(pt, 'm'), n)}`,
+    tipText: `For ${n === 2 ? 'squared' : 'cubed'} units, ${n === 2 ? 'square' : 'cube'} the number and the unit in the factor: (10⁻² m)${n === 2 ? '²' : '³'} = 10<sup>${supExp(-2 * n)}</sup> m${n === 2 ? '²' : '³'}.`
+  });
+}
+
+// cm³ = mL. Volumes written relative to liters.
+const F = {
+  cm3_mL: { num: { e: 0, u: 'mL' }, den: { e: 0, u: 'cm<sup>3</sup>' }, pow: 1 },
+  mL_L: { num: { e: -3, u: 'L' }, den: { e: 0, u: 'mL' }, pow: 1 },
+  m_cm3: { num: { e: 2, u: 'cm' }, den: { e: 0, u: 'm' }, pow: 3 }
+};
+function genCm3(o = {}) {
+  const kind = o.kind || pick(['cm3ToML', 'mLToCm3', 'cm3ToL', 'cm3ToL', 'LToCm3', 'LToCm3', 'm3ToL']);
+  const coef = randCoef(), e0 = kind === 'm3ToL' ? rint(-2, 0) : kind === 'LToCm3' ? rint(-2, 0) : rint(0, 3);
+  const spec = {
+    cm3ToML: ['cm<sup>3</sup>', 'mL', [F.cm3_mL]],
+    mLToCm3: ['mL', 'cm<sup>3</sup>', [flip(F.cm3_mL)]],
+    cm3ToL: ['cm<sup>3</sup>', 'L', [F.cm3_mL, F.mL_L]],
+    LToCm3: ['L', 'cm<sup>3</sup>', [flip(F.mL_L), flip(F.cm3_mL)]],
+    m3ToL: ['m<sup>3</sup>', 'L', [F.m_cm3, F.cm3_mL, F.mL_L]]
+  }[kind];
+  const steps = [{ ask: 'How are cm<sup>3</sup> and mL related?', choices: shuffle([{ html: '1 cm<sup>3</sup> = 1 mL exactly', ok: true }, { html: '1 cm<sup>3</sup> = 1 L', why: 'A 1 cm cube is tiny: it holds 1 mL. A liter is a 10 cm cube.' }, { html: '1 cm<sup>3</sup> = 10<sup>−2</sup> mL', why: 'cm<sup>3</sup> and mL are the same size. Nothing to convert.' }]), why: 'A cube 1 cm on each side holds exactly 1 mL.' }];
+  const q = convQ({
+    topic: 'cm3ml', tag: `${spec[0]} → ${spec[1]}`, coef, e0, fromU: spec[0], toU: spec[1], factors: spec[2], prefixes: ['milli', 'centi'], customSteps: true,
+    note1000: '1 cm<sup>3</sup> is 1 <b>mL</b>, not 1 L. Your answer is off by 1000.',
+    tipText: kind === 'm3ToL' ? '1 m³ = (100 cm)³ = 10⁶ cm³ = 10⁶ mL = 1000 L.' : '1 cm³ = 1 mL exactly, and 1000 cm³ = 1000 mL = 1 L.'
+  });
+  q.steps = [...steps, ...q.steps];
+  return q;
+}
+
+const GENERATORS = {
+  prefixToNumber: o => genPrefix('prefixToNumber', o), symbolToNumber: o => genPrefix('symbolToNumber', o), prefixToSymbol: o => genPrefix('prefixToSymbol', o),
+  symbolToPrefix: o => genPrefix('symbolToPrefix', o), scientificToPrefix: o => genPrefix('scientificToPrefix', o), standardToPrefix: o => genPrefix('standardToPrefix', o),
+  toBase: o => genOneStep('toBase', o), fromBase: o => genOneStep('fromBase', o), iv: genIV, twoPrefix: genTwoPrefix, dose: genDose,
+  area: o => genPower(2, o), volume: o => genPower(3, o), cm3ml: genCm3
+};
+var generate = function (topic, opts) { return GENERATORS[topic](opts || {}); };
+if (typeof module !== 'undefined') module.exports = { allPrefixes, TOPICS, CATEGORIES, generate, parseNum, getActivePrefixes };
+</script>
+<script>
+/* ===================== Prefix Power-Up: game UI ===================== */
+const $ = id => document.getElementById(id);
+const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
+const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
+const STORE = 'ddPrefixPowerUp.v1';
+const badgeImg = (n, alt = '') => `<img src="${BADGE(n)}" alt="${alt}" loading="lazy" onerror="this.style.visibility='hidden'">`;
+
+const VIDEOS = {
+  prefixes: { id: 's7Dr7FSQ4R8', start: 607, title: 'What are prefixes in the metric system?', why: 'The prefix ladder and what each one means.' },
+  prefix_conv: { id: 's7Dr7FSQ4R8', start: 735, title: 'Examples of prefix conversions', why: 'One-step conversions with a conversion factor.' },
+  twostep: { id: 's7Dr7FSQ4R8', start: 1050, title: '2-step mass conversion using prefixes', why: 'Go through the base unit.' },
+  volume: { id: 's7Dr7FSQ4R8', start: 917, title: 'Volume conversion using prefixes', why: 'mL, L and cm³.' },
+  cubed: { id: 'ilqm5Quaggc', start: 384, title: 'Cubed volume conversion problem', why: 'Cube the factor along with the unit.' },
+  dosage: { id: 'gVI0NWuv9VU', start: 888, title: 'Medical dosage example', why: 'Dimensional analysis with doses.' },
+  factor: { id: 's7Dr7FSQ4R8', start: 328, title: 'Example of unit conversion', why: 'Setting up a conversion factor.' }
+};
+const EYEBROW = { '3A': 'CHEM 3A · Chapter 1: Basics of Measurement', '1A': 'CHEM 1A · Chapter 1.4–1.6: Measurements' };
+const READ = {
+  '3A': ['Read: 1.3 Conversions', 'https://chem.libretexts.org/Courses/Fresno_City_College/Introductory_Chemistry_Atoms_First_for_FCC/01%3A__Basics_of_Measurement/1.03%3A_Conversions'],
+  '1A': ['Read: OpenStax 1.6 Mathematical Treatment of Measurement Results', 'https://openstax.org/books/chemistry-2e/pages/1-6-mathematical-treatment-of-measurement-results']
+};
+const SKILL_PLAN = {
+  '3A': ['prefixToNumber', 'symbolToPrefix', 'prefixToSymbol', 'standardToPrefix', 'toBase', 'fromBase', 'twoPrefix', 'dose', 'volume', 'cm3ml'],
+  '1A': ['symbolToNumber', 'symbolToPrefix', 'prefixToSymbol', 'scientificToPrefix', 'toBase', 'fromBase', 'twoPrefix', 'area', 'volume', 'cm3ml']
+};
+const STUDY_TIPS = {
+  prefixToNumber: 'Memorize the ladder: G 10⁹, M 10⁶, k 10³, d 10⁻¹, c 10⁻², m 10⁻³, µ 10⁻⁶, n 10⁻⁹, p 10⁻¹².',
+  symbolToNumber: 'Symbols are case-sensitive: M (mega) vs m (milli). µ is micro.',
+  prefixToSymbol: 'Capital letters only for mega and bigger (M, G, T).',
+  symbolToPrefix: 'Say the symbol and name out loud together: “k, kilo, 10³.”',
+  scientificToPrefix: 'Negative exponent → a prefix smaller than 1.',
+  standardToPrefix: 'Count decimal places (small numbers) or zeros (big numbers) to get the exponent.',
+  toBase: 'Put the prefixed unit on the bottom of the factor: (10⁻³ g / 1 mg).',
+  fromBase: 'Put the base unit on the bottom: (1 mg / 10⁻³ g).',
+  iv: '1 L = 1000 mL.',
+  twoPrefix: 'Go through the base unit: two factors, each with the old unit on the bottom.',
+  dose: '1 mg = 1000 mcg (µg). Doses that are off by 1000 are a red flag.',
+  area: 'Square the whole factor: (10⁻² m / 1 cm)².',
+  volume: 'Cube the whole factor: (10⁻² m / 1 cm)³ = 10⁻⁶ m³ / 1 cm³.',
+  cm3ml: '1 cm³ = 1 mL exactly, and 1000 cm³ = 1 L.'
 };
 
-let currentCourse = "CHEM1A";
-let currentPrefix = null;
-let currentQuestionType = null;
+const RANKS = [[0, 'Prefix Rookie'], [60, 'Kilo Climber'], [150, 'Mega Mover'], [300, 'Giga Guru'], [500, 'Tera Titan'], [800, 'Factor-Label Pro'], [1200, 'Master of Metric']];
+const tc = (P, ts) => [].concat(ts).reduce((n, t) => n + (P.topic[t] ? P.topic[t].c : 0), 0);
+const PREFIX_TOPICS = CATEGORIES[0].topics;
+const ACH = [
+  ['first', 'First Power-Up', 'Get your first answer right', 'stars', P => P.correct >= 1],
+  ['streak5', 'On a Roll', '5 right in a row', 'stars', P => P.best >= 5],
+  ['streak10', 'Unstoppable', '10 right in a row', 'trophy', P => P.best >= 10],
+  ['ladder', 'Prefix Pro', '20 prefix questions right', 'checklist', P => tc(P, PREFIX_TOPICS) >= 20],
+  ['onestep', 'Smooth Converter', '10 one-step conversions right', 'target', P => tc(P, ['toBase', 'fromBase', 'iv']) >= 10],
+  ['twostep', 'Base Unit Bridge', '5 two-prefix conversions right', 'balance', P => tc(P, ['twoPrefix', 'dose']) >= 5],
+  ['cube', 'Cube Crusher', '5 squared or cubed conversions right', 'density', P => tc(P, ['area', 'volume', 'cm3ml']) >= 5],
+  ['sci', 'E-Notation Expert', '5 answers typed in scientific notation', 'percent', P => (P.sciRight || 0) >= 5],
+  ['nohelp', 'No Net Needed', '10 right on the first try with no help', 'medal', P => (P.noHelp || 0) >= 10],
+  ['skill', 'Skill Check Ready', 'Score 8+ on Skill Check Prep', 'trophy', P => (P.bestQuiz || 0) >= 8]
+];
 
-let correct = 0;
-let attempts = 0;
-let streak = 0;
+const state = { course: '3A', sel: new Set(), quiz: null, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false };
+let PALL = {}, P = null;
+const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, noHelp: 0, sciRight: 0, bestQuiz: 0, missed: {}, sel: [] });
+function loadCourse(c) { try { PALL = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { PALL = {}; } P = Object.assign(fresh(), PALL[c] || {}); }
+function save() { try { P.sel = [...state.sel]; PALL[state.course] = P; PALL.last = state.course; localStorage.setItem(STORE, JSON.stringify(PALL)); } catch (e) {} }
+function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
+const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
 
-let questionAnswered = false;
-let previousPrefixIndex = -1;
-let previousQuestionType = "";
-let missedPrefixes = {};
-
-function getActivePrefixes() {
-    const settings = courseSettings[currentCourse];
-
-    return allPrefixes.filter(prefix =>
-        prefix.exponent <= settings.maxExponent &&
-        prefix.exponent >= settings.minExponent
-    );
+/* ---------- stats ---------- */
+function rankOf(xp) { let r = RANKS[0], nx = null; for (let i = 0; i < RANKS.length; i++) if (xp >= RANKS[i][0]) { r = RANKS[i]; nx = RANKS[i + 1] || null; } return { name: r[1], from: r[0], to: nx ? nx[0] : null }; }
+function renderStats() {
+  const r = rankOf(P.xp);
+  $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
+  $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
+  $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
+  $('streak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried; $('sAcc').textContent = (P.tried ? Math.round(P.correct / P.tried * 100) : 0) + '%';
+  $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  const m = Object.entries(P.missed || {}).sort((a, b) => b[1] - a[1]);
+  $('missedList').innerHTML = m.length ? m.map(([n, c]) => `<span class="missed-item">${n} (${PNAME[n].symbol}) = ${pow10HTML(PNAME[n].exponent)} · missed ${c} time${c === 1 ? '' : 's'}</span>`).join('') : '<span class="missed-none">No missed prefixes yet!</span>';
+}
+function setCourse(c) {
+  state.course = c; loadCourse(c);
+  state.sel = new Set((P.sel || []).filter(t => TOPICS[t] && topicInCourse(t, c))); state.quiz = null;
+  document.querySelectorAll('#course button').forEach(b => { b.classList.toggle('active', b.dataset.course === c); b.setAttribute('aria-pressed', b.dataset.course === c); });
+  $('eyebrow').textContent = EYEBROW[c]; $('readLink').textContent = READ[c][0] + ' ↗'; $('readLink').href = READ[c][1];
+  try { const u = new URL(location.href); u.searchParams.set('course', c); history.replaceState(null, '', u); } catch (e) {}
+  save(); renderStats(); renderChooser(); state.sel.size ? newQuestion() : showEmpty();
 }
 
-function exponentToSuperscript(number) {
-    const map = {
-        "-": "⁻",
-        "0": "⁰",
-        "1": "¹",
-        "2": "²",
-        "3": "³",
-        "4": "⁴",
-        "5": "⁵",
-        "6": "⁶",
-        "7": "⁷",
-        "8": "⁸",
-        "9": "⁹"
-    };
+/* ---------- chooser: 4 tiles → topic chips ---------- */
+const catOn = c => catTopics(c, state.course).some(t => state.sel.has(t));
+function renderChooser() {
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><span class="cat-ico" aria-hidden="true">${ico(c.icon)}</span><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  const open = CATEGORIES.filter(catOn);
+  $('chipsWrap').hidden = !open.length;
+  $('chips').innerHTML = open.map(c => `<div class="chip-row"><span>${c.title}</span>${catTopics(c, state.course).map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="stat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`).join('');
+  $('skillCard').classList.toggle('on', !!state.quiz);
+}
+function toggleCat(id) {
+  const c = CATEGORIES.find(x => x.id === id), ts = catTopics(c, state.course);
+  if (catOn(c)) ts.forEach(t => state.sel.delete(t)); else ts.forEach(t => state.sel.add(t));
+  afterSelect();
+}
+function toggleTopic(t) { state.sel.has(t) ? state.sel.delete(t) : state.sel.add(t); afterSelect(); }
+function afterSelect() { state.quiz = null; save(); renderChooser(); if (state.sel.size) newQuestion(); else showEmpty(); }
+function showEmpty() { state.q = null; $('emptyBox').hidden = false; $('playArea').hidden = true; $('reportBox').hidden = true; $('playTitle').textContent = 'Practice'; $('skipBtn').hidden = true; }
+function scrollToPlay() { try { $('play').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} }
 
-    return String(number)
-        .split("")
-        .map(character => map[character])
-        .join("");
+/* ---------- questions ---------- */
+function weightedTopic(pool) { return pickW(pool, t => { const s = P.topic[t]; return 1 + (s && s.a ? 3 * (1 - s.c / s.a) : 1.5); }); }
+let lastTopic = null, lastPrefix = null;
+function makeQuestion() {
+  const course = state.course;
+  if (state.quiz) return generate(state.quiz.plan[state.quiz.i], { course, avoid: lastPrefix });
+  let pool = [...state.sel]; if (pool.length > 1 && lastTopic) pool = pool.filter(t => t !== lastTopic || chance(0.35));
+  const t = weightedTopic(pool.length ? pool : [...state.sel]); lastTopic = t;
+  return generate(t, { course, avoid: lastPrefix });
+}
+function newQuestion(focus) {
+  const q = makeQuestion(); if (q.p) lastPrefix = q.p.name;
+  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false;
+  $('emptyBox').hidden = true; $('reportBox').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
+  const T = TOPICS[q.topic];
+  $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.sel.size > 1 ? 'Mixed practice' : T.label;
+  $('topicTag').textContent = T.label; $('subTag').innerHTML = q.tag || ''; $('subTag').hidden = !q.tag;
+  $('quizTag').hidden = !state.quiz; $('quizBar').hidden = !state.quiz;
+  if (state.quiz) { $('quizTag').textContent = `Question ${state.quiz.i + 1} of ${state.quiz.plan.length}`; $('quizBar').firstElementChild.style.width = (state.quiz.i / state.quiz.plan.length * 100) + '%'; }
+  const eq = $('equation'); eq.innerHTML = q.eq; eq.classList.toggle('text', !!q.story); eq.classList.toggle('long', !!q.long);
+  $('prompt').innerHTML = q.prompt;
+  $('unit').innerHTML = q.kind === 'num' && q.unit ? q.unit : '';
+  const inp = $('answer'); inp.value = ''; inp.disabled = false; inp.placeholder = q.placeholder || 'Type your answer';
+  inp.setAttribute('inputmode', 'text'); $('checkBtn').textContent = 'Check';
+  $('typingNote').innerHTML = typingNote(q);
+  $('calcTip').hidden = !q.calcTip; $('calcTip').innerHTML = q.calcTip ? calcTip(q) : '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
+  $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
+  setVideoFor(q.video || T.video);
+  renderChooser(); paintIcons($('play'));
+  if (focus && !coarse()) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+}
+function typingNote(q) {
+  if (q.kind === 'num' && q.p) return 'Decimal or scientific notation: <b>0.001</b>, <b>1E-3</b>, <b>10^-3</b> or <b>1×10^-3</b>.';
+  if (q.kind === 'num') return 'Decimal or scientific notation: <b>4.5E-6</b>, <b>4.5e-6</b>, <b>4.5×10^-6</b> and <b>4.5*10^-6</b> all work. You can leave off the unit.';
+  if (q.topic === 'prefixToSymbol') return 'Symbols are case-sensitive. No µ key? Type <b>u</b> for micro.';
+  if (q.topic === 'symbolToPrefix') return 'Type the prefix name, like <b>kilo</b>.';
+  return 'Type the name (like <b>milli</b>) or the symbol (like <b>m</b>). No µ key? Type <b>u</b>.';
+}
+function calcTip(q) {
+  return '<b>TI-36X Pro:</b> 4.5 [×10ⁿ] [(−)] 6 enters 4.5 × 10⁻⁶ (×10ⁿ is the EE key). Using ^ instead? Wrap it in parentheses: 2.5 ÷ (10^(−3)).';
 }
 
-function exponentToStandard(exponent) {
-    if (exponent > 0) {
-        return "1" + "0".repeat(exponent);
-    }
-
-    if (exponent < 0) {
-        return "0." +
-            "0".repeat(Math.abs(exponent) - 1) +
-            "1";
-    }
-
-    return "1";
+/* ---------- checking + scoring ---------- */
+function check() {
+  const q = state.q; if (!q) return; if (state.done) return next();
+  const raw = $('answer').value;
+  if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
+  const res = q.check(raw); grade(res.ok, res.slip, res.note, res.sci);
+}
+function ddLog(ok, slip) {
+  try {
+    if (state.logged || !window.ddTrack) return; state.logged = true;
+    const q = state.q;
+    window.ddTrack({ game: 'metric', course: state.course, mode: state.quiz ? 'Skill Check Prep' : 'Practice', topic: TOPICS[q.topic].label + (q.tag ? ' · ' + String(q.tag).replace(/<[^>]+>/g, '') : ''), correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
+  } catch (e) {}
+}
+function bumpTopic(t, ok) { const s = P.topic[t] || (P.topic[t] = { c: 0, a: 0 }); s.a++; if (ok) s.c++; }
+function markMissed(q) { (q.prefixes || []).forEach(n => { P.missed[n] = (P.missed[n] || 0) + 1; }); }
+function grade(ok, slip, note, sci) {
+  const q = state.q, first = state.tries === 0; state.tries++;
+  if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); if (!ok) markMissed(q); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok }); }
+  if (ok) {
+    state.done = true;
+    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
+    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
+    P.xp += xp; P.correct++; if (!state.helped && first) P.noHelp++; if (sci) P.sciRight = (P.sciRight || 0) + 1;
+    setFeedback('good', `<b>${pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Powered up!'])}</b> <span class="xp-pop">+${xp} XP</span>${note ? ' ' + note : ''}<div class="sol">${q.solution}</div>`);
+    finishQuestion();
+  } else {
+    if (first) P.streak = 0;
+    let msg = `<b>Not quite.</b> ${note || 'Check the prefix table and try again.'}`;
+    if (state.quiz) { msg += `<div class="sol">Answer: <b>${q.answer}</b><br>${q.solution}</div>`; state.done = true; finishQuestion(); }
+    else if (state.tries >= 2) { msg += '<br>Stuck? Try <b>Step by step</b> or <b>Show answer</b>.'; $('solBtn').classList.add('pulse'); }
+    setFeedback('bad', msg);
+  }
+  save(); renderStats(); checkAch();
+}
+function finishQuestion() {
+  $('answer').disabled = true; $('checkBtn').textContent = 'Next';
+  $('nextBtn').hidden = false;
+  $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
+  if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function showSolution() {
+  const q = state.q; if (!q || state.done) return;
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); markMissed(q); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+  state.done = true; state.helped = true; save(); renderStats();
+  setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion();
+}
+const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
+function scrollToQuestion() {
+  const el = $('play'), r = el.getBoundingClientRect();
+  const embedded = document.documentElement.classList.contains('dd-embedded');
+  if (embedded || r.top < 0 || r.top > innerHeight * 0.35) { try { el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); } }
+}
+function next() {
+  if (state.quiz) { state.quiz.i++; if (state.quiz.i >= state.quiz.plan.length) { showReport(); scrollToQuestion(); return; } }
+  newQuestion(true); scrollToQuestion();
 }
 
-function addCommas(numberString) {
-    if (numberString.includes(".")) {
-        return numberString;
-    }
-
-    return numberString.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ","
-    );
+/* ---------- step by step ---------- */
+function setGuide(on) {
+  const q = state.q; on = !!(on && q && q.steps && q.steps.length);
+  $('guideBtn').setAttribute('aria-pressed', on); $('guide').hidden = !on;
+  if (on) renderGuide();
+}
+function renderGuide() {
+  const q = state.q; if (!q._g) q._g = { at: 0, msg: {} };
+  $('guide').innerHTML = q.steps.map((s, i) => {
+    const cls = i < q._g.at ? 'done' : i === q._g.at ? 'current' : 'later', right = s.choices ? s.choices.find(c => c.ok) : null;
+    let body = '';
+    if (!s.final && i < q._g.at) body = `<div class="gwhy"><b>${right.html}</b>. ${s.why || ''}</div>`;
+    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}">${c.html}</button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
+    return `<div class="gstep ${cls}"><div class="gnum">Step ${i + 1} of ${q.steps.length}</div><div class="gask">${s.ask}</div>${body}</div>`;
+  }).join('');
+}
+function guideChoose(i, k) {
+  const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.');
+  renderGuide();
+  if (c.ok && q.steps[q._g.at] && q.steps[q._g.at].final && !coarse()) { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
 }
 
-function updateCourse() {
-    const toggle = document.getElementById("courseToggle");
-
-    currentCourse = toggle.checked ? "CHEM1A" : "CHEM3A";
-
-    updateCourseDisplay();
-
-    correct = 0;
-    attempts = 0;
-    streak = 0;
-    missedPrefixes = {};
-    previousPrefixIndex = -1;
-    previousQuestionType = "";
-
-    updateStats();
-    updateMissedList();
-    buildReferenceTable();
-    newQuestion();
+/* ---------- Skill Check Prep ---------- */
+function startQuiz() {
+  state.quiz = { plan: shuffle(SKILL_PLAN[state.course]), i: 0, results: [] }; state.guideOn = false;
+  newQuestion(true); renderChooser();
+}
+function showReport() {
+  const z = state.quiz, score = z.results.filter(r => r.ok).length;
+  P.bestQuiz = Math.max(P.bestQuiz || 0, score); save(); checkAch(); renderStats();
+  const missed = [...new Set(z.results.filter(r => !r.ok).map(r => r.topic))];
+  $('playArea').hidden = true; const box = $('reportBox'); box.hidden = false; $('skipBtn').hidden = true;
+  box.innerHTML = `<span class="ex-label">Skill Check Prep results</span><div class="report-score"><b>${score} / ${z.results.length}</b><span>${score >= 9 ? 'Excellent, you are ready!' : score >= 7 ? 'Solid. Polish the topics below.' : 'Good practice. Work on the topics below.'}</span></div>
+   <ul class="report-list">${z.results.map((r, i) => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? '✓' : '✗'} ${i + 1}. ${TOPICS[r.topic].label}${r.tag ? ' · ' + r.tag : ''}</li>`).join('')}</ul>
+   ${missed.length ? `<p style="margin:10px 0 0"><b>Study plan:</b> practice these next.</p><ul class="plan-list">${missed.map(t => `<li><b>${TOPICS[t].label}.</b> ${STUDY_TIPS[t]}</li>`).join('')}</ul><div class="ex-actions"><button type="button" class="btn primary" id="practiceMissed">Practice my missed topics ${ico('arrow')}</button></div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
+   <div class="ex-actions"><button type="button" class="btn" id="quizAgain">Take another Skill Check Prep</button></div>`;
+  state.quiz = null; renderChooser();
+  $('quizAgain').onclick = startQuiz;
+  if ($('practiceMissed')) $('practiceMissed').onclick = () => { state.sel = new Set(missed); afterSelect(); scrollToPlay(); };
+  if (score >= 8) confetti();
 }
 
-function updateCourseDisplay() {
-    const chem1Label = document.getElementById("chem1Label");
-    const chem3Label = document.getElementById("chem3Label");
-    const courseRange = document.getElementById("courseRange");
-
-    if (currentCourse === "CHEM1A") {
-        chem1Label.classList.add("active");
-        chem3Label.classList.remove("active");
-
-        courseRange.innerHTML =
-            "CHEM 1A Range: " +
-            "<strong>tera (10¹²)</strong> through " +
-            "<strong>femto (10⁻¹⁵)</strong>";
-    } else {
-        chem3Label.classList.add("active");
-        chem1Label.classList.remove("active");
-
-        courseRange.innerHTML =
-            "CHEM 3A Range: " +
-            "<strong>tera (10¹²)</strong> through " +
-            "<strong>nano (10⁻⁹)</strong>";
-    }
+/* ---------- achievements, toasts, confetti ---------- */
+function checkAch() {
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  save(); renderStats();
+}
+function toast(badge, title, text) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+  $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
+}
+function confetti() {
+  if (reduced()) return;
+  const c = $('celebrationCanvas'), x = c.getContext && c.getContext('2d'); if (!x) return; c.hidden = false; c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#4b57d1', '#72c9a8', '#f28aa3', '#ffd36b', '#9fb0ff'];
+  const ps = Array.from({ length: 90 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.3, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3, r: 4 + Math.random() * 4, c: pick(cols), a: Math.random() * 6 }));
+  let f = 0; (function step() { x.clearRect(0, 0, c.width, c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += 0.1; x.fillStyle = p.c; x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); x.restore(); }); if (++f < 110) requestAnimationFrame(step); else { x.clearRect(0, 0, c.width, c.height); c.hidden = true; } })();
 }
 
-function getEnabledQuestionTypes() {
-    let types = [];
-
-    if (document.getElementById("typePrefixNumber").checked) {
-        types.push("prefixToNumber");
-    }
-
-    if (document.getElementById("typeSymbolNumber").checked) {
-        types.push("symbolToNumber");
-    }
-
-    if (document.getElementById("typePrefixSymbol").checked) {
-        types.push("prefixToSymbol");
-    }
-
-    if (document.getElementById("typeSymbolPrefix").checked) {
-        types.push("symbolToPrefix");
-    }
-
-    if (document.getElementById("typeScientificPrefix").checked) {
-        types.push("scientificToPrefix");
-    }
-
-    if (document.getElementById("typeStandardPrefix").checked) {
-        types.push("standardToPrefix");
-    }
-
-    if (types.length === 0) {
-        document.getElementById("typePrefixNumber").checked = true;
-        types.push("prefixToNumber");
-    }
-
-    return types;
+/* ---------- videos ---------- */
+function setVideoFor(key) {
+  const v = VIDEOS[key] || VIDEOS.prefixes, pl = $('player'), src = `https://www.youtube-nocookie.com/embed/${v.id}?rel=0&start=${v.start || 0}`;
+  pl.dataset.src = src; if ($('videoSection').open && pl.src !== src) pl.src = src;
+  $('lessonTitle').textContent = v.title; $('lessonLink').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start || 0}s`;
+  const keys = [key, ...Object.keys(VIDEOS).filter(k => k !== key)].filter(k => VIDEOS[k]).slice(0, 5);
+  $('videoList').innerHTML = keys.map(k => { const w = VIDEOS[k]; return `<button type="button" class="lesson-card${k === key ? ' active' : ''}" data-video="${k}"><img src="https://i.ytimg.com/vi/${w.id}/mqdefault.jpg" alt="" loading="lazy"><span><b>${w.title}</b><small>${w.why}</small></span></button>`; }).join('');
 }
 
-function newQuestion() {
-    const activePrefixes = getActivePrefixes();
-    const enabledTypes = getEnabledQuestionTypes();
-
-    let type;
-
-    if (enabledTypes.length > 1) {
-        do {
-            type = enabledTypes[
-                Math.floor(Math.random() * enabledTypes.length)
-            ];
-        } while (type === previousQuestionType);
-    } else {
-        type = enabledTypes[0];
-    }
-
-    previousQuestionType = type;
-    currentQuestionType = type;
-
-    let prefixIndex;
-
-    do {
-        prefixIndex = Math.floor(
-            Math.random() * activePrefixes.length
-        );
-    } while (
-        prefixIndex === previousPrefixIndex &&
-        activePrefixes.length > 1
-    );
-
-    previousPrefixIndex = prefixIndex;
-    currentPrefix = activePrefixes[prefixIndex];
-
-    questionAnswered = false;
-
-    document.getElementById("answer").value = "";
-    document.getElementById("feedback").className = "feedback";
-    document.getElementById("feedback").innerHTML = "";
-    document.getElementById("checkButton").textContent =
-        "Check Answer";
-
-    if (type === "prefixToNumber") {
-        showPrefixToNumber();
-    } else if (type === "symbolToNumber") {
-        showSymbolToNumber();
-    } else if (type === "prefixToSymbol") {
-        showPrefixToSymbol();
-    } else if (type === "symbolToPrefix") {
-        showSymbolToPrefix();
-    } else if (type === "scientificToPrefix") {
-        showScientificToPrefix();
-    } else {
-        showStandardToPrefix();
-    }
-
-    document.getElementById("answer").focus();
+/* ---------- reference sheet (prefix table + rules) ---------- */
+function renderRules() {
+  const c = state.course;
+  $('rulesTitle').textContent = courseSettings[c].name + ' SI Prefix Reference';
+  const rows = getActivePrefixes(c).map(p => `<tr class="${p.core ? 'core' : ''}"><td>${p.name}</td><td><b>${p.symbol}</b></td><td>10${exponentToSuperscript(p.exponent)}</td><td class="std">${addCommas(exponentToStandard(p.exponent))}</td></tr>`).join('');
+  $('rulesBody').innerHTML = `<div class="table-wrap"><table class="ref"><thead><tr><th>Prefix</th><th>Symbol</th><th>Scientific Notation</th><th>Standard Notation</th></tr></thead><tbody>${rows}</tbody></table></div>
+   <p class="note-small" style="margin:6px 0 12px">${c === '3A' ? 'CHEM 3A range: tera (10¹²) through pico (10⁻¹²). <b>Bold</b> prefixes (giga through pico) are the must-knows.' : 'CHEM 1A range: tera (10¹²) through femto (10⁻¹⁵).'} Symbols are case-sensitive: M = mega, m = milli.</p>
+   <div class="rule-grid">
+   <div class="rule"><h3>Factor-label setup</h3><p>Write what you have, then a factor with that unit on the <b>bottom</b> so it cancels.</p><div class="chain">2.5 mg <span class="x">×</span>${fracHTML({ num: { e: -3, u: 'g' }, den: { e: 0, u: 'mg' }, pow: 1 })}<span class="x">=</span><b>2.5 × 10<sup>−3</sup> g</b></div></div>
+   <div class="rule"><h3>Two prefixes: go through the base unit</h3><p>mg → g → µg:</p><div class="chain">2.5 mg <span class="x">×</span>${fracHTML({ num: { e: -3, u: 'g' }, den: { e: 0, u: 'mg' }, pow: 1 })}<span class="x">×</span>${fracHTML({ num: { e: 0, u: 'µg' }, den: { e: -6, u: 'g' }, pow: 1 })}<span class="x">=</span><b>2.5 × 10<sup>3</sup> µg</b></div></div>
+   <div class="rule"><h3>Squared and cubed units</h3><p>Raise the whole factor to the power: (10<sup>−2</sup> m / 1 cm)<sup>3</sup> → 1 cm<sup>3</sup> = 10<sup>−6</sup> m<sup>3</sup>. 1 m<sup>2</sup> = 10<sup>4</sup> cm<sup>2</sup>.</p></div>
+   <div class="rule"><h3>cm³ = mL</h3><p>1 cm<sup>3</sup> = 1 mL exactly. 1000 cm<sup>3</sup> = 1 L. 1 m<sup>3</sup> = 1000 L.</p></div>
+   <div class="rule"><h3>Health care</h3><p><b>mcg</b> is how µg is written on labels: 1 mg = 1000 mcg. IV bags: 1 L = 1000 mL.</p></div>
+   <div class="rule"><h3>Bigger unit, smaller number</h3><p>Going from mg to g (a bigger unit), the number gets smaller. Going from g to mg, it gets bigger.</p></div>
+   <div class="rule wide"><h3>TI-36X Pro tips</h3><p>For 4.5 × 10<sup>−6</sup>, press <b>4.5 [×10ⁿ] [(−)] 6</b>. The ×10ⁿ key is the <b>EE</b> key; the screen shows 4.5E−6. Use the <b>(−)</b> key, not the minus key, for a negative exponent.</p><p>Using <b>^</b> instead? Put the power of ten in parentheses: 2.5 ÷ <b>(10^(−3))</b>, or 2.5 ÷ <b>(1 × 10^(−3))</b>. Typed without parentheses, 2.5 ÷ 1 × 10^(−3) divides by 1 and then multiplies by 10<sup>−3</sup>: wrong answer. With the EE key, 2.5 ÷ 1E−3 is safe because 1E−3 is one number.</p></div>
+   <div class="rule wide"><h3>Typing answers here</h3><p>4.5E-6, 4.5e-6, 4.5×10^-6, 4.5*10^-6 and 0.0000045 all work. Prefix values can be typed 10^-3 or 0.001. Type <b>u</b> if you have no µ key.</p></div></div>`;
 }
 
-function setQuestion(typeLabel, questionLabel, display, subtitle, instruction, placeholder, example) {
-    document.getElementById("questionType").textContent = typeLabel;
-    document.getElementById("questionLabel").textContent = questionLabel;
-    document.getElementById("questionDisplay").textContent = display;
-    document.getElementById("questionSubtitle").innerHTML = subtitle;
-    document.getElementById("instruction").textContent = instruction;
-    document.getElementById("answer").placeholder = placeholder;
-    document.getElementById("exampleText").textContent = example;
+/* ---------- wiring ---------- */
+function bind() {
+  $('course').addEventListener('click', e => { const b = e.target.closest('button[data-course]'); if (b && b.dataset.course !== state.course) setCourse(b.dataset.course); });
+  document.addEventListener('click', e => {
+    const cat = e.target.closest('[data-cat]'); if (cat) return toggleCat(cat.dataset.cat);
+    const tp0 = e.target.closest('[data-topic]'); if (tp0) return toggleTopic(tp0.dataset.topic);
+    const g = e.target.closest('[data-g]'); if (g) return guideChoose(+g.dataset.g, +g.dataset.k);
+    const v = e.target.closest('[data-video]'); if (v) { setVideoFor(v.dataset.video); const pl = $('player'); pl.src = pl.dataset.src; }
+  });
+  $('skillCard').onclick = () => { startQuiz(); scrollToPlay(); };
+  $('checkBtn').onclick = check; $('nextBtn').onclick = next;
+  $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
+  $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
+  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
+  $('solBtn').onclick = showSolution;
+  const openRules = () => { renderRules(); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };
+  $('rulesBtn').onclick = openRules; $('closeRules').onclick = () => { try { $('rulesDialog').close(); } catch (e) { $('rulesDialog').removeAttribute('open'); } };
+  $('rulesDialog').addEventListener('click', e => { if (e.target === $('rulesDialog')) $('rulesDialog').close(); });
+  $('videoBtn').onclick = () => { const d = $('videoSection'); d.open = true; const pl = $('player'); if (pl.src !== pl.dataset.src) pl.src = pl.dataset.src; try { d.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} };
+  $('videoSection').addEventListener('toggle', () => { const pl = $('player'); if ($('videoSection').open && pl.src !== pl.dataset.src) pl.src = pl.dataset.src; });
+  let armed = 0; $('resetBtn').onclick = () => { const b = $('resetBtn'); if (!armed) { armed = 1; b.classList.add('armed'); b.textContent = 'Tap again to erase this course’s progress'; setTimeout(() => { armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; }, 4000); return; } P = fresh(); state.sel.clear(); save(); armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; renderStats(); renderChooser(); showEmpty(); };
 }
-
-function showPrefixToNumber() {
-    setQuestion(
-        "Prefix Name → Number",
-        "What numerical value corresponds to the SI prefix:",
-        currentPrefix.name,
-        "",
-        "Enter the numerical value:",
-        "Example: 10^-3 or 0.001",
-        "Scientific notation or standard notation are both accepted."
-    );
+function init() {
+  let c = null; try { c = (new URLSearchParams(location.search).get('course') || '').toUpperCase().replace('CHEM', '').trim(); } catch (e) {}
+  if (!['3A', '1A'].includes(c)) { try { c = JSON.parse(localStorage.getItem(STORE) || '{}').last; } catch (e) {} }
+  if (!['3A', '1A'].includes(c)) c = '3A';
+  bind(); setCourse(c); paintIcons();
 }
-
-function showSymbolToNumber() {
-    setQuestion(
-        "Prefix Symbol → Number",
-        "What numerical value corresponds to the SI prefix symbol:",
-        currentPrefix.symbol,
-        "",
-        "Enter the numerical value:",
-        "Example: 10^-3 or 0.001",
-        "Remember: SI prefix symbols are case-sensitive."
-    );
-}
-
-function showPrefixToSymbol() {
-    setQuestion(
-        "Prefix Name → Symbol",
-        "What is the SI symbol for the prefix:",
-        currentPrefix.name,
-        "",
-        "Enter the SI prefix symbol:",
-        "Example: k",
-        "Symbols are case-sensitive: M = mega, while m = milli."
-    );
-}
-
-function showSymbolToPrefix() {
-    setQuestion(
-        "Prefix Symbol → Name",
-        "What SI prefix name corresponds to the symbol:",
-        currentPrefix.symbol,
-        "",
-        "Enter the SI prefix name:",
-        "Example: kilo",
-        "Prefix names are not case-sensitive."
-    );
-}
-
-function showScientificToPrefix() {
-    setQuestion(
-        "Scientific Notation → Prefix",
-        "Which SI prefix corresponds to:",
-        "10" + exponentToSuperscript(currentPrefix.exponent),
-        "",
-        "Enter the SI prefix name or symbol:",
-        "Example: milli or m",
-        "Either the full prefix name or the correct case-sensitive symbol is accepted."
-    );
-}
-
-function showStandardToPrefix() {
-    const standard = exponentToStandard(currentPrefix.exponent);
-
-    setQuestion(
-        "Standard Notation → Prefix",
-        "Which SI prefix corresponds to:",
-        addCommas(standard),
-        "",
-        "Enter the SI prefix name or symbol:",
-        "Example: micro or µ",
-        "Either the full prefix name or the correct case-sensitive symbol is accepted."
-    );
-}
-
-function normalizeNumberAnswer(input) {
-    let answer = input.trim();
-
-    answer = answer.replace(/\s+/g, "");
-    answer = answer.replace(/,/g, "");
-    answer = answer.replace(/×/g, "x");
-    answer = answer.replace(/\*/g, "x");
-
-    const superscriptMap = {
-        "⁰": "0",
-        "¹": "1",
-        "²": "2",
-        "³": "3",
-        "⁴": "4",
-        "⁵": "5",
-        "⁶": "6",
-        "⁷": "7",
-        "⁸": "8",
-        "⁹": "9",
-        "⁻": "-",
-        "⁺": "+"
-    };
-
-    answer = answer.replace(
-        /[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,
-        character => superscriptMap[character]
-    );
-
-    return answer.toLowerCase();
-}
-
-function interpretNumberAnswer(input) {
-    let answer = normalizeNumberAnswer(input);
-    if (answer.startsWith('.')) answer = '0' + answer;   // .001 = 0.001
-
-    const standardPrefixes = getActivePrefixes();
-
-    for (let i = 0; i < standardPrefixes.length; i++) {
-        if (answer === exponentToStandard(standardPrefixes[i].exponent)) {
-            return standardPrefixes[i].exponent;
-        }
-    }
-
-    let powerMatch = answer.match(/^10\^?([+-]?\d+)$/);
-
-    if (powerMatch) {
-        return Number(powerMatch[1]);
-    }
-
-    let eMatch = answer.match(/^1(?:\.0+)?e([+-]?\d+)$/);
-
-    if (eMatch) {
-        return Number(eMatch[1]);
-    }
-
-    let scientificMatch = answer.match(
-        /^1(?:\.0+)?x10\^?([+-]?\d+)$/
-    );
-
-    if (scientificMatch) {
-        return Number(scientificMatch[1]);
-    }
-
-    const activePrefixes = getActivePrefixes();
-
-    for (let i = 0; i < activePrefixes.length; i++) {
-        const standard = exponentToStandard(
-            activePrefixes[i].exponent
-        );
-
-        if (answer === standard) {
-            return activePrefixes[i].exponent;
-        }
-    }
-
-    return null;
-}
-
-function prefixNameIsCorrect(input) {
-    const typed = input.trim().toLowerCase().replace(/^deka$/, 'deca');   // US spelling deka- is also correct
-    return typed === currentPrefix.name.toLowerCase();
-}
-
-function prefixSymbolIsCorrect(input) {
-    const trimmed = input.trim();
-
-    if (trimmed === currentPrefix.symbol) {
-        return true;
-    }
-
-    if (
-        currentPrefix.name === "micro" &&
-        (trimmed === "μ" || trimmed === "µ" || trimmed === "u")
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-function prefixNameOrSymbolIsCorrect(input) {
-    return prefixNameIsCorrect(input) || prefixSymbolIsCorrect(input);
-}
-
-function ddLog(ok) {
-    try {
-        if (questionAnswered || !window.ddTrack) return;
-        ddTrack({game: 'metric', course: currentCourse === "CHEM1A" ? '1A' : '3A', mode: 'Practice', topic: document.getElementById("questionType").textContent, correct: !!ok});
-    } catch (e) {}
-}
-
-function checkAnswer() {
-    if (questionAnswered) {
-        newQuestion();
-        return;
-    }
-
-    const answerElement = document.getElementById("answer");
-    const feedback = document.getElementById("feedback");
-    const userAnswer = answerElement.value;
-
-    if (userAnswer.trim() === "") {
-        feedback.className = "feedback info";
-        feedback.textContent = "Enter an answer before checking.";
-        return;
-    }
-
-    let isCorrect = false;
-
-    if (
-        currentQuestionType === "prefixToNumber" ||
-        currentQuestionType === "symbolToNumber"
-    ) {
-        const enteredExponent = interpretNumberAnswer(userAnswer);
-        isCorrect = enteredExponent === currentPrefix.exponent;
-    }
-
-    else if (currentQuestionType === "prefixToSymbol") {
-        isCorrect = prefixSymbolIsCorrect(userAnswer);
-    }
-
-    else if (currentQuestionType === "symbolToPrefix") {
-        isCorrect = prefixNameIsCorrect(userAnswer);
-    }
-
-    else {
-        isCorrect = prefixNameOrSymbolIsCorrect(userAnswer);
-    }
-
-    ddLog(isCorrect);
-    attempts++;
-
-    if (isCorrect) {
-        correct++;
-        streak++;
-
-        feedback.className = "feedback correct";
-        feedback.innerHTML =
-            "✓ <strong>Correct!</strong><br><br>" +
-            getCompleteAnswer();
-    } else {
-        streak = 0;
-        addMissedPrefix(currentPrefix);
-
-        feedback.className = "feedback incorrect";
-        feedback.innerHTML =
-            "✗ <strong>Not quite.</strong><br><br>" +
-            getCompleteAnswer();
-    }
-
-    questionAnswered = true;
-    document.getElementById("checkButton").textContent =
-        "Next Question";
-
-    updateStats();
-}
-
-function getCompleteAnswer() {
-    const standard = exponentToStandard(currentPrefix.exponent);
-
-    return (
-        "<strong>" +
-        currentPrefix.name +
-        "</strong> (" +
-        currentPrefix.symbol +
-        ")" +
-        " = 10" +
-        exponentToSuperscript(currentPrefix.exponent) +
-        " = " +
-        addCommas(standard)
-    );
-}
-
-function skipQuestion() {
-    if (questionAnswered) {
-        newQuestion();
-        return;
-    }
-
-    const feedback = document.getElementById("feedback");
-
-    feedback.className = "feedback info";
-    feedback.innerHTML =
-        "<strong>Answer:</strong><br><br>" +
-        getCompleteAnswer();
-
-    ddLog(false);
-
-    addMissedPrefix(currentPrefix);
-    streak = 0;
-    questionAnswered = true;
-
-    document.getElementById("checkButton").textContent =
-        "Next Question";
-
-    updateStats();
-}
-
-function updateStats() {
-    document.getElementById("correctCount").textContent = correct;
-    document.getElementById("attemptCount").textContent = attempts;
-    document.getElementById("streakCount").textContent = streak;
-
-    let percent = 0;
-
-    if (attempts > 0) {
-        percent = Math.round((correct / attempts) * 100);
-    }
-
-    document.getElementById("accuracy").textContent =
-        percent + "%";
-}
-
-function addMissedPrefix(prefix) {
-    if (!missedPrefixes[prefix.name]) {
-        missedPrefixes[prefix.name] = {
-            prefix: prefix,
-            count: 0
-        };
-    }
-
-    missedPrefixes[prefix.name].count++;
-    updateMissedList();
-}
-
-function updateMissedList() {
-    const container = document.getElementById("missedList");
-    container.innerHTML = "";
-
-    const entries = Object.values(missedPrefixes);
-
-    if (entries.length === 0) {
-        container.innerHTML =
-            "<div>No missed prefixes yet!</div>";
-        return;
-    }
-
-    entries.sort((a, b) => b.count - a.count);
-
-    entries.forEach(item => {
-        const div = document.createElement("div");
-
-        div.className = "missed-item";
-
-        div.textContent =
-            item.prefix.name +
-            " (" +
-            item.prefix.symbol +
-            ") — missed " +
-            item.count +
-            (item.count === 1 ? " time" : " times");
-
-        container.appendChild(div);
-    });
-}
-
-function buildReferenceTable() {
-    const table = document.getElementById("referenceBody");
-    const title = document.getElementById("referenceTitle");
-
-    table.innerHTML = "";
-
-    title.textContent =
-        courseSettings[currentCourse].name +
-        " SI Prefix Reference";
-
-    const activePrefixes = getActivePrefixes();
-
-    activePrefixes.forEach(prefix => {
-        const row = document.createElement("tr");
-        const standard = exponentToStandard(prefix.exponent);
-
-        row.innerHTML = `
-            <td>${prefix.name}</td>
-            <td><strong>${prefix.symbol}</strong></td>
-            <td>10${exponentToSuperscript(prefix.exponent)}</td>
-            <td>${addCommas(standard)}</td>
-        `;
-
-        table.appendChild(row);
-    });
-}
-
-function toggleReference() {
-    const section = document.getElementById("referenceSection");
-
-    section.style.display =
-        section.style.display === "block"
-            ? "none"
-            : "block";
-}
-
-function toggleMissed() {
-    const section = document.getElementById("missedSection");
-
-    updateMissedList();
-
-    section.style.display =
-        section.style.display === "block"
-            ? "none"
-            : "block";
-}
-
-function resetGame() {
-    correct = 0;
-    attempts = 0;
-    streak = 0;
-    missedPrefixes = {};
-
-    updateStats();
-    updateMissedList();
-    newQuestion();
-}
-
-document
-    .getElementById("answer")
-    .addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            checkAnswer();
-        }
-    });
-
-document
-    .getElementById("courseToggle")
-    .addEventListener("change", updateCourse);
-
-document
-    .querySelectorAll('.settings input[type="checkbox"]')
-    .forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            getEnabledQuestionTypes();
-            newQuestion();
-        });
-    });
-
-updateCourseDisplay();
-buildReferenceTable();
-updateMissedList();
-newQuestion();
-
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>
-</body>
-</html>
+</body></html>

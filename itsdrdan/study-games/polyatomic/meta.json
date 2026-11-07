@@ -1,8 +1,27 @@
 {
-  "title": "Polyatomic Ion Memorization Game (Green Sheet)",
-  "author": "Dr. Dan",
-  "course": "CHEM 3A or CHEM 1A",
-  "description": "This interactive study tool helps students practice identifying common polyatomic ions by matching each ion’s name and chemical formula. Students can choose to study Name → Formula, Formula → Name, or use a mixed review mode. The activity provides immediate feedback, tracks accuracy and streaks, and allows students to reveal answers when needed.",
-  "tags": ["naming"],
+  "title": "Polyatomic Posse: Polyatomic Ions — ItsDrDan",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3A and CHEM 1A",
+  "chapters": {
+    "CHEM 3A": "Chapter 4: naming ions and compounds (Green Sheet polyatomic ions)",
+    "CHEM 1A": "Chapter 2: chemical nomenclature (Green Sheet polyatomic ions)"
+  },
+  "description": "Polyatomic ion practice built on the Green Sheet, for CHEM 3A and CHEM 1A (default 1A; add ?course=3A). Every one of the 30 Green Sheet ions (oxyanion table, other common ions, naming-rule examples and sulfite from the solubility table, including both acetate formulas). Four games: Name → Formula & Charge, Formula → Name, The -ate/-ite Family (given chlorate, build perchlorate, chlorite and hypochlorite; given sulfate, find sulfite; carbonate to hydrogen carbonate; phosphate to hydrogen and dihydrogen phosphate), and Charge Check (tap just the charge), plus Skill Check Prep: 10 mixed questions, then a study plan with the missed ions and mistake types. Smart typing turns SO4^2-, SO42- or SO4-2 into SO₄²⁻, and the formula and the charge are graded separately. Mistake catchers name the slip: -ite/-ate swap, per-/hypo- mix-up, charge sign, charge size, missing subscript, ammonium is positive, and the hydrogen- prefix (one less negative). Decks don't repeat an ion until the set is done. Hints, step-by-step help, Professor Tips, a Green Sheet ion list, a periodic table, XP, ranks and 10 achievements.",
+  "tags": [
+    "naming",
+    "nomenclature",
+    "polyatomic ions",
+    "oxyanions",
+    "green sheet",
+    "-ate and -ite",
+    "per- and hypo-",
+    "hydrogen carbonate",
+    "ion charges",
+    "ammonium",
+    "CHEM 1A",
+    "CHEM 3A",
+    "skill check",
+    "XP and achievements"
+  ],
   "status": "working"
 }

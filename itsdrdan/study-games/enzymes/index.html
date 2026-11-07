@@ -717,7 +717,7 @@ function genNames() {
   const similar = { decarboxylase: 'carboxylase', carboxylase: 'decarboxylase', dehydratase: 'hydratase', hydratase: 'dehydratase', dehydrogenase: 'reductase', reductase: 'dehydrogenase' }[nm];
   let wr = others.map(n => [n[0], `A ${n[0]} ${n[1]}.`]);
   if (similar) wr = [[similar, `Careful: a ${similar} ${NAMES.find(n => n[0] === similar)[1]}. Watch the “de-”.`, 'names:' + slug(nm) + '-vs-' + slug(similar)], ...wr.filter(w => w[0] !== similar).slice(0, 2)];
-  return mcq({ topic: 'names', tag: 'Which enzyme?', scenario: `<p class="scenario">This enzyme ${does}.</p>`, prompt: 'Which kind of enzyme is it?', right: nm, wrongs: wr, grid: true, solution: `A <b>${nm}</b> ${does}. It is a ${c.toLowerCase()}.`, hint: 'de- means remove. Without de-, the group is added.' });
+  return mcq({ topic: 'names', tag: 'Which enzyme?', scenario: `<p class="scenario">This enzyme ${fm(does)}.</p>`, prompt: 'Which kind of enzyme is it?', right: nm, wrongs: wr, grid: true, solution: `A <b>${nm}</b> ${fm(does)}. It is a ${c.toLowerCase()}.`, hint: 'de- means remove. Without de-, the group is added.' });
 }
 
 /* ===================== 3. Enzyme Activity ===================== */

@@ -1,977 +1,275 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polyatomic Ion Study Game</title>
-
-  <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --ink: #17202a;
-      --muted: #646e82;
-      --line: #d9e1ea;
-      --primary: #1f5f99;
-      --primary-dark: #16466f;
-      --good: #1f7a4c;
-      --good-bg: #edf9f2;
-      --bad: #a53a3a;
-      --bad-bg: #fff0f0;
-      --warn: #8a5a00;
-      --warn-bg: #fff8e6;
-      --soft: #eef4fa;
-      --shadow: 0 14px 34px rgba(23, 32, 42, 0.10);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 28px 16px 48px;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top left, #e8f2fb 0, transparent 34%),
-        var(--bg);
-      color: var(--ink);
-    }
-
-    .app {
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #e9f2fa;
-      color: var(--primary-dark);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.7rem);
-      line-height: 1.08;
-    }
-
-    .hero p {
-      max-width: 650px;
-      margin: 10px auto 0;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .panel,
-    .study-card,
-
-    /* -------------------------------------------------------------
-       CLICKABLE PERIODIC TABLE REFERENCE
-    ------------------------------------------------------------- */
-
-    .periodic-reference {
-      margin-top: 16px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .periodic-toggle {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 17px 20px;
-      border: 0;
-      border-radius: 0;
-      background: #eef4fa;
-      color: var(--primary-dark);
-      text-align: left;
-      font-size: 1rem;
-    }
-
-    .periodic-toggle:hover {
-      background: #e4eef7;
-    }
-
-    .periodic-toggle-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .periodic-toggle-title {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    .periodic-toggle-subtitle {
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-weight: 400;
-    }
-
-    .periodic-arrow {
-      font-size: 1.15rem;
-      transition: transform 0.2s ease;
-    }
-
-    .periodic-toggle[aria-expanded="true"] .periodic-arrow {
-      transform: rotate(180deg);
-    }
-
-    .periodic-content {
-      display: none;
-      padding: 18px;
-      border-top: 1px solid var(--line);
-    }
-
-    .periodic-content.open {
-      display: block;
-    }
-
-    .periodic-instructions {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.5;
-    }
-
-    .periodic-scroll {
-      overflow-x: auto;
-      padding-bottom: 8px;
-    }
-
-    .periodic-table {
-      min-width: 920px;
-      display: grid;
-      grid-template-columns: repeat(18, minmax(46px, 1fr));
-      grid-template-rows: repeat(7, 58px);
-      gap: 4px;
-    }
-
-    .element-button {
-      position: relative;
-      min-width: 0;
-      padding: 4px 3px;
-      border: 1px solid #b9c9d8;
-      border-radius: 7px;
-      background: #f9fbfd;
-      color: var(--ink);
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .element-button:hover,
-    .element-button:focus-visible {
-      background: #e8f2fb;
-      border-color: var(--primary);
-      outline: none;
-    }
-
-    .element-number {
-      position: absolute;
-      top: 3px;
-      left: 5px;
-      color: var(--muted);
-      font-size: 0.58rem;
-      font-weight: 600;
-    }
-
-    .element-symbol {
-      display: block;
-      margin-top: 9px;
-      text-align: center;
-      color: #173f61;
-      font-size: 1.15rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .series-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px dashed #b9c9d8;
-      border-radius: 7px;
-      background: #f5f7f9;
-      color: var(--muted);
-      font-size: 0.66rem;
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.15;
-    }
-
-    .periodic-series {
-      min-width: 920px;
-      display: grid;
-      grid-template-columns: 105px repeat(15, minmax(46px, 1fr));
-      gap: 4px;
-      margin-top: 8px;
-    }
-
-    .series-label {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 8px;
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .periodic-detail {
-      margin-top: 14px;
-      padding: 14px 16px;
-      border: 1px solid #cbd8e4;
-      border-radius: 12px;
-      background: #f7fafc;
-      text-align: center;
-      color: #344054;
-      line-height: 1.4;
-    }
-
-    .periodic-detail-symbol {
-      display: inline-block;
-      margin-right: 8px;
-      color: #173f61;
-      font-size: 1.8rem;
-      font-weight: 800;
-      vertical-align: middle;
-    }
-
-    .periodic-case-note {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.78rem;
-      text-align: center;
-    }
-
-    .footer-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .panel {
-      padding: 18px;
-      margin-bottom: 16px;
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 12px;
-      align-items: end;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: #344054;
-    }
-
-    select,
-    input {
-      width: 100%;
-      border: 1.5px solid #c8d2dc;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--ink);
-      font-size: 1rem;
-    }
-
-    select {
-      min-height: 44px;
-      padding: 9px 11px;
-    }
-
-    input {
-      padding: 13px 14px;
-    }
-
-    select:focus,
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(31, 95, 153, 0.12);
-    }
-
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 0.96rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.06s ease, background 0.15s ease;
-    }
-
-    button:active {
-      transform: translateY(1px);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-secondary {
-      background: #e9edf2;
-      color: #25313d;
-    }
-
-    .btn-secondary:hover {
-      background: #dfe5eb;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--primary-dark);
-      border: 1px solid #bfd0e0;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .stat {
-      background: rgba(255,255,255,0.86);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-    }
-
-    .stat-label {
-      margin-top: 3px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .study-card {
-      overflow: hidden;
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      padding: 16px 20px;
-      background: var(--soft);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .card-top .kind {
-      font-size: 0.86rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-    }
-
-    .card-top .counter {
-      color: var(--muted);
-      font-size: 0.86rem;
-    }
-
-    .card-body {
-      padding: 30px 24px 24px;
-    }
-
-    .prompt-label {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.055em;
-    }
-
-    .prompt {
-      min-height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 20px;
-      text-align: center;
-      font-size: clamp(2rem, 7vw, 4rem);
-      font-weight: 800;
-      line-height: 1.15;
-      color: #173f61;
-      overflow-wrap: anywhere;
-    }
-
-    .prompt.name-prompt {
-      font-size: clamp(1.9rem, 5.7vw, 3.35rem);
-    }
-
-    .chem {
-      white-space: nowrap;
-      font-variant-numeric: lining-nums;
-    }
-
-    .chem sub {
-      font-size: 0.62em;
-      line-height: 0;
-      vertical-align: -0.32em;
-    }
-
-    .chem sup {
-      font-size: 0.58em;
-      line-height: 0;
-      vertical-align: 0.72em;
-      margin-left: 0.03em;
-    }
-
-    .answer-wrap {
-      max-width: 610px;
-      margin: 0 auto;
-    }
-
-    .answer-help {
-      margin: 7px 2px 0;
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.4;
-    }
-
-    .answer-help code {
-      padding: 1px 5px;
-      border-radius: 5px;
-      background: #eef1f4;
-      color: #344054;
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 0.95em;
-    }
-
-    .answer-actions {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .feedback {
-      display: none;
-      max-width: 610px;
-      margin: 18px auto 0;
-      padding: 15px 16px;
-      border-radius: 12px;
-      line-height: 1.45;
-    }
-
-    .feedback.good {
-      display: block;
-      background: var(--good-bg);
-      color: var(--good);
-      border: 1px solid #bfe6cf;
-    }
-
-    .feedback.bad {
-      display: block;
-      background: var(--bad-bg);
-      color: var(--bad);
-      border: 1px solid #efc3c3;
-    }
-
-    .feedback.reveal {
-      display: block;
-      background: var(--warn-bg);
-      color: var(--warn);
-      border: 1px solid #ead49c;
-    }
-
-    .feedback strong {
-      color: inherit;
-    }
-
-    .next-row {
-      display: none;
-      max-width: 610px;
-      margin: 12px auto 0;
-    }
-
-    .next-row.show {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .progress-track {
-      height: 8px;
-      background: #e7ecf1;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      transition: width 0.2s ease;
-    }
-
-
-    /* -------------------------------------------------------------
-       CLICKABLE PERIODIC TABLE REFERENCE
-    ------------------------------------------------------------- */
-
-    .periodic-reference {
-      margin-top: 16px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .periodic-toggle {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 17px 20px;
-      border: 0;
-      border-radius: 0;
-      background: #eef4fa;
-      color: var(--primary-dark);
-      text-align: left;
-      font-size: 1rem;
-    }
-
-    .periodic-toggle:hover {
-      background: #e4eef7;
-    }
-
-    .periodic-toggle-text {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .periodic-toggle-title {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    .periodic-toggle-subtitle {
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-weight: 400;
-    }
-
-    .periodic-arrow {
-      font-size: 1.15rem;
-      transition: transform 0.2s ease;
-    }
-
-    .periodic-toggle[aria-expanded="true"] .periodic-arrow {
-      transform: rotate(180deg);
-    }
-
-    .periodic-content {
-      display: none;
-      padding: 18px;
-      border-top: 1px solid var(--line);
-    }
-
-    .periodic-content.open {
-      display: block;
-    }
-
-    .periodic-instructions {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.5;
-    }
-
-    .periodic-scroll {
-      overflow-x: auto;
-      padding-bottom: 8px;
-    }
-
-    .periodic-table {
-      min-width: 920px;
-      display: grid;
-      grid-template-columns: repeat(18, minmax(46px, 1fr));
-      grid-template-rows: repeat(7, 58px);
-      gap: 4px;
-    }
-
-    .element-button {
-      position: relative;
-      min-width: 0;
-      padding: 4px 3px;
-      border: 1px solid #b9c9d8;
-      border-radius: 7px;
-      background: #f9fbfd;
-      color: var(--ink);
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .element-button:hover,
-    .element-button:focus-visible {
-      background: #e8f2fb;
-      border-color: var(--primary);
-      outline: none;
-    }
-
-    .element-number {
-      position: absolute;
-      top: 3px;
-      left: 5px;
-      color: var(--muted);
-      font-size: 0.58rem;
-      font-weight: 600;
-    }
-
-    .element-symbol {
-      display: block;
-      margin-top: 9px;
-      text-align: center;
-      color: #173f61;
-      font-size: 1.15rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .series-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px dashed #b9c9d8;
-      border-radius: 7px;
-      background: #f5f7f9;
-      color: var(--muted);
-      font-size: 0.66rem;
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.15;
-    }
-
-    .periodic-series {
-      min-width: 920px;
-      display: grid;
-      grid-template-columns: 105px repeat(15, minmax(46px, 1fr));
-      gap: 4px;
-      margin-top: 8px;
-    }
-
-    .series-label {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 8px;
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .periodic-detail {
-      margin-top: 14px;
-      padding: 14px 16px;
-      border: 1px solid #cbd8e4;
-      border-radius: 12px;
-      background: #f7fafc;
-      text-align: center;
-      color: #344054;
-      line-height: 1.4;
-    }
-
-    .periodic-detail-symbol {
-      display: inline-block;
-      margin-right: 8px;
-      color: #173f61;
-      font-size: 1.8rem;
-      font-weight: 800;
-      vertical-align: middle;
-    }
-
-    .periodic-case-note {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.78rem;
-      text-align: center;
-    }
-
-    .footer-card {
-      margin-top: 16px;
-      padding: 16px 18px;
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.5;
-    }
-
-    .footer-card strong {
-      color: #344054;
-    }
-
-    .completion {
-      display: none;
-      text-align: center;
-      padding: 34px 24px;
-    }
-
-    .completion.show {
-      display: block;
-    }
-
-    .completion h2 {
-      margin-top: 0;
-      font-size: 2rem;
-    }
-
-    .completion p {
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    @media (max-width: 700px) {
-      .controls-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .card-body {
-        padding: 24px 16px 20px;
-      }
-
-      .answer-actions,
-      .next-row.show {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polyatomic Posse • Polyatomic Ions • ItsDrDan</title>
+<meta name="description" content="Polyatomic ion practice for CHEM 3A and CHEM 1A from the Green Sheet: name to formula and charge, formula to name, the -ate/-ite family game, charge check, and Skill Check Prep.">
+<link rel="icon" type="image/webp" href="https://itsdrdan.github.io/games/brand/badges/molecule.webp">
+<style>
+:root{
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
+ --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
+ --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
+ --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
+ --font:Nunito,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--font-display:Fredoka,Nunito,system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-padding-top:calc(var(--topbar) + 12px)}
+body{margin:0;background:linear-gradient(180deg,#eef0fb 0,var(--bg) 340px);color:var(--ink);font:16.5px/1.55 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,.tb-brand,.play-title,summary,.btn.primary{font-family:var(--font-display)}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
+[hidden]{display:none!important}
+.ui{width:1.05em;height:1.05em;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+sub{font-size:.66em;line-height:0;vertical-align:-.3em}sup{font-size:.62em;line-height:0;vertical-align:.7em}
+.chem{white-space:nowrap}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:#ffffffe6;backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+html.dd-embedded .topbar{position:relative}
+.tb{max-width:1180px;margin:auto;min-height:var(--topbar);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:1.12rem;white-space:nowrap;margin-right:auto}
+.tb-logo{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent-d);display:grid;place-items:center;font-size:1.35rem;flex:none}
+.seg{display:inline-flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:8px 18px;font-weight:800;color:var(--muted);min-height:46px;white-space:nowrap}
+.seg button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+.tb-xp{display:flex;align-items:center;gap:9px;min-width:160px}.tb-xp .ico{width:34px;height:34px;display:grid;place-items:center;background:var(--lav);border-radius:10px;color:var(--accent-d)}
+.tb-xp b{display:block;font-size:.82rem;line-height:1.1}.tb-xp small{display:block;font-size:.72rem;color:var(--faint);font-weight:700}
+.xpbar{height:6px;width:110px;background:#e9eaf3;border-radius:9px;overflow:hidden;margin:4px 0 2px}.xpbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea);border-radius:9px;transition:width .5s}
+.tb-streak{display:flex;align-items:center;gap:5px;font-weight:800;font-size:.92rem;padding:7px 11px;border-radius:10px;background:var(--rose);color:var(--rose-ink);white-space:nowrap}
+.tb-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;border-radius:11px;padding:7px 13px;font-weight:800;color:#3d4a73;min-height:44px;white-space:nowrap}.tb-btn:hover{background:var(--accent-soft)}
+
+/* page */
+.wrap{max-width:1180px;margin:auto;padding:16px 16px 50px}
+.intro{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.intro-logo{width:96px;height:96px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 14px #4b57d126)}
+.eyebrow{margin:0;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:2px 0 2px;font-size:clamp(1.6rem,3.6vw,2.35rem);line-height:1.1;font-weight:600}
+.lede{margin:0;color:var(--muted)}
+details.howto{margin:4px 0 12px;font-size:.95rem;color:var(--muted)}details.howto summary{cursor:pointer;font-family:var(--font);font-weight:800;color:var(--accent-d);display:inline-block;padding:4px 0}
+details.howto ul{margin:6px 0 0;padding-left:20px}
+
+/* mode tiles */
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mode{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;border:2px solid var(--line2);background:#fff;border-radius:20px;padding:14px 10px 12px;box-shadow:var(--shadow);min-height:150px}
+.mode:hover{border-color:#aab2ea}
+.mode .ms-ico{width:56px;height:56px;border-radius:16px;background:var(--accent-soft);color:var(--accent-d);display:grid;place-items:center;font-size:1.6rem;flex:none}
+.mode b{font-family:var(--font-display);font-weight:600;font-size:1.12rem;line-height:1.2}.mode small{color:var(--muted);font-size:.86rem;line-height:1.3}
+.mode .meter{position:absolute;left:14px;right:14px;bottom:7px;height:4px;background:#eceef5;border-radius:9px;overflow:hidden}.mode .meter span{display:block;height:100%;background:#5cb892}
+.mode.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.mode.on .ms-ico{background:var(--accent);color:#fff}
+.chips-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.chips-wrap>span{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-right:4px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);background:#fff;border-radius:99px;padding:8px 15px;min-height:44px;font-weight:800;color:#3d4a73}
+.chip small{font-weight:700;color:var(--faint)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d)}
+.skill-card{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;text-align:left;border:1px solid #ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);border-radius:var(--r-lg);padding:12px 16px;box-shadow:var(--shadow)}
+.skill-card img{width:56px;height:56px;flex:none}.skill-card b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.15rem}.skill-card small{color:var(--muted)}.skill-card .go{margin-left:auto;font-size:1.4rem;color:var(--accent-d)}
+.skill-card.on{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+
+/* play panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);min-width:0}
+main.panel{padding:20px;margin-top:16px;scroll-margin-top:calc(var(--topbar) + 10px)}
+.play-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.play-title{margin:0;font-size:1.2rem;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;font-weight:750;color:#34416a;min-height:48px}.btn:hover{background:#f6f7fc}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;font-size:1.02rem}.btn.primary:hover{background:var(--accent-d)}
+.btn.pulse{border-color:var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.btn[aria-pressed="true"]{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tag{font-size:.78rem;font-weight:800;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}.tag.quiz{background:var(--lav);color:#4b4590}
+.question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:16px}
+.given{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;background:var(--mint);border:1px solid var(--mint-line);color:var(--mint-ink);border-radius:var(--r-sm);padding:8px 12px;margin-bottom:10px;font-weight:800}
+.given .chem{font-size:1.25rem}
+.equation{text-align:center;font-size:clamp(1.9rem,7vw,3rem);font-weight:800;background:var(--accent-soft);border-radius:var(--r-sm);padding:14px;margin-bottom:12px;color:#26326a;overflow-wrap:anywhere;line-height:1.25}
+.equation.name{font-family:var(--font-display);font-weight:600;font-size:clamp(1.7rem,6vw,2.6rem)}
+.equation .q{color:#c0577a}
+.prompt{font-size:1.2rem;line-height:1.5;font-weight:650;margin:0}
+.answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.45rem;min-height:58px;border:1.5px solid var(--line2);border-radius:12px;background:#fff;font-weight:700;letter-spacing:.02em}
+.answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
+.answer .btn.primary{min-height:58px;padding:0 26px}
+.readback{font-size:.95rem;color:var(--muted);margin:8px 2px 0;min-height:1.4em}.readback b{color:#26326a;font-size:1.1rem}
+.typing-note{font-size:.85rem;color:var(--faint);margin:6px 2px 0}.typing-note code{background:#eef0f6;border-radius:5px;padding:0 5px;font-weight:800;color:#34416a}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:9px;margin-top:14px}
+.choice{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 14px;min-height:58px;font-size:1.25rem;font-weight:800;color:#2b3760;text-align:center}
+.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
+.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
+.feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.parts{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 2px}.part{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 11px;font-weight:800;font-size:.92rem;background:#fff}
+.part.ok{color:var(--mint-ink);border:1px solid var(--mint-line)}.part.no{color:var(--rose-ink);border:1px solid var(--rose-line)}
+.tip{display:block;margin-top:8px;padding:8px 11px;border-radius:10px;background:#fff8;color:#5b4714;border:1px solid var(--amber-line)}.tip b{color:#80601a}
+.xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
+.detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
+.next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
+.note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
+.empty{padding:26px 16px;text-align:center;color:var(--muted);font-weight:700;font-size:1.08rem;border:2px dashed var(--line2);border-radius:var(--r-md)}
+.empty .ui{transform:rotate(-90deg)}
+
+/* guide */
+.guide{margin-top:10px;display:grid;gap:8px}
+.gstep{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:10px 12px}
+.gstep.current{border:2px solid #8b95ee;box-shadow:0 4px 14px #4b57d114}.gstep.done{background:#f3fbf7;border-color:#cbe9db}.gstep.later{display:none}
+.gstep .gnum{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}.gstep.done .gnum{color:var(--mint-ink)}
+.gstep .gask{font-weight:700;margin:2px 0 8px;font-size:1.05rem}
+.gstep .gchoices{display:flex;flex-wrap:wrap;gap:7px}.gstep .gchoices .choice{min-height:46px;padding:8px 13px;font-size:1.05rem;text-align:left}
+.gstep .gwhy{margin-top:7px;font-size:.95rem;color:var(--mint-ink)}.gstep .gwhy.bad{color:var(--rose-ink)}
+
+/* report */
+.example{border:1px solid #d9ddf3;border-radius:var(--r-md);padding:16px;background:#fbfbff;margin-bottom:14px}
+.ex-label{display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.ex-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.report-score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.report-score b{font-size:2.2rem;color:var(--accent-d);font-family:var(--font-display)}
+.report-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:6px}.report-list li{padding:8px 12px;border-radius:12px;background:var(--rose);border:1px solid var(--rose-line)}.report-list li.ok{background:var(--mint);border-color:var(--mint-line)}
+.plan{margin:8px 0 0;padding-left:20px}.plan li{margin:4px 0}
+.quiz-bar{height:8px;border-radius:9px;background:#eceef5;overflow:hidden;margin:-2px 0 12px}.quiz-bar span{display:block;height:100%;background:linear-gradient(90deg,#72c9a8,#7884ea)}
+
+/* progress */
+.section{margin-top:18px;padding:20px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
+.section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:750;min-height:44px}.reset-btn.armed{background:var(--rose)}
+.ion-tally{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}.ion-tally span{font-size:.8rem;font-weight:800;border-radius:99px;padding:3px 9px;background:#f2f3f8;color:var(--faint)}.ion-tally span.got{background:var(--mint);color:var(--mint-ink)}
+
+/* details sections */
+details.section{padding:0}details.section>summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:1.1rem}
+details.section>summary::-webkit-details-marker{display:none}details.section>summary::after{content:'▾';color:var(--faint)}details[open].section>summary::after{transform:rotate(180deg)}
+details.section>summary small{display:block;font-family:var(--font);font-weight:600;color:var(--muted);font-size:.86rem}
+.dbody{padding:0 20px 20px}
+
+/* green sheet dialog */
+dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;width:min(860px,calc(100vw - 16px));max-height:90vh}dialog::backdrop{background:#15182b80}
+.modal-head{position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head strong{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.close-btn{width:44px;height:44px;border:1px solid var(--line2);border-radius:10px;background:#fff;font-size:1.2rem}
+.modal-body{overflow:auto;padding:16px 18px;max-height:calc(90vh - 70px)}
+.sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sheet{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fbfbfe}.sheet h3{margin:0 0 6px;font-size:1rem}.sheet.wide{grid-column:1/-1}
+.sheet table{width:100%;border-collapse:collapse;font-size:.98rem}.sheet td{padding:4px 6px;border-top:1px solid var(--line)}.sheet td:last-child{text-align:right;font-weight:800;color:#26326a}
+.ox-table{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ox-table div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px;text-align:center;font-size:.9rem}.ox-table b{display:block;color:#26326a;font-size:1.02rem}.ox-table .blank{background:none;border:0}
+
+/* periodic table (kept from the original game) */
+.periodic-instructions{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.periodic-scroll{overflow-x:auto;padding-bottom:8px}
+.periodic-table{min-width:920px;display:grid;grid-template-columns:repeat(18,minmax(46px,1fr));grid-template-rows:repeat(7,58px);gap:4px}
+.element-button{position:relative;min-width:0;padding:4px 3px;border:1px solid #c7cde6;border-radius:7px;background:#f9faff;cursor:pointer;overflow:hidden}
+.element-button:hover,.element-button:focus-visible{background:var(--accent-soft);border-color:var(--accent);outline:none}
+.element-number{position:absolute;top:3px;left:5px;color:var(--faint);font-size:.58rem;font-weight:700}
+.element-symbol{display:block;margin-top:9px;text-align:center;color:#26326a;font-size:1.15rem;font-weight:800;line-height:1}
+.series-placeholder{display:flex;align-items:center;justify-content:center;border:1px dashed #c7cde6;border-radius:7px;background:#f5f6fa;color:var(--faint);font-size:.66rem;font-weight:700;text-align:center;line-height:1.15}
+.periodic-series{min-width:920px;display:grid;grid-template-columns:105px repeat(15,minmax(46px,1fr));gap:4px;margin-top:8px}
+.series-label{display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:var(--faint);font-size:.72rem;font-weight:700}
+.periodic-detail{margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fafaff;text-align:center;color:var(--muted)}
+.periodic-detail-symbol{display:inline-block;margin-right:8px;color:#26326a;font-size:1.8rem;font-weight:800;vertical-align:middle}
+
+/* toasts + confetti */
+.toasts{position:fixed;right:16px;bottom:16px;z-index:1100;display:grid;gap:9px;max-width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #ddd6f7;border-radius:14px;padding:10px 13px;box-shadow:0 12px 34px #1f2a4430;font-size:.92rem;transition:opacity .5s,transform .5s}.toast img{width:42px;height:42px}.toast.out{opacity:0;transform:translateY(10px)}
+#celebrationCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
+.foot{text-align:center;font-size:.82rem;color:var(--faint);margin:18px 0 6px}
+
+@media(max-width:760px){
+ .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.tb-logo{width:34px;height:34px;font-size:1.15rem}.tb-xp{min-width:0}.tb-xp .xpbar{width:64px}.tb-btn .lbl{display:none}
+ .topbar{position:relative}
+ .seg button{padding:8px 12px}
+ .wrap{padding:10px 12px 40px}
+ .intro{gap:10px}.intro-logo{width:58px;height:58px}.intro h1{font-size:1.5rem}.lede{font-size:.95rem;line-height:1.35}
+ .modes{grid-template-columns:1fr 1fr;gap:9px}.mode{min-height:0;padding:10px 8px 12px;gap:3px}.mode .ms-ico{width:42px;height:42px;font-size:1.25rem;border-radius:12px}.mode b{font-size:1rem}.mode small{font-size:.78rem}
+ .skill-card{padding:10px 12px}.skill-card img{width:44px;height:44px}
+ main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}
+ .answer input{flex:1 1 100%}.answer .btn.primary{flex:1}.next-row .btn.primary{width:100%}
+ .actions{gap:6px}.actions .btn{white-space:nowrap;font-size:.86rem;padding:8px 4px;gap:4px;min-width:0}
+ .stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
+ .sheet-grid{grid-template-columns:1fr}.ox-table{grid-template-columns:repeat(2,minmax(0,1fr))}.ox-table .blank{display:none}
+ html{scroll-padding-top:8px}
+}
+@media(max-width:400px){.tb-xp{display:none}}
+html.dd-embedded{scroll-padding-top:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
+<body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
+<header class="topbar"><div class="tb">
+ <div class="tb-brand"><span class="tb-logo" data-icon="atom" aria-hidden="true"></span>Polyatomic Posse</div>
+ <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
+ <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Ion Intern</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
+ <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
+ <button type="button" class="tb-btn" id="sheetBtn" aria-label="Open the Green Sheet ion list"><span data-icon="book" aria-hidden="true"></span><span class="lbl">Green Sheet</span></button>
+</div></header>
 
-<body>
-  <div class="app">
-    <header class="hero">
-      <div class="eyebrow">Interactive Chemistry Study Tool</div>
-      <h1>Polyatomic Ion Study Lab</h1>
-      <p>
-        Practice both directions: identify a formula from an ion name or identify
-        the ion name from a formula. Questions are shuffled and do not repeat
-        until the deck is complete.
-      </p>
-    </header>
+<div class="wrap">
+ <section class="intro"><img class="intro-logo" src="https://itsdrdan.github.io/games/brand/badges/molecule.webp" alt="Polyatomic Posse logo" onerror="this.hidden=true"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Green Sheet polyatomic ions</p><h1>Polyatomic Posse</h1><p class="lede">Learn every Green Sheet ion: its name, formula and charge.</p></div></section>
+ <details class="howto"><summary>How to play</summary><ul>
+  <li>Pick a game below. Every question has <b>Hint</b>, <b>Step by step</b> and <b>Show answer</b>.</li>
+  <li>Type formulas the easy way: <b>SO4^2-</b>, <b>SO42-</b> or <b>SO4-2</b> all become SO₄²⁻. Numbers after a letter turn into subscripts, and <b>^</b> or a + or − at the end makes the charge.</li>
+  <li>Element symbols are case-sensitive: <b>Cl</b>, not CL or cl. Names are not.</li>
+  <li>Decks don’t repeat an ion until you’ve seen every ion in the set.</li>
+ </ul></details>
 
-    <section class="panel" aria-label="Study settings">
-      <div class="controls-grid">
-        <div class="field">
-          <label for="modeSelect">Question mode</label>
-          <select id="modeSelect">
-            <option value="mixed">Mixed: Name ↔ Formula</option>
-            <option value="nameToFormula">Name → Formula</option>
-            <option value="formulaToName">Formula → Name</option>
-          </select>
-        </div>
+ <section class="chooser" aria-label="Choose a game">
+  <div class="modes" id="modes"></div>
+  <div class="chips-wrap" id="setWrap"><span>Ion set</span><span id="setChips" style="display:contents"></span></div>
+  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/checklist.webp" alt="" onerror="this.hidden=true"><span><b>Skill Check Prep</b><small>10 mixed questions on all the ions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+ </section>
 
-        <div class="field">
-          <label for="groupSelect">Ion set</label>
-          <select id="groupSelect">
-            <option value="all">All ions from the green sheet</option>
-            <option value="oxyanions">Oxyanion table</option>
-            <option value="common">Other common polyatomic ions</option>
-            <option value="rules">Naming-rule examples</option>
-            <option value="solubility">Additional ion from solubility table</option>
-          </select>
-        </div>
-
-        <button id="restartButton" class="btn-secondary" type="button">
-          Shuffle / Restart
-        </button>
-      </div>
-    </section>
-
-    <section class="stats" aria-label="Study statistics">
-      <div class="stat">
-        <div id="scoreValue" class="stat-value">0 / 0</div>
-        <div class="stat-label">Correct</div>
-      </div>
-      <div class="stat">
-        <div id="streakValue" class="stat-value">0</div>
-        <div class="stat-label">Streak</div>
-      </div>
-      <div class="stat">
-        <div id="remainingValue" class="stat-value">0</div>
-        <div class="stat-label">Remaining</div>
-      </div>
-      <div class="stat">
-        <div id="percentValue" class="stat-value">—</div>
-        <div class="stat-label">Accuracy</div>
-      </div>
-    </section>
-
-    <main class="study-card">
-      <div class="progress-track" aria-hidden="true">
-        <div id="progressBar" class="progress-bar"></div>
-      </div>
-
-      <div id="quizArea">
-        <div class="card-top">
-          <div id="questionKind" class="kind">Name → Formula</div>
-          <div id="questionCounter" class="counter">Question 1</div>
-        </div>
-
-        <div class="card-body">
-          <div id="promptLabel" class="prompt-label">Ion name</div>
-          <div id="prompt" class="prompt name-prompt">Sulfate</div>
-
-          <div class="answer-wrap">
-            <label for="answerInput"><strong>Your answer</strong></label>
-            <input
-              id="answerInput"
-              type="text"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="Type your answer"
-            >
-            <div id="answerHelp" class="answer-help">
-              Element symbols are case-sensitive. You may type ordinary keyboard notation such as SO4^2-. Correct answers display with chemical subscripts and superscript charges.
-            </div>
-
-            <div class="answer-actions">
-              <button id="checkButton" class="btn-primary" type="button">Check Answer</button>
-              <button id="revealButton" class="btn-ghost" type="button">Reveal Answer</button>
-            </div>
-          </div>
-
-          <div id="feedback" class="feedback" aria-live="polite"></div>
-
-          <div id="nextRow" class="next-row">
-            <button id="nextButton" class="btn-primary" type="button">Next Question</button>
-            <button id="retryButton" class="btn-secondary" type="button">Try This One Again</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="completionArea" class="completion">
-        <h2>Deck Complete</h2>
-        <p id="completionText"></p>
-        <button id="studyAgainButton" class="btn-primary" type="button">Study Again</button>
-      </div>
-    </main>
-
-
-    <section class="periodic-reference" aria-label="Periodic table reference">
-      <button
-        id="periodicToggle"
-        class="periodic-toggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="periodicContent">
-        <span class="periodic-toggle-text">
-          <span class="periodic-toggle-title">Periodic Table Reference</span>
-          <span class="periodic-toggle-subtitle">Click to open, then select any element for its name and atomic number.</span>
-        </span>
-        <span class="periodic-arrow" aria-hidden="true">▼</span>
-      </button>
-
-      <div id="periodicContent" class="periodic-content">
-        <p class="periodic-instructions">
-          Use this reference when you need to check an element symbol.
-          Click any element to see its full name and atomic number.
-        </p>
-
-        <div class="periodic-scroll">
-          <div id="periodicMain" class="periodic-table" aria-label="Main periodic table"></div>
-
-          <div id="lanthanideRow" class="periodic-series" aria-label="Lanthanide series">
-            <div class="series-label">Lanthanides</div>
-          </div>
-
-          <div id="actinideRow" class="periodic-series" aria-label="Actinide series">
-            <div class="series-label">Actinides</div>
-          </div>
-        </div>
-
-        <div id="periodicDetail" class="periodic-detail" aria-live="polite">
-          Select an element to view its information.
-        </div>
-
-        <div class="periodic-case-note">
-          Remember: element symbols are case-sensitive. Oxygen is <strong>O</strong>, chlorine is <strong>Cl</strong>, and cobalt is <strong>Co</strong>.
-        </div>
-      </div>
-    </section>
-
-
-    <section class="footer-card">
-      <strong>Included:</strong> all polyatomic ions explicitly shown in the uploaded
-      green sheet, including both acetate formulas. The study deck contains
-      <strong><span id="totalIonCount"></span> unique ion names</strong>.
-      <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></div>
-    </section>
+ <main class="panel" id="play">
+  <div class="play-head"><h2 class="play-title" id="playTitle">Practice</h2><button type="button" id="skipBtn" class="btn">New question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  <div class="empty" id="emptyBox"><span data-icon="arrow" aria-hidden="true"></span> Pick a game above to get your first question.</div>
+  <section id="reportBox" class="example" hidden></section>
+  <div id="playArea" hidden>
+   <div class="quiz-bar" id="quizBar" hidden><span></span></div>
+   <div class="tags"><span class="tag" id="modeTag"></span><span class="tag" id="deckTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
+   <section class="question"><div class="given" id="given" hidden></div><div class="equation" id="equation"></div><p class="prompt" id="prompt"></p></section>
+   <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn primary" id="checkBtn">Check</button></div>
+   <p class="readback" id="readback" aria-live="polite"></p>
+   <div class="choices" id="choices" hidden></div>
+   <p class="typing-note" id="typingNote"></p>
+   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button></div>
+   <div class="guide" id="guide" hidden></div>
+   <div class="detail" id="hintBox" hidden></div>
+   <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
   </div>
+  <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+ </main>
 
-  <script>
-    // -------------------------------------------------------------------------
-    // SOURCE DECK
-    // -------------------------------------------------------------------------
-    // All polyatomic ions explicitly shown in the uploaded green sheet.
-    //
-    // Categories:
-    //   oxyanions  = Oxyanions table
-    //   common     = Other Common Polyatomic Ions table
-    //   rules      = Naming-rule examples
-    //   solubility = Additional explicit polyatomic ion on the solubility table
-    //
-    // Formula syntax:
-    //   html     = formatted display
-    //   formulas = accepted plain-text formulas for typed answers
-    //   names    = accepted name variants for typed answers
-    // -------------------------------------------------------------------------
+ <section class="panel section" aria-labelledby="progressTitle">
+  <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Ion Intern</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="badges" id="achGrid"></div>
+  <div class="ion-tally" id="ionTally" aria-label="Green Sheet ions you have gotten right"></div>
+  <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. CHEM 3A and CHEM 1A progress are saved separately on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
+ </section>
 
-    const ions = [
+ <details class="panel section" id="ptSection"><summary><span>Periodic table reference<small>Tap an element for its name and atomic number.</small></span></summary>
+  <div class="dbody">
+   <p class="periodic-instructions">Element symbols are case-sensitive: oxygen is <b>O</b>, chlorine is <b>Cl</b>, cobalt is <b>Co</b>.</p>
+   <div class="periodic-scroll"><div id="periodicMain" class="periodic-table" aria-label="Main periodic table"></div>
+    <div id="lanthanideRow" class="periodic-series" aria-label="Lanthanide series"><div class="series-label">Lanthanides</div></div>
+    <div id="actinideRow" class="periodic-series" aria-label="Actinide series"><div class="series-label">Actinides</div></div></div>
+   <div id="periodicDetail" class="periodic-detail" aria-live="polite">Select an element to view its information.</div>
+  </div>
+ </details>
+ <p class="foot">ItsDrDan · Fresno City College · Practice only, nothing is graded · <a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener noreferrer">Dr. Dan’s Chemistry Study Hub</a></p>
+</div>
+
+<dialog id="sheetDialog" aria-labelledby="sheetTitle"><div class="modal-head"><strong id="sheetTitle">Green Sheet: polyatomic ions</strong><button type="button" class="close-btn" id="closeSheet" aria-label="Close the ion list">✕</button></div>
+ <div class="modal-body" id="sheetBody"></div></dialog>
+
+<script>
+/* =====================================================================
+   Polyatomic Posse: data
+   `ions` is the Green Sheet list. Keep its name and shape: the shared
+   question bank (questionbank/tools/build.js) reads it for
+   data/polyatomic-ions.json. Don't add or remove ions here.
+   ===================================================================== */
+const ions = [
       // OXYANIONS TABLE
       {
         name: "borate",
@@ -1192,552 +490,691 @@
       }
     ];
 
-    // -------------------------------------------------------------------------
-    // STATE
-    // -------------------------------------------------------------------------
+// Rule-built ions for the -ate/-ite Family game ONLY. They are not on the Green Sheet list,
+// but students build them from the Green Sheet naming rules (per-/-ate/-ite/hypo-, hydrogen-).
+// Kept out of `ions` on purpose, so the Green Sheet deck and the shared ion data stay exact.
+const RULE_IONS = [
+  { name: 'perbromate', html: 'BrO<sub>4</sub><sup>−</sup>', formulas: ['BrO4^-'], names: ['perbromate'], group: 'rule-built' },
+  { name: 'bromite', html: 'BrO<sub>2</sub><sup>−</sup>', formulas: ['BrO2^-'], names: ['bromite'], group: 'rule-built' },
+  { name: 'hypobromite', html: 'BrO<sup>−</sup>', formulas: ['BrO^-'], names: ['hypobromite'], group: 'rule-built' },
+  { name: 'periodate', html: 'IO<sub>4</sub><sup>−</sup>', formulas: ['IO4^-'], names: ['periodate'], group: 'rule-built' },
+  { name: 'hypoiodite', html: 'IO<sup>−</sup>', formulas: ['IO^-'], names: ['hypoiodite'], group: 'rule-built' },
+  { name: 'nitrite', html: 'NO<sub>2</sub><sup>−</sup>', formulas: ['NO2^-'], names: ['nitrite'], group: 'rule-built' },
+  { name: 'phosphite', html: 'PO<sub>3</sub><sup>3−</sup>', formulas: ['PO3^3-'], names: ['phosphite'], group: 'rule-built' },
+  { name: 'arsenite', html: 'AsO<sub>3</sub><sup>3−</sup>', formulas: ['AsO3^3-'], names: ['arsenite'], group: 'rule-built' },
+  { name: 'selenite', html: 'SeO<sub>3</sub><sup>2−</sup>', formulas: ['SeO3^2-'], names: ['selenite'], group: 'rule-built' },
+  { name: 'tellurite', html: 'TeO<sub>3</sub><sup>2−</sup>', formulas: ['TeO3^2-'], names: ['tellurite'], group: 'rule-built' },
+  { name: 'hydrogen carbonate', html: 'HCO<sub>3</sub><sup>−</sup>', formulas: ['HCO3^-'], names: ['hydrogen carbonate', 'hydrogencarbonate', 'bicarbonate'], group: 'rule-built' },
+  { name: 'hydrogen sulfate', html: 'HSO<sub>4</sub><sup>−</sup>', formulas: ['HSO4^-'], names: ['hydrogen sulfate', 'hydrogensulfate', 'bisulfate'], group: 'rule-built' },
+  { name: 'hydrogen sulfite', html: 'HSO<sub>3</sub><sup>−</sup>', formulas: ['HSO3^-'], names: ['hydrogen sulfite', 'hydrogensulfite', 'bisulfite'], group: 'rule-built' }
+];
+// level: per = +1 O vs -ate, ate = 0, ite = −1 O, hypo = −2 O. h = number of H added. thio = one O swapped for S.
+const FAMILIES = [
+  { id: 'Cl', weight: 3, members: [['perchlorate', 'per'], ['chlorate', 'ate'], ['chlorite', 'ite'], ['hypochlorite', 'hypo']] },
+  { id: 'Br', weight: 2, members: [['perbromate', 'per'], ['bromate', 'ate'], ['bromite', 'ite'], ['hypobromite', 'hypo']] },
+  { id: 'I', weight: 1, members: [['periodate', 'per'], ['iodate', 'ate'], ['hypoiodite', 'hypo']] },
+  { id: 'S', weight: 3, members: [['sulfate', 'ate'], ['sulfite', 'ite'], ['hydrogen sulfate', 'ate', 1], ['hydrogen sulfite', 'ite', 1], ['thiosulfate', 'thio']] },
+  { id: 'N', weight: 2, members: [['nitrate', 'ate'], ['nitrite', 'ite']] },
+  { id: 'P', weight: 3, members: [['phosphate', 'ate'], ['phosphite', 'ite'], ['hydrogenphosphate', 'ate', 1], ['dihydrogenphosphate', 'ate', 2]] },
+  { id: 'C', weight: 2, members: [['carbonate', 'ate'], ['hydrogen carbonate', 'ate', 1]] },
+  { id: 'As', weight: 1, members: [['arsenate', 'ate'], ['arsenite', 'ite']] },
+  { id: 'Se', weight: 1, members: [['selenate', 'ate'], ['selenite', 'ite']] },
+  { id: 'Te', weight: 1, members: [['tellurate', 'ate'], ['tellurite', 'ite']] }
+];
+const LEVEL = { per: 1, ate: 0, ite: -1, hypo: -2 };
+const GROUPS = [['all', 'All Green Sheet ions'], ['oxyanions', 'Oxyanion table'], ['common', 'Other common ions'], ['rules', 'Naming-rule examples'], ['solubility', 'Solubility table ion']];
+const MODES = {
+  n2f: { label: 'Name → Formula & Charge', short: 'Name → Formula', blurb: 'See the name, type the formula with its charge.', icon: 'pencil' },
+  f2n: { label: 'Formula → Name', short: 'Formula → Name', blurb: 'See the formula, type the ion’s name.', icon: 'eye' },
+  family: { label: 'The -ate/-ite Family', short: '-ate/-ite Family', blurb: 'Know one ion, build its whole family.', icon: 'loop' },
+  charge: { label: 'Charge Check', short: 'Charge Check', blurb: 'Just the charge. Tap it.', icon: 'bolt' }
+};
+const SKILL_PLAN = ['n2f', 'n2f', 'n2f', 'n2f', 'f2n', 'f2n', 'family', 'family', 'charge', 'charge'];
 
-    const modeSelect = document.getElementById("modeSelect");
-    const groupSelect = document.getElementById("groupSelect");
-    const restartButton = document.getElementById("restartButton");
-
-    const scoreValue = document.getElementById("scoreValue");
-    const streakValue = document.getElementById("streakValue");
-    const remainingValue = document.getElementById("remainingValue");
-    const percentValue = document.getElementById("percentValue");
-
-    const quizArea = document.getElementById("quizArea");
-    const completionArea = document.getElementById("completionArea");
-    const completionText = document.getElementById("completionText");
-
-    const questionKind = document.getElementById("questionKind");
-    const questionCounter = document.getElementById("questionCounter");
-    const promptLabel = document.getElementById("promptLabel");
-    const prompt = document.getElementById("prompt");
-    const answerInput = document.getElementById("answerInput");
-    const answerHelp = document.getElementById("answerHelp");
-    const checkButton = document.getElementById("checkButton");
-    const revealButton = document.getElementById("revealButton");
-    const feedback = document.getElementById("feedback");
-    const nextRow = document.getElementById("nextRow");
-    const nextButton = document.getElementById("nextButton");
-    const retryButton = document.getElementById("retryButton");
-    const studyAgainButton = document.getElementById("studyAgainButton");
-    const progressBar = document.getElementById("progressBar");
-    const totalIonCount = document.getElementById("totalIonCount");
-
-    let deck = [];
-    let currentIndex = 0;
-    let currentQuestion = null;
-    let correctCount = 0;
-    let attemptedQuestions = 0;
-    let streak = 0;
-    let answeredCurrent = false;
-    let currentWasMissed = false;
-
-    totalIonCount.textContent = ions.length;
-
-    // -------------------------------------------------------------------------
-    // HELPERS
-    // -------------------------------------------------------------------------
-
-    function shuffle(array) {
-      const copy = [...array];
-
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-
-      return copy;
+/* ---------- formula engine ---------- */
+const SUBS = '₀₁₂₃₄₅₆₇₈₉', SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const chance = p => Math.random() < p;
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const toSub = d => String(d).replace(/\d/g, c => SUBS[c]);
+const toSup = d => String(d).replace(/\d/g, c => SUPS[c]);
+// Pretty or keyboard text → keyboard text with ^ before the charge: "SO₄²⁻" → "SO4^2-"
+function toAscii(s) {
+  s = String(s == null ? '' : s).replace(/[−–—‒‑]/g, '-').replace(/\s+/g, '').replace(/[{}()\[\]]/g, '');
+  s = s.replace(/[₀-₉]/g, c => SUBS.indexOf(c));
+  s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]+/g, run => '^' + [...run].map(c => (c === '⁺' ? '+' : c === '⁻' ? '-' : SUPS.indexOf(c))).join(''));
+  return s.replace(/\^+/g, '^');
+}
+// Read a typed ion. Accepts SO4^2-, SO4^-2, SO42-, SO4-2, SO4 2-, SO₄²⁻. Returns { base, charge (number|null), signMissing }.
+function parseIon(raw) {
+  const s = toAscii(raw);
+  let base = s, mag = null, sign = null, signMissing = false, pending = '';
+  const i = s.indexOf('^');
+  if (i >= 0) {
+    base = s.slice(0, i); const c = s.slice(i + 1); let m;
+    if ((m = c.match(/^(\d*)([+-])$/))) { mag = m[1] ? +m[1] : 1; sign = m[2]; }
+    else if ((m = c.match(/^([+-])(\d*)$/))) { sign = m[1]; mag = m[2] ? +m[2] : 1; }
+    else if (/^\d+$/.test(c)) { signMissing = true; pending = c; }
+    else if (c) { base = s.replace(/\^/g, ''); }
+  } else {
+    const m = s.match(/^(.*?)([+-])(\d*)$/);
+    if (m && m[1]) {
+      base = m[1]; sign = m[2];
+      if (m[3]) mag = +m[3];
+      else { const d = base.match(/^(.*[A-Za-z]\d)(\d)$/) || base.match(/^(.*[A-Za-z])(1)$/); if (d) { base = d[1]; mag = +d[2]; } else mag = 1; }
     }
-
-    function normalizeName(value) {
-      return value
-        .toLowerCase()
-        .trim()
-        .replace(/[‐‑‒–—]/g, "-")
-        .replace(/\s+/g, " ")
-        .replace(/\s*\(\s*/g, "(")
-        .replace(/\s*\)\s*/g, ")");
-    }
-
-    function normalizeFormula(value) {
-      const subMap = {
-        "₀":"0","₁":"1","₂":"2","₃":"3","₄":"4",
-        "₅":"5","₆":"6","₇":"7","₈":"8","₉":"9"
-      };
-
-      const supMap = {
-        "⁰":"0","¹":"1","²":"2","³":"3","⁴":"4",
-        "⁵":"5","⁶":"6","⁷":"7","⁸":"8","⁹":"9",
-        "⁺":"+","⁻":"-"
-      };
-
-      let s = value.trim();
-
-      s = s.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, ch => subMap[ch]);
-      s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]/g, ch => supMap[ch]);
-      s = s.replace(/[−–—]/g, "-");
-      s = s.replace(/\s+/g, "");
-      s = s.replace(/[{}]/g, "");
-      s = s.replace(/[()]/g, "");
-
-      // IMPORTANT: Do NOT change letter case here.
-      // Chemical element symbols are case-sensitive:
-      // O = oxygen, while o is incorrect.
-      // Cl = chlorine, while CL or cl are incorrect.
-      return s;
-    }
-
-    function formulaVariants(formula) {
-      // Start with the canonical form, e.g. SO4^2- or NO3^-.
-      const variants = new Set();
-      const clean = normalizeFormula(formula);
-
-      variants.add(clean);
-      variants.add(clean.replace(/\^/g, ""));
-
-      const match = clean.match(/^(.*)\^(\d*)([+-])$/);
-
-      if (match) {
-        const base = match[1];
-        const magnitude = match[2] || "1";
-        const sign = match[3];
-
-        variants.add(base + "^" + (magnitude === "1" ? "" : magnitude) + sign);
-        variants.add(base + "^" + magnitude + sign);
-        variants.add(base + (magnitude === "1" ? "" : magnitude) + sign);
-        variants.add(base + magnitude + sign);
-        variants.add(base + sign + (magnitude === "1" ? "" : magnitude));
-        variants.add(base + sign + magnitude);
-      }
-
-      return variants;
-    }
-
-    function isFormulaCorrect(input, ion) {
-      const user = normalizeFormula(input);
-
-      return ion.formulas.some(formula => {
-        return formulaVariants(formula).has(user);
-      });
-    }
-
-    function isNameCorrect(input, ion) {
-      const user = normalizeName(input);
-      return ion.names.some(name => normalizeName(name) === user);
-    }
-
-    function plainFormula(formula) {
-      return formula.replace("^1", "^");
-    }
-
-    function expectedFormulaText(ion) {
-      if (ion.formulas.length === 1) {
-        return plainFormula(ion.formulas[0]);
-      }
-
-      return ion.formulas.map(plainFormula).join(" or ");
-    }
-
-    function selectedIons() {
-      const group = groupSelect.value;
-
-      if (group === "all") {
-        return ions;
-      }
-
-      return ions.filter(ion => ion.group === group);
-    }
-
-    function chooseDirection() {
-      const mode = modeSelect.value;
-
-      if (mode === "mixed") {
-        return Math.random() < 0.5 ? "nameToFormula" : "formulaToName";
-      }
-
-      return mode;
-    }
-
-    function buildDeck() {
-      return shuffle(selectedIons()).map(ion => ({
-        ion,
-        direction: chooseDirection()
-      }));
-    }
-
-    // -------------------------------------------------------------------------
-    // QUIZ RENDERING
-    // -------------------------------------------------------------------------
-
-    function startSession() {
-      deck = buildDeck();
-      currentIndex = 0;
-      correctCount = 0;
-      attemptedQuestions = 0;
-      streak = 0;
-      answeredCurrent = false;
-      currentWasMissed = false;
-
-      completionArea.classList.remove("show");
-      quizArea.style.display = "block";
-
-      if (deck.length === 0) {
-        completionArea.classList.add("show");
-        quizArea.style.display = "none";
-        completionText.textContent = "No ions are available in this set.";
-        return;
-      }
-
-      showQuestion();
-      updateStats();
-    }
-
-    function showQuestion() {
-      if (currentIndex >= deck.length) {
-        finishSession();
-        return;
-      }
-
-      currentQuestion = deck[currentIndex];
-      answeredCurrent = false;
-      currentWasMissed = false;
-
-      const ion = currentQuestion.ion;
-      const direction = currentQuestion.direction;
-
-      questionCounter.textContent =
-        "Question " + (currentIndex + 1) + " of " + deck.length;
-
-      feedback.className = "feedback";
-      feedback.innerHTML = "";
-      nextRow.className = "next-row";
-
-      answerInput.disabled = false;
-      checkButton.disabled = false;
-      revealButton.disabled = false;
-      answerInput.value = "";
-
-      if (direction === "nameToFormula") {
-        questionKind.textContent = "Name → Formula";
-        promptLabel.textContent = "Ion name";
-        prompt.className = "prompt name-prompt";
-        prompt.textContent = ion.name;
-        answerInput.placeholder = "Type the chemical formula";
-        answerHelp.innerHTML =
-          "Element symbols are <strong>case-sensitive</strong>. Type ordinary keyboard notation such as " +
-          "<code>SO4^2-</code>. For example, <code>SO4^2-</code> is accepted, but " +
-          "<code>so4^2-</code> is not. The formatted formula is " +
-          "<span class='chem'><strong>SO<sub>4</sub><sup>2−</sup></strong></span>.";
-      } else {
-        questionKind.textContent = "Formula → Name";
-        promptLabel.textContent = "Chemical formula";
-        prompt.className = "prompt chem";
-        prompt.innerHTML = "<span class='chem'>" + ion.html + "</span>";
-        answerInput.placeholder = "Type the ion name";
-        answerHelp.textContent =
-          "Capitalization does not matter. Spaces are accepted in names such as hydrogen phosphate.";
-      }
-
-      updateStats();
-      answerInput.focus();
-    }
-
-    function ddLog(ok) {
-      try {
-        const q = currentQuestion;
-        if (!q || q.ddLogged || !window.ddTrack) return;
-        q.ddLogged = 1;
-        const g = groupSelect.options[groupSelect.selectedIndex];
-        ddTrack({ game: "polyatomic", course: "3A", mode: q.direction === "nameToFormula" ? "Name → Formula" : "Formula → Name", topic: g ? g.text : "", correct: !!ok });
-      } catch (e) {}
-    }
-
-    function checkAnswer() {
-      if (answeredCurrent) {
-        return;
-      }
-
-      const answer = answerInput.value.trim();
-
-      if (!answer) {
-        feedback.className = "feedback reveal";
-        feedback.textContent = "Enter an answer before checking.";
-        answerInput.focus();
-        return;
-      }
-
-      const ion = currentQuestion.ion;
-      const direction = currentQuestion.direction;
-
-      const correct =
-        direction === "nameToFormula"
-          ? isFormulaCorrect(answer, ion)
-          : isNameCorrect(answer, ion);
-
-      ddLog(correct);
-      attemptedQuestions++;
-
-      if (correct) {
-        if (!currentWasMissed) {
-          correctCount++;
-          streak++;
-        } else {
-          streak = 0;
-        }
-
-        answeredCurrent = true;
-        answerInput.disabled = true;
-        checkButton.disabled = true;
-        revealButton.disabled = true;
-
-        let extra = "";
-        if (ion.displayNoteHtml) {
-          extra = " " + ion.displayNoteHtml + ".";
-        }
-
-        feedback.className = "feedback good";
-        feedback.innerHTML =
-          "<strong>Correct!</strong> " +
-          ion.name +
-          " = <span class='chem'>" +
-          ion.html +
-          "</span>." +
-          extra;
-
-        nextRow.className = "next-row show";
-      } else {
-        currentWasMissed = true;
-        streak = 0;
-
-        feedback.className = "feedback bad";
-
-        if (direction === "nameToFormula") {
-          feedback.innerHTML =
-            "<strong>Not quite.</strong> Check the formula, charge, and capitalization of each element symbol. " +
-            "Element symbols are case-sensitive. Try again, or reveal the answer.";
-        } else {
-          feedback.innerHTML =
-            "<strong>Not quite.</strong> Try again, or reveal the answer.";
-        }
-
-        answerInput.select();
-      }
-
-      updateStats();
-    }
-
-    function revealAnswer() {
-      if (answeredCurrent) {
-        return;
-      }
-
-      const ion = currentQuestion.ion;
-      ddLog(false);
-      currentWasMissed = true;
-      attemptedQuestions++;
-      streak = 0;
-      answeredCurrent = true;
-
-      answerInput.disabled = true;
-      checkButton.disabled = true;
-      revealButton.disabled = true;
-
-      feedback.className = "feedback reveal";
-
-      if (currentQuestion.direction === "nameToFormula") {
-        feedback.innerHTML =
-          "<strong>Answer:</strong> <span class='chem'>" +
-          ion.html +
-          "</span> &nbsp;(" +
-          expectedFormulaText(ion) +
-          ")" +
-          (ion.displayNoteHtml ? ". " + ion.displayNoteHtml + "." : "");
-      } else {
-        feedback.innerHTML =
-          "<strong>Answer:</strong> " + ion.name;
-      }
-
-      nextRow.className = "next-row show";
-      updateStats();
-    }
-
-    function nextQuestion() {
-      currentIndex++;
-      showQuestion();
-    }
-
-    function retryCurrent() {
-      answeredCurrent = false;
-      answerInput.disabled = false;
-      checkButton.disabled = false;
-      revealButton.disabled = false;
-      answerInput.value = "";
-
-      feedback.className = "feedback";
-      feedback.innerHTML = "";
-      nextRow.className = "next-row";
-
-      answerInput.focus();
-    }
-
-    function finishSession() {
-      quizArea.style.display = "none";
-      completionArea.classList.add("show");
-
-      const accuracy =
-        attemptedQuestions === 0
-          ? 0
-          : Math.round((correctCount / attemptedQuestions) * 100);
-
-      completionText.textContent =
-        "You finished " +
-        deck.length +
-        " ions. You earned " +
-        correctCount +
-        " correct points with an accuracy of " +
-        accuracy +
-        "% based on checked/revealed attempts.";
-
-      progressBar.style.width = "100%";
-      updateStats();
-    }
-
-    function updateStats() {
-      scoreValue.textContent = correctCount + " / " + deck.length;
-      streakValue.textContent = streak;
-
-      const remaining = Math.max(deck.length - currentIndex, 0);
-      remainingValue.textContent = remaining;
-
-      if (attemptedQuestions === 0) {
-        percentValue.textContent = "—";
-      } else {
-        percentValue.textContent =
-          Math.round((correctCount / attemptedQuestions) * 100) + "%";
-      }
-
-      if (deck.length > 0) {
-        const completed = Math.min(currentIndex, deck.length);
-        progressBar.style.width = ((completed / deck.length) * 100) + "%";
-      } else {
-        progressBar.style.width = "0%";
-      }
-    }
-
-    // -------------------------------------------------------------------------
-    // EVENTS
-    // -------------------------------------------------------------------------
-
-    checkButton.addEventListener("click", checkAnswer);
-    revealButton.addEventListener("click", revealAnswer);
-    nextButton.addEventListener("click", nextQuestion);
-    retryButton.addEventListener("click", retryCurrent);
-    restartButton.addEventListener("click", startSession);
-    studyAgainButton.addEventListener("click", startSession);
-
-    modeSelect.addEventListener("change", startSession);
-    groupSelect.addEventListener("change", startSession);
-
-    answerInput.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-
-        if (answeredCurrent) {
-          nextQuestion();
-        } else {
-          checkAnswer();
-        }
-      }
-    });
-
-
-    // -------------------------------------------------------------------------
-    // CLICKABLE PERIODIC TABLE REFERENCE
-    // -------------------------------------------------------------------------
-
-    const periodicElements = [{"number":1,"symbol":"H","name":"Hydrogen","period":1,"group":1,"series":"main"},{"number":2,"symbol":"He","name":"Helium","period":1,"group":18,"series":"main"},{"number":3,"symbol":"Li","name":"Lithium","period":2,"group":1,"series":"main"},{"number":4,"symbol":"Be","name":"Beryllium","period":2,"group":2,"series":"main"},{"number":5,"symbol":"B","name":"Boron","period":2,"group":13,"series":"main"},{"number":6,"symbol":"C","name":"Carbon","period":2,"group":14,"series":"main"},{"number":7,"symbol":"N","name":"Nitrogen","period":2,"group":15,"series":"main"},{"number":8,"symbol":"O","name":"Oxygen","period":2,"group":16,"series":"main"},{"number":9,"symbol":"F","name":"Fluorine","period":2,"group":17,"series":"main"},{"number":10,"symbol":"Ne","name":"Neon","period":2,"group":18,"series":"main"},{"number":11,"symbol":"Na","name":"Sodium","period":3,"group":1,"series":"main"},{"number":12,"symbol":"Mg","name":"Magnesium","period":3,"group":2,"series":"main"},{"number":13,"symbol":"Al","name":"Aluminum","period":3,"group":13,"series":"main"},{"number":14,"symbol":"Si","name":"Silicon","period":3,"group":14,"series":"main"},{"number":15,"symbol":"P","name":"Phosphorus","period":3,"group":15,"series":"main"},{"number":16,"symbol":"S","name":"Sulfur","period":3,"group":16,"series":"main"},{"number":17,"symbol":"Cl","name":"Chlorine","period":3,"group":17,"series":"main"},{"number":18,"symbol":"Ar","name":"Argon","period":3,"group":18,"series":"main"},{"number":19,"symbol":"K","name":"Potassium","period":4,"group":1,"series":"main"},{"number":20,"symbol":"Ca","name":"Calcium","period":4,"group":2,"series":"main"},{"number":21,"symbol":"Sc","name":"Scandium","period":4,"group":3,"series":"main"},{"number":22,"symbol":"Ti","name":"Titanium","period":4,"group":4,"series":"main"},{"number":23,"symbol":"V","name":"Vanadium","period":4,"group":5,"series":"main"},{"number":24,"symbol":"Cr","name":"Chromium","period":4,"group":6,"series":"main"},{"number":25,"symbol":"Mn","name":"Manganese","period":4,"group":7,"series":"main"},{"number":26,"symbol":"Fe","name":"Iron","period":4,"group":8,"series":"main"},{"number":27,"symbol":"Co","name":"Cobalt","period":4,"group":9,"series":"main"},{"number":28,"symbol":"Ni","name":"Nickel","period":4,"group":10,"series":"main"},{"number":29,"symbol":"Cu","name":"Copper","period":4,"group":11,"series":"main"},{"number":30,"symbol":"Zn","name":"Zinc","period":4,"group":12,"series":"main"},{"number":31,"symbol":"Ga","name":"Gallium","period":4,"group":13,"series":"main"},{"number":32,"symbol":"Ge","name":"Germanium","period":4,"group":14,"series":"main"},{"number":33,"symbol":"As","name":"Arsenic","period":4,"group":15,"series":"main"},{"number":34,"symbol":"Se","name":"Selenium","period":4,"group":16,"series":"main"},{"number":35,"symbol":"Br","name":"Bromine","period":4,"group":17,"series":"main"},{"number":36,"symbol":"Kr","name":"Krypton","period":4,"group":18,"series":"main"},{"number":37,"symbol":"Rb","name":"Rubidium","period":5,"group":1,"series":"main"},{"number":38,"symbol":"Sr","name":"Strontium","period":5,"group":2,"series":"main"},{"number":39,"symbol":"Y","name":"Yttrium","period":5,"group":3,"series":"main"},{"number":40,"symbol":"Zr","name":"Zirconium","period":5,"group":4,"series":"main"},{"number":41,"symbol":"Nb","name":"Niobium","period":5,"group":5,"series":"main"},{"number":42,"symbol":"Mo","name":"Molybdenum","period":5,"group":6,"series":"main"},{"number":43,"symbol":"Tc","name":"Technetium","period":5,"group":7,"series":"main"},{"number":44,"symbol":"Ru","name":"Ruthenium","period":5,"group":8,"series":"main"},{"number":45,"symbol":"Rh","name":"Rhodium","period":5,"group":9,"series":"main"},{"number":46,"symbol":"Pd","name":"Palladium","period":5,"group":10,"series":"main"},{"number":47,"symbol":"Ag","name":"Silver","period":5,"group":11,"series":"main"},{"number":48,"symbol":"Cd","name":"Cadmium","period":5,"group":12,"series":"main"},{"number":49,"symbol":"In","name":"Indium","period":5,"group":13,"series":"main"},{"number":50,"symbol":"Sn","name":"Tin","period":5,"group":14,"series":"main"},{"number":51,"symbol":"Sb","name":"Antimony","period":5,"group":15,"series":"main"},{"number":52,"symbol":"Te","name":"Tellurium","period":5,"group":16,"series":"main"},{"number":53,"symbol":"I","name":"Iodine","period":5,"group":17,"series":"main"},{"number":54,"symbol":"Xe","name":"Xenon","period":5,"group":18,"series":"main"},{"number":55,"symbol":"Cs","name":"Cesium","period":6,"group":1,"series":"main"},{"number":56,"symbol":"Ba","name":"Barium","period":6,"group":2,"series":"main"},{"number":72,"symbol":"Hf","name":"Hafnium","period":6,"group":4,"series":"main"},{"number":73,"symbol":"Ta","name":"Tantalum","period":6,"group":5,"series":"main"},{"number":74,"symbol":"W","name":"Tungsten","period":6,"group":6,"series":"main"},{"number":75,"symbol":"Re","name":"Rhenium","period":6,"group":7,"series":"main"},{"number":76,"symbol":"Os","name":"Osmium","period":6,"group":8,"series":"main"},{"number":77,"symbol":"Ir","name":"Iridium","period":6,"group":9,"series":"main"},{"number":78,"symbol":"Pt","name":"Platinum","period":6,"group":10,"series":"main"},{"number":79,"symbol":"Au","name":"Gold","period":6,"group":11,"series":"main"},{"number":80,"symbol":"Hg","name":"Mercury","period":6,"group":12,"series":"main"},{"number":81,"symbol":"Tl","name":"Thallium","period":6,"group":13,"series":"main"},{"number":82,"symbol":"Pb","name":"Lead","period":6,"group":14,"series":"main"},{"number":83,"symbol":"Bi","name":"Bismuth","period":6,"group":15,"series":"main"},{"number":84,"symbol":"Po","name":"Polonium","period":6,"group":16,"series":"main"},{"number":85,"symbol":"At","name":"Astatine","period":6,"group":17,"series":"main"},{"number":86,"symbol":"Rn","name":"Radon","period":6,"group":18,"series":"main"},{"number":87,"symbol":"Fr","name":"Francium","period":7,"group":1,"series":"main"},{"number":88,"symbol":"Ra","name":"Radium","period":7,"group":2,"series":"main"},{"number":104,"symbol":"Rf","name":"Rutherfordium","period":7,"group":4,"series":"main"},{"number":105,"symbol":"Db","name":"Dubnium","period":7,"group":5,"series":"main"},{"number":106,"symbol":"Sg","name":"Seaborgium","period":7,"group":6,"series":"main"},{"number":107,"symbol":"Bh","name":"Bohrium","period":7,"group":7,"series":"main"},{"number":108,"symbol":"Hs","name":"Hassium","period":7,"group":8,"series":"main"},{"number":109,"symbol":"Mt","name":"Meitnerium","period":7,"group":9,"series":"main"},{"number":110,"symbol":"Ds","name":"Darmstadtium","period":7,"group":10,"series":"main"},{"number":111,"symbol":"Rg","name":"Roentgenium","period":7,"group":11,"series":"main"},{"number":112,"symbol":"Cn","name":"Copernicium","period":7,"group":12,"series":"main"},{"number":113,"symbol":"Nh","name":"Nihonium","period":7,"group":13,"series":"main"},{"number":114,"symbol":"Fl","name":"Flerovium","period":7,"group":14,"series":"main"},{"number":115,"symbol":"Mc","name":"Moscovium","period":7,"group":15,"series":"main"},{"number":116,"symbol":"Lv","name":"Livermorium","period":7,"group":16,"series":"main"},{"number":117,"symbol":"Ts","name":"Tennessine","period":7,"group":17,"series":"main"},{"number":118,"symbol":"Og","name":"Oganesson","period":7,"group":18,"series":"main"},{"number":57,"symbol":"La","name":"Lanthanum","series":"lanthanide","seriesIndex":1},{"number":58,"symbol":"Ce","name":"Cerium","series":"lanthanide","seriesIndex":2},{"number":59,"symbol":"Pr","name":"Praseodymium","series":"lanthanide","seriesIndex":3},{"number":60,"symbol":"Nd","name":"Neodymium","series":"lanthanide","seriesIndex":4},{"number":61,"symbol":"Pm","name":"Promethium","series":"lanthanide","seriesIndex":5},{"number":62,"symbol":"Sm","name":"Samarium","series":"lanthanide","seriesIndex":6},{"number":63,"symbol":"Eu","name":"Europium","series":"lanthanide","seriesIndex":7},{"number":64,"symbol":"Gd","name":"Gadolinium","series":"lanthanide","seriesIndex":8},{"number":65,"symbol":"Tb","name":"Terbium","series":"lanthanide","seriesIndex":9},{"number":66,"symbol":"Dy","name":"Dysprosium","series":"lanthanide","seriesIndex":10},{"number":67,"symbol":"Ho","name":"Holmium","series":"lanthanide","seriesIndex":11},{"number":68,"symbol":"Er","name":"Erbium","series":"lanthanide","seriesIndex":12},{"number":69,"symbol":"Tm","name":"Thulium","series":"lanthanide","seriesIndex":13},{"number":70,"symbol":"Yb","name":"Ytterbium","series":"lanthanide","seriesIndex":14},{"number":71,"symbol":"Lu","name":"Lutetium","series":"lanthanide","seriesIndex":15},{"number":89,"symbol":"Ac","name":"Actinium","series":"actinide","seriesIndex":1},{"number":90,"symbol":"Th","name":"Thorium","series":"actinide","seriesIndex":2},{"number":91,"symbol":"Pa","name":"Protactinium","series":"actinide","seriesIndex":3},{"number":92,"symbol":"U","name":"Uranium","series":"actinide","seriesIndex":4},{"number":93,"symbol":"Np","name":"Neptunium","series":"actinide","seriesIndex":5},{"number":94,"symbol":"Pu","name":"Plutonium","series":"actinide","seriesIndex":6},{"number":95,"symbol":"Am","name":"Americium","series":"actinide","seriesIndex":7},{"number":96,"symbol":"Cm","name":"Curium","series":"actinide","seriesIndex":8},{"number":97,"symbol":"Bk","name":"Berkelium","series":"actinide","seriesIndex":9},{"number":98,"symbol":"Cf","name":"Californium","series":"actinide","seriesIndex":10},{"number":99,"symbol":"Es","name":"Einsteinium","series":"actinide","seriesIndex":11},{"number":100,"symbol":"Fm","name":"Fermium","series":"actinide","seriesIndex":12},{"number":101,"symbol":"Md","name":"Mendelevium","series":"actinide","seriesIndex":13},{"number":102,"symbol":"No","name":"Nobelium","series":"actinide","seriesIndex":14},{"number":103,"symbol":"Lr","name":"Lawrencium","series":"actinide","seriesIndex":15}];
-
-    const periodicToggle = document.getElementById("periodicToggle");
-    const periodicContent = document.getElementById("periodicContent");
-    const periodicMain = document.getElementById("periodicMain");
-    const lanthanideRow = document.getElementById("lanthanideRow");
-    const actinideRow = document.getElementById("actinideRow");
-    const periodicDetail = document.getElementById("periodicDetail");
-
-    function makeElementButton(element) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "element-button";
-      button.setAttribute(
-        "aria-label",
-        element.name + ", symbol " + element.symbol + ", atomic number " + element.number
-      );
-
-      button.innerHTML =
-        "<span class='element-number'>" + element.number + "</span>" +
-        "<span class='element-symbol'>" + element.symbol + "</span>";
-
-      button.addEventListener("click", function() {
-        periodicDetail.innerHTML =
-          "<span class='periodic-detail-symbol'>" + element.symbol + "</span>" +
-          "<strong>" + element.name + "</strong>" +
-          " &nbsp;·&nbsp; Atomic Number " + element.number;
-      });
-
-      return button;
-    }
-
-    function renderPeriodicTable() {
-      periodicElements
-        .filter(element => element.series === "main")
-        .forEach(element => {
-          const button = makeElementButton(element);
-          button.style.gridColumn = element.group;
-          button.style.gridRow = element.period;
-          periodicMain.appendChild(button);
-        });
-
-      const lanthanidePlaceholder = document.createElement("div");
-      lanthanidePlaceholder.className = "series-placeholder";
-      lanthanidePlaceholder.style.gridColumn = "3";
-      lanthanidePlaceholder.style.gridRow = "6";
-      lanthanidePlaceholder.textContent = "57–71";
-      periodicMain.appendChild(lanthanidePlaceholder);
-
-      const actinidePlaceholder = document.createElement("div");
-      actinidePlaceholder.className = "series-placeholder";
-      actinidePlaceholder.style.gridColumn = "3";
-      actinidePlaceholder.style.gridRow = "7";
-      actinidePlaceholder.textContent = "89–103";
-      periodicMain.appendChild(actinidePlaceholder);
-
-      periodicElements
-        .filter(element => element.series === "lanthanide")
-        .sort((a, b) => a.number - b.number)
-        .forEach(element => {
-          lanthanideRow.appendChild(makeElementButton(element));
-        });
-
-      periodicElements
-        .filter(element => element.series === "actinide")
-        .sort((a, b) => a.number - b.number)
-        .forEach(element => {
-          actinideRow.appendChild(makeElementButton(element));
-        });
-    }
-
-    periodicToggle.addEventListener("click", function() {
-      const isOpen = periodicContent.classList.toggle("open");
-      periodicToggle.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    renderPeriodicTable();
-
-
-    // Start immediately.
-    startSession();
-  </script>
-</body>
-</html>
+  }
+  const charge = sign ? (sign === '-' ? -1 : 1) * mag : null;
+  return { base, charge, signMissing, pending, caret: i >= 0 && s.slice(i + 1) === '' };
+}
+const subBase = b => b.replace(/([A-Za-z])(\d+)/g, (m, a, d) => a + toSub(d));
+const chargeUni = q => (Math.abs(q) === 1 ? '' : toSup(Math.abs(q))) + (q < 0 ? '⁻' : '⁺');
+const chargeTxt = q => (q == null ? 'none' : Math.abs(q) + (q < 0 ? '−' : '+'));
+const chargeHTML = q => `<sup>${Math.abs(q) === 1 ? '' : Math.abs(q)}${q < 0 ? '−' : '+'}</sup>`;
+const baseHTML = b => b.replace(/([A-Za-z])(\d+)/g, '$1<sub>$2</sub>');
+// What the answer box shows while typing (smart typing)
+function liveFormat(raw) {
+  const p = parseIon(raw);
+  if (p.charge != null && p.charge !== 0) return subBase(p.base) + chargeUni(p.charge);
+  if (p.caret) return subBase(p.base) + '^';
+  if (p.signMissing) return subBase(p.base) + toSup(p.pending);
+  return subBase(toAscii(raw));
+}
+const ionUni = f => { const p = parseIon(f); return subBase(p.base) + (p.charge ? chargeUni(p.charge) : ''); };
+const ionHTML = f => { const p = parseIon(f); return `<span class="chem">${baseHTML(p.base)}${p.charge ? chargeHTML(p.charge) : ''}</span>`; };
+const chemHTML = ion => `<span class="chem">${ion.html}</span>`;
+const baseOf = ion => parseIon(ion.formulas[0]).base;
+const chargeOf = ion => parseIon(ion.formulas[0]).charge;
+// Every plain-text way to type a formula (used by the shared question bank's accept lists)
+function formulaVariants(formula) {
+  const variants = new Set(); const clean = toAscii(formula);
+  variants.add(clean); variants.add(clean.replace(/\^/g, ''));
+  const match = clean.match(/^(.*)\^(\d*)([+-])$/);
+  if (match) {
+    const base = match[1], magnitude = match[2] || '1', sign = match[3];
+    variants.add(base + '^' + (magnitude === '1' ? '' : magnitude) + sign);
+    variants.add(base + '^' + magnitude + sign);
+    variants.add(base + (magnitude === '1' ? '' : magnitude) + sign);
+    variants.add(base + magnitude + sign);
+    variants.add(base + sign + (magnitude === '1' ? '' : magnitude));
+    variants.add(base + sign + magnitude);
+  }
+  return variants;
+}
+const plainFormula = f => f.replace('^1', '^');
+function normalizeName(value) {
+  return String(value).toLowerCase().trim().replace(/[‐‑‒–—]/g, '-').replace(/\s+/g, ' ').replace(/\s*\(\s*/g, '(').replace(/\s*\)\s*/g, ')');
+}
+// Looser key for grading names: no spaces, no "ion", sulph → sulf, mercury(1)/mercury i → mercury(i)
+function nameKey(v) {
+  let s = normalizeName(v).replace(/\bions?$/, '').replace(/sulph/g, 'sulf').replace(/[\s-]/g, '');
+  s = s.replace(/^mercury\(?(i|1|one)\)?$/, 'mercury(i)');
+  return s;
+}
+function isFormulaCorrect(input, ion) { return gradeFormula(input, ion).ok; }
+function isNameCorrect(input, ion) { const k = nameKey(input); return !!k && ion.names.some(n => nameKey(n) === k); }
+
+/* ---------- lookups ---------- */
+const ALL = [...ions, ...RULE_IONS];
+const byName = n => ALL.find(i => i.name === n);
+const NAME_IDX = {}; ALL.forEach(i => i.names.concat(i.name).forEach(n => { NAME_IDX[nameKey(n)] = i; }));
+const BASE_IDX = {}; ALL.forEach(i => i.formulas.forEach(f => { BASE_IDX[parseIon(f).base] = i; }));
+const MEMBER = new Map();
+FAMILIES.forEach(F => F.members.forEach(([n, level, h]) => { const ion = byName(n); if (ion) MEMBER.set(ion, { fam: F, level, h: h || 0, ion }); }));
+FAMILIES.forEach(F => { F.parent = byName(F.members.find(m => m[1] === 'ate' && !m[2])[0]); });
+const parentOf = ion => { const m = MEMBER.get(ion); return m ? m.fam.parent : null; };
+const onSheet = ion => ions.includes(ion);
+
+/* ---------- teaching text ---------- */
+const COLUMN_TIP = {
+  B: 'Boron starts the oxyanion table: BO₃³⁻.', C: 'Period 2 -ate ions have 3 O: BO₃³⁻, CO₃²⁻, NO₃⁻ (charges 3−, 2−, 1− going across).', N: 'Period 2 -ate ions have 3 O: BO₃³⁻, CO₃²⁻, NO₃⁻ (charges 3−, 2−, 1− going across).',
+  Si: 'Silicate is the odd one in period 3: only 3 O, SiO₃²⁻.', P: 'P and As are in the same column: PO₄³⁻ and AsO₄³⁻.', As: 'P and As are in the same column: PO₄³⁻ and AsO₄³⁻.',
+  S: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Se: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Te: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.',
+  Cl: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.', Br: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.', I: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.'
+};
+const COMMON_TIP = {
+  hydronium: 'Hydronium is water plus H⁺: H₂O + H⁺ → H₃O⁺. It is positive.',
+  ammonium: 'Ammonium is ammonia plus H⁺: NH₃ + H⁺ → NH₄⁺. It is one of the few positive polyatomic ions.',
+  'mercury(I)': 'Mercury(I) is two Hg atoms bonded together. Each Hg is +1, so the ion is Hg₂²⁺.',
+  hydroxide: 'Hydroxide is one O and one H with a 1− charge: OH⁻.',
+  cyanide: 'Cyanide is one C and one N, 1−: CN⁻.',
+  peroxide: 'Peroxide is two O atoms bonded together, 2− total: O₂²⁻ (oxide is O²⁻).',
+  permanganate: 'Permanganate looks like perchlorate: one metal + 4 O, 1−. MnO₄⁻.',
+  chromate: 'Chromate looks like sulfate: 4 O and 2−. CrO₄²⁻.',
+  dichromate: '“Di” = two Cr. Dichromate is Cr₂O₇²⁻, still 2−.',
+  oxalate: 'Oxalate has 2 C and 4 O, 2−: C₂O₄²⁻.',
+  acetate: 'Acetate (the vinegar ion) is C₂H₃O₂⁻, also written CH₃COO⁻.',
+  thiosulfate: '“Thio” swaps one O of sulfate for S: SO₄²⁻ → S₂O₃²⁻. Same charge.'
+};
+const PROF_RULES = 'Professor Tip: learn the -ate ion and build the rest. per-…-ate = one more O. -ite = one less O. hypo-…-ite = two less O. The charge stays the same.';
+const PROF_H = 'Professor Tip: each H⁺ you add makes the ion one less negative. PO₄³⁻ → HPO₄²⁻ → H₂PO₄⁻.';
+const tip = t => `<span class="tip"><b>${t.startsWith('Professor Tip') ? 'Professor Tip:' : ''}</b>${t.replace(/^Professor Tip:/, '')}</span>`;
+function centralOf(ion) { const m = baseOf(ion).match(/^H?\d*([A-Z][a-z]?)/); return m ? m[1] : ''; }
+function ionTip(ion) {
+  if (COMMON_TIP[ion.name]) return 'Professor Tip: ' + COMMON_TIP[ion.name];
+  const m = MEMBER.get(ion);
+  if (m && m.h) return PROF_H;
+  if (m && m.level !== 'ate') return PROF_RULES;
+  const c = centralOf(ion); if (COLUMN_TIP[c]) return 'Professor Tip: ' + COLUMN_TIP[c];
+  return PROF_RULES;
+}
+function relationText(given, target) {
+  const g = MEMBER.get(given), t = MEMBER.get(target), bits = [];
+  if (t.level === 'thio' || g.level === 'thio') bits.push('“thio-” means one O is swapped for an S');
+  else { const d = LEVEL[t.level] - LEVEL[g.level]; if (d) bits.push(`${target.name} has ${Math.abs(d)} ${d > 0 ? 'more' : 'fewer'} O than ${given.name}`); else bits.push('the number of O stays the same'); }
+  const dh = t.h - g.h;
+  if (dh) bits.push(`${dh > 0 ? 'add' : 'take away'} ${Math.abs(dh)} H, so the charge goes ${dh > 0 ? 'up' : 'down'} by ${Math.abs(dh)} (${dh > 0 ? 'less' : 'more'} negative)`);
+  else bits.push('the charge stays the same');
+  return bits.join('; ') + '.';
+}
+// Family pairs that make sense to ask: anything paired with the -ate parent, ate/ite swaps at the same H count,
+// and H changes at the same ending. thio- is only paired with sulfate.
+function familyPairs(F) {
+  const mem = F.members.map(m => byName(m[0])), out = [];
+  mem.forEach(g => mem.forEach(t => {
+    if (g === t) return; const a = MEMBER.get(g), b = MEMBER.get(t);
+    if ((a.level === 'thio' || b.level === 'thio') && g !== F.parent && t !== F.parent) return;
+    if (g === F.parent || t === F.parent || a.h === b.h || a.level === b.level) out.push([g, t]);
+  }));
+  return out;
+}
+
+/* ---------- mistake catchers ---------- */
+const SLIP_MSG = {
+  'ite-ate-swap': '-ate has one MORE oxygen than -ite (sulfate SO₄²⁻, sulfite SO₃²⁻).',
+  'per-hypo-mixup': 'per-…-ate has the MOST oxygens (one more than -ate). hypo-…-ite has the FEWEST (one less than -ite).',
+  'hydrogen-prefix': '“Hydrogen” puts one H in front, and the charge becomes one less negative: CO₃²⁻ → HCO₃⁻. “Dihydrogen” = 2 H.',
+  'ammonium-charge': 'Ammonium is positive: NH₄⁺. It and hydronium H₃O⁺ (and mercury(I) Hg₂²⁺) are the positive ions on the Green Sheet.',
+  'charge-sign': 'Right size, wrong sign.',
+  'charge-magnitude': 'The size of the charge is off.',
+  'missing-subscript': 'A subscript is missing. Count the atoms of each element.',
+  'wrong-subscript': 'The elements are right, but a subscript is off. Count the atoms again.',
+  'symbol-case': 'Element symbols are case-sensitive: the first letter is a capital, the second is lowercase (Cl, Mn, Hg). O and N are capitals.',
+  'no-charge': 'Polyatomic ions always carry a charge. Add it at the end, like SO4^2-.',
+  'thio-prefix': '“Thio-” swaps one O for an S (sulfate SO₄²⁻ → thiosulfate S₂O₃²⁻).',
+  'ide-ending': '-ide is for single-atom ions like sulfide S²⁻ (and a few like hydroxide, cyanide, peroxide). Oxygen ions from the table end in -ate or -ite.'
+};
+function famSlip(target, other) {
+  const a = MEMBER.get(target), b = MEMBER.get(other);
+  if (!a || !b || a.fam !== b.fam) return null;
+  if (a.h !== b.h) return 'hydrogen-prefix';
+  if (a.level === 'thio' || b.level === 'thio') return 'thio-prefix';
+  const pair = [a.level, b.level].sort().join('-');
+  return pair === 'ate-ite' ? 'ite-ate-swap' : 'per-hypo-mixup';
+}
+function atomList(base) { const out = []; base.replace(/([A-Z][a-z]?)(\d*)/g, (m, el, n) => { out.push([el, n ? +n : 1, !!n]); return m; }); return out; }
+function baseSlip(base, ion) {
+  const bases = ion.formulas.map(f => parseIon(f).base);
+  if (!base) return ['other', ''];
+  if (bases.some(b => b.toLowerCase() === base.toLowerCase())) return ['symbol-case', ''];
+  const other = BASE_IDX[base];
+  if (other && other !== ion) {
+    const fs = famSlip(ion, other);
+    return [fs || 'other', `<span class="chem">${baseHTML(base)}</span> is the formula part of <b>${other.name}</b>.`];
+  }
+  const u = atomList(base), w = atomList(bases[0]);
+  if (u.length === w.length && u.every((x, i) => x[0] === w[i][0])) {
+    if (u.some((x, i) => !x[2] && w[i][1] > 1)) return ['missing-subscript', ''];
+    return ['wrong-subscript', ''];
+  }
+  return ['other', ''];
+}
+function chargeSlip(charge, ion, signMissing) {
+  const want = chargeOf(ion);
+  if (charge == null) return signMissing ? 'charge-sign' : 'no-charge';
+  if (ion.name === 'ammonium' && charge < 0) return 'ammonium-charge';
+  const m = MEMBER.get(ion);
+  if (m && m.h && charge < want && charge >= chargeOf(m.fam.parent)) return 'hydrogen-prefix';
+  if (Math.abs(charge) === Math.abs(want)) return 'charge-sign';
+  return 'charge-magnitude';
+}
+function gradeFormula(raw, ion) {
+  const p = parseIon(raw), bases = ion.formulas.map(f => parseIon(f).base), want = chargeOf(ion);
+  const baseOk = bases.includes(p.base), chargeOk = p.charge === want;
+  if (baseOk && chargeOk) return { ok: true, parts: { formula: true, charge: true } };
+  const bs = baseOk ? null : baseSlip(p.base, ion), cs = chargeOk ? null : chargeSlip(p.charge, ion, p.signMissing);
+  const slip = bs && bs[0] !== 'other' ? bs[0] : cs || (bs ? bs[0] : 'other'), notes = [];
+  if (bs) { if (SLIP_MSG[bs[0]]) notes.push(SLIP_MSG[bs[0]]); if (bs[1]) notes.push(bs[1]); }
+  if (cs) notes.push(cs === 'charge-sign' && p.charge != null ? (want > 0 ? 'The charge is the right size but the wrong sign: this is one of the positive ions.' : 'The charge is the right size but the wrong sign: this ion is negative.') : cs === 'charge-sign' ? 'Your charge needs a + or − sign.' : SLIP_MSG[cs]);
+  if (cs === 'charge-magnitude' && ion.name === 'mercury(I)') notes.push(COMMON_TIP['mercury(I)']);
+  return { ok: false, slip, parts: { formula: baseOk, charge: chargeOk }, note: notes.filter((x, i, a) => x && a.indexOf(x) === i).join(' ') };
+}
+function gradeName(raw, ion) {
+  const k = nameKey(raw);
+  if (isNameCorrect(raw, ion)) return { ok: true, note: /sulph/i.test(raw) ? 'We spell it “sulf-” in this class, but “sulph-” is the British spelling, so it counts.' : '' };
+  const other = NAME_IDX[k];
+  if (other && other !== ion) {
+    const fs = famSlip(ion, other);
+    return { ok: false, slip: fs || 'other', note: (fs ? SLIP_MSG[fs] + ' ' : '') + `<b>${other.name}</b> is ${chemHTML(other)}.` };
+  }
+  if (/ide$/.test(k) && /(ate|ite)$/.test(ion.name)) return { ok: false, slip: 'ide-ending', note: SLIP_MSG['ide-ending'] };
+  if (/hydrogen/.test(k) !== /hydrogen/.test(nameKey(ion.name)) || /dihydrogen/.test(k) !== /dihydrogen/.test(nameKey(ion.name))) return { ok: false, slip: 'hydrogen-prefix', note: SLIP_MSG['hydrogen-prefix'] };
+  if (lev(k, nameKey(ion.name)) <= 2) return { ok: false, slip: 'spelling', note: 'So close! Check the spelling.' };
+  return { ok: false, slip: 'other', note: '' };
+}
+function lev(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
+
+/* ---------- question makers ---------- */
+const CHARGES = [-3, -2, -1, 1, 2];
+function chargeChoices(ion) { return CHARGES.map(q => ({ html: chargeTxt(q), q, ok: q === chargeOf(ion) })); }
+function baseChoices(ion) {
+  const right = baseOf(ion), a = atomList(right), str = l => l.map(([el, n]) => el + (n > 1 ? n : '')).join('');
+  const m = MEMBER.get(ion), cands = [];
+  if (m) m.fam.members.map(x => byName(x[0])).filter(x => x !== ion).forEach(x => cands.push(baseOf(x)));
+  const li = a.map(x => x[1] > 1).lastIndexOf(true);
+  if (li >= 0) cands.push(str(a.map((x, i) => (i === li ? [x[0], 1] : x))));
+  cands.push(str(a.map((x, i) => (i === a.length - 1 ? [x[0], x[1] + 1] : x))));
+  cands.push(str(a.map((x, i) => (i === 0 ? [x[0], x[1] + 1] : x))));
+  const picks = [...new Set(cands)].filter(b => b !== right).slice(0, 2);
+  return shuffle([right, ...picks].map(b => ({ html: `<span class="chem">${baseHTML(b)}</span>`, ok: b === right, why: b === right ? '' : (BASE_IDX[b] ? `That one is ${BASE_IDX[b].name}.` : 'Count the atoms again.') })));
+}
+function nameChoices(ion, n = 3) {
+  const m = MEMBER.get(ion); let pool = m ? m.fam.members.map(x => byName(x[0])) : ions.filter(i => i.group === ion.group);
+  pool = shuffle(pool.filter(x => x !== ion)).slice(0, n - 1);
+  while (pool.length < n - 1) { const x = pick(ions); if (x !== ion && !pool.includes(x)) pool.push(x); }
+  return shuffle([ion, ...pool]).map(x => ({ html: x.name, ok: x === ion, why: x === ion ? '' : `${x.name} is ${chemHTML(x)}.` }));
+}
+const noteFor = ion => (ion.displayNoteHtml ? ' ' + ion.displayNoteHtml + '.' : '');
+function qName2Formula(ion) {
+  return {
+    mode: 'n2f', kind: 'formula', ion, eq: ion.name, eqName: true,
+    prompt: 'Type the formula <b>and</b> the charge.',
+    answer: chemHTML(ion) + ` <span style="font-weight:600">(type ${plainFormula(ion.formulas[0])})</span>`,
+    solution: `${ion.name} = ${chemHTML(ion)}.${noteFor(ion)} ${tip(ionTip(ion))}`,
+    hint: ionTip(ion),
+    steps: [
+      { ask: `What is the formula part (no charge) of ${ion.name}?`, choices: baseChoices(ion) },
+      { ask: 'What is its charge?', choices: chargeChoices(ion).map(c => ({ html: c.html, ok: c.ok, why: c.ok ? '' : 'Not that one.' })) },
+      { ask: 'Now type the whole ion in the box above.', final: true }
+    ],
+    check: raw => gradeFormula(raw, ion)
+  };
+}
+function qFormula2Name(ion) {
+  const m = MEMBER.get(ion); let steps;
+  if (m && m.fam.parent !== ion) {
+    const p = m.fam.parent, others = shuffle(FAMILIES.filter(F => F !== m.fam)).slice(0, 2).map(F => F.parent);
+    steps = [
+      { ask: 'Which -ate ion is this one built from?', choices: shuffle([p, ...others]).map(x => ({ html: `${x.name} ${chemHTML(x)}`, ok: x === p, why: x === p ? '' : 'Look at the central atom.' })) },
+      { ask: `Compared with ${p.name} ${chemHTML(p)}: ${relationText(p, ion).replace(ion.name, 'this ion')} Which name fits?`, choices: nameChoices(ion) },
+      { ask: 'Type the name in the box above.', final: true }
+    ];
+  } else steps = [{ ask: 'Which name goes with this formula?', choices: nameChoices(ion) }, { ask: 'Type the name in the box above.', final: true }];
+  return {
+    mode: 'f2n', kind: 'name', ion, eq: chemHTML(ion),
+    prompt: 'Name this ion.',
+    answer: ion.name, solution: `${chemHTML(ion)} is <b>${ion.name}</b>.${noteFor(ion)} ${tip(ionTip(ion))}`,
+    hint: m && m.fam.parent !== ion ? `Professor Tip: start from ${m.fam.parent.name} ${chemHTML(m.fam.parent)} and compare the oxygens and hydrogens.` : `Professor Tip: it starts with “${ion.name.slice(0, 3)}…”. ${ionTip(ion).replace(/^Professor Tip: /, '')}`,
+    steps, check: raw => gradeName(raw, ion)
+  };
+}
+function qCharge(ion) {
+  return {
+    mode: 'charge', kind: 'choice', ion, eq: `${ion.name}<br><span class="chem">${baseHTML(baseOf(ion))}</span><span class="q"><sup>?</sup></span>`, eqName: true,
+    prompt: 'Tap the charge.', choices: chargeChoices(ion).map(c => ({ ...c, why: '' })),
+    answer: chargeTxt(chargeOf(ion)), solution: `${ion.name} = ${chemHTML(ion)}, charge ${chargeTxt(chargeOf(ion))}. ${tip(ionTip(ion))}`,
+    hint: ionTip(ion), steps: null,
+    checkChoice: c => { if (c.ok) return { ok: true }; const s = chargeSlip(c.q, ion); return { ok: false, slip: s, note: s === 'charge-sign' ? (chargeOf(ion) > 0 ? 'Right size, wrong sign: this is one of the positive ions.' : 'Right size, wrong sign: this ion is negative.') : (SLIP_MSG[s] + (ion.name === 'mercury(I)' ? ' ' + COMMON_TIP['mercury(I)'] : '')) }; }
+  };
+}
+function qFamily(o = {}) {
+  const F = o.fam || weightedFam(), mem = F.members.map(m => byName(m[0]));
+  let given = o.given, target = o.target;
+  if (!given || !target) { const pairs = familyPairs(F), fromParent = pairs.filter(p => p[0] === F.parent); [given, target] = pick(chance(0.6) && fromParent.length ? fromParent : pairs); }
+  const dir = o.dir || (chance(0.6) ? 'formula' : 'name');
+  const rel = relationText(given, target), g = MEMBER.get(given), t = MEMBER.get(target);
+  const dO = (t.level === 'thio' || g.level === 'thio') ? null : LEVEL[t.level] - LEVEL[g.level], dh = t.h - g.h;
+  const oChoices = dO == null ? [{ html: 'Swap one O for an S', ok: true }, { html: 'Add one O', ok: false, why: 'Thio- doesn’t add oxygen.' }, { html: 'Remove one O', ok: false, why: 'Thio- replaces an O with S.' }]
+    : [[1, 'One more O'], [0, 'Same number of O'], [-1, 'One fewer O'], [-2, 'Two fewer O']].map(([d, h]) => ({ html: h, ok: d === dO, why: d === dO ? '' : 'Check the prefix and the ending.' }));
+  const q = {
+    mode: 'family', kind: dir === 'formula' ? 'formula' : 'name', ion: target, given,
+    givenHTML: `Given: <span>${given.name}</span> = ${chemHTML(given)}`,
+    eq: dir === 'formula' ? target.name : chemHTML(target), eqName: dir === 'formula',
+    prompt: dir === 'formula' ? `Use ${given.name} to write the formula and charge of <b>${target.name}</b>.` : `Use ${given.name} to name this ion.`,
+    answer: dir === 'formula' ? chemHTML(target) + ` <span style="font-weight:600">(type ${plainFormula(target.formulas[0])})</span>` : target.name,
+    solution: `Start from ${given.name} ${chemHTML(given)}: ${rel} So <b>${target.name}</b> = ${chemHTML(target)}.${onSheet(target) ? '' : ' <i>(Built with the Green Sheet naming rules.)</i>'} ${tip(dh ? PROF_H : PROF_RULES)}`,
+    hint: dh ? PROF_H : (dO == null ? 'Professor Tip: ' + COMMON_TIP.thiosulfate : PROF_RULES),
+    steps: [
+      { ask: `How do the oxygens change from ${given.name} to ${target.name}?` + (dh && !dO ? ' (Adding or removing H doesn’t change the O count.)' : ''), choices: oChoices },
+      { ask: dh ? `What happens to the charge? (${Math.abs(dh)} H ${dh > 0 ? 'added' : 'removed'})` : 'What happens to the charge?', choices: [[0, 'Stays the same'], [1, 'Up by 1 (less negative)'], [2, 'Up by 2 (less negative)'], [-1, 'Down by 1 (more negative)'], [-2, 'Down by 2 (more negative)']].map(([d, h]) => ({ html: h, ok: d === dh, why: d === dh ? '' : dh ? 'Each H⁺ is +1.' : 'Changing the oxygens never changes the charge.' })) },
+      { ask: dir === 'formula' ? 'Type the whole ion in the box above.' : 'Type the name in the box above.', final: true }
+    ],
+    check: raw => (dir === 'formula' ? gradeFormula(raw, target) : gradeName(raw, target))
+  };
+  return q;
+}
+function weightedFam() { const tot = FAMILIES.reduce((a, F) => a + F.weight, 0); let r = Math.random() * tot; for (const F of FAMILIES) { r -= F.weight; if (r <= 0) return F; } return FAMILIES[0]; }
+// Public maker (also used by the question-bank sampler): makeQ('n2f'|'f2n'|'charge', ion) or makeQ('family', {fam, given, target, dir})
+function makeQ(mode, x) { return mode === 'family' ? qFamily(x || {}) : mode === 'n2f' ? qName2Formula(x) : mode === 'f2n' ? qFormula2Name(x) : qCharge(x); }
+var generate = makeQ;
+</script>
+<script>
+/* ===================== Polyatomic Posse: game UI ===================== */
+const $ = id => document.getElementById(id);
+const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
+const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
+const STORE = 'ddPolyatomicPosse.v1';
+const EYEBROW = { '3A': 'CHEM 3A · Green Sheet polyatomic ions', '1A': 'CHEM 1A · Green Sheet polyatomic ions' };
+const RANKS = [[0, 'Ion Intern'], [60, 'Charge Chaser'], [150, 'Oxyanion Apprentice'], [300, 'Suffix Specialist'], [500, 'Polyatomic Pro'], [800, 'Posse Leader'], [1200, 'Green Sheet Legend']];
+const ACH = [
+  ['first', 'First Ion', 'Get your first answer right', 'stars', P => P.correct >= 1],
+  ['streak5', 'On a Roll', '5 right in a row', 'stars', P => P.best >= 5],
+  ['streak10', 'Unstoppable', '10 right in a row', 'trophy', P => P.best >= 10],
+  ['family', 'Family Reunion', '10 -ate/-ite family questions right', 'molecule', P => (P.mode.family ? P.mode.family.c : 0) >= 10],
+  ['charge', 'Charge Champ', '15 charges right in Charge Check', 'balance', P => (P.mode.charge ? P.mode.charge.c : 0) >= 15],
+  ['positive', 'Positive Vibes', 'Get NH₄⁺, H₃O⁺ and Hg₂²⁺ right', 'react', P => ['ammonium', 'hydronium', 'mercury(I)'].every(n => P.right[n])],
+  ['hydrogen', 'H Hopper', '5 hydrogen-ion questions right', 'acidbase', P => (P.hRight || 0) >= 5],
+  ['half', 'Halfway There', 'Get 15 different Green Sheet ions right', 'checklist', P => Object.keys(P.right).length >= 15],
+  ['all', 'Whole Green Sheet', 'Get every Green Sheet ion right', 'medal', P => ions.every(i => P.right[i.name])],
+  ['skill', 'Skill Check Ready', 'Score 8+ on Skill Check Prep', 'trophy', P => (P.bestQuiz || 0) >= 8]
+];
+const state = { course: '1A', mode: null, set: 'all', quiz: null, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false, decks: {}, review: null };
+let PALL = {}, P = null;
+const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, mode: {}, right: {}, ach: {}, hRight: 0, bestQuiz: 0, lastMode: null, set: 'all' });
+function loadCourse(c) { try { PALL = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { PALL = {}; } P = Object.assign(fresh(), PALL[c] || {}); }
+function save() { try { P.lastMode = state.mode; P.set = state.set; PALL[state.course] = P; PALL.last = state.course; localStorage.setItem(STORE, JSON.stringify(PALL)); } catch (e) {} }
+function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
+const badgeImg = n => `<img src="${BADGE(n)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`;
+const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
+
+/* ---------- stats ---------- */
+function rankOf(xp) { let r = RANKS[0], nx = null; for (let i = 0; i < RANKS.length; i++) if (xp >= RANKS[i][0]) { r = RANKS[i]; nx = RANKS[i + 1] || null; } return { name: r[1], from: r[0], to: nx ? nx[0] : null }; }
+function renderStats() {
+  const r = rankOf(P.xp);
+  $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
+  $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
+  $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
+  $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  const got = ions.filter(i => P.right[i.name]).length;
+  $('ionTally').innerHTML = `<span style="background:none;padding-left:0">Green Sheet ions mastered: ${got} of ${ions.length}</span>` + ions.map(i => `<span class="${P.right[i.name] ? 'got' : ''}">${i.name}</span>`).join('');
+}
+function setCourse(c) {
+  state.course = c; loadCourse(c); state.quiz = null; state.review = null;
+  state.set = GROUPS.some(g => g[0] === P.set) ? P.set : 'all';
+  document.querySelectorAll('#course button').forEach(b => { b.classList.toggle('active', b.dataset.course === c); b.setAttribute('aria-pressed', b.dataset.course === c); });
+  $('eyebrow').textContent = EYEBROW[c];
+  try { const u = new URL(location.href); u.searchParams.set('course', c); history.replaceState(null, '', u); } catch (e) {}
+  state.mode = MODES[P.lastMode] ? P.lastMode : null;
+  save(); renderStats(); renderChooser(); state.mode ? newQuestion() : showEmpty();
+}
+
+/* ---------- chooser ---------- */
+function renderChooser() {
+  $('modes').innerHTML = Object.entries(MODES).map(([k, m]) => { const s = P.mode[k]; const pct = s && s.a ? Math.round(s.c / s.a * 100) : 0; return `<button type="button" class="mode${state.mode === k && !state.quiz ? ' on' : ''}" data-mode="${k}" aria-pressed="${state.mode === k && !state.quiz}"><span class="ms-ico">${ico(m.icon)}</span><b>${m.label}</b><small>${m.blurb}</small>${s && s.a ? `<span class="meter" title="${s.c} of ${s.a} right"><span style="width:${pct}%"></span></span>` : ''}</button>`; }).join('');
+  const famMode = state.mode === 'family' || state.quiz;
+  $('setWrap').hidden = !!famMode;
+  $('setChips').innerHTML = GROUPS.map(([k, l]) => `<button type="button" class="chip${state.set === k ? ' on' : ''}" data-set="${k}" aria-pressed="${state.set === k}">${l} <small>${k === 'all' ? ions.length : ions.filter(i => i.group === k).length}</small></button>`).join('');
+  $('skillCard').classList.toggle('on', !!state.quiz);
+}
+function pickMode(k) { state.mode = k; state.quiz = null; state.review = null; save(); renderChooser(); newQuestion(); scrollToPlay(); }
+function pickSet(k) { state.set = k; state.decks = {}; state.review = null; save(); renderChooser(); if (state.mode && !state.quiz) newQuestion(); }
+function showEmpty() { state.q = null; $('emptyBox').hidden = false; $('playArea').hidden = true; $('reportBox').hidden = true; $('playTitle').textContent = 'Practice'; $('skipBtn').hidden = true; }
+function scrollToPlay() { try { $('play').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} }
+
+/* ---------- decks: no repeats until the whole set has been seen ---------- */
+const setIons = () => (state.review && state.review.length ? state.review : state.set === 'all' ? ions : ions.filter(i => i.group === state.set));
+function drawIon(mode) {
+  const pool = setIons(), key = mode + '|' + (state.review ? 'review' : state.set);
+  let d = state.decks[key];
+  if (!d || !d.left.length) { d = state.decks[key] = { left: shuffle(pool), total: pool.length, rounds: d ? d.rounds + 1 : 0 }; if (state.q && d.left.length > 1 && d.left[d.left.length - 1] === state.q.ion) d.left.unshift(d.left.pop()); }
+  return { ion: d.left.pop(), d };
+}
+let famLast = null;
+function makeQuestion() {
+  if (state.quiz) { const it = state.quiz.plan[state.quiz.i]; return it.mode === 'family' ? qFamily(it.fam ? { fam: it.fam } : {}) : makeQ(it.mode, it.ion); }
+  if (state.mode === 'family') { let q, n = 0; do { q = qFamily(); } while (famLast && q.ion === famLast.ion && q.given === famLast.given && n++ < 8); famLast = q; state.deckInfo = null; return q; }
+  const { ion, d } = drawIon(state.mode); state.deckInfo = d; return makeQ(state.mode, ion);
+}
+function newQuestion(focus) {
+  const q = makeQuestion();
+  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false;
+  $('emptyBox').hidden = true; $('reportBox').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
+  $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.review ? 'Review: missed ions' : MODES[q.mode].label;
+  $('modeTag').textContent = MODES[q.mode].short;
+  const di = state.deckInfo; $('deckTag').hidden = !!state.quiz || !di; if (di && !state.quiz) $('deckTag').textContent = `Deck: ${di.total - di.left.length} of ${di.total}`;
+  $('quizTag').hidden = !state.quiz; $('quizBar').hidden = !state.quiz;
+  if (state.quiz) { $('quizTag').textContent = `Question ${state.quiz.i + 1} of ${state.quiz.plan.length}`; $('quizBar').firstElementChild.style.width = (state.quiz.i / state.quiz.plan.length * 100) + '%'; }
+  $('given').hidden = !q.givenHTML; $('given').innerHTML = q.givenHTML || '';
+  const eq = $('equation'); eq.innerHTML = q.eq; eq.classList.toggle('name', !!q.eqName);
+  $('prompt').innerHTML = q.prompt;
+  const isChoice = q.kind === 'choice';
+  $('answerRow').hidden = isChoice; $('choices').hidden = !isChoice; $('readback').hidden = q.kind !== 'formula';
+  const inp = $('answer'); inp.value = ''; inp.disabled = false; $('checkBtn').textContent = 'Check';
+  inp.placeholder = q.kind === 'formula' ? 'like SO4^2-' : 'type the name';
+  inp.setAttribute('aria-label', q.kind === 'formula' ? 'Formula with charge' : 'Ion name');
+  if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');
+  $('typingNote').innerHTML = q.kind === 'formula' ? 'Smart typing: <code>SO4^2-</code>, <code>SO42-</code> or <code>SO4-2</code> → SO₄²⁻. Symbols are case-sensitive (Cl, not CL).' : q.kind === 'name' ? 'Capitals don’t matter. “hydrogen phosphate” or “hydrogenphosphate” both work.' : '';
+  updateReadback();
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
+  $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
+  renderChooser(); paintIcons($('play'));
+  if (focus && !isChoice && !coarse()) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+}
+
+/* ---------- smart typing ---------- */
+function onType(e) {
+  const q = state.q; if (!q || q.kind !== 'formula' || (e && e.isComposing)) { updateReadback(); return; }
+  const inp = $('answer'), v = inp.value, atEnd = inp.selectionStart === v.length && inp.selectionEnd === v.length;
+  if (atEnd) { const f = liveFormat(v); if (f !== v) { inp.value = f; try { inp.setSelectionRange(f.length, f.length); } catch (er) {} } }
+  updateReadback();
+}
+function updateReadback() {
+  const q = state.q, el = $('readback'); if (!q || q.kind !== 'formula') { el.innerHTML = ''; return; }
+  const v = $('answer').value.trim(); if (!v) { el.innerHTML = ''; return; }
+  const p = parseIon(v);
+  el.innerHTML = `Reads as <b class="chem">${baseHTML(p.base)}${p.charge ? chargeHTML(p.charge) : ''}</b> · formula ${p.base ? `<span class="chem">${baseHTML(p.base)}</span>` : '?'} · charge ${p.charge ? chargeTxt(p.charge) : p.signMissing ? 'needs a + or −' : 'not typed yet'}`;
+}
+
+/* ---------- checking + scoring ---------- */
+function check() {
+  const q = state.q; if (!q) return; if (state.done) return next();
+  const raw = $('answer').value;
+  if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
+  const res = q.check(raw); grade(res);
+}
+function choose(i) {
+  const q = state.q; if (state.done) return;
+  const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
+  const res = q.checkChoice(c);
+  if (res.ok) btn.classList.add('right'); else { btn.classList.add('wrong'); btn.disabled = true; }
+  grade(res);
+}
+function ddLog(ok, slip) {
+  try {
+    if (state.logged || !window.ddTrack) return; state.logged = true;
+    const q = state.q;
+    window.ddTrack({ game: 'polyatomic', course: state.course, mode: state.quiz ? 'Skill Check Prep' : MODES[q.mode].label, topic: MODES[q.mode].short + ' · ' + q.ion.name, correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
+  } catch (e) {}
+}
+function bump(mode, ok) { const s = P.mode[mode] || (P.mode[mode] = { c: 0, a: 0 }); s.a++; if (ok) s.c++; }
+function partsHTML(res) {
+  if (!res.parts) return '';
+  const p = res.parts;
+  return `<div class="parts"><span class="part ${p.formula ? 'ok' : 'no'}">${p.formula ? '✓' : '✗'} Formula part</span><span class="part ${p.charge ? 'ok' : 'no'}">${p.charge ? '✓' : '✗'} Charge</span></div>`;
+}
+function grade(res) {
+  const q = state.q, first = state.tries === 0, ok = res.ok, slip = res.slip; state.tries++;
+  if (first) { ddLog(ok, slip); P.tried++; bump(q.mode, ok); if (state.quiz) state.quiz.results.push({ mode: q.mode, ion: q.ion, ok, slip }); }
+  if (ok) {
+    state.done = true;
+    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
+    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
+    P.xp += xp; P.correct++;
+    if (onSheet(q.ion) && first && !state.helped && (q.mode === 'n2f' || q.mode === 'f2n' || q.mode === 'charge')) P.right[q.ion.name] = 1;
+    const m = MEMBER.get(q.ion); if (m && m.h) P.hRight = (P.hRight || 0) + 1;
+    setFeedback('good', `<b>${pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Ion-credible!'])}</b> <span class="xp-pop">+${xp} XP</span>${res.note ? ' ' + res.note : ''}<div class="sol">${q.solution}</div>`);
+    finishQuestion();
+  } else {
+    if (first) P.streak = 0;
+    let msg = `<b>Not quite.</b>${partsHTML(res)} ${res.note || 'Check it and try again.'}`;
+    if (state.quiz) { msg += `<div class="sol">Answer: <b>${q.answer}</b>. ${q.solution}</div>`; state.done = true; finishQuestion(); }
+    else if (state.tries >= 2) { msg += '<br>Stuck? Try <b>Step by step</b> or <b>Show answer</b>.'; $('solBtn').classList.add('pulse'); }
+    setFeedback('bad', msg);
+  }
+  save(); renderStats(); checkAch();
+}
+function finishQuestion() {
+  $('answer').disabled = true; $('checkBtn').textContent = 'Next';
+  if (state.q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (state.q.choices[i].ok) b.classList.add('right'); });
+  $('nextBtn').hidden = false;
+  $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
+  if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function showSolution() {
+  const q = state.q; if (!q || state.done) return;
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bump(q.mode, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ mode: q.mode, ion: q.ion, ok: false, slip: 'gave-up' }); }
+  state.done = true; state.helped = true; save(); renderStats();
+  setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion();
+}
+function scrollToQuestion() {
+  const el = $('play'), r = el.getBoundingClientRect();
+  const embedded = document.documentElement.classList.contains('dd-embedded');
+  if (embedded || r.top < 0 || r.top > innerHeight * 0.35) { try { el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); } }
+}
+function next() {
+  if (state.quiz) { state.quiz.i++; if (state.quiz.i >= state.quiz.plan.length) { showReport(); scrollToQuestion(); return; } }
+  else if (state.review && state.deckInfo && !state.deckInfo.left.length) { state.review = null; state.decks = {}; }
+  newQuestion(true); scrollToQuestion();
+}
+
+/* ---------- step by step ---------- */
+function setGuide(on) {
+  const q = state.q; on = !!(on && q && q.steps && q.steps.length);
+  $('guideBtn').setAttribute('aria-pressed', on); $('guide').hidden = !on;
+  if (on) renderGuide();
+}
+function renderGuide() {
+  const q = state.q; if (!q._g) q._g = { at: 0, msg: {} };
+  $('guide').innerHTML = q.steps.map((s, i) => {
+    const cls = i < q._g.at ? 'done' : i === q._g.at ? 'current' : 'later', right = s.choices ? s.choices.find(c => c.ok) : null;
+    let body = '';
+    if (!s.final && i < q._g.at) body = `<div class="gwhy"><b>${right.html}</b>${s.why ? '. ' + s.why : ''}</div>`;
+    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}">${c.html}</button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
+    return `<div class="gstep ${cls}"><div class="gnum">Step ${i + 1} of ${q.steps.length}</div><div class="gask">${s.ask}</div>${body}</div>`;
+  }).join('');
+}
+function guideChoose(i, k) {
+  const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.');
+  renderGuide();
+  if (c.ok && q.steps[q._g.at] && q.steps[q._g.at].final && q.kind !== 'choice') { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
+}
+
+/* ---------- Skill Check Prep ---------- */
+function startQuiz() {
+  const pool = shuffle(ions), fams = shuffle(FAMILIES);
+  const plan = shuffle(SKILL_PLAN).map((mode, i) => (mode === 'family' ? { mode, fam: fams[i % fams.length] } : { mode, ion: pool[i] }));
+  state.quiz = { plan, i: 0, results: [] }; state.guideOn = false; state.review = null;
+  newQuestion(true); renderChooser();
+}
+function showReport() {
+  const z = state.quiz, score = z.results.filter(r => r.ok).length;
+  P.bestQuiz = Math.max(P.bestQuiz || 0, score); save(); checkAch(); renderStats();
+  const missed = z.results.filter(r => !r.ok);
+  const weakModes = [...new Set(missed.map(r => r.mode))];
+  const slips = [...new Set(missed.map(r => r.slip).filter(s => SLIP_MSG[s]))];
+  const missedSheet = [...new Set(missed.map(r => r.ion).filter(onSheet))];
+  $('playArea').hidden = true; const box = $('reportBox'); box.hidden = false; $('skipBtn').hidden = true;
+  box.innerHTML = `<span class="ex-label">Skill Check Prep results</span><div class="report-score"><b>${score} / ${z.results.length}</b><span>${score >= 9 ? 'Excellent, you are ready!' : score >= 7 ? 'Solid. Polish the ions below.' : 'Good practice. Work on the plan below.'}</span></div>
+   <ul class="report-list">${z.results.map((r, i) => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? '✓' : '✗'} ${i + 1}. ${MODES[r.mode].short} · ${r.ion.name} ${chemHTML(r.ion)}</li>`).join('')}</ul>
+   ${missed.length ? `<p style="margin:10px 0 0"><b>Study plan</b></p><ul class="plan">
+     ${weakModes.map(m => `<li>Practice <b>${MODES[m].label}</b>.</li>`).join('')}
+     ${missedSheet.length ? `<li>Ions to review: ${missedSheet.map(i => `${i.name} ${chemHTML(i)}`).join(', ')}.</li>` : ''}
+     ${slips.map(s => `<li>${SLIP_MSG[s]}</li>`).join('')}</ul>
+     <div class="ex-actions">${missedSheet.length ? `<button type="button" class="btn primary" id="practiceMissed">Practice my missed ions ${ico('arrow')}</button>` : ''}${weakModes.includes('family') ? `<button type="button" class="btn" id="practiceFamily">Play the -ate/-ite Family</button>` : ''}</div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
+   <div class="ex-actions"><button type="button" class="btn" id="quizAgain">Take another Skill Check Prep</button></div>`;
+  state.quiz = null; renderChooser();
+  $('quizAgain').onclick = () => { startQuiz(); scrollToPlay(); };
+  if ($('practiceMissed')) $('practiceMissed').onclick = () => { state.mode = 'n2f'; state.review = missedSheet; state.decks = {}; renderChooser(); newQuestion(true); scrollToPlay(); };
+  if ($('practiceFamily')) $('practiceFamily').onclick = () => pickMode('family');
+  if (score >= 8) confetti();
+}
+
+/* ---------- achievements, toasts, confetti ---------- */
+function checkAch() {
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  save(); renderStats();
+}
+function toast(badge, title, text) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+  $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
+}
+function confetti() {
+  if (reduced()) return;
+  const c = $('celebrationCanvas'), x = c.getContext('2d'); if (!x) return; c.hidden = false; c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#4b57d1', '#72c9a8', '#f28aa3', '#ffd36b', '#9fb0ff'];
+  const ps = Array.from({ length: 90 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.3, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3, r: 4 + Math.random() * 4, c: pick(cols), a: Math.random() * 6 }));
+  let f = 0; (function step() { x.clearRect(0, 0, c.width, c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += 0.1; x.fillStyle = p.c; x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); x.restore(); }); if (++f < 110) requestAnimationFrame(step); else { x.clearRect(0, 0, c.width, c.height); c.hidden = true; } })();
+}
+
+/* ---------- Green Sheet list ---------- */
+function renderSheet() {
+  const row = i => `<tr><td>${i.name}</td><td>${chemHTML(i)}${i.displayNoteHtml ? `<br><small style="font-weight:600;color:var(--faint)">${i.displayNoteHtml}</small>` : ''}</td></tr>`;
+  const ox = ['borate', 'carbonate', 'nitrate', null, 'silicate', 'phosphate', 'sulfate', 'chlorate', null, 'arsenate', 'selenate', 'bromate', null, null, 'tellurate', 'iodate'];
+  $('sheetBody').innerHTML = `<div class="sheet-grid">
+   <div class="sheet wide"><h3>Oxyanions</h3><div class="ox-table">${ox.map(n => (n ? `<div>${n}<b>${chemHTML(byName(n))}</b></div>` : '<div class="blank"></div>')).join('')}</div></div>
+   <div class="sheet"><h3>Other common polyatomic ions</h3><table>${ions.filter(i => i.group === 'common').map(row).join('')}</table></div>
+   <div class="sheet"><h3>Naming-rule examples</h3><table>${ions.filter(i => i.group === 'rules').map(row).join('')}</table>
+    <p style="font-size:.92rem;margin:8px 0 0">per-…-ate: one more O · -ite: one less O · hypo-…-ite: two less O · thio-: swap an O for S · hydrogen-: add H⁺ (one less negative)</p></div>
+   <div class="sheet wide"><h3>Also on the solubility table</h3><table>${ions.filter(i => i.group === 'solubility').map(row).join('')}</table></div></div>`;
+}
+
+/* ---------- periodic table (kept from the original game) ---------- */
+const periodicElements = [{"number":1,"symbol":"H","name":"Hydrogen","period":1,"group":1,"series":"main"},{"number":2,"symbol":"He","name":"Helium","period":1,"group":18,"series":"main"},{"number":3,"symbol":"Li","name":"Lithium","period":2,"group":1,"series":"main"},{"number":4,"symbol":"Be","name":"Beryllium","period":2,"group":2,"series":"main"},{"number":5,"symbol":"B","name":"Boron","period":2,"group":13,"series":"main"},{"number":6,"symbol":"C","name":"Carbon","period":2,"group":14,"series":"main"},{"number":7,"symbol":"N","name":"Nitrogen","period":2,"group":15,"series":"main"},{"number":8,"symbol":"O","name":"Oxygen","period":2,"group":16,"series":"main"},{"number":9,"symbol":"F","name":"Fluorine","period":2,"group":17,"series":"main"},{"number":10,"symbol":"Ne","name":"Neon","period":2,"group":18,"series":"main"},{"number":11,"symbol":"Na","name":"Sodium","period":3,"group":1,"series":"main"},{"number":12,"symbol":"Mg","name":"Magnesium","period":3,"group":2,"series":"main"},{"number":13,"symbol":"Al","name":"Aluminum","period":3,"group":13,"series":"main"},{"number":14,"symbol":"Si","name":"Silicon","period":3,"group":14,"series":"main"},{"number":15,"symbol":"P","name":"Phosphorus","period":3,"group":15,"series":"main"},{"number":16,"symbol":"S","name":"Sulfur","period":3,"group":16,"series":"main"},{"number":17,"symbol":"Cl","name":"Chlorine","period":3,"group":17,"series":"main"},{"number":18,"symbol":"Ar","name":"Argon","period":3,"group":18,"series":"main"},{"number":19,"symbol":"K","name":"Potassium","period":4,"group":1,"series":"main"},{"number":20,"symbol":"Ca","name":"Calcium","period":4,"group":2,"series":"main"},{"number":21,"symbol":"Sc","name":"Scandium","period":4,"group":3,"series":"main"},{"number":22,"symbol":"Ti","name":"Titanium","period":4,"group":4,"series":"main"},{"number":23,"symbol":"V","name":"Vanadium","period":4,"group":5,"series":"main"},{"number":24,"symbol":"Cr","name":"Chromium","period":4,"group":6,"series":"main"},{"number":25,"symbol":"Mn","name":"Manganese","period":4,"group":7,"series":"main"},{"number":26,"symbol":"Fe","name":"Iron","period":4,"group":8,"series":"main"},{"number":27,"symbol":"Co","name":"Cobalt","period":4,"group":9,"series":"main"},{"number":28,"symbol":"Ni","name":"Nickel","period":4,"group":10,"series":"main"},{"number":29,"symbol":"Cu","name":"Copper","period":4,"group":11,"series":"main"},{"number":30,"symbol":"Zn","name":"Zinc","period":4,"group":12,"series":"main"},{"number":31,"symbol":"Ga","name":"Gallium","period":4,"group":13,"series":"main"},{"number":32,"symbol":"Ge","name":"Germanium","period":4,"group":14,"series":"main"},{"number":33,"symbol":"As","name":"Arsenic","period":4,"group":15,"series":"main"},{"number":34,"symbol":"Se","name":"Selenium","period":4,"group":16,"series":"main"},{"number":35,"symbol":"Br","name":"Bromine","period":4,"group":17,"series":"main"},{"number":36,"symbol":"Kr","name":"Krypton","period":4,"group":18,"series":"main"},{"number":37,"symbol":"Rb","name":"Rubidium","period":5,"group":1,"series":"main"},{"number":38,"symbol":"Sr","name":"Strontium","period":5,"group":2,"series":"main"},{"number":39,"symbol":"Y","name":"Yttrium","period":5,"group":3,"series":"main"},{"number":40,"symbol":"Zr","name":"Zirconium","period":5,"group":4,"series":"main"},{"number":41,"symbol":"Nb","name":"Niobium","period":5,"group":5,"series":"main"},{"number":42,"symbol":"Mo","name":"Molybdenum","period":5,"group":6,"series":"main"},{"number":43,"symbol":"Tc","name":"Technetium","period":5,"group":7,"series":"main"},{"number":44,"symbol":"Ru","name":"Ruthenium","period":5,"group":8,"series":"main"},{"number":45,"symbol":"Rh","name":"Rhodium","period":5,"group":9,"series":"main"},{"number":46,"symbol":"Pd","name":"Palladium","period":5,"group":10,"series":"main"},{"number":47,"symbol":"Ag","name":"Silver","period":5,"group":11,"series":"main"},{"number":48,"symbol":"Cd","name":"Cadmium","period":5,"group":12,"series":"main"},{"number":49,"symbol":"In","name":"Indium","period":5,"group":13,"series":"main"},{"number":50,"symbol":"Sn","name":"Tin","period":5,"group":14,"series":"main"},{"number":51,"symbol":"Sb","name":"Antimony","period":5,"group":15,"series":"main"},{"number":52,"symbol":"Te","name":"Tellurium","period":5,"group":16,"series":"main"},{"number":53,"symbol":"I","name":"Iodine","period":5,"group":17,"series":"main"},{"number":54,"symbol":"Xe","name":"Xenon","period":5,"group":18,"series":"main"},{"number":55,"symbol":"Cs","name":"Cesium","period":6,"group":1,"series":"main"},{"number":56,"symbol":"Ba","name":"Barium","period":6,"group":2,"series":"main"},{"number":72,"symbol":"Hf","name":"Hafnium","period":6,"group":4,"series":"main"},{"number":73,"symbol":"Ta","name":"Tantalum","period":6,"group":5,"series":"main"},{"number":74,"symbol":"W","name":"Tungsten","period":6,"group":6,"series":"main"},{"number":75,"symbol":"Re","name":"Rhenium","period":6,"group":7,"series":"main"},{"number":76,"symbol":"Os","name":"Osmium","period":6,"group":8,"series":"main"},{"number":77,"symbol":"Ir","name":"Iridium","period":6,"group":9,"series":"main"},{"number":78,"symbol":"Pt","name":"Platinum","period":6,"group":10,"series":"main"},{"number":79,"symbol":"Au","name":"Gold","period":6,"group":11,"series":"main"},{"number":80,"symbol":"Hg","name":"Mercury","period":6,"group":12,"series":"main"},{"number":81,"symbol":"Tl","name":"Thallium","period":6,"group":13,"series":"main"},{"number":82,"symbol":"Pb","name":"Lead","period":6,"group":14,"series":"main"},{"number":83,"symbol":"Bi","name":"Bismuth","period":6,"group":15,"series":"main"},{"number":84,"symbol":"Po","name":"Polonium","period":6,"group":16,"series":"main"},{"number":85,"symbol":"At","name":"Astatine","period":6,"group":17,"series":"main"},{"number":86,"symbol":"Rn","name":"Radon","period":6,"group":18,"series":"main"},{"number":87,"symbol":"Fr","name":"Francium","period":7,"group":1,"series":"main"},{"number":88,"symbol":"Ra","name":"Radium","period":7,"group":2,"series":"main"},{"number":104,"symbol":"Rf","name":"Rutherfordium","period":7,"group":4,"series":"main"},{"number":105,"symbol":"Db","name":"Dubnium","period":7,"group":5,"series":"main"},{"number":106,"symbol":"Sg","name":"Seaborgium","period":7,"group":6,"series":"main"},{"number":107,"symbol":"Bh","name":"Bohrium","period":7,"group":7,"series":"main"},{"number":108,"symbol":"Hs","name":"Hassium","period":7,"group":8,"series":"main"},{"number":109,"symbol":"Mt","name":"Meitnerium","period":7,"group":9,"series":"main"},{"number":110,"symbol":"Ds","name":"Darmstadtium","period":7,"group":10,"series":"main"},{"number":111,"symbol":"Rg","name":"Roentgenium","period":7,"group":11,"series":"main"},{"number":112,"symbol":"Cn","name":"Copernicium","period":7,"group":12,"series":"main"},{"number":113,"symbol":"Nh","name":"Nihonium","period":7,"group":13,"series":"main"},{"number":114,"symbol":"Fl","name":"Flerovium","period":7,"group":14,"series":"main"},{"number":115,"symbol":"Mc","name":"Moscovium","period":7,"group":15,"series":"main"},{"number":116,"symbol":"Lv","name":"Livermorium","period":7,"group":16,"series":"main"},{"number":117,"symbol":"Ts","name":"Tennessine","period":7,"group":17,"series":"main"},{"number":118,"symbol":"Og","name":"Oganesson","period":7,"group":18,"series":"main"},{"number":57,"symbol":"La","name":"Lanthanum","series":"lanthanide","seriesIndex":1},{"number":58,"symbol":"Ce","name":"Cerium","series":"lanthanide","seriesIndex":2},{"number":59,"symbol":"Pr","name":"Praseodymium","series":"lanthanide","seriesIndex":3},{"number":60,"symbol":"Nd","name":"Neodymium","series":"lanthanide","seriesIndex":4},{"number":61,"symbol":"Pm","name":"Promethium","series":"lanthanide","seriesIndex":5},{"number":62,"symbol":"Sm","name":"Samarium","series":"lanthanide","seriesIndex":6},{"number":63,"symbol":"Eu","name":"Europium","series":"lanthanide","seriesIndex":7},{"number":64,"symbol":"Gd","name":"Gadolinium","series":"lanthanide","seriesIndex":8},{"number":65,"symbol":"Tb","name":"Terbium","series":"lanthanide","seriesIndex":9},{"number":66,"symbol":"Dy","name":"Dysprosium","series":"lanthanide","seriesIndex":10},{"number":67,"symbol":"Ho","name":"Holmium","series":"lanthanide","seriesIndex":11},{"number":68,"symbol":"Er","name":"Erbium","series":"lanthanide","seriesIndex":12},{"number":69,"symbol":"Tm","name":"Thulium","series":"lanthanide","seriesIndex":13},{"number":70,"symbol":"Yb","name":"Ytterbium","series":"lanthanide","seriesIndex":14},{"number":71,"symbol":"Lu","name":"Lutetium","series":"lanthanide","seriesIndex":15},{"number":89,"symbol":"Ac","name":"Actinium","series":"actinide","seriesIndex":1},{"number":90,"symbol":"Th","name":"Thorium","series":"actinide","seriesIndex":2},{"number":91,"symbol":"Pa","name":"Protactinium","series":"actinide","seriesIndex":3},{"number":92,"symbol":"U","name":"Uranium","series":"actinide","seriesIndex":4},{"number":93,"symbol":"Np","name":"Neptunium","series":"actinide","seriesIndex":5},{"number":94,"symbol":"Pu","name":"Plutonium","series":"actinide","seriesIndex":6},{"number":95,"symbol":"Am","name":"Americium","series":"actinide","seriesIndex":7},{"number":96,"symbol":"Cm","name":"Curium","series":"actinide","seriesIndex":8},{"number":97,"symbol":"Bk","name":"Berkelium","series":"actinide","seriesIndex":9},{"number":98,"symbol":"Cf","name":"Californium","series":"actinide","seriesIndex":10},{"number":99,"symbol":"Es","name":"Einsteinium","series":"actinide","seriesIndex":11},{"number":100,"symbol":"Fm","name":"Fermium","series":"actinide","seriesIndex":12},{"number":101,"symbol":"Md","name":"Mendelevium","series":"actinide","seriesIndex":13},{"number":102,"symbol":"No","name":"Nobelium","series":"actinide","seriesIndex":14},{"number":103,"symbol":"Lr","name":"Lawrencium","series":"actinide","seriesIndex":15}];
+function makeElementButton(element) {
+  const button = document.createElement('button'); button.type = 'button'; button.className = 'element-button';
+  button.setAttribute('aria-label', element.name + ', symbol ' + element.symbol + ', atomic number ' + element.number);
+  button.innerHTML = "<span class='element-number'>" + element.number + "</span><span class='element-symbol'>" + element.symbol + '</span>';
+  button.addEventListener('click', () => { $('periodicDetail').innerHTML = "<span class='periodic-detail-symbol'>" + element.symbol + '</span><strong>' + element.name + '</strong> &nbsp;·&nbsp; Atomic Number ' + element.number; });
+  return button;
+}
+function renderPeriodicTable() {
+  const main = $('periodicMain');
+  periodicElements.filter(e => e.series === 'main').forEach(e => { const b = makeElementButton(e); b.style.gridColumn = e.group; b.style.gridRow = e.period; main.appendChild(b); });
+  [['57–71', 6], ['89–103', 7]].forEach(([t, r]) => { const d = document.createElement('div'); d.className = 'series-placeholder'; d.style.gridColumn = '3'; d.style.gridRow = r; d.textContent = t; main.appendChild(d); });
+  periodicElements.filter(e => e.series === 'lanthanide').sort((a, b) => a.number - b.number).forEach(e => $('lanthanideRow').appendChild(makeElementButton(e)));
+  periodicElements.filter(e => e.series === 'actinide').sort((a, b) => a.number - b.number).forEach(e => $('actinideRow').appendChild(makeElementButton(e)));
+}
+
+/* ---------- wiring ---------- */
+function bind() {
+  $('course').addEventListener('click', e => { const b = e.target.closest('button[data-course]'); if (b && b.dataset.course !== state.course) setCourse(b.dataset.course); });
+  document.addEventListener('click', e => {
+    const m = e.target.closest('[data-mode]'); if (m) return pickMode(m.dataset.mode);
+    const s = e.target.closest('[data-set]'); if (s) return pickSet(s.dataset.set);
+    const ch = e.target.closest('#choices [data-choice]'); if (ch) return choose(+ch.dataset.choice);
+    const g = e.target.closest('[data-g]'); if (g) return guideChoose(+g.dataset.g, +g.dataset.k);
+  });
+  $('skillCard').onclick = () => { startQuiz(); scrollToPlay(); };
+  $('checkBtn').onclick = check; $('nextBtn').onclick = next;
+  $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
+  $('answer').addEventListener('input', onType);
+  $('answer').addEventListener('blur', () => { const q = state.q; if (q && q.kind === 'formula' && !state.done) { const inp = $('answer'); inp.value = liveFormat(inp.value); updateReadback(); } });
+  $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = tip(state.q.hint.startsWith('Professor Tip') ? state.q.hint : 'Professor Tip: ' + state.q.hint); };
+  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
+  $('solBtn').onclick = showSolution;
+  const openSheet = () => { renderSheet(); try { $('sheetDialog').showModal(); } catch (e) { $('sheetDialog').setAttribute('open', ''); } };
+  $('sheetBtn').onclick = openSheet; $('closeSheet').onclick = () => { try { $('sheetDialog').close(); } catch (e) { $('sheetDialog').removeAttribute('open'); } };
+  $('sheetDialog').addEventListener('click', e => { if (e.target === $('sheetDialog')) $('sheetDialog').close(); });
+  let armed = 0; $('resetBtn').onclick = () => { const b = $('resetBtn'); if (!armed) { armed = 1; b.classList.add('armed'); b.textContent = 'Tap again to erase this course’s progress'; setTimeout(() => { armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; }, 4000); return; } P = fresh(); state.mode = null; state.quiz = null; save(); armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; renderStats(); renderChooser(); showEmpty(); };
+}
+function init() {
+  let c = null; try { c = (new URLSearchParams(location.search).get('course') || '').toUpperCase().replace(/\s+/g, '').replace('CHEM', '').trim(); } catch (e) {}
+  if (!['3A', '1A'].includes(c)) { try { c = JSON.parse(localStorage.getItem(STORE) || '{}').last; } catch (e) {} }
+  if (!['3A', '1A'].includes(c)) c = '1A';
+  bind(); renderPeriodicTable(); setCourse(c); paintIcons();
+  // icons.js loads with defer; paint again once it is ready
+  window.addEventListener('load', () => { paintIcons(); renderChooser(); });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+</script>
+</body></html>

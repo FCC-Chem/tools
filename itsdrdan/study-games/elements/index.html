@@ -1,1102 +1,1177 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f7f8fc" />
-  <title>Element Symbol Study Lab</title>
-  <style>
-    :root{
-      --bg:#f7f8fc;
-      --panel:#ffffff;
-      --ink:#1f2937;
-      --muted:#667085;
-      --line:#e5e7eb;
-      --accent:#6d5dfc;
-      --accent2:#108282;
-      --good:#178a55;
-      --bad:#c54545;
-      --warn:#a46a00;
-      --soft:#f0efff;
-      --soft2:#eafafa;
-      --shadow:0 18px 45px rgba(31,41,55,.09);
-      --radius:20px;
-    }
-
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 10% 10%, rgba(109,93,252,.09), transparent 28%),
-        radial-gradient(circle at 88% 16%, rgba(21,166,166,.08), transparent 26%),
-        var(--bg);
-      color:var(--ink);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-
-    .wrap{
-      width:min(1180px, calc(100% - 28px));
-      margin:28px auto 54px;
-    }
-
-    .topbar{
-      display:flex;
-      gap:18px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:18px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .atom-logo{
-      width:48px;
-      height:48px;
-      display:grid;
-      place-items:center;
-      border-radius:16px;
-      background:linear-gradient(135deg, var(--accent), #8f84ff);
-      color:white;
-      font-size:24px;
-      box-shadow:0 10px 24px rgba(109,93,252,.24);
-    }
-
-    h1{
-      font-size:clamp(1.35rem, 2.6vw, 2.05rem);
-      margin:0;
-      letter-spacing:-.025em;
-    }
-
-    .subtitle{
-      color:var(--muted);
-      margin:4px 0 0;
-      font-size:.95rem;
-    }
-
-    .header-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      justify-content:flex-end;
-    }
-
-    .btn{
-      border:none;
-      border-radius:12px;
-      padding:10px 14px;
-      font-weight:700;
-      transition:.18s ease;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-    .btn:active{transform:translateY(0)}
-
-    .btn-primary{
-      background:var(--accent);
-      color:#fff;
-      box-shadow:0 7px 16px rgba(109,93,252,.2);
-    }
-
-    .btn-secondary{
-      background:#fff;
-      color:var(--ink);
-      border:1px solid var(--line);
-    }
-
-    .btn-teal{
-      background:var(--accent2);
-      color:white;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.5fr .82fr;
-      gap:18px;
-      align-items:start;
-    }
-
-    .card{
-      background:rgba(255,255,255,.94);
-      border:1px solid rgba(229,231,235,.85);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
-
-    .study{
-      padding:24px;
-    }
-
-    .settings{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:12px;
-      margin-bottom:22px;
-    }
-
-    .control label{
-      display:block;
-      font-size:.78rem;
-      color:var(--muted);
-      font-weight:800;
-      margin:0 0 6px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-
-    select{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:11px 12px;
-      background:#fff;
-      color:var(--ink);
-      outline:none;
-    }
-
-    select:focus,input:focus{
-      border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(109,93,252,.12);
-    }
-
-    .prompt-card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      min-height:315px;
-      padding:26px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      background:
-        linear-gradient(180deg, rgba(109,93,252,.035), rgba(21,166,166,.02)),
-        #fff;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .question-type{
-      font-size:.78rem;
-      font-weight:900;
-      letter-spacing:.09em;
-      text-transform:uppercase;
-      color:var(--accent);
-      margin-bottom:12px;
-    }
-
-    .question{
-      font-size:clamp(2rem, 6vw, 4.1rem);
-      font-weight:900;
-      letter-spacing:-.04em;
-      line-height:1.05;
-      margin:0 0 8px;
-    }
-
-    .atomic-line{
-      color:var(--muted);
-      margin-bottom:24px;
-      font-size:.92rem;
-      min-height:1.2em;
-    }
-
-    .answer-row{
-      width:min(520px, 100%);
-      display:flex;
-      gap:9px;
-    }
-
-    .answer-row input{
-      flex:1;
-      min-width:0;
-      border:1px solid var(--line);
-      border-radius:13px;
-      padding:13px 14px;
-      font-size:1.05rem;
-      outline:none;
-    }
-
-    .feedback{
-      min-height:56px;
-      margin-top:15px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:3px;
-      font-weight:750;
-    }
-
-    .feedback.good{color:var(--good)}
-    .feedback.bad{color:var(--bad)}
-    .feedback .small{
-      color:var(--muted);
-      font-size:.88rem;
-      font-weight:600;
-    }
-
-    .card-actions{
-      margin-top:13px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      justify-content:center;
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(4, 1fr);
-      gap:9px;
-      margin-top:17px;
-    }
-
-    .stat{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-      text-align:center;
-      background:#fff;
-    }
-
-    .stat strong{
-      display:block;
-      font-size:1.25rem;
-    }
-
-    .stat span{
-      display:block;
-      font-size:.74rem;
-      color:var(--muted);
-      margin-top:2px;
-      font-weight:700;
-    }
-
-    .side{
-      display:grid;
-      gap:18px;
-    }
-
-    .side-card{
-      padding:18px;
-    }
-
-    .side-card h2{
-      font-size:1rem;
-      margin:0 0 11px;
-      letter-spacing:-.01em;
-    }
-
-    .progress-track{
-      height:10px;
-      background:#eceef3;
-      border-radius:999px;
-      overflow:hidden;
-      margin:9px 0 7px;
-    }
-
-    .progress-fill{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      transition:width .25s ease;
-    }
-
-    .progress-copy{
-      color:var(--muted);
-      font-size:.84rem;
-      line-height:1.45;
-    }
-
-    .missed-list{
-      display:flex;
-      flex-wrap:wrap;
-      gap:7px;
-      min-height:34px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      border-radius:999px;
-      padding:7px 10px;
-      background:#f6f7f9;
-      border:1px solid var(--line);
-      font-weight:800;
-      font-size:.82rem;
-    }
-
-    .chip button{
-      border:none;
-      background:transparent;
-      color:var(--muted);
-      padding:0;
-      line-height:1;
-      font-size:1rem;
-    }
-
-    .tip{
-      background:linear-gradient(135deg, var(--soft), #f8f7ff);
-    }
-
-    .tip p{
-      margin:0;
-      color:#5148a7;
-      line-height:1.48;
-      font-size:.9rem;
-    }
-
-    .reference{
-      margin-top:18px;
-      padding:20px;
-    }
-
-    .ref-head{
-      display:flex;
-      gap:12px;
-      align-items:flex-end;
-      justify-content:space-between;
-      margin-bottom:15px;
-    }
-
-    .ref-head h2{
-      margin:0;
-      font-size:1.15rem;
-    }
-
-    .ref-head p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:.88rem;
-    }
-
-    .legend{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      font-size:.75rem;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    .dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      display:inline-block;
-      margin-right:4px;
-    }
-    .dot.core{background:var(--accent)}
-    .dot.extra{background:var(--accent2)}
-
-    .element-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(78px, 1fr));
-      gap:8px;
-    }
-
-    .element{
-      border:1px solid var(--line);
-      border-radius:13px;
-      padding:10px 8px;
-      background:#fff;
-      text-align:center;
-      min-height:88px;
-      position:relative;
-      transition:.18s ease;
-      user-select:none;
-    }
-
-    .element:hover{
-      transform:translateY(-2px);
-      box-shadow:0 7px 16px rgba(31,41,55,.08);
-    }
-
-    .element.core{border-top:4px solid var(--accent)}
-    .element.extra{border-top:4px solid var(--accent2)}
-
-    .element .z{
-      position:absolute;
-      left:7px;
-      top:6px;
-      color:var(--muted);
-      font-size:.66rem;
-      font-weight:800;
-    }
-
-    .element .sym{
-      display:block;
-      font-size:1.48rem;
-      font-weight:900;
-      margin-top:5px;
-    }
-
-    .element .name{
-      display:block;
-      color:var(--muted);
-      font-size:.72rem;
-      margin-top:2px;
-      word-break:break-word;
-    }
-
-    .element.hidden-answer .name{
-      filter:blur(5px);
-      user-select:none;
-    }
-
-    .ref-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:13px;
-    }
-
-    .footer-note{
-      text-align:center;
-      color:var(--muted);
-      margin-top:16px;
-      font-size:.78rem;
-    }
-
-    .toast{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      background:#1f2937;
-      color:white;
-      padding:11px 14px;
-      border-radius:12px;
-      font-weight:700;
-      font-size:.85rem;
-      opacity:0;
-      transform:translateY(8px);
-      pointer-events:none;
-      transition:.2s ease;
-      box-shadow:var(--shadow);
-      z-index:20;
-    }
-    .toast.show{opacity:1; transform:translateY(0)}
-
-    @media (max-width: 860px){
-      .grid{grid-template-columns:minmax(0,1fr)}
-      .settings{grid-template-columns:1fr}
-      .topbar{align-items:flex-start}
-      .header-actions{display:none}
-      .stats{grid-template-columns:repeat(2,1fr)}
-      .answer-row{flex-direction:column}
-      .ref-head{align-items:flex-start; flex-direction:column}
-      .legend{justify-content:flex-start}
-    }
-
-    @media (max-width: 520px){
-      .wrap{width:min(100% - 16px, 1180px); margin-top:10px}
-      .study{padding:14px}
-      .prompt-card{padding:20px 14px; min-height:345px}
-      .side-card,.reference{padding:14px}
-      .element-grid{grid-template-columns:repeat(4, minmax(0, 1fr))}
-      .element{min-height:82px;padding:9px 4px}
-      .element .name{font-size:.64rem}
-    }
-  </style>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symbol Safari • Element Symbols • ItsDrDan</title>
+<meta name="description" content="Element names and symbols practice for CHEM 3A and CHEM 1A: name to symbol, symbol to name, tricky Latin symbols, groups, periods, families, metals and nonmetals, and common ions on a clickable periodic table.">
+<link rel="icon" type="image/webp" href="https://itsdrdan.github.io/games/assets/games/elements.webp">
+<style>
+:root{
+ --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
+ --accent:#4b57d1;--accent-d:#3c47b8;--accent-soft:#eef0fe;--mint:#e8f6ef;--mint-ink:#23704f;--mint-line:#a9d9c2;
+ --amber:#fff6e2;--amber-ink:#80601a;--amber-line:#f0dca6;--rose:#fdedf0;--rose-ink:#9c3346;--rose-line:#eab3bd;--lav:#f3effd;--sky:#eaf4fb;
+ --r-lg:20px;--r-md:14px;--r-sm:10px;--shadow:0 1px 2px #1f2a440d,0 6px 20px #1f2a440a;--topbar:70px;
+ --font:Nunito,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--font-display:Fredoka,Nunito,system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-padding-top:calc(var(--topbar) + 12px)}
+body{margin:0;background:linear-gradient(180deg,#eef0fb 0,var(--bg) 340px);color:var(--ink);font:16.5px/1.55 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,.tb-brand,.play-title,summary,.btn.primary{font-family:var(--font-display)}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:3px solid #9fb0ff;outline-offset:2px}
+[hidden]{display:none!important}
+.ui{width:1.05em;height:1.05em;vertical-align:-.17em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+sup{font-size:.62em;line-height:0}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:#ffffffe6;backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+html.dd-embedded .topbar{position:relative}
+.tb{max-width:1180px;margin:auto;min-height:var(--topbar);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:1.12rem;white-space:nowrap;margin-right:auto}.tb-brand img{width:40px;height:40px;display:block;object-fit:contain}
+.seg{display:inline-flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:8px 18px;font-weight:800;color:var(--muted);min-height:46px;white-space:nowrap}
+.seg button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
+.tb-xp{display:flex;align-items:center;gap:9px;min-width:160px}.tb-xp .ico{width:34px;height:34px;display:grid;place-items:center;background:var(--lav);border-radius:10px;color:var(--accent-d)}
+.tb-xp b{display:block;font-size:.82rem;line-height:1.1}.tb-xp small{display:block;font-size:.72rem;color:var(--faint);font-weight:700}
+.xpbar{height:6px;width:110px;background:#e9eaf3;border-radius:9px;overflow:hidden;margin:4px 0 2px}.xpbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea);border-radius:9px;transition:width .5s}
+.tb-streak{display:flex;align-items:center;gap:5px;font-weight:800;font-size:.92rem;padding:7px 11px;border-radius:10px;background:var(--rose);color:var(--rose-ink);white-space:nowrap}
+.tb-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#fff;border-radius:11px;padding:7px 13px;font-weight:800;color:#3d4a73;min-height:44px;white-space:nowrap}.tb-btn:hover{background:var(--accent-soft)}
+
+/* page */
+.wrap{max-width:1180px;margin:auto;padding:16px 16px 50px}
+.intro{display:flex;align-items:center;gap:16px;margin-bottom:6px}.intro img{width:96px;height:96px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 14px #4b57d126)}
+.eyebrow{margin:0;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.intro h1{margin:2px 0 2px;font-size:clamp(1.6rem,3.6vw,2.35rem);line-height:1.1;font-weight:600}
+.lede{margin:0;color:var(--muted)}
+details.howto{margin:4px 0 10px;font-size:.95rem;color:var(--muted)}details.howto summary{cursor:pointer;font-weight:600;color:var(--accent-d);font-family:var(--font-display);display:inline-block;padding:4px 0}
+details.howto ul{margin:6px 0 0;padding-left:20px}details.howto li{margin:3px 0}
+
+/* chooser */
+.chooser{margin:4px 0 16px}
+.pick-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px;font-size:1.2rem;font-weight:600}.pick-title small{font-family:var(--font);font-weight:700;color:var(--faint);font-size:.88rem}
+.pick-title.small{font-size:1.05rem;margin-top:14px}
+.stepnum{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.9rem;flex:none}
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cat{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;border:2px solid var(--line2);background:#fff;border-radius:20px;padding:14px 12px 14px;box-shadow:var(--shadow);min-height:170px}
+.cat:hover{border-color:#aab2ea}.cat b{font-family:var(--font-display);font-weight:600;font-size:1.15rem;line-height:1.2}.cat small{color:var(--muted);font-size:.86rem;line-height:1.3}
+.cat .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;color:#fff}
+.cat.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.cat.on .tick{background:var(--accent);border-color:var(--accent)}
+.cat-art{height:74px;display:flex;align-items:center;justify-content:center;gap:6px}
+.mini-tile{position:relative;display:inline-grid;place-items:center;width:62px;height:66px;border-radius:12px;background:#fff;border:2px solid #b9c0ec;font:600 1.7rem/1 var(--font-display);color:#26326a;box-shadow:0 3px 0 #dfe3f7}
+.mini-tile small{position:absolute;top:5px;left:7px;font:800 .62rem/1 var(--font);color:var(--faint)}
+.mini-tile.gold{background:#fff6dc;border-color:#ecc76a;box-shadow:0 3px 0 #f3e2b0}.mini-tile.mint{background:var(--mint);border-color:var(--mint-line);box-shadow:0 3px 0 #cfeadc}
+.cat-art .arrow{font-weight:800;color:var(--faint);font-size:1.1rem}
+.mini-pt{display:grid;grid-template-columns:repeat(18,6px);grid-auto-rows:7px;gap:1.5px}.mini-pt i{background:#cfd5ef;border-radius:1.5px}.mini-pt i.s{background:#f4b9c8}.mini-pt i.p{background:#a9d9c2}.mini-pt i.d{background:#b9c8ec}.mini-pt i.x{background:#4b57d1}
+.chips-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:6px 16px 16px;margin-top:12px}
+.chips{display:flex;flex-direction:column;gap:10px}.chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.chip-row>span{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);min-width:150px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);background:#fff;border-radius:99px;padding:9px 16px;min-height:46px;font-weight:800;color:#3d4a73}
+.chip::before{content:'';width:18px;height:18px;border-radius:6px;border:2px solid var(--line2);flex:none}
+.chip.radio::before{border-radius:50%}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-d)}.chip.on::before{background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5 9-10' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--accent)}
+.chip .stat{font-size:.75rem;color:var(--faint)}
+.skill-card{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;text-align:left;border:1px solid #ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);border-radius:var(--r-lg);padding:12px 16px;box-shadow:var(--shadow)}
+.skill-card img{width:58px;height:58px;flex:none}.skill-card b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.15rem}.skill-card small{color:var(--muted)}.skill-card .go{margin-left:auto;font-size:1.4rem;color:var(--accent-d)}
+.skill-card.on{border-color:var(--accent);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}
+
+/* play panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);min-width:0}
+main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
+.play-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.play-title{margin:0;font-size:1.2rem;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line2);background:#fff;border-radius:12px;padding:10px 16px;font-weight:750;color:#34416a;min-height:48px}.btn:hover{background:#f6f7fc}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;font-size:1.02rem}.btn.primary:hover{background:var(--accent-d)}
+.btn.pulse{border-color:var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.btn[aria-pressed="true"]{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tag{font-size:.78rem;font-weight:800;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}.tag.quiz{background:var(--lav);color:#4b4590}
+.question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:16px}
+.equation{text-align:center;font-size:clamp(1.9rem,6vw,3.2rem);font-weight:800;background:var(--accent-soft);border-radius:var(--r-sm);padding:12px 14px 10px;margin-bottom:12px;color:#26326a;line-height:1.15;font-family:var(--font-display)}
+.equation:empty{display:none}.equation.text{font-size:clamp(1.25rem,3.6vw,1.7rem)}
+.equation .sub{display:block;font:700 .9rem/1.4 var(--font);color:var(--faint);margin-top:4px;letter-spacing:0}
+.prompt{font-size:1.2rem;line-height:1.5;font-weight:650;margin:0}
+.answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.3rem;min-height:56px;border:1.5px solid var(--line2);border-radius:12px;background:#fff}
+.answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
+.answer .picked{flex:1;min-width:0;font-weight:800;color:var(--muted);font-size:1.05rem;padding:8px 4px}
+.answer .picked b{color:var(--accent-d);font-size:1.25rem}
+.answer .btn.primary{min-height:56px;padding:0 24px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px;margin-top:14px}
+.choice{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 16px;min-height:56px;font-size:1.06rem;font-weight:750;color:#2b3760;text-align:left}
+.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
+.typing-note{font-size:.85rem;color:var(--faint);margin:8px 2px 0}
+.feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
+.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
+.feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.slip{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:#fff;border-radius:99px;padding:1px 9px;margin-right:6px;vertical-align:1px}
+.xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
+.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
+.detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
+.next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
+.ptip{display:flex;gap:11px;background:var(--amber);border:1px solid var(--amber-line);border-radius:var(--r-sm);padding:12px 14px;margin-top:14px;color:#5b4714;font-size:1rem}
+.ptip b.lbl{display:block;font-family:var(--font-display);font-weight:600;color:var(--amber-ink)}
+.ptip .ico{font-size:1.3rem;color:var(--amber-ink);flex:none}
+.note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
+.empty{padding:26px 16px;text-align:center;color:var(--muted);font-weight:700;font-size:1.08rem;border:2px dashed var(--line2);border-radius:var(--r-md)}
+.empty .ui{transform:rotate(-90deg)}
+
+/* guide */
+.guide{margin-top:10px;display:grid;gap:8px}
+.gstep{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:10px 12px}
+.gstep.current{border:2px solid #8b95ee;box-shadow:0 4px 14px #4b57d114}.gstep.done{background:#f3fbf7;border-color:#cbe9db}.gstep.later{display:none}
+.gstep .gnum{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}.gstep.done .gnum{color:var(--mint-ink)}
+.gstep .gask{font-weight:700;margin:2px 0 8px;font-size:1.05rem}
+.gstep .gchoices{display:flex;flex-wrap:wrap;gap:7px}.gstep .gchoices .choice{min-height:46px;padding:8px 13px;font-size:1rem}
+.gstep .gwhy{margin-top:7px;font-size:.95rem;color:var(--mint-ink)}.gstep .gwhy.bad{color:var(--rose-ink)}
+
+/* periodic table */
+.ptwrap{max-width:780px;margin:2px auto 8px}
+.ptable{display:grid;grid-template-columns:16px repeat(18,minmax(0,1fr));gap:2px}
+.ptable .lab{font-size:.62rem;font-weight:800;color:var(--faint);display:grid;place-items:center;min-width:0;overflow:hidden}
+.pt{position:relative;min-width:0;aspect-ratio:1/1.15;border:1px solid #cfd5e6;border-radius:5px;background:#fff;padding:0;display:grid;place-items:center;font:800 clamp(.6rem,1.9vw,.98rem)/1 var(--font);color:#26326a;transition:transform .12s}
+.pt small{position:absolute;top:2px;left:3px;font-size:.5em;color:var(--faint);font-weight:700;line-height:1}
+.pt.s{background:#fdeef2}.pt.d{background:#eef3fb}.pt.p{background:#eefaf3}.pt.ng{background:#f3effd}
+.pt.mlo{background:#fff2cf;border:1.5px dashed #c79a2b}
+.pt.ghost{opacity:.33}
+button.pt:disabled{opacity:1}.choice.right:disabled,.choice.wrong:disabled{opacity:1}
+button.pt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.pt.sel{background:var(--accent)!important;color:#fff;border-color:var(--accent);transform:scale(1.18);z-index:2;box-shadow:0 3px 10px #4b57d155}.pt.sel small{color:#dfe3ff}
+.pt.right{background:#3a9a71!important;color:#fff;border-color:#2c7c59;z-index:2}.pt.right small{color:#d8f1e5}
+.pt.wrong{background:#d4677a!important;color:#fff;border-color:#b84d61}.pt.wrong small{color:#fbe0e5}
+.pt.hl{box-shadow:0 0 0 3px #f2a93b;z-index:1}
+.pt-key{display:flex;gap:6px 12px;flex-wrap:wrap;justify-content:center;font-size:.78rem;color:var(--muted);font-weight:700;margin-top:6px}
+.pt-key i{display:inline-block;width:13px;height:13px;border-radius:4px;vertical-align:-2px;margin-right:4px;border:1px solid #cfd5e6}
+
+/* report */
+.example{border:1px solid #d9ddf3;border-radius:var(--r-md);padding:16px;background:#fbfbff;margin-bottom:14px}
+.ex-label{display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.ex-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.report-score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.report-score b{font-size:2.2rem;color:var(--accent-d);font-family:var(--font-display)}
+.report-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:6px}.report-list li{padding:8px 12px;border-radius:12px;background:var(--rose);border:1px solid var(--rose-line)}.report-list li.ok{background:var(--mint);border-color:var(--mint-line)}
+.plan{margin:6px 0 0;padding-left:20px}.plan li{margin:4px 0}
+.quiz-bar{height:8px;border-radius:9px;background:#eceef5;overflow:hidden;margin:-2px 0 12px}.quiz-bar span{display:block;height:100%;background:linear-gradient(90deg,#72c9a8,#7884ea)}
+
+/* sections below */
+.section{margin-top:18px;padding:20px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
+.badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
+.badge.got{border-color:#ead9a0;background:linear-gradient(135deg,#fffbf1,#fbf4ff);color:var(--muted)}.badge.got b{color:var(--ink)}.badge.got img{filter:none;opacity:1}
+.section-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.reset-btn{border:1px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:8px 13px;font-weight:750;min-height:44px}.reset-btn.armed{background:var(--rose)}
+.miss-list{display:flex;flex-wrap:wrap;gap:7px;min-height:34px}
+.mchip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 6px 5px 12px;background:#f6f7f9;border:1px solid var(--line);font-weight:800;font-size:.88rem}
+.mchip button{border:0;background:#fff;border-radius:50%;width:30px;height:30px;color:var(--muted);line-height:1;font-size:1rem}
+.ref-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.ref-actions .btn{min-height:44px;padding:8px 13px}
+.ref-actions .btn.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-d)}
+.element-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px}
+.element{border:1px solid var(--line);border-radius:13px;padding:10px 6px 8px;background:#fff;text-align:center;min-height:86px;position:relative;cursor:pointer;user-select:none}
+.element.core{border-top:4px solid var(--accent)}.element.extra{border-top:4px solid #3aa38a}.element.gen{border-top:4px solid #d08a3a}
+.element .z{position:absolute;left:7px;top:6px;color:var(--faint);font-size:.66rem;font-weight:800}
+.element .sym{display:block;font:600 1.5rem/1.1 var(--font-display);margin-top:6px}
+.element .name{display:block;color:var(--muted);font-size:.74rem;margin-top:2px;word-break:break-word}
+.element.hidden-answer .name{filter:blur(5px)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);font-weight:700;margin:-4px 0 10px}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+
+/* videos + dialog */
+details.section{padding:0}details.section>summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:1.1rem}
+details.section>summary::-webkit-details-marker{display:none}details.section>summary::after{content:'▾';color:var(--faint)}details[open].section>summary::after{transform:rotate(180deg)}
+details.section>summary small{display:block;font-family:var(--font);font-weight:600;color:var(--muted);font-size:.86rem}
+.video-body{padding:0 20px 20px}.lesson-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.lesson-player{aspect-ratio:16/9;background:#1e2538;border-radius:var(--r-md);overflow:hidden}.lesson-player iframe{width:100%;height:100%;border:0;display:block}
+.lesson-meta h3{margin:10px 0 2px;font-size:1rem}.lesson-meta a{color:var(--accent-d);font-weight:750}
+.video-list{display:grid;gap:8px;align-content:start}.lesson-card{display:flex;gap:11px;text-align:left;align-items:start;border:1px solid var(--line);background:#fafbff;border-radius:12px;padding:9px;width:100%}
+.lesson-card img{width:96px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:none;background:#e6e8f2}.lesson-card b{display:block;font-size:.9rem;line-height:1.3}.lesson-card small{display:block;color:var(--muted);font-size:.76rem}.lesson-card.active{border-color:var(--accent);background:var(--accent-soft)}
+.chapter-links{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:16px;padding-top:12px;font-size:.92rem}.chapter-links a{color:var(--accent-d);font-weight:750}
+dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;width:min(860px,calc(100vw - 16px));max-height:90vh}dialog::backdrop{background:#15182b80}
+.modal-head{position:sticky;top:0;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head strong{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.close-btn{width:44px;height:44px;border:1px solid var(--line2);border-radius:10px;background:#fff;font-size:1.2rem}
+.modal-body{overflow:auto;padding:16px 18px;max-height:calc(90vh - 70px)}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rule{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfbfe}.rule h3{margin:0 0 4px;font-size:1rem}.rule p{margin:3px 0;font-size:.95rem}.rule.wide{grid-column:1/-1}
+table.data{border-collapse:collapse;font-size:.95rem;width:100%;background:#fff}table.data th,table.data td{border:1px solid var(--line2);padding:5px 8px;text-align:left}table.data th{background:#f4f5fb;font-weight:800}
+
+/* toasts + confetti */
+.toasts{position:fixed;right:16px;bottom:16px;z-index:1100;display:grid;gap:9px;max-width:min(340px,calc(100vw - 32px))}
+.toast{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #ddd6f7;border-radius:14px;padding:10px 13px;box-shadow:0 12px 34px #1f2a4430;font-size:.92rem;transition:opacity .5s,transform .5s}.toast img{width:42px;height:42px}.toast.out{opacity:0;transform:translateY(10px)}
+#celebrationCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
+.foot{text-align:center;font-size:.82rem;color:var(--faint);margin:18px 0 6px}
+
+@media(max-width:760px){
+ .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.tb-brand img{width:34px;height:34px}.tb-xp{min-width:0}.tb-xp .xpbar{width:70px}.tb-btn .lbl{display:none}
+ .topbar{position:relative}
+ .seg button{padding:8px 13px}
+ .wrap{padding:10px 12px 40px}
+ .intro{gap:12px}.intro img{width:60px;height:60px}.intro h1{font-size:1.55rem}.lede{font-size:.95rem;line-height:1.4}
+ .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:128px;padding:10px 8px;gap:3px}.cat-art{height:54px}.mini-tile{width:46px;height:50px;font-size:1.3rem}.mini-tile small{font-size:.55rem;top:4px;left:5px}.mini-pt{grid-template-columns:repeat(18,4.5px);grid-auto-rows:5px;gap:1px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}
+ .chip-row>span{min-width:100%}
+ .cat .tick{width:22px;height:22px;top:6px;right:6px}.cat-art{gap:3px;margin-top:8px}.cat-art .arrow{font-size:.9rem}.mini-tile.mint{font-size:.8rem!important;padding:0 5px!important}
+ main.panel{padding:12px}.question{padding:10px}.prompt{font-size:1.08rem}
+ .actions{grid-template-columns:1fr 1fr}.actions .btn{white-space:nowrap;font-size:.95rem;padding:10px 8px}
+ .stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
+ .lesson-layout,.rule-grid{grid-template-columns:1fr}
+ .answer{gap:8px}.answer input{flex:1 1 0;min-width:0}.answer .btn.primary{flex:1 1 100%}.next-row .btn.primary{width:100%}
+ .element-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.element{min-height:80px;padding:9px 3px}.element .name{font-size:.64rem}
+ html{scroll-padding-top:8px}
+}
+@media(max-width:560px){
+ .question.has-table{padding:8px 4px}
+ .ptable{gap:1px;grid-template-columns:9px repeat(18,minmax(0,1fr))}.ptable .lab{font-size:.48rem}.pt{border-radius:3px}.pt small{display:none}
+}
+html.dd-embedded{scroll-padding-top:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.pt.sel{transform:none}}
+</style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
+<body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
+<header class="topbar"><div class="tb">
+ <div class="tb-brand"><img class="logo-img" src="https://itsdrdan.github.io/games/assets/games/elements.webp" alt="">Symbol Safari</div>
+ <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
+ <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Symbol Rookie</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
+ <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
+ <button type="button" class="tb-btn" id="rulesBtn" aria-label="Open the symbol rules and periodic table"><span data-icon="book" aria-hidden="true"></span><span class="lbl">Rules</span></button>
+</div></header>
 
-<body>
-  <main class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <div class="atom-logo" aria-hidden="true">⚛</div>
-        <div>
-          <h1>Element Symbol Study Lab</h1>
-          <p class="subtitle">Practice element names and symbols for introductory & health-science chemistry.</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-secondary" id="focusMissedTop">Review Missed</button>
-        <button class="btn btn-primary" id="newQuestionTop">New Question</button>
-      </div>
-    </header>
+<div class="wrap">
+ <section class="intro"><img class="logo-img" src="https://itsdrdan.github.io/games/assets/games/elements.webp" alt="Symbol Safari logo"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Chapter 2: Atoms, Molecules, and Ions</p><h1>Symbol Safari</h1><p class="lede">Pick a tile, then type the symbol or name. Capital letters count.</p></div></section>
+ <details class="howto"><summary>How to play</summary><ul>
+  <li><b>Pick one or more tiles</b> below. Mix them for mixed practice, or take <b>Skill Check Prep</b> for a 10-question quiz and a study plan.</li>
+  <li><b>Typing symbols:</b> first letter capital, second letter lowercase (Co is cobalt, CO is carbon monoxide). Names can be any case, and British spellings like aluminium, sulphur and caesium count.</li>
+  <li><b>Where is it?</b> questions use the periodic table: tap an element, check what you tapped, then press <b>Check</b>.</li>
+  <li>Stuck? Use <b>Hint</b>, <b>Step by step</b> or <b>Show answer</b>. Missed elements go to your review list, and the game asks them more often.</li>
+  <li>Use the <b>CHEM 3A / CHEM 1A</b> switch at the top. CHEM 3A focuses on the first 20, the health-science (body) elements and common ions. CHEM 1A adds the rest of the main group and common transition metals.</li>
+ </ul></details>
+ <section class="chooser" aria-labelledby="pickTitle">
+  <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
+  <div class="cats" id="cats"></div>
+  <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Options <small>Tap to turn on or off.</small></h3><div class="chips" id="chips"></div></div>
+  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/trophy.webp" alt="" onerror="this.style.visibility='hidden'"><span><b>Skill Check Prep</b><small id="skillBlurb">10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+ </section>
 
-    <section class="grid">
-      <article class="card study">
-        <div class="settings">
-          <div class="control">
-            <label for="setSelect">Element Set</label>
-            <select id="setSelect">
-              <option value="core">First 20 Elements</option>
-              <option value="health">Health Science Essentials</option>
-              <option value="combined" selected>Combined Study Set</option>
-              <option value="missed">Missed Elements Only</option>
-            </select>
-          </div>
+ <main class="panel" id="play">
+  <div class="play-head"><h2 class="play-title" id="playTitle">Practice</h2><button type="button" id="skipBtn" class="btn">New question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+  <div class="empty" id="emptyBox"><span data-icon="arrow" aria-hidden="true"></span> Pick something above to get your first question.</div>
+  <section id="reportBox" class="example" hidden></section>
+  <div id="playArea" hidden>
+   <div class="quiz-bar" id="quizBar" hidden><span></span></div>
+   <div class="tags"><span class="tag" id="topicTag"></span><span class="tag" id="subTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
+   <section class="question" id="qbox"><div class="equation" id="equation"></div><div id="art"></div><p class="prompt" id="prompt"></p></section>
+   <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer"><span class="picked" id="picked" hidden></span><button type="button" class="btn primary" id="checkBtn">Check</button></div>
+   <div class="choices" id="choices" hidden></div>
+   <p class="typing-note" id="typingNote"></p>
+   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
+   <div class="guide" id="guide" hidden></div>
+   <div class="detail" id="hintBox" hidden></div>
+   <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
+   <div class="ptip" id="ptip"><span class="ico" data-icon="bulb" aria-hidden="true"></span><div><b class="lbl">Professor Tip</b><span id="ptipText"></span></div></div>
+  </div>
+  <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
+ </main>
 
-          <div class="control">
-            <label for="directionSelect">Question Style</label>
-            <select id="directionSelect">
-              <option value="mixed" selected>Mixed</option>
-              <option value="nameToSymbol">Name → Symbol</option>
-              <option value="symbolToName">Symbol → Name</option>
-            </select>
-          </div>
+ <section class="panel section" aria-labelledby="progressTitle">
+  <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Symbol Rookie</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sAcc">—</strong><small>Accuracy</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="badges" id="achGrid"></div>
+  <div class="section-foot"><span class="note-small" style="margin:0" id="seenLine">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. CHEM 3A and CHEM 1A progress are saved separately on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
+ </section>
 
-          <div class="control">
-            <label for="orderSelect">Question Order</label>
-            <select id="orderSelect">
-              <option value="random" selected>Random</option>
-              <option value="atomic">Atomic Number</option>
-            </select>
-          </div>
-        </div>
+ <section class="panel section" aria-labelledby="missTitle">
+  <div class="section-head"><h2 id="missTitle">Elements to review</h2><span id="missCount"></span></div>
+  <div class="miss-list" id="missList"></div>
+  <p class="note-small" id="missEmpty" style="margin-top:0">No missed elements yet.</p>
+  <div class="ex-actions" id="missActions" hidden><button type="button" class="btn" id="practiceMissedBtn"><span data-icon="loop" aria-hidden="true"></span>Practice my missed elements</button></div>
+ </section>
 
-        <div class="prompt-card">
-          <div class="question-type" id="questionType">Name → Symbol</div>
-          <div class="question" id="questionText">Oxygen</div>
-          <div class="atomic-line" id="atomicLine">Atomic number 8</div>
+ <section class="panel section" aria-labelledby="refTitle">
+  <div class="section-head"><h2 id="refTitle">Study reference</h2><span id="refSub">Tap a card to show or hide its name.</span></div>
+  <div class="legend" id="refLegend"></div>
+  <div class="ref-actions" id="refActions"></div>
+  <div class="element-grid" id="elementGrid"></div>
+ </section>
 
-          <div class="answer-row">
-            <input
-              id="answerInput"
-              type="text"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              aria-label="Answer"
-              placeholder="Type your answer..."
-            />
-            <button class="btn btn-primary" id="checkBtn">Check</button>
-          </div>
+ <details class="panel section" id="videoSection"><summary><span>Learn with Dr. Dan<small id="videoContext">Videos picked for the current question</small></span></summary>
+  <div class="video-body"><div class="lesson-layout"><div><div class="lesson-player"><iframe id="player" title="Dr. Dan video lesson" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="lesson-meta"><h3 id="lessonTitle"></h3><a id="lessonLink" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p class="note-small" style="margin-top:4px">If the video won’t play inside Canvas, use the YouTube link.</p></div></div><div class="video-list" id="videoList"></div></div>
+  <div class="chapter-links"><a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">More from ItsDrDan on YouTube ↗</a><a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener noreferrer">Dr. Dan’s Chemistry Study Hub ↗</a></div></div>
+ </details>
+ <p class="foot">ItsDrDan · Fresno City College · Practice only, nothing is graded</p>
+</div>
 
-          <div class="feedback" id="feedback" aria-live="polite">
-            <span>Type the matching element name or symbol.</span>
-            <span class="small">Symbols are case-sensitive: Co ≠ CO.</span>
-          </div>
+<dialog id="rulesDialog" aria-labelledby="rulesTitle"><div class="modal-head"><strong id="rulesTitle">Element Symbol Rules</strong><button type="button" class="close-btn" id="closeRules" aria-label="Close the rules">✕</button></div>
+ <div class="modal-body" id="rulesBody"></div></dialog>
 
-          <div class="card-actions">
-            <button class="btn btn-secondary" id="hintBtn">Hint</button>
-            <button class="btn btn-secondary" id="revealBtn">Reveal</button>
-            <button class="btn btn-teal" id="nextBtn">Next</button>
-          </div>
-        </div>
+<script>
+/* ===================== Element data ===================== */
+// ELEMENTS: the study list. questionbank/tools/build.js reads this global (z, symbol, name, core).
+// core = first 20, health = CHEM 3A health-science extension, gen = CHEM 1A additions (rest of the main group + common transition metals).
+const ELEMENTS = [
+  // First 20
+  {z:1,  symbol:"H",  name:"Hydrogen",  core:true},
+  {z:2,  symbol:"He", name:"Helium",    core:true},
+  {z:3,  symbol:"Li", name:"Lithium",   core:true},
+  {z:4,  symbol:"Be", name:"Beryllium", core:true},
+  {z:5,  symbol:"B",  name:"Boron",     core:true},
+  {z:6,  symbol:"C",  name:"Carbon",    core:true},
+  {z:7,  symbol:"N",  name:"Nitrogen",  core:true},
+  {z:8,  symbol:"O",  name:"Oxygen",    core:true},
+  {z:9,  symbol:"F",  name:"Fluorine",  core:true},
+  {z:10, symbol:"Ne", name:"Neon",      core:true},
+  {z:11, symbol:"Na", name:"Sodium",    core:true},
+  {z:12, symbol:"Mg", name:"Magnesium", core:true},
+  {z:13, symbol:"Al", name:"Aluminum",  core:true},
+  {z:14, symbol:"Si", name:"Silicon",   core:true},
+  {z:15, symbol:"P",  name:"Phosphorus",core:true},
+  {z:16, symbol:"S",  name:"Sulfur",    core:true},
+  {z:17, symbol:"Cl", name:"Chlorine",  core:true},
+  {z:18, symbol:"Ar", name:"Argon",     core:true},
+  {z:19, symbol:"K",  name:"Potassium", core:true},
+  {z:20, symbol:"Ca", name:"Calcium",   core:true},
 
-        <div class="stats">
-          <div class="stat"><strong id="correctStat">0</strong><span>Correct</span></div>
-          <div class="stat"><strong id="attemptStat">0</strong><span>Answered</span></div>
-          <div class="stat"><strong id="accuracyStat">—</strong><span>Accuracy</span></div>
-          <div class="stat"><strong id="streakStat">0</strong><span>Streak</span></div>
-        </div>
-      </article>
+  // Health-science / common chemistry extension
+  {z:22, symbol:"Ti", name:"Titanium",  health:true},
+  {z:24, symbol:"Cr", name:"Chromium",  health:true},
+  {z:25, symbol:"Mn", name:"Manganese", health:true},
+  {z:26, symbol:"Fe", name:"Iron",      health:true},
+  {z:27, symbol:"Co", name:"Cobalt",    health:true},
+  {z:28, symbol:"Ni", name:"Nickel",    health:true},
+  {z:29, symbol:"Cu", name:"Copper",    health:true},
+  {z:30, symbol:"Zn", name:"Zinc",      health:true},
+  {z:33, symbol:"As", name:"Arsenic",   health:true},
+  {z:34, symbol:"Se", name:"Selenium",  health:true},
+  {z:35, symbol:"Br", name:"Bromine",   health:true},
+  {z:47, symbol:"Ag", name:"Silver",    health:true},
+  {z:48, symbol:"Cd", name:"Cadmium",   health:true},
+  {z:53, symbol:"I",  name:"Iodine",    health:true},
+  {z:56, symbol:"Ba", name:"Barium",    health:true},
+  {z:78, symbol:"Pt", name:"Platinum",  health:true},
+  {z:79, symbol:"Au", name:"Gold",      health:true},
+  {z:80, symbol:"Hg", name:"Mercury",   health:true},
+  {z:82, symbol:"Pb", name:"Lead",      health:true},
 
-      <aside class="side">
-        <section class="card side-card">
-          <h2>Study Progress</h2>
-          <div class="progress-track" aria-hidden="true">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-copy" id="progressCopy">
-            Answer questions to build your mastery score.
-          </div>
-        </section>
+  // CHEM 1A additions: the rest of the main group (periods 1-7, no superheavy elements) + common transition metals
+  {z:21, symbol:"Sc", name:"Scandium",  gen:true},
+  {z:23, symbol:"V",  name:"Vanadium",  gen:true},
+  {z:31, symbol:"Ga", name:"Gallium",   gen:true},
+  {z:32, symbol:"Ge", name:"Germanium", gen:true},
+  {z:36, symbol:"Kr", name:"Krypton",   gen:true},
+  {z:37, symbol:"Rb", name:"Rubidium",  gen:true},
+  {z:38, symbol:"Sr", name:"Strontium", gen:true},
+  {z:42, symbol:"Mo", name:"Molybdenum",gen:true},
+  {z:46, symbol:"Pd", name:"Palladium", gen:true},
+  {z:49, symbol:"In", name:"Indium",    gen:true},
+  {z:50, symbol:"Sn", name:"Tin",       gen:true},
+  {z:51, symbol:"Sb", name:"Antimony",  gen:true},
+  {z:52, symbol:"Te", name:"Tellurium", gen:true},
+  {z:54, symbol:"Xe", name:"Xenon",     gen:true},
+  {z:55, symbol:"Cs", name:"Cesium",    gen:true},
+  {z:74, symbol:"W",  name:"Tungsten",  gen:true},
+  {z:81, symbol:"Tl", name:"Thallium",  gen:true},
+  {z:83, symbol:"Bi", name:"Bismuth",   gen:true},
+  {z:84, symbol:"Po", name:"Polonium",  gen:true},
+  {z:85, symbol:"At", name:"Astatine",  gen:true},
+  {z:86, symbol:"Rn", name:"Radon",     gen:true},
+  {z:87, symbol:"Fr", name:"Francium",  gen:true},
+  {z:88, symbol:"Ra", name:"Radium",    gen:true}
+];
+const CORE = ELEMENTS.filter(e => e.core);
+// "Health Science Essentials" intentionally includes several first-20 elements heavily used in chemistry/physiology.
+const HEALTH_SYMBOLS = new Set([
+  "H","C","N","O","F","Na","Mg","P","S","Cl","K","Ca",
+  "Ti","Cr","Mn","Fe","Co","Ni","Cu","Zn","As","Se","Br",
+  "Ag","Cd","I","Ba","Pt","Au","Hg","Pb"
+]);
+const HEALTH = ELEMENTS.filter(e => HEALTH_SYMBOLS.has(e.symbol));
+// Accepted alternate spellings (British / IUPAC)
+const NAME_ALT = { Aluminum: ['aluminium'], Sulfur: ['sulphur'], Cesium: ['caesium'] };
 
-        <section class="card side-card">
-          <h2>Elements to Review</h2>
-          <div class="missed-list" id="missedList"></div>
-          <div class="progress-copy" id="missedEmpty">No missed elements yet.</div>
-        </section>
+// The whole periodic table (for the clickable table and for "you typed Po, that's polonium" feedback)
+const PT_LIST = 'H Hydrogen,He Helium,Li Lithium,Be Beryllium,B Boron,C Carbon,N Nitrogen,O Oxygen,F Fluorine,Ne Neon,Na Sodium,Mg Magnesium,Al Aluminum,Si Silicon,P Phosphorus,S Sulfur,Cl Chlorine,Ar Argon,K Potassium,Ca Calcium,Sc Scandium,Ti Titanium,V Vanadium,Cr Chromium,Mn Manganese,Fe Iron,Co Cobalt,Ni Nickel,Cu Copper,Zn Zinc,Ga Gallium,Ge Germanium,As Arsenic,Se Selenium,Br Bromine,Kr Krypton,Rb Rubidium,Sr Strontium,Y Yttrium,Zr Zirconium,Nb Niobium,Mo Molybdenum,Tc Technetium,Ru Ruthenium,Rh Rhodium,Pd Palladium,Ag Silver,Cd Cadmium,In Indium,Sn Tin,Sb Antimony,Te Tellurium,I Iodine,Xe Xenon,Cs Cesium,Ba Barium,La Lanthanum,Ce Cerium,Pr Praseodymium,Nd Neodymium,Pm Promethium,Sm Samarium,Eu Europium,Gd Gadolinium,Tb Terbium,Dy Dysprosium,Ho Holmium,Er Erbium,Tm Thulium,Yb Ytterbium,Lu Lutetium,Hf Hafnium,Ta Tantalum,W Tungsten,Re Rhenium,Os Osmium,Ir Iridium,Pt Platinum,Au Gold,Hg Mercury,Tl Thallium,Pb Lead,Bi Bismuth,Po Polonium,At Astatine,Rn Radon,Fr Francium,Ra Radium,Ac Actinium,Th Thorium,Pa Protactinium,U Uranium,Np Neptunium,Pu Plutonium,Am Americium,Cm Curium,Bk Berkelium,Cf Californium,Es Einsteinium,Fm Fermium,Md Mendelevium,No Nobelium,Lr Lawrencium,Rf Rutherfordium,Db Dubnium,Sg Seaborgium,Bh Bohrium,Hs Hassium,Mt Meitnerium,Ds Darmstadtium,Rg Roentgenium,Cn Copernicium,Nh Nihonium,Fl Flerovium,Mc Moscovium,Lv Livermorium,Ts Tennessine,Og Oganesson'.split(',').map((x, i) => { const [s, n] = x.split(' '); return { z: i + 1, symbol: s, name: n }; });
+function posOf(z) {                       // {g, p} or null for the f-block (shown below the main table on most charts)
+  if (z === 1) return { g: 1, p: 1 }; if (z === 2) return { g: 18, p: 1 };
+  if (z <= 18) { const p = z <= 10 ? 2 : 3, i = z - (p === 2 ? 3 : 11); return { g: i < 2 ? i + 1 : i + 11, p }; }
+  if (z <= 54) { const p = z <= 36 ? 4 : 5; return { g: z - (p === 4 ? 18 : 36), p }; }
+  if (z <= 86) { if (z <= 56) return { g: z - 54, p: 6 }; if (z === 57) return { g: 3, p: 6 }; if (z <= 71) return null; return { g: z - 68, p: 6 }; }
+  if (z <= 88) return { g: z - 86, p: 7 }; if (z === 89) return { g: 3, p: 7 }; if (z <= 103) return null; return { g: z - 100, p: 7 };
+}
+const BY_SYM = {}, BY_Z = {};
+PT_LIST.forEach(e => { const ps = posOf(e.z); const o = { ...e, g: ps ? ps.g : null, p: ps ? ps.p : null }; BY_SYM[e.symbol] = o; BY_Z[e.z] = o; });
+const info = s => BY_SYM[s];
+const nameOf = s => (BY_SYM[s] ? BY_SYM[s].name : s);
+const SYM_CI = {}; PT_LIST.forEach(e => { SYM_CI[e.symbol.toLowerCase()] = e.symbol; });
+const NAME_TO_SYM = {}; PT_LIST.forEach(e => { NAME_TO_SYM[e.name.toLowerCase()] = e.symbol; }); Object.entries(NAME_ALT).forEach(([n, alts]) => alts.forEach(a => { NAME_TO_SYM[a] = info(Object.values(BY_SYM).find(x => x.name === n).symbol).symbol; }));
 
-        <section class="card side-card tip">
-          <h2>Symbol Tip</h2>
-          <p>
-            The first letter of an element symbol is always capitalized. If there is a second letter, it is lowercase:
-            <strong>Fe</strong>, <strong>Ag</strong>, <strong>Na</strong>. This tool checks symbol capitalization.
-          </p>
-        </section>
+// Metals, nonmetals, metalloids (OpenStax Chemistry 2e, Fig. 2.26). Po and At are borderline, so the game never asks about them.
+const NONMETALS = new Set('H He C N O F Ne P S Cl Ar Se Br Kr I Xe Rn'.split(' '));
+const METALLOIDS = new Set('B Si Ge As Sb Te'.split(' '));
+const TYPE_UNCLEAR = new Set(['Po', 'At']);
+const typeOf = s => (METALLOIDS.has(s) ? 'metalloid' : NONMETALS.has(s) ? 'nonmetal' : 'metal');
+// Families (group names)
+const FAMILIES = {
+  alkali: { name: 'Alkali metals', one: 'an alkali metal', groups: [1] },
+  alkaline: { name: 'Alkaline earth metals', one: 'an alkaline earth metal', groups: [2] },
+  transition: { name: 'Transition metals', one: 'a transition metal', groups: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  pnictogen: { name: 'Pnictogens', one: 'a pnictogen', groups: [15], only1A: true },
+  chalcogen: { name: 'Chalcogens', one: 'a chalcogen', groups: [16], only1A: true },
+  halogen: { name: 'Halogens', one: 'a halogen', groups: [17] },
+  noble: { name: 'Noble gases', one: 'a noble gas', groups: [18] }
+};
+function familyOf(s) {
+  const e = info(s); if (!e || !e.g) return null; const g = e.g;
+  if (g === 1) return s === 'H' ? null : 'alkali'; if (g === 2) return 'alkaline';
+  if (g >= 3 && g <= 12) return (e.z >= 57 && e.z <= 71) || e.z >= 89 ? null : 'transition';
+  return { 15: 'pnictogen', 16: 'chalcogen', 17: 'halogen', 18: 'noble' }[g] || null;
+}
+const groupsText = f => (f.groups.length > 1 ? `groups ${f.groups[0]}–${f.groups[f.groups.length - 1]}` : `group ${f.groups[0]}`);
+const aLabel = g => (g <= 2 ? g + 'A' : g >= 13 ? (g - 10) + 'A' : '');
+const groupName = g => `group ${g}${aLabel(g) ? ` (${aLabel(g)})` : ''}`;
 
-        <section class="card side-card">
-          <h2>Reset Session</h2>
-          <div class="progress-copy" style="margin-bottom:10px">
-            Your session stats and missed-element list are saved in this browser.
-          </div>
-          <button class="btn btn-secondary" id="resetBtn">Reset Progress</button>
-        </section>
-      </aside>
-    </section>
+// Tricky symbols: not from the English name
+const TRICKY = ['Na', 'K', 'Fe', 'Cu', 'Ag', 'Sn', 'Sb', 'Au', 'Hg', 'Pb', 'W'];
+const LATIN = {
+  Na: { word: 'natrium', lang: 'Latin', story: 'from natron, a sodium salt the ancient Egyptians used' },
+  K: { word: 'kalium', lang: 'Latin', story: 'from the Arabic word for plant ashes, which are rich in potassium' },
+  Fe: { word: 'ferrum', lang: 'Latin', story: 'think “ferrous” and “ferric” iron' },
+  Cu: { word: 'cuprum', lang: 'Latin', story: 'from the island of Cyprus, an ancient copper source; think “cupric”' },
+  Ag: { word: 'argentum', lang: 'Latin', story: 'Argentina was named for silver' },
+  Sn: { word: 'stannum', lang: 'Latin', story: 'think “stannous fluoride” in toothpaste' },
+  Sb: { word: 'stibium', lang: 'Latin', story: 'an old name for the mineral stibnite' },
+  Au: { word: 'aurum', lang: 'Latin', story: 'means “shining dawn”' },
+  Hg: { word: 'hydrargyrum', lang: 'Latin', story: 'from Greek words meaning “water silver,” a shiny liquid metal' },
+  Pb: { word: 'plumbum', lang: 'Latin', story: 'Roman pipes were lead, which is where “plumbing” comes from' },
+  W: { word: 'wolfram', lang: 'German', story: 'from the mineral wolframite. This one is German, not Latin' }
+};
+// Look-alike symbols students mix up
+const LOOK = [['S', 'Si', 'Sn', 'Sb', 'Se', 'Sc', 'Sr', 'Na'], ['P', 'K', 'Po', 'Pt', 'Pb', 'Pd'], ['C', 'Ca', 'Cl', 'Co', 'Cu', 'Cr', 'Cs', 'Cd'], ['Mg', 'Mn', 'Mo'], ['N', 'Na', 'Ne', 'Ni'], ['Ag', 'Au', 'Ar', 'Al', 'As', 'At'], ['F', 'Fe', 'Fr'], ['B', 'Be', 'Ba', 'Br', 'Bi'], ['I', 'Ir', 'In'], ['Ti', 'Tl', 'Sn', 'Te', 'W'], ['Hg', 'H', 'He'], ['Ga', 'Ge', 'Gd']];
+const lookAlike = (a, b) => a !== b && (a[0] === b[0] || LOOK.some(g => g.includes(a) && g.includes(b)));
+const LOOK_TIPS = {
+  S: 'S alone is sulfur. Si is silicon, Sn is tin, Sb is antimony.', Si: 'Si is silicon. S alone is sulfur, Sn is tin.', Sn: 'Sn is tin (stannum). S is sulfur and Si is silicon.',
+  P: 'P alone is phosphorus. Potassium is K, and Po is polonium.', K: 'K is potassium (kalium). P is phosphorus and Po is polonium.',
+  Mg: 'Mg is magnesium, Mn is manganese. Think: maGnesium has the G.', Mn: 'Mn is manganese, Mg is magnesium. Think: maNganese has the N.',
+  Co: 'Co is cobalt, Cu is copper (cuprum).', Cu: 'Cu is copper (cuprum), Co is cobalt.', Ag: 'Ag is silver (argentum), Au is gold (aurum).', Au: 'Au is gold (aurum), Ag is silver (argentum).'
+};
 
-    <section class="card reference">
-      <div class="ref-head">
-        <div>
-          <h2>Study Reference</h2>
-          <p>First 20 elements plus a focused set of commonly encountered elements in health-science chemistry.</p>
-        </div>
-        <div class="legend">
-          <span><i class="dot core"></i> First 20</span>
-          <span><i class="dot extra"></i> Health-science extension</span>
-        </div>
-      </div>
+// Common ions (predictable charges). Transition metals here have only one common charge.
+const ION_CHARGE = { Li: 1, Na: 1, K: 1, Rb: 1, Cs: 1, Mg: 2, Ca: 2, Sr: 2, Ba: 2, Al: 3, N: -3, P: -3, O: -2, S: -2, Se: -2, F: -1, Cl: -1, Br: -1, I: -1, Zn: 2, Ag: 1, Cd: 2 };
+const ANION_NAME = { N: 'nitride', P: 'phosphide', O: 'oxide', S: 'sulfide', Se: 'selenide', F: 'fluoride', Cl: 'chloride', Br: 'bromide', I: 'iodide' };
+const ELECTROLYTES = new Set(['Na', 'K', 'Ca', 'Mg', 'Cl']);
+const chg = c => (Math.abs(c) === 1 ? '' : Math.abs(c)) + (c > 0 ? '+' : '−');
+const ionHTML = (s, c) => `${s}<sup>${chg(c)}</sup>`;
 
-      <div class="element-grid" id="elementGrid"></div>
+/* ===================== helpers ===================== */
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const chance = p => Math.random() < p;
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const lname = e => e.name.toLowerCase();
+function editDist(a, b) {                 // optimal string alignment distance (counts a swap of two letters as 1)
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]); for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+  }
+  return d[a.length][b.length];
+}
+function courseScope(course) { return course === '3A' ? ELEMENTS.filter(e => e.core || e.health) : ELEMENTS.slice(); }
 
-      <div class="ref-actions">
-        <button class="btn btn-secondary" id="hideNamesBtn">Hide Names</button>
-        <button class="btn btn-secondary" id="showCoreBtn">Show First 20</button>
-        <button class="btn btn-secondary" id="showHealthBtn">Show Health Set</button>
-        <button class="btn btn-secondary" id="showAllBtn">Show All</button>
-      </div>
-    </section>
+/* ===================== checking typed answers ===================== */
+// Element symbols are case-sensitive. Returns {ok, slip, note}
+function checkSymbol(raw, el) {
+  const t = String(raw).trim().replace(/\s+/g, '').replace(/\.$/, '');
+  const S = el.symbol, tricky = TRICKY.includes(S);
+  if (t === S) return { ok: true };
+  if (!t) return { ok: false, slip: 'other', note: 'Type a symbol.' };
+  if (t.toLowerCase() === S.toLowerCase()) {
+    let note;
+    if (t === 'CO' && S === 'Co') note = '<b>CO</b> is carbon monoxide, a compound; <b>Co</b> is cobalt.';
+    else if (t.length === 2 && t[1] === t[1].toUpperCase() && info(t[0]) && info(t[1])) note = `<b>${t}</b> would mean two elements, ${t[0]} (${nameOf(t[0]).toLowerCase()}) and ${t[1]} (${nameOf(t[1]).toLowerCase()}), like a compound. The second letter is always lowercase: <b>${S}</b>.`;
+    else if (t.length === 2 && t[1] === t[1].toUpperCase()) note = `The second letter of a symbol is always lowercase: <b>${S}</b>, not ${esc(t)}.`;
+    else note = `Element symbols always start with a capital letter: <b>${S}</b>, not ${esc(t)}.`;
+    return { ok: false, slip: 'capitalization', note };
+  }
+  if (t.length >= 3 && NAME_TO_SYM[t.toLowerCase()]) {
+    const sym = NAME_TO_SYM[t.toLowerCase()];
+    return sym === S ? { ok: false, slip: 'name-not-symbol', note: 'That’s the name. Type the 1- or 2-letter symbol.' } : { ok: false, slip: 'name-not-symbol', note: `${nameOf(sym)} is a name (and a different element). Type the symbol for ${lname(el)}.` };
+  }
+  const real = info(t) ? t : null, ci = SYM_CI[t.toLowerCase()] || null;
+  const capsNote = !real && ci ? ` (Also watch the capitals: ${ci}.)` : '';
+  if (tricky && t[0].toLowerCase() === el.name[0].toLowerCase()) {
+    const L = LATIN[S], which = real || ci;
+    return { ok: false, slip: 'latin-symbol', note: `${el.name}’s symbol doesn’t come from its English name. It comes from the ${L.lang} name <i>${L.word}</i>, so it’s <b>${S}</b>.${which ? ` (${which} is ${nameOf(which).toLowerCase()}.)` : ''}` };
+  }
+  const other = real || ci;
+  if (other && other !== S) {
+    const tip = LOOK_TIPS[S] || LOOK_TIPS[other] || '';
+    if (lookAlike(other, S)) return { ok: false, slip: 'look-alike', note: `${other} is ${nameOf(other).toLowerCase()}, a look-alike. ${LOOK_TIPS[S] || `${el.name} is <b>${S}</b>. ${tip}`}${capsNote}` };
+    return { ok: false, slip: 'other', note: `${other} is ${nameOf(other).toLowerCase()}, not ${lname(el)}.${capsNote}` };
+  }
+  if (/^[a-z]{3,}$/i.test(t)) return { ok: false, slip: 'other', note: 'A symbol is one capital letter, sometimes followed by one lowercase letter.' };
+  return { ok: false, slip: 'other', note: `${esc(t)} isn’t an element symbol. The symbol for ${lname(el)} starts with ${S[0]}.` };
+}
+// Element names: any case, common spellings, one-letter typos allowed
+function checkName(raw, el) {
+  const t = String(raw).trim().toLowerCase().replace(/[\s\-.']/g, '');
+  const want = [lname(el), ...(NAME_ALT[el.name] || [])];
+  if (!t) return { ok: false, slip: 'other', note: 'Type a name.' };
+  if (want.includes(t)) return { ok: true, note: t !== lname(el) ? `(${el.name} in the US; ${t} is also correct.)` : '' };
+  const S = el.symbol, tricky = TRICKY.includes(S);
+  if (SYM_CI[t] && t.length <= 2) return { ok: false, slip: 'symbol-not-name', note: `Type the element’s <b>name</b>, like iron, not a symbol.` };
+  const oSym = NAME_TO_SYM[t];
+  if (oSym && oSym !== S) {
+    const o = info(oSym);
+    if (tricky && oSym[0] === S[0]) return { ok: false, slip: 'latin-symbol', note: `${o.name} is ${oSym}. <b>${S}</b> comes from the ${LATIN[S].lang} name <i>${LATIN[S].word}</i>: it’s <b>${lname(el)}</b>.` };
+    if (lookAlike(oSym, S)) return { ok: false, slip: 'look-alike', note: `${o.name} is ${oSym}, a look-alike. <b>${S}</b> is ${lname(el)}. ${LOOK_TIPS[S] || ''}` };
+    return { ok: false, slip: 'other', note: `${o.name} is ${oSym}. <b>${S}</b> is a different element.` };
+  }
+  const d = editDist(t, lname(el));
+  if (d <= 1 && t.length >= 4) return { ok: true, note: `Watch the spelling: <b>${el.name}</b>.` };
+  if (d <= 3) return { ok: false, slip: 'spelling', note: 'Close! Check the spelling.' };
+  return { ok: false, slip: 'other', note: '' };
+}
+const originNote = el => (TRICKY.includes(el.symbol) ? ` The symbol comes from the ${LATIN[el.symbol].lang} name <i>${LATIN[el.symbol].word}</i> (${LATIN[el.symbol].story}).` : '');
 
-    <p class="footer-note">
-      Standalone HTML • GitHub Pages ready • No API key required
-      <br>This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span>
-    </p>
-  </main>
+/* ===================== question generators ===================== */
+const TOPICS = {
+  n2s: { label: 'Name → Symbol', video: 'alphabet' },
+  s2n: { label: 'Symbol → Name', video: 'alphabet' },
+  latin: { label: 'Tricky: name → symbol', video: 'alphabet' },
+  latinback: { label: 'Tricky: symbol → name', video: 'alphabet' },
+  latinorigin: { label: 'Where the symbol comes from', video: 'alphabet' },
+  locate: { label: 'Find it on the table', video: 'periodic' },
+  family: { label: 'Family names', video: 'organized' },
+  mtype: { label: 'Metal, nonmetal, or metalloid', video: 'organized' },
+  gp: { label: 'Group and period', video: 'periodic' },
+  ions: { label: 'Common ions', video: 'ions' }
+};
+const CATEGORIES = [
+  { id: 'n2s', title: 'Name → Symbol', blurb: 'See sodium, type Na.', art: '<span class="mini-tile mint" style="font-size:1rem;width:auto;padding:0 8px">Sodium</span><span class="arrow">→</span><span class="mini-tile"><small>11</small>Na</span>', topics: ['n2s'] },
+  { id: 's2n', title: 'Symbol → Name', blurb: 'See Fe, type iron.', art: '<span class="mini-tile"><small>26</small>Fe</span><span class="arrow">→</span><span class="mini-tile mint" style="font-size:1rem;width:auto;padding:0 8px">Iron</span>', topics: ['s2n'] },
+  { id: 'tricky', title: 'Tricky Symbols', blurb: 'Na, K, Fe, Au, Pb… from Latin.', art: '<span class="mini-tile gold"><small>79</small>Au</span><span class="mini-tile gold"><small>82</small>Pb</span>', topics: ['latin', 'latinback', 'latinorigin'] },
+  { id: 'where', title: 'Where is it?', blurb: 'Groups, periods, families, ions.', art: '', topics: ['locate', 'family', 'mtype', 'gp', 'ions'] }
+];
+function miniPT() {   // tiny periodic table drawing for the "Where is it?" tile
+  let h = '<span class="mini-pt" aria-hidden="true">';
+  for (let p = 1; p <= 6; p++) for (let g = 1; g <= 18; g++) {
+    const on = p === 1 ? g === 1 || g === 18 : p <= 3 ? g <= 2 || g >= 13 : true;
+    h += on ? `<i class="${p === 3 && g === 17 ? 'x' : g <= 2 ? 's' : g >= 13 ? 'p' : 'd'}" style="grid-column:${g};grid-row:${p}"></i>` : '';
+  }
+  return h + '</span>';
+}
+CATEGORIES[3].art = miniPT();
 
-  <div class="toast" id="toast"></div>
-
-  <script>
-    const ELEMENTS = [
-      // First 20
-      {z:1,  symbol:"H",  name:"Hydrogen",  core:true},
-      {z:2,  symbol:"He", name:"Helium",    core:true},
-      {z:3,  symbol:"Li", name:"Lithium",   core:true},
-      {z:4,  symbol:"Be", name:"Beryllium", core:true},
-      {z:5,  symbol:"B",  name:"Boron",     core:true},
-      {z:6,  symbol:"C",  name:"Carbon",    core:true},
-      {z:7,  symbol:"N",  name:"Nitrogen",  core:true},
-      {z:8,  symbol:"O",  name:"Oxygen",    core:true},
-      {z:9,  symbol:"F",  name:"Fluorine",  core:true},
-      {z:10, symbol:"Ne", name:"Neon",      core:true},
-      {z:11, symbol:"Na", name:"Sodium",    core:true},
-      {z:12, symbol:"Mg", name:"Magnesium", core:true},
-      {z:13, symbol:"Al", name:"Aluminum",  core:true},
-      {z:14, symbol:"Si", name:"Silicon",   core:true},
-      {z:15, symbol:"P",  name:"Phosphorus",core:true},
-      {z:16, symbol:"S",  name:"Sulfur",    core:true},
-      {z:17, symbol:"Cl", name:"Chlorine",  core:true},
-      {z:18, symbol:"Ar", name:"Argon",     core:true},
-      {z:19, symbol:"K",  name:"Potassium", core:true},
-      {z:20, symbol:"Ca", name:"Calcium",   core:true},
-
-      // Health-science / common chemistry extension
-      {z:22, symbol:"Ti", name:"Titanium",  health:true},
-      {z:24, symbol:"Cr", name:"Chromium",  health:true},
-      {z:25, symbol:"Mn", name:"Manganese", health:true},
-      {z:26, symbol:"Fe", name:"Iron",      health:true},
-      {z:27, symbol:"Co", name:"Cobalt",    health:true},
-      {z:28, symbol:"Ni", name:"Nickel",    health:true},
-      {z:29, symbol:"Cu", name:"Copper",    health:true},
-      {z:30, symbol:"Zn", name:"Zinc",      health:true},
-      {z:33, symbol:"As", name:"Arsenic",   health:true},
-      {z:34, symbol:"Se", name:"Selenium",  health:true},
-      {z:35, symbol:"Br", name:"Bromine",   health:true},
-      {z:47, symbol:"Ag", name:"Silver",    health:true},
-      {z:48, symbol:"Cd", name:"Cadmium",   health:true},
-      {z:53, symbol:"I",  name:"Iodine",    health:true},
-      {z:56, symbol:"Ba", name:"Barium",    health:true},
-      {z:78, symbol:"Pt", name:"Platinum",  health:true},
-      {z:79, symbol:"Au", name:"Gold",      health:true},
-      {z:80, symbol:"Hg", name:"Mercury",   health:true},
-      {z:82, symbol:"Pb", name:"Lead",      health:true}
-    ];
-
-    const CORE = ELEMENTS.filter(e => e.core);
-    // "Health Science Essentials" intentionally includes several first-20 elements heavily used in chemistry/physiology.
-    const HEALTH_SYMBOLS = new Set([
-      "H","C","N","O","F","Na","Mg","P","S","Cl","K","Ca",
-      "Ti","Cr","Mn","Fe","Co","Ni","Cu","Zn","As","Se","Br",
-      "Ag","Cd","I","Ba","Pt","Au","Hg","Pb"
-    ]);
-    const HEALTH = ELEMENTS.filter(e => HEALTH_SYMBOLS.has(e.symbol));
-
-    const els = {
-      setSelect: document.getElementById("setSelect"),
-      directionSelect: document.getElementById("directionSelect"),
-      orderSelect: document.getElementById("orderSelect"),
-      questionType: document.getElementById("questionType"),
-      questionText: document.getElementById("questionText"),
-      atomicLine: document.getElementById("atomicLine"),
-      answerInput: document.getElementById("answerInput"),
-      feedback: document.getElementById("feedback"),
-      checkBtn: document.getElementById("checkBtn"),
-      hintBtn: document.getElementById("hintBtn"),
-      revealBtn: document.getElementById("revealBtn"),
-      nextBtn: document.getElementById("nextBtn"),
-      newQuestionTop: document.getElementById("newQuestionTop"),
-      focusMissedTop: document.getElementById("focusMissedTop"),
-      correctStat: document.getElementById("correctStat"),
-      attemptStat: document.getElementById("attemptStat"),
-      accuracyStat: document.getElementById("accuracyStat"),
-      streakStat: document.getElementById("streakStat"),
-      progressFill: document.getElementById("progressFill"),
-      progressCopy: document.getElementById("progressCopy"),
-      missedList: document.getElementById("missedList"),
-      missedEmpty: document.getElementById("missedEmpty"),
-      resetBtn: document.getElementById("resetBtn"),
-      elementGrid: document.getElementById("elementGrid"),
-      hideNamesBtn: document.getElementById("hideNamesBtn"),
-      showCoreBtn: document.getElementById("showCoreBtn"),
-      showHealthBtn: document.getElementById("showHealthBtn"),
-      showAllBtn: document.getElementById("showAllBtn"),
-      toast: document.getElementById("toast")
-    };
-
-    let state = loadState();
-    let current = null;
-    let currentDirection = "nameToSymbol";
-    let answeredCurrent = false;
-    let revealedCurrent = false;
-    let atomicIndex = 0;
-    let lastSymbol = "";
-    let referenceMode = "all";
-    let namesHidden = true;
-
-    function defaultState(){
-      return {
-        correct:0,
-        attempts:0,
-        streak:0,
-        bestStreak:0,
-        missed:{},
-        seen:{}
-      };
+// element pools
+const SETS = {
+  '3A': [['combined', 'First 20 + health set'], ['core', 'First 20'], ['health', 'Health-science set'], ['missed', 'My missed elements']],
+  '1A': [['all1A', 'All 1A elements'], ['core', 'First 20'], ['main', 'Main group'], ['tm', 'Transition metals'], ['health', 'Health-science set'], ['missed', 'My missed elements']]
+};
+function setPool(id, course) {
+  const scope = courseScope(course);
+  if (id === 'core') return CORE;
+  if (id === 'health') return HEALTH;
+  if (id === 'main') return scope.filter(e => { const g = info(e.symbol).g; return g <= 2 || g >= 13; });
+  if (id === 'tm') return scope.filter(e => { const g = info(e.symbol).g; return g >= 3 && g <= 12; });
+  if (id === 'missed') { const m = scope.filter(e => (P && P.missed[e.symbol]) > 0); return m.length ? m : scope; }
+  return scope;   // combined (3A) / all1A
+}
+let lastSym = '';
+function pickEl(o, topic) {
+  if (o.el) return o.el;
+  const course = o.course || '1A';
+  let pool;
+  if (topic === 'latin' || topic === 'latinback' || topic === 'latinorigin') pool = ELEMENTS.filter(e => TRICKY.includes(e.symbol));
+  else if (o.quiz || typeof state === 'undefined' || !['n2s', 's2n', 'locate'].includes(topic)) pool = courseScope(course);
+  else pool = setPool(state.setId, course);
+  if (o.filter) { const f = pool.filter(o.filter); pool = f.length ? f : courseScope(course).filter(o.filter); }
+  if (!pool.length) pool = courseScope(course);
+  if (!o.quiz && typeof state !== 'undefined' && state.ordered && (topic === 'n2s' || topic === 's2n')) {
+    const sorted = [...pool].sort((a, b) => a.z - b.z), key = state.setId;
+    const i = (state.orderIdx[key] || 0) % sorted.length; state.orderIdx[key] = i + 1; return sorted[i];
+  }
+  let choices = pool.length > 1 ? pool.filter(e => e.symbol !== lastSym) : pool;
+  const w = choices.map(e => 1 + 2 * Math.min(3, (P && P.missed[e.symbol]) || 0));
+  let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < choices.length; i++) { r -= w[i]; if (r <= 0) { lastSym = choices[i].symbol; return choices[i]; } }
+  lastSym = choices[0].symbol; return choices[0];
+}
+const capsTip = el => (el.symbol.length === 2 ? `The first letter of an element symbol is always capitalized. If there is a second letter, it is lowercase: <b>Fe</b>, <b>Ag</b>, <b>Na</b>. This game checks symbol capitalization, so <b>${el.symbol}</b> counts but ${el.symbol.toUpperCase()} does not.` : `The first letter of an element symbol is always capitalized. If there is a second letter, it is lowercase: <b>Fe</b>, <b>Ag</b>, <b>Na</b>. This game checks symbol capitalization.`);
+const latinTip = el => `<b>${el.symbol}</b> comes from <i>${LATIN[el.symbol].word}</i> (${LATIN[el.symbol].story}). Eleven common symbols don’t match their English names: Na, K, Fe, Cu, Ag, Sn, Sb, Au, Hg, Pb and W. Learn these as a set.`;
+function letterChoices(right, extra, upper) {
+  const set = new Set([right]); extra.forEach(c => { if (set.size < 4 && c) set.add(c); });
+  const abc = upper ? 'ABCDEFGHIKLMNOPRSTUZ' : 'abcdeghilmnorstu'; while (set.size < 4) set.add(pick([...abc]));
+  return shuffle([...set]);
+}
+function stepsN2S(el) {
+  const S = el.symbol, tricky = TRICKY.includes(S), L = LATIN[S], first = S[0], eng = el.name[0].toUpperCase();
+  const steps = [{ ask: `Does the symbol for ${lname(el)} come from its English name?`, choices: [{ html: 'Yes, from the English name', ok: !tricky, why: `Not this one. ${el.name} is one of the tricky symbols.` }, { html: 'No, from another language', ok: tricky, why: `${el.name} is a regular one: its symbol uses letters from “${el.name}.”` }], why: tricky ? `It comes from the ${L.lang} name <i>${L.word}</i>.` : `Its symbol uses letters from “${el.name}.”` }];
+  const src = tricky ? L.word : el.name;
+  steps.push({ ask: 'What is the first letter? (It is always a capital.)', choices: letterChoices(first, [eng, src[1] && src[1].toUpperCase(), src[2] && src[2].toUpperCase()], true).map(c => ({ html: c, ok: c === first, why: tricky && c === eng ? `That’s the English first letter, but this symbol comes from <i>${L.word}</i>.` : 'Not that one. Try again.' })), why: `It starts with <b>${first}</b>${tricky ? ` (from <i>${L.word}</i>)` : ''}.` });
+  if (S.length === 2) {
+    const sec = S[1], letters = [...new Set(src.toLowerCase().slice(1).replace(/[^a-z]/g, ''))].filter(c => c !== sec);
+    const ch = letterChoices(sec, shuffle(letters).slice(0, 2), false); ch[ch.indexOf(pick(ch.filter(c => c !== sec)))] = sec.toUpperCase();
+    steps.push({ ask: 'What is the second letter?', choices: shuffle(ch).map(c => ({ html: c, ok: c === sec, why: c === sec.toUpperCase() ? 'Right letter, but a second letter is always lowercase.' : 'Not that one. Try again.' })), why: `The second letter is a lowercase <b>${sec}</b>.` });
+  }
+  steps.push({ final: true, ask: 'Now type the whole symbol in the box: capital first letter' + (S.length === 2 ? ', lowercase second.' : '.') });
+  return steps;
+}
+function stepsS2N(el) {
+  const S = el.symbol, tricky = TRICKY.includes(S), L = LATIN[S];
+  const others = shuffle(courseScope('1A').filter(e => e.symbol !== S && e.symbol[0] === S[0])).slice(0, 2);
+  const steps = [{ ask: `Does <b>${S}</b> come from the element’s English name?`, choices: [{ html: 'Yes, English', ok: !tricky, why: `Not this one. ${S} is one of the tricky symbols.` }, { html: 'No, another language', ok: tricky, why: `${S} is a regular one: it’s the start of the English name.` }], why: tricky ? `It comes from the ${L.lang} name <i>${L.word}</i>.` : `It’s from the English name.` }];
+  const first = el.name[0], fl = letterChoices(first, [S[0], ...others.map(e => e.name[0])], true);
+  steps.push({ ask: 'The English name starts with which letter?', choices: fl.map(c => ({ html: c, ok: c === first, why: tricky && c === S[0] ? `That’s the first letter of <i>${L.word}</i>. The English name is different.` : 'Not that one. Try again.' })), why: `It starts with <b>${first}</b> and has ${el.name.length} letters.` });
+  steps.push({ final: true, ask: 'Now type the element name in the box.' });
+  return steps;
+}
+function genN2S(o = {}) {
+  const topic = o.topic || 'n2s', el = pickEl(o, topic), len = el.symbol.length, tricky = TRICKY.includes(el.symbol);
+  return {
+    topic, kind: 'text', el, tag: tricky && topic === 'n2s' ? 'Tricky symbol' : '',
+    eq: `${el.name}<span class="sub">Atomic number ${el.z}</span>`, prompt: `Type the symbol for <b>${el.name}</b>.`, placeholder: 'Example: Fe',
+    answer: el.symbol, explain: `${el.name} = ${el.symbol}`,
+    hint: `The symbol starts with <strong>${el.symbol[0]}</strong> and has ${len} letter${len === 1 ? '' : 's'}.` + (tricky ? ' It does not come from the English name.' : ''),
+    solution: `${el.name} = <b>${el.symbol}</b>.${originNote(el)}`,
+    tip: tricky ? latinTip(el) : capsTip(el), steps: stepsN2S(el), check: raw => checkSymbol(raw, el)
+  };
+}
+function genS2N(o = {}) {
+  const topic = o.topic || 's2n', el = pickEl(o, topic), tricky = TRICKY.includes(el.symbol);
+  return {
+    topic, kind: 'text', el, tag: tricky && topic === 's2n' ? 'Tricky symbol' : '',
+    eq: `${el.symbol}<span class="sub">Atomic number ${el.z}</span>`, prompt: `Type the element name for <b>${el.symbol}</b>.`, placeholder: 'Example: Iron',
+    answer: el.name, accept: NAME_ALT[el.name] || [], explain: `${el.name} = ${el.symbol}`,
+    hint: `The name starts with <strong>${el.name[0]}</strong> and has ${el.name.length} letters.`,
+    solution: `<b>${el.symbol}</b> = ${el.name}.${originNote(el)}${NAME_ALT[el.name] ? ` The spelling ${NAME_ALT[el.name][0]} is also correct.` : ''}`,
+    tip: tricky ? latinTip(el) : 'Element-name capitalization does not matter here, but spelling does. A one-letter typo is allowed.', steps: stepsS2N(el), check: raw => checkName(raw, el)
+  };
+}
+function genLatinOrigin(o = {}) {
+  const el = pickEl(o, 'latinorigin'), S = el.symbol, L = LATIN[S], others = shuffle(TRICKY.filter(s => s !== S)).slice(0, 3);
+  if (o.variant === 'word' || (!o.variant && chance(0.5))) {
+    const choices = shuffle([S, ...others]).map(s => ({ html: `<i>${LATIN[s].word}</i>`, ok: s === S, slip: 'latin-symbol', why: `<i>${LATIN[s].word}</i> gives the symbol ${s} (${nameOf(s).toLowerCase()}).` }));
+    return { topic: 'latinorigin', kind: 'choice', el, eq: `${S}<span class="sub">${el.name}</span>`, prompt: `The symbol <b>${S}</b> for ${lname(el)} comes from which name?`, choices, answer: `<i>${L.word}</i>`, answerText: L.word,
+      hint: `Look for a word that starts with ${S[0]}${S.length > 1 ? ' and contains ' + S[1] : ''}.`, solution: `<b>${S}</b> comes from the ${L.lang} name <i>${L.word}</i>: ${L.story}.`, tip: latinTip(el) };
+  }
+  const choices = shuffle([S, ...others]).map(s => ({ html: `${nameOf(s)} (${s})`, ok: s === S, slip: 'latin-symbol', why: `${nameOf(s)}’s symbol ${s} comes from <i>${LATIN[s].word}</i>.` }));
+  return { topic: 'latinorigin', kind: 'choice', el, eq: `<i>${L.word}</i><span class="sub">${L.lang} name</span>`, prompt: `Which element’s symbol comes from the name <i>${L.word}</i>?`, choices, answer: `${el.name} (${S})`, answerText: `${el.name} (${S})`,
+    hint: `The symbol uses the first letter of <i>${L.word}</i>: ${L.word[0].toUpperCase()}.`, solution: `<i>${L.word}</i> → <b>${S}</b>, ${lname(el)}. ${L.story[0].toUpperCase() + L.story.slice(1)}.`, tip: latinTip(el) };
+}
+function famList(course) { return Object.keys(FAMILIES).filter(k => course === '1A' || !FAMILIES[k].only1A); }
+function genFamily(o = {}) {
+  const course = o.course || '1A', fams = famList(course);
+  const el = pickEl({ ...o, filter: e => fams.includes(familyOf(e.symbol)) }, 'family'), S = el.symbol, f = familyOf(S), F = FAMILIES[f], e = info(S);
+  const near = { alkali: 'alkaline', alkaline: 'alkali', halogen: 'noble', noble: 'halogen', chalcogen: 'halogen', pnictogen: 'chalcogen', transition: 'alkaline' }[f];
+  const famWhy = k => `${FAMILIES[k].name} are ${groupsText(FAMILIES[k])}. ${el.name} is in group ${e.g}.`;
+  const steps = [{ ask: `Which group is ${lname(el)} (${S}) in?`, choices: shuffle([...new Set([e.g, e.g === 1 ? 2 : e.g - 1, e.g === 18 ? 17 : e.g + 1, pick([1, 2, 17, 18, 8].filter(x => x !== e.g))])]).map(g => ({ html: 'Group ' + g, ok: g === e.g, why: 'Count the columns from the left.' })), why: `${el.name} is in ${groupName(e.g)}.` }, { final: true, ask: 'Pick the family above.' }];
+  const tipFam = f === 'alkali' || f === 'alkaline' ? 'Alkali metals are group 1 and alkaline earth metals are group 2. “Alkali” comes first, like group 1. Hydrogen sits in group 1 but is a nonmetal, not an alkali metal.' : f === 'halogen' || f === 'noble' ? 'Halogens (group 17) are one electron short of a noble gas (group 18). Noble gases are the far right column.' : f === 'transition' ? 'Transition metals fill the middle block, groups 3–12.' : 'Group 15 elements are the pnictogens and group 16 elements are the chalcogens (oxygen family).';
+  if (o.variant === 'which' || (!o.variant && chance(0.4))) {
+    const wrong = shuffle(courseScope(course).filter(x => { const k = familyOf(x.symbol); return k && k !== f && fams.includes(k); }));
+    const picks = []; const pref = wrong.filter(x => familyOf(x.symbol) === near); if (pref.length) picks.push(pref[0]);
+    for (const x of wrong) { if (picks.length >= 3) break; if (!picks.includes(x) && !picks.some(p => familyOf(p.symbol) === familyOf(x.symbol))) picks.push(x); }
+    for (const x of wrong) { if (picks.length >= 3) break; if (!picks.includes(x)) picks.push(x); }
+    const choices = shuffle([el, ...picks]).map(x => ({ html: `${x.name} (${x.symbol})`, ok: x === el, slip: 'family-mixup', why: `${x.name} is in group ${info(x.symbol).g}: ${FAMILIES[familyOf(x.symbol)].one}. ${F.name} are ${groupsText(F)}.` }));
+    return { topic: 'family', kind: 'choice', el, tag: F.name, eq: F.name, prompt: `Which of these is ${F.one}?`, choices, answer: `${el.name} (${S})`, hint: `${F.name} are in ${groupsText(F)}.`, solution: `${el.name} is in ${groupName(e.g)}, so it is ${F.one}.`, art: ptableHTML({ hl: [] }), artAfter: ptableHTML({ hl: [el.z], mark: { [el.z]: 'right' } }), tip: tipFam, steps: [{ ask: `Which group are the ${F.name.toLowerCase()} in?`, choices: shuffle([...new Set([F.groups[0], ...[1, 2, 17, 18, 16].filter(g => g !== F.groups[0]).slice(0, 3)])]).map(g => ({ html: f === 'transition' ? (g === 3 ? 'Groups 3–12' : 'Group ' + g) : 'Group ' + g, ok: g === F.groups[0], why: 'Not that group.' })), why: `${F.name} are ${groupsText(F)}.` }, { final: true, ask: 'Find the choice that sits in that group. Use the table above.' }] };
+  }
+  const opts = [f, near, ...shuffle(fams.filter(k => k !== f && k !== near))].slice(0, 4);
+  const choices = shuffle(opts).map(k => ({ html: FAMILIES[k].name, ok: k === f, slip: 'family-mixup', why: famWhy(k) }));
+  steps[1] = { final: true, ask: `${groupName(e.g)[0].toUpperCase() + groupName(e.g).slice(1)} elements are called…? Pick it above.` };
+  return { topic: 'family', kind: 'choice', el, tag: '', eq: `${S}<span class="sub">${el.name}</span>`, prompt: `Which family is ${lname(el)} in?`, choices, answer: F.name, hint: `${el.name} is in group ${e.g}.`, solution: `${el.name} is in ${groupName(e.g)}: the <b>${F.name.toLowerCase()}</b>.`, artAfter: ptableHTML({ hl: [el.z], mark: { [el.z]: 'right' } }), tip: tipFam, steps };
+}
+function genMtype(o = {}) {
+  const want = pick(['metal', 'nonmetal', 'metalloid']), el = pickEl({ ...o, filter: e => !TYPE_UNCLEAR.has(e.symbol) && typeOf(e.symbol) === want }, 'mtype'), S = el.symbol, t = typeOf(S);
+  const where = S === 'H' ? 'Hydrogen is the exception: it sits on the left in group 1 but is a nonmetal.' : t === 'metalloid' ? `${el.name} touches the staircase line, so it is a metalloid. The metalloids are B, Si, Ge, As, Sb and Te.` : t === 'metal' ? `${el.name} is left of the staircase line, so it is a metal.` : `${el.name} is right of the staircase line, so it is a nonmetal.`;
+  const lbl = { metal: 'Metal', nonmetal: 'Nonmetal', metalloid: 'Metalloid' };
+  const choices = ['metal', 'nonmetal', 'metalloid'].map(k => ({ html: lbl[k], ok: k === t, slip: 'metal-type', why: k === 'metalloid' ? 'Only B, Si, Ge, As, Sb and Te are metalloids (they touch the staircase line).' : k === 'metal' ? 'Metals are left of the staircase line (except hydrogen).' : 'Nonmetals are right of the staircase line, plus hydrogen.' }));
+  return { topic: 'mtype', kind: 'choice', el, eq: `${S}<span class="sub">${el.name}</span>`, prompt: `Is ${lname(el)} a metal, a nonmetal, or a metalloid?`, choices, answer: lbl[t], hint: 'Find the staircase line that runs from boron (B) down to tellurium (Te). Dashed boxes on the table are metalloids.', solution: where, artAfter: ptableHTML({ hl: [el.z], mark: { [el.z]: 'right' }, key: true }),
+    tip: 'Most elements are metals. Nonmetals sit at the upper right, plus hydrogen. The six metalloids (B, Si, Ge, As, Sb, Te) sit along the staircase line.',
+    steps: [{ ask: `Where is ${lname(el)} compared with the staircase line?`, choices: [{ html: 'Left of it', ok: t === 'metal' || S === 'H', why: 'Look again at the table.' }, { html: 'Touching it (B, Si, Ge, As, Sb, Te)', ok: t === 'metalloid', why: 'Only those six touch it.' }, { html: 'Right of it', ok: t === 'nonmetal' && S !== 'H', why: 'Look again at the table.' }], why: where }, { final: true, ask: 'Pick the matching answer above.' }] };
+}
+function genGP(o = {}) {
+  const el = pickEl(o, 'gp'), S = el.symbol, e = info(S);
+  const lab = (g, p) => `Group ${g}, period ${p}`;
+  const set = [[e.g, e.p, '']];
+  if (e.g !== e.p) set.push([e.p, e.g, 'group-period-swap']);
+  const cand = shuffle([[e.g, e.p === 1 ? 2 : e.p - 1], [e.g, e.p === 7 ? 6 : e.p + 1], [e.g === 1 ? 2 : e.g - 1, e.p], [e.g === 18 ? 17 : e.g + 1, e.p]]);
+  for (const [g, p] of cand) { if (set.length >= 4) break; if (!set.some(x => x[0] === g && x[1] === p)) set.push([g, p, 'position']); }
+  const choices = shuffle(set).map(([g, p, slip]) => ({ html: lab(g, p), ok: !slip, slip: slip || 'position', why: slip === 'group-period-swap' ? 'Swapped! Groups are the columns (up and down). Periods are the rows (across).' : 'Count again: periods are rows from the top, groups are columns from the left.' }));
+  return { topic: 'gp', kind: 'choice', el, eq: `${S}<span class="sub">${el.name} · atomic number ${el.z}</span>`, prompt: `Where is ${lname(el)} on the periodic table?`, choices, answer: lab(e.g, e.p), hint: 'Period = row (count down from the top). Group = column (count from the left, 1 to 18).', solution: `${el.name} is in ${groupName(e.g)}, period ${e.p}.`, art: ptableHTML({}), artAfter: ptableHTML({ hl: [el.z], mark: { [el.z]: 'right' } }),
+    tip: 'Rows are <b>periods</b> (like periods in a sentence, read across). Columns are <b>groups</b> (a group of people standing in a line). Main groups are also called 1A–8A.',
+    steps: [{ ask: `Which period (row) is ${lname(el)} in?`, choices: shuffle([...new Set([e.p, e.p === 1 ? 2 : e.p - 1, e.p === 7 ? 5 : e.p + 1, e.g <= 7 ? e.g : 4])]).map(p => ({ html: 'Period ' + p, ok: p === e.p, why: 'Count rows down from the top.' })), why: `Period ${e.p}.` }, { ask: 'Which group (column)?', choices: shuffle([...new Set([e.g, e.g === 1 ? 2 : e.g - 1, e.g === 18 ? 16 : e.g + 1, e.p])]).map(g => ({ html: 'Group ' + g, ok: g === e.g, why: 'Count columns from the left.' })), why: `${groupName(e.g)[0].toUpperCase() + groupName(e.g).slice(1)}.` }, { final: true, ask: 'Now pick the matching choice above.' }] };
+}
+function genIons(o = {}) {
+  const el = pickEl({ ...o, filter: e => ION_CHARGE[e.symbol] !== undefined }, 'ions'), S = el.symbol, c = ION_CHARGE[S], e = info(S);
+  const metal = c > 0, n = Math.abs(c);
+  const opts = [[c, ''], [-c, 'ion-sign']];
+  for (const x of shuffle([c + 1, c - 1, c > 0 ? c + 2 : c - 2])) { if (opts.length >= 4) break; if (x !== 0 && !opts.some(y => y[0] === x)) opts.push([x, 'ion-charge']); }
+  const ionName = metal ? `${lname(el)} ion` : `${ANION_NAME[S]} ion`;
+  const why = e.g >= 3 && e.g <= 12 ? `${el.name} is a transition metal that forms only one common ion, ${ionHTML(S, c)}.` : metal ? `${el.name} is a metal in ${groupName(e.g)}, so it loses ${n} electron${n > 1 ? 's' : ''}: ${ionHTML(S, c)}.` : `${el.name} is a nonmetal in ${groupName(e.g)}, so it gains 8 − ${e.g - 10} = ${n} electron${n > 1 ? 's' : ''}: ${ionHTML(S, c)}.`;
+  const choices = shuffle(opts).map(([x, slip]) => ({ html: ionHTML(S, x), ok: !slip, slip: slip || 'ion-charge', why: slip === 'ion-sign' ? (metal ? 'Right number, wrong sign. Metals lose electrons, so they become positive.' : 'Right number, wrong sign. Nonmetals gain electrons, so they become negative.') : metal ? (e.g >= 3 && e.g <= 12 ? 'Zinc and cadmium form only 2+ ions; silver forms only 1+.' : 'Group 1 metals lose 1 electron, group 2 metals lose 2, and aluminum (group 13) loses 3.') : 'Nonmetals gain enough electrons to reach 8: subtract the A-group number from 8.' }));
+  const tip = ELECTROLYTES.has(S) ? 'Na⁺, K⁺, Ca²⁺, Mg²⁺ and Cl⁻ are electrolytes: your nerves, muscles and heart depend on them. You will see them on every blood panel.' : 'Metals lose electrons and become positive (cations). Nonmetals gain electrons and become negative (anions). Anion names end in -ide.';
+  const steps = e.g >= 3 && e.g <= 12 ? null : [{ ask: `Is ${lname(el)} a metal or a nonmetal?`, choices: [{ html: 'Metal: loses electrons (+)', ok: metal, why: 'Look at which side of the staircase line it is on.' }, { html: 'Nonmetal: gains electrons (−)', ok: !metal, why: 'Look at which side of the staircase line it is on.' }], why: metal ? 'A metal loses electrons, so the ion is positive.' : 'A nonmetal gains electrons, so the ion is negative.' }, { ask: `${el.name} is in ${groupName(e.g)}. How many electrons does it ${metal ? 'lose' : 'gain'}?`, choices: shuffle([1, 2, 3, 4].map(k => ({ html: String(k), ok: k === n, why: metal ? 'Groups 1, 2, 13 lose 1, 2, 3.' : 'Gain enough to reach 8 valence electrons.' }))), why: `${n}.` }, { final: true, ask: 'Pick the matching ion above.' }];
+  return { topic: 'ions', kind: 'choice', el, eq: `${S}<span class="sub">${el.name}</span>`, prompt: `What ion does ${lname(el)} usually form?`, choices, answer: ionHTML(S, c), answerText: S + chg(c).replace('−', '-'), hint: metal ? 'Metals lose electrons and become positive. The group number tells you how many (group 1 → 1+, group 2 → 2+, aluminum → 3+).' : 'Nonmetals gain electrons and become negative: 8 minus the A-group number.', solution: `${why} It is called the <b>${ionName}</b>.`, tip, steps };
+}
+/* ---------- Where is it? on the clickable table ---------- */
+function ptableHTML(o = {}) {
+  const hl = new Set(o.hl || []), mark = o.mark || {}, inter = !!o.interactive;
+  let h = `<div class="ptwrap"><div class="ptable" role="${inter ? 'group' : 'img'}" aria-label="${inter ? 'Periodic table: tap an element' : 'Periodic table'}">`;
+  for (let g = 1; g <= 18; g++) h += `<span class="lab" style="grid-column:${g + 1};grid-row:1">${g}</span>`;
+  for (let p = 1; p <= 7; p++) h += `<span class="lab" style="grid-column:1;grid-row:${p + 1}">${p}</span>`;
+  PT_LIST.forEach(e => {
+    const ps = posOf(e.z); if (!ps) return;
+    const ghost = e.z >= 104, blk = METALLOIDS.has(e.symbol) ? 'mlo' : ps.g === 18 ? 'ng' : ps.g <= 2 ? (e.z === 1 ? '' : 's') : ps.g >= 13 ? 'p' : 'd';
+    const cls = `pt ${blk}${ghost ? ' ghost' : ''}${hl.has(e.z) ? ' hl' : ''}${mark[e.z] ? ' ' + mark[e.z] : ''}`;
+    const st = `grid-column:${ps.g + 1};grid-row:${ps.p + 1}`;
+    if (inter && !ghost) h += `<button type="button" class="${cls}" style="${st}" data-z="${e.z}" aria-label="${e.name}, ${e.symbol}"><small>${e.z}</small>${e.symbol}</button>`;
+    else h += `<span class="${cls}" style="${st}" title="${e.name}"><small>${e.z}</small>${e.symbol}</span>`;
+  });
+  h += '</div>';
+  if (o.key) h += '<div class="pt-key"><span><i style="background:#fff2cf;border:1.5px dashed #c79a2b"></i>Metalloids (staircase)</span><span>Left: metals</span><span>Right: nonmetals (+ H)</span></div>';
+  return h + '</div>';
+}
+function genLocate(o = {}) {
+  const course = o.course || '1A', scope = courseScope(course), fams = famList(course);
+  const v = o.variant || pick(['gp', 'gp', 'name', 'name', 'family', course === '1A' ? 'metalloid' : 'family']);
+  let el, target, eq, prompt, hint, solution, steps, judge, tag;
+  const tapped = z => BY_Z[z];
+  if (v === 'metalloid') {
+    target = [...METALLOIDS].map(s => info(s).z); el = null; tag = 'Metalloids';
+    eq = 'Any metalloid'; prompt = 'Tap <b>any metalloid</b>, then press Check.'; hint = 'Metalloids sit along the staircase line from boron (B) down to tellurium (Te).';
+    solution = 'The metalloids are B, Si, Ge, As, Sb and Te.';
+    judge = z => { const t = tapped(z); return { ok: target.includes(z), slip: 'metal-type', note: `${t.name} (${t.symbol}) is a ${typeOf(t.symbol)}.` }; };
+    steps = [{ ask: 'Where are the metalloids?', choices: [{ html: 'Along the staircase line', ok: true }, { html: 'In the middle block', ok: false, why: 'Those are the transition metals.' }, { html: 'Far right column', ok: false, why: 'Those are the noble gases.' }], why: 'They touch the staircase line between metals and nonmetals.' }, { final: true, ask: 'Tap one of them: B, Si, Ge, As, Sb or Te.' }];
+  } else if (v === 'family') {
+    const mg = scope.filter(e => { const k = familyOf(e.symbol); return k && k !== 'transition' && fams.includes(k); });
+    el = o.el || pick(mg); const f = familyOf(el.symbol), F = FAMILIES[f], ps = info(el.symbol); target = [el.z]; tag = F.name;
+    eq = `${F.one.replace(/^an? /, '')} in period ${ps.p}`; eq = eq[0].toUpperCase() + eq.slice(1);
+    prompt = `Tap <b>${F.one}</b> in <b>period ${ps.p}</b>, then press Check.`; hint = `${F.name} are ${groupsText(F)}. Period ${ps.p} is row ${ps.p}.`;
+    solution = `${F.name} are ${groupsText(F)}; in period ${ps.p} that’s <b>${el.name} (${el.symbol})</b>.`;
+    judge = z => { const t = tapped(z), k = familyOf(t.symbol); if (z === el.z) return { ok: true };
+      if (k !== f) return { ok: false, slip: 'family-mixup', note: `${t.name} (${t.symbol}) is in group ${t.g}${k ? ', ' + FAMILIES[k].name.toLowerCase() : ''}. ${F.name} are ${groupsText(F)}.` };
+      return { ok: false, slip: 'position', note: `Right family! But ${t.symbol} is in period ${t.p}. Count rows down to period ${ps.p}.` }; };
+    steps = [{ ask: `Which group are the ${F.name.toLowerCase()}?`, choices: shuffle([F.groups[0], ...shuffle([1, 2, 15, 16, 17, 18].filter(g => g !== F.groups[0])).slice(0, 3)]).map(g => ({ html: 'Group ' + g, ok: g === F.groups[0], why: 'Not that one.' })), why: `${F.name} are ${groupsText(F)}.` }, { final: true, ask: `Go down that column to row ${ps.p} and tap it.` }];
+  } else {
+    el = pickEl(v === 'name' ? o : { ...o, quiz: true }, 'locate'); const ps = info(el.symbol); target = [el.z];
+    if (v === 'name') {
+      eq = el.name; prompt = `Tap <b>${lname(el)}</b> on the periodic table, then press Check.`; hint = `Its symbol is ${el.symbol[0]}${el.symbol.length > 1 ? '_' : ''} and its atomic number is ${el.z}.`; tag = 'Find by name';
+      solution = `${el.name} is <b>${el.symbol}</b>, atomic number ${el.z}: ${groupName(ps.g)}, period ${ps.p}.${originNote(el)}`;
+      judge = z => { const t = tapped(z); if (z === el.z) return { ok: true };
+        if (TRICKY.includes(el.symbol) && t.symbol[0] === el.name[0].toUpperCase()) return { ok: false, slip: 'latin-symbol', note: `You tapped ${t.symbol} (${lname(t)}). ${el.name}’s symbol comes from <i>${LATIN[el.symbol].word}</i>, not the English name.` };
+        if (lookAlike(t.symbol, el.symbol)) return { ok: false, slip: 'look-alike', note: `You tapped ${t.symbol}, which is ${lname(t)}. ${el.name} is ${el.symbol}.` };
+        return { ok: false, slip: 'position', note: `You tapped ${t.symbol} (${lname(t)}, atomic number ${t.z}). The table is in order of atomic number: find ${el.z}.` }; };
+      steps = [{ ask: `What is the symbol for ${lname(el)}?`, choices: shuffle([el.symbol, ...shuffle(courseScope('1A').filter(x => x !== el && lookAlike(x.symbol, el.symbol))).slice(0, 3).map(x => x.symbol)]).map(s => ({ html: s, ok: s === el.symbol, why: `${s} is ${nameOf(s).toLowerCase()}.` })), why: `${el.name} is ${el.symbol}, atomic number ${el.z}.` }, { final: true, ask: `Find ${el.symbol} (number ${el.z}) and tap it.` }];
+    } else {
+      eq = `Group ${ps.g} · Period ${ps.p}`; prompt = `Tap the element in <b>group ${ps.g}</b>, <b>period ${ps.p}</b>, then press Check.`; tag = 'Group + period';
+      hint = 'Groups are columns (numbered across the top). Periods are rows (numbered down the side).'; solution = `Group ${ps.g}, period ${ps.p} is <b>${el.name} (${el.symbol})</b>.`;
+      judge = z => { const t = tapped(z); if (z === el.z) return { ok: true };
+        if (t.g === ps.p && t.p === ps.g) return { ok: false, slip: 'group-period-swap', note: `You tapped group ${t.g}, period ${t.p}: that’s swapped. Groups are columns, periods are rows.` };
+        return { ok: false, slip: 'position', note: `You tapped ${t.symbol}, which is in group ${t.g}, period ${t.p}.` }; };
+      steps = [{ ask: `Period ${ps.p} is…`, choices: [{ html: `Row ${ps.p} (across)`, ok: true }, { html: `Column ${ps.p} (up and down)`, ok: false, why: 'Columns are groups.' }], why: 'Periods are rows.' }, { ask: `Group ${ps.g} is…`, choices: [{ html: `Column ${ps.g}`, ok: true }, { html: `Row ${ps.g}`, ok: false, why: 'Rows are periods.' }], why: 'Groups are columns, numbered 1–18 across the top.' }, { final: true, ask: `Go to row ${ps.p}, column ${ps.g}, and tap the element there.` }];
     }
+  }
+  const mark = {}; target.forEach(z => { mark[z] = 'right'; });
+  return { topic: 'locate', kind: 'table', el, tag, eq, prompt, hint, solution, steps, target, check: judge, answer: el ? `${el.name} (${el.symbol})` : 'B, Si, Ge, As, Sb or Te', art: ptableHTML({ interactive: true }), artAfter: null,
+    tip: 'The periodic table is in order of atomic number. Rows are periods; columns are groups. Elements in the same group act alike, which is why families have names.' };
+}
+const GENERATORS = {
+  n2s: o => genN2S({ ...o, topic: 'n2s' }), s2n: o => genS2N({ ...o, topic: 's2n' }),
+  latin: o => genN2S({ ...o, topic: 'latin' }), latinback: o => genS2N({ ...o, topic: 'latinback' }), latinorigin: genLatinOrigin,
+  locate: genLocate, family: genFamily, mtype: genMtype, gp: genGP, ions: genIons
+};
+function generate(topic, o = {}) { const q = GENERATORS[topic](o); q.topic = topic; return q; }
+</script>
+<script>
+/* ===================== Symbol Safari: game UI ===================== */
+const $ = id => document.getElementById(id);
+const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
+const LOGO_FB = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect x="6" y="6" width="108" height="108" rx="26" fill="#eef0fe" stroke="#4b57d1" stroke-width="6"/><text x="18" y="34" font-family="Arial" font-weight="700" font-size="16" fill="#646c82">11</text><text x="60" y="84" text-anchor="middle" font-family="Arial" font-weight="700" font-size="50" fill="#26326a">Na</text></svg>');
+const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
+const STORE = 'ddElementSymbols.v1';
+const badgeImg = n => `<img src="${BADGE(n)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`;
 
-    function loadState(){
-      try{
-        const raw = localStorage.getItem("elementStudyLabState");
-        return raw ? {...defaultState(), ...JSON.parse(raw)} : defaultState();
-      }catch{
-        return defaultState();
-      }
-    }
+const VIDEOS = {
+  alphabet: { id: 'ARE5_CgcxW4', start: 525, title: 'The chemist’s alphabet', why: 'Elements are the letters chemistry is written with.' },
+  periodic: { id: 'JmyWmu3RA6Q', start: 0, title: 'How to use your periodic table', why: 'What the boxes, rows and columns tell you.' },
+  organized: { id: 'ARE5_CgcxW4', start: 573, title: 'The periodic table is organized by properties', why: 'Why elements in a family act alike.' },
+  ions: { id: 'jNh0S62GrHg', start: 667, title: 'Predictable ions explained', why: 'Getting an ion’s charge from its group.' },
+  cations: { id: 'jNh0S62GrHg', start: 96, title: 'Cations and anions', why: 'Metals lose electrons, nonmetals gain them.' },
+  halogens: { id: 'b__bU7D6YIM', start: 253, title: 'The halogen gases (F, Cl, Br, I)', why: 'The diatomic halogens in group 17.' }
+};
+const EYEBROW = { '3A': 'CHEM 3A · Ch 2: Atomic Structure · Ch 4: Compounds', '1A': 'CHEM 1A · Chapter 2: Atoms, Molecules, and Ions' };
+// Skill Check Prep plans (10 questions)
+const SKILL_PLAN = {
+  '3A': ['n2s', 'n2s', 's2n', 's2n', 'latin', 'latinorigin', 'locate', 'family', 'ions', 'ions'],
+  '1A': ['n2s', 'n2s', 's2n', 's2n', 'latin', 'locate', 'family', 'mtype', 'gp', 'ions']
+};
+const SKILL_BLURB = { '3A': '10 questions: symbols, names, tricky symbols, families and common ions, then a study plan.', '1A': '10 questions: symbols, names, tricky symbols, table positions, families and ions, then a study plan.' };
+const DEFAULT_SET = { '3A': 'combined', '1A': 'all1A' };
 
-    function saveState(){
-      localStorage.setItem("elementStudyLabState", JSON.stringify(state));
-    }
+const RANKS = [[0, 'Symbol Rookie'], [60, 'Letter Learner'], [150, 'Capital Captain'], [300, 'Latin Linguist'], [500, 'Group Guru'], [800, 'Family Finder'], [1200, 'Periodic Pro']];
+const tc = (P, ts) => [].concat(ts).reduce((n, t) => n + (P.topic[t] ? P.topic[t].c : 0), 0);
+const ACH = [
+  ['first', 'First Symbol', 'Get your first answer right', 'stars', P => P.correct >= 1],
+  ['streak5', 'On a Roll', '5 right in a row', 'stars', P => P.best >= 5],
+  ['streak10', 'Unstoppable', '10 right in a row', 'trophy', P => P.best >= 10],
+  ['first20', 'First 20 Fluent', 'Get every one of the first 20 elements right', 'checklist', P => CORE.every(e => P.known[e.symbol])],
+  ['caps', 'Capital Idea', '15 two-letter symbols right on the first try', 'scale', P => (P.caps || 0) >= 15],
+  ['latin', 'Speaks Latin', '10 tricky-symbol questions right', 'book', P => tc(P, ['latin', 'latinback', 'latinorigin']) >= 10],
+  ['table', 'Table Tracker', 'Find 10 elements on the table', 'target', P => tc(P, 'locate') >= 10],
+  ['family', 'Family Reunion', '10 family or metal/nonmetal questions right', 'molecule', P => tc(P, ['family', 'mtype']) >= 10],
+  ['ions', 'Ion Expert', '8 common-ion questions right', 'lattice', P => tc(P, 'ions') >= 8],
+  ['skill', 'Skill Check Ready', 'Score 8+ on Skill Check Prep', 'trophy', P => (P.bestQuiz || 0) >= 8]
+];
 
-    function getMissedElements(){
-      return ELEMENTS.filter(e => (state.missed[e.symbol] || 0) > 0);
-    }
+const state = { course: '1A', sel: new Set(), quiz: null, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false, setId: 'all1A', ordered: false, orderIdx: {}, tableSel: null, refMode: 'all', namesHidden: true };
+let PALL = {}, P = null;
+const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, missed: {}, known: {}, caps: 0, bestQuiz: 0, sel: [], setId: '', ordered: false });
+function loadCourse(c) { try { PALL = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { PALL = {}; } P = Object.assign(fresh(), PALL[c] || {}); }
+function save() { try { P.sel = [...state.sel]; P.setId = state.setId; P.ordered = state.ordered; PALL[state.course] = P; PALL.last = state.course; localStorage.setItem(STORE, JSON.stringify(PALL)); } catch (e) {} }
+function migrateOld() {   // bring the missed list over from the old "Element Symbol Study Lab" save
+  try {
+    if (localStorage.getItem(STORE)) return; const raw = localStorage.getItem('elementStudyLabState'); if (!raw) return;
+    const old = JSON.parse(raw) || {}; const m = old.missed || {}; const all = {};
+    ['3A', '1A'].forEach(c => { all[c] = Object.assign(fresh(), { missed: { ...m } }); }); localStorage.setItem(STORE, JSON.stringify(all));
+  } catch (e) {}
+}
+function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
 
-    function getSet(){
-      const v = els.setSelect.value;
-      if(v === "core") return CORE;
-      if(v === "health") return HEALTH;
-      if(v === "missed"){
-        const missed = getMissedElements();
-        return missed.length ? missed : ELEMENTS;
-      }
-      return ELEMENTS;
-    }
+/* ---------- stats ---------- */
+function rankOf(xp) { let r = RANKS[0], nx = null; for (let i = 0; i < RANKS.length; i++) if (xp >= RANKS[i][0]) { r = RANKS[i]; nx = RANKS[i + 1] || null; } return { name: r[1], from: r[0], to: nx ? nx[0] : null }; }
+function renderStats() {
+  const r = rankOf(P.xp);
+  $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
+  $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
+  $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
+  $('streak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried; $('sAcc').textContent = P.tried ? Math.round(P.correct / P.tried * 100) + '%' : '—';
+  $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  renderMissed();
+}
+function renderMissed() {
+  const scope = courseScope(state.course), missed = scope.filter(e => (P.missed[e.symbol] || 0) > 0).sort((a, b) => P.missed[b.symbol] - P.missed[a.symbol]);
+  $('missEmpty').hidden = !!missed.length; $('missActions').hidden = !missed.length; $('missCount').textContent = missed.length ? `${missed.length} element${missed.length > 1 ? 's' : ''}` : '';
+  $('missList').innerHTML = missed.slice(0, 24).map(e => `<span class="mchip">${e.symbol} · ${e.name}<button type="button" data-unmiss="${e.symbol}" aria-label="Remove ${e.name} from the review list">✕</button></span>`).join('');
+}
+function setCourse(c) {
+  state.course = c; loadCourse(c);
+  state.sel = new Set((P.sel || []).filter(t => TOPICS[t])); state.quiz = null;
+  state.setId = SETS[c].some(s => s[0] === P.setId) ? P.setId : DEFAULT_SET[c]; state.ordered = !!P.ordered; state.orderIdx = {};
+  state.refMode = 'all';
+  document.querySelectorAll('#course button').forEach(b => b.classList.toggle('active', b.dataset.course === c));
+  $('eyebrow').textContent = EYEBROW[c]; $('skillBlurb').textContent = SKILL_BLURB[c];
+  try { const u = new URL(location.href); u.searchParams.set('course', c); history.replaceState(null, '', u); } catch (e) {}
+  save(); renderStats(); renderChooser(); renderReference(); state.sel.size ? newQuestion() : showEmpty();
+}
 
-    function chooseDirection(){
-      const value = els.directionSelect.value;
-      if(value === "mixed"){
-        return Math.random() < .5 ? "nameToSymbol" : "symbolToName";
-      }
-      return value;
-    }
+/* ---------- chooser ---------- */
+const catOn = c => c.topics.some(t => state.sel.has(t));
+function renderChooser() {
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><span class="cat-art" aria-hidden="true">${c.art}</span><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  const open = CATEGORIES.filter(catOn), rows = [];
+  if (state.sel.has('n2s') || state.sel.has('s2n') || (state.sel.has('locate'))) {
+    const missN = courseScope(state.course).filter(e => P.missed[e.symbol] > 0).length;
+    rows.push(`<div class="chip-row"><span>Element set</span>${SETS[state.course].map(([id, lbl]) => `<button type="button" class="chip radio${state.setId === id ? ' on' : ''}" data-set="${id}" aria-pressed="${state.setId === id}">${lbl}${id === 'missed' ? ` <span class="stat">${missN}</span>` : ` <span class="stat">${setPool(id, state.course).length}</span>`}</button>`).join('')}<button type="button" class="chip${state.ordered ? ' on' : ''}" data-order="1" aria-pressed="${state.ordered}">In atomic-number order</button></div>`);
+  }
+  open.filter(c => c.topics.length > 1).forEach(c => rows.push(`<div class="chip-row"><span>${c.title}</span>${c.topics.map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="stat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`));
+  $('chipsWrap').hidden = !rows.length; $('chips').innerHTML = rows.join('');
+  $('skillCard').classList.toggle('on', !!state.quiz);
+}
+function toggleCat(id) {
+  const c = CATEGORIES.find(x => x.id === id);
+  if (catOn(c)) c.topics.forEach(t => state.sel.delete(t)); else c.topics.forEach(t => state.sel.add(t));
+  afterSelect();
+}
+function toggleTopic(t) { state.sel.has(t) ? state.sel.delete(t) : state.sel.add(t); afterSelect(); }
+function afterSelect() { state.quiz = null; save(); renderChooser(); if (state.sel.size) newQuestion(); else showEmpty(); }
+function showEmpty() { state.q = null; $('emptyBox').hidden = false; $('playArea').hidden = true; $('reportBox').hidden = true; $('playTitle').textContent = 'Practice'; $('skipBtn').hidden = true; }
+function scrollToPlay() { try { $('play').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} }
 
-    function pickQuestion(){
-      const pool = getSet();
-      if(!pool.length) return ELEMENTS[0];
+/* ---------- questions ---------- */
+function weightedTopic(pool) {
+  const w = pool.map(t => { const s = P.topic[t]; return 1 + (s && s.a ? 3 * (1 - s.c / s.a) : 1.5); });
+  let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= w[i]; if (r <= 0) return pool[i]; }
+  return pool[0];
+}
+let lastTopic = null;
+function makeQuestion() {
+  const course = state.course;
+  if (state.quiz) return generate(state.quiz.plan[state.quiz.i], { course, quiz: true });
+  let pool = [...state.sel]; if (pool.length > 1 && lastTopic) pool = pool.filter(t => t !== lastTopic || chance(0.35));
+  const t = weightedTopic(pool.length ? pool : [...state.sel]); lastTopic = t;
+  return generate(t, { course });
+}
+function newQuestion(focus) {
+  const q = makeQuestion();
+  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false; state.tableSel = null;
+  $('emptyBox').hidden = true; $('reportBox').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
+  const T = TOPICS[q.topic];
+  $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.sel.size > 1 ? 'Mixed practice' : T.label;
+  $('topicTag').textContent = T.label; $('subTag').textContent = q.tag || ''; $('subTag').hidden = !q.tag;
+  $('quizTag').hidden = !state.quiz; $('quizBar').hidden = !state.quiz;
+  if (state.quiz) { $('quizTag').textContent = `Question ${state.quiz.i + 1} of ${state.quiz.plan.length}`; $('quizBar').firstElementChild.style.width = (state.quiz.i / state.quiz.plan.length * 100) + '%'; }
+  const eq = $('equation'); eq.innerHTML = q.eq || ''; eq.classList.toggle('text', String(q.eq).replace(/<span class="sub">.*<\/span>/, '').replace(/<[^>]+>/g, '').length > 12);
+  $('art').innerHTML = q.art || ''; $('qbox').classList.toggle('has-table', q.kind === 'table');
+  $('prompt').innerHTML = q.prompt;
+  const isChoice = q.kind === 'choice', isTable = q.kind === 'table';
+  $('answerRow').hidden = isChoice; $('choices').hidden = !isChoice;
+  const inp = $('answer'); inp.value = ''; inp.disabled = false; inp.placeholder = q.placeholder || 'Type your answer'; inp.hidden = isTable;
+  $('picked').hidden = !isTable; $('picked').innerHTML = isTable ? 'Tapped: <b>—</b>' : '';
+  $('checkBtn').textContent = 'Check'; $('checkBtn').disabled = false;
+  if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');
+  $('typingNote').innerHTML = q.topic === 'n2s' || q.topic === 'latin' ? 'Capital first letter, lowercase second: <b>Co</b> is cobalt, <b>CO</b> is carbon monoxide.' : q.topic === 's2n' || q.topic === 'latinback' ? 'Any capitalization is fine for names. Aluminium, sulphur and caesium count too.' : isTable ? 'Tap an element. It turns blue. Tap another to change your pick.' : '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
+  $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
+  $('ptipText').innerHTML = ' ' + (q.tip || capsTip(CORE[0]));
+  setVideoFor(q.video || T.video);
+  renderChooser(); paintIcons($('play'));
+  if (focus && !isChoice && !isTable && !coarse()) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+}
 
-      if(els.orderSelect.value === "atomic"){
-        const sorted = [...pool].sort((a,b)=>a.z-b.z);
-        const selected = sorted[atomicIndex % sorted.length];
-        atomicIndex = (atomicIndex + 1) % sorted.length;
-        return selected;
-      }
+/* ---------- checking + scoring ---------- */
+function check() {
+  const q = state.q; if (!q) return; if (state.done) return next();
+  if (q.kind === 'table') {
+    if (state.tableSel == null) { setFeedback('info', 'Tap an element on the table first.'); return; }
+    const res = q.check(state.tableSel); markTable(res.ok); grade(res.ok, res.slip, res.note); return;
+  }
+  const raw = $('answer').value;
+  if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
+  const res = q.check(raw); grade(res.ok, res.slip, res.note);
+}
+function markTable(ok) {
+  const b = document.querySelector(`#art [data-z="${state.tableSel}"]`); if (!b) return;
+  b.classList.remove('sel'); b.classList.add(ok ? 'right' : 'wrong');
+}
+function tapCell(z) {
+  if (state.done) return;
+  document.querySelectorAll('#art .pt.sel, #art .pt.wrong').forEach(b => b.classList.remove('sel', 'wrong'));
+  state.tableSel = z; const b = document.querySelector(`#art [data-z="${z}"]`); if (b) b.classList.add('sel');
+  const t = BY_Z[z]; $('picked').innerHTML = `Tapped: <b>${t.symbol}</b> ${t.name}`;
+}
+function choose(i) {
+  const q = state.q; if (state.done) return;
+  const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
+  if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
+  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip || 'choice', c.why || ''); }
+}
+function ddLog(ok, slip) {
+  try {
+    if (state.logged || !window.ddTrack) return; state.logged = true;
+    const q = state.q;
+    window.ddTrack({ game: 'elements', course: state.course, mode: state.quiz ? 'Skill Check Prep' : 'Practice', topic: TOPICS[q.topic].label + (q.tag ? ' · ' + q.tag : ''), correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
+  } catch (e) {}
+}
+function bumpTopic(t, ok) { const s = P.topic[t] || (P.topic[t] = { c: 0, a: 0 }); s.a++; if (ok) s.c++; }
+const ELEMENT_TOPICS = new Set(['n2s', 's2n', 'latin', 'latinback', 'locate']);
+function bumpMissed(q, ok) {
+  if (!q.el || !ELEMENT_TOPICS.has(q.topic) || (q.topic === 'locate' && q.tag !== 'Find by name')) return;
+  const s = q.el.symbol;
+  if (ok) { if (P.missed[s]) { P.missed[s] = Math.max(0, P.missed[s] - 1); if (!P.missed[s]) delete P.missed[s]; } P.known[s] = 1; }
+  else P.missed[s] = (P.missed[s] || 0) + 1;
+}
+const SLIP_LABEL = { capitalization: 'Capitalization', 'latin-symbol': 'Latin symbol', 'look-alike': 'Look-alike', 'family-mixup': 'Family mix-up', 'group-period-swap': 'Group/period swap', 'ion-sign': 'Sign of the charge', 'ion-charge': 'Size of the charge', 'metal-type': 'Metal vs nonmetal', spelling: 'Spelling', 'name-not-symbol': 'Name, not symbol', 'symbol-not-name': 'Symbol, not name' };
+function grade(ok, slip, note) {
+  const q = state.q, first = state.tries === 0; state.tries++;
+  if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); bumpMissed(q, ok); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok, el: q.el ? q.el.symbol : '', slip: ok ? '' : slip }); }
+  if (ok) {
+    state.done = true;
+    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
+    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); if ((q.topic === 'n2s' || q.topic === 'latin') && q.el.symbol.length === 2) P.caps = (P.caps || 0) + 1; }
+    P.xp += xp; P.correct++;
+    setFeedback('good', `<b>${pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Great job!'])}</b> <span class="xp-pop">+${xp} XP</span>${note ? ' ' + note : ''}<div class="sol">${q.solution}</div>`);
+    finishQuestion();
+  } else {
+    if (first) P.streak = 0;
+    const tag = slip && SLIP_LABEL[slip] ? `<span class="slip">${SLIP_LABEL[slip]}</span>` : '';
+    let msg = `${tag}<b>Not quite.</b> ${note || 'Check and try again.'}`;
+    if (state.quiz) { msg += `<div class="sol">Answer: <b>${q.answer}</b>. ${q.solution}</div>`; state.done = true; finishQuestion(); }
+    else if (state.tries >= 2) { msg += '<br>Stuck? Try <b>Step by step</b> or <b>Show answer</b>.'; $('solBtn').classList.add('pulse'); }
+    setFeedback('bad', msg);
+  }
+  save(); renderStats(); checkAch();
+}
+function finishQuestion() {
+  const q = state.q;
+  $('answer').disabled = true; $('checkBtn').textContent = 'Next';
+  if (q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) b.classList.add('right'); });
+  if (q.kind === 'table') { document.querySelectorAll('#art button.pt').forEach(b => { b.disabled = true; }); if (q.target.length === 1 || !q.target.includes(state.tableSel)) q.target.forEach(z => { const b = document.querySelector(`#art [data-z="${z}"]`); if (b && !b.classList.contains('wrong')) { b.classList.remove('sel'); b.classList.add('right'); } }); }
+  if (q.artAfter) $('art').innerHTML = q.artAfter;
+  $('nextBtn').hidden = false;
+  $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
+  if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function showSolution() {
+  const q = state.q; if (!q) return;
+  if (!state.done) {
+    if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); bumpMissed(q, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false, el: q.el ? q.el.symbol : '', slip: 'gave-up' }); }
+    state.done = true; state.helped = true; save(); renderStats();
+    setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}${q.el && ELEMENT_TOPICS.has(q.topic) ? ' This element was added to your review list.' : ''}</div>`); finishQuestion();
+  }
+}
+const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
+function scrollToQuestion() {
+  const el = $('play'), r = el.getBoundingClientRect();
+  const embedded = document.documentElement.classList.contains('dd-embedded');
+  if (embedded || r.top < 0 || r.top > innerHeight * 0.35) {
+    try { el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); }
+  }
+}
+function next() {
+  if (state.quiz) { state.quiz.i++; if (state.quiz.i >= state.quiz.plan.length) { showReport(); scrollToQuestion(); return; } }
+  newQuestion(true); scrollToQuestion();
+}
 
-      let choices = pool;
-      if(pool.length > 1 && lastSymbol){
-        choices = pool.filter(e => e.symbol !== lastSymbol);
-      }
-      return choices[Math.floor(Math.random()*choices.length)];
-    }
+/* ---------- step by step ---------- */
+function setGuide(on) {
+  const q = state.q; on = !!(on && q && q.steps && q.steps.length);
+  $('guideBtn').setAttribute('aria-pressed', on); $('guide').hidden = !on;
+  if (on) renderGuide();
+}
+function renderGuide() {
+  const q = state.q; if (!q._g) q._g = { at: 0, msg: {} };
+  $('guide').innerHTML = q.steps.map((s, i) => {
+    const cls = i < q._g.at ? 'done' : i === q._g.at ? 'current' : 'later', right = s.choices ? s.choices.find(c => c.ok) : null;
+    let body = '';
+    if (!s.final && i < q._g.at) body = `<div class="gwhy"><b>${right.html}</b>. ${s.why || ''}</div>`;
+    else if (!s.final && i === q._g.at) body = `<div class="gchoices">${s.choices.map((c, k) => `<button type="button" class="choice" data-g="${i}" data-k="${k}">${c.html}</button>`).join('')}</div>${q._g.msg[i] ? `<div class="gwhy bad">${q._g.msg[i]}</div>` : ''}`;
+    return `<div class="gstep ${cls}"><div class="gnum">Step ${i + 1} of ${q.steps.length}</div><div class="gask">${s.ask}</div>${body}</div>`;
+  }).join('');
+}
+function guideChoose(i, k) {
+  const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.');
+  renderGuide();
+  if (c.ok && q.steps[q._g.at] && q.steps[q._g.at].final && q.kind === 'text') { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
+}
 
-    function newQuestion(){
-      current = pickQuestion();
-      currentDirection = chooseDirection();
-      answeredCurrent = false;
-      revealedCurrent = false;
-      lastSymbol = current.symbol;
+/* ---------- Skill Check Prep ---------- */
+function startQuiz() {
+  state.quiz = { plan: shuffle(SKILL_PLAN[state.course]), i: 0, results: [] }; state.guideOn = false;
+  newQuestion(true); renderChooser();
+}
+const PLAN_ADVICE = {
+  n2s: 'Name → Symbol: say the name, write the symbol, and check the capitals.', s2n: 'Symbol → Name: use the Study reference below with names hidden, then tap to check.',
+  latin: 'Tricky Symbols: learn the 11 as a set (Na, K, Fe, Cu, Ag, Sn, Sb, Au, Hg, Pb, W).', latinback: 'Tricky Symbols: learn the 11 as a set.', latinorigin: 'Tricky Symbols: link each symbol to its Latin word (Au = aurum).',
+  locate: 'Where is it?: periods are rows, groups are columns. Practice “Find it on the table.”', family: 'Family names: alkali (1), alkaline earth (2), transition (3–12), halogens (17), noble gases (18).',
+  mtype: 'Metals left of the staircase, nonmetals right (plus H), metalloids on the line.', gp: 'Group and period: count columns for group, rows for period.', ions: 'Common ions: metals lose electrons (+), nonmetals gain (−); use the group number.'
+};
+function showReport() {
+  const z = state.quiz, score = z.results.filter(r => r.ok).length;
+  P.bestQuiz = Math.max(P.bestQuiz || 0, score); save(); checkAch(); renderStats();
+  const missed = [...new Set(z.results.filter(r => !r.ok).map(r => r.topic))];
+  const missedEls = [...new Set(z.results.filter(r => !r.ok && r.el).map(r => r.el))];
+  $('playArea').hidden = true; const box = $('reportBox'); box.hidden = false; $('skipBtn').hidden = true;
+  box.innerHTML = `<span class="ex-label">Skill Check Prep results</span><div class="report-score"><b>${score} / ${z.results.length}</b><span>${score >= 9 ? 'Excellent, you are ready!' : score >= 7 ? 'Solid. Polish the topics below.' : 'Good practice. Work on the topics below.'}</span></div>
+   <ul class="report-list">${z.results.map((r, i) => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? '✓' : '✗'} ${i + 1}. ${TOPICS[r.topic].label}${r.el ? ' · ' + r.el : ''}${!r.ok && SLIP_LABEL[r.slip] ? ' · ' + SLIP_LABEL[r.slip] : ''}</li>`).join('')}</ul>
+   ${missed.length ? `<p style="margin-bottom:0"><b>Study plan:</b></p><ol class="plan">${missed.map(t => `<li>${PLAN_ADVICE[t]}</li>`).join('')}${missedEls.length ? `<li>Review these elements: <b>${missedEls.map(s => `${s} (${nameOf(s).toLowerCase()})`).join(', ')}</b>. They are on your review list.</li>` : ''}</ol><div class="ex-actions"><button type="button" class="btn primary" id="practiceMissed">Practice my missed topics ${ico('arrow')}</button></div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
+   <div class="ex-actions"><button type="button" class="btn" id="quizAgain">Take another Skill Check Prep</button></div>`;
+  state.quiz = null; renderChooser();
+  $('quizAgain').onclick = startQuiz;
+  if ($('practiceMissed')) $('practiceMissed').onclick = () => { state.sel = new Set(missed); if (missedEls.length && (missed.includes('n2s') || missed.includes('s2n'))) state.setId = 'missed'; afterSelect(); scrollToPlay(); };
+  if (score >= 8) confetti();
+}
 
-      els.questionType.textContent =
-        currentDirection === "nameToSymbol" ? "Name → Symbol" : "Symbol → Name";
+/* ---------- achievements, toasts, confetti ---------- */
+function checkAch() {
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  save(); renderStats();
+}
+function toast(badge, title, text) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+  $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
+}
+function confetti() {
+  try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (e) {}
+  const c = $('celebrationCanvas'), x = c.getContext('2d'); if (!x) return; c.hidden = false; c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#4b57d1', '#72c9a8', '#f28aa3', '#ffd36b', '#9fb0ff'];
+  const ps = Array.from({ length: 90 }, () => ({ x: Math.random() * c.width, y: -20 - Math.random() * c.height * 0.3, vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3, r: 4 + Math.random() * 4, c: pick(cols), a: Math.random() * 6 }));
+  let f = 0; (function step() { x.clearRect(0, 0, c.width, c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += 0.1; x.fillStyle = p.c; x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); x.restore(); }); if (++f < 110) requestAnimationFrame(step); else { x.clearRect(0, 0, c.width, c.height); c.hidden = true; } })();
+}
 
-      els.questionText.textContent =
-        currentDirection === "nameToSymbol" ? current.name : current.symbol;
+/* ---------- videos ---------- */
+function setVideoFor(key) {
+  const v = VIDEOS[key] || VIDEOS.periodic, pl = $('player'), src = `https://www.youtube-nocookie.com/embed/${v.id}?rel=0&start=${v.start || 0}`;
+  pl.dataset.src = src; if ($('videoSection').open && pl.src !== src) pl.src = src;
+  $('lessonTitle').textContent = v.title; $('lessonLink').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start || 0}s`;
+  const keys = [key, ...Object.keys(VIDEOS).filter(k => k !== key)].filter(k => VIDEOS[k]).slice(0, 5);
+  $('videoList').innerHTML = keys.map(k => { const w = VIDEOS[k]; return `<button type="button" class="lesson-card${k === key ? ' active' : ''}" data-video="${k}"><img src="https://i.ytimg.com/vi/${w.id}/mqdefault.jpg" alt="" loading="lazy"><span><b>${w.title}</b><small>${w.why}</small></span></button>`; }).join('');
+}
 
-      els.atomicLine.textContent = `Atomic number ${current.z}`;
-      els.answerInput.value = "";
-      els.answerInput.disabled = false;
-      els.checkBtn.disabled = false;
-      els.feedback.className = "feedback";
-      els.feedback.innerHTML = `
-        <span>Type the matching ${currentDirection === "nameToSymbol" ? "symbol" : "element name"}.</span>
-        <span class="small">${currentDirection === "nameToSymbol" ? "Symbol capitalization counts." : "Element-name capitalization does not matter."}</span>
-      `;
-      els.answerInput.placeholder =
-        currentDirection === "nameToSymbol" ? "Example: Fe" : "Example: Iron";
-      els.answerInput.focus();
-    }
+/* ---------- study reference (element cards) ---------- */
+function refModes() { return state.course === '3A' ? [['all', 'Show all'], ['core', 'First 20'], ['health', 'Health set']] : [['all', 'Show all'], ['core', 'First 20'], ['main', 'Main group'], ['tm', 'Transition metals'], ['tricky', 'Tricky symbols']]; }
+function renderReference() {
+  const modes = refModes(); if (!modes.some(m => m[0] === state.refMode)) state.refMode = 'all';
+  let list = state.refMode === 'all' ? courseScope(state.course) : state.refMode === 'tricky' ? ELEMENTS.filter(e => TRICKY.includes(e.symbol)) : setPool(state.refMode, state.course);
+  if (state.course === '3A' && state.refMode === 'all') list = list.concat(ELEMENTS.filter(e => e.gen && TRICKY.includes(e.symbol)));
+  $('refActions').innerHTML = `<button type="button" class="btn" data-hidenames="1">${state.namesHidden ? 'Show names' : 'Hide names'}</button>` + modes.map(([id, l]) => `<button type="button" class="btn${state.refMode === id ? ' on' : ''}" data-ref="${id}">${l}</button>`).join('');
+  $('refLegend').innerHTML = `<span><i style="background:#4b57d1"></i>First 20</span><span><i style="background:#3aa38a"></i>Health-science extension</span>${state.course === '1A' || state.refMode === 'all' ? '<span><i style="background:#d08a3a"></i>' + (state.course === '1A' ? 'CHEM 1A additions' : 'Tricky symbols (Sn, Sb, W)') + '</span>' : ''}`;
+  $('elementGrid').innerHTML = [...list].sort((a, b) => a.z - b.z).map(e => `<div class="element ${e.core ? 'core' : e.health ? 'extra' : 'gen'}${state.namesHidden ? ' hidden-answer' : ''}" title="${e.name} (${e.symbol}), atomic number ${e.z}" data-card="1" role="button" tabindex="0"><span class="z">${e.z}</span><span class="sym">${e.symbol}</span><span class="name">${e.name}</span></div>`).join('');
+}
 
-    function normalizedName(s){
-      return s.trim().toLowerCase().replace(/\s+/g," ");
-    }
+/* ---------- rules sheet ---------- */
+function renderRules() {
+  const fams = famList(state.course).map(k => `<tr><td>${FAMILIES[k].name}</td><td>${groupsText(FAMILIES[k]).replace(/^g/, 'G')}</td><td>${courseScope(state.course).filter(e => familyOf(e.symbol) === k).slice(0, 6).map(e => e.symbol).join(', ')}</td></tr>`).join('');
+  $('rulesBody').innerHTML = `<div class="rule-grid">
+   <div class="rule wide"><h3>Capital letters count</h3><p>The first letter of an element symbol is always capitalized. If there is a second letter, it is lowercase: <b>Fe</b>, <b>Ag</b>, <b>Na</b>. <b>Co</b> is cobalt, but <b>CO</b> is carbon monoxide (C + O), a compound.</p></div>
+   <div class="rule wide"><h3>Tricky symbols</h3><table class="data"><tr><th>Symbol</th><th>Element</th><th>Comes from</th></tr>${TRICKY.map(s => `<tr><td><b>${s}</b></td><td>${nameOf(s)}</td><td><i>${LATIN[s].word}</i> (${LATIN[s].lang})</td></tr>`).join('')}</table></div>
+   <div class="rule"><h3>Periods and groups</h3><p><b>Periods</b> are rows (1–7, across). <b>Groups</b> are columns (1–18, up and down). Main groups are also called 1A–8A.</p></div>
+   <div class="rule"><h3>Metals, nonmetals, metalloids</h3><p>Metals are left of the staircase line. Nonmetals are right of it, plus hydrogen. Metalloids touch the line: B, Si, Ge, As, Sb, Te.</p></div>
+   <div class="rule wide"><h3>Families</h3><table class="data"><tr><th>Family</th><th>Where</th><th>Examples</th></tr>${fams}</table><p>Hydrogen sits in group 1 but is a nonmetal, not an alkali metal.</p></div>
+   <div class="rule wide"><h3>Common ions</h3><p>Metals lose electrons → positive ions: group 1 → 1+ (Na⁺), group 2 → 2+ (Ca²⁺), Al → Al³⁺. Nonmetals gain electrons → negative ions named “-ide”: N³⁻ nitride, O²⁻ oxide, S²⁻ sulfide, F⁻ fluoride, Cl⁻ chloride. Zn²⁺ and Ag⁺ have one common charge.</p></div>
+   <div class="rule wide"><h3>Periodic table</h3>${ptableHTML({ key: true })}</div></div>`;
+}
 
-    function isCorrectAnswer(){
-      const entered = els.answerInput.value.trim();
-      if(currentDirection === "nameToSymbol"){
-        return entered === current.symbol;
-      }
-      return normalizedName(entered) === normalizedName(current.name);
-    }
-
-    function ddLog(ok){
-      try{
-        if(!current || answeredCurrent || !window.ddTrack) return;
-        const sel = els.setSelect.options[els.setSelect.selectedIndex];
-        ddTrack({game:"elements", course:"3A", mode:els.questionType.textContent, topic:sel ? sel.text : "", correct:!!ok});
-      }catch(e){}
-    }
-
-    function checkAnswer(){
-      if(!current || answeredCurrent) return;
-
-      const entered = els.answerInput.value.trim();
-      if(!entered){
-        showToast("Type an answer first.");
-        els.answerInput.focus();
-        return;
-      }
-
-      const ok = isCorrectAnswer();
-      ddLog(ok);
-      answeredCurrent = true;
-      els.answerInput.disabled = true;
-      els.checkBtn.disabled = true;
-
-      state.attempts += 1;
-      state.seen[current.symbol] = (state.seen[current.symbol] || 0) + 1;
-
-      if(ok){
-        state.correct += 1;
-        state.streak += 1;
-        state.bestStreak = Math.max(state.bestStreak, state.streak);
-        if(state.missed[current.symbol]){
-          state.missed[current.symbol] = Math.max(0, state.missed[current.symbol] - 1);
-        }
-
-        els.feedback.className = "feedback good";
-        els.feedback.innerHTML = `
-          <span>✓ Correct!</span>
-          <span class="small">${current.name} = ${current.symbol}</span>
-        `;
-      }else{
-        state.streak = 0;
-        state.missed[current.symbol] = (state.missed[current.symbol] || 0) + 1;
-
-        els.feedback.className = "feedback bad";
-        els.feedback.innerHTML = `
-          <span>Not quite. The correct answer is <strong>${currentDirection === "nameToSymbol" ? current.symbol : current.name}</strong>.</span>
-          <span class="small">${current.name} = ${current.symbol}</span>
-        `;
-      }
-
-      saveState();
-      updateStats();
-      renderMissed();
-    }
-
-    function showHint(){
-      if(!current) return;
-      if(currentDirection === "nameToSymbol"){
-        const len = current.symbol.length;
-        const first = current.symbol[0];
-        els.feedback.className = "feedback";
-        els.feedback.innerHTML = `
-          <span>Hint: The symbol starts with <strong>${first}</strong> and has ${len} letter${len === 1 ? "" : "s"}.</span>
-          <span class="small">Atomic number ${current.z}</span>
-        `;
-      }else{
-        els.feedback.className = "feedback";
-        els.feedback.innerHTML = `
-          <span>Hint: The name starts with <strong>${current.name[0]}</strong> and has ${current.name.length} letters.</span>
-          <span class="small">Atomic number ${current.z}</span>
-        `;
-      }
-    }
-
-    function revealAnswer(){
-      if(!current || answeredCurrent || revealedCurrent) return;
-      ddLog(false);
-      revealedCurrent = true;
-      answeredCurrent = true;
-      els.answerInput.disabled = true;
-      els.checkBtn.disabled = true;
-      state.missed[current.symbol] = (state.missed[current.symbol] || 0) + 1;
-      state.streak = 0;
-      saveState();
-
-      els.feedback.className = "feedback";
-      els.feedback.innerHTML = `
-        <span><strong>${current.name} = ${current.symbol}</strong></span>
-        <span class="small">This element was added to your review list.</span>
-      `;
-      updateStats();
-      renderMissed();
-    }
-
-    function updateStats(){
-      els.correctStat.textContent = state.correct;
-      els.attemptStat.textContent = state.attempts;
-      els.streakStat.textContent = state.streak;
-      els.accuracyStat.textContent =
-        state.attempts ? `${Math.round((state.correct/state.attempts)*100)}%` : "—";
-
-      const seenCount = Object.keys(state.seen).length;
-      const total = ELEMENTS.length;
-      const pct = Math.round((seenCount/total)*100);
-      els.progressFill.style.width = `${pct}%`;
-      els.progressCopy.textContent =
-        `${seenCount} of ${total} study-set elements encountered. Best streak: ${state.bestStreak}.`;
-    }
-
-    function renderMissed(){
-      const missed = getMissedElements()
-        .sort((a,b)=>(state.missed[b.symbol]||0)-(state.missed[a.symbol]||0));
-
-      els.missedList.innerHTML = "";
-      els.missedEmpty.style.display = missed.length ? "none" : "block";
-
-      missed.slice(0,16).forEach(e=>{
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.innerHTML = `
-          <span>${e.symbol} · ${e.name}</span>
-          <button title="Remove from missed list" aria-label="Remove ${e.name} from missed list">×</button>
-        `;
-        chip.querySelector("button").addEventListener("click", ()=>{
-          delete state.missed[e.symbol];
-          saveState();
-          renderMissed();
-          if(els.setSelect.value === "missed" && getMissedElements().length === 0){
-            els.setSelect.value = "combined";
-            newQuestion();
-          }
-        });
-        els.missedList.appendChild(chip);
-      });
-    }
-
-    function referenceElements(){
-      if(referenceMode === "core") return CORE;
-      if(referenceMode === "health") return HEALTH;
-      return ELEMENTS;
-    }
-
-    function renderReference(){
-      els.elementGrid.innerHTML = "";
-      referenceElements()
-        .slice()
-        .sort((a,b)=>a.z-b.z)
-        .forEach(e=>{
-          const div = document.createElement("div");
-          div.className = `element ${e.core ? "core" : "extra"} ${namesHidden ? "hidden-answer" : ""}`;
-          div.title = `${e.name} (${e.symbol}), atomic number ${e.z}`;
-          div.innerHTML = `
-            <span class="z">${e.z}</span>
-            <span class="sym">${e.symbol}</span>
-            <span class="name">${e.name}</span>
-          `;
-          div.addEventListener("click", ()=>{
-            div.classList.toggle("hidden-answer");
-          });
-          els.elementGrid.appendChild(div);
-        });
-
-      els.hideNamesBtn.textContent = namesHidden ? "Show Names" : "Hide Names";
-    }
-
-    function resetProgress(){
-      if(!confirm("Reset all saved practice stats and missed elements for this browser?")) return;
-      state = defaultState();
-      saveState();
-      updateStats();
-      renderMissed();
-      els.setSelect.value = "combined";
-      newQuestion();
-      showToast("Progress reset.");
-    }
-
-    function showToast(message){
-      els.toast.textContent = message;
-      els.toast.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(()=>els.toast.classList.remove("show"), 1700);
-    }
-
-    els.checkBtn.addEventListener("click", checkAnswer);
-    els.nextBtn.addEventListener("click", newQuestion);
-    els.newQuestionTop.addEventListener("click", newQuestion);
-    els.hintBtn.addEventListener("click", showHint);
-    els.revealBtn.addEventListener("click", revealAnswer);
-
-    els.answerInput.addEventListener("keydown", e=>{
-      if(e.key === "Enter"){
-        if(answeredCurrent) newQuestion();
-        else checkAnswer();
-      }
-    });
-
-    els.setSelect.addEventListener("change", ()=>{
-      atomicIndex = 0;
-      if(els.setSelect.value === "missed" && getMissedElements().length === 0){
-        showToast("No missed elements yet — using the combined set.");
-      }
-      newQuestion();
-    });
-
-    els.directionSelect.addEventListener("change", newQuestion);
-    els.orderSelect.addEventListener("change", ()=>{
-      atomicIndex = 0;
-      newQuestion();
-    });
-
-    els.focusMissedTop.addEventListener("click", ()=>{
-      if(getMissedElements().length === 0){
-        showToast("No missed elements yet.");
-        return;
-      }
-      els.setSelect.value = "missed";
-      atomicIndex = 0;
-      newQuestion();
-    });
-
-    els.resetBtn.addEventListener("click", resetProgress);
-
-    els.hideNamesBtn.addEventListener("click", ()=>{
-      namesHidden = !namesHidden;
-      renderReference();
-    });
-    els.showCoreBtn.addEventListener("click", ()=>{ referenceMode="core"; renderReference(); });
-    els.showHealthBtn.addEventListener("click", ()=>{ referenceMode="health"; renderReference(); });
-    els.showAllBtn.addEventListener("click", ()=>{ referenceMode="all"; renderReference(); });
-
-    renderReference();
-    renderMissed();
-    updateStats();
-    newQuestion();
-  </script>
-</body>
-</html>
+/* ---------- wiring ---------- */
+function bind() {
+  $('course').addEventListener('click', e => { const b = e.target.closest('button[data-course]'); if (b && b.dataset.course !== state.course) setCourse(b.dataset.course); });
+  document.addEventListener('click', e => {
+    const cat = e.target.closest('[data-cat]'); if (cat) return toggleCat(cat.dataset.cat);
+    const tp0 = e.target.closest('[data-topic]'); if (tp0) return toggleTopic(tp0.dataset.topic);
+    const st = e.target.closest('[data-set]'); if (st) { state.setId = st.dataset.set; state.orderIdx = {}; save(); renderChooser(); if (state.sel.size && !state.quiz) newQuestion(); return; }
+    const od = e.target.closest('[data-order]'); if (od) { state.ordered = !state.ordered; state.orderIdx = {}; save(); renderChooser(); if (state.sel.size && !state.quiz) newQuestion(); return; }
+    const ch = e.target.closest('#choices [data-choice]'); if (ch) return choose(+ch.dataset.choice);
+    const g = e.target.closest('[data-g]'); if (g) return guideChoose(+g.dataset.g, +g.dataset.k);
+    const cell = e.target.closest('#art button[data-z]'); if (cell) return tapCell(+cell.dataset.z);
+    const um = e.target.closest('[data-unmiss]'); if (um) { delete P.missed[um.dataset.unmiss]; save(); renderStats(); renderChooser(); return; }
+    const hn = e.target.closest('[data-hidenames]'); if (hn) { state.namesHidden = !state.namesHidden; renderReference(); return; }
+    const rf = e.target.closest('[data-ref]'); if (rf) { state.refMode = rf.dataset.ref; renderReference(); return; }
+    const card = e.target.closest('[data-card]'); if (card) { card.classList.toggle('hidden-answer'); return; }
+    const v = e.target.closest('[data-video]'); if (v) { setVideoFor(v.dataset.video); const pl = $('player'); pl.src = pl.dataset.src; }
+  });
+  $('elementGrid').addEventListener('keydown', e => { const card = e.target.closest('[data-card]'); if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); card.classList.toggle('hidden-answer'); } });
+  $('skillCard').onclick = () => { startQuiz(); scrollToPlay(); };
+  $('practiceMissedBtn').onclick = () => { state.setId = 'missed'; state.sel = new Set(['n2s', 's2n']); afterSelect(); scrollToPlay(); };
+  $('checkBtn').onclick = check; $('nextBtn').onclick = next;
+  $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
+  $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
+  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
+  $('solBtn').onclick = showSolution;
+  const openRules = () => { renderRules(); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };
+  $('rulesBtn').onclick = openRules; $('closeRules').onclick = () => { try { $('rulesDialog').close(); } catch (e) { $('rulesDialog').removeAttribute('open'); } };
+  $('rulesDialog').addEventListener('click', e => { if (e.target === $('rulesDialog')) $('rulesDialog').close(); });
+  $('videoBtn').onclick = () => { const d = $('videoSection'); d.open = true; const pl = $('player'); if (pl.src !== pl.dataset.src) pl.src = pl.dataset.src; try { d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} };
+  $('videoSection').addEventListener('toggle', () => { const pl = $('player'); if ($('videoSection').open && pl.src !== pl.dataset.src) pl.src = pl.dataset.src; });
+  document.querySelectorAll('img.logo-img').forEach(img => { img.onerror = () => { img.onerror = null; img.src = LOGO_FB; }; if (img.complete && !img.naturalWidth) img.src = LOGO_FB; });
+  let armed = 0; $('resetBtn').onclick = () => { const b = $('resetBtn'); if (!armed) { armed = 1; b.classList.add('armed'); b.textContent = 'Tap again to erase this course’s progress'; setTimeout(() => { armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; }, 4000); return; } P = fresh(); state.sel.clear(); state.setId = DEFAULT_SET[state.course]; save(); armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; renderStats(); renderChooser(); showEmpty(); };
+}
+function parseCourse(v) {
+  v = String(v || '').toUpperCase().replace(/CHEM/g, '').replace(/[\s_-]/g, '');
+  return { '3A': '3A', '1A': '1A', '3B': '3A', '1B': '1A' }[v] || null;   // 3B → 3A content, 1B → 1A content
+}
+function init() {
+  migrateOld();
+  let c = null; try { c = parseCourse(new URLSearchParams(location.search).get('course')); } catch (e) {}
+  if (!c) { try { c = parseCourse(JSON.parse(localStorage.getItem(STORE) || '{}').last); } catch (e) {} }
+  if (!c) c = '1A';
+  bind(); setCourse(c); paintIcons();
+  window.addEventListener('load', () => paintIcons());
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+</script>
+</body></html>

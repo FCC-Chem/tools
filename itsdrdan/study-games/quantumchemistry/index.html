@@ -872,7 +872,7 @@ function is3A(q){
  return false;
 }
 for(const q of bank)q.c3a=is3A(q);
-let course='1A';try{if(localStorage.getItem('q-course')==='3A')course='3A';}catch{}
+let course='1A';try{if(localStorage.getItem('q-course')==='3A')course='3A';}catch{}try{const u=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim();if(u==='3A'||u==='1A'){course=u;try{localStorage.setItem('q-course',u)}catch{}}}catch{}
 const courseBank=()=>course==='3A'?bank.filter(q=>q.c3a):bank;
 const PREP_3A=[
  ['Light calculations','light',q=>q.type==='number'],

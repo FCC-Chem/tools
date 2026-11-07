@@ -1,0 +1,39 @@
+{
+  "title": "Prefix Power-Up: SI Prefixes — ItsDrDan",
+  "author": "Dr. Dan (ItsDrDan)",
+  "course": "CHEM 3A and CHEM 1A",
+  "chapters": {
+    "CHEM 3A": "Chapter 1: Basics of Measurement (1.1.2 The Basic Units of Measurement, 1.3 Conversions, 1.3.3 Units Raised to a Power)",
+    "CHEM 1A": "Chapters 1.4 Measurements and 1.6 Mathematical Treatment of Measurement Results (OpenStax)"
+  },
+  "description": "SI prefix and metric conversion practice for CHEM 3A Chapter 1 (default) and CHEM 1A Chapter 1 (add ?course=1A). Students pick from 4 main options, Prefix ↔ Power of Ten, One-Step Conversions, Two-Prefix Conversions, and Squared & Cubed Units, then turn individual topics on or off and can mix several at once: prefix name → number, symbol → number, name → symbol, symbol → name, scientific notation → prefix, standard notation → prefix (CHEM 3A: tera through pico, with giga through pico as the must-knows; CHEM 1A: tera through femto), prefix → base unit, base unit → prefix, prefix → prefix through the base unit (mg → µg, km → nm), squared units (cm² → m²), cubed units (cm³ → m³), and cm³ = mL (including m³ → L). CHEM 3A adds short health-science conversions: IV volumes (mL ↔ L) and tablet doses (mg ↔ mcg, with mcg as the label abbreviation for µg). Answers can be typed in decimal or scientific notation (4.5E-6, 4.5e-6, 4.5×10^-6, 4.5*10^-6). Step-by-step factor-label walkthroughs show which way to write each conversion factor. Mistake catchers name the slip: factor upside down, exponent sign, off by 1000 (milli/micro/nano mix-ups), squared or cubed factor not squared or cubed, µ vs m, and symbol case. Skill Check Prep: 10 mixed questions, then a study plan. Also a prefix reference table, TI-36X Pro tips (EE key, parentheses with ^), XP, ranks, 10 achievements, a missed-prefixes list, and ItsDrDan videos that jump to the right moment.",
+  "tags": [
+    "base units",
+    "CHEM 1A",
+    "CHEM 3A",
+    "CHEM 3A Chapter 1",
+    "chemistry",
+    "cm3 and mL",
+    "conversion factors",
+    "cubed units",
+    "dimensional analysis",
+    "dosage calculations",
+    "factor-label method",
+    "IV volumes",
+    "mcg",
+    "metric conversions",
+    "metric prefixes",
+    "powers of ten",
+    "scientific notation",
+    "SI prefixes",
+    "SI units",
+    "skill check",
+    "squared units",
+    "TI-36X Pro",
+    "two-step conversions",
+    "unit conversions",
+    "XP and achievements"
+  ],
+  "logo": null,
+  "status": "working"
+}

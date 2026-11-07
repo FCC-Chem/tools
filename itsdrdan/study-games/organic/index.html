@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-<title>Functional Group Flashcards • ItsDrDan • CHEM 3B</title>
+<title>Functional Group Flashcards • Functional Groups • ItsDrDan</title>
 <meta name="description" content="Flashcards and quizzes for the 16 functional groups in CHEM 3B: alkanes to amides. Free study game by ItsDrDan.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='10' width='52' height='44' rx='10' fill='%23f1e3fa' stroke='%239555bd' stroke-width='4'/%3E%3Cpolygon points='32,20 43,26.5 43,39.5 32,46 21,39.5 21,26.5' fill='none' stroke='%239555bd' stroke-width='4'/%3E%3C/svg%3E">
 <style>
@@ -22,9 +22,16 @@ button,select,input{font:inherit;color:inherit}
 
 /* hero */
 .hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px;border-radius:28px;background:linear-gradient(120deg,#f1e3fa,#fff8f1 70%);border:1px solid var(--line);box-shadow:var(--shadow)}
-.hero h1{margin:6px 0 4px;font-size:clamp(26px,3.6vw,40px);line-height:1.08;font-weight:900;letter-spacing:-.02em}
+.hero h1{margin:6px 0 4px;font-size:clamp(26px,3.6vw,40px);line-height:1.08;font-weight:700;letter-spacing:-.02em}
 .hero h1 .a{color:var(--brand)}.hero h1 .b{color:#d96b5f}
 .hero .subtitle{margin:0;color:var(--muted);font-size:15.5px}
+.hero .warmup{margin:0 0 4px;font-weight:800;font-size:14.5px;color:var(--brand-d)}.hero .warmup a{color:var(--brand-d)}
+.badge .ui,.warmup .ui,summary .ui,.mastery h2 .ui{color:var(--brand)}
+.mode-icon .ui{width:26px;height:26px;color:var(--brand-d)}
+.tip-label{font-weight:900;color:#80601a}
+.plan{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.plan li{background:#f6f1fb;border-radius:12px;padding:8px 12px}.plan li.ok{background:var(--good-bg)}
+.plan-box{margin-top:12px;background:#fff8e6;border:1.5px solid #ffd59a;border-radius:16px;padding:12px 14px}
 .badge{display:inline-block;background:#fff;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;color:var(--brand);border:1.5px solid #e4d3f2}
 .hero-logo{width:128px;height:128px;flex:none;filter:drop-shadow(0 6px 8px #0002)}.hero-logo svg{width:100%;height:100%;display:block}
 
@@ -40,20 +47,20 @@ details[open]>summary .sum-hint{background:#fff;color:var(--brand);border:1.5px 
 .ht-step b{font-size:15.5px}.ht-step span{font-size:14px;color:var(--muted)}
 
 /* modes */
-.mode-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:10px 0}
+.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0}
 .mode-btn{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:18px;background:linear-gradient(145deg,#fff,var(--mb));padding:12px 12px 12px;display:grid;grid-template-columns:44px 1fr;grid-template-areas:"i n" "i s";gap:2px 10px;align-items:center;transition:transform .12s;min-height:72px}
 .mode-btn:hover{transform:translateY(-2px)}
 .mode-btn.active{outline:3px solid var(--ma);outline-offset:2px}
 .mode-icon{grid-area:i;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#fff;font-size:24px}
-.mode-name{grid-area:n;font-weight:900;font-size:16.5px;line-height:1.15}
+.mode-name{grid-area:n;font-weight:600;font-size:16.5px;line-height:1.15}
 .mode-btn small{grid-area:s;font-size:12.5px;color:var(--muted);font-weight:700}
-.mode-btn[data-mode=study]{--mb:#fff1ea;--ma:#e59a7a}.mode-btn[data-mode=p2n]{--mb:#e7f6e9;--ma:#7caf86}.mode-btn[data-mode=n2p]{--mb:#e6f2ff;--ma:#82afd2}.mode-btn[data-mode=real]{--mb:#fdeaf3;--ma:#d68aae}.mode-btn[data-mode=mixed]{--mb:#f0e8fc;--ma:#ad8cce}
+.mode-btn[data-mode=study]{--mb:#fff1ea;--ma:#e59a7a}.mode-btn[data-mode=p2n]{--mb:#e7f6e9;--ma:#7caf86}.mode-btn[data-mode=n2p]{--mb:#e6f2ff;--ma:#82afd2}.mode-btn[data-mode=real]{--mb:#fdeaf3;--ma:#d68aae}.mode-btn[data-mode=mixed]{--mb:#f0e8fc;--ma:#ad8cce}.mode-btn[data-mode=skill]{--mb:#fff6dc;--ma:#e0b851}
 
 /* practice */
 .main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start;margin-top:10px}
 #practice{grid-column:1/-1}
 .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.mode-title{margin:0;font-size:26px;font-weight:900}
+.mode-title{margin:0;font-size:26px;font-weight:600}
 .statbar{display:flex;gap:8px;flex-wrap:wrap}
 .stat{background:#f6f1fb;border-radius:14px;padding:6px 12px;display:grid;line-height:1.1;min-width:76px;text-align:center}
 .stat small{font-size:11.5px;color:var(--muted);font-weight:800}.stat b{font-size:19px}
@@ -125,7 +132,7 @@ details.journey>summary::-webkit-details-marker{display:none}
 .jbadges{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .jbadge{display:flex;gap:10px;align-items:center;border-radius:14px;padding:8px 10px;background:#f6f1fb;opacity:.45;font-size:13px}
 .jbadge.on{opacity:1;background:#fff6d6;border:1.5px solid #ffd59a}
-.jbadge .ic{font-size:24px}.jbadge b{display:block;font-size:14px}
+.jbadge .ic{font-size:24px;color:var(--brand-d);display:grid;place-items:center}.jbadge b{display:block;font-size:14px}
 .journey-reset{margin-top:10px;border:0;background:none;color:var(--soft);text-decoration:underline;cursor:pointer;font-size:13px}
 .footer-note{color:var(--muted);font-size:13.5px;margin:12px 4px 0;line-height:1.5}
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--edge);color:#fff;padding:10px 18px;border-radius:999px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;z-index:50}
@@ -134,23 +141,27 @@ details.journey>summary::-webkit-details-marker{display:none}
 @media(max-width:560px){.hero{padding:14px 16px}.hero-logo{width:84px;height:84px}.answers{grid-template-columns:1fr}.answers.pics{grid-template-columns:repeat(2,1fr)}.mode-title{font-size:22px}.action{padding:10px 14px;font-size:16px}.stat{min-width:64px}}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head>
 <body>
 <div class="toast" id="toast" role="status"></div>
 <div class="app">
-<section class="hero"><div><span class="badge">🃏 16 functional groups • ItsDrDan • CHEM 3B</span>
+<section class="hero"><div><span class="badge"><span data-icon="book"></span> 16 functional groups • ItsDrDan • CHEM 3B</span>
 <h1><span class="a">Functional Group</span> <span class="b">Flashcards</span></h1>
-<p class="subtitle">Learn to spot the 16 groups fast: flip cards, then quiz yourself both directions.</p></div>
+<p class="warmup"><span data-icon="stopwatch"></span> 5-minute warm-up for <a href="https://itsdrdan.github.io/functionalgroups/" target="_blank" rel="noopener noreferrer">Organic Origins</a></p>
+<p class="subtitle">Pick a mode below. Flip the cards first, then quiz yourself.</p></div>
 <div class="hero-logo" id="heroLogo" role="img" aria-label="Stack of flashcards with a benzene ring"></div></section>
 
-<details class="directions" id="howTo"><summary>📘 How to play <span class="sum-hint">Tap to open</span></summary>
+<details class="directions" id="howTo"><summary><span><span data-icon="book"></span> How to play</span> <span class="sum-hint">Tap to open</span></summary>
 <div class="howto">
 <div class="ht-step"><span class="ht-num">1</span><b>Start with Study</b><span>Tap a card to flip it.</span></div>
 <div class="ht-step"><span class="ht-num">2</span><b>Pick a quiz</b><span>Tap an answer, then <em>Check</em>.</span></div>
 <div class="ht-step"><span class="ht-num">3</span><b>Stuck?</b><span><em>Hint</em> helps. <em>Show Answer</em> explains (no XP).</span></div>
 <div class="ht-step"><span class="ht-num">4</span><b>Fill the grid</b><span>Each group turns green after 3 correct in a row.</span></div>
+<div class="ht-step"><span class="ht-num">5</span><b>Before a skill check</b><span><em>Skill Check Prep</em>: 10 mixed questions, then a study plan.</span></div>
 </div></details>
 
 <nav class="mode-grid" id="modeGrid" aria-label="Choose a study mode"></nav>
@@ -158,14 +169,14 @@ details.journey>summary::-webkit-details-marker{display:none}
 <div class="main">
 <section class="card" id="practice">
   <div class="toprow"><h2 class="mode-title" id="modeTitle">Study</h2>
-    <div class="statbar"><span class="stat"><small>Correct</small><b id="sCorrect">0</b></span><span class="stat"><small>Streak 🔥</small><b id="sStreak">0</b></span><span class="stat"><small>Best</small><b id="sBest">0</b></span></div></div>
+    <div class="statbar"><span class="stat"><small>Correct</small><b id="sCorrect">0</b></span><span class="stat"><small>Streak <span data-icon="flame"></span></small><b id="sStreak">0</b></span><span class="stat"><small>Best</small><b id="sBest">0</b></span></div></div>
   <div class="progress" id="progress"><i id="progressFill" style="width:0"></i></div>
   <div id="area"></div>
 </section>
 
-<section class="card mastery" id="mastery"><h2>🧩 Your 16 groups</h2><p class="footer-note" style="margin-top:0">Grey = not yet · orange = started · yellow = getting there · green = mastered (3 in a row).</p><div class="mgrid" id="mgrid"></div></section>
+<section class="card mastery" id="mastery"><h2><span data-icon="target"></span> Your 16 groups</h2><p class="footer-note" style="margin-top:0">Grey = not yet · orange = started · yellow = getting there · green = mastered (3 in a row).</p><div class="mgrid" id="mgrid"></div></section>
 
-<details class="card journey" id="journey"><summary>🧭 Chemistry Journey <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary>
+<details class="card journey" id="journey"><summary><span><span data-icon="compass"></span> Chemistry Journey</span> <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary>
   <div class="xp-row"><span id="xpLevel">Level 1</span><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><span id="xpText">0 / 100 XP</span></div>
   <p class="xp-note">10 XP for each answer you get on your own (+2 per streak step, up to +10), 2 XP when you peek at the answer. Saved in this browser only.</p>
   <div class="jbadges" id="jbadges"></div>
@@ -312,31 +323,37 @@ document.getElementById('heroLogo').innerHTML = `<svg viewBox="0 0 128 128" aria
 
 /* ===================== state, XP, mastery ===================== */
 const $ = id => document.getElementById(id);
+const ico = n => { try { return window.ddIcon ? window.ddIcon(n) : ''; } catch { return ''; } };
+function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
+/* CHEM 3B only: ?course= is accepted (3A, 1A, 1B, 3B, optional "CHEM") but stats are always tagged 3B. */
+const COURSE = '3B';
+try { const c = (new URLSearchParams(location.search).get('course') || '').toUpperCase().replace(/^CHEM\s*/, '').trim(); if (c && c !== COURSE) console.info('Functional Group Flashcards is a CHEM 3B game; course=' + c + ' ignored.'); } catch {}
 const KEY = 'itsdrdan-fgflash';
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } };
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch {} };
 const P = Object.assign({xp: 0, best: 0, mastery: {}, badges: {}, answered: 0, studied: {}}, load());
-const S = {mode: 'study', correct: 0, streak: 0, q: null, answered: false, tries: 0, hinted: false, deck: [], i: 0, picked: null, flipIdx: 0, order: GROUPS.map((_, i) => i), shuffled: false};
+const S = {mode: 'study', results: [], logged: false, correct: 0, streak: 0, q: null, answered: false, tries: 0, hinted: false, deck: [], i: 0, picked: null, flipIdx: 0, order: GROUPS.map((_, i) => i), shuffled: false};
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); };
 
 const BADGES = [
-  {id: 'first', ic: '🌱', name: 'First Flip', desc: 'Flip your first card'},
-  {id: 'deck', ic: '🃏', name: 'Whole Deck', desc: 'Study all 16 cards'},
-  {id: 'ten', ic: '✅', name: 'Ten Right', desc: '10 correct answers'},
-  {id: 'streak5', ic: '🔥', name: 'On Fire', desc: '5 in a row'},
-  {id: 'streak16', ic: '🏆', name: 'Perfect 16', desc: '16 in a row'},
-  {id: 'carbonyl', ic: '🔴', name: 'Carbonyl Crew', desc: 'Master all 5 C=O groups'},
-  {id: 'sulfur', ic: '🟡', name: 'Sulfur Squad', desc: 'Master thiol, sulfide, disulfide'},
-  {id: 'all', ic: '🧩', name: 'All 16', desc: 'Master every group'},
+  {id: 'first', ic: 'sparkle', name: 'First Flip', desc: 'Flip your first card'},
+  {id: 'deck', ic: 'book', name: 'Whole Deck', desc: 'Study all 16 cards'},
+  {id: 'ten', ic: 'check', name: 'Ten Right', desc: '10 correct answers'},
+  {id: 'streak5', ic: 'flame', name: 'On Fire', desc: '5 in a row'},
+  {id: 'streak16', ic: 'trophy', name: 'Perfect 16', desc: '16 in a row'},
+  {id: 'carbonyl', ic: 'atom', name: 'Carbonyl Crew', desc: 'Master all 5 C=O groups'},
+  {id: 'sulfur', ic: 'gem', name: 'Sulfur Squad', desc: 'Master thiol, sulfide, disulfide'},
+  {id: 'all', ic: 'target', name: 'All 16', desc: 'Master every group'},
+  {id: 'skill', ic: 'clipboard', name: 'Skill Check Ready', desc: 'Score 8+ on Skill Check Prep'},
 ];
-function award(id) { if (P.badges[id]) return; P.badges[id] = 1; save(); const b = BADGES.find(x => x.id === id); toast(`${b.ic} Badge: ${b.name}`); renderJourney(); }
+function award(id) { if (P.badges[id]) return; P.badges[id] = 1; save(); const b = BADGES.find(x => x.id === id); toast(`Badge: ${b.name}`); renderJourney(); }
 function addXp(n) { P.xp += n; save(); renderJourney(); }
 function renderJourney() {
   const lvl = Math.floor(P.xp / 100) + 1, into = P.xp % 100;
   $('xpLevel').textContent = 'Level ' + lvl; $('xpText').textContent = `${into} / 100 XP`; $('xpFill').style.width = into + '%';
   $('jChip').textContent = `Level ${lvl} • ${P.xp} XP`;
-  $('jbadges').innerHTML = BADGES.map(b => `<div class="jbadge ${P.badges[b.id] ? 'on' : ''}"><span class="ic">${b.ic}</span><span><b>${b.name}</b>${b.desc}</span></div>`).join('');
+  $('jbadges').innerHTML = BADGES.map(b => `<div class="jbadge ${P.badges[b.id] ? 'on' : ''}"><span class="ic">${ico(b.ic)}</span><span><b>${b.name}</b>${b.desc}</span></div>`).join('');
   $('sBest').textContent = P.best;
 }
 const mlevel = id => { const m = P.mastery[id] || {run: 0, seen: 0}; return m.run >= 3 ? 3 : m.run >= 1 ? 2 : m.seen ? 1 : 0; };
@@ -349,26 +366,44 @@ function renderMastery() {
   if (mastered.length === 16) award('all');
 }
 function record(id, ok) { const m = P.mastery[id] = P.mastery[id] || {run: 0, seen: 0, right: 0}; m.seen++; if (ok) { m.run++; m.right++; } else m.run = 0; save(); renderMastery(); }
-function ddLog(mode, topic, ok) { try { if (window.ddTrack) ddTrack({game: 'organic', course: '3B', mode, topic, correct: !!ok}); } catch {} }
+/* one stat per question, on the first answer only */
+function ddLog(mode, topic, ok, slip, tries) {
+  if (S.logged) return; S.logged = true;
+  try { if (window.ddTrack) ddTrack({game: 'organic', course: COURSE, mode, topic, correct: !!ok, slip: ok ? '' : (slip || ''), tries: tries || ''}); } catch {}
+}
+/* mistake catchers: look-alike groups students mix up (either direction) */
+const SLIPS = [
+  {id: 'ester-vs-ether', pair: ['ester', 'ether'], tip: 'Esters and ethers both have an O between two carbons. In an ester that O sits right next to a C=O (–COO–R). No C=O anywhere means ether (R–O–R′).'},
+  {id: 'aldehyde-vs-ketone', pair: ['aldehyde', 'ketone'], tip: 'Both have a C=O. Look at what else is on the C=O carbon: an H means aldehyde (–CHO, end of the chain); carbons on both sides means ketone.'},
+  {id: 'amine-vs-amide', pair: ['amine', 'amide'], tip: 'Both have nitrogen. If the N is bonded directly to a C=O carbon, it is an amide (–CON–). An N with only single bonds to C and H is an amine.'},
+  {id: 'alcohol-vs-phenol', pair: ['alcohol', 'phenol'], tip: 'An –OH on a benzene ring is a phenol. An alcohol has its –OH on a carbon with only single bonds.'},
+  {id: 'carboxylic-acid-vs-ester', pair: ['acid', 'ester'], tip: 'Both have C=O with an O next to it. Check that second O: if it holds an H, it is a carboxylic acid (–COOH); if it leads to another carbon, it is an ester (–COOR).'},
+  {id: 'thiol-vs-alcohol', pair: ['thiol', 'alcohol'], tip: 'Check the atom holding the H: –OH is an alcohol, –SH is a thiol (sulfur sits right below oxygen on the periodic table, so it is the sulfur cousin).'},
+];
+const findSlip = (picked, right) => SLIPS.find(x => x.pair.includes(picked) && x.pair.includes(right) && picked !== right) || null;
 
 /* ===================== modes ===================== */
 const MODES = [
-  {id: 'study', ic: '🃏', name: 'Study', sub: 'Flip through the 16 cards'},
-  {id: 'p2n', ic: '👀', name: 'Picture → Name', sub: 'See a structure, pick its name'},
-  {id: 'n2p', ic: '✏️', name: 'Name → Picture', sub: 'See a name, pick the structure'},
-  {id: 'real', ic: '🧪', name: 'Real Molecules', sub: 'Formula of a real compound'},
-  {id: 'mixed', ic: '🎲', name: 'Mixed', sub: 'All three quiz styles'},
+  {id: 'study', ic: 'book', name: 'Study', sub: 'Flip through the 16 cards'},
+  {id: 'p2n', ic: 'eye', name: 'Picture → Name', sub: 'See a structure, pick its name'},
+  {id: 'n2p', ic: 'pencil', name: 'Name → Picture', sub: 'See a name, pick the structure'},
+  {id: 'real', ic: 'flask', name: 'Real Molecules', sub: 'Formula of a real compound'},
+  {id: 'mixed', ic: 'dice', name: 'Mixed', sub: 'All three quiz styles'},
+  {id: 'skill', ic: 'clipboard', name: 'Skill Check Prep', sub: '10 mixed questions, then a study plan'},
 ];
-$('modeGrid').innerHTML = MODES.map(m => `<button type="button" class="mode-btn" data-mode="${m.id}"><span class="mode-icon">${m.ic}</span><span class="mode-name">${m.name}</span><small>${m.sub}</small></button>`).join('');
-$('modeGrid').addEventListener('click', e => { const b = e.target.closest('.mode-btn'); if (b) setMode(b.dataset.mode); });
-function setMode(id) {
-  S.mode = id; document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === id));
-  $('modeTitle').textContent = MODES.find(m => m.id === id).name;
-  S.deck = shuffle(GROUPS.map(g => g.id)); S.i = 0; S.correct = 0; S.streak = 0; updateStats();
-  if (id === 'study') renderStudy(); else nextQuestion();
-  $('practice').scrollIntoView({behavior: 'smooth', block: 'start'});
+function renderModes() {
+  $('modeGrid').innerHTML = MODES.map(m => `<button type="button" class="mode-btn" data-mode="${m.id}"><span class="mode-icon">${ico(m.ic)}</span><span class="mode-name">${m.name}</span><small>${m.sub}</small></button>`).join('');
 }
-function updateStats() { $('sCorrect').textContent = S.correct; $('sStreak').textContent = S.streak; $('sBest').textContent = P.best; $('progressFill').style.width = (S.mode === 'study' ? (S.flipIdx + 1) / 16 : S.i / 16) * 100 + '%'; }
+/* deck (optional): a list of group ids to quiz, e.g. the groups missed on a Skill Check Prep */
+function setMode(id, deck, scroll = true) {
+  S.mode = id; document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === id));
+  $('modeTitle').textContent = deck ? 'Practice my missed groups' : MODES.find(m => m.id === id).name;
+  S.deck = deck ? shuffle(deck) : id === 'skill' ? shuffle(GROUPS.map(g => g.id)).slice(0, 10) : shuffle(GROUPS.map(g => g.id));
+  S.i = 0; S.correct = 0; S.streak = 0; S.results = []; updateStats();
+  if (id === 'study') renderStudy(); else nextQuestion();
+  if (scroll) $('practice').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function updateStats() { $('sCorrect').textContent = S.correct; $('sStreak').textContent = S.streak; $('sBest').textContent = P.best; $('progressFill').style.width = (S.mode === 'study' ? (S.flipIdx + 1) / 16 : S.i / S.deck.length) * 100 + '%'; }
 
 /* ----- Study: flip cards ----- */
 function renderStudy() {
@@ -379,7 +414,7 @@ function renderStudy() {
     <div class="face front"><div id="frontStruct"></div><span class="tap">tap to flip ↻</span></div>
     <div class="face back"><h3>${esc(g.name)}</h3><p class="key">${esc(g.key)}</p><p class="ex"><b>Spot it:</b> ${esc(g.spot)}</p><p class="ex"><b>Example:</b> ${g.ex[0][0]} — ${esc(g.ex[0][1])}${g.ex[0][2] ? ' (' + esc(g.ex[0][2]) + ')' : ''}</p><p class="ex"><b>Where you’ll meet it:</b> ${esc(g.meet)}</p></div>
   </div></div>
-  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / 16</span><button class="action primary" id="nextCard" type="button">Next ›</button><button class="action" id="shuffleBtn" type="button" title="${S.shuffled ? 'Back to textbook order' : 'Shuffle the deck'}">${S.shuffled ? '↕ In order' : '🔀 Shuffle'}</button></div>`;
+  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / 16</span><button class="action primary" id="nextCard" type="button">Next ›</button><button class="action" id="shuffleBtn" type="button" title="${S.shuffled ? 'Back to textbook order' : 'Shuffle the deck'}">${S.shuffled ? ico('levels') + ' In order' : ico('loop') + ' Shuffle'}</button></div>`;
   $('frontStruct').append(drawGroup(g));
   const flash = $('flash');
   const flip = () => { flash.classList.toggle('flipped'); if (flash.classList.contains('flipped')) { P.studied[g.id] = 1; save(); award('first'); if (Object.keys(P.studied).length === 16) award('deck'); } };
@@ -392,21 +427,22 @@ function renderStudy() {
 
 /* ----- quizzes ----- */
 function pickDistractors(g, n) {
-  // prefer look-alikes from the same family, then anything else
-  const same = GROUPS.filter(x => x.id !== g.id && x.family === g.family), rest = GROUPS.filter(x => x.id !== g.id && x.family !== g.family);
-  return shuffle(same).slice(0, n).concat(shuffle(rest)).slice(0, n);
+  // prefer the classic look-alike partner (SLIPS: ester/ether, amine/amide...), then the same family, then anything else
+  const partners = (typeof SLIPS === 'undefined' ? [] : SLIPS).filter(x => x.pair.includes(g.id)).map(x => byId[x.pair.find(y => y !== g.id)]).filter(Boolean);
+  const same = GROUPS.filter(x => x.id !== g.id && x.family === g.family && !partners.includes(x)), rest = GROUPS.filter(x => x.id !== g.id && x.family !== g.family && !partners.includes(x));
+  return shuffle(partners).concat(shuffle(same).slice(0, n)).concat(shuffle(rest)).slice(0, n);
 }
 function nextQuestion() {
   if (S.i >= S.deck.length) return renderDone();
   const g = byId[S.deck[S.i]];
-  let kind = S.mode === 'mixed' ? ['p2n', 'n2p', 'real'][Math.floor(Math.random() * 3)] : S.mode;
+  let kind = (S.mode === 'mixed' || S.mode === 'skill') ? ['p2n', 'n2p', 'real'][Math.floor(Math.random() * 3)] : S.mode;
   const q = S.q = {g, kind, opts: shuffle([g, ...pickDistractors(g, 3)])};
   if (kind === 'real') q.ex = g.ex[Math.floor(Math.random() * g.ex.length)];
-  S.answered = false; S.tries = 0; S.hinted = false; S.picked = null;
+  S.answered = false; S.tries = 0; S.hinted = false; S.picked = null; S.logged = false;
   const area = $('area');
   const kicker = kind === 'p2n' ? 'Which functional group is this?' : kind === 'n2p' ? 'Which structure shows this group?' : 'Which functional group does this real compound contain?';
-  area.innerHTML = `<p class="kicker">${kicker} <span style="color:var(--soft)">(${S.i + 1} of 16)</span></p><div class="prompt ${kind === 'p2n' ? '' : 'short'}" id="prompt"></div><div class="answers ${kind === 'n2p' ? 'pics' : ''}" id="answers" role="group" aria-label="Answer choices"></div>
-  <div class="btn-row"><button class="action primary" id="checkBtn" type="button">Check Answer</button><button class="action" id="hintBtn" type="button">💡 Hint</button><button class="action" id="showBtn" type="button">Show Answer</button><button class="action primary next hidden" id="nextBtn" type="button">Next →</button></div>
+  area.innerHTML = `<p class="kicker">${kicker} <span style="color:var(--soft)">(${S.i + 1} of ${S.deck.length})</span></p><div class="prompt ${kind === 'p2n' ? '' : 'short'}" id="prompt"></div><div class="answers ${kind === 'n2p' ? 'pics' : ''}" id="answers" role="group" aria-label="Answer choices"></div>
+  <div class="btn-row"><button class="action primary" id="checkBtn" type="button">Check Answer</button><button class="action" id="hintBtn" type="button">${ico('bulb')} Hint</button><button class="action" id="showBtn" type="button">Show Answer</button><button class="action primary next hidden" id="nextBtn" type="button">Next →</button></div>
   <div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>`;
   const prompt = $('prompt');
   if (kind === 'p2n') prompt.append(drawGroup(g, {hideName: true}));
@@ -423,16 +459,17 @@ function nextQuestion() {
   updateStats();
 }
 function fmt(f) { return esc(f).replace(/[₀-₉]+/g, m => '<sub>' + [...m].map(c => '₀₁₂₃₄₅₆₇₈₉'.indexOf(c)).join('') + '</sub>'); }
-function hint() { if (S.answered) return; S.hinted = true; const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = '💡 ' + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot); }
+function hint() { if (S.answered) return; S.hinted = true; const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = `<span class="tip-label">${ico('bulb')} Professor Tip:</span> ` + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot); }
 function check() {
   if (S.answered) return; if (!S.picked) { toast('Tap an answer first'); return; }
   S.tries++; const ok = S.picked === S.q.g.id;
   if (ok) return finish(true, false);
   const b = document.querySelector(`.opt[data-id="${S.picked}"]`); b.classList.add('wrong'); b.disabled = true;
-  const fb = $('feedback'); fb.className = 'feedback bad'; fb.innerHTML = `<b>Not yet.</b> That one is ${esc(byId[S.picked].name.toLowerCase())}: ${esc(byId[S.picked].key)} Try again${S.tries >= 2 ? ', or tap <b>Show Answer</b>' : ''}.`;
-  if (S.tries === 1) { S.streak = 0; updateStats(); record(S.q.g.id, false); ddLog(modeName(), S.q.g.name, false); }
+  const slip = findSlip(S.picked, S.q.g.id);
+  const fb = $('feedback'); fb.className = 'feedback bad'; fb.innerHTML = `<b>Not yet.</b> That one is ${esc(byId[S.picked].name.toLowerCase())}: ${esc(byId[S.picked].key)}${slip ? `<br><span class="tip-label">${ico('bulb')} Professor Tip:</span> ${esc(slip.tip)}` : ''} Try again${S.tries >= 2 ? ', or tap <b>Show Answer</b>' : ''}.`;
+  if (S.tries === 1) { S.streak = 0; updateStats(); record(S.q.g.id, false); ddLog(modeName(), S.q.g.name, false, slip ? slip.id : 'other', S.hinted ? 'hint' : ''); S.results.push({id: S.q.g.id, kind: S.q.kind, ok: false, slip: slip && slip.id}); }
 }
-function modeName() { return S.q.kind === 'p2n' ? 'Picture to Name' : S.q.kind === 'n2p' ? 'Name to Picture' : 'Real Molecules'; }
+function modeName() { if (S.mode === 'skill') return 'Skill Check Prep'; return S.q.kind === 'p2n' ? 'Picture to Name' : S.q.kind === 'n2p' ? 'Name to Picture' : 'Real Molecules'; }
 function finish(ok, revealed) {
   S.answered = true; const q = S.q, g = q.g;
   document.querySelectorAll('.opt').forEach(b => { b.disabled = true; if (b.dataset.id === g.id) b.classList.add('right'); });
@@ -440,28 +477,62 @@ function finish(ok, revealed) {
   const firstTry = ok && S.tries === 1 && !S.hinted;
   const fb = $('feedback');
   const why = `<b>${esc(g.name)}:</b> ${esc(g.key)} ${q.kind === 'real' ? `${fmt(q.ex[0])} is <b>${esc(q.ex[1])}</b>${q.ex[2] ? ' (' + esc(q.ex[2]) + ')' : ''}.` : ''}<br><span style="color:var(--muted)">Where you’ll meet it: ${esc(g.meet)}</span>`;
-  if (ok) { fb.className = 'feedback good'; fb.innerHTML = '<b>✓ Correct!</b> ' + why; }
+  if (ok) { fb.className = 'feedback good'; fb.innerHTML = `<b>${ico('check')} Correct!</b> ` + why; }
   else { fb.className = 'feedback shown'; fb.innerHTML = why; }
   if (firstTry) {
     S.correct++; S.streak++; P.best = Math.max(P.best, S.streak); P.answered++;
-    addXp(10 + Math.min(10, 2 * (S.streak - 1))); record(g.id, true); ddLog(modeName(), g.name, true);
+    addXp(10 + Math.min(10, 2 * (S.streak - 1))); record(g.id, true); ddLog(modeName(), g.name, true); S.results.push({id: g.id, kind: q.kind, ok: true});
     if (S.streak >= 5) award('streak5'); if (S.streak >= 16) award('streak16'); if (P.answered >= 10) award('ten');
-  } else if (ok) { S.correct++; addXp(4); }
-  else { S.streak = 0; if (S.tries === 0) { record(g.id, false); ddLog(modeName(), g.name, false); } addXp(2); }
+  } else if (ok) { S.correct++; addXp(4); if (S.tries === 1) { ddLog(modeName(), g.name, true, '', 'hint'); S.results.push({id: g.id, kind: q.kind, ok: true, hinted: true}); } }
+  else { S.streak = 0; if (S.tries === 0) { record(g.id, false); ddLog(modeName(), g.name, false, '', 'revealed'); S.results.push({id: g.id, kind: q.kind, ok: false}); } addXp(2); }
   save(); updateStats();
 }
 function renderDone() {
-  $('area').innerHTML = `<div class="prompt" style="min-height:0"><div style="text-align:center"><div class="bigname">Round complete!</div><p style="font-size:18px;margin:6px 0 0">${S.correct} of 16 on the first try · best streak ${P.best}</p></div></div>
+  if (S.mode === 'skill') return renderPlan();
+  const firsts = S.results.filter(r => r.ok && !r.hinted).length;
+  $('area').innerHTML = `<div class="prompt" style="min-height:0"><div style="text-align:center"><div class="bigname">Round complete!</div><p style="font-size:18px;margin:6px 0 0">${firsts} of ${S.deck.length} on the first try · best streak ${P.best}</p></div></div>
   <div class="btn-row" style="justify-content:center"><button class="action primary" id="againBtn" type="button">Play again</button><button class="action" id="studyBtn" type="button">Back to Study</button></div>`;
   $('againBtn').onclick = () => setMode(S.mode); $('studyBtn').onclick = () => setMode('study');
   $('progressFill').style.width = '100%';
 }
 
-$('journeyReset').onclick = () => { if (!confirm('Reset XP, badges and mastery for this game?')) return; P.xp = 0; P.badges = {}; P.mastery = {}; P.answered = 0; P.studied = {}; P.best = 0; save(); renderJourney(); renderMastery(); updateStats(); toast('Progress reset'); };
+/* ----- Skill Check Prep: score + study plan ----- */
+const FAMILY = {hydrocarbon: 'Hydrocarbons (C and H only)', halogen: 'Halogen groups', oxygen: 'Oxygen groups without C=O', sulfur: 'Sulfur groups', carbonyl: 'Carbonyl (C=O) groups', nitrogen: 'Nitrogen groups'};
+const KIND = {p2n: 'Picture → Name', n2p: 'Name → Picture', real: 'Real Molecules'};
+function renderPlan() {
+  const res = S.results, n = S.deck.length, score = res.filter(r => r.ok).length;
+  P.bestSkill = Math.max(P.bestSkill || 0, score); save(); if (score >= 8) award('skill');
+  const missed = [...new Set(res.filter(r => !r.ok).map(r => r.id))];
+  const slips = [...new Set(res.filter(r => r.slip).map(r => r.slip))].map(id => SLIPS.find(x => x.id === id));
+  const fams = [...new Set(missed.map(id => byId[id].family))];
+  const verdict = score >= 9 ? 'Excellent, you are ready!' : score >= 7 ? 'Solid. Polish the groups below.' : 'Good practice. Work through the plan below.';
+  $('area').innerHTML = `<div style="text-align:center"><div class="bigname">${score} / ${n}</div><p style="font-size:18px;margin:4px 0 10px">${verdict}</p></div>
+  <ul class="plan">${res.map((r, i) => `<li class="${r.ok ? 'ok' : ''}">${r.ok ? ico('check') : ico('x')} ${i + 1}. ${esc(byId[r.id].name)} <span style="color:var(--muted)">· ${KIND[r.kind]}${r.hinted ? ' · used a hint' : ''}</span></li>`).join('')}</ul>
+  <div class="plan-box"><b>Study plan</b>${missed.length ? `<ol style="margin:6px 0 0;padding-left:22px">
+    <li>Flip the Study cards for: <b>${missed.map(id => esc(label(byId[id]))).join(', ')}</b>. Read the “Spot it” line out loud.</li>
+    ${fams.length ? `<li>Review these families side by side: ${fams.map(f => esc(FAMILY[f])).join('; ')}.</li>` : ''}
+    ${slips.map(x => `<li><span class="tip-label">Professor Tip:</span> ${esc(x.tip)}</li>`).join('')}
+    <li>Then tap <b>Practice my missed groups</b> and aim for all correct on the first try.</li></ol>` : '<p style="margin:6px 0 0">No misses. Take another one, or try Name → Picture for a harder workout.</p>'}</div>
+  <div class="btn-row" style="justify-content:center">${missed.length ? `<button class="action primary" id="missedBtn" type="button">Practice my missed groups ${ico('arrow')}</button><button class="action" id="studyMissed" type="button">${ico('book')} Study cards</button>` : ''}<button class="action ${missed.length ? '' : 'primary'}" id="againBtn" type="button">Take another Skill Check Prep</button></div>`;
+  $('againBtn').onclick = () => setMode('skill');
+  if (missed.length) {
+    $('missedBtn').onclick = () => setMode('mixed', missed);
+    $('studyMissed').onclick = () => { S.shuffled = false; S.order = GROUPS.map((_, i) => i); S.flipIdx = GROUPS.findIndex(g => g.id === missed[0]); setMode('study'); };
+  }
+  $('progressFill').style.width = '100%';
+}
 
-renderJourney(); renderMastery();
-setMode('study');
-window.scrollTo(0, 0);
+$('journeyReset').onclick = () => { if (!confirm('Reset XP, badges and mastery for this game?')) return; P.xp = 0; P.bestSkill = 0; P.badges = {}; P.mastery = {}; P.answered = 0; P.studied = {}; P.best = 0; save(); renderJourney(); renderMastery(); updateStats(); toast('Progress reset'); };
+
+P.bestSkill = P.bestSkill || 0;
+function init() {
+  renderModes();
+  $('modeGrid').addEventListener('click', e => { const b = e.target.closest('.mode-btn'); if (b) setMode(b.dataset.mode); });
+  paintIcons(); renderJourney(); renderMastery();
+  setMode('study', null, false);
+  window.scrollTo(0, 0);
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>
 </body>
 </html>

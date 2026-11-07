@@ -1,29 +1,50 @@
 {
-  "title": "Oxidation & Reduction Study Game — LEO Goes GER!",
+  "title": "LEO Goes GER! Oxidation & Reduction — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
-  "course": "CHEM 1A and CHEM1B",
-  "description": "Interactive REDOX study game with six modes: Oxidation States, Identify REDOX, Activity Series, Half-Reaction Method, Acidic REDOX, and Basic REDOX. Practice individual oxidation numbers and complete charts; identify oxidation, reduction, oxidizing agents, and reducing agents; predict activity-series reactions; and balance equations through guided steps. Includes hints, answer reveals, completed-work review with optional automatic expansion, visual cancellation of electrons and common species, an activity series chart, embedded Dr. Dan video lessons, scoring, streaks, celebration animations, and a responsive pastel interface with Pocket Leo.",
+  "course": "CHEM 3A, CHEM 1A and CHEM 1B",
+  "description": "Oxidation and reduction practice with a course picker (CHEM 1A default; ?course=3A, 1A or 1B). CHEM 3A sees oxidation numbers, oxidation-state charts, identifying oxidized/reduced species and agents, and REDOX Concepts (agents, batteries, corrosion). CHEM 1A adds the Activity Series (1A only), the half-reaction method and balancing in acidic and basic solution. CHEM 1B reviews oxidation numbers and roles, balances in acid and base, and adds Galvanic Cells (1B only: E°cell, ΔG°, K, Nernst, cell notation; E° values from OpenStax Appendix L; the data-sheet equations E°cell = E°cathode − E°anode and Nernst are shown). Guided step-by-step balancing with locked steps, visual cancellation and OH⁻ neutralization, mistake catchers (oxygen sign, forgetting the ion charge, swapped agents, unbalanced electrons, H⁺ left in basic solution, flipping the anode's E° sign, and more), hints with Professor Tips, Mixed practice and Skill Check Prep (10 questions from the selected course, then a study plan), XP, ranks, achievements, an activity-series chart, and Dr. Dan video lessons. Leo the lion mascot.",
   "tags": [
-    "chemistry",
     "CHEM 1A",
-    "redox",
-    "oxidation states",
-    "oxidation numbers",
-    "oxidation",
-    "reduction",
-    "oxidizing agent",
-    "reducing agent",
-    "activity series",
-    "half reactions",
-    "balancing equations",
+    "CHEM 1B",
+    "CHEM 3A",
+    "Nernst equation",
     "acidic solution",
+    "activity series",
+    "balancing equations",
     "basic solution",
-    "combustion",
-    "single displacement",
+    "cell potential",
+    "chemistry",
     "combination",
+    "combustion",
     "decomposition",
-    "guided practice"
+    "galvanic cells",
+    "guided practice",
+    "half reactions",
+    "mistake catchers",
+    "oxidation",
+    "oxidation numbers",
+    "oxidation states",
+    "oxidizing agent",
+    "redox",
+    "reducing agent",
+    "reduction",
+    "single displacement",
+    "skill check"
   ],
-  "version": "12",
-  "status": "working"
+  "status": "working",
+  "courses": [
+    "CHEM 3A",
+    "CHEM 1A",
+    "CHEM 1B"
+  ],
+  "chapters": {
+    "CHEM 3A": "Oxidation and reduction (Ch. 10)",
+    "CHEM 1A": "OpenStax Chemistry 2e 4.2 and 17.1: Oxidation-reduction reactions and balancing",
+    "CHEM 1B": "OpenStax Chemistry 2e Chapter 17: Electrochemistry"
+  },
+  "courseScope": {
+    "CHEM 3A": "Oxidation numbers (single atoms and full oxidation-state charts), identify what is oxidized and reduced plus the oxidizing and reducing agents, and REDOX Concepts (LEO goes GER, agents, batteries, corrosion). No activity series, no balancing, no galvanic cells.",
+    "CHEM 1A": "Everything in CHEM 3A plus the Activity Series (CHEM 1A only), the half-reaction method, and balancing in acidic and basic solution.",
+    "CHEM 1B": "Oxidation numbers and REDOX roles as review, half-reactions, balancing in acidic and basic solution, and Galvanic Cells (CHEM 1B only): anode/cathode, E°cell = E°cathode − E°anode, ΔG° = −nFE°, K, the Nernst equation, cell notation and electron flow."
+  }
 }
