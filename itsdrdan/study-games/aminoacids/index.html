@@ -673,6 +673,12 @@ window.FBX={version:FBX_VERSION,mount:fbxMount,qHTML,optHTML,molSVG,figBlock,str
 <!--FBX:END-->
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
@@ -1357,10 +1363,12 @@ function finish(){ddLog(!state.revealed);state.done=true;['checkBtn','hintBtn','
  else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+q.why);awardXP(false);mascot(state.streak>=3?'wow':'happy',3500)}updateStats();
  const f=$('feedback'),r=f.getBoundingClientRect();if(r.bottom>innerHeight&&f.scrollIntoView)f.scrollIntoView({behavior:'smooth',block:'nearest'})}
 function ddLog(ok){try{const q=state.q;if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const m=MODES.find(x=>x.id===state.mode);ddTrack({game:'aminoacids',course:'3B',mode:'Practice',topic:m?m.title:state.mode,correct:!!ok});}catch(e){}}
+/* wrong-choice reason for the current question, from the shared question bank */
+function qbWhyQ(q,k){try{const sk={aa:'amino-acids',build:'condense-hydrolyze',codon:'codons',name:'name-peptides',levels:'protein-structure',interact:'r-group-interactions'}[q.mode||state.mode];if(!sk||!q.options)return '';const t=o=>o.html,o=q.options,a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);if(!a||!p)return '';return qbWhy({skill:'aminoacids.'+sk,prompt:q.html,choices:o.map(t),answer:t(a),explain:q.why||''},t(p),{AA:typeof AA!=='undefined'?AA:undefined})}catch(e){return ''}}
 function wrong(msg){ddLog(false);state.streak=0;updateStats();mascot('hmm',2600);fb('bad','🔎 Not quite. '+msg)}
 function check(){if(state.done||!state.q)return;const q=state.q;
  if(q.kind==='mc'){if(!state.selected){fb('bad','Choose an answer first.');return}
-  if(state.selected!==q.answer){$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;wrong(q.hint);return}
+  if(state.selected!==q.answer){const qw=qbWhyQ(q,state.selected);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;wrong(qw||q.hint);return}
   finish();return}
  const r=q.checkI();if(r.ok===null){fb('bad','👆 '+r.msg);return}if(!r.ok){wrong(r.msg);return}finish()}
 function hint(){if(state.done||!state.q)return;$('hintBox').innerHTML='💡 '+state.q.hint;$('hintBox').className='hintbox show'}

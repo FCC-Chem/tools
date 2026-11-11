@@ -828,6 +828,12 @@ window.FBX={version:FBX_VERSION,mount:fbxMount,qHTML,optHTML,molSVG,figBlock,str
 <!--FBX:END-->
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
@@ -1766,8 +1772,11 @@ function finish(){ddLog(!state.revealed);state.done=true;['checkBtn','hintBtn','
  $('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===q.answer)b.classList.add('right')});
  if(state.revealed){state.assisted++;state.streak=0;mascot('normal');fb('good','👀 '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
  else{state.correct++;state.streak++;confetti();fb('good','✅ Correct! '+q.why);awardXP(false);mascot(state.streak>=3?'wow':'happy',3500)}updateStats()}
+
+/* wrong-choice reason for the current question, from the shared question bank */
+function qbWhyQ(q,k){try{const sk={spot:'spot-group',classify:'classify-degree',name:'name',props:'properties',med:'med-molecules'}[q.mode||state.mode];if(!sk||!q.options)return '';const t=o=>o.struct?o.key:/class="medopt"/.test(o.html)?'Label '+o.key:o.html,o=q.options,a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);if(!a||!p)return '';return qbWhy({skill:'functionalgroups.'+sk,prompt:q.html,choices:o.map(t),answer:t(a),explain:q.why||''},t(p),{})}catch(e){return ''}}
 function check(){if(state.done)return;if(!state.selected){fb('bad','Choose an answer first.');return}
- if(state.selected!==state.q.answer){if(!state.q.firstSlip){try{state.q.firstSlip=ooSlip(state.q,state.selected)}catch(e){}}ddLog(false);state.streak=0;updateStats();mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+esc(state.q.hint));return}
+ if(state.selected!==state.q.answer){const qw=qbWhyQ(state.q,state.selected);if(!state.q.firstSlip){try{state.q.firstSlip=ooSlip(state.q,state.selected)}catch(e){}}ddLog(false);state.streak=0;updateStats();mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;fb('bad','🔎 Not quite. '+(qw||esc(state.q.hint)));return}
  finish()}
 function hint(){if(state.done)return;$('hintBox').textContent='💡 '+state.q.hint;$('hintBox').className='hintbox show'}
 function show(){if(state.done)return;state.revealed=true;state.selected=state.q.answer;finish()}

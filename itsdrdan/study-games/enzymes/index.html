@@ -315,6 +315,12 @@ table.data.lab td.hi{color:#b4233d;font-weight:800}
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/textbook/css/widget-base.css">
 <script src="https://itsdrdan.github.io/textbook/js/fbx.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
@@ -890,6 +896,83 @@ const DISORDERS = [
   { tag: 'Vitamins', q: 'Why are people who could become pregnant advised to take folic acid (B9) before and during early pregnancy?', a: 'Its coenzyme (THF) is needed to make DNA bases for rapidly dividing cells, preventing neural-tube defects', w: ['It prevents scurvy in the baby', 'It is a heavy metal that protects the baby', 'It is stored in fat and can’t be lost'], why: 'Tetrahydrofolate carries one-carbon groups used to make DNA bases. The neural tube closes in the first weeks of pregnancy, when cells divide very fast.', h: 'Which coenzyme helps build DNA bases?' },
   { tag: 'Vitamins', q: 'A patient takes very large doses of vitamin A supplements for months. Why is this riskier than large doses of vitamin C?', a: 'Vitamin A is fat-soluble and is stored, so it can build up to toxic levels', w: [['Vitamin A is water-soluble and is lost too fast', 'Vitamin A is one of the fat-soluble four (A, D, E, K).', 'soluble:fat-as-water'], 'Vitamin C is fat-soluble and is stored', 'Both are flushed out in urine'], why: 'Fat-soluble vitamins (A, D, E, K) are stored in fat tissue and the liver, so excess accumulates. Extra water-soluble vitamins (B and C) are mostly lost in urine.', h: 'ADEK are stored.' }
 ];
+/* ---- Wrong-choice feedback for the health topics: reasons for the plain-string wrong choices, in order ---- */
+const HEALTH_WHYS = {
+  DENTAL: {
+    0: ['Pepsin is a stomach protease. It isn’t in saliva, and enamel is mostly mineral, not protein.', 'Lactase splits lactose (milk sugar). Starch is broken down by amylase.'],
+    1: ['Inhibiting an enzyme slows the pathway, so less acid is made, not stronger acid.', 'Fluoride inhibits enolase; the enzyme doesn’t make enamel.', 'Fluoride doesn’t denature proteins. It slows one glycolysis enzyme.'],
+    2: ['Lysozyme adds water to break bonds, so it is a hydrolase, and it doesn’t whiten teeth.', 'Isomerases rearrange one molecule. Lysozyme uses water to cut bonds.'],
+    3: ['Transferases move a group from one molecule to another. Here something is oxidized.', 'Ligases join two molecules using ATP. Here H_2O_2 oxidizes thiocyanate.'],
+    4: ['That would be an oxidoreductase. Cholinesterase uses water to split the ester bond.', 'Isomerases rearrange a molecule. Cholinesterase splits the ester bond with water.'],
+    5: ['A weak enzyme means the drug lasts longer, so the patient would need less, not more.', 'It is the opposite: plasma cholinesterase breaks down ester anesthetics, not amides.'],
+    6: ['Hydrolysis in the blood starts right away, so it is cleared quickly, not over days.', 'Blood enzymes break it down before the kidneys are needed.', 'Articaine is the substrate the enzymes break down. It doesn’t inhibit them.'],
+    7: ['A substrate is what the enzyme acts on. Doxycycline slows the enzyme instead.', 'A zymogen is an inactive enzyme precursor. Doxycycline is a drug that blocks the enzyme.'],
+    8: ['The substrate is collagen, the molecule the enzyme breaks down.', 'An inhibitor slows the enzyme. Zn^2+ is needed for it to work.'],
+    9: ['Lipase digests fats. The bubbles are O2 gas from breaking down H_2O_2.', 'H_2O_2 breaks down slowly on its own. The fast foaming comes from catalase in blood and tissue.'],
+    10: ['They don’t provide vitamins. They damage proteins and membranes directly.', 'They kill by denaturing proteins, not by changing temperature.'],
+    11: ['Heat damages DNA too, but sterilization works mainly because heat denatures every protein.', 'Heat destroys enzymes and zymogens. It doesn’t activate them.', 'Steam isn’t a competitive inhibitor; it doesn’t look like any substrate. Heat denatures the enzymes.'],
+    12: ['Ammonia is a base dissolved in plaque. It doesn’t become enamel.', 'Ammonia isn’t a coenzyme, and amylase doesn’t need one.'],
+    13: ['Xylitol doesn’t denature proteins. Bacteria simply can’t ferment it.', 'Xylitol isn’t a coenzyme, and fluoride doesn’t need one.', 'Xylitol is a sugar alcohol, not an enzyme.'],
+    14: ['Vitamin D helps absorb calcium. It doesn’t make saliva or build gum collagen.', 'Vitamin B12 is needed for red blood cells and nerves, not collagen or whitening.'],
+    15: ['Scurvy is a vitamin C deficiency, not B12.', 'N_2O inactivates vitamin B12 inside the body. It doesn’t stain teeth.', 'The concern is vitamin B12, which many enzymes in the body need, not salivary amylase.'],
+    16: ['Aspirin inhibits COX. It doesn’t activate clotting zymogens.', 'Aspirin contains no vitamin K, and vitamin K would help clotting.']
+  },
+  NURSING: {
+    0: ['Both are COX inhibitors. They differ in how they bind.', 'Ibuprofen blocks COX. A coenzyme would help the enzyme work.'],
+    1: ['Statins slow cholesterol synthesis. They don’t speed it up, and they aren’t coenzymes.', 'A zymogen is an inactive precursor of an enzyme. Statins are drugs that block the enzyme.'],
+    2: ['Lisinopril blocks an enzyme. It doesn’t add a vitamin.', 'It is a targeted inhibitor of one enzyme, not a denaturing agent.', 'It lowers blood pressure by blocking ACE. It doesn’t raise it.'],
+    3: ['Vitamin K is a vitamin the liver uses, not an enzyme that digests drugs.', 'Leafy greens contain vitamin K, not warfarin.'],
+    4: ['Allopurinol isn’t a coenzyme. It slows the enzyme instead of helping it.', 'Heavy metals bind –SH groups. Allopurinol works by resembling the substrate.'],
+    5: ['Clavulanic acid kills few bacteria itself. It protects amoxicillin from β-lactamase.', 'It isn’t a coenzyme. It blocks the enzyme that would destroy the antibiotic.', 'Activating β-lactamase would destroy the antibiotic faster.'],
+    6: ['A covalent bond is irreversible, and blocking the enzyme makes acetylcholine build up, not fall.', 'This is enzyme inhibition, not denaturation, and the molecule that builds up is acetylcholine.'],
+    7: ['Inhibiting the enzyme slows acetylcholine breakdown, so it lasts longer.', 'Donepezil is reversible and targets one enzyme.', 'Donepezil is a drug that inhibits an enzyme, not a vitamin.'],
+    8: ['Enzymes like CYP3A4 break down many drugs, so inhibiting them changes drug levels.', 'Grapefruit doesn’t denature the statin. It blocks the enzyme, so more drug gets through.'],
+    9: ['Ethanol is absorbed normally. The block is at the second step, after acetaldehyde is made.', 'Disulfiram blocks an oxidation. It doesn’t make extra NAD^+.', 'Enzymes don’t change class. The second step simply stops.'],
+    10: ['Pancreatic enzymes digest food in the intestine. They don’t kill bacteria.', 'Enzymes aren’t vitamins, and they don’t replace insulin.', 'The capsules release enzymes in the intestine to digest food. They don’t act on lung mucus.'],
+    11: ['Joining strands with ATP would be a ligase and would build the clot, not dissolve it.', 'Plasmin is a protease (an enzyme), not a vitamin, and it thins clots.', 'Plasmin is itself a protease; it cuts fibrin rather than blocking other proteases.'],
+    12: ['Every enzyme has an optimum pH, and pepsin works best near pH 2.', 'Enzymes don’t turn into other enzymes. Trypsin is made by the pancreas.'],
+    13: ['Vitamins don’t evaporate from blood.', 'Zymogens are inactive precursors made by the body. Heat damages enzymes; it doesn’t make zymogens.'],
+    14: ['Cooling doesn’t change the activation energy. Molecules simply collide less often and with less energy.', 'Zymogens are made by the body, not by cold.'],
+    15: ['Moving away from the optimum pH slows enzymes; it doesn’t speed them up.', 'Enzyme activity depends strongly on pH because the active site’s charges change.', 'Acid can denature enzymes, but it can’t turn them into vitamins.'],
+    16: ['Heavy metals bind –SH groups. Methotrexate works by resembling the substrate (folate).', 'A zymogen is an inactive enzyme precursor. Methotrexate is a drug that blocks an enzyme.'],
+    17: ['Sugars have different shapes, which is why a specific enzyme can tell them apart.', 'The strip doesn’t denature other sugars. The enzyme just doesn’t fit them.', 'Several sugars dissolve in blood. The enzyme’s specificity is what matters.'],
+    18: ['A coenzyme is a small helper molecule. Proinsulin is the inactive protein itself.', 'An inhibitor blocks an enzyme. Proinsulin is an inactive precursor.', 'Proinsulin is folded and stable. It just needs a section cut out to become active.']
+  },
+  LABS: {
+    0: ['Damaged cells leak enzymes they already contain; they don’t make extra.', 'Denatured enzymes would be inactive and wouldn’t show up as higher activity.', 'The liver doesn’t release CK and LDH to dissolve clots. They came from the damaged heart muscle.'],
+    1: ['Pancreatic damage would raise amylase and lipase, not ALT and AST.', 'Salivary gland damage would raise amylase only.'],
+    2: ['A heart attack raises CK, LDH and troponin, not lipase and amylase.', 'Lactose intolerance is a missing gut enzyme. It doesn’t raise blood enzymes.', 'Vitamin C deficiency affects collagen, not pancreatic enzymes.'],
+    3: ['Lipase is a different enzyme, and a denatured sample would affect results unpredictably, not just lipase.', 'They are different enzymes: amylase digests starch and lipase digests fats.'],
+    4: ['A heart attack raises CK and troponin, not ALP.', 'Vitamin K deficiency affects clotting, not ALP.'],
+    5: ['Liver damage raises ALT and AST, not CK.', 'Pancreatitis raises amylase and lipase, not CK.'],
+    6: ['Enzymes work at many temperatures, just at different rates.', 'Buffers keep pH steady so enzymes stay active. They don’t denature them.', 'Temperature strongly affects enzyme rate.'],
+    7: ['A substrate is what the enzyme acts on, not a helper like a cofactor.', 'More substrate doesn’t change the energy released. It keeps every active site busy.'],
+    8: ['Vitamins are small molecules. PSA is a protein enzyme.', 'PSA is a protein, not a lipid.']
+  },
+  DISORDERS: {
+    0: ['Amylase digests starch. Milk sugar needs lactase.', 'Pepsin digests protein. Yogurt still has milk protein and doesn’t cause symptoms.'],
+    1: ['Aspartame doesn’t inhibit lactase. The problem is the phenylalanine it contains.', 'Aspartame is a sweetener, not a vitamin.', 'Aspartame doesn’t denature insulin. Its phenylalanine is the danger.'],
+    2: ['Fructose isn’t galactose. Fruit doesn’t need to be removed.', 'Sucrose is glucose + fructose, with no galactose.', 'Starch is all glucose, with no galactose.'],
+    3: ['G6PD isn’t a digestive enzyme. Fava beans cause oxidative stress that red cells can’t handle without NADPH.', 'Hemoglobin isn’t made by G6PD.', 'G6PD makes NADPH. It doesn’t add CO_2 to hemoglobin.'],
+    4: ['The missing enzyme breaks down a lipid in nerve cells, not glucose.', 'Tay-Sachs affects nerve-cell lipids, not bone.', 'Collagen synthesis needs vitamin C, not this hydrolase.'],
+    5: ['Tyrosine is the substrate, not an inhibitor.', 'Melanin is made in the body, not taken in as a vitamin.', 'Extra tyrosine doesn’t denature proteins. It just can’t be converted.'],
+    6: ['Glucose isn’t part of the alcohol breakdown pathway.', 'Lactose is milk sugar, not part of alcohol breakdown.'],
+    7: ['Lead slows enzymes. It isn’t a coenzyme and doesn’t speed them up.', 'Lead reaches enzymes all over the body, including the ones that make heme.'],
+    8: ['NAD^+ comes from niacin (B3), not thiamine.', 'Coenzyme A comes from pantothenic acid (B5).'],
+    9: ['Vitamin C absorption doesn’t need intrinsic factor.', 'Vitamin K absorption doesn’t need intrinsic factor.'],
+    10: ['Scurvy is vitamin C deficiency.', 'Folic acid is a B vitamin, not a heavy metal.', 'Folic acid is water-soluble and isn’t stored well, which is why steady intake matters.'],
+    11: ['Vitamin C is water-soluble; extra is excreted in urine.', 'Fat-soluble vitamins like A are stored, not flushed out.']
+  }
+};
+for (const [name, byIdx] of Object.entries(HEALTH_WHYS)) {
+  const arr = { DENTAL, NURSING, LABS, DISORDERS }[name];
+  for (const [i, list] of Object.entries(byIdx)) {
+    const it = arr[+i]; if (!it || !it.w) continue;
+    const plain = it.w.map((w, k) => typeof w === 'string' ? k : -1).filter(k => k >= 0);
+    if (plain.length !== list.length) { console.warn('HEALTH_WHYS mismatch', name, i); continue; }
+    plain.forEach((k, n) => { it.w[k] = [it.w[k], list[n]]; });
+  }
+}
 const HEALTH = { dental: DENTAL, nursing: NURSING, labs: LABS, disorders: DISORDERS };
 const HEALTH_BAGS = {}; Object.keys(HEALTH).forEach(k => HEALTH_BAGS[k] = bag(HEALTH[k]));
 function genHealth(topic) {
@@ -999,6 +1082,48 @@ function genStructs() {
 }
 
 /* ===================== topic table ===================== */
+/* ===== Classify Vitamins (student feedback: "more vitamins and classifying each one") ===== */
+const VITS = [
+  { L: 'Vitamin A', nm: 'retinol', g: 'fat', r: 'vision' }, { L: 'Vitamin D', nm: 'cholecalciferol', g: 'fat', r: 'hormone' },
+  { L: 'Vitamin E', nm: 'tocopherol', g: 'fat', r: 'antiox' }, { L: 'Vitamin K', nm: 'phylloquinone', g: 'fat', r: 'clot' },
+  { L: 'Vitamin C', nm: 'ascorbic acid', g: 'water', r: 'antiox' },
+  { L: 'Vitamin B1', nm: 'thiamine', g: 'b', r: 'coenz', co: 'TPP' }, { L: 'Vitamin B2', nm: 'riboflavin', g: 'b', r: 'coenz', co: 'FAD and FMN' },
+  { L: 'Vitamin B3', nm: 'niacin', g: 'b', r: 'coenz', co: 'NAD^+' }, { L: 'Vitamin B5', nm: 'pantothenic acid', g: 'b', r: 'coenz', co: 'coenzyme A' },
+  { L: 'Vitamin B6', nm: 'pyridoxine', g: 'b', r: 'coenz', co: 'PLP' }, { L: 'Vitamin B7', nm: 'biotin', g: 'b', r: 'coenz', co: 'biotin (biocytin)' },
+  { L: 'Vitamin B9', nm: 'folic acid', g: 'b', r: 'coenz', co: 'THF' }, { L: 'Vitamin B12', nm: 'cobalamin', g: 'b', r: 'coenz', co: 'methylcobalamin' }
+];
+const VG = { b: 'B vitamin: water-soluble, made into a coenzyme', water: 'Water-soluble, but not a B vitamin', fat: 'Fat-soluble (A, D, E, K)' };
+const VGWHY = { b: 'The B vitamins (B1, B2, B3, B5, B6, B7, B9, B12) are water-soluble and are made into coenzymes.', water: 'Vitamin C is the only water-soluble vitamin that is not a B vitamin.', fat: 'Only A, D, E and K are fat-soluble.' };
+const VR = { coenz: 'Made into a coenzyme for metabolism', antiox: 'Antioxidant (protects against free radicals)', vision: 'Vision (part of the light-sensing pigment in the eye)', hormone: 'Acts like a hormone to absorb calcium for bones', clot: 'Needed to make blood-clotting factors' };
+const vlab = v => `${v.L} (${v.nm})`;
+const isWater = v => v.g !== 'fat';
+const roleWhy = v => v.r === 'coenz' ? `${v.L} (${v.nm}) is made into the coenzyme ${fm(v.co)}.` : v.r === 'antiox' ? (v.L === 'Vitamin C' ? 'Vitamin C is a water-soluble antioxidant (and is also needed to make collagen).' : 'Vitamin E is a fat-soluble antioxidant that protects cell membranes.') : v.r === 'vision' ? 'Vitamin A (retinol) is used to make the light-sensing pigment in the eye.' : v.r === 'hormone' ? 'Vitamin D works like a hormone: it helps the gut absorb calcium and phosphorus for bones.' : 'Vitamin K is needed to make blood-clotting factors.';
+const vsBag = bag([].concat(VITS.map(v => ['name', v]), VITS.map(v => ['rev', v]), VITS.map(v => ['group', v]), VITS.filter(v => v.r !== 'coenz').concat(VITS.filter(v => v.r === 'coenz').slice(0, 4)).map(v => ['role', v]), [['odd', 'fat'], ['odd', 'water'], ['odd', 'fat'], ['odd', 'water'], ['list', 'fat'], ['list', 'water'], ['list', 'fat'], ['list', 'water']]));
+function genVitSort() {
+  const [k, v] = vsBag();
+  if (k === 'name') { const others = shuffle(VITS.filter(x => x !== v)).slice(0, 3);
+    return mcq({ topic: 'vitsort', tag: 'Letter → name', prompt: `What is the chemical name of <b>${v.L}</b>?`, right: v.nm, wrongs: others.map(x => [x.nm, `${x.nm[0].toUpperCase() + x.nm.slice(1)} is ${x.L}.`, 'vitsort:name']), grid: true, solution: `${v.L} = <b>${v.nm}</b>.`, hint: 'B1 thiamine, B2 riboflavin, B3 niacin, B5 pantothenic acid, B6 pyridoxine, B7 biotin, B9 folic acid, B12 cobalamin; A retinol, C ascorbic acid, D cholecalciferol, E tocopherol, K phylloquinone.' }); }
+  if (k === 'rev') { const others = shuffle(VITS.filter(x => x !== v)).slice(0, 3);
+    return mcq({ topic: 'vitsort', tag: 'Name → letter', prompt: `<b>${v.nm[0].toUpperCase() + v.nm.slice(1)}</b> is which vitamin?`, right: v.L, wrongs: others.map(x => [x.L, `${x.L} is ${x.nm}.`, 'vitsort:name']), grid: true, solution: `${v.nm[0].toUpperCase() + v.nm.slice(1)} is <b>${v.L}</b>.`, hint: 'Some names give a clue: ascorbic acid prevents scurvy, “retin-” points to the retina, “cobal-” means it contains cobalt.' }); }
+  if (k === 'group') { const keys = ['b', 'water', 'fat']; const shown = Math.random() < .5 ? `<b>${v.L}</b>` : `<b>${v.nm[0].toUpperCase() + v.nm.slice(1)}</b> (${v.L})`;
+    return mcq({ topic: 'vitsort', tag: 'Sort the vitamin', prompt: `Which group does ${shown} belong to?`, right: VG[v.g], wrongs: keys.filter(x => x !== v.g).map(x => [VG[x], `${VGWHY[x]} ${v.L} belongs in a different group. ${VGWHY[v.g]}`, 'vitsort:group-' + x]), keep: keys.map(x => VG[x]), solution: `${v.L} (${v.nm}): <b>${VG[v.g]}</b>. ${VGWHY[v.g]}`, hint: 'Fat-soluble: A, D, E, K. Everything else is water-soluble, and all the B vitamins become coenzymes.' }); }
+  if (k === 'role') { const wrongR = shuffle(Object.keys(VR).filter(r => r !== v.r)).slice(0, 3);
+    const whoHas = r => VITS.filter(x => x.r === r).map(x => x.r === 'coenz' ? 'the B vitamins' : x.L).filter((x, i, a) => a.indexOf(x) === i).join(' and ');
+    return mcq({ topic: 'vitsort', tag: 'Main job', prompt: `What is the main job of <b>${vlab(v)}</b>?`, right: VR[v.r], wrongs: wrongR.map(r => [VR[r], `That is the job of ${whoHas(r)}.`, 'vitsort:role']), solution: roleWhy(v), hint: 'B vitamins → coenzymes. C and E → antioxidants. A → vision. D → calcium for bones. K → clotting.' }); }
+  if (k === 'odd') { const fatV = VITS.filter(x => x.g === 'fat'), watV = VITS.filter(x => x.g !== 'fat');
+    const three = shuffle(v === 'fat' ? fatV : watV).slice(0, 3), odd = shuffle(v === 'fat' ? watV : fatV)[0];
+    const kind = v === 'fat' ? 'fat-soluble' : 'water-soluble', oddKind = v === 'fat' ? 'water-soluble' : 'fat-soluble';
+    return mcq({ topic: 'vitsort', tag: 'Odd one out', prompt: 'Which vitamin does <b>not</b> belong with the other three?', right: vlab(odd), wrongs: three.map(x => [vlab(x), `${x.L} is ${kind}, like the other two. The odd one out is ${odd.L}, which is ${oddKind}.`, 'vitsort:odd']), grid: true, solution: `${three.map(x => x.L).join(', ')} are all <b>${kind}</b>; <b>${odd.L}</b> is ${oddKind}.`, hint: 'Sort each one: is it A, D, E or K (fat-soluble), or a B vitamin or C (water-soluble)?' }); }
+  // 'list': which list contains only fat- (or water-) soluble vitamins?
+  const want = v === 'fat' ? VITS.filter(x => x.g === 'fat') : VITS.filter(x => x.g !== 'fat'), other = v === 'fat' ? VITS.filter(x => x.g !== 'fat') : VITS.filter(x => x.g === 'fat');
+  const kind = v === 'fat' ? 'fat-soluble' : 'water-soluble';
+  const mk = arr => arr.map(x => x.L.replace('Vitamin ', '')).join(', ');
+  const right = shuffle(want).slice(0, 3), wrongs = [];
+  const used = new Set([mk(right)]);
+  while (wrongs.length < 3) { const base = shuffle(want).slice(0, 2), intr = shuffle(other)[0], arr = shuffle(base.concat(intr)), t = 'Vitamins ' + mk(arr); if (used.has(t)) continue; used.add(t); wrongs.push([t, `Vitamin ${intr.L.replace('Vitamin ', '')} is ${v === 'fat' ? 'water-soluble' : 'fat-soluble'}, so this list is not all ${kind}.`, 'vitsort:list']); }
+  return mcq({ topic: 'vitsort', tag: 'Sort the list', prompt: `Which list contains <b>only ${kind}</b> vitamins?`, right: 'Vitamins ' + mk(right), wrongs, grid: true, solution: `Vitamins ${mk(right)} are all <b>${kind}</b>. Fat-soluble: A, D, E, K. Water-soluble: the B vitamins and C.`, hint: 'Remember “ADEK” for the fat-soluble four.' });
+}
+
 const TOPICS = {
   terms: { label: 'Key terms', gen: genTerms, video: 'protein' },
   parts: { label: 'Label the enzyme', gen: genParts, video: 'protein' },
@@ -1019,14 +1144,15 @@ const TOPICS = {
   cofactor: { label: 'Cofactors', gen: genCofactor, video: 'protein' },
   bvit: { label: 'B vitamins → coenzymes', gen: genBvit, video: 'protein' },
   deficiency: { label: 'Deficiencies', gen: genDeficiency, video: 'protein' },
-  soluble: { label: 'Water vs fat soluble', gen: genSoluble, video: 'protein' }
+  soluble: { label: 'Water vs fat soluble', gen: genSoluble, video: 'protein' },
+  vitsort: { label: 'Classify vitamins', gen: genVitSort, video: 'protein' }
 };
 const CATEGORIES = [
   { id: 'basics', title: 'Enzyme Basics', blurb: 'Terms, active site, models, activation energy', art: 'cat-basics', fallback: 'molecule', topics: ['terms', 'parts', 'models', 'energy', 'specific'] },
   { id: 'classify', title: 'Classify Enzymes', blurb: 'The six classes, from the reaction, the name or the structures', art: 'cat-classify', fallback: 'checklist', topics: ['six', 'names', 'structs'] },
   { id: 'activity', title: 'Enzyme Activity', blurb: 'Temperature, pH and concentration graphs', art: 'cat-activity', fallback: 'heat', topics: ['plot', 'predict'] },
   { id: 'control', title: 'Inhibitors & Control', blurb: 'Inhibitors, feedback, allosteric control, zymogens', art: 'cat-control', fallback: 'target', topics: ['inhibit', 'regulate'] },
-  { id: 'vitamins', title: 'Cofactors & Vitamins', blurb: 'Metal ions, coenzymes, deficiencies', art: 'cat-vitamins', fallback: 'water', topics: ['cofactor', 'bvit', 'deficiency', 'soluble'] },
+  { id: 'vitamins', title: 'Cofactors & Vitamins', blurb: 'Metal ions, coenzymes, deficiencies, classify vitamins', art: 'cat-vitamins', fallback: 'water', topics: ['cofactor', 'bvit', 'deficiency', 'soluble', 'vitsort'] },
   { id: 'health', title: 'Health & Clinic', blurb: 'Dental hygiene, nursing, meds, lab tests', art: 'cat-health', fallback: 'medal', fbSrc: 'assets/ach-clinic.webp', topics: ['dental', 'nursing', 'labs', 'disorders'] }
 ];
 function generate(topic) { const q = TOPICS[topic].gen(); q.topic = topic; return q; }
@@ -1062,7 +1188,7 @@ const ACH = [
   ['graph', 'Graph Reader', '10 activity questions right', 'ach-graph', 'heat', P => tc(P, ['plot', 'predict']) >= 10],
   ['detective', 'Inhibitor Detective', '10 inhibitor questions right', 'ach-detective', 'target', P => tc(P, 'inhibit') >= 10],
   ['feedback', 'Feedback Loop', '5 regulation questions right', 'ach-feedback', 'equilibrium', P => tc(P, 'regulate') >= 5],
-  ['vitamin', 'Vitamin Virtuoso', '10 cofactor and vitamin questions right', 'ach-vitamin', 'water', P => tc(P, ['cofactor', 'bvit', 'deficiency', 'soluble']) >= 10],
+  ['vitamin', 'Vitamin Virtuoso', '10 cofactor and vitamin questions right', 'ach-vitamin', 'water', P => tc(P, ['cofactor', 'bvit', 'deficiency', 'soluble', 'vitsort']) >= 10],
   ['clinic', 'Clinic Ready', '10 Health & Clinic questions right', 'ach-clinic', 'medal', P => tc(P, ['dental', 'nursing', 'labs', 'disorders', 'clinic']) >= 10],
   ['chairside', 'Chairside Pro', '10 dental hygiene questions right', 'ach-chairside', 'stars', P => tc(P, 'dental') >= 10],
   ['medpass', 'Med Pass', '10 meds & nursing questions right', 'ach-medpass', 'checklist', P => tc(P, 'nursing') >= 10],
@@ -1193,11 +1319,12 @@ function newQuestion(focus) {
 }
 
 /* ---------- checking + scoring ---------- */
+function qbChoiceWhy(q,c){try{const T=h=>String(h||'').replace(/<span class="lt">[^<]*<\/span>/g,'').replace(/<[^>]+>/g,'').trim(),tx=x=>T(x&&(x.html||x.label||x.text)),ans=q.choices.find(x=>x.ok);return qbWhy({skill:'enzymes.'+q.topic,prompt:String(q.prompt||'')+' '+String(q.eq||''),choices:q.choices.map(tx),answer:tx(ans),explain:T(q.solution)},tx(c))}catch(e){return ''}}
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || ''); }
+  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
 }
 function tapHit(id, el) {
   const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
@@ -1411,7 +1538,7 @@ function init() {
   load(); bind(); wireArt(); paintIcons();
   // ?topic=terms,six  or the first version's ?mode=cls|inh|plot|vit|reg|exam
   let sp; try { sp = new URLSearchParams(location.search); } catch (e) { sp = new URLSearchParams(); }
-  const OLD = { cls: ['six', 'names', 'structs'], inh: ['inhibit'], plot: ['plot', 'predict'], vit: ['cofactor', 'bvit', 'deficiency', 'soluble'], reg: ['regulate', 'dental', 'nursing'] };
+  const OLD = { cls: ['six', 'names', 'structs'], inh: ['inhibit'], plot: ['plot', 'predict'], vit: ['cofactor', 'bvit', 'deficiency', 'soluble', 'vitsort'], reg: ['regulate', 'dental', 'nursing'] };
   const topics = (sp.get('topic') || '').split(',').filter(t => TOPICS[t]), mode = sp.get('mode');
   if (topics.length) state.sel = new Set(topics); else if (OLD[mode]) state.sel = new Set(OLD[mode]); else state.sel = new Set((P.sel || []).map(t => t === 'clinic' ? 'dental' : t).filter(t => TOPICS[t]));
   renderStats(); renderChooser(); P.rankSeen = P.rankSeen || rankOf(P.xp).name;

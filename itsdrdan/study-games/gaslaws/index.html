@@ -298,6 +298,12 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="app">
@@ -925,9 +931,11 @@ function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)ret
  if(sfMis){wrong(q);return feedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, and keep extra digits until the final step.');}
  if(sfOff)return feedback('close',sfCloseMsg(raw,q.sf,esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit))+score(q));
  feedback('good','Correct! '+esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+score(q));}
+/* wrong-choice reason from the shared question bank (questionbank/whys.js) */
+function qbOpt(q,k){try{const o=q.options||[],a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);return a&&p?qbWhy({skill:'gaslaws.'+(q.mode||q.kind||''),prompt:(q.prompt||'')+' '+(q.equationHTML||''),choices:o.map(x=>x.html),answer:a.html,explain:q.finalExplain||q.explain||''},p.html):''}catch(e){return ''}}
 function checkChoice(k){const q=S.q;if(q.done||q.scored)return;tried(q);const btn=byId('choiceBox').querySelector('[data-choice="'+CSS.escape(k)+'"]');btn?.classList.add(k===q.answer?'right':'wrong');
  if(q.quiz){if(k!==q.answer){ddSlip(q,'choice');byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');}return quizResult(q,k===q.answer);}
- if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);ddSlip(q,'choice');wrong(q);feedback('bad','Not that one. '+(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.'));}}
+ if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);ddSlip(q,'choice');wrong(q);feedback('bad','Not that one. '+(qbOpt(q,k)||(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.')));}}
 function hint(){const q=S.q;q.usedHelp=true;const i=Math.min(S.hint,q.hints.length-1);byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>💡 Hint '+(i+1)+' of '+q.hints.length+'</h3>'+q.hints[i];S.hint=Math.min(i+1,q.hints.length-1);}
 function solution(){const q=S.q;if(!q.tried&&!q.firstSlip)q.firstSlip='revealed';ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 /* readiness check */

@@ -200,6 +200,12 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <style>/* sweep 2026-11-05: keep the top bar inside a 375px phone screen */@media(max-width:400px){.tb{gap:5px;padding:0 8px}.seg button{padding:6px 8px}.tb-streak{padding:5px 7px}.tb-btn{padding:6px 9px}.tb-brand img{width:34px;height:34px}}</style>
 <style>/* sweep 2026-11-05: top bar fits tablet and Canvas widths */@media(max-width:800px){.tb-brand span,.tb-btn span{display:none}}</style>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
@@ -934,10 +940,12 @@ function checkAnswer(){const q=state.q;if(q.reactionTask&&!q.reactionTask.solved
  if(sfCount(raw)!==q.sf){if(!sfAgree(n,q.answer,Math.min(sfCount(raw),q.sf))){markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, and avoid rounding in the middle steps.');return}q.sfSlip=true;setFeedback('close',sfCloseMsg(raw,q.sf,escape(fmt(q.answer,q.sf))+' '+unitHTML(q.unit))+scoreCorrect(q));return}
  {const step=Math.pow(10,Math.floor(Math.log10(Math.abs(target)))-q.sf+1);if(Math.abs(n-target)>step*1.001){markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, and avoid rounding in the middle steps.');return}}
  setFeedback('good','Correct! '+escape(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+scoreCorrect(q));}
+/* wrong-choice reason from the shared question bank (questionbank/whys.js) */
+function qbOpt(q,k){try{const o=q.options||[],a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);return a&&p?qbWhy({skill:'stoichiometry.'+(q.mode||q.kind||''),prompt:(q.prompt||'')+' '+(q.equationHTML||''),choices:o.map(x=>x.html),answer:a.html,explain:q.finalExplain||q.explain||''},p.html):''}catch(e){return ''}}
 function checkChoice(key){const q=state.q;if(q.challenge){checkChallengeAnswer(q,key);return}countAttempt(q);
  byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>{if(b.dataset.choice===key)b.classList.add(key===q.answer?'right':'wrong')});
  if(key===q.answer){byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);setFeedback('good',(q.finalExplain||'Correct!')+scoreCorrect(q));}
- else{ddSlip(q,'choice');markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||'Not that one. Use the hint or the step-by-step help.');}}
+ else{ddSlip(q,'choice');markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||qbOpt(q,key)||'Not that one. Use the hint or the step-by-step help.');}}
 
 /* ================= Hints and solutions ================= */
 function hint(){const q=state.q;if(q.reactionTask&&!q.reactionTask.solved){reactionMessage('info','Reaction type: '+q.reactionTask.type+'. Recipe: '+recipeHints[q.reactionTask.type]+'. Check product formulas before balancing.');q.usedHelp=true;return}

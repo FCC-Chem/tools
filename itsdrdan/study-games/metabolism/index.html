@@ -218,6 +218,12 @@ html.dd-embedded{scroll-padding-top:8px}
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <script src="https://itsdrdan.github.io/textbook/js/fbx.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
@@ -632,6 +638,381 @@ const CLINIC = [
   { s: 'Nursing: a patient recovering from surgery is on a high-protein diet while the wound heals.', q: 'What is their nitrogen balance?', a: 'Positive: more protein is being built than broken down', w: ['Negative: more protein is being broken down than built', 'Zero: nitrogen in equals nitrogen out', 'Nitrogen balance does not apply after surgery'], why: 'Recovery (convalescence) builds new tissue, so more nitrogen is kept than excreted: positive nitrogen balance.', h: 'Is the body building tissue?', slip: 'balance-flip' },
   { s: 'Nursing: a patient has acute pancreatitis.', q: 'Which digestive enzymes are made by the pancreas, so digestion in the small intestine suffers?', a: 'Pancreatic amylase, lipase and trypsin', w: ['Salivary amylase only', 'Pepsin and HCl', 'Lactase and sucrase'], why: 'The pancreas sends amylase (starch), lipase (fats) and trypsin/chymotrypsin (proteins) into the small intestine, so all three food types are affected. Pepsin and HCl come from the stomach.', h: 'Which enzymes are named “pancreatic”?' }
 ];
+/* ---- Wrong-choice feedback: one short reason per wrong choice, in the same order as each item's w list ---- */
+const WRONG_WHYS = {
+  BIG: {
+    11: ['Stage 2 starts after digestion, when monomers like glucose are broken into pyruvate or acetyl CoA. Amylase is still cutting food polymers apart.',
+      'Stage 3 is the citric acid cycle and electron transport inside mitochondria. Amylase works in the mouth and intestine, on food.',
+      'Anabolism builds bigger molecules. Amylase breaks starch into smaller sugars, so this is catabolism.'],
+    12: ['Stage 1 is digestion: hydrolysis of food polymers in the gut. Glycolysis and β-oxidation work on monomers already inside cells.',
+      'Stage 3 burns acetyl CoA in the citric acid cycle. Glycolysis and β-oxidation come just before that: they make the 2- and 3-carbon pieces.',
+      'Anabolism builds bigger molecules. These pathways break glucose and fatty acids into smaller pieces, so they are catabolic.'],
+    13: ['Stage 1 is digestion in the gut. It makes no ATP; it only hydrolyzes food into monomers.',
+      'Stage 2 (glycolysis, β-oxidation) makes only a little ATP. Most ATP comes from the next stage.',
+      'These pathways oxidize acetyl CoA to CO2 and release energy, so they are catabolic.'],
+    14: ['Pyruvate comes from glucose (and some amino acids), but fatty acids never become pyruvate. The shared product is one step later.',
+      'Glucose is a starting fuel, not a common end product. Fats and most of a protein never become glucose in stage 2.',
+      'Urea carries away only the nitrogen from amino acids. Carbohydrates and fats contain no nitrogen and make no urea.']
+  },
+  GLUCOSE: {
+    0: ['-lysis means breaking apart. Glycogenolysis breaks glycogen down, which happens between meals, not after a big meal.',
+      'Gluconeogenesis makes new glucose from non-carbohydrates. After pasta there is plenty of glucose already.',
+      'Glycolysis splits glucose into pyruvate for energy. It doesn’t link glucose into a polymer.'],
+    1: ['-genesis means making. Glycogenesis builds glycogen; here glycogen is being broken down.',
+      'Gluconeogenesis builds new glucose from lactate, glycerol or amino acids, not from glycogen.',
+      'Glycolysis splits glucose into pyruvate. It doesn’t release glucose from glycogen.'],
+    2: ['Glycogenolysis breaks down stored glycogen. Lactate, glycerol and amino acids aren’t glycogen.',
+      'Glycogenesis stores glucose as glycogen. It doesn’t make new glucose.',
+      'The pentose phosphate pathway uses glucose 6-phosphate to make NADPH and ribose. It doesn’t build glucose.'],
+    3: ['Glycolysis gives pyruvate, ATP and NADH, not NADPH or ribose.',
+      'Gluconeogenesis builds glucose. It makes neither ribose nor NADPH.',
+      'The citric acid cycle makes NADH, FADH2 and CO2, not NADPH or ribose.'],
+    4: ['Gluconeogenesis builds glucose and costs ATP. It doesn’t split glucose.',
+      'Glycogenesis stores glucose as glycogen and costs energy (UTP).',
+      'The pentose phosphate pathway makes NADPH and ribose, not quick ATP.'],
+    5: ['Glycogenolysis removes glucose from glycogen using phosphate. It uses no UTP and adds nothing to the chain.',
+      'Glycolysis breaks glucose down to pyruvate. It doesn’t add glucose to a chain.',
+      'Gluconeogenesis makes free glucose. UDP-glucose and a growing chain point to glycogen synthesis.'],
+    6: ['Both pathways run mainly in the cytosol, and no metabolic pathway here runs in the nucleus.',
+      'It’s the reverse: gluconeogenesis costs ATP (6 per glucose) and glycolysis makes a net 2.',
+      'Most steps are shared and simply run in reverse. Only the three irreversible steps need different enzymes.'],
+    7: ['Gluconeogenesis costs more than glycolysis earns: 4 ATP + 2 GTP = 6, not 2.',
+      '32 ATP is about the total for fully burning glucose. Glycolysis alone nets only 2.',
+      'Building glucose always costs energy: 4 ATP + 2 GTP = 6.'],
+    8: ['NADH and pyruvate are products of glycolysis, not the pentose phosphate pathway.',
+      'The pathway does release one CO2, but it makes no ATP. It is run for NADPH and ribose.',
+      'FADH2 comes from the citric acid cycle and β-oxidation. This pathway uses glucose 6-phosphate; it doesn’t make glucose.'],
+    9: ['Breaking apart is -lysis (as in glycolysis).',
+      'Sugar is gluco- or glyco-.',
+      'No word part here means storage. Glycogen is the storage form; -neo- means new.'],
+    10: ['Healthy kidneys reabsorb glucose. Glucose in urine is a sign of very high blood glucose (diabetes), not a way to store extra.',
+      'Starch is the plant storage form. Animals store glucose as glycogen, then as fat.',
+      'Glucose has no nitrogen, so it can’t become protein. The extra carbon goes to fat.'],
+    11: ['The urea cycle disposes of nitrogen from amino acids. These sugars have no nitrogen.',
+      'β-Oxidation breaks down fatty acids, not sugars.',
+      'They are good fuels: the liver turns them into glycolysis intermediates.']
+  },
+  ORGANS: {
+    0: ['The kidneys excrete urea in urine, but they don’t make it. The urea cycle is in the liver.',
+      'Muscle sends its extra nitrogen to the liver (for example as alanine). It doesn’t run the urea cycle.',
+      'The pancreas makes digestive enzymes and insulin and glucagon, not urea.'],
+    1: ['The brain uses ketone bodies during a long fast, but it doesn’t make them.',
+      'The kidneys can excrete ketone bodies in urine; they don’t make them.',
+      'Adipose tissue releases fatty acids. The liver turns them into ketone bodies.'],
+    2: ['The brain needs glucose but can’t make it for the rest of the body.',
+      'Muscle makes lactate that the liver turns back into glucose. Muscle itself does very little gluconeogenesis.',
+      'The small intestine absorbs glucose. Most new glucose comes from the liver (the kidneys make a little).'],
+    3: ['The liver makes triacylglycerols and ships them out, but it isn’t the main store.',
+      'Muscle stores some fat and glycogen, but most fat is in fat cells.',
+      'Plasma carries triacylglycerols in lipoproteins only on the way somewhere. It isn’t a store.'],
+    4: ['The stomach’s acid stops carbohydrate digestion. It doesn’t start it.',
+      'Pancreatic amylase finishes starch digestion in the small intestine, but salivary amylase starts it earlier.',
+      'By the large intestine, absorbable carbohydrate is already gone; only fiber and undigested sugar remain for bacteria.'],
+    5: ['Saliva has amylase and a little lipase, but no protease.',
+      'Trypsin and chymotrypsin continue protein digestion in the small intestine, but pepsin starts it in the stomach.',
+      'The liver handles amino acids after absorption. It doesn’t digest food protein.'],
+    6: ['Saliva has a little lipase, but fat digestion there is minor.',
+      'Only about 10% of fat is hydrolyzed in the stomach.',
+      'The liver makes bile, but digestion happens in the small intestine.'],
+    7: ['The stomach contents are watery. The problem is the acid.',
+      'Food spends too little time in the mouth for that. Most starch reaches the small intestine undigested.',
+      'Pepsin is a protease: it hydrolyzes peptide bonds, not the glycosidic bonds in starch.']
+  },
+  COENZ: {
+    0: ['FAD oxidizes C–C to C=C. Oxidizing an alcohol (C–O) to a ketone uses NAD+.',
+      'NADPH is a reducing agent for building molecules. It gives hydrogens; it doesn’t take them.',
+      'Coenzyme A carries acetyl and acyl groups. It isn’t an oxidizing agent.'],
+    1: ['NAD+ handles C–O oxidations (alcohol → ketone). Making a C=C from C–C uses FAD.',
+      'NADH is already reduced, so it can’t take more hydrogens.',
+      'ATP carries phosphate groups and energy, not hydrogens.'],
+    2: ['NADH is the reduced form. It is what forms here, not the oxidizing agent.',
+      'FADH2 is reduced and comes from the citric acid cycle and β-oxidation, not glycolysis.',
+      'Coenzyme A carries acyl groups and isn’t an oxidizing agent.'],
+    3: ['NAD+ oxidizes alcohols to ketones (step 3 of β-oxidation), not C–C to C=C.',
+      'NADPH is a reducing agent for synthesis. β-Oxidation is an oxidation.',
+      'ATP activates the fatty acid before β-oxidation. It doesn’t remove hydrogens.'],
+    4: ['NADH supplies hydrogens in catabolism (for example pyruvate → lactate). Biosynthesis uses NADPH.',
+      'NAD+ is an oxidizing agent: it takes hydrogens. This step needs a reducing agent.',
+      'FADH2 passes its electrons to the electron transport chain. It isn’t used to reduce ketones in synthesis.'],
+    5: ['NAD+ is what forms. It takes hydrogens; it can’t supply them.',
+      'FAD is an oxidizing agent. Here pyruvate is reduced, so something must give hydrogens.',
+      'NADPH is the reducing agent for biosynthesis, not for lactate fermentation.'],
+    6: ['NAD+ carries hydrogens and electrons, not acetyl groups.',
+      'FAD carries hydrogens and electrons, not acetyl groups.',
+      'ATP carries phosphate groups and energy, not acetyl groups.'],
+    7: ['Coenzyme A carries acyl and acetyl groups.',
+      'NAD+ carries hydrogens and electrons.',
+      'FAD carries hydrogens and electrons.'],
+    8: ['Cytochrome c carries electrons from complex III to complex IV, one step later.',
+      'NADH gives its electrons to complex I. It isn’t the carrier between complexes.',
+      'O2 is the final electron acceptor at complex IV, at the very end of the chain.'],
+    9: ['Coenzyme Q carries electrons from complexes I and II to complex III, one step earlier.',
+      'FADH2 gives its electrons to complex II (as part of the succinate step). It isn’t the mobile carrier to complex IV.',
+      'ATP synthase uses the H+ gradient to make ATP. It doesn’t carry electrons.'],
+    10: ['NAD+ is what forms. It can’t supply hydrogens.',
+      'FAD is an oxidizing agent. Here acetaldehyde is reduced, so something must give hydrogens.',
+      'Coenzyme A carries acyl groups and isn’t a reducing agent.'],
+    11: ['A reducing agent loses hydrogens. FAD gains them (FAD → FADH2).',
+      'The oxidizing agent is always the one that gets reduced. FAD gains H, so it is reduced, not oxidized.',
+      'Gaining H is reduction, but the substance that is reduced is the oxidizing agent.'],
+    12: ['An oxidizing agent gains hydrogens. NADH loses them (NADH → NAD+).',
+      'NADH loses H, so it is oxidized, not reduced.',
+      'Losing H is oxidation, but the substance that is oxidized is the reducing agent.'],
+    13: ['Gaining hydrogens (NAD+ → NADH) is reduction, not oxidation.',
+      'NADPH is a different coenzyme (it has an extra phosphate). NAD+ becomes NADH.',
+      'Coenzymes like NAD+ are changed in the reaction and have to be recycled; the enzyme is the catalyst.'],
+    14: ['NAD+ is the oxidized form: it is missing the hydride.',
+      'FADH2 is reduced, but it is flavin adenine dinucleotide, a different coenzyme.',
+      'FAD is the oxidized form of flavin adenine dinucleotide.'],
+    15: ['Adenine is part of the structure, but it doesn’t change in the reaction.',
+      'The phosphates link the two nucleotides; they don’t carry hydrogens.',
+      'The ribose sugars are part of the backbone; they don’t carry hydrogens.']
+  },
+  PREDICT: {
+    0: ['That removes the –OH completely (a reduction). Oxidation turns the –OH carbon into C=O.',
+      'That loses H2O to make a C=C (dehydration), not an oxidation by NAD+.',
+      'The –OH is still there, and the –COO⁻ was reduced to an aldehyde. Oxidation turns the CH(OH) into C=O.'],
+    1: ['That adds H2 across the C=C (a reduction), not H and OH.',
+      'That is oxaloacetate: hydration and then oxidation. Hydration alone stops at the alcohol.',
+      'Hydration adds one H and one OH. This adds two OH groups.'],
+    2: ['That reduced the ketone to an alcohol (β-hydroxybutyrate). Decarboxylation removes –COO⁻ instead.',
+      'That keeps the –COO⁻ and drops a CH2 instead. Decarboxylation removes the –COO⁻ as CO2, leaving acetone.',
+      'Removing CO2 leaves the C=O in place. Propane has lost the ketone too.'],
+    3: ['That is the next step (hydration). FAD only removes two H to make a C=C.',
+      'That is after two more steps (hydration, then NAD+ oxidation). FAD makes the C=C first.',
+      'That hydrolyzes the thioester. FAD removes two H from the chain instead.'],
+    4: ['That loses CO2 (decarboxylation). Carboxylation adds a carbon.',
+      'That is acetyl CoA, made when pyruvate loses CO2 to enter the citric acid cycle.',
+      'That is lactate, from reducing the ketone. Carboxylation adds a –COO⁻.'],
+    5: ['The NH3+ group was replaced by H, not by C=O.',
+      'That is lactate: the NH3+ became –OH. In transamination it becomes C=O.',
+      'The amino group is still there. Transamination removes it and leaves a ketone.'],
+    6: ['That loses water to make a C=C. Oxidation turns the –OH carbon into a C=O.',
+      'That is acetone, made when acetoacetate loses CO2. Oxidation keeps all 4 carbons.',
+      'That removed the –OH (a reduction). NAD+ oxidizes the alcohol to a ketone.'],
+    7: ['A ketone needs a C=O in the middle of the chain. Ethanol is a 1° alcohol, so it gives an aldehyde.',
+      'That is dehydration (losing water), not oxidation by NAD+.',
+      'That removes the –OH (a reduction). Oxidation makes a C=O.'],
+    8: ['An aldehyde comes from a 1° alcohol. Isopropyl alcohol’s –OH is on the middle carbon (2°).',
+      'That is dehydration (losing water), not oxidation by NAD+.',
+      'A carboxylic acid comes from oxidizing a 1° alcohol twice. A 2° alcohol stops at a ketone.'],
+    9: ['That adds H2 across the C=C (a reduction). Hydration adds H and OH.',
+      'That is the next step: NAD+ oxidizes the alcohol to a ketone. Hydration stops at the alcohol.',
+      'That is the last step (thiolysis), which splits off acetyl CoA.'],
+    10: ['That is incomplete hydrolysis, as pancreatic lipase does in the intestine. Complete hydrolysis breaks all three esters.',
+      'Acetyl CoA comes later, from β-oxidation of the fatty acids. Hydrolysis just breaks the ester bonds.',
+      'The backbone is glycerol, not glucose. Hydrolysis frees glycerol.'],
+    11: ['That is complete hydrolysis (lipoprotein lipase). Pancreatic lipase leaves one ester.',
+      'Pancreatic lipase removes two fatty acids, and it frees fatty acids, not glycerol.',
+      'Acetyl CoA comes from β-oxidation inside cells, not from digestion.'],
+    12: ['Citrulline is made earlier in the cycle (step 1). Arginase gives ornithine.',
+      'NH4+ and fumarate are not made by arginase. Fumarate leaves at step 3.',
+      'Aspartate enters the cycle at step 2. It isn’t a product of arginase.'],
+    13: ['NAD+ oxidizes the 2° alcohol to a ketone. That gives dihydroxyacetone phosphate, and the phosphate stays.',
+      'Removing a phosphate is hydrolysis, not oxidation by NAD+.',
+      'Pyruvate comes from the end of glycolysis, several steps later.']
+  },
+  FATES: {
+    0: ['The citric acid cycle needs O2, because electron transport must recycle its NADH. Without O2 it slows.',
+      'Ethanol and CO2 come from yeast fermentation. Human muscle makes lactate.',
+      'Muscle doesn’t do gluconeogenesis, and it costs ATP the muscle needs. The liver does that later (Cori cycle).'],
+    1: ['Lactate comes from human muscle (and some bacteria). Yeast make ethanol.',
+      'Without O2, yeast can’t run the citric acid cycle, so pyruvate isn’t burned to acetyl CoA.',
+      'Yeast are breaking glucose down for energy, not storing it.'],
+    2: ['Glycogenolysis happens between meals, when blood glucose falls. Insulin turns it off.',
+      'Gluconeogenesis runs during fasting. With glucose plentiful, the liver doesn’t make more.',
+      'Ketone bodies are made during fasting or untreated diabetes, when fat is the main fuel.'],
+    3: ['Muscle lacks glucose 6-phosphatase, so its glycogen stays in the muscle.',
+      'Ketone bodies come from acetyl CoA, which can’t make glucose.',
+      'Fatty acids become acetyl CoA, which can’t make net glucose.'],
+    4: ['Fatty acids travel bound to albumin and can’t get into the brain.',
+      'Lactate isn’t a main brain fuel; the liver turns it back into glucose.',
+      'The brain doesn’t burn amino acids directly. Ketone bodies are used partly to save muscle protein.'],
+    5: ['Glucose can’t turn directly into ketone bodies. Ketone bodies come from fat breakdown.',
+      'Insulin doesn’t make glucose. It moves glucose into cells and slows fat breakdown.',
+      'The liver makes ketone bodies; the kidneys only excrete them.'],
+    6: ['Two hours in, muscle glycogen is running low, so fat supplies a bigger share.',
+      'Muscle can use some ketone bodies, but in a race it burns mainly fatty acids and glycogen.',
+      'Amino acids supply only a small share of energy, even in long exercise.'],
+    7: ['Ketone bodies come from acetyl CoA from fat, not from lactate.',
+      'Lactate first has to become glucose by gluconeogenesis (Cori cycle).',
+      'Lactate is a useful fuel; the liver recycles it rather than excreting it.'],
+    8: ['The body has no protein store; extra amino acids are broken down.',
+      'The nitrogen is excreted as urea, and the carbon skeletons are used.',
+      'Fatty acids contain no nitrogen. The nitrogen must be removed first and leaves as urea.'],
+    9: ['β-Oxidation ends with acetyl CoA, which can’t become pyruvate or glucose.',
+      'The pyruvate → acetyl CoA step is irreversible, so acetyl CoA can’t go back.',
+      'The glycerol backbone can become DHAP and then glucose, so a small part of fat can.'],
+    10: ['Burning ATP isn’t how brown fat makes heat. Thermogenin lets H+ leak back, so ATP is never made.',
+      'Brown fat is packed with mitochondria and burns fat aerobically. It doesn’t ferment glucose.',
+      'Tissues can’t store heat for later. The heat comes from burning fat now.'],
+    11: ['Cyanide doesn’t remove O2 from hemoglobin; the blood still carries O2. (That is more like carbon monoxide.)',
+      'Glycolysis keeps running. It just can’t make enough ATP alone.',
+      'Cyanide doesn’t convert ATP. It stops ATP from being made.']
+  },
+  REG: {
+    0: ['High ATP means the cell has plenty of energy, so it turns glycolysis down.',
+      'PFK is allosteric: ATP binds a regulatory site and inhibits it.',
+      'Glycolysis steps can’t run backward to make glucose. Gluconeogenesis uses different enzymes for the irreversible steps.'],
+    1: ['ADP and AMP signal low energy, so they speed up ATP production.',
+      'Allosteric effectors bind reversibly and change activity. They don’t destroy enzymes.',
+      'ADP and AMP are major allosteric regulators of PFK.'],
+    2: ['Glucose is the substrate, not the product.',
+      'ADP is a product of the reaction, but feedback inhibition here comes from the sugar product.',
+      'Insulin is a hormone that acts through signaling, not a product of this step.'],
+    3: ['ADP and AMP mean low energy, so they activate glycolysis.',
+      'Glucose is the starting fuel. More glucose doesn’t signal to stop.',
+      'NAD+ is needed for glycolysis to keep running. It doesn’t inhibit pyruvate kinase.'],
+    4: ['That is backwards. ATP is the product the cycle supplies, so plenty of ATP slows it.',
+      'The cycle responds to the cell’s energy level (ATP and ADP), not to glucose.',
+      'The citric acid cycle is tightly regulated by the cell’s energy needs.'],
+    5: ['NAD+ is a reactant the step needs. High ATP inhibits, not activates.',
+      'This step responds to energy and NADH levels, not to glucose or insulin directly.',
+      'This step makes NADH, not FADH2, and O2 doesn’t bind this enzyme.'],
+    6: ['High ATP means the cell has enough energy, so electron transport slows.',
+      'O2 is the final electron acceptor. Less O2 slows electron transport.',
+      'NADH supplies the electrons. Less NADH slows electron transport.'],
+    7: ['Insulin signals the fed state and stops fat breakdown.',
+      'Insulin blocks fat breakdown, so it can’t be one of the triggers.',
+      'Insulin promotes fat storage. Thyroxine raises metabolic rate but isn’t the main trigger here.'],
+    8: ['Those are fasting pathways, switched on by glucagon.',
+      'Those run when fat is the main fuel (fasting or no insulin).',
+      'Insulin blocks glycogen breakdown and ketone body production.'],
+    9: ['That describes normal substrate binding. Allosteric means a different site.',
+      'Heat denaturation is unfolding, not regulation.',
+      'Coenzymes come from vitamins, but that has nothing to do with allosteric control.'],
+    10: ['After a high-carb meal glucose is plentiful, so gluconeogenesis is off.',
+      'It runs whenever blood glucose needs support, day or night.',
+      'High ATP and insulin mean the fed state, when gluconeogenesis is turned off.']
+  },
+  NITRO: {
+    0: ['Negative balance means breakdown exceeds synthesis (starvation, wasting illness). Growth is the opposite.',
+      'Zero balance is a steady adult: synthesis and breakdown are equal. Growth builds more than it breaks.',
+      'Growth is a classic case of positive nitrogen balance.'],
+    1: ['Positive balance means building more than breaking down, as in growth or pregnancy.',
+      'Zero means synthesis equals breakdown. Losing muscle means breakdown is winning.',
+      'Wasting illness is a classic case of negative nitrogen balance.'],
+    2: ['Negative balance means losing protein. Pregnancy builds new tissue.',
+      'Zero balance means no net gain, but pregnancy keeps adding tissue.',
+      'Building new tissue every day means positive nitrogen balance.'],
+    3: ['Ketogenic amino acids become acetyl CoA or acetoacetyl CoA, which can’t make glucose.',
+      'Essential means the body can’t make it and must eat it. That says nothing about where the skeleton goes.',
+      '“Lipogenic” isn’t the term used for amino acid skeletons; the two classes are glucogenic and ketogenic.'],
+    4: ['Glucogenic skeletons become pyruvate or cycle intermediates, which can make glucose.',
+      'Nonessential means the body can make it. That is a different question.',
+      '“Glycolytic” isn’t a class of amino acids. Acetyl CoA products make them ketogenic.'],
+    5: ['Tyrosine is made from phenylalanine. Serine and glycine come from a glycolysis intermediate (3-phosphoglycerate), not these keto acids.',
+      'Lysine, leucine and valine are essential: we can’t make them.',
+      'Ornithine and citrulline are urea cycle intermediates, not amino acids used to build proteins.'],
+    6: ['Alanine’s side chain is just –CH3; it has no ring to add –OH to.',
+      'Glutamate has a –CH2CH2COO⁻ side chain, not a benzene ring.',
+      'Tryptophan has a different ring system (indole). Tyrosine’s ring matches phenylalanine’s.'],
+    7: ['The nitrogen comes easily by transamination. The carbon skeleton is the hard part.',
+      'The liver doesn’t destroy them. We simply can’t make them.',
+      'Animal proteins like meat, eggs and milk are rich in essential amino acids.'],
+    8: ['Ornithine and citrulline cycle within the urea cycle; they don’t link to the citric acid cycle.',
+      'NH4+ enters as carbamoyl phosphate, and urea leaves the body. Neither joins the citric acid cycle.',
+      'Arginine is a urea cycle intermediate. Glutamate supplies N through transamination, but the direct links are aspartate and fumarate.'],
+    9: ['Some skeletons can become glucose, but the nitrogen must come off first.',
+      'Joining into a protein is building, not burning.',
+      'Phosphorylation isn’t the required first step for amino acids. Removing the amino group is.'],
+    10: ['About 50% is far too high; carbohydrates and fats supply most energy.',
+      '90% is far too high; protein is mainly for building.',
+      'Some amino acids are burned, about 10% of energy.'],
+    11: ['Glycogen and fat contain no nitrogen, and urea is a waste product.',
+      'Protein turnover and liver synthesis also refill the pool.',
+      'These contain no nitrogen, so they can’t supply amino acids by themselves.'],
+    12: ['HCl unfolds proteins but doesn’t cut them into single amino acids. Pepsin and later proteases do the cutting.',
+      'Urea is made in the liver from amino acid nitrogen, not by stomach acid.',
+      'Saliva has no protease. Protein digestion starts in the stomach.'],
+    13: ['Trypsin also cuts after Arg, so Gly–Arg–Phe is split again.',
+      'Trypsin cuts after Lys and Arg (their carboxyl side), not before them.',
+      'Trypsin cuts only after Lys and Arg, not every peptide bond.']
+  },
+  CLINIC: {
+    0: ['Sugar is neutral. It is the acid bacteria make from it that dissolves enamel.',
+      'Bacteria in plaque ferment sugar to lactic acid. They don’t oxidize it to CO2.',
+      'Amylase breaks starch into sugars. It doesn’t make acid.'],
+    1: ['Xylitol doesn’t sterilize the mouth. Bacteria just can’t use it.',
+      'Xylitol isn’t fermented at all, so nothing is made from it.',
+      'Xylitol is a sugar alcohol, not a fat, and it doesn’t coat teeth.'],
+    2: ['Pepsin works on proteins in the stomach, not starch in the mouth.',
+      'Pancreatic lipase digests fats in the small intestine.',
+      'Trypsin digests proteins in the small intestine.'],
+    3: ['Ketone bodies are in the blood, not the airways.',
+      'The breathing is a response to acidic blood, not a loss of brain control.',
+      'Ketone bodies are dissolved acids. Only acetone is volatile, and it isn’t why breathing speeds up.'],
+    4: ['Tyrosine can’t be made without the enzyme, so it doesn’t build up.',
+      'PKU is about an amino acid, not blood glucose.',
+      'PKU doesn’t raise urea, and more protein would make it worse (more phenylalanine).'],
+    5: ['The kidneys excrete urea; they aren’t the source of the ammonia.',
+      'Glycolysis contains no nitrogen, so it can’t make ammonia.',
+      'Glucose has no nitrogen, so it can’t become ammonia.'],
+    6: ['The liver normally clears lactate. It doesn’t make extra from glycogen during shock.',
+      'Fat breakdown gives acetyl CoA and ketone bodies, not lactate.',
+      'The kidneys help clear lactate. They aren’t the source.'],
+    7: ['Glycolysis step 1 uses hexokinase and ATP, not TPP.',
+      'Complex IV uses copper and heme iron, not thiamine.',
+      'Fatty acid activation uses ATP and coenzyme A, not TPP.'],
+    8: ['Urea comes from amino acid nitrogen in the liver.',
+      'Ketone bodies come from fat breakdown in the liver during fasting.',
+      'Glycogen is being used up during sprints, not built.'],
+    9: ['Vinegar (acetic acid) comes from a 1° alcohol like ethanol. Isopropyl alcohol is 2°.',
+      'An aldehyde comes from a 1° alcohol. The –OH here is on the middle carbon.',
+      'Alcohol dehydrogenase oxidizes it, giving acetone.'],
+    10: ['Lactic acidosis comes from O2 shortage in hard exercise, and lactate has no acetone smell.',
+      'Strict dieting empties glycogen stores rather than filling them.',
+      'Strict dieting tends to break protein down, the opposite of positive balance.'],
+    11: ['Protein in urine points to kidney damage, and urea is always in urine.',
+      'Lactate isn’t a typical dipstick finding in diabetes.',
+      'Glycogen and fatty acids aren’t found in urine.'],
+    12: ['The brain stores very little glycogen.',
+      'The brain runs on glucose, not protein.',
+      'The brain uses ketone bodies but doesn’t make them, and that only helps after days of fasting.'],
+    13: ['The citric acid cycle is in mitochondria, which red blood cells lack.',
+      'β-Oxidation is in mitochondria too.',
+      'Electron transport is in the inner mitochondrial membrane.'],
+    14: ['Muscle glycogen is the same polymer as liver glycogen.',
+      'Muscle does have glycogen phosphorylase; it breaks glycogen down for its own use.',
+      'Glucose can enter muscle cells (with insulin). The problem is getting it back out as glucose 6-phosphate.'],
+    15: ['Without lactase, lactose isn’t hydrolyzed at all.',
+      'Lactose is a sugar, not a protein.',
+      'The problem is in the gut, before anything reaches the liver.'],
+    16: ['The pancreas makes lipase. The gallbladder only stores bile.',
+      'The gallbladder stores bile, not glycogen.',
+      'Bile salts only emulsify fat. Lipase does the hydrolysis.'],
+    17: ['High ALT points to the liver, not the kidneys, and urea is a different test (BUN).',
+      'ALT works inside liver cells. It doesn’t digest protein in the stomach.',
+      'ALT is a transaminase that moves amino groups. It doesn’t make glucose from glycogen.'],
+    18: ['The urea cycle is in the liver.',
+      'Urea comes from amino acid nitrogen, not from glucose.',
+      'Urea leaves in urine. The lungs exhale CO2 and acetone, not urea.'],
+    19: ['Lactate isn’t volatile and doesn’t smell fruity.',
+      'Ethanol isn’t a typical sign of diabetes, and the mouth doesn’t normally ferment it.',
+      'Urea doesn’t give a fruity smell, and the kidneys excrete it rather than make it.'],
+    20: ['Negative balance means breakdown is winning. Healing builds tissue.',
+      'Zero means no net gain, but healing adds new tissue.',
+      'Recovery from surgery is a classic case of positive balance.'],
+    21: ['Salivary amylase comes from the salivary glands, not the pancreas.',
+      'Pepsin and HCl come from the stomach.',
+      'Lactase and sucrase are on the small intestine’s own lining.']
+  }
+};
+(function attachWrongWhys() {
+  const ARR = { BIG, GLUCOSE, ORGANS, COENZ, PREDICT, FATES, REG, NITRO, CLINIC };
+  const se2p = Object.fromEntries(PATHS_SE.map(([p, se]) => [se, p.replace(/^The /, 'the ')]));
+  BIG.forEach(it => {
+    if (it.whys || !it.w) return;
+    if (se2p[it.a]) it.whys = Object.fromEntries(it.w.map(w => [w, se2p[w] ? `That is ${se2p[w]}: ${w}.` : '']));
+    else if (/^(Catabolic|Anabolic):/.test(it.a)) it.whys = { [it.w[0]]: (/^Anabolic/.test(it.w[0]) ? 'Anabolic pathways build bigger molecules. ' : 'Catabolic pathways break molecules down. ') + it.why };
+    else if (/^(Linear|Cyclic):/.test(it.a)) it.whys = { [it.w[0]]: (/^Cyclic/.test(it.w[0]) ? 'A cyclic pathway makes its first reactant again at the end. ' : 'A linear pathway ends with a different product. ') + it.why };
+  });
+  for (const [name, byIdx] of Object.entries(WRONG_WHYS)) for (const [i, list] of Object.entries(byIdx)) {
+    const it = ARR[name][+i];
+    if (!it || !it.w || it.w.length !== list.length) { console.warn('WRONG_WHYS mismatch', name, i); continue; }
+    it.whys = Object.fromEntries(it.w.map((w, k) => [w, list[k]]));
+  }
+})();
 
 /* ---------- videos (no metabolism video yet: these teach the reaction types used in every pathway) ---------- */
 const VIDEOS = {
@@ -797,7 +1178,7 @@ const FIG = { urea: () => ureaSVG(), etc: () => etcSVG({}), box: () => boxHTML()
 /* ===================== question builders ===================== */
 // item: {q, a, w:[...], why, h, s, slip, slips:{wrong: slip}, one}
 function mcq(topic, item, extra = {}) {
-  const right = { html: f(item.a), ok: true }, wrongs = item.w.map(w => ({ html: f(w), ok: false, slip: (item.slips && item.slips[w]) || item.slip || extra.slip || TOPICS[topic].slipDefault || 'choice', why: (item.whys && item.whys[w]) || '' }));
+  const right = { html: f(item.a), ok: true }, wrongs = item.w.map(w => ({ html: f(w), ok: false, slip: (item.slips && item.slips[w]) || item.slip || extra.slip || TOPICS[topic].slipDefault || 'choice', why: item.whys && item.whys[w] ? f(item.whys[w]) : '' }));
   return Object.assign({ topic, kind: 'choice', scenario: item.s ? f(item.s) : '', prompt: f(item.q), choices: shuffle([right, ...wrongs]), one: item.one || item.a.length > 46 || item.w.some(w => w.length > 46), answer: f(item.a), solution: f(item.why), hint: item.h ? f(item.h) : '', art: item.fig ? FIG[item.fig]() : undefined }, extra);
 }
 const numChoices = (n, pool) => [String(n), ...shuffle(pool.filter(x => x !== n)).slice(0, 3).map(String)];
@@ -814,7 +1195,12 @@ function genWhere() {
   const choices = Object.keys(PLACES).map(k => ({ html: `<span class="lt">${k}</span>${PLACES[k]}`, ok: k === L, slip: 'location', why: k === L ? '' : `${k} is the ${PLACES[k].toLowerCase()}.` }));
   return { topic: 'where', tag: 'Where in the cell', kind: 'choice', art: cellSVG(), prompt: `Where in the cell does this happen? <b>${f(what)}</b>`, choices, grid: 1, answer: `${L} · ${PLACES[L]}`, solution: f(why), hint: 'Glycolysis-type pathways that do not need O<sub>2</sub> run in the cytosol. Pathways that burn acetyl CoA or fatty acids are inside the mitochondrion. Electron transport is in a membrane.' };
 }
-function rtChoices(t) { return shuffle([t, ...RT_PAIRS[t]]).map(k => ({ html: f(RT[k]), ok: k === t, slip: RT_SLIP[`${t}>${k}`] || 'reaction-type', key: k })); }
+const RT_TIP = { 'hyd>hydrol': 'Hydrolysis uses water to split a molecule in two. Hydration adds water across a C=C and keeps one molecule.', 'hydrol>hyd': 'Hydration adds water across a C=C and keeps one molecule. Here water split a bond, making two pieces.',
+  'decarb>oxdecarb': 'Oxidative decarboxylation also reduces NAD+ to NADH. Here only CO2 left.', 'oxdecarb>decarb': 'A plain decarboxylation only loses CO2. Here NAD+ also became NADH, so it is oxidative.',
+  'phos>ptrans': 'Phosphate transfer to ADP makes ATP. Here a phosphate was put onto the molecule (ATP was spent).', 'ptrans>phos': 'Phosphorylation adds a phosphate to the molecule. Here the molecule gave its phosphate to ADP.' };
+const rtName = k => RT[k].split(' (')[0], lc1 = s => /^[A-Z](?![A-Z0-9])/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+function rtWhy(t, k) { return RT_TIP[`${t}>${k}`] ? f(RT_TIP[`${t}>${k}`]) : f(`${rtName(k)} would mean: ${lc1(CHG[k])}. What actually changed: ${lc1(CHG[t])}.`); }
+function rtChoices(t) { return shuffle([t, ...RT_PAIRS[t]]).map(k => ({ html: f(RT[k]), ok: k === t, slip: RT_SLIP[`${t}>${k}`] || 'reaction-type', key: k, why: k === t ? '' : rtWhy(t, k) })); }
 function rtSteps(t, ask) {
   const opts = shuffle([t, ...RT_PAIRS[t]]).map(k => ({ html: f(CHG[k]), ok: k === t, why: k === t ? '' : 'Look again at what was gained or lost.' }));
   return [{ ask: ask || 'Compare the reactant and product. What changed?', choices: opts }, { ask: 'Now pick the reaction type that matches that change, above.', final: true }];
@@ -925,6 +1311,25 @@ const ENERGY = [
   { q: 'Each turn of the citric acid cycle makes 1 GTP. In ATP accounting, one GTP counts as how many ATP?', a: '1', w: ['0', '2.5', '1.5'], why: 'GTP is energy-equivalent to ATP, so it is counted as 1 ATP.' },
   { q: 'Why does a gram of fat (9 kcal) give more energy than a gram of carbohydrate (4 kcal)?', a: 'Fat carbons are more reduced (more C–H bonds), so oxidizing them makes more NADH and FADH2', w: ['Fat contains more oxygen', 'Fat is burned without O2', 'Carbohydrates cannot be fully oxidized'], why: 'The more reduced a carbon is, the more electrons it can give to NAD+ and FAD, and the more ATP it yields.', one: 1 }
 ];
+
+/* wrong-choice feedback for ATP & energy (same order as each item's w list) */
+[
+  ['NADH can’t cross the inner mitochondrial membrane. A shuttle carries its electrons in instead.',
+   'Glycolysis NADH does make ATP. Its electrons are shuttled into the mitochondria.',
+   'Complex II takes electrons from succinate (as FADH2). It doesn’t convert NADH.'],
+  ['ADP has one fewer phosphoanhydride bond than ATP, so it stores less.', 'AMP has no phosphoanhydride bonds left, so it stores the least.', 'Each phosphate–phosphate bond stores energy, so more phosphates means more stored.'],
+  ['Hydrolyzing ATP releases energy. Making ATP is what absorbs it.', 'Breaking a phosphoanhydride bond always releases energy.', 'ATP hydrolysis doesn’t need O2. It releases energy anywhere in the cell.'],
+  ['Making ATP stores energy, so energy must be put in. Hydrolyzing ATP is what releases it.', 'Building the new bond takes energy; it comes from catabolism.', 'Phosphorylating ADP always absorbs energy at body temperature.'],
+  ['Cells can’t use heat to drive reactions. They couple the reaction with ATP hydrolysis.', 'More glucose doesn’t supply the energy the reaction needs.', 'O2 is used only at the end of electron transport. It doesn’t drive this step.'],
+  ['A phosphoester bond links a phosphate to a carbon (like the ribose). Phosphate–phosphate bonds are anhydrides.', 'Glycosidic bonds link sugars to each other or to a base.', 'Peptide bonds link amino acids in proteins.'],
+  ['Oxidative phosphorylation uses ATP synthase and the H+ gradient. Here PEP hands its phosphate straight to ADP.', 'Photophosphorylation uses light energy in plants.', 'Hydrolysis breaks ATP down. Here ATP is being made.'],
+  ['Substrate-level phosphorylation hands a phosphate directly from a molecule to ADP, with no H+ gradient.', 'Glycolysis makes a little ATP by substrate-level phosphorylation, not with ATP synthase.', 'Fermentation recycles NAD+ without O2 and uses no ATP synthase.'],
+  ['No energy conversion is 100% efficient. 234 of 686 kcal is about a third.', '234 ÷ 686 is about 34%, not 5%, and the rest is lost as heat, not stored as fat.', '234 ÷ 686 is about 34%. CO2 is a product, not a form of the lost energy.'],
+  ['That is backwards: F0 is the membrane channel and F1 is the knob that makes ATP.', 'ATP synthase lets H+ flow back in. The complexes of the chain pump H+ out.', 'O2 binds complex IV and NADH binds complex I. ATP synthase binds neither.'],
+  ['Anabolic reactions (building up) are the ones that absorb energy.', 'Breaking bonds in catabolism generally releases energy.', 'All living cells, including ours, run catabolic reactions.'],
+  ['GTP stores as much energy as ATP, so it counts.', '2.5 is the value for one NADH.', '1.5 is the value for one FADH2.'],
+  ['It’s the opposite: carbohydrate carbons already carry more O, so they are more oxidized and have less to give.', 'Fat is burned only with O2 (β-oxidation and electron transport).', 'Both are fully oxidized to CO2 and H2O.']
+].forEach((list, i) => { const it = ENERGY[i]; if (it && it.w && it.w.length === list.length && !it.whys) it.whys = Object.fromEntries(it.w.map((w, k) => [w, list[k]])); });
 const energyBag = bag(ENERGY);
 function genEnergy() { return mcq('energy', energyBag.next(), { tag: 'ATP & energy' }); }
 
@@ -986,13 +1391,13 @@ function genEnzClass() {
     return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', prompt: `Which enzyme is a <b>${cls.toLowerCase()}</b>?`, choices: shuffle([right, ...others]).map(e => ({ html: `<b>${fe(e[0])}</b><br><small>${fe(e[1])}</small>`, ok: e === right, slip: 'enzyme-class', why: e === right ? '' : `${e[0]} is a ${e[2].toLowerCase()}.` })), answer: fe(right[0]), solution: `${fe(right[0])}: ${fe(right[1])}. ${CLASS_WHY[cls]}`, hint: 'Clues in the name: dehydrogenase → oxidoreductase; kinase, transaminase → transferase; lipase, amylase, -phosphatase → hydrolase; aldolase, hydratase, -lyase → lyase; isomerase, mutase → isomerase; synthetase, carboxylase → ligase.' };
   }
   const e = enzBag.next();
-  return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', eq: `<div class="rxn" style="flex-direction:column;gap:2px"><span>${fe(e[0])}</span><span class="struct">${fe(e[1])}</span></div>`, prompt: 'Which <b>enzyme class</b> does this enzyme belong to?', choices: shuffle([e[2], ...shuffle(CLASSES.filter(c => c !== e[2])).slice(0, 3)]).map(c => ({ html: c, ok: c === e[2], slip: 'enzyme-class', why: c === e[2] ? '' : '' })), grid: 1, answer: e[2], solution: CLASS_WHY[e[2]], hint: 'Read the reaction: H moved? a group moved? water used to split? a bond broken or made without water or ATP? atoms rearranged? two molecules joined using ATP?', steps: [{ ask: 'What does the reaction do?', choices: shuffle(CLASSES.map(c => ({ html: { Oxidoreductase: 'Moves H or electrons (a coenzyme is oxidized or reduced)', Transferase: 'Moves a group (phosphate, amino, glucose) to another molecule', Hydrolase: 'Uses water to split a bond', Lyase: 'Adds or removes across a C=C, or splits a bond, without water splitting it', Isomerase: 'Rearranges one molecule', Ligase: 'Joins two molecules using ATP' }[c], ok: c === e[2], why: c === e[2] ? '' : 'Look at the reaction again.' }))) }, { ask: 'Pick the matching class above.', final: true }] };
+  return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', eq: `<div class="rxn" style="flex-direction:column;gap:2px"><span>${fe(e[0])}</span><span class="struct">${fe(e[1])}</span></div>`, prompt: 'Which <b>enzyme class</b> does this enzyme belong to?', choices: shuffle([e[2], ...shuffle(CLASSES.filter(c => c !== e[2])).slice(0, 3)]).map(c => ({ html: c, ok: c === e[2], slip: 'enzyme-class', why: c === e[2] ? '' : CLASS_WHY[c] + ` ${fe(e[0])} doesn’t do that.` })), grid: 1, answer: e[2], solution: CLASS_WHY[e[2]], hint: 'Read the reaction: H moved? a group moved? water used to split? a bond broken or made without water or ATP? atoms rearranged? two molecules joined using ATP?', steps: [{ ask: 'What does the reaction do?', choices: shuffle(CLASSES.map(c => ({ html: { Oxidoreductase: 'Moves H or electrons (a coenzyme is oxidized or reduced)', Transferase: 'Moves a group (phosphate, amino, glucose) to another molecule', Hydrolase: 'Uses water to split a bond', Lyase: 'Adds or removes across a C=C, or splits a bond, without water splitting it', Isomerase: 'Rearranges one molecule', Ligase: 'Joins two molecules using ATP' }[c], ok: c === e[2], why: c === e[2] ? '' : 'Look at the reaction again.' }))) }, { ask: 'Pick the matching class above.', final: true }] };
 }
 function genVit() {
   const x = pick(VIT), k = rint(1, 3);
-  if (k === 1) return mcq('vit', { q: `Which coenzyme is made from <b>${x.v}</b>?`, a: x.co, w: shuffle(VIT.filter(v => v !== x).map(v => v.co)).slice(0, 3), why: `${x.v} → ${x.co}: ${x.use}.`, h: 'Match the vitamin to the coenzyme it builds.' }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
-  if (k === 2) return mcq('vit', { q: `The coenzyme <b>${x.co}</b> is made from which vitamin?`, a: x.v, w: shuffle(VIT.filter(v => v !== x).map(v => v.v)).slice(0, 3), why: `${x.co} comes from ${x.v}. Job: ${x.use}.`, h: 'Riboflavin is in FAD (flavin); niacin is in NAD (nicotinamide).' }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
-  return mcq('vit', { q: `What job does the coenzyme <b>${x.co}</b> (from ${x.v}) do?`, a: x.use, w: shuffle(VIT.filter(v => v !== x).map(v => v.use)).slice(0, 3), why: `${x.co}: ${x.use}.`, h: 'Think of the reactions where you write this coenzyme over the arrow.', one: 1 }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
+  if (k === 1) return mcq('vit', { q: `Which coenzyme is made from <b>${x.v}</b>?`, a: x.co, w: shuffle(VIT.filter(v => v !== x).map(v => v.co)).slice(0, 3), why: `${x.v} → ${x.co}: ${x.use}.`, whys: Object.fromEntries(VIT.map(v => [v.co, `${v.co} is made from ${v.v}.`])), h: 'Match the vitamin to the coenzyme it builds.' }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
+  if (k === 2) return mcq('vit', { q: `The coenzyme <b>${x.co}</b> is made from which vitamin?`, a: x.v, w: shuffle(VIT.filter(v => v !== x).map(v => v.v)).slice(0, 3), why: `${x.co} comes from ${x.v}. Job: ${x.use}.`, whys: Object.fromEntries(VIT.map(v => [v.v, `${v.v} is used to make ${v.co}.`])), h: 'Riboflavin is in FAD (flavin); niacin is in NAD (nicotinamide).' }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
+  return mcq('vit', { q: `What job does the coenzyme <b>${x.co}</b> (from ${x.v}) do?`, a: x.use, w: shuffle(VIT.filter(v => v !== x).map(v => v.use)).slice(0, 3), why: `${x.co}: ${x.use}.`, whys: Object.fromEntries(VIT.map(v => [v.use, `That is the job of ${v.co} (from ${v.v}).`])), h: 'Think of the reactions where you write this coenzyme over the arrow.', one: 1 }, { tag: 'Vitamins', slip: 'vitamin-mixup' });
 }
 function genFates() { return mcq('fates', fateBag.next(), { tag: 'Fuel scenario', slip: 'fuel-state', one: 1 }); }
 function genReg() { return mcq('reg', regBag.next(), { tag: 'Regulation', slip: 'regulation', one: 1 }); }
@@ -1343,11 +1748,12 @@ function checkMulti() {
   const n = q.rows.filter((r, i) => !r.choices[q.sel[i]].ok).length;
   grade(false, slip, `${n === 1 ? 'One row is' : n + ' rows are'} not right yet (marked in red). Change ${n === 1 ? 'it' : 'them'} and check again.`);
 }
+function qbChoiceWhy(q,c){try{const T=h=>String(h||'').replace(/<span class="lt">[^<]*<\/span>/g,'').replace(/<[^>]+>/g,'').trim(),tx=x=>T(x&&(x.html||x.label||x.text)),ans=q.choices.find(x=>x.ok);return qbWhy({skill:'metabolism.'+q.topic,prompt:String(q.prompt||'')+' '+String(q.eq||''),choices:q.choices.map(tx),answer:tx(ans),explain:T(q.solution)},tx(c))}catch(e){return ''}}
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#qBox [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip || 'choice', c.why || ''); }
+  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip || 'choice', c.why || qbChoiceWhy(q, c)); }
 }
 function ddLog(ok, slip) {
   try {

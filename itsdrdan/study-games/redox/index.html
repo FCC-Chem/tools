@@ -196,6 +196,12 @@ html.dd-embedded{scroll-padding-top:8px}
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
@@ -836,7 +842,7 @@ function check(){if(state.complete){next();return}if(state.stageDone)return;cons
   if(!results.every(x=>x.ok)){let slip=null;if(q.chart){const vals={};for(const r of results)vals[r.f.id.slice(6)]=numberValue(r.raw);slip=chartSlip(q,vals)}else slip=oxSlip(q.f,q.target.split(' ')[0],Number(q.ans),numberValue(results[0].raw));
    miss(slip,q.chart?'Keep the correct states. Fix the marked ones so that (state × atom count) adds up to the species charge.':esc(q.hint));return}
   finishQuestion();const summary=q.chart?Object.entries(q.states).map(([el,n])=>el+' = '+signed(n)).join('; '):q.why;$('feedback').insertAdjacentHTML('beforeend','<br>'+esc(summary));$('questionArea').querySelectorAll('input').forEach(el=>el.readOnly=true)}
- else if(isForm()){const results=checkFields(q.fields);if(!results.every(x=>x.ok)){miss(formSlip(q,results),esc(q.hint)+' Correct entries are marked.');return}finishQuestion();$('feedback').insertAdjacentHTML('beforeend','<br>'+esc(q.why));$('questionArea').querySelectorAll('input,select').forEach(el=>{el.disabled=true})}
+ else if(isForm()){const results=checkFields(q.fields);if(!results.every(x=>x.ok)){const rw=results.filter(r=>!r.ok&&r.f.type==='select'&&r.raw).map(r=>qbWhy({skill:'redox.'+(state.mode==='cells'?'galvanic-cells':'concepts'),prompt:q.html+' '+(r.f.label||''),choices:(r.f.opts||[]).map(o=>typeof o==='string'?o:o.value),answer:String(r.f.answer),explain:q.why||''},r.raw)).filter(Boolean);miss(formSlip(q,results),(rw.length?rw.join('<br>'):esc(q.hint))+' Correct entries are marked.');return}finishQuestion();$('feedback').insertAdjacentHTML('beforeend','<br>'+esc(q.why));$('questionArea').querySelectorAll('input,select').forEach(el=>{el.disabled=true})}
  else{if(!state.selected){feedback('info','Choose whether the reaction occurs first.');return}if(state.selected!==(q.yes?'yes':'no')){miss(activitySlip(q,state.selected),esc(q.why));return}finishQuestion();$('feedback').insertAdjacentHTML('beforeend','<br>'+chem(q.prod)+' · '+esc(q.why));$('questionArea').querySelectorAll('.option').forEach(el=>el.disabled=true)}}
 function hint(){if(state.complete||state.stageDone)return;const h=state.stages.length?state.stages[state.stage].hint:state.mode==='ox'?state.q.chart?'Use the oxidation-state rules, including the peroxide and hydride exceptions. Multiply each state by its atom count; the total must equal the species charge.':state.q.hint:isForm()?state.q.hint:'Compare the free element with the element in the ion. Metals higher in the list are more easily oxidized; higher halogens are more easily reduced.';$('hintBox').innerHTML=ico('bulb')+' <b>Hint:</b> '+esc(h)+`<p class="ptip"><b>Professor Tip:</b> ${esc(PROF_TIPS[state.mode])}</p>`;$('hintBox').className='hintbox show'}
 function show(){if(state.complete||state.stageDone)return;state.revealed=true;state.revealedStep=true;const q=state.q;let result;if(state.stages.length){const st=state.stages[state.stage];for(const f of st.fields)$(f.id).value=f.type==='signed'?signed(f.answer):f.answer;result=st.result}else if(state.mode==='ox'){if(q.chart){for(const [el,n] of Object.entries(q.states))$('chart-'+el).value=signed(n);result=Object.entries(q.states).map(([el,n])=>el+' = '+signed(n)).join('; ')}else{$('oxInput').value=signed(Number(q.ans));result=esc(q.why)}}else if(isForm()){for(const f of q.fields)$(f.id).value=String(f.answer);result=esc(q.why)}

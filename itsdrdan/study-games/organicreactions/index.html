@@ -868,6 +868,12 @@ window.FBX={version:FBX_VERSION,mount:fbxMount,qHTML,optHTML,molSVG,figBlock,str
 <!--FBX:END-->
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
@@ -1849,7 +1855,7 @@ const SLIPRX=[[/unchanged/i,'no reaction picked'],[/anti-Markovnikov/i,'anti-Mar
 function slipFor(st,key){if(st.arrow)return 'reagent: chose '+(AOPT[key]?AOPT[key].t:key);if(st.pick){const w=(st.wrongWhy||{})[key]||'';const hit=SLIPRX.find(([rx])=>rx.test(w));return hit?hit[1]:'other'}if(st.kind==='mc'){const o=st.options.find(x=>x.key===key);return 'chose '+(o?String(o.key):key)}return ''}
 function check(){if(state.stepDone)return;const st=state.q.steps[state.step];
  if(st.kind==='mc'){if(!state.selected){fb('bad','Choose an answer first.');return}
-  if(state.selected!==st.answer){if(!state.q.firstSlip){const rr=state.q.road?state.q.road[Math.min(state.step,1)]:state.q.r;const sl=slipFor(st,state.selected);if(sl)state.q.firstSlip=(rr&&rr.type?rr.type+': ':'')+sl}ddLog(false);state.streak=0;updateStats();$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});const ww=st.wrongWhy&&st.wrongWhy[state.selected];state.selected=null;cappy('oops',2800);fb('bad','🔎 Not quite. '+esc(ww||st.hint)+(ww?'<br><small>Try another choice.</small>':''));return}
+  if(state.selected!==st.answer){if(!state.q.firstSlip){const rr=state.q.road?state.q.road[Math.min(state.step,1)]:state.q.r;const sl=slipFor(st,state.selected);if(sl)state.q.firstSlip=(rr&&rr.type?rr.type+': ':'')+sl}ddLog(false);state.streak=0;updateStats();$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});const ww=(st.wrongWhy&&st.wrongWhy[state.selected])||(st.options?qbWhy({skill:'organicreactions.reaction-type',prompt:String(st.prompt||''),choices:st.options.map(o=>o.html),answer:(st.options.find(o=>o.key===st.answer)||{}).html,explain:st.why||''},(st.options.find(o=>o.key===state.selected)||{}).html):'');state.selected=null;cappy('oops',2800);fb('bad','🔎 Not quite. '+esc(ww||st.hint)+(ww?'<br><small>Try another choice.</small>':''));return}
   stepSolved(false);return}
  if(st.kind==='name'){const res=checkName($('nameIn').value,st.comp);if(!res.ok){if(normName($('nameIn').value)){ddLog(false);state.streak=0;updateStats()}fb('bad','🔎 Not quite. '+res.msg);return}stepSolved(false,res.note);return}
  const res=checkDrawing(st.accept);

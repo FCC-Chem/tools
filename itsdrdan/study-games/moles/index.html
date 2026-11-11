@@ -255,6 +255,12 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <style>/* sweep 2026-11-05: keep the top bar inside a 375px phone screen */@media(max-width:400px){.tb{gap:5px;padding:0 8px}.seg button{padding:6px 8px}.tb-streak{padding:5px 7px}.tb-btn{padding:6px 9px}.tb-brand img{width:34px;height:34px}}</style>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="app">
@@ -963,8 +969,10 @@ function sanityMsg(q,n){const isCount=/^(molecules|atoms|formula units) /.test(q
  if(/^(mol|mmol) /.test(q.unit)&&n>1e10)return '<b>That’s far too many moles.</b> Moles are usually small numbers. Did you multiply by Avogadro’s number instead of dividing?';
  if(n<0)return 'A count or mass can’t be negative.';return '';}
 function helpTip(q){if(state.quiz)return ' Try a hint if you are stuck.';return state.guideOn||!q.guide?.length?' Try a hint if you are stuck.':(state.view==='learn'?' Tip: tap <b>Try with help</b> above to go one step at a time.':' Tip: turn on <b>Step-by-step help</b> to check each step.');}
+/* wrong-choice reason from the shared question bank (questionbank/whys.js) */
+function qbOpt(q,k){try{const o=q.options||[],a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);return a&&p?qbWhy({skill:'moles.'+(q.mode||q.kind||''),prompt:(q.prompt||'')+' '+(q.equationHTML||''),choices:o.map(x=>x.html),answer:a.html,explain:q.finalExplain||q.explain||''},p.html):''}catch(e){return ''}}
 function checkChoice(key){const q=state.q;countAttempt(q);byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>{if(b.dataset.choice===key)b.classList.add(key===q.answer?'right':'wrong')});
- if(key===q.answer){byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);setFeedback('good',(q.finalExplain||'Correct!')+scoreCorrect(q));}else{ddSlip(q,'choice');markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||'Not that one. Use the hint or the step-by-step help.');}}
+ if(key===q.answer){byId('choiceBox').querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);setFeedback('good',(q.finalExplain||'Correct!')+scoreCorrect(q));}else{ddSlip(q,'choice');markWrong(q);setFeedback('bad',(q.wrongWhy&&q.wrongWhy[key])||qbOpt(q,key)||'Not that one. Use the hint or the step-by-step help.');}}
 
 /* ===================== Hints and solutions ===================== */
 function hint(){const q=state.q,i=Math.min(state.hintIndex,q.hints.length-1);q.usedHelp=true;byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>Hint '+(i+1)+' of '+q.hints.length+'</h3>'+escape(q.hints[i]).replace(/\b([A-Z][a-z]?\d*(?:[A-Z][a-z]?\d*)*)\b/g,s=>/\d/.test(s)?fhtml(s):s);state.hintIndex=Math.min(i+1,q.hints.length-1);}

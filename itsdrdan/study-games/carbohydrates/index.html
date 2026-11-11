@@ -137,6 +137,7 @@ details.directions .tip{margin:8px 18px 16px;background:#fff6d6;border-radius:12
 @media(max-width:700px){.mode-title{font-size:21px}.mode-tag{font-size:11px;padding:2px 8px;margin-right:6px}}
 .rx-scheme{gap:6px 10px;flex-wrap:wrap}.rx-scheme .fbx-figs{margin:0}.rx-arrow{flex:0 0 auto;max-width:100%}.rx-mol{display:flex;flex-direction:column;align-items:center;gap:2px}.rx-cap{font-weight:900;font-size:15px;color:#2d3f4b;text-align:center;max-width:170px;line-height:1.2}.rx-q{width:110px;height:170px;border:2px dashed #c9b8a0;border-radius:14px;display:flex;align-items:center;justify-content:center;font:900 44px Fredoka,Inter,sans-serif;color:#c0473b}.opt-body .fbx .fbx-figs{margin:0}.opt-body .fbx .fbx-fsvg{max-height:200px;width:auto}.feedback .struct{margin-top:10px}
 @media(max-width:700px){.rx-scheme{flex-wrap:nowrap;gap:2px;padding:6px 2px}.rx-scheme .fbx-fsvg{max-width:31vw}.rx-arrow{width:24vw;height:auto}.rx-q{width:26vw;height:140px}.rx-cap{font-size:12px;max-width:31vw}}
+.conv-tab{border-collapse:collapse;margin:8px 0 10px;font-size:.95em}.conv-tab th,.conv-tab td{border:1px solid #d9cfe8;padding:4px 10px;text-align:left}.conv-tab th{background:#f4effb}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
@@ -619,6 +620,12 @@ window.FBX={version:FBX_VERSION,mount:fbxMount,qHTML,optHTML,molSVG,figBlock,str
 
 })();</script>
 <!--FBX:END-->
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body>
 <div class="celebrate" id="celebrate"></div><div class="toast" id="toast" role="status"></div>
@@ -731,13 +738,39 @@ const havName=(k,a)=>`${a}-D-${HSTEM[k]}`;
 const ALLK=Object.keys(SUG);
 const KINDS=['aldotriose','ketotriose','aldotetrose','ketotetrose','aldopentose','ketopentose','aldohexose','ketohexose'];
 const nice=k=>k==='dihydroxyacetone'?'1,3-dihydroxyacetone':k;
-const clsBag=bag(['draw','name','draw']),fiBag=bag(['dl','id','id','dl']),haBag=bag(['convert','anomer','unconvert','ring','convert','match','anomer','unconvert','match']),stBag=bag(['count','rel','rel','count']),diBag=bag(['drawlink','form','comp','label','drawid','source','form','drawlink','link','label','poly','drawid','red','red','digest']),rxBag=bag(['benedict','benedict','ox','red','hydro','ferment','cond','dprod','dtype','dname','dprod','dtype']);
+const clsBag=bag(['draw','formula','group','pick','draw','count','formula','group','pick']),fiBag=bag(['dl','id','id','dl']),haBag=bag(['convert','anomer','unconvert','ring','convert','match','anomer','unconvert','match']),stBag=bag(['count','rel','rel','count']),diBag=bag(['drawlink','form','comp','label','drawid','source','form','drawlink','link','label','poly','drawid','red','red','digest']),rxBag=bag(['benedict','benedict','ox','red','hydro','ferment','cond','dprod','dtype','dname','dprod','dtype']);
 const relBag=bag(['enantiomer','epimer','structural','none']);
 function kindWhy(k){const s=SUG[k];return `${sugKind(k)}: ${s.n} carbons (${SZ[s.n]}ose) and ${s.type==='aldo'?'an aldehyde (–CHO) at C1, so it is an aldose':'a ketone (C=O) at C2, so it is a ketose'}.`}
-function genClassify(){const k=pickOne(ALLK);const L=Math.random()<.25&&chiralCount(k)>0;const ans=sugKind(k),s=SUG[k];
- const sw=(s.type==='aldo'?'keto':'aldo')+SZ[s.n]+'ose';const others=KINDS.filter(x=>x!==ans);const alt=[sw,...shuf(others.filter(x=>x!==sw))].slice(0,3);const opts=shuf([ans,...alt]);const showDraw=clsBag()==='draw';
- const prompt=showDraw?`<p class="prompt">What type of monosaccharide is shown?</p><div class="struct">${fischerSVG(k,L)}</div>`:`<p class="prompt">${esc(nice(k)[0].toUpperCase()+nice(k).slice(1))} contains ${s.n} carbons and ${s.type==='aldo'?'an aldehyde group':'a ketone group'}. How is it classified?</p>`;
- return {kind:'classify',html:prompt,options:opts.map(o=>({key:o,html:o})),answer:ans,hint:'Count the carbons for the size (tri-, tetr-, pent-, hex-). Look at the top: –CHO means aldo-, a C=O in the middle (at C2) means keto-.',why:kindWhy(k)+(showDraw?` This is ${sugName(k,L)}.`:''),cols:2}}
+const clsKindBag=bag([...new Set(ALLK.map(k=>sugKind(k)))]),clsSugBags={};
+function clsPick(){const kind=clsKindBag();if(!clsSugBags[kind])clsSugBags[kind]=bag(ALLK.filter(k=>sugKind(k)===kind));return clsSugBags[kind]()}
+
+/* ===== Classify Sugars: extra question types (student feedback asked for more variety) ===== */
+const sub=n=>'<sub>'+n+'</sub>';
+function condensed(k){const s=SUG[k];if(s.type==='aldo'){const m=s.n-2;return 'CHO–'+(m===1?'CHOH':'(CHOH)'+sub(m))+'–CH'+sub(2)+'OH'}
+ const m=s.n-3;return 'CH'+sub(2)+'OH–CO–'+(m===0?'':(m===1?'CHOH–':'(CHOH)'+sub(m)+'–'))+'CH'+sub(2)+'OH'}
+function kindNote(ans,o,n,type){const sz=x=>(x.match(/(tri|tetr|pent|hex)ose/)||[])[1],ak=x=>x.startsWith('aldo')?'aldo':'keto',N={tri:3,tetr:4,pent:5,hex:6};const bits=[];
+ if(sz(o)!==sz(ans))bits.push(`“${sz(o)}ose” means ${N[sz(o)]} carbons, but this sugar has <b>${n}</b>. Count every C, including both ends.`);
+ if(ak(o)!==ak(ans))bits.push(type==='aldo'?'The C=O is at the end of the chain (–CHO, an aldehyde), so it is an <b>aldo</b>se.':'The C=O is inside the chain (at C2, a ketone), so it is a <b>keto</b>se.');
+ return bits.join(' ')}
+const SIZE_ITEMS=[['glucose','mono','blood sugar; a single six-carbon unit'],['fructose','mono','fruit sugar; a single six-carbon ketose'],['galactose','mono','a single six-carbon unit (half of lactose)'],['ribose','mono','a single five-carbon unit found in RNA'],['deoxyribose','mono','a single five-carbon unit found in DNA'],
+ ['sucrose','di','table sugar = glucose + fructose (2 units)'],['lactose','di','milk sugar = galactose + glucose (2 units)'],['maltose','di','malt sugar = glucose + glucose (2 units)'],
+ ['amylose (starch)','poly','hundreds of glucose units in an unbranched chain'],['amylopectin (starch)','poly','thousands of glucose units with branches'],['glycogen','poly','animal storage form: many glucose units, highly branched'],['cellulose','poly','plant cell walls: thousands of β-linked glucose units']];
+const sizeBag=bag(SIZE_ITEMS);const SZN={mono:'monosaccharide',di:'disaccharide',poly:'polysaccharide'},SZU={mono:'1 sugar unit',di:'2 sugar units',poly:'many sugar units'};
+function genSizeClass(){const [nm,c,d]=sizeBag();const keys=['mono','di','poly'];const notes={};
+ keys.filter(x=>x!==c).forEach(x=>notes[x]=`A ${SZN[x]} has ${SZU[x]}. ${nm[0].toUpperCase()+nm.slice(1)} is ${d}, so it is a <b>${SZN[c]}</b>.`);
+ return {kind:'classify',html:`<p class="prompt">How is <b>${nm}</b> classified?</p>`,options:keys.map(x=>({key:x,html:SZN[x]})),answer:c,notes,hint:'Count the sugar units: one unit = mono-, two = di-, many = poly-.',why:`${nm[0].toUpperCase()+nm.slice(1)} is ${d}: a <b>${SZN[c]}</b>.`,cols:3}}
+function genPickKind(){const target=clsPick(),want=sugKind(target);const pool=shuf(ALLK.filter(k=>sugKind(k)!==want));const others=[];const seen=new Set();
+ for(const k of pool){const kk=sugKind(k);if(!seen.has(kk)){seen.add(kk);others.push(k)}if(others.length===3)break}
+ const ks=shuf([target,...others]);const notes={};others.forEach(k=>notes[k]=`That one is a <b>${sugKind(k)}</b>: ${kindWhy(k).split(': ')[1]}`);
+ return {kind:'classify',html:`<p class="prompt">Which structure is ${/^[aeiou]/.test(want)?'an':'a'} <b>${want}</b>?</p>`,options:ks.map(k=>({key:k,html:`<div class="struct">${fischerSVG(k,false,{scale:.62})}</div>`})),answer:target,notes,hint:'For each structure: count the carbons, then check where the C=O is (top –CHO = aldo, C2 = keto).',why:`This is ${sugName(target,false)}, a ${kindWhy(target)}`,cols:2,struct:true}}
+function genCountKind(){const k=clsPick(),s=SUG[k],want=sugKind(k),n=s.n,N={3:'3',4:'4',5:'5',6:'6'};const alt=n===6?5:n+1,pos=s.type==='aldo'?'an aldehyde (–CHO) at C1':'a ketone (C=O) at C2',bad=s.type==='aldo'?'a ketone (C=O) at C2':'an aldehyde (–CHO) at C1';
+ const o={ok:`${n} carbons, with ${pos}`,size:`${alt} carbons, with ${pos}`,pos:`${n} carbons, with ${bad}`,both:`${alt} carbons, with ${bad}`};
+ const notes={size:`“${SZ[n]}ose” means ${n} carbons, not ${alt}.`,pos:s.type==='aldo'?'“Aldo-” means an aldehyde: the C=O is at the end of the chain (C1).':'“Keto-” means a ketone: the C=O is inside the chain (C2).',both:`Both parts are off: “${SZ[n]}ose” = ${n} carbons, and “${s.type==='aldo'?'aldo':'keto'}-” puts the C=O ${s.type==='aldo'?'at the end (C1)':'at C2'}.`};
+ return {kind:'classify',html:`<p class="prompt">${/^[aeiou]/.test(want)?'An':'A'} <b>${want}</b> has how many carbons, and what kind of carbonyl group?</p>`,options:shuf(Object.keys(o)).map(x=>({key:x,html:o[x]})),answer:'ok',notes,slips:{size:'carbon-count',pos:'aldo-keto',both:'carbon-count'},hint:'Split the name: aldo/keto (carbonyl type) + tri/tetr/pent/hex (carbons) + -ose (sugar).',why:`${want} = ${s.type==='aldo'?'aldo':'keto'} + ${SZ[n]} + ose: <b>${o.ok}</b>.`,cols:1}}
+function genClassify(){const t=clsBag();if(t==='group')return genSizeClass();if(t==='pick')return genPickKind();if(t==='count')return genCountKind();const k=clsPick();const L=Math.random()<.25&&chiralCount(k)>0;const ans=sugKind(k),s=SUG[k];
+ const sw=(s.type==='aldo'?'keto':'aldo')+SZ[s.n]+'ose';const others=KINDS.filter(x=>x!==ans);const alt=[sw,...shuf(others.filter(x=>x!==sw))].slice(0,3);const opts=shuf([ans,...alt]);const showDraw=t==='draw';
+ const prompt=showDraw?`<p class="prompt">What type of monosaccharide is shown?</p><div class="struct">${fischerSVG(k,L)}</div>`:`<p class="prompt">The open-chain sugar below is ${esc(nice(k))}. How is it classified?</p><p class="prompt" style="font-size:1.15em;text-align:center"><b>${condensed(k)}</b></p>`;
+ const notes={};opts.filter(o=>o!==ans).forEach(o=>notes[o]=kindNote(ans,o,s.n,s.type));return {kind:'classify',html:prompt,options:opts.map(o=>({key:o,html:o})),answer:ans,notes,hint:'Count the carbons for the size (tri-, tetr-, pent-, hex-). Look at the top: –CHO means aldo-, a C=O in the middle (at C2) means keto-.',why:kindWhy(k)+(showDraw?` This is ${sugName(k,L)}.`:''),cols:2}}
 function dOrL(k,L){return L?'L':'D'}
 function genFischer(){const t=fiBag();
  if(t==='dl'){const k=pickOne(ALLK.filter(x=>chiralCount(x)>0));const L=Math.random()<.5;const sd=sidesOf(k,L).filter(x=>x!=='X');const last=sd[sd.length-1];
@@ -802,18 +835,21 @@ const ACID={glucose:'gluconic acid',galactose:'galactonic acid',mannose:'mannoni
 const AHEX=['glucose','galactose','mannose','allose','altrose','gulose','idose','talose'];
 const pickHex=()=>Math.random()<.7?pickOne(['glucose','galactose','mannose']):pickOne(AHEX);
 const hwSubsOf=(sd,an)=>[an==='a'?['H','OH']:['OH','H'],...sd.slice(0,3).map(v=>v==='R'?['H','OH']:['OH','H']),['CH<sub>2</sub>OH','H']];
-const fiFigOf=(sd,cap)=>({type:'fischer',top:'CHO',bottom:'CH<sub>2</sub>OH',rows:sd.map(v=>v==='R'?['H','OH']:['HO','H']),cap});
-const hwFigOf=(sd,an,o)=>Object.assign({type:'haworth',size:6,subs:hwSubsOf(sd,an)},o||{});
+const fiFigOf=(sd,cap)=>({type:'fischer',top:'CHO',bottom:'CH<sub>2</sub>OH',rows:sd.map(v=>v==='R'?['H','OH']:['HO','H']),cap,nums:true});
+const hwFigOf=(sd,an,o)=>Object.assign({type:'haworth',size:6,subs:hwSubsOf(sd,an),nums:true},o||{});
+/* Carbon-by-carbon Fischer → Haworth table for explanations (students were reading the ring left to right, which runs C4 → C1) */
+const convTable=(sd,an)=>{const row=(c,f,r)=>`<tr><td><b>${c}</b></td><td>${f}</td><td>${r}</td></tr>`;return `<table class="conv-tab"><tr><th>Carbon</th><th>Fischer (–OH)</th><th>Haworth ring (–OH)</th></tr>`+row('C1','the C=O (–CHO)',an==='a'?'<b>down</b> (α)':'<b>up</b> (β)')+sd.slice(0,3).map((v,i)=>row('C'+(i+2),v==='R'?'right':'left',v==='R'?'<b>down</b>':'<b>up</b>')).join('')+row('C5',sd[3]==='R'?'right (D-sugar)':'left','ring O; CH₂OH points <b>up</b>')+`</table>`};
+const ringRead='<b>Reading the ring:</b> C1 is the carbon just right of the ring O. Go clockwise: C1 (right) → C2 (front right) → C3 (front left) → C4 (left) → C5 (back left, holds the CH₂OH). Reading left to right goes C4 → C1, backwards.';
 const figOpt=f=>`<span class="fbx">${window.FBX?FBX.figBlock([f]):''}</span>`;
 const figBox=f=>`<div class="struct fbx">${window.FBX?FBX.figBlock([f]):''}</div>`;
 const flipAt=(sd,idx)=>sd.map((v,i)=>idx.includes(i)?(v==='R'?'L':'R'):v);
 const AN={a:'α',b:'β'};
-const convWhy='Fischer → Haworth (D-sugars): an –OH on the <b>right</b> in the Fischer projection points <b>down</b> in the ring; on the left it points <b>up</b>. The CH₂OH on C5 points up. α = anomeric –OH down (opposite the CH₂OH); β = up.';
+const convWhy='Fischer → Haworth (D-sugars): match carbon to carbon by number. An –OH on the <b>right</b> in the Fischer projection points <b>down</b> in the ring; on the left it points <b>up</b>. The CH₂OH on C5 points up. α = anomeric –OH down (opposite the CH₂OH); β = up.';
 function genConvert(t){const k=pickHex(),sd=SUG[k].sides.slice(),an=pickOne(['a','b']),j=rnd(0,2);
  if(t==='convert'){const opts=[['ok',hwFigOf(sd,an)],['anom',hwFigOf(sd,an==='a'?'b':'a')],['flip',hwFigOf(flipAt(sd,[0,1,2]),an)],['epi',hwFigOf(flipAt(sd,[j]),an)]];
-  return {kind:'haworth',html:`<p class="prompt">D-${k} closes into a six-membered ring as the <b>${AN[an]}</b> anomer. Which Haworth projection is correct?</p>${figBox(fiFigOf(sd,'D-'+k))}`,options:shuf(opts).map(([key,f])=>({key,html:figOpt(f)})),answer:'ok',slips:{anom:'alpha-beta',flip:'haworth-flip',epi:'epimer-mixup'},hint:convWhy,why:`${convWhy} So ${AN[an]}-D-${k} is drawn like this:${figBox(hwFigOf(sd,an,{nums:true}))}`,cols:2,struct:true}}
+  return {kind:'haworth',html:`<p class="prompt">D-${k} closes into a six-membered ring as the <b>${AN[an]}</b> anomer. Which Haworth projection is correct?</p>${figBox(fiFigOf(sd,'D-'+k))}`,options:shuf(opts).map(([key,f])=>({key,html:figOpt(f)})),answer:'ok',slips:{anom:'alpha-beta',flip:'haworth-flip',epi:'epimer-mixup'},hint:convWhy+' '+ringRead,why:`${convWhy}${convTable(sd,an)}<p>${ringRead}</p>So ${AN[an]}-D-${k} is drawn like this:${figBox(hwFigOf(sd,an,{nums:true}))}`,cols:2,struct:true}}
  const L=mirror(sd),opts=[['ok',fiFigOf(sd)],['flip',fiFigOf(flipAt(sd,[0,1,2]))],['epi',fiFigOf(flipAt(sd,[j]))],['L',fiFigOf(L)]];
- return {kind:'haworth',html:`<p class="prompt">Which Fischer projection shows the open-chain form of this ring sugar?</p>${figBox(hwFigOf(sd,an,{nums:true}))}`,options:shuf(opts).map(([key,f])=>({key,html:figOpt(f)})),answer:'ok',slips:{flip:'haworth-flip',epi:'epimer-mixup',L:'dl-flip'},hint:'Ring → Fischer: an –OH pointing down in the ring goes on the right; up goes on the left. The CH₂OH pointing up means C5 has its –OH on the right (a D-sugar). The anomeric C1 becomes the –CHO, so α or β does not matter.',why:`Down in the ring = right in the Fischer projection; up = left. This ring is ${AN[an]}-D-${k}, and its open-chain form is D-${k}:${figBox(fiFigOf(sd,'D-'+k))}`,cols:2,struct:true}}
+ return {kind:'haworth',html:`<p class="prompt">Which Fischer projection shows the open-chain form of this ring sugar?</p>${figBox(hwFigOf(sd,an,{nums:true}))}`,options:shuf(opts).map(([key,f])=>({key,html:figOpt(f)})),answer:'ok',slips:{flip:'haworth-flip',epi:'epimer-mixup',L:'dl-flip'},hint:'Ring → Fischer: match carbon to carbon by number. An –OH pointing down in the ring goes on the right; up goes on the left. The CH₂OH pointing up means C5 has its –OH on the right (a D-sugar). The anomeric C1 becomes the –CHO, so α or β does not matter. '+ringRead,why:`Down in the ring = right in the Fischer projection; up = left. This ring is ${AN[an]}-D-${k}:${convTable(sd,an)}<p>${ringRead}</p>Its open-chain form is D-${k}:${figBox(fiFigOf(sd,'D-'+k))}`,cols:2,struct:true}}
 
 /* ===== Condensation: draw the glycosidic bond ===== */
 const FORM=[{l:'glucose',an:'a',name:'maltose'},{l:'glucose',an:'b',name:'cellobiose'},{l:'galactose',an:'b',name:'lactose'},{l:'galactose',an:'a',name:''}];
@@ -994,8 +1030,11 @@ function finish(){ddLog(!state.revealed,state.revealed?'revealed':'');state.done
  if(state.revealed){state.assisted++;state.streak=0;mascot('normal');fb('good',ico('eye')+' '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>');awardXP(true)}
  else{state.correct++;state.streak++;confetti();fb('good',ico('check')+' <b>Correct!</b> '+q.why);awardXP(false);mascot(state.streak>=3?'wow':'happy',3500)}updateStats()}
 function ddLog(ok,slip){try{const q=state.q;if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const m=MODES.find(x=>x.id===state.mode);ddTrack({game:'carbohydrates',course:'3B',mode:'Practice',topic:m?m.title:state.mode,correct:!!ok,slip:ok?'':(slip||'')});}catch(e){}}
+
+/* wrong-choice reason for the current question, from the shared question bank */
+function qbWhyQ(q,k){try{const sk={classify:'classify',fischer:'fischer',haworth:'haworth',stereo:'stereo',disacc:'disaccharides',react:'sugar-reactions'}[q.mode||state.mode];if(!sk||!q.options)return '';const t=o=>o.html,o=q.options,a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);if(!a||!p)return '';return qbWhy({skill:'carbohydrates.'+sk,prompt:q.html,choices:o.map(t),answer:t(a),explain:q.why||''},t(p),{SUG:typeof SUG!=='undefined'?(Array.isArray(SUG)?Object.fromEntries(SUG):SUG):undefined})}catch(e){return ''}}
 function check(){if(state.done)return;if(!state.selected){fb('bad','Choose an answer first.');return}
- if(state.selected!==state.q.answer){const sl=slipFor(state.q,state.selected);state.streak=0;updateStats();ddLog(false,sl[0]);mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;if(!state.q.slip)state.q.slip=sl[0];fb('bad',ico('x')+' <b>Not quite.</b> '+(sl[1]||esc(state.q.hint)));return}
+ if(state.selected!==state.q.answer){const pk=state.selected,qw=qbWhyQ(state.q,pk);const sl=slipFor(state.q,state.selected);state.streak=0;updateStats();ddLog(false,sl[0]);mascot('hmm',2600);$('questionArea').querySelectorAll('.option').forEach(b=>{if(b.dataset.key===state.selected){b.classList.add('wrong');b.classList.remove('selected')}});state.selected=null;if(!state.q.slip)state.q.slip=sl[0];const nt=state.q.notes&&state.q.notes[pk];fb('bad',ico('x')+' <b>Not quite.</b> '+(nt||qw||sl[1]||esc(state.q.hint)));return}
  finish()}
 function hint(){if(state.done)return;$('hintBox').innerHTML=ico('bulb')+' '+esc(state.q.hint);$('hintBox').className='hintbox show';mascot('thinking',4000)}
 function show(){if(state.done)return;state.revealed=true;state.selected=state.q.answer;finish()}

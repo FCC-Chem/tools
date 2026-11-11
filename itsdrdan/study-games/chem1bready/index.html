@@ -1006,6 +1006,12 @@ dialog{border-radius:22px;background:#fffdf9;border:1px solid #ece4d4}
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <script>var BRIDGE_COURSE=(function(){var c='';try{c=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim();}catch(e){}if(c!=='1A'&&c!=='1B'){try{c=localStorage.getItem('itsdrdan-1b-course')||'';}catch(e){}}if(c!=='1A'&&c!=='1B')c='1B';try{localStorage.setItem('itsdrdan-1b-course',c);}catch(e){}return c;})();</script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body>
 <div id="celebrate" aria-hidden="true"></div>
@@ -2425,7 +2431,47 @@ function feedback(cls,text){const box=$('feedback');box.className='feedback '+cl
 function checkBench(){if(q.steps[index].bench==='lewis'){const problem=LewisBuilder.validate();if(problem)return problem;}if(q.steps[index].bench==='atomic'){if([q.mo.atomicLeft,q.mo.atomicRight].some(side=>side.some((a,i)=>[...a].sort().join()!==[...q.mo.atomicFill[i]].sort().join())))return 'Recheck each neutral atom: fill s first, singly fill degenerate p orbitals, then pair. The ionic adjustment applies to the combined molecule.';}if(q.steps[index].bench==='mo'){if(q.mo.current.some((a,i)=>[...a].sort().join()!=[...q.mo.fill[i]].sort().join()))return 'Recheck low-to-high filling, the electron total, and Hund’s rule. Singly fill both degenerate π orbitals before pairing.';}return '';}
 function ddLog(ok){try{if(!q||q.ddLogged||watching||!window.ddTrack)return;q.ddLogged=1;
  const slip=ok?'':(q.firstSlip||'');ddTrack({game:'chem1bready',course:BRIDGE_COURSE,mode:mode==='diagnostic'?'Readiness Check':mode==='daily'?'Daily 5':uiView==='learn'?'Learn Trail':'Practice',topic:labName(q.topic)||q.topic||'',correct:!!ok,tries:slip?'slip:'+slip:'',slip});}catch(e){}}
-function check(){if(awarded)return;const s=q.steps[index],errors=[],formulaFields=s.fields.filter(f=>f.formula),formulaCorrect=formulaFields.map(f=>formulaAnswer($('input-'+f.id).value)).sort().join('|')===formulaFields.map(f=>f.answer).sort().join('|');s.fields.forEach(f=>{const el=$('input-'+f.id),raw=el.value.trim();let ok=f.formula?formulaCorrect:f.options?raw===f.answer:Number.isFinite(number(raw))&&(f.exact?number(raw)===f.answer:Math.abs(number(raw)-Number(f.answer.toPrecision(3)))<=Math.max(Math.abs(f.answer)*.005,1e-12));$('field-'+f.id).className=(s.bench==='reactionCoefficients'?'coefficient-formula field ':'field ')+(ok?'good':'bad');if(!ok){const why=(f.options||f.formula)?'':diagnose(f,number(raw));if(!q.firstSlip)q.firstSlip=why?slipCode:(f.options?'choice':f.formula?'formula':'other');errors.push(f.label+': '+(why?why+' ':'')+(f.hint||(f.options?'Reconsider the chemistry.':why?'':'Check units, coefficients, and arithmetic.')));}});const bench=checkBench();if(bench)errors.push(bench);if(errors.length){ddLog(false);hadError=true;markSeen(q.topic,true);if(mode!=='diagnostic')streak=0;feedback('bad',errors.map(esc).join('<br>'));stats();return;}completeStep(false);}
+function cbLocal(s,f,raw){try{
+const L=o=>optionLabel(f.optionLabels&&f.optionLabels[o]||o),T=x=>String(x||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+const N=x=>T(x).replace(/[₀-₉]/g,c=>'₀₁₂₃₄₅₆₇₈₉'.indexOf(c)).replace(/[⁰¹²³⁴-⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).replace(/[⁻−]/g,'-').replace(/⁺/g,'+').replace(/[\^\s]/g,'');
+const a=f.answer,w=raw,A=L(a),W=L(w),lab=f.label,ex=T(s.explain).replace(/^.*?(?=[A-Z][a-z]? is (above|below) )/,'');
+const DEF={'Combination':'two or more substances join into one product (A + B → AB)','Decomposition':'one compound breaks into simpler substances (AB → A + B)','Single displacement':'an element replaces another element in a compound (A + BC → AC + B)','Double displacement':'two compounds swap partners (AB + CD → AD + CB)','Combustion':'a fuel burns in O₂, usually making CO₂ and H₂O','Neutralization':'an acid and a base make water and a salt','Gas evolution':'two solutions swap partners and one product is (or breaks down into) a gas such as CO₂, H₂S or NH₃'};
+if(lab==='Reaction type'&&DEF[W])return W+' means '+DEF[W]+'. This one is '+A.toLowerCase()+': '+DEF[A]+'.';
+const roles=T((q.steps.find(x=>/Oxidized:/.test(x.explain||''))||{}).explain);
+const rm=roles.match(/Oxidized: (\S+) \(([^)]*)\)\. Reduced: (\S+) \(([^)]*)\)/);
+const el=x=>/^[A-Z][a-z]?$/.test(x);
+if(rm&&/^Element (oxidized|reduced)$/.test(lab)){const ox=/oxidized/.test(lab),[oE,oC,rE,rC]=[rm[1],rm[2],rm[3],rm[4]];
+ if(!el(w))return W+' is a whole species. This blank wants the element whose oxidation number changes.';
+ if(ox&&w===rE)return W+' goes '+rC+': its oxidation number drops, so it gains electrons and is reduced.';
+ if(!ox&&w===oE)return W+' goes '+oC+': its oxidation number rises, so it loses electrons and is oxidized.';
+ return W+' has the same oxidation number on both sides, so it is neither oxidized nor reduced.'}
+if(rm&&/^(Oxidizing|Reducing) agent$/.test(lab)){const oxA=/Oxidizing/.test(lab),[oE,rE]=[rm[1],rm[3]];
+ const eq=T(q.equation).replace(/^Original:\s*/,''),re=(eq.split('→')[0]||'').split(' + ').map(x=>N(x.replace(/^\d+\s*/,'')));
+ const isR=re.includes(N(W)),pr=(eq.split('→')[1]||'').split(' + ').map(x=>N(x.replace(/^\d+\s*/,''))),isP=pr.includes(N(W));
+ const other=oxA?roles.match(/Reducing agent: ([^.]+)\./):roles.match(/Oxidizing agent: ([^.]+)\./);
+ if(other&&N(other[1])===N(W))return W+(W===(oxA?oE:rE)?' is ':' contains ')+(oxA?oE+', the element oxidized, so it is the reducing agent':rE+', the element reduced, so it is the oxidizing agent')+'. The '+(oxA?'oxidizing':'reducing')+' agent contains the element '+(oxA?'reduced ('+rE+')':'oxidized ('+oE+')')+'.';
+ if(!isR&&!isP&&el(w))return 'Pick the whole reactant species, not just the element. The agent is the reactant that contains '+(oxA?rE:oE)+'.';
+ if(!isR)return W+' is a product. Agents are reactants: the '+(oxA?'oxidizing':'reducing')+' agent is the reactant that contains '+(oxA?rE:oE)+'.';
+ return W+' doesn’t contain '+(oxA?rE+', the element reduced':oE+', the element oxidized')+'.'}
+if(/^(Reactant|Product) species$/.test(lab)){const m=T(s.prompt).match(/element (\S+)/);if(m)return W+' doesn’t contain '+m[1]+'. It belongs in the other half-reaction.'}
+const sm=lab.match(/^Which side receives (H₂O|H⁺|e⁻)\?$/);
+if(sm){const sd={L:'the reactant (left) side',R:'the product (right) side'},what=sm[1],ox=/^Oxidation/.test(s.title);
+ if(what==='e⁻'){if(a==='none')return 'The charges already match, so no electrons are needed.';return (ox?'Oxidation loses electrons, so e⁻ appear as a product, on ':'Reduction gains electrons, so e⁻ are a reactant, on ')+sd[a]+'.'}
+ const at=what==='H₂O'?'O':'H';
+ if(a==='none')return 'The '+at+' atoms are already balanced, so no '+what+' is needed.';
+ if(w==='none')return 'The '+at+' atoms aren’t balanced yet, so '+what+' is needed.';
+ return what+' goes on the side that is short on '+at+' atoms: '+sd[a]+'.'}
+if(lab==='Limiting reactant'){if(/together/.test(W))return 'Only an exact mole-ratio mix runs out together. Here the moles ÷ coefficient results differ, so '+A+' runs out first.';return W+' is in excess. Divide each reactant’s moles by its coefficient: the smaller result ('+A+') runs out first.'}
+if(lab==='Excess reactive ion'){const H=/H3O/.test(a),O=/OH/.test(a);
+ if(/No excess/.test(W))return 'The acid and base amounts don’t match exactly, so one ion is left over: '+A+'.';
+ if(/No excess/.test(A))return 'The acid and base amounts match exactly, so neither H₃O⁺ nor OH⁻ is left over.';
+ return H?'The base runs out first, so no OH⁻ is left. The extra acid leaves H₃O⁺.':O?'The acid runs out first, so no H₃O⁺ is left. The extra base leaves OH⁻.':''}
+if(lab==='Reaction occurs?')return 'That’s backwards. '+ex;
+if(lab==='Products'){if(/No reaction/.test(W))return 'A reaction does happen. '+ex;if(/No reaction/.test(A))return 'No reaction happens here. '+ex;return 'Those products come from a different pair of reactants. Look at which substances are actually mixed.'}
+if(lab==='Electron transfer'){if(/less active/.test(W))return 'In the activity-series model, the more active metal loses electrons, not the less active one.';if(/lower halogen/.test(W))return 'It’s the reverse: a more active halogen (higher in the series) displaces a less active halide.';return 'That’s not it. '+ex}
+return ''}catch(e){return ''}}
+function cbWhy(s,f,raw){const SL={titration:'acid-base-stoichiometry',limiting:'limiting-reactant',ions:'dissolution-ions',aqueous:'reactions-in-water',geometry:'shape-hybridization',mo:'mo-theory',foundations:'core-toolkit',physical:'matter-energy',kineq:'kinetics-equilibrium-prep',mathgym:'math-gym'};const t=o=>optionLabel(f.optionLabels&&f.optionLabels[o]||o);const ex=q.steps.slice(0,index+1).filter(x=>x.explain).map(x=>x.title+': '+x.explain).join(' ');return qbWhy({skill:'chem1bready.'+(SL[mode]||mode),prompt:(q.story||'')+' '+(q.equation||'')+' '+(s.prompt||'')+' Find: '+f.label,choices:f.options.map(t),answer:t(f.answer),explain:ex},t(raw))}
+function check(){if(awarded)return;const s=q.steps[index],errors=[],formulaFields=s.fields.filter(f=>f.formula),formulaCorrect=formulaFields.map(f=>formulaAnswer($('input-'+f.id).value)).sort().join('|')===formulaFields.map(f=>f.answer).sort().join('|');s.fields.forEach(f=>{const el=$('input-'+f.id),raw=el.value.trim();let ok=f.formula?formulaCorrect:f.options?raw===f.answer:Number.isFinite(number(raw))&&(f.exact?number(raw)===f.answer:Math.abs(number(raw)-Number(f.answer.toPrecision(3)))<=Math.max(Math.abs(f.answer)*.005,1e-12));$('field-'+f.id).className=(s.bench==='reactionCoefficients'?'coefficient-formula field ':'field ')+(ok?'good':'bad');if(!ok){const ow=f.options&&raw?(cbLocal(s,f,raw)||cbWhy(s,f,raw)):'';const why=ow||((f.options||f.formula)?'':diagnose(f,number(raw)));if(!q.firstSlip)q.firstSlip=why?slipCode:(f.options?'choice':f.formula?'formula':'other');errors.push(f.label+': '+(why?why+' ':'')+(ow?'':(f.hint||(f.options?'Reconsider the chemistry.':why?'':'Check units, coefficients, and arithmetic.'))));}});const bench=checkBench();if(bench)errors.push(bench);if(errors.length){ddLog(false);hadError=true;markSeen(q.topic,true);if(mode!=='diagnostic')streak=0;feedback('bad',errors.map(esc).join('<br>'));stats();return;}completeStep(false);}
 let practiceScrollToken=0;
 function focusPracticeArea(id){if(quietScroll)return;const token=++practiceScrollToken;requestAnimationFrame(()=>requestAnimationFrame(()=>{if(token!==practiceScrollToken)return;const el=$(id);if(!el||el.hidden)return;el.setAttribute('tabindex',el.matches('button,input,select')?'0':'-1');el.focus({preventScroll:true});el.scrollIntoView({block:id==='bottomNew'?'center':'start',behavior:'auto'});}));}
 function completeStep(revealed){const s=q.steps[index],answers=s.fields.map(f=>`${inlineChem(f.label)}: ${f.formula?chem(f.answer):f.options?inlineChem(f.answer):esc(fmt(f.answer,f.exact?Math.max(1,String(f.answer).replace('.','').length):3))} ${esc(f.unit||'')}`).join('<br>')||'Diagram completed';completed.push({title:s.title,answers,explain:s.explain,assisted:revealed});$('hintBox').hidden=true;if(index<q.steps.length-1){index++;render();if(watching){$('feedback').className='feedback';}else{feedback('good','Step locked in. Continue below with '+esc(q.steps[index].title)+'.');}focusPracticeArea('title');return;}finish();}

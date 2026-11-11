@@ -322,6 +322,12 @@ svg.fischer{width:200px;max-width:100%}svg.fischer .fl{font:800 17px Nunito,Inte
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/textbook/css/widget-base.css">
 <script src="https://itsdrdan.github.io/textbook/js/fbx.js" defer></script>
+<script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
+<script>
+/* Per-choice "why" feedback from the shared question bank (itsdrdan.github.io/questionbank/whys.js).
+   qbWhy(item, picked, ctx) returns a short reason the picked wrong choice is wrong, or '' if it can't tell (or is offline). */
+function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picked,ctx)||''):''}catch(e){return ''}}
+</script>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
@@ -965,11 +971,12 @@ function newQuestion(focus) {
 }
 
 /* ---------- checking + scoring ---------- */
+function qbChoiceWhy(q,c){try{const T=h=>String(h||'').replace(/<span class="lt">[^<]*<\/span>/g,'').replace(/<[^>]+>/g,'').trim(),tx=x=>T(x&&(x.html||x.label||x.text)),ans=q.choices.find(x=>x.ok);return qbWhy({skill:'stereochemistry.'+q.topic,prompt:String(q.prompt||'')+' '+String(q.eq||''),choices:q.choices.map(tx),answer:tx(ans),explain:T(q.solution)},tx(c))}catch(e){return ''}}
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || ''); }
+  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
 }
 function tapHit(id, el) {
   const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
