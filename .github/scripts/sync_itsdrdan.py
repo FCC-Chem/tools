@@ -14,6 +14,8 @@ its own repo, ItsDrDan/<game>.
 The catalog builder treats study-games/ as a collection: each game gets its
 own card in Dr. Dan's section, and the launcher is offered as an "open all" link.
 
+Games in NEEDS_PERMISSION (MCAT, TEAS, CHEM 3A retake prep) are never copied.
+
 Everything else in itsdrdan/ is removed. Nothing outside itsdrdan/ is touched.
 If one game repo can't be fetched, its previous copy is kept.
 
@@ -43,6 +45,12 @@ TOPICS = {
     "functionalgroups": "Organic families", "organicreactions": "Organic reactions",
     "carbohydrates": "Carbohydrates", "finalexam": "Final exam review",
 }
+# NEVER copied into the FCC-Chem catalog, even if they later appear on the
+# study hub. Dr. Dan must give permission before one is removed from this list.
+#   mcat             - MCAT Study Hub / Pre-Med Pulse (ItsDrDan/MCAT)
+#   teas             - TEAS Study Hub (ItsDrDan/teas)
+#   retakeprepchem3a - private CHEM 3A Exam Retake Prep (built from his exams)
+NEEDS_PERMISSION = {"mcat", "teas", "retakeprepchem3a"}
 TEMPLATE = ROOT / ".github" / "itsdrdan" / "launcher.html"
 OWNER = "https://github.com/ItsDrDan"
 
@@ -63,6 +71,9 @@ def read_hub(hub_dir):
     games = []
     for g in data.get("games", []):
         gid = str(g.get("id", "")).strip()
+        if gid.lower() in NEEDS_PERMISSION:
+            print(f"== {gid} skipped (not shared to FCC-Chem without Dr. Dan's permission)")
+            continue
         if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", gid) or gid in hide or gid in ("logos",):
             continue
         games.append({
