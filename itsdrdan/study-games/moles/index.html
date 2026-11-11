@@ -108,7 +108,7 @@ main.panel{padding:22px;scroll-margin-top:calc(var(--topbar) + 10px)}
 
 /* feedback + helpers */
 .feedback,.detail{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;scroll-margin-top:calc(var(--topbar) + 20px)}
-.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}.feedback.info{display:block;background:var(--amber);color:var(--amber-ink);border:1px solid var(--amber-line)}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}.feedback.info{display:block;background:var(--amber);color:var(--amber-ink);border:1px solid var(--amber-line)}.feedback.close{display:block;background:#fff3b0;color:#5c4300;border:2px solid #f0b400;box-shadow:0 0 0 3px #ffe17a55}.feedback.close .result-title strong{color:#6e4f00}input.sf-close{border-color:#f0b400!important;background:#fff8d6!important;box-shadow:0 0 0 3px #ffe17a66!important}
 .result-title{display:flex;align-items:center;gap:10px;margin-bottom:4px;font-size:1.05rem}.result-title span{display:grid;place-items:center;border-radius:50%;background:#fff;width:32px;height:32px;font-size:1.1rem}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:750;font-size:.9rem;animation:pop .35s ease}
 .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}.actions .btn{display:flex;align-items:center;justify-content:center;gap:7px}
@@ -372,7 +372,7 @@ const ELEMENTS=[['Fe','iron'],['Cu','copper'],['Al','aluminum'],['Au','gold'],['
 const byId=id=>document.getElementById(id),pick=a=>a[Math.floor(Math.random()*a.length)],roll=(a,b)=>a+Math.random()*(b-a);
 const cmp=f=>COMPOUNDS.find(x=>x.f===f)||ELEMENTS.find(x=>x.f===f);
 const dpOf=t=>(String(t).split('.')[1]||'').length;
-function sfCount(s){let t=normalizeScientific(s).trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×xX*]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(t.includes('.'))return t.replace('.','').replace(/^0+/,'').length;return t.replace(/0+$/,'').length;}
+function sfCount(s){let t=normalizeScientific(s).trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×xX*]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(/^0*\.?0*$/.test(t))return Math.max(1,(t.split('.')[1]||'').length);if(t.includes('.'))return t.replace('.','').replace(/^0+/,'').length;return t.replace(/0+$/,'').length;}
 /* Molar mass follows the addition rule: round to the fewest decimal places among the atomic masses used. */
 function molar(comp){const els=Object.keys(comp),dp=Math.min(...els.map(e=>dpOf(masses[e]))),raw=els.reduce((s,e)=>s+Number(masses[e])*comp[e],0),value=Number(raw.toFixed(dp)),text=value.toFixed(dp);return {value,text,dp,sf:sfCount(text),raw};}
 function normalizeScientific(raw){return String(raw).replace(/[−–]/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>({'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'})[c]);}
@@ -908,7 +908,7 @@ function checkGuideStep(){const s=state.q.guide[state.guideIdx],raw=byId('guideI
 function guideChoice(key){const q=state.q,s=q.guide[state.guideIdx];if(key===s.answer){guideAdvance(true);return}q.guideMiss=true;guideMsg('bad',(s.wrongWhy&&s.wrongWhy[key])||'Not that one. Look back at your earlier steps.');}
 
 /* ===================== Answer checking ===================== */
-function setFeedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.setAttribute('role',type==='bad'?'alert':'status');el.innerHTML=(type==='good'||type==='bad'?'<div class="result-title"><span aria-hidden="true">'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Holy moley, nice!','Nailed it!']):'Not correct yet, try again')+'</strong></div>':'')+'<div>'+html+'</div>';byId('bottomNext').hidden=!(type==='good'&&state.q?.scored);byId('skipQ').hidden=(state.view!=='learn'&&!state.quiz)||!!state.q?.scored;if(state.q)updateCoach();if(type==='bad'){el.focus({preventScroll:true});el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}}
+function setFeedback(type,html){if(type==='close')html='<div class="result-title"><span aria-hidden="true">⚠️</span><strong>Close! Fix your sig figs</strong></div>'+html;const el=byId('feedback');el.className='feedback '+type;el.setAttribute('role',type==='bad'?'alert':'status');el.innerHTML=(type==='good'||type==='bad'?'<div class="result-title"><span aria-hidden="true">'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Holy moley, nice!','Nailed it!']):'Not correct yet, try again')+'</strong></div>':'')+'<div>'+html+'</div>';byId('bottomNext').hidden=!((type==='good'||type==='close')&&state.q?.scored);byId('skipQ').hidden=(state.view!=='learn'&&!state.quiz)||!!state.q?.scored;if(state.q)updateCoach();if(type==='bad'){el.focus({preventScroll:true});el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}}
 function countAttempt(q){if(!q.attempted){q.attempted=true;P.attempts++;save();renderStatus();}}
 
 /* Mistake catchers (shared across ItsDrDan games): name the slip in a wrong numeric answer instead of "check your work".
@@ -928,16 +928,18 @@ function ddDiagnose(entered,answer,unit){const a=Number(answer),x=Number(entered
  return null;}
 
 function ddSlip(q,code){if(q&&!q.firstSlip)q.firstSlip=code||'other';}
-function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.level&&levelById(q.level);ddTrack({game:'moles',course:state.course,mode:state.quiz?'Skill Check Prep':L?'Learn Trail':'Practice',topic:L?L.title:({road:'Mole Road Map',molar:'Molar Mass',percent:'Percent Composition',formula:'Empirical & Molecular Formulas',sense:'Mole Sense',health:'Health-science mole problems',solution:'Solution moles'}[q.modeKey||state.mode]||q.modeKey||state.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?'':(q.firstSlip||'')});}catch(e){}}
+function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.level&&levelById(q.level);ddTrack({game:'moles',course:state.course,mode:state.quiz?'Skill Check Prep':L?'Learn Trail':'Practice',topic:L?L.title:({road:'Mole Road Map',molar:'Molar Mass',percent:'Percent Composition',formula:'Empirical & Molecular Formulas',sense:'Mole Sense',health:'Health-science mole problems',solution:'Solution moles'}[q.modeKey||state.mode]||q.modeKey||state.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?(q.sfSlip?'sigfigs':''):(q.firstSlip||'')});}catch(e){}}
 function markWrong(q){ddLog(q,false);if(!q.failed){q.failed=true;P.streak=0;P.miss=P.miss||{};if(q.modeKey)P.miss[q.modeKey]=(P.miss[q.modeKey]||0)+1;save();renderStatus();}if(state.quiz)state.quiz.items[state.quiz.i].missed=true;}
 function scoreCorrect(q,extra=''){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=true;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp;
- if(q.solutionShown){xp=3;}else{P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;if(!q.failed&&q.sf)P.sigFirst++;}
+ if(q.solutionShown){xp=3;}else{P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;if(!q.failed&&q.sf&&!q.sfSlip)P.sigFirst++;}
  if(q.kind==='formula')P.formulas++;
  if(q.level&&!q.solutionShown){const before=P.levels[q.level]||0;P.levels[q.level]=Math.min(6,before+(solo?2:1));if(before<6&&P.levels[q.level]>=6){xp+=50;toast(levelById(q.level).icon,'Stop mastered!',levelById(q.level).title+' complete (+50 XP).');}renderTrail();}
  if(q.modeKey){P.modes[q.modeKey]=(P.modes[q.modeKey]||0)+1;P.miss=P.miss||{};if(!q.failed&&P.miss[q.modeKey])P.miss[q.modeKey]--;}
  if(state.quiz){const it=state.quiz.items[state.quiz.i];it.done=true;it.help=!!(q.usedHelp||q.guideUsed);it.revealed=!!q.solutionShown;renderQuizBar();}
  if(q.guide&&state.guideIdx<q.guide.length){state.guideIdx=q.guide.length;renderGuide();}
  addXP(xp);celebrate();checkAchievements();return ' <span class="xp-pop">+'+xp+' XP</span>'+extra;}
+function sfCloseMsg(raw,need,ans){const got=sfCount(raw);return '<b>Your math is right, but your significant figures are not.</b> '+(got?'You entered <b>'+got+'</b> sig fig'+(got===1?'':'s')+'. ':'')+'This answer needs <b>'+need+'</b>: <b>'+ans+'</b>. On a Skill Check or exam this would lose points, so fix it next time!';}
+function sfAgree(n,ans,m){m=Math.max(1,Math.min(m,15));return Number(Number(n).toPrecision(m))===Number(Number(ans).toPrecision(m));}
 function checkAnswer(){const q=state.q;if(q.scored){setFeedback('good','Already solved! Tap <b>Next question</b>.');return}
  if(q.kind==='choice'){setFeedback('info','Choose one of the answer buttons.');return}
  const raw=byId('answer').value.trim();if(!raw){setFeedback('info','Enter an answer first.');return}
@@ -952,7 +954,7 @@ function checkAnswer(){const q=state.q;if(q.scored){setFeedback('good','Already 
  if(q.dp!=null){if(Math.abs(n-q.answer)<=(q.tolAbs||.015)){setFeedback('good','Correct! '+q.answer.toFixed(q.dp)+' '+unitHTML(q.unit)+'.'+(Math.abs(n-q.answer)>1e-9?' (Using the Yellow Sheet and the addition rule, report '+q.answer.toFixed(q.dp)+'.)':'')+scoreCorrect(q));}else{const dg=ddDiagnose(n,q.answer,q.unit);ddSlip(q,dg?dg.code:'other');markWrong(q);setFeedback('bad',(dg&&dg.code!=='close'?dg.msg+' ':'')+'Recount the atoms of each element (watch the parentheses), then multiply by the Yellow Sheet atomic masses and add.'+helpTip(q));}return}
  const target=Number(q.answer.toPrecision(q.sf)),tol=Math.max(Math.abs(target)*.006,Math.abs(q.answer)*1e-9);
  if(Math.abs(n-target)>tol){const alt=(q.alts||[]).find(a=>Math.abs(n-a.v)<=Math.abs(a.v)*.012),sane=alt?'':sanityMsg(q,n),dg=alt||sane?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,alt?'trap':sane?'power10':dg?dg.code:'other');markWrong(q);setFeedback('bad',(alt?alt.msg:sane||(dg?dg.msg:'Check your setup: does every unit cancel? Then check the arithmetic.'))+helpTip(q));return}
- if(sfCount(raw)!==q.sf){setFeedback('info','<b>Your math is right!</b> Now round to '+q.sf+' significant figures: '+escape(fmt(q.answer,q.sf))+'. Enter it that way to score.'+(q.sfWhy?' '+q.sfWhy:''));return}
+ if(sfCount(raw)!==q.sf){if(!sfAgree(n,q.answer,Math.min(sfCount(raw),q.sf))){ddSlip(q,'close');markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, using the Yellow Sheet molar masses without rounding them early.'+helpTip(q));return}q.sfSlip=true;setFeedback('close',sfCloseMsg(raw,q.sf,escape(fmt(q.answer,q.sf))+' '+unitHTML(q.unit))+(q.sfWhy?' '+q.sfWhy:'')+scoreCorrect(q));return}
  {const step=Math.pow(10,Math.floor(Math.log10(Math.abs(target)))-q.sf+1);if(Math.abs(n-target)>step*1.001){ddSlip(q,'close');markWrong(q);setFeedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, using the Yellow Sheet molar masses without rounding them early.'+helpTip(q));return}}
  setFeedback('good','Correct! '+escape(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+scoreCorrect(q));}
 function sanityMsg(q,n){const isCount=/^(molecules|atoms|formula units) /.test(q.unit),r=n/q.answer,k=Math.round(Math.log10(Math.abs(r)));
@@ -1105,4 +1107,5 @@ byId('reference').onclick=()=>byId('referenceDialog').showModal();byId('closeRef
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
+<script>/* sig-fig "close" state: tint the answer box yellow while the yellow notice shows */(()=>{const fb=document.getElementById("feedback"),a=document.getElementById("answer");if(!fb||!a)return;new MutationObserver(()=>a.classList.toggle("sf-close",fb.classList.contains("close"))).observe(fb,{attributes:true,attributeFilter:["class"]});})();</script>
 </body></html>

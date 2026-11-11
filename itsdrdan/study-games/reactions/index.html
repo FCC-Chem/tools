@@ -843,6 +843,19 @@ const otherGases=new Set(['N2','H2','CH4','C2H6','C3H8','C4H10','C2H4','C2H2','C
 ['BaCO3','SrCO3','MgCO3','Fe(OH)2','Zn(OH)2','Ag3PO4'].forEach(f=>insoluble.add(f));
 ['PbSO4'].forEach(f=>insoluble.add(f));
 ['Mg(OH)2','Al(OH)3','Ca3(PO4)2','FePO4','Ag2CO3','AgBr','AgI','PbCl2','PbI2','SrSO4','Ag2O'].forEach(f=>insoluble.add(f));
+/* Green-sheet solubility (FCC green sheet): used as the fallback for any ionic compound not listed above, so main mode and Blitz always agree.
+   Returns 's' (insoluble), 'aq' (soluble), or null (slightly soluble / not a simple salt: leave to the other rules). */
+function greenSol(f){const G1=['Li','Na','K','Rb','Cs','NH4'];const cm=f.match(/^(NH4|Hg2|\(NH4\)|[A-Z][a-z]?)/);if(!cm)return null;const c=cm[1].replace(/[()]/g,'');if(c==='H')return null;
+ const rest=f.slice(cm[1].length).replace(/^\d+/,'').replace(/^\(/,'');const AN=['C2H3O2','CH3COO','HCO3','HSO4','Cr2O7','ClO4','ClO3','ClO2','ClO','NO3','NO2','SO4','SO3','CO3','PO4','CrO4','C2O4','OH','Cl','Br','I','F','O','S'];const a=AN.find(x=>rest.startsWith(x));if(!a)return null;
+ if(G1.includes(c))return(c==='Li'&&['CO3','PO4','F'].includes(a))?null:'aq';
+ if(['ClO4','ClO3','NO3','NO2','C2H3O2','CH3COO','HCO3','HSO4'].includes(a))return'aq';
+ if(['Cl','Br','I'].includes(a))return['Ag','Hg2','Pb'].includes(c)?'s':'aq';
+ if(a==='F')return['Mg','Ca','Sr','Ba','Pb'].includes(c)?'s':'aq';
+ if(['SO3','SO4'].includes(a))return['Ca','Sr','Ba','Ag','Pb'].includes(c)?'s':'aq';
+ if(['CO3','PO4','CrO4','C2O4','Cr2O7'].includes(a))return a==='Cr2O7'?null:'s';
+ if(['O','S'].includes(a))return['Ca','Sr','Ba'].includes(c)?'aq':'s';
+ if(a==='OH')return['Ca','Sr','Ba'].includes(c)?null:'s';
+ return null}
 function stateOf(f,d){
  if(f==='H2O')return'l';if(f==='Hg')return'l';if(['HCl','HBr','HI','HNO3','H2SO4','H3PO4','HClO4'].includes(f))return'aq';if(f==='H2O2')return'aq';
  if(f==='H2CO3'||f==='H2SO3')return'aq';
@@ -852,6 +865,7 @@ function stateOf(f,d){
  if(ionicMap[f]&&!insoluble.has(f))return'aq';
  if(f==='NaHCO3'||f==='Na2CO3'||f==='K2CO3'||f==='KCl'||f==='AlCl3'||f==='NaCl')return'aq';
  if(insoluble.has(f)||solids.has(f))return's';
+ {const g=greenSol(f);if(g)return g;}
  return'aq';
 }
 function sides(d,states=false){let build=(list,offset)=>list.map((f,i)=>({f,n:d.coef[offset+i],st:states?stateOf(f,d):null}));return[build(d.r,0),build(d.p,d.r.length)]}
@@ -1186,7 +1200,7 @@ document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.data
 
 /* ---------- Blitz Challenge ---------- */
 const RECIPE={Combination:'Combination: A + B → AB (two things join into one).',Decomposition:'Decomposition: AB → A + B (one reactant breaks apart).','Single displacement':'Single displacement: A + BC → AC + B (an element swaps in for another).','Double displacement':'Double displacement: AB + CD → AD + CB (the ions swap partners). Neutralization and gas evolution count here too.',Combustion:'Combustion: fuel + O₂ → CO₂ + H₂O.'};
-const SOL_RULE={g1:'Group 1 (Li⁺, Na⁺, K⁺…) and NH₄⁺ compounds are soluble.',no3:'NO₃⁻, ClO₃⁻, ClO₄⁻, and acetate compounds are always soluble.',hal:'Cl⁻, Br⁻, I⁻ are soluble except with Ag⁺, Hg₂²⁺, Pb²⁺.',so4:'SO₃²⁻ and SO₄²⁻ are soluble except with Ca²⁺, Sr²⁺, Ba²⁺, Ag⁺, Pb²⁺.',co3:'CO₃²⁻, PO₄³⁻, CrO₄²⁻, C₂O₄²⁻ are solids unless paired with Group 1 or NH₄⁺.',oh:'OH⁻ compounds are solids unless paired with Group 1 or NH₄⁺.',s:'O²⁻ and S²⁻ are solids except with Group 1, NH₄⁺, Ca²⁺, Sr²⁺, Ba²⁺.',f:'F⁻ is soluble except with Mg²⁺, Ca²⁺, Sr²⁺, Ba²⁺, Pb²⁺.'};
+const SOL_RULE={g1:'Group 1 (Li⁺, Na⁺, K⁺…) and NH₄⁺ compounds are soluble.',no3:'NO₃⁻, ClO₃⁻, ClO₄⁻, and acetate compounds are always soluble.',hal:'Cl⁻, Br⁻, I⁻ are soluble except with Ag⁺, Hg₂²⁺, Pb²⁺.',so4:'SO₃²⁻ and SO₄²⁻ are soluble except with Ca²⁺, Sr²⁺, Ba²⁺, Ag⁺, Pb²⁺.',co3:'CO₃²⁻, PO₄³⁻, CrO₄²⁻, C₂O₄²⁻ are solids unless paired with Group 1 or NH₄⁺.',oh:'OH⁻ compounds are solids unless paired with Group 1 or NH₄⁺. Ca²⁺, Sr²⁺, Ba²⁺ hydroxides are slightly soluble (but still strong bases).',s:'O²⁻ and S²⁻ are solids except with Group 1, NH₄⁺, Ca²⁺, Sr²⁺, Ba²⁺.',f:'F⁻ is soluble except with Mg²⁺, Ca²⁺, Sr²⁺, Ba²⁺, Pb²⁺.'};
 const SOL=('NaCl,1,g1|KNO3,1,g1|(NH4)2SO4,1,g1|Na2CO3,1,g1|K3PO4,1,g1|Li2SO4,1,g1|NH4Cl,1,g1|KOH,1,g1|Na2S,1,g1|K2CrO4,1,g1|KF,1,g1|(NH4)3PO4,1,g1|Ba(NO3)2,1,no3|Pb(NO3)2,1,no3|AgNO3,1,no3|Cu(NO3)2,1,no3|Ca(ClO3)2,1,no3|Fe(ClO4)3,1,no3|Mg(C2H3O2)2,1,no3|CaCl2,1,hal|FeCl3,1,hal|ZnBr2,1,hal|AlCl3,1,hal|MgI2,1,hal|CuCl2,1,hal|AgCl,0,hal|AgBr,0,hal|AgI,0,hal|PbCl2,0,hal|PbI2,0,hal|Hg2Cl2,0,hal|MgSO4,1,so4|ZnSO4,1,so4|CuSO4,1,so4|FeSO4,1,so4|BaSO4,0,so4|SrSO4,0,so4|CaSO4,0,so4|PbSO4,0,so4|Ag2SO4,0,so4|CaSO3,0,so4|CaCO3,0,co3|BaCO3,0,co3|MgCO3,0,co3|FeCO3,0,co3|Ca3(PO4)2,0,co3|AlPO4,0,co3|Ag3PO4,0,co3|PbCrO4,0,co3|BaCrO4,0,co3|CaC2O4,0,co3|Mg(OH)2,0,oh|Fe(OH)3,0,oh|Cu(OH)2,0,oh|Al(OH)3,0,oh|Zn(OH)2,0,oh|Fe(OH)2,0,oh|ZnS,0,s|CuS,0,s|PbS,0,s|FeS,0,s|CuO,0,s|Fe2O3,0,s|BaS,1,s|CaF2,0,f|MgF2,0,f|BaF2,0,f|PbF2,0,f').split('|').map(x=>{const[f,s,r]=x.split(',');return{f,sol:s==='1',r}});
 const SERIES=['Li','K','Ba','Ca','Na','Mg','Al','Zn','Fe','Ni','Sn','Pb','H','Cu','Ag','Au'];
 const SALTS=[['MgCl2','Mg','Mg²⁺'],['Al(NO3)3','Al','Al³⁺'],['ZnSO4','Zn','Zn²⁺'],['FeCl2','Fe','Fe²⁺'],['NiCl2','Ni','Ni²⁺'],['SnCl2','Sn','Sn²⁺'],['Pb(NO3)2','Pb','Pb²⁺'],['HCl','H','H⁺'],['CuSO4','Cu','Cu²⁺'],['AgNO3','Ag','Ag⁺']];

@@ -107,7 +107,7 @@ main.panel{padding:22px;scroll-margin-top:calc(var(--topbar) + 10px)}
 
 /* feedback + helpers */
 .feedback,.detail{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;scroll-margin-top:calc(var(--topbar) + 20px)}
-.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}.feedback.info{display:block;background:var(--amber);color:var(--amber-ink);border:1px solid var(--amber-line)}
+.feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}.feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}.feedback.info{display:block;background:var(--amber);color:var(--amber-ink);border:1px solid var(--amber-line)}.feedback.close{display:block;background:#fff3b0;color:#5c4300;border:2px solid #f0b400;box-shadow:0 0 0 3px #ffe17a55}.feedback.close .result-title strong{color:#6e4f00}input.sf-close{border-color:#f0b400!important;background:#fff8d6!important;box-shadow:0 0 0 3px #ffe17a66!important}
 .result-title{display:flex;align-items:center;gap:10px;margin-bottom:4px;font-size:1.05rem}.result-title span{display:grid;place-items:center;border-radius:50%;background:#fff;width:32px;height:32px;font-size:1.1rem}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:750;font-size:.9rem;animation:pop .35s ease}
 .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}.actions .btn{display:flex;align-items:center;justify-content:center;gap:7px}
@@ -407,7 +407,7 @@ const r3=(x,s=3)=>Number(x.toPrecision(s));
 function parseValue(raw){const t=unsup(raw).trim().replace(/,/g,'').replace(/\s+/g,'').replace(/^−/,'-').replace(/[×x*·]10\^?([+-]?\d+)$/i,'e$1');return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN;}
 /* returns [min,max] possible sig figs (trailing zeros without a decimal point are ambiguous) */
 function sfRange(s){let t=unsup(s).trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×x*·]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+\-−]/,'');if(!/^\d*\.?\d*$/.test(t)||!/\d/.test(t))return [0,0];
- if(t.includes('.')){const d=t.replace('.','').replace(/^0+/,'');return [d.length,d.length];}t=t.replace(/^0+(?=\d)/,'');const core=t.replace(/0+$/,'').length;return [core||1,t.length];}
+ if(t.includes('.')){const d=t.replace('.','').replace(/^0+/,'');const z=d?d.length:Math.max(1,(t.split('.')[1]||'').length);return [z,z];}t=t.replace(/^0+(?=\d)/,'');const core=t.replace(/0+$/,'').length;return [core||1,t.length];}
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const fhtml=f=>'<span class="formula">'+esc(f).replace(/(\d+)/g,'<sub>$1</sub>')+'</span>';
 const fsub=f=>esc(f).replace(/(\d+)/g,'<sub>$1</sub>');
@@ -560,7 +560,7 @@ function genAvog(){const c=C(),g=pick(['He','Ar','N2','O2','CO2','Ne']);const n1
  if(useMass){guide.push(mmStep(g));guide.push(solveStep('Moles '+(add?'added':'removed'),`How many moles of ${fhtml(g)} is ${fmt(gm)} g?`,`${fmt(gm)} g × ${frac('1 mol',M+' g')}`,dn,'mol'));}
  guide.push(solveStep('New moles',`What is ${N2}, the total moles after the change?`,`${fmt(n1)} mol ${add?'+':'−'} ${fmt(dn,4)} mol`,n2,'mol'));
  guide.push(solveStep('Solve',`Solve for ${V2}.`,`${V2} = ${frac(`(${fmt(V1v)} L)(${fmt(n2,4)} mol)`,`${fmt(n1)} mol`)}`,ans,'L'));
- return {mode:'Avogadro’s law',equationHTML:`${V1}/${N1} = ${V2}/${N2}`,prompt:`A balloon contains ${meas(n1,'mol')} of ${gasName(g)} and has a volume of ${meas(V1v,'L')}. ${add?'Then':'Then'} ${useMass?meas(gm,'g')+' of '+gasName(g)+' is '+(add?'added':'let out'):meas(dn,'mol')+' of '+gasName(g)+' is '+(add?'added':'let out')}. What is the new volume at the same temperature and pressure?`,kind:'numeric',answer:ans,unit:'L',sf:3,
+ return {mode:'Avogadro’s law',equationHTML:`${V1}/${N1} = ${V2}/${N2}`,prompt:`A balloon contains ${meas(n1,'mol')} of ${gasName(g)} and has a volume of ${meas(V1v,'L')}. Then ${useMass?meas(gm,'g')+' of '+gasName(g)+' is '+(add?'added':'let out'):meas(dn,'mol')+' of '+gasName(g)+' is '+(add?'added':'let out')}. What is the new volume at the same temperature and pressure?`,kind:'numeric',answer:ans,unit:'L',sf:3,
   hints:['Volume and moles are directly related.',`Find the new total moles ${N2} first.`],guide,traps:[{v:V1v*dn/n1,msg:`Use the <b>total</b> moles after the change for ${N2}, not just the amount ${add?'added':'removed'}.`}],video:'avog'};}
 
 /* Level 6: Combined */
@@ -882,8 +882,8 @@ function gMsg(t,cls='bad'){const el=byId('gMsg');if(el){el.className='g-msg '+cl
 function stepTrap(s,n){if(s.unit==='K'&&Math.abs(n-(s.answer-KOFF))<0.6)return 'That is still in °C. Add 273.15.';if(Math.abs(s.answer)>0&&Math.abs(n*s.answer-1)<.02&&Math.abs(s.answer-1)>.05)return 'Looks like the fraction is upside down.';const ratio=n/s.answer;if(Math.abs(ratio-1000)<15||Math.abs(ratio-.001)<.000015)return 'Off by a factor of 1000. Check mL vs L or g vs kg.';if(Math.abs(ratio-760)<8||Math.abs(ratio-1/760)<.0001)return 'Off by a factor of 760. Check the mmHg ↔ atm conversion.';return '';}
 function checkStep(){const s=S.q.guide[S.gi],n=parseValue(byId('gIn').value);if(!Number.isFinite(n))return gMsg('Type a number first (like 0.0472 or 4.72E-2).','info');const tol=s.exact?1e-9:s.abs!=null?s.abs:Math.max(Math.abs(s.answer)*.015,1e-12);if(Math.abs(n-s.answer)<=tol)return guideNext(true);const t=stepTrap(s,n);gMsg(t||('Not yet. '+(s.setup?'Tap “Show me the setup.”':'Look at the step again.')));}
 function stepChoice(k){const q=S.q,s=q.guide[S.gi];if(k!==s.answer){byId('guide').querySelector('[data-gc="'+CSS.escape(k)+'"]')?.classList.add('wrong');return gMsg('Not that one. Think about it again.');}const last=S.gi===q.guide.length-1;guideNext(true);if(last&&q.kind==='choice'&&s.answer===q.answer)checkChoice(k);}
-function feedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.innerHTML=(type!=='info'?'<div class="result-title"><span>'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Great job!','Under control!']):S.q.quiz?'Not quite':'Not correct yet, try again')+'</strong></div>':'')+html;
- byId('bottomNext').hidden=!((type==='good'&&S.q.scored)||(S.q.quiz&&S.q.done));byId('skipQ').hidden=!(S.view==='learn'||(S.q.quiz&&!S.q.done))||!!S.q.scored;updateCoach();if(type!=='good')el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function feedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.innerHTML=type==='close'?'<div class="result-title"><span>⚠️</span><strong>Close! Fix your sig figs</strong></div>'+html:(type!=='info'?'<div class="result-title"><span>'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Great job!','Under control!']):S.q.quiz?'Not quite':'Not correct yet, try again')+'</strong></div>':'')+html;
+ byId('bottomNext').hidden=!(((type==='good'||type==='close')&&S.q.scored)||(S.q.quiz&&S.q.done));byId('skipQ').hidden=!(S.view==='learn'||(S.q.quiz&&!S.q.done))||!!S.q.scored;updateCoach();if(type!=='good')el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 function tried(q){if(!q.tried){q.tried=1;P.attempts++;save();renderStatus();}}
 
 /* Mistake catchers (shared across ItsDrDan games): name the slip in a wrong numeric answer instead of "check your work".
@@ -904,7 +904,7 @@ function ddDiagnose(entered,answer,unit){const a=Number(answer),x=Number(entered
 
 function ddSlip(q,code){if(q&&!q.firstSlip)q.firstSlip=code||'other';}
 function ddLog(q,ok){try{if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const L=q.quiz?levelById(q.lvl):q.level&&levelById(q.level);
- ddTrack({game:'gaslaws',course:S.course,mode:q.quiz?'Readiness Check':q.level?'Learn Trail':'Practice',topic:L?L.title:(q.realMode||q.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?'':(q.firstSlip||'')});}catch(e){}}
+ ddTrack({game:'gaslaws',course:S.course,mode:q.quiz?'Readiness Check':q.level?'Learn Trail':'Practice',topic:L?L.title:(q.realMode||q.mode||''),correct:!!ok,tries:ok||!q.firstSlip?'':'slip:'+q.firstSlip,slip:ok?(q.sfSlip?'sigfigs':''):(q.firstSlip||'')});}catch(e){}}
 function wrong(q){ddLog(q,false);if(!q.failed){q.failed=1;P.streak=0;save();renderStatus();}}
 function score(q){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=1;P.correct++;const solo=!q.usedHelp&&!q.guideUsed;let xp=3;
  if(!q.solutionShown){P.streak++;P.best=Math.max(P.best,P.streak);xp=10+(q.failed?0:5)+(solo?5:0)+Math.min(2*(P.streak-1),10);if(solo)P.solo++;
@@ -913,14 +913,17 @@ function score(q){if(q.scored)return '';ddLog(q,!q.solutionShown);q.scored=1;P.c
 function trapMsg(q,n){for(const t of q.traps||[])if(Number.isFinite(t.v)&&t.v!==0&&Math.abs(n-t.v)<=Math.abs(t.v)*.012&&Math.abs(t.v-q.answer)>Math.abs(q.answer)*.02)return t.msg;return '';}
 function quizResult(q,right,extra=''){ddLog(q,right);q.done=1;q.quizRight=right;S.quiz.results[S.quiz.i]=right;byId('answer').disabled=true;byId('check').disabled=true;byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);
  if(right){P.correct++;P.streak++;P.best=Math.max(P.best,P.streak);addXP(10);celebrate();}else{P.streak=0;save();renderStatus();}
- if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?'good':'bad',(right?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
+ if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?(q.sfSlip?'close':'good'):'bad',(right&&!q.sfSlip?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
+function sfCloseMsg(raw,need,ans){const [lo,hi]=sfRange(raw);return '<b>Your math is right, but your significant figures are not.</b> '+(lo&&lo===hi?'You entered <b>'+lo+'</b> sig fig'+(lo===1?'':'s')+'. ':'')+'This answer needs <b>'+need+'</b>: <b>'+ans+'</b>. On a Skill Check or exam this would lose points, so fix it next time!';}
 function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
  if(q.kind==='abs'){const ok=Math.abs(n-q.answer)<=q.tol;if(!ok){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}if(q.quiz)return quizResult(q,ok);return ok?feedback('good','Correct! '+esc(q.shown)+'.'+score(q)):(wrong(q),feedback('bad',(trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg||'Check your setup. Remember K = °C + 273.15.')));}
  const close=Math.abs(n-q.answer)<=Math.abs(q.answer)*.01;
  if(!close){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}
- if(q.quiz)return quizResult(q,close);
+ const sfOff=close&&q.sf&&(()=>{const [lo,hi]=sfRange(raw);return q.sf<lo||q.sf>hi})();const sfMis=sfOff&&!(()=>{const [lo]=sfRange(raw),m=Math.max(1,Math.min(lo,q.sf));return Number(n.toPrecision(m))===Number(Number(q.answer).toPrecision(m))})();if(sfOff&&!sfMis)q.sfSlip=true;if(sfMis)ddSlip(q,'close');
+ if(q.quiz)return quizResult(q,close&&!sfMis,sfOff&&!sfMis?sfCloseMsg(raw,q.sf,esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit))+' ':'');
  if(!close){wrong(q);const t=trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg;return feedback('bad',t||'Check your setup and arithmetic. Try a hint or the step-by-step help.');}
- const [lo,hi]=sfRange(raw);if(q.sf&&(q.sf<lo||q.sf>hi))return feedback('info','<b>Your math is right!</b> Now round to '+q.sf+' significant figures: '+esc(fmt(q.answer,q.sf))+'.');
+ if(sfMis){wrong(q);return feedback('bad','Very close, but your last digits don’t match. Recheck your arithmetic and rounding, and keep extra digits until the final step.');}
+ if(sfOff)return feedback('close',sfCloseMsg(raw,q.sf,esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit))+score(q));
  feedback('good','Correct! '+esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit)+'.'+score(q));}
 function checkChoice(k){const q=S.q;if(q.done||q.scored)return;tried(q);const btn=byId('choiceBox').querySelector('[data-choice="'+CSS.escape(k)+'"]');btn?.classList.add(k===q.answer?'right':'wrong');
  if(q.quiz){if(k!==q.answer){ddSlip(q,'choice');byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');}return quizResult(q,k===q.answer);}
@@ -1017,4 +1020,5 @@ LAB.userPaused=false;if('IntersectionObserver' in window)new IntersectionObserve
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
+<script>/* sig-fig "close" state: tint the answer box yellow while the yellow notice shows */(()=>{const fb=document.getElementById("feedback"),a=document.getElementById("answer");if(!fb||!a)return;new MutationObserver(()=>a.classList.toggle("sf-close",fb.classList.contains("close"))).observe(fb,{attributes:true,attributeFilter:["class"]});})();</script>
 </body></html>

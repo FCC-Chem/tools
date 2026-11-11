@@ -489,7 +489,7 @@ function numTxt(x,p){p=prec(p);let s;
  if(!s.includes('.')&&countSF(s)<p.sf)s+='.'; // 400 to 3 sig figs is written "400."
  return{html:s.replace('-','−'),plain:s,sf:p.sf}}
 function countSF(str){let s=String(str).trim().replace(/^[+-]/,'');const m=s.match(/^([\d.]+)(?:e[+-]?\d+)?$/i);if(!m)return 0;s=m[1];
- const hasDot=s.includes('.');let d=s.replace('.','').replace(/^0+/,'');if(!hasDot)d=d.replace(/0+$/,'');return Math.max(d.length,hasDot?1:0)}
+ const hasDot=s.includes('.');let d=s.replace('.','').replace(/^0+/,'');if(!hasDot)d=d.replace(/0+$/,'');if(!d&&hasDot)return Math.max(1,(s.split('.')[1]||'').length);return Math.max(d.length,hasDot?1:0)}
 /* student input -> {v, sf} or null.  Accepts 3.45E-4, 3.45e-4, 3.45*10^-4, 3.45x10^-4, 3.45×10^-4, commas, unicode minus */
 function readNum(raw){let s=String(raw||'').trim().replace(/[\s,]/g,'').replace(/[−–]/g,'-').replace(/⁻/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c));
  if(!s)return null;let m=s.match(/^([+-]?(?:\d+\.?\d*|\.\d+))(?:(?:\*|x|×|·)10\^?\(?([+-]?\d+)\)?|[eE]([+-]?\d+))?$/);
