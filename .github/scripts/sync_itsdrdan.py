@@ -4,7 +4,8 @@ Copies Dr. Dan's games into ONE catalog entry: itsdrdan/study-games/.
 
     itsdrdan/study-games/index.html        launcher page (the one card in the catalog)
     itsdrdan/study-games/meta.json         catalog card text
-    itsdrdan/study-games/<game>/           a copy of each game (index.html, meta.json, assets/)
+    itsdrdan/study-games/<game>/           a copy of each game (index.html, meta.json, assets/,
+                                           and INSTRUCTORS.md copied as README.md)
     itsdrdan/study-games/logos/<game>.webp game thumbnails
 
 The game list comes from Dr. Dan's study hub (ItsDrDan/games, data/hub.js), so a
@@ -111,6 +112,10 @@ def copy_game(src, dst):
             print(f"::warning::{src.name}/meta.json is not valid JSON; skipped it")
     if (src / "assets").is_dir():
         shutil.copytree(src / "assets", dst / "assets")
+    # Notes for instructors live in the game repo as INSTRUCTORS.md and show up
+    # only here, as the tool's README.md in the catalog (not in the game itself).
+    if (src / "INSTRUCTORS.md").is_file():
+        shutil.copy2(src / "INSTRUCTORS.md", dst / "README.md")
     return True
 
 
