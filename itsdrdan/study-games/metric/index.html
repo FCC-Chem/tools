@@ -316,7 +316,8 @@ const answerText = (coef, e) => `${coef}E${e}`;
 const SUPS = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
 // Accepts 0.0045, 4.5E-6, 4.5e-6, 4.5×10^-6, 4.5*10^-6, 4.5 x 10^(-6), 4.5×10⁻⁶, 10^-3, 1e-3, .001, 4,500 and a unit at the end.
 function parseNum(raw) {
-  let s = String(raw).trim().replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g, c => SUPS[c]).replace(/[−–—]/g, '-').replace(/\s+/g, '').replace(/,/g, '');
+  // a superscript power right after a leading 10 ("10³") is 10^3, not 103
+  let s = String(raw).trim().replace(/^10(?=[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺])/, '10^').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g, c => SUPS[c]).replace(/[−–—]/g, '-').replace(/\s+/g, '').replace(/,/g, '');
   s = s.replace(/[a-zµμ°]+[23²³]?$/i, m => (/^e[+-]?\d+$/i.test(m) ? m : ''));      // a typed unit at the end (mg, cm3, mcg)
   s = s.replace(/[×xX*·∙]/g, 'x').replace(/[()]/g, '');
   let m = s.match(/^\+?(\d+\.?\d*|\.\d+)(?:x10\^?([+-]?\d+)|[eE]([+-]?\d+))?$/);
@@ -326,12 +327,15 @@ function parseNum(raw) {
   return null;
 }
 // If v = target × 10^K for a whole number K, return K, else null.
-function pow10Offset(v, target, tol = 5e-4) {
+function pow10Offset(v, target, tol = 1e-6) {
   if (!(v > 0) || !(target > 0)) return null;
   const k = Math.log10(v / target), K = Math.round(k);
   return Math.abs(k - K) < tol ? K : null;
 }
 const FORMAT_NOTE = 'Type a number, like 0.0045, 4.5E-6 or 4.5×10^-6.';
+// "2,5" or "0,125" is a decimal comma, not a thousands separator ("1,200" still means 1200)
+const isCommaDecimal = raw => /^[+-]?(?:\d+,\d{1,2}|0,\d+)(?![\d,])/.test(String(raw).trim().replace(/[−–—]/g, '-'));
+const COMMA_NOTE = 'Use a period for decimals (2.5), not a comma.';
 const isMu = t => ['µ', 'μ', 'u'].includes(t);
 function nameMatch(t) { t = t.trim().toLowerCase(); if (t === 'deka') t = 'deca'; return PNAME[t] || null; }
 function symMatch(t) { t = t.trim(); if (isMu(t)) return PNAME.micro; return PSYM[t] || null; }
@@ -843,6 +847,7 @@ function check() {
   const q = state.q; if (!q) return; if (state.done) return next();
   const raw = $('answer').value;
   if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
+  if (isCommaDecimal(raw)) { setFeedback('info', COMMA_NOTE); return; }
   const res = q.check(raw); grade(res.ok, res.slip, res.note, res.sci);
 }
 function ddLog(ok, slip) {

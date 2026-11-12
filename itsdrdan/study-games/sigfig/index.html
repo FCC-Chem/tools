@@ -386,6 +386,8 @@ function cleanTyped(raw) {
 }
 const INF_WORDS = ['oo', '∞', 'inf', 'infinity', 'infinite', 'exact'];
 const isInfWord = raw => INF_WORDS.includes(cleanTyped(raw));
+// "2,5" or "0,125" is a decimal comma, not a thousands separator ("1,200" still means 1200)
+const isCommaDecimal = raw => /^[+-]?(?:\d+,\d{1,2}|0,\d+)(?![\d,])/.test(String(raw).trim().replace(/[−–—]/g, '-'));
 // sig figs a written number shows (no decimal point → trailing zeros are placeholders)
 function sfOfDigits(whole, dot, frac) {
   let d = (whole + frac).replace(/^0+/, '');
@@ -699,7 +701,7 @@ function genDecimal(o = {}) {
     str = w + '.' + f.slice(0, fd);
     n = rint(chance(0.15) ? 0 : 1, Math.min(3, fd - 1));
     d = dec(str); r = roundDP(d, n);
-  } while ((r.m === 0n) && tries < 40);
+  } while ((r.m === 0n || (n === 0 && r.m % 10n === 0n)) && tries < 40);   // no answers like "40" for the ones place
   const pad = chance(0.12);
   if (pad) { str = String(rint(1, 99)) + '.' + nz(); d = dec(str); n = rint(2, 3); r = roundDP(d, n); }
   const ans = decStr(r) + (n === 0 && false ? '.' : '');
@@ -802,7 +804,9 @@ function measured(sf, dp, lo, hi) { // random measured number string with given 
     let v = lo + Math.random() * (hi - lo);
     let d;
     if (sf != null) { d = roundSF(dec(v.toFixed(12)), sf); if (stdForm(d) == null || d.s < 0) continue; const s = stdForm(d); if (s.endsWith('.')) continue; return s; }
-    d = roundDP(dec(v.toFixed(12)), dp); const s = decStr(d); if (s === '0' || /^0\.?0*$/.test(s)) continue; return s;
+    d = roundDP(dec(v.toFixed(12)), dp); const s = decStr(d); if (s === '0' || /^0\.?0*$/.test(s)) continue;
+    if (dp === 0 && s.endsWith('0')) continue;            // "40" would read as 1 sig fig (good to the tens), not to the ones place
+    return s;
   }
   return '1.0';
 }
@@ -843,7 +847,7 @@ function genCalc(o = {}) {
       n = Math.min(...ops.map(dpOf)); r = roundDP(exact, n); std = decStr(r);
       eq = ops.map(s => `${s} ${u}`).join(op === 'add' ? ' + ' : ' − ');
       unit = u;
-    } while ((exact.m <= 0n || r.m === 0n) && tries < 50);
+    } while ((exact.m <= 0n || r.m === 0n || (n === 0 && r.m % 10n === 0n)) && tries < 50);   // no answers like "40" for the ones place
     rule = 'dp';
   }
   const calc = calcShow(exact);
@@ -892,7 +896,7 @@ function genMulti(o = {}) {
       const prod = dMul(dec(a), dec(b)); innerSF = Math.min(sfOf(a), sfOf(b));
       const pr = roundSF(prod, innerSF); innerDP = pr.s; if (innerDP < 0) continue;
       exact = dAdd(prod, dec(c)); n = Math.min(innerDP, dpOf(c)); r = roundDP(exact, n); std = decStr(r);
-      early = roundDP(dAdd(pr, dec(c)), n);
+      early = roundDP(dAdd(pr, dec(c)), n); if (n === 0 && r.m % 10n === 0n) continue;   // no answers like "40" for the ones place
       innerShow = calcShow(prod); finalRule = 'dp'; unit = 'g';
       eq = `${a} g/mL × ${b} mL + ${c} g`;
       if (decEq(early, r) && chance(0.7)) continue;
@@ -1577,6 +1581,7 @@ function check() {
   if (q.kind === 'tap') return checkTap();
   const raw = $('answer').value;
   if (!raw.trim()) { setFeedback('info', 'Type an answer first.'); return; }
+  if (isCommaDecimal(raw)) { setFeedback('info', 'Use a period for decimals (2.5), not a comma.'); return; }
   const res = q.check(raw); grade(res.ok, res.slip, res.note);
 }
 function checkTap() {

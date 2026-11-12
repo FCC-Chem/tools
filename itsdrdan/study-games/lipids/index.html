@@ -321,6 +321,7 @@ svg.mol{width:100%;height:auto;display:block}
 @media(max-width:760px){.lab svg.labmol{min-width:min(calc(var(--vbw) * 1.05px),980px)}.lab .bench::after{content:'Swipe sideways to see the whole chain →';display:block;font-size:.75rem;color:var(--faint);padding:2px 6px 0;position:sticky;left:0}}
 .choice .ctext{min-width:0}.choices.grid .choice .ctext{display:block;width:100%;overflow-x:auto}
 
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.res-mark{margin-left:.45em;font-weight:800}.choice.right .res-mark,.step.ok .res-mark{color:var(--mint-ink)}.choice.wrong .res-mark,.step.bad .res-mark{color:var(--rose-ink)}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -856,7 +857,9 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 const cap = s => /^[αβωΑ-Ω]/.test(s) ? s : s[0].toUpperCase() + s.slice(1);
 const plural = (n, w, p) => `${n} ${n === 1 ? w : (p || w + 's')}`;
 // no-repeat bag: cycles through every item before repeating
-function bag(items) { let q = []; return { next() { if (!q.length) q = shuffle(items); return q.pop(); } }; }
+// bags never repeat the last question of one cycle as the first of the next
+const refill = (items, last) => { const a = shuffle(items); if (a.length > 1 && a[a.length - 1] === last) [a[0], a[a.length - 1]] = [a[a.length - 1], a[0]]; return a; };
+function bag(items) { let q = [], last; return { next() { if (!q.length) q = refill(items, last); return (last = q.pop()); } }; }
 // build a multiple-choice question. right = html, wrong = [{html, why, slip}] or strings
 function mcq(o) {
   const ch = [{ html: o.right, ok: true }, ...o.wrong.slice(0, o.n ? o.n - 1 : 3).map(w => typeof w === 'string' ? { html: w, ok: false } : { ...w, ok: false })];
@@ -1500,10 +1503,10 @@ function genLab() {
 let BANK = null, BANK_LOADING = null;
 function loadBank() {
   if (BANK || BANK_LOADING) return BANK_LOADING;
-  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/lipids.json').then(r => r.json()).then(items => { BANK = items.filter(x => !x.cs && !x.s && !(x.f || []).some(g => g && g.type !== 'table')); return BANK; }).catch(() => { BANK = []; return BANK; }); // only questions this page can show in full (no drawn structures or graphs)
+  BANK_LOADING = fetch('https://itsdrdan.github.io/textbook/bank/lipids.json').then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(items => { BANK = items.filter(x => !x.cs && !x.s && !(x.f || []).some(g => g && g.type !== 'table')); return BANK; }).catch(() => { BANK = []; return BANK; }); // only questions this page can show in full (no drawn structures or graphs)
   return BANK_LOADING;
 }
-const bankBag = { q: [], next() { if (!this.q.length) this.q = shuffle(BANK || []); return this.q.pop(); } };
+const bankBag = { q: [], last: null, next() { if (!this.q.length) this.q = refill(BANK || [], this.last); return (this.last = this.q.pop()); } };
 function tableHTML(f) { return `<table class="data">${f.head ? `<thead><tr>${f.head.map(h => `<th>${h}</th>`).join('')}</tr></thead>` : ''}<tbody>${f.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>${f.cap ? `<p class="note-small">${f.cap}</p>` : ''}`; }
 function genFinal() {
   if (!BANK || !BANK.length) return null;
@@ -1594,7 +1597,10 @@ const ACH = [
 const state = { course: '3B', sel: new Set(), quiz: null, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false, atomSel: null };
 let P = null;
 const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, noHelp: 0, bestQuiz: 0, fams: [], sel: [] });
-function load() { try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); } }
+function load() { try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); } fixSave(); }
+// a damaged or hand-edited save must not stop the game from starting
+function fixSave() { const F = fresh(); if (!P || typeof P !== 'object' || Array.isArray(P)) P = F; const kind = v => Array.isArray(v) ? 'array' : v === null ? 'null' : typeof v; for (const k in F) if (kind(P[k]) !== kind(F[k]) || (kind(F[k]) === 'number' && !isFinite(P[k]))) P[k] = F[k]; for (const t in P.topic) { const s = P.topic[t]; if (!s || typeof s !== 'object' || !isFinite(s.c) || !isFinite(s.a)) delete P.topic[t]; } }
+
 function save() { try { P.sel = [...state.sel]; localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} }
 function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
 
@@ -1716,15 +1722,19 @@ function checkAtom() {
   const q = state.q;
   if (state.atomSel == null) { setFeedback('info', 'Tap a carbon first.'); return; }
   const ok = state.atomSel === q.atom; let slip = '', note = '';
-  if (!ok) { [slip, note] = q.slipFor(state.atomSel); document.querySelector(`#art .atom[data-atom="${state.atomSel}"]`)?.classList.add('miss'); }
+  if (!ok) { [slip, note] = q.slipFor(state.atomSel); const m = document.querySelector(`#art .atom[data-atom="${state.atomSel}"]`); if (m) { m.classList.add('miss'); ariaRes(m, false); } }
   grade(ok, slip, note);
-  if (state.done) document.querySelectorAll('#art .atom').forEach(a => { a.classList.remove('miss', 'on'); if (+a.dataset.atom === q.atom) a.classList.add('right'); a.setAttribute('tabindex', '-1'); });
+  if (state.done) document.querySelectorAll('#art .atom').forEach(a => { a.classList.remove('miss', 'on'); ariaRes(a, +a.dataset.atom === q.atom ? true : null); if (+a.dataset.atom === q.atom) a.classList.add('right'); a.setAttribute('tabindex', '-1'); });
 }
+const resMarkHTML = ok => `<span class="res-mark" aria-hidden="true">${ok ? '✓' : '✗'}</span><span class="sr-only res-sr">${ok ? ' (correct)' : ' (incorrect)'}</span>`;
+// right/wrong is shown with a ✓/✗ glyph and spoken as (correct)/(incorrect), not by colour alone
+function markRes(el, ok) { if (!el) return; el.querySelectorAll('.res-mark,.res-sr').forEach(x => x.remove()); if (ok != null) el.insertAdjacentHTML('beforeend', resMarkHTML(ok)); }
+function ariaRes(el, ok) { if (!el) return; if (el.dataset.lbl == null) el.dataset.lbl = el.getAttribute('aria-label') || ''; el.setAttribute('aria-label', el.dataset.lbl + (ok == null ? '' : ok ? ' (correct)' : ' (incorrect)')); }
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
-  if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip || 'choice', c.why || ''); }
+  if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip || 'choice', c.why || ''); }
 }
 function ddLog(ok, slip) {
   try {
@@ -1739,10 +1749,10 @@ function grade(ok, slip, note) {
   if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok }); }
   if (ok) {
     state.done = true;
-    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
-    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
-    P.xp += xp; P.correct++; if (!state.helped && first) P.noHelp++;
-    if (q.flags && q.flags.fam && !(P.fams || []).includes(q.flags.fam)) P.fams = [...(P.fams || []), q.flags.fam];
+    let xp = 2; // right only after a miss: the small assisted amount, and it does not count as correct
+    if (first) { xp = 15 + (state.helped ? 0 : 5); P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); P.correct++; }
+    P.xp += xp; if (!state.helped && first) P.noHelp++;
+    if (first && q.flags && q.flags.fam && !(P.fams || []).includes(q.flags.fam)) P.fams = [...(P.fams || []), q.flags.fam];
     setMood(first && (P.streak === 5 || P.streak === 10 || P.streak % 25 === 0) ? 'victory' : 'correct');
     setFeedback('good', `<b>${pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Great chemistry!'])}</b> <span class="xp-pop">+${xp} XP</span>${note ? ' ' + note : ''}<div class="sol">${q.solution}</div>`);
     finishQuestion();
@@ -1758,9 +1768,9 @@ function grade(ok, slip, note) {
 }
 function finishQuestion() {
   $('answer').disabled = true; $('checkBtn').textContent = 'Next';
-  if (state.q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (state.q.choices[i].ok) b.classList.add('right'); });
+  if (state.q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (state.q.choices[i].ok) { b.classList.add('right'); markRes(b, true); } });
   if (state.q.kind === 'lab') state.q.lock();
-  if (state.q.kind === 'atom') document.querySelectorAll('#art .atom').forEach(a => { if (+a.dataset.atom === state.q.atom) a.classList.add('right'); });
+  if (state.q.kind === 'atom') document.querySelectorAll('#art .atom').forEach(a => { if (+a.dataset.atom === state.q.atom) { a.classList.add('right'); ariaRes(a, true); } });
   $('nextBtn').hidden = false;
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
@@ -1906,7 +1916,7 @@ function bind() {
   let armed = 0; $('resetBtn').onclick = () => { const b = $('resetBtn'); if (!armed) { armed = 1; b.classList.add('armed'); b.textContent = 'Tap again to erase your progress'; setTimeout(() => { armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; }, 4000); return; } P = fresh(); state.sel.clear(); save(); armed = 0; b.classList.remove('armed'); b.textContent = 'Reset my progress'; renderStats(); renderChooser(); showEmpty(); };
 }
 function pickAtom(at) {
-  document.querySelectorAll('#art .atom').forEach(a => { a.classList.remove('on', 'miss'); a.setAttribute('aria-pressed', 'false'); });
+  document.querySelectorAll('#art .atom').forEach(a => { a.classList.remove('on', 'miss'); ariaRes(a, null); a.setAttribute('aria-pressed', 'false'); });
   at.classList.add('on'); at.setAttribute('aria-pressed', 'true'); state.atomSel = +at.dataset.atom;
   if (!state.done && $('mascot').dataset.mood === 'idle') setMood('thinking');
 }

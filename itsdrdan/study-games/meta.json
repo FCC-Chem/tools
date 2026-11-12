@@ -1,9 +1,9 @@
 {
   "title": "Dr. Dan's Chemistry Study Games",
   "author": "Dr. Dan (ItsDrDan)",
-  "summary": "Sig figs · Metric prefixes · Algebra · Element symbols · Polyatomic ions · Naming · Quantum · Lewis structures · Reactions · Redox · Moles · Stoichiometry · Gas laws · Thermochemistry · 1B readiness · Functional groups · Organic families · Stereochemistry · pH & Charge · Organic reactions · Carbohydrates · Amino Acids & Proteins · Enzymes & Vitamins · Lipids · Nucleic Acids & Protein Synthesis · Metabolism · Final exam review · Station Rotation",
+  "summary": "Sig figs · Metric prefixes · Algebra · Element symbols · Polyatomic ions · Naming · Quantum · Lewis structures · Reactions · Redox · Moles · Stoichiometry · Gas laws · Thermochemistry · 1B readiness · Bonding Theories · Functional groups · Organic families · Stereochemistry · pH & Charge · Organic reactions · Carbohydrates · Amino Acids & Proteins · Enzymes & Vitamins · Lipids · Nucleic Acids & Protein Synthesis · Metabolism · Final exam review · Station Rotation",
   "course": "CHEM 3A, CHEM 1A, CHEM 3B, CHEM 1B",
-  "description": "28 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
+  "description": "29 practice games in one place, sorted by course: significant figures and the mole through stoichiometry, gas laws, thermochemistry, redox, quantum, Lewis structures, organic reactions, carbohydrates and final exam review. Open it to pick a course and copy a game link for Canvas.",
   "tags": [
     "study games",
     "practice",
@@ -27,6 +27,7 @@
     "Under Pressure (Gas Laws)",
     "Thermochemistry",
     "Bridge to 1B (CHEM 1B Readiness)",
+    "Orbital Overlap (Bonding Theories)",
     "Functional Group Flashcards",
     "Organic Origins (Hydrocarbons to Amides)",
     "Mirror Match (Stereochemistry)",

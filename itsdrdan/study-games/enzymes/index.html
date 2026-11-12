@@ -308,6 +308,7 @@ table.data.lab{width:100%;font-size:1rem}table.data.lab td,table.data.lab th{pad
 table.data.lab td.hi{color:#b4233d;font-weight:800}
 .cats.six{grid-template-columns:repeat(3,minmax(0,1fr))}
 
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.res-mark{margin-left:.45em;font-weight:800}.choice.right .res-mark,.step.ok .res-mark{color:var(--mint-ink)}.choice.wrong .res-mark,.step.bad .res-mark{color:var(--rose-ink)}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -380,7 +381,8 @@ const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 const chance = p => Math.random() < p;
 const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-function bag(items) { let left = []; return () => { if (!left.length) left = shuffle(items); return left.pop(); }; }
+// bags never repeat the last question of one cycle as the first of the next
+function bag(items) { let left = [], last; return () => { if (!left.length) { left = shuffle(items); if (left.length > 1 && left[left.length - 1] === last) [left[0], left[left.length - 1]] = [left[left.length - 1], left[0]]; } return (last = left.pop()); }; }
 // Formula markup: H_2O → H₂O, P_i → Pᵢ (subscript), NAD^+ / Zn^2+ / HPO_4^2− → superscript charge
 const fm = s => String(s).replace(/_(\d+|[a-z](?![a-z0-9]))/g, '<sub>$1</sub>').replace(/\^(\d*[+−-])/g, '<sup>$1</sup>');
 const slug = s => String(s).toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
@@ -488,7 +490,7 @@ function inhSVG(kind) {
   if (kind === 'feedback') g = body(squeezed) + reg(300, 150, '#9fe0c4', 'D') + subPiece(180, 42, SUBC, 'A') + X(222, 70) + `<text x="300" y="196" text-anchor="middle" class="cap">end product</text>`;
   if (kind === 'positive') g = `<path d="M100 90H150V128H210V90H260Q300 90 300 128V134A16 16 0 0 0 300 166V172Q300 210 260 210H100Q60 210 60 172V128Q60 90 100 90Z" fill="${EBODY}" stroke="${INK}" stroke-width="3.5"/>` + reg(300, 150, '#9fe0c4', 'R') + subPiece(180, 86) + OK(244, 70);
   if (kind === 'negative') g = body(squeezed) + reg(300, 150, '#f6b3c2', 'R') + subPiece(180, 42) + X(222, 70);
-  return `<svg class="dgm" viewBox="0 0 360 240" role="img" aria-label="${kind} enzyme picture">${g}</svg>`;
+  return `<svg class="dgm" viewBox="0 0 360 240" role="img" aria-label="Enzyme diagram for this question">${g}</svg>`;
 }
 
 function pathwaySVG(withArrow, hit) {
@@ -1008,7 +1010,9 @@ const OTHERV = [
   { v: 'Vitamin E (tocopherol)', job: 'acting as an antioxidant in cell membranes', def: 'Hemolysis (red blood cells break open) and anemia' },
   { v: 'Vitamin K', job: 'making the blood-clotting zymogens', def: 'Prolonged bleeding and easy bruising' }
 ];
-const bvBag = bag(BV.map(b => ['co', b]).concat(BV.map(b => ['rev', b]), BV.map(b => ['job', b])));
+// biotin's coenzyme is biotin itself, so vitamin ↔ coenzyme questions would give the answer away; it keeps its job question
+const BV_CO = BV.filter(b => !/biotin/i.test(b.v));
+const bvBag = bag(BV_CO.map(b => ['co', b]).concat(BV_CO.map(b => ['rev', b]), BV.map(b => ['job', b])));
 function genBvit() {
   const [k, b] = bvBag(), others = shuffle(BV.filter(x => x !== b)).slice(0, 3);
   if (k === 'co') return mcq({ topic: 'bvit', tag: 'Vitamin → coenzyme', prompt: `Which coenzyme is made from <b>${b.v}</b>?`, right: b.co, wrongs: others.map(x => [x.co, `${fm(x.co)} comes from ${x.v}.`, 'bvit:' + slug(b.v) + '-vs-' + slug(x.v)]), grid: true, solution: `${b.v} → <b>${fm(b.co)}</b>, used for ${fm(b.job)}.`, hint: 'Many coenzyme names hide the vitamin name: thiamine → thiamine pyrophosphate, pyridoxine → pyridoxal phosphate, niacin (nicotinamide) → NAD^+.' });
@@ -1201,10 +1205,12 @@ const state = { sel: new Set(), quiz: null, exam: false, q: null, tries: 0, help
 let P = null;
 const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, noHelp: 0, bestQuiz: 0, examRight: 0, sel: [] });
 function load() {
-  try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); }
+  try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); } fixSave();
   // carry XP over from the first version of the game
   try { if (!P.migrated) { const old = JSON.parse(localStorage.getItem('itsdrdan-enzymes-journey-v1') || 'null'); if (old && typeof old.xp === 'number') { P.xp += old.xp; P.correct += old.correct || 0; P.best = Math.max(P.best, old.best || 0); } P.migrated = 1; } } catch (e) {}
 }
+// a damaged or hand-edited save must not stop the game from starting
+function fixSave() { const F = fresh(); if (!P || typeof P !== 'object' || Array.isArray(P)) P = F; const kind = v => Array.isArray(v) ? 'array' : v === null ? 'null' : typeof v; for (const k in F) if (kind(P[k]) !== kind(F[k]) || (kind(F[k]) === 'number' && !isFinite(P[k]))) P[k] = F[k]; for (const t in P.topic) { const s = P.topic[t]; if (!s || typeof s !== 'object' || !isFinite(s.c) || !isFinite(s.a)) delete P.topic[t]; } }
 function save() { try { P.sel = [...state.sel]; localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} }
 function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
 
@@ -1320,17 +1326,21 @@ function newQuestion(focus) {
 
 /* ---------- checking + scoring ---------- */
 function qbChoiceWhy(q,c){try{const T=h=>String(h||'').replace(/<span class="lt">[^<]*<\/span>/g,'').replace(/<[^>]+>/g,'').trim(),tx=x=>T(x&&(x.html||x.label||x.text)),ans=q.choices.find(x=>x.ok);return qbWhy({skill:'enzymes.'+q.topic,prompt:String(q.prompt||'')+' '+String(q.eq||''),choices:q.choices.map(tx),answer:tx(ans),explain:T(q.solution)},tx(c))}catch(e){return ''}}
+const resMarkHTML = ok => `<span class="res-mark" aria-hidden="true">${ok ? '✓' : '✗'}</span><span class="sr-only res-sr">${ok ? ' (correct)' : ' (incorrect)'}</span>`;
+// right/wrong is shown with a ✓/✗ glyph and spoken as (correct)/(incorrect), not by colour alone
+function markRes(el, ok) { if (!el) return; el.querySelectorAll('.res-mark,.res-sr').forEach(x => x.remove()); if (ok != null) el.insertAdjacentHTML('beforeend', resMarkHTML(ok)); }
+function ariaRes(el, ok) { if (!el) return; if (el.dataset.lbl == null) el.dataset.lbl = el.getAttribute('aria-label') || ''; el.setAttribute('aria-label', el.dataset.lbl + (ok == null ? '' : ok ? ' (correct)' : ' (incorrect)')); }
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
-  if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
+  if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
 }
 function tapHit(id, el) {
   const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
-  if (id === q.target) { el.classList.add('right'); grade(true, '', ''); return; }
+  if (id === q.target) { el.classList.add('right'); ariaRes(el, true); grade(true, '', ''); return; }
   const h = q.hits[id] || { why: 'That isn’t it.', slip: q.topic + ':tapped-' + id };
-  el.classList.add('wrong'); setTimeout(() => el.classList.remove('wrong'), 1400);
+  el.classList.add('wrong'); ariaRes(el, false); setTimeout(() => { el.classList.remove('wrong'); ariaRes(el, null); }, 1400);
   grade(false, h.slip, fm(h.why));
 }
 function ddLog(ok, slip) {
@@ -1346,9 +1356,9 @@ function grade(ok, slip, note) {
   if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok }); }
   if (ok) {
     state.done = true;
-    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
-    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
-    P.xp += xp; P.correct++; if (!state.helped && first) P.noHelp++;
+    let xp = 2; // right only after a miss: the small assisted amount, and it does not count as correct
+    if (first) { xp = 15 + (state.helped ? 0 : 5); P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); P.correct++; }
+    P.xp += xp; if (!state.helped && first) P.noHelp++;
     const big = first && (P.streak === 5 || P.streak === 10 || (P.streak > 0 && P.streak % 25 === 0));
     setMood(big ? 'victory' : 'correct');
     setFeedback('good', `<b>${first ? pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Perfect fit!']) : 'Got it now!'}</b> <span class="xp-pop">+${xp} XP</span><div class="sol">${q.solution}</div>`);
@@ -1365,8 +1375,8 @@ function grade(ok, slip, note) {
 }
 function finishQuestion() {
   const q = state.q;
-  if (q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) b.classList.add('right'); });
-  if (q.kind === 'hit') { $('art').classList.add('done-dgm'); const t = $('art').querySelector(`[data-hit="${q.target}"]`); if (t) t.classList.add('right'); const n = $('art').querySelector('.tap-note'); if (n) n.remove(); }
+  if (q.kind === 'choice') document.querySelectorAll('#choices .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) { b.classList.add('right'); markRes(b, true); } });
+  if (q.kind === 'hit') { $('art').classList.add('done-dgm'); const t = $('art').querySelector(`[data-hit="${q.target}"]`); if (t) { t.classList.add('right'); ariaRes(t, true); } const n = $('art').querySelector('.tap-note'); if (n) n.remove(); }
   $('nextBtn').hidden = false;
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
@@ -1444,7 +1454,7 @@ function enterExam() {
   if (FBXI || FBXLOADING) return;
   if (!window.FBX) { $('fbxHost').textContent = 'Exam Practice could not load. Try reloading the page.'; return; }
   FBXLOADING = true; $('fbxHost').innerHTML = '<p class="note-small">Loading the enzymes and vitamins exam questions…</p>';
-  fetch('https://itsdrdan.github.io/textbook/bank/enzymes.json').then(r => r.json()).then(items => {
+  fetch('https://itsdrdan.github.io/textbook/bank/enzymes.json').then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(items => {
     FBXI = FBX.mount($('fbxHost'), items, { topics: [['enzymes', 'Enzymes & Vitamins', '⚙️']], storageKey: 'itsdrdan-enzymes-exam-v1', onAnswer: examAnswer });
     const s = $('fbxHost').querySelector('.fbx-tsel'); if (s) s.hidden = true;
   }).catch(e => { console.error(e); $('fbxHost').textContent = 'Exam Practice could not load the question bank. Check your connection and reload.'; }).finally(() => { FBXLOADING = false; });

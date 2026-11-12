@@ -82,6 +82,7 @@ main.panel{padding:20px;margin-top:16px;scroll-margin-top:calc(var(--topbar) + 1
 .answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
 .answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.45rem;min-height:58px;border:1.5px solid var(--line2);border-radius:12px;background:#fff;font-weight:700;letter-spacing:.02em}
 .answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
+.answer input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .answer .btn.primary{min-height:58px;padding:0 26px}
 .readback{font-size:.95rem;color:var(--muted);margin:8px 2px 0;min-height:1.4em}.readback b{color:#26326a;font-size:1.1rem}
 .typing-note{font-size:.85rem;color:var(--faint);margin:6px 2px 0}.typing-note code{background:#eef0f6;border-radius:5px;padding:0 5px;font-weight:800;color:#34416a}
@@ -155,6 +156,7 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 .periodic-table{min-width:920px;display:grid;grid-template-columns:repeat(18,minmax(46px,1fr));grid-template-rows:repeat(7,58px);gap:4px}
 .element-button{position:relative;min-width:0;padding:4px 3px;border:1px solid #c7cde6;border-radius:7px;background:#f9faff;cursor:pointer;overflow:hidden}
 .element-button:hover,.element-button:focus-visible{background:var(--accent-soft);border-color:var(--accent);outline:none}
+.element-button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
 .element-number{position:absolute;top:3px;left:5px;color:var(--faint);font-size:.58rem;font-weight:700}
 .element-symbol{display:block;margin-top:9px;text-align:center;color:#26326a;font-size:1.15rem;font-weight:800;line-height:1}
 .series-placeholder{display:flex;align-items:center;justify-content:center;border:1px dashed #c7cde6;border-radius:7px;background:#f5f6fa;color:var(--faint);font-size:.66rem;font-weight:700;text-align:center;line-height:1.15}

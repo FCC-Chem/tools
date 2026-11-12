@@ -211,6 +211,7 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 }
 html.dd-embedded{scroll-padding-top:8px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.res-mark{margin-left:.45em;font-weight:800}.choice.right .res-mark,.step.ok .res-mark{color:var(--mint-ink)}.choice.wrong .res-mark,.step.bad .res-mark{color:var(--rose-ink)}.field.is-ok>span:first-child::after{content:" ✓";color:var(--mint-ink)}.field.is-bad>span:first-child::after{content:" ✗";color:var(--rose-ink)}
 </style>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
 <link rel="stylesheet" href="https://itsdrdan.github.io/textbook/css/widget-base.css">
@@ -297,7 +298,8 @@ const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { c
 // chemistry text: digits after a letter or bracket become subscripts, ^x becomes superscript
 const f = s => String(s).replace(/\b(P?P)i\b/g, '$1<sub>i</sub>').replace(/([A-Za-z\)\]])(\d+)/g, '$1<sub>$2</sub>').replace(/\^([0-9]*[+\-−]|\S+?)(?=[\s,.;:)]|$)/g, '<sup>$1</sup>');
 const fe = s => f(esc(s));
-function bag(items) { const b = { items, left: [] }; b.next = () => { if (!b.left.length) b.left = shuffle(b.items); return b.left.pop(); }; return b; }
+// bags never repeat the last question of one cycle as the first of the next
+function bag(items) { const b = { items, left: [], last: undefined }; b.next = () => { if (!b.left.length) { const a = b.left = shuffle(b.items); if (a.length > 1 && a[a.length - 1] === b.last) [a[0], a[a.length - 1]] = [a[a.length - 1], a[0]]; } return (b.last = b.left.pop()); }; return b; }
 
 /* ---------- categories and topics ---------- */
 const CATEGORIES = [
@@ -354,7 +356,7 @@ const CLASS_WHY = {
   Oxidoreductase: 'Oxidoreductases (dehydrogenases, oxidases, reductases) move hydrogens or electrons: one molecule is oxidized, a coenzyme is reduced.',
   Transferase: 'Transferases move a group (phosphate, amino, acyl, glucose) from one molecule to another. Kinases and transaminases are transferases.',
   Hydrolase: 'Hydrolases use water to split a bond (lipase, amylase, protease, phosphatase, arginase).',
-  Lyase: 'Lyases add or remove a group across a double bond, or split a bond, without water splitting it and without ATP (aldolase, hydratases, fumarase, enolase).',
+  Lyase: 'Lyases add or remove a group (often H<sub>2</sub>O, CO<sub>2</sub> or NH<sub>3</sub>) across a double bond, or split a C–C bond, without hydrolysis and without ATP (aldolase, hydratases, fumarase, enolase).',
   Isomerase: 'Isomerases rearrange atoms within one molecule (isomerases and mutases).',
   Ligase: 'Ligases join two molecules using the energy of ATP (synthetases, carboxylases).'
 };
@@ -1391,7 +1393,7 @@ function genEnzClass() {
     return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', prompt: `Which enzyme is a <b>${cls.toLowerCase()}</b>?`, choices: shuffle([right, ...others]).map(e => ({ html: `<b>${fe(e[0])}</b><br><small>${fe(e[1])}</small>`, ok: e === right, slip: 'enzyme-class', why: e === right ? '' : `${e[0]} is a ${e[2].toLowerCase()}.` })), answer: fe(right[0]), solution: `${fe(right[0])}: ${fe(right[1])}. ${CLASS_WHY[cls]}`, hint: 'Clues in the name: dehydrogenase → oxidoreductase; kinase, transaminase → transferase; lipase, amylase, -phosphatase → hydrolase; aldolase, hydratase, -lyase → lyase; isomerase, mutase → isomerase; synthetase, carboxylase → ligase.' };
   }
   const e = enzBag.next();
-  return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', eq: `<div class="rxn" style="flex-direction:column;gap:2px"><span>${fe(e[0])}</span><span class="struct">${fe(e[1])}</span></div>`, prompt: 'Which <b>enzyme class</b> does this enzyme belong to?', choices: shuffle([e[2], ...shuffle(CLASSES.filter(c => c !== e[2])).slice(0, 3)]).map(c => ({ html: c, ok: c === e[2], slip: 'enzyme-class', why: c === e[2] ? '' : CLASS_WHY[c] + ` ${fe(e[0])} doesn’t do that.` })), grid: 1, answer: e[2], solution: CLASS_WHY[e[2]], hint: 'Read the reaction: H moved? a group moved? water used to split? a bond broken or made without water or ATP? atoms rearranged? two molecules joined using ATP?', steps: [{ ask: 'What does the reaction do?', choices: shuffle(CLASSES.map(c => ({ html: { Oxidoreductase: 'Moves H or electrons (a coenzyme is oxidized or reduced)', Transferase: 'Moves a group (phosphate, amino, glucose) to another molecule', Hydrolase: 'Uses water to split a bond', Lyase: 'Adds or removes across a C=C, or splits a bond, without water splitting it', Isomerase: 'Rearranges one molecule', Ligase: 'Joins two molecules using ATP' }[c], ok: c === e[2], why: c === e[2] ? '' : 'Look at the reaction again.' }))) }, { ask: 'Pick the matching class above.', final: true }] };
+  return { topic: 'enzclass', tag: 'Enzyme class', kind: 'choice', eq: `<div class="rxn" style="flex-direction:column;gap:2px"><span>${fe(e[0])}</span><span class="struct">${fe(e[1])}</span></div>`, prompt: 'Which <b>enzyme class</b> does this enzyme belong to?', choices: shuffle([e[2], ...shuffle(CLASSES.filter(c => c !== e[2])).slice(0, 3)]).map(c => ({ html: c, ok: c === e[2], slip: 'enzyme-class', why: c === e[2] ? '' : CLASS_WHY[c] + ` ${fe(e[0])} doesn’t do that.` })), grid: 1, answer: e[2], solution: CLASS_WHY[e[2]], hint: 'Read the reaction: H moved? a group moved? water used to split? a group (H<sub>2</sub>O, CO<sub>2</sub>, NH<sub>3</sub>) added or removed across a C=C, or a C–C bond split, without hydrolysis or ATP? atoms rearranged? two molecules joined using ATP?', steps: [{ ask: 'What does the reaction do?', choices: shuffle(CLASSES.map(c => ({ html: { Oxidoreductase: 'Moves H or electrons (a coenzyme is oxidized or reduced)', Transferase: 'Moves a group (phosphate, amino, glucose) to another molecule', Hydrolase: 'Uses water to split a bond', Lyase: 'Adds or removes a group (often H<sub>2</sub>O, CO<sub>2</sub> or NH<sub>3</sub>) across a C=C, or splits a C–C bond, without hydrolysis or ATP', Isomerase: 'Rearranges one molecule', Ligase: 'Joins two molecules using ATP' }[c], ok: c === e[2], why: c === e[2] ? '' : 'Look at the reaction again.' }))) }, { ask: 'Pick the matching class above.', final: true }] };
 }
 function genVit() {
   const x = pick(VIT), k = rint(1, 3);
@@ -1624,7 +1626,10 @@ else {
 const state = { sel: new Set(), quiz: null, q: null, tries: 0, helped: false, done: false, logged: false, guideOn: false, boss: false, picked: [] };
 let P = null;
 const fresh = () => ({ xp: 0, correct: 0, tried: 0, streak: 0, best: 0, topic: {}, ach: {}, noHelp: 0, bestPrep: 0, boss: 0, sel: [] });
-function load() { try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); } }
+function load() { try { P = Object.assign(fresh(), JSON.parse(localStorage.getItem(STORE) || '{}') || {}); } catch (e) { P = fresh(); } fixSave(); }
+// a damaged or hand-edited save must not stop the game from starting
+function fixSave() { const F = fresh(); if (!P || typeof P !== 'object' || Array.isArray(P)) P = F; const kind = v => Array.isArray(v) ? 'array' : v === null ? 'null' : typeof v; for (const k in F) if (kind(P[k]) !== kind(F[k]) || (kind(F[k]) === 'number' && !isFinite(P[k]))) P[k] = F[k]; for (const t in P.topic) { const s = P.topic[t]; if (!s || typeof s !== 'object' || !isFinite(s.c) || !isFinite(s.a)) delete P.topic[t]; } }
+
 function save() { try { P.sel = [...state.sel]; localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) {} }
 function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
 function rankOf(xp) { let r = RANKS[0], nx = null; for (let i = 0; i < RANKS.length; i++) if (xp >= RANKS[i][0]) { r = RANKS[i]; nx = RANKS[i + 1] || null; } return { name: r[1], from: r[0], to: nx ? nx[0] : null }; }
@@ -1706,9 +1711,13 @@ function newQuestion(focus) {
 /* ---------- checking ---------- */
 const num = v => { const s = String(v).trim().replace(/,/g, '').replace(/−/g, '-'); return s === '' || isNaN(+s) ? null : +s; };
 const near = (a, b) => Math.abs(a - b) < 0.011;
+function fieldRes(el, ok) { const lab = el.closest('.field'); if (ok === false) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); if (lab) { lab.classList.toggle('is-ok', ok === true); lab.classList.toggle('is-bad', ok === false); } }
+const resMarkHTML = ok => `<span class="res-mark" aria-hidden="true">${ok ? '✓' : '✗'}</span><span class="sr-only res-sr">${ok ? ' (correct)' : ' (incorrect)'}</span>`;
+// right/wrong is shown with a ✓/✗ glyph and spoken as (correct)/(incorrect), not by colour alone
+function markRes(el, ok) { if (!el) return; el.querySelectorAll('.res-mark,.res-sr').forEach(x => x.remove()); if (ok != null) el.insertAdjacentHTML('beforeend', resMarkHTML(ok)); }
 function checkFields() {
   const q = state.q; let empty = 0, ok = true, slip = '', notes = [];
-  const vals = q.fields.map((fd, i) => { const el = $('fd' + i), v = num(el.value); if (el.value.trim() === '') empty++; const good = v != null && near(v, fd.value); el.classList.toggle('ok', good); el.classList.toggle('bad', !good && el.value.trim() !== ''); if (!good) ok = false; return v; });
+  const vals = q.fields.map((fd, i) => { const el = $('fd' + i), v = num(el.value); if (el.value.trim() === '') empty++; const good = v != null && near(v, fd.value); el.classList.toggle('ok', good); el.classList.toggle('bad', !good && el.value.trim() !== ''); fieldRes(el, good ? true : el.value.trim() !== '' ? false : null); if (!good) ok = false; return v; });
   if (empty === q.fields.length) { setFeedback('info', 'Type your numbers first.'); return; }
   if (vals.some((v, i) => v == null && $('fd' + i).value.trim() !== '')) { setFeedback('info', 'Type numbers only, like 2 or 118.5.'); return; }
   if (ok) return grade(true, '', '');
@@ -1725,12 +1734,12 @@ function checkFields() {
     'forgot-gtp': 'Don’t forget the 1 GTP (= 1 ATP) made each turn.', 'nadh-only': 'Add the FADH₂ (1.5) and the GTP (1) too.', 'fadh-value': 'NADH is worth 2.5 ATP; 1.5 is the FADH₂ value.',
     'forgot-recycle': 'Making lactate uses the NADH back up, so the net NADH is 0.', 'one-glucose': 'That is one glucose. The question asks about 3 glucose.'
   };
-  grade(false, slip || 'arithmetic', SLIP_NOTE[slip] || 'The red boxes are not right yet. Fix them and check again.');
+  grade(false, slip || 'arithmetic', SLIP_NOTE[slip] || 'The boxes marked ✗ are not right yet. Fix them and check again.');
 }
 function renderSeq(mark) {
   const q = state.q, S = $('seq'); if (!S) return;
   if (!state.picked.length) { S.innerHTML = '<span class="ph">Your order shows up here…</span>'; return; }
-  S.innerHTML = state.picked.map((i, k) => `<span class="step${mark ? (q.order[i] === q.seq[k] ? ' ok' : ' bad') : ''}">${fe(q.order[i])}</span>`).join('<span class="ar">→</span>');
+  S.innerHTML = state.picked.map((i, k) => `<span class="step${mark ? (q.order[i] === q.seq[k] ? ' ok' : ' bad') : ''}">${fe(q.order[i])}${mark ? resMarkHTML(q.order[i] === q.seq[k]) : ''}</span>`).join('<span class="ar">→</span>');
 }
 function checkOrder() {
   const q = state.q;
@@ -1743,17 +1752,17 @@ function checkMulti() {
   const q = state.q;
   if (q.sel.some(v => v == null)) { setFeedback('info', `Pick an answer in every row first (${q.sel.filter(v => v == null).length} to go).`); return; }
   let slip = '';
-  q.rows.forEach((r, i) => { const ok = r.choices[q.sel[i]].ok; document.querySelectorAll(`#qBox [data-mr="${i}"]`).forEach((b, k) => { b.classList.toggle('right', ok && k === q.sel[i]); b.classList.toggle('wrong', !ok && k === q.sel[i]); }); if (!ok && !slip) slip = r.slip; });
+  q.rows.forEach((r, i) => { const ok = r.choices[q.sel[i]].ok; document.querySelectorAll(`#qBox [data-mr="${i}"]`).forEach((b, k) => { b.classList.toggle('right', ok && k === q.sel[i]); b.classList.toggle('wrong', !ok && k === q.sel[i]); markRes(b, k === q.sel[i] ? ok : null); }); if (!ok && !slip) slip = r.slip; });
   if (!slip) return grade(true, '', '');
   const n = q.rows.filter((r, i) => !r.choices[q.sel[i]].ok).length;
-  grade(false, slip, `${n === 1 ? 'One row is' : n + ' rows are'} not right yet (marked in red). Change ${n === 1 ? 'it' : 'them'} and check again.`);
+  grade(false, slip, `${n === 1 ? 'One row is' : n + ' rows are'} not right yet (marked ✗). Change ${n === 1 ? 'it' : 'them'} and check again.`);
 }
 function qbChoiceWhy(q,c){try{const T=h=>String(h||'').replace(/<span class="lt">[^<]*<\/span>/g,'').replace(/<[^>]+>/g,'').trim(),tx=x=>T(x&&(x.html||x.label||x.text)),ans=q.choices.find(x=>x.ok);return qbWhy({skill:'metabolism.'+q.topic,prompt:String(q.prompt||'')+' '+String(q.eq||''),choices:q.choices.map(tx),answer:tx(ans),explain:T(q.solution)},tx(c))}catch(e){return ''}}
 function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#qBox [data-choice="${i}"]`);
-  if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip || 'choice', c.why || qbChoiceWhy(q, c)); }
+  if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip || 'choice', c.why || qbChoiceWhy(q, c)); }
 }
 function ddLog(ok, slip) {
   try {
@@ -1768,9 +1777,9 @@ function grade(ok, slip, note) {
   if (first) { ddLog(ok, slip); P.tried++; bumpTopic(q.topic, ok); if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok }); }
   if (ok) {
     state.done = true;
-    let xp = 10; if (first) xp += 5; if (!state.helped) xp += 5;
-    if (first) { P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); }
-    P.xp += xp; P.correct++; if (!state.helped && first) P.noHelp++;
+    let xp = 2; // right only after a miss: the small assisted amount, and it does not count as correct
+    if (first) { xp = 15 + (state.helped ? 0 : 5); P.streak++; P.best = Math.max(P.best, P.streak); xp += 2 * Math.min(P.streak, 5); P.correct++; }
+    P.xp += xp; if (!state.helped && first) P.noHelp++;
     setMood(first && (P.streak === 5 || P.streak === 10 || P.streak % 25 === 0) ? 'victory' : 'correct');
     setFeedback('good', `<b>${pick(['Correct!', 'Nice work!', 'You got it!', 'Exactly right!', 'Strong finish!', 'Right on pace!'])}</b> <span class="xp-pop">+${xp} XP</span><div class="sol">${q.solution}</div>`);
     finishQuestion();
@@ -1786,10 +1795,10 @@ function grade(ok, slip, note) {
 }
 function lockQ() {
   const q = state.q;
-  if (q.kind === 'choice') document.querySelectorAll('#qBox .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) b.classList.add('right'); });
+  if (q.kind === 'choice') document.querySelectorAll('#qBox .choice').forEach((b, i) => { b.disabled = true; if (q.choices[i].ok) { b.classList.add('right'); markRes(b, true); } });
   if (q.kind === 'fields') q.fields.forEach((fd, i) => { const el = $('fd' + i); el.disabled = true; });
   if (q.kind === 'order') document.querySelectorAll('#qBox .tile, #undoBtn, #clearBtn').forEach(b => b.disabled = true);
-  if (q.kind === 'multi') document.querySelectorAll('#qBox [data-mr]').forEach(b => { const i = +b.dataset.mr, k = +b.dataset.mk; b.disabled = true; b.classList.remove('wrong'); if (q.rows[i].choices[k].ok) b.classList.add('right'); });
+  if (q.kind === 'multi') document.querySelectorAll('#qBox [data-mr]').forEach(b => { const i = +b.dataset.mr, k = +b.dataset.mk; b.disabled = true; b.classList.remove('wrong'); markRes(b, null); if (q.rows[i].choices[k].ok) { b.classList.add('right'); markRes(b, true); } });
   const cb = $('checkBtn'); if (cb) cb.hidden = true;
 }
 function finishQuestion() {
@@ -1802,7 +1811,7 @@ function showSolution() {
   const q = state.q; if (!q || state.done) return;
   if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
   state.done = true; state.helped = true;
-  if (q.kind === 'fields') q.fields.forEach((fd, i) => { const el = $('fd' + i); el.value = fd.value; el.classList.remove('bad'); el.classList.add('ok'); });
+  if (q.kind === 'fields') q.fields.forEach((fd, i) => { const el = $('fd' + i); el.value = fd.value; el.classList.remove('bad'); el.classList.add('ok'); fieldRes(el, true); });
   if (q.kind === 'order') { state.picked = q.seq.map(s => q.order.indexOf(s)); renderSeq(true); }
   save(); renderStats();
   setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion();
@@ -1857,7 +1866,7 @@ function openBoss() {
   const host = $('bossHost');
   if (!window.FBX) { host.innerHTML = '<p class="empty">The Final Boss questions could not load. Check your connection and reload the page.</p>'; return; }
   FBXLOADING = true; host.innerHTML = '<p class="note-small">Loading the Final Boss metabolism questions…</p>';
-  fetch('https://itsdrdan.github.io/textbook/bank/metabolism.json').then(r => r.json()).then(items => {
+  fetch('https://itsdrdan.github.io/textbook/bank/metabolism.json').then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(items => {
     FBXI = FBX.mount(host, items, { topics: [['metabolism', 'Metabolism', '⚡']], storageKey: 'itsdrdan-metabolism-exam-v1', onAnswer: bossAnswer });
     const s = host.querySelector('.fbx-tsel'); if (s) s.hidden = true;
   }).catch(e => { console.error(e); host.innerHTML = '<p class="empty">The Final Boss questions could not load. Check your connection and reload the page.</p>'; }).finally(() => FBXLOADING = false);
@@ -1924,7 +1933,7 @@ function bind() {
     const tl = e.target.closest('#qBox [data-tile]'); if (tl && !state.done) { state.picked.push(+tl.dataset.tile); tl.disabled = true; renderSeq(); return; }
     if (e.target.closest('#undoBtn')) { if (!state.done && state.picked.length) { const i = state.picked.pop(); document.querySelector(`#qBox [data-tile="${i}"]`).disabled = false; renderSeq(); } return; }
     if (e.target.closest('#clearBtn')) { if (!state.done) { state.picked = []; document.querySelectorAll('#qBox [data-tile]').forEach(b => b.disabled = false); renderSeq(); } return; }
-    const mb = e.target.closest('#qBox [data-mr]'); if (mb && !state.done) { const i = +mb.dataset.mr; state.q.sel[i] = +mb.dataset.mk; document.querySelectorAll(`#qBox [data-mr="${i}"]`).forEach(b => { const on = b === mb; b.setAttribute('aria-pressed', on); b.classList.remove('right', 'wrong'); }); return; }
+    const mb = e.target.closest('#qBox [data-mr]'); if (mb && !state.done) { const i = +mb.dataset.mr; state.q.sel[i] = +mb.dataset.mk; document.querySelectorAll(`#qBox [data-mr="${i}"]`).forEach(b => { const on = b === mb; b.setAttribute('aria-pressed', on); b.classList.remove('right', 'wrong'); markRes(b, null); }); return; }
     if (e.target.closest('#checkBtn')) { if (state.done) return; return state.q.kind === 'fields' ? checkFields() : state.q.kind === 'multi' ? checkMulti() : checkOrder(); }
     const v = e.target.closest('[data-video]'); if (v) { setVideoFor(v.dataset.video); const pl = $('player'); pl.src = pl.dataset.src; }
   });

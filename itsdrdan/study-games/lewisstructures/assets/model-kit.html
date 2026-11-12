@@ -231,6 +231,7 @@
     min-height:400px;
     perspective:1100px;
     cursor:grab;
+    touch-action:none;
   }
   #stage.dragging{ cursor:grabbing; }
   #world{
@@ -1247,21 +1248,16 @@
     stage.classList.remove('dragging');
   }
 
-  stage.addEventListener('mousedown', (e) => { if (dragStart(e.clientX, e.clientY, e.target)) e.preventDefault(); });
-  window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
-  window.addEventListener('mouseup', (e) => dragEnd(e.target));
-
-  stage.addEventListener('touchstart', (e) => {
-    const t = e.touches[0];
-    if (dragStart(t.clientX, t.clientY, e.target)) { /* allow tap-through for click emulation */ }
-  }, {passive:true});
-  stage.addEventListener('touchmove', (e) => {
-    if (!dragging) return;
-    e.preventDefault();
-    const t = e.touches[0];
-    dragMove(t.clientX, t.clientY);
-  }, {passive:false});
-  stage.addEventListener('touchend', (e) => dragEnd(e.target), {passive:true});
+  // Pointer events cover mouse, pen and touch with one set of handlers (no duplicate touch + emulated mouse events).
+  let dragPointer = null;
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.button > 0 || dragPointer !== null) return;
+    if (dragStart(e.clientX, e.clientY, e.target)){ dragPointer = e.pointerId; if (e.pointerType === 'mouse') e.preventDefault(); }
+  });
+  window.addEventListener('pointermove', (e) => { if (e.pointerId === dragPointer) dragMove(e.clientX, e.clientY); });
+  const endPointer = (e) => { if (e.pointerId !== dragPointer) return; dragPointer = null; dragEnd(e.type === 'pointerup' ? e.target : null); };
+  window.addEventListener('pointerup', endPointer);
+  window.addEventListener('pointercancel', endPointer);
 
   stage.addEventListener('wheel', (e) => {
     e.preventDefault();
