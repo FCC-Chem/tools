@@ -138,7 +138,7 @@ mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
 /* progress */
 .section{margin-top:18px;padding:20px}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
-.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
 .badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
@@ -335,6 +335,8 @@ svg.fischer{width:200px;max-width:100%}svg.fischer .fl{font:800 17px Nunito,Inte
 .dial-exfb:empty{display:none}
 @media(max-width:640px){.dial-view{grid-template-columns:1fr}}
 /* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
+/* Touch targets: at least 44 px on phones (house rule, WCAG 2.2), 2026-11-14. Inline links inside sentences are exempt. */
+#skipBtn{min-height:44px}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -389,7 +391,7 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
  </main>
  <section class="panel section" aria-labelledby="progressTitle">
   <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
-  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Neutral Atom</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Neutral Atom</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div><div class="stat" title="Questions where you used Show answer"><strong id="sAssisted">0</strong><small>👀 Assisted</small></div></div>
   <div class="badges" id="achGrid"></div>
   <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. Progress is saved on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
  </section>
@@ -542,6 +544,44 @@ const MULTI = [
   ['1,3-diaminopropane', ['NH2', 'C', 'C', 'C', 'NH2'], {}]
 ];
 const multiBag = bag(MULTI);
+/*WHY-LOGIC-START*/
+/* Per-distractor reasons for net charge, pI and peptide charge (2026-11-14). Each wrong choice is checked against the
+   mistakes that produce it; if two mistakes give the same number, both are named. No pKa values (course rule). */
+const numOf = t => Number(String(t).replace('−', '-').replace('+', ''));
+function whyNet(v, A, B, M) {
+  const right = B - A, out = [];
+  if (M && v === right + M) out.push(`You counted the amide N as +1. An N bonded to a C=O carbon is an amide; it is not basic, so it stays neutral (0).`);
+  if (right !== 0 && v === -right) out.push('Right size, wrong sign. At pH 7.4 each –COOH loses H<sup>+</sup> (becomes −1) and each amine N gains H<sup>+</sup> (becomes +1).');
+  if (A && B && v === B) out.push('You counted only the amine N. Each –COOH is also ionized at pH 7.4: it loses H<sup>+</sup> and becomes –COO<sup>−</sup> (−1).');
+  if (A && B && v === -A) out.push('You counted only the acid groups. Each amine N picks up H<sup>+</sup> at pH 7.4 and becomes +1.');
+  if (!out.length && A && v > right && v - right <= A) out.push(v - right === 1 ? 'It looks like one –COOH group was missed. Find every carbon with both a C=O and an –OH: each is −1 at pH 7.4.' : `It looks like ${v - right} –COOH groups were missed. Find every carbon with both a C=O and an –OH: each is −1 at pH 7.4.`);
+  if (!out.length && B && v < right && right - v <= B) out.push(right - v === 1 ? 'It looks like one amine N was missed. Every N that is not bonded to a C=O carbon picks up H<sup>+</sup> at pH 7.4: +1.' : `It looks like ${right - v} amine N atoms were missed. Every N not bonded to a C=O carbon picks up H<sup>+</sup>: +1 each.`);
+  if (!out.length && v === 0) out.push('Zero needs the + and − groups to balance exactly. Count again: each –COOH is −1, each amine N is +1, and amide N, –OH and C=O are 0.');
+  if (!out.length && A && v === -2 * A + B) out.push('Each –COOH loses only one H<sup>+</sup>, so it is −1, not −2.');
+  return (out.slice(0, 2).join(' ') || 'Count again: each –COOH is −1 and each amine N is +1 at pH 7.4. Amide N (next to C=O), –OH and C=O are 0.');
+}
+function whyPI(where, picked) {
+  if (where === 'below') return picked === 'Negative'
+    ? 'Negative is the charge <b>above</b> the pI. Below the pI the solution has extra H<sup>+</sup>, so the groups are protonated and the net charge is positive.'
+    : 'Zero is the charge only <b>at</b> the pI itself. Below the pI, extra H<sup>+</sup> protonates the groups and the net charge becomes positive.';
+  if (where === 'above') return picked === 'Positive'
+    ? 'Positive is the charge <b>below</b> the pI. Above the pI the solution is more basic: H<sup>+</sup> is removed from the groups, so the net charge is negative.'
+    : 'Zero is the charge only <b>at</b> the pI itself. Above the pI, the groups lose H<sup>+</sup> and the net charge becomes negative.';
+  return 'The pI is defined as the pH where the net charge is zero: the + and − charges balance. ' + (picked === 'Positive' ? 'Positive would be below the pI.' : 'Negative would be above the pI.');
+}
+function whyPeptide(v, res, q) {
+  const P = res.filter(r => aaCharge(r) > 0).length, N = res.filter(r => aaCharge(r) < 0).length, bonds = res.length - 1, out = [];
+  if (v === q + 1) out.push('You may have counted the N-terminal –NH<sub>3</sub><sup>+</sup> (+1) without the C-terminal –COO<sup>−</sup> (−1). The two ends cancel.');
+  if (v === q - 1) out.push('You may have counted the C-terminal –COO<sup>−</sup> (−1) without the N-terminal –NH<sub>3</sub><sup>+</sup> (+1). The two ends cancel.');
+  if (bonds >= 1 && v === q + bonds) out.push(`You may have counted the ${bonds} peptide-bond N–H group${bonds > 1 ? 's' : ''} as +1. Those N atoms are amides (bonded to C=O), so they are never charged.`);
+  if (q !== 0 && v === -q) out.push('Right size, wrong sign. Lys and Arg side chains are +1 at pH 7.4; Asp and Glu side chains are −1.');
+  if (P && N && v === P) out.push('You counted only the + side chains (Lys, Arg). Asp and Glu side chains are −1 at pH 7.4.');
+  if (P && N && v === -N) out.push('You counted only the − side chains (Asp, Glu). Lys and Arg side chains are +1 at pH 7.4.');
+  if (!out.length && N && v > q && v - q <= N) out.push(v - q === 1 ? 'It looks like one Asp or Glu side chain was missed: each is −1 at pH 7.4.' : `It looks like ${v - q} Asp or Glu side chains were missed: each is −1 at pH 7.4.`);
+  if (!out.length && P && v < q && q - v <= P) out.push(q - v === 1 ? 'It looks like one Lys or Arg side chain was missed: each is +1 at pH 7.4.' : `It looks like ${q - v} Lys or Arg side chains were missed: each is +1 at pH 7.4.`);
+  return [...new Set(out)].slice(0, 2).join(' ') || 'Recount the side chains: Lys and Arg +1; Asp and Glu −1; all others 0. The two ends cancel, and peptide-bond N atoms are never charged.';
+}
+/*WHY-LOGIC-END*/
 function genNet() {
   const [name, seq, subs] = multiBag(); const q = chargeAt74(seq, subs); const right = sgn(q);
   const opts = ['−2', '−1', '0', '+1', '+2'];
@@ -549,7 +589,7 @@ function genNet() {
   const bases = seq.filter((s, i) => /^(NH2|NH|N)$/.test(s) && ![].concat(subs[i - 1] || []).includes('=O') && ![].concat(subs[i + 1] || []).includes('=O')).length;
   const amides = seq.filter((s, i) => /^(NH2|NH)$/.test(s) && ([].concat(subs[i - 1] || []).includes('=O') || [].concat(subs[i + 1] || []).includes('=O'))).length;
   return mcq({ topic: 'net', tag: name.split(' (')[0], art: drawMol(zig(seq, subs), { alt: 'Skeletal structure of ' + name }), prompt: `This is <b>${name}</b>. What is its <b>net charge</b> at physiological pH (7.4)?`, right,
-    wrongs: shuffle(opts.filter(o => o !== right)).slice(0, 3).map(o => [o, 'Count: each –COOH becomes –COO<sup>−</sup> (−1); each amine N becomes N–H<sup>+</sup> (+1); amides, alcohols and ketones are 0.', 'net:' + (amides ? 'amide-counted' : 'count')]), keep: opts,
+    wrongs: shuffle(opts.filter(o => o !== right)).slice(0, 3).map(o => [o, whyNet(numOf(o), acids, bases, amides), 'net:' + (amides && numOf(o) === q + amides ? 'amide-counted' : numOf(o) === -q && q ? 'flip-sign' : 'count')]), keep: opts,
     solution: `${acids} carboxylic acid group${acids === 1 ? '' : 's'} (each −1)${bases ? `, ${bases} amine N (each +1)` : ', no amine N'}${amides ? `, and ${amides} amide N (0: amides are not basic)` : ''}. Net charge = <b>${right}</b>.`,
     hint: 'Find every –COOH (−1 at pH 7.4) and every amine N (+1). Amide N (next to C=O) and –OH groups don’t count.' });
 }
@@ -754,7 +794,7 @@ function genPI() {
   const showF = where === 'below' ? 'acid' : where === 'above' ? 'base' : (AA[name][1] === 'basic' ? null : AA[name][1] === 'acidic' ? 'pi' : 'zwit');
   const seen = showF ? `<div class="molpair" style="margin-top:8px">${aaPic(name, showF, where === 'below' ? 'well below the pI' : where === 'above' ? 'well above the pI' : 'at the pI', true)}</div>` : '';
   return mcq({ topic: 'pi', tag: where, art: aaPic(name, 'unch') + UNCH_NOTE, prompt: `A solution of <b>${name}</b> is at a pH <b>${where}</b> its isoelectric point (pI). What is the overall charge of ${name}?`, right,
-    wrongs: OPTS.filter(o => o !== right).map(o => [o, 'Below the pI there is extra H<sup>+</sup>, so groups are protonated (+). Above the pI, H<sup>+</sup> is removed (−). At the pI the charges balance.', 'pi:' + (where === 'equal to' ? 'at-pi' : 'flip-sign')]), keep: OPTS,
+    wrongs: OPTS.filter(o => o !== right).map(o => [o, whyPI(where === 'equal to' ? 'at' : where, o), 'pi:' + (where === 'equal to' ? 'at-pi' : o.startsWith('Zero') ? 'zero' : 'flip-sign')]), keep: OPTS,
     solution: `The pI is the pH where the amino acid has no net charge. ${where === 'below' ? 'Below it, the solution is more acidic: H<sup>+</sup> adds to –COO<sup>−</sup> groups, leaving a net <b>positive</b> charge.' : where === 'above' ? 'Above it, the solution is more basic: H<sup>+</sup> is pulled off –NH_3<sup>+</sup> groups, leaving a net <b>negative</b> charge.' : 'At the pI, the + and − charges balance: <b>no net charge</b>.'} This works the same way for every amino acid, whatever its side chain.${seen}`,
     hint: 'Below pI → positive. Above pI → negative. At pI → zero.' });
 }
@@ -785,7 +825,7 @@ function genPeptide() {
   const parts = res.filter(r => aaCharge(r)).map(r => `${AA[r][0]} ${aaCharge(r) > 0 ? '+1' : '−1'}`);
   const pic = form => `<div class="molbox pep">${PP.chainSVG(res.map(r => AA[r][0]), { form, tags: true, label: `Peptide ${code}${form === 'unch' ? ' drawn with no charges' : ' at pH 7.4'}` })}</div>`;
   return mcq({ topic: 'peptide', tag: code, art: pic('unch') + UNCH_NOTE, prompt: `This is the peptide <b>${code}</b>. What is its net charge at physiological pH (7.4)?`, right,
-    wrongs: shuffle(opts.filter(o => o !== right)).slice(0, 3).map(o => [o, 'The N-terminal NH_3<sup>+</sup> (+1) and C-terminal COO<sup>−</sup> (−1) cancel; the amide N–H groups in the peptide bonds are never charged; then add the side chains.', 'peptide:' + (o === sgn(q + 1) || o === sgn(q - 1) ? 'termini' : 'count')]), keep: opts,
+    wrongs: shuffle(opts.filter(o => o !== right)).slice(0, 3).map(o => [o, whyPeptide(numOf(o), res, q), 'peptide:' + (o === sgn(q + 1) || o === sgn(q - 1) ? 'termini' : 'count')]), keep: opts,
     solution: `The two ends cancel: N-terminus –NH_3<sup>+</sup> (+1), C-terminus –COO<sup>−</sup> (−1). The peptide-bond N atoms are amides, so they stay neutral. Side chains: ${parts.length ? parts.join(', ') : 'none of these residues has a charged side chain'}. Net charge <b>${right}</b>.${pic('zwit').replace('molbox pep', 'molbox pep" style="margin-top:8px')}`,
     hint: 'Ends cancel (+1 and −1). Peptide-bond N–H groups are amides: 0. Then count side chains: Lys, Arg +1; Asp, Glu −1; the rest 0.' });
 }
@@ -1015,7 +1055,7 @@ function renderStats() {
   $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
   $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
   $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
-  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best; $('sAssisted').textContent = P.assisted || 0;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
   $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${artImg(a[3], a[4])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
@@ -1140,8 +1180,9 @@ function finishQuestion() {
 function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
-  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
-  state.done = true; state.helped = true; save(); renderStats();
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); if (state.quiz) P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+  if (!state.quiz) P.assisted = (P.assisted || 0) + 1; /* house rule: Show answer counts as Assisted and keeps the streak */
+    state.done = true; state.helped = true; save(); renderStats();
   setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion(); setMood('thinking', 2500);
 }
 const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
@@ -1291,6 +1332,11 @@ function bind() {
   const rb = $('resetBtn'); let armed = 0;
   rb.onclick = () => { if (!armed) { armed = 1; rb.classList.add('armed'); rb.textContent = 'Tap again to reset'; setTimeout(() => { armed = 0; rb.classList.remove('armed'); rb.textContent = 'Reset my progress'; }, 3500); return; } P = fresh(); P.migrated = 1; save(); renderStats(); renderChooser(); armed = 0; rb.classList.remove('armed'); rb.textContent = 'Reset my progress'; };
 }
+/* Inside a textbook box (iframe), a ?topic= link opens at the question, not the title banner (2026-11-14) */
+/* ?view=lab: compact view for a textbook box. Shows only the demo (and whatever it needs) plus a link to the full game,
+   so the box can stay short on a phone and the student can still scroll the textbook page around it (2026-11-14). */
+function ddLabView(keep){try{if(new URLSearchParams(location.search).get('view')!=='lab')return false;const ks=keep.map(k=>typeof k==='string'?document.getElementById(k):k).filter(Boolean);if(!ks.length)return false;const need=new Set();ks.forEach(k=>{for(let e=k;e&&e!==document.body;e=e.parentElement)need.add(e)});need.forEach(e=>{const p=e.parentElement;if(!p)return;[...p.children].forEach(c=>{if(need.has(c)||/^(SCRIPT|STYLE|DIALOG|CANVAS|TEMPLATE|LINK|NOSCRIPT)$/.test(c.tagName)||getComputedStyle(c).position==='fixed')return;c.setAttribute('data-dd-labhide','')})});const st=document.createElement('style');st.textContent='[data-dd-labhide]{display:none!important}.dd-labbar{display:flex;justify-content:flex-end;padding:4px 10px 0;font:600 14px/1.4 system-ui,-apple-system,sans-serif}.dd-labbar a{color:inherit;text-decoration:underline}';document.head.appendChild(st);document.documentElement.classList.add('dd-labview');const u=new URL(location.href);u.searchParams.delete('view');const bar=document.createElement('div');bar.className='dd-labbar';const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Open the full game ↗';bar.appendChild(a);document.body.insertBefore(bar,document.body.firstChild);window.scrollTo(0,0);return true}catch(e){return false}}
+function ddJumpTo(get){let moved=false;const stop=()=>{moved=true};['wheel','touchstart','keydown','pointerdown'].forEach(t=>addEventListener(t,stop,{once:true,passive:true}));const go=()=>{if(moved||document.documentElement.classList.contains('dd-labview'))return;const el=get();if(el)window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-8),behavior:'instant'})};requestAnimationFrame(()=>requestAnimationFrame(go));if(document.readyState!=='complete')addEventListener('load',()=>setTimeout(go,50),{once:true});setTimeout(go,700)}
 function init() {
   load(); bind(); wireArt(); paintIcons();
   // ?topic=find,relate opens topics directly; ?mode=exam opens Exam Practice
@@ -1301,6 +1347,8 @@ function init() {
   renderStats(); renderChooser(); P.rankSeen = P.rankSeen || rankOf(P.xp).name;
   setVideoFor('ph');
   if (mode === 'exam') enterExam(); else if (state.sel.size) newQuestion(); else showEmpty();
+  if (topics.length && window.parent !== window && sp.get('explore') !== '1') ddJumpTo(() => $('play'));
+  ddLabView(['play']);
   setTimeout(() => { paintIcons(); }, 400);
   window.addEventListener('load', () => paintIcons());
 }

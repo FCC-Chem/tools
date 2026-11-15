@@ -98,6 +98,11 @@ table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall{margin-top:8px;padding-top:4px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.feedback .whyall ul{list-style:none;margin:0;padding:0}
+.feedback .whyall li{display:flex;gap:8px;margin:0 0 8px;font-size:.97rem;line-height:1.4}
+.feedback .whyall .wa-x{color:var(--rose-ink);font-weight:700;flex:none}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
 .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
 .detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
@@ -138,7 +143,7 @@ mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
 /* progress */
 .section{margin-top:18px;padding:20px}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
-.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
 .badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
@@ -322,7 +327,20 @@ table.data.lab td.hi{color:#b4233d;font-weight:800}
 .eb-obs{border:1px solid #dfe4f0;border-left:5px solid #7884ea;border-radius:12px;padding:10px 12px;background:#fbfbff;margin:8px 0;text-align:left}.eb-obs p{margin:4px 0}
 .eb-exfb:empty{display:none}
 @media(max-width:640px){.eb-view{grid-template-columns:1fr}}
+/* Enzyme Bench free play (2026-11-14) */
+.ebx{padding:0 20px 18px;text-align:left}.ebx-intro{margin:0 0 10px;color:var(--muted)}
+.ebx-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0}.ebx-row>b{min-width:92px;font-size:.92rem}
+.ebx-seg{min-height:44px;padding:6px 12px;border-radius:99px;border:1.5px solid #cfd6ea;background:#fff;font:inherit;font-weight:700;font-size:.9rem;color:#3d4a73;cursor:pointer}
+.ebx-seg[aria-pressed=true]{background:#e8ebff;border-color:#7884ea;color:#2d38a8}
+.ebx-ctls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:4px 16px;margin:6px 0}
+.ebx-ctls .eb-ctl input{height:44px;-webkit-tap-highlight-color:transparent}.ebx-ctls .eb-ctl input:disabled{opacity:.4}
+.ebx-notes{margin:6px 0;padding-left:20px}.ebx-notes li{margin:3px 0}
+.ebx-goals{list-style:none;padding:0;margin:6px 0;display:grid;gap:4px}.ebx-goals li{padding:6px 10px;border-radius:10px;background:#f6f7fb;font-size:.92rem}.ebx-goals li.done{background:#e7f6ef;color:#1f6b4c;font-weight:700}
+.eb-free{margin-top:8px}
+@media(max-width:640px){.ebx-view{position:sticky;top:0;z-index:3;background:#fff;margin:0 -20px;padding:6px 20px;box-shadow:0 6px 10px -8px #0003;grid-template-columns:1fr;gap:2px}.ebx-view svg{max-height:210px;width:100%}.ebx-view .eb-meter{display:none}.ebx-view .eb-read{gap:0}.ebx-view .eb-num{font-size:.9rem}.ebx-view .eb-num b{font-size:1.05rem}.ebx-view .eb-num small{display:inline;font-size:.8rem}}
 /* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
+/* Touch targets: at least 44 px on phones (house rule, WCAG 2.2), 2026-11-14. Inline links inside sentences are exempt. */
+#skipBtn{min-height:44px}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -375,9 +393,10 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
   </div>
   <p class="note-small">This game collects anonymous practice stats (no names or student IDs) to help plan new lessons.<br><span class="dd-credit" style="display:inline-block;margin-top:6px"><strong>Game design and chemistry by ItsDrDan.</strong><br>I used AI (Claude by Anthropic) to help write the code, the way I hope you'll use it: as a tool, while checking every answer and understanding the chemistry and math behind it.</span></p>
  </main>
+ <details class="panel section" id="ebExplore"><summary><span>🧪 Enzyme Bench: free play<small>Move every control at once and watch the rate curve</small></span></summary><div class="ebx" id="ebxBody"></div></details>
  <section class="panel section" aria-labelledby="progressTitle">
   <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
-  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Substrate</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Substrate</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div><div class="stat" title="Questions where you used Show answer"><strong id="sAssisted">0</strong><small>👀 Assisted</small></div></div>
   <div class="badges" id="achGrid"></div>
   <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. Progress is saved on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
  </section>
@@ -625,7 +644,7 @@ function genEnergy() {
   }
   if (k === 'mcChange') return mcq({ topic: 'energy', tag: 'What an enzyme changes', prompt: 'What does an enzyme change about a reaction?', right: 'It lowers the activation energy', wrongs: [['It makes the reaction release more energy', 'The energy released (ΔG) is the same with or without the enzyme.', 'energy:changes-dG'], ['It shifts the equilibrium toward products', 'A catalyst speeds up both directions equally, so the equilibrium does not move.', 'energy:changes-equilibrium'], ['It raises the temperature so molecules move faster', 'Enzymes work at body temperature; they give an easier path, not more heat.']], solution: 'An enzyme provides an alternative pathway with a <b>lower activation energy</b>. ΔG and the equilibrium position are unchanged.', hint: 'A catalyst changes the road, not the destination.' });
   if (k === 'mcHow') return mcq({ topic: 'energy', tag: 'How enzymes speed reactions', prompt: 'How does an enzyme speed up a reaction?', right: 'It provides an alternative pathway with a lower activation energy', wrongs: ['It adds energy to the reactants', 'It increases the number of reactant molecules', 'It is consumed and becomes part of the product'], solution: 'Enzymes give the reaction an easier path: more molecules have enough energy to get over the smaller hump, so the reaction goes faster.', hint: 'Think of a tunnel through a mountain.' });
-  return mcq({ topic: 'energy', tag: 'Catalysts', scenario: '<p class="scenario">With no enzyme, a reaction releases 30 kJ of energy per mole.</p>', prompt: 'How much energy does it release when an enzyme catalyzes it?', right: '30 kJ, the same amount', wrongs: [['Less than 30 kJ', 'The enzyme lowers the hump, not the energy difference between reactants and products.', 'energy:changes-dG'], ['More than 30 kJ', 'The enzyme lowers the hump, not the energy difference between reactants and products.', 'energy:changes-dG'], 'Zero, enzymes absorb the energy'], solution: 'Same: <b>30 kJ</b>. The reactants and products have the same energies with or without an enzyme, so ΔG is unchanged. Only the activation energy is lower.', hint: 'Does the enzyme change where the reaction starts or ends?' });
+  return mcq({ topic: 'energy', tag: 'Catalysts', scenario: '<p class="scenario">With no enzyme, a reaction releases 30 kJ of energy per mole.</p>', prompt: 'How much energy does it release when an enzyme catalyzes it?', right: '30 kJ, the same amount', wrongs: [['Less than 30 kJ', 'The enzyme lowers the hump, not the energy difference between reactants and products.', 'energy:changes-dG'], ['More than 30 kJ', 'The enzyme lowers the hump, not the energy difference between reactants and products.', 'energy:changes-dG'], ['Zero, enzymes absorb the energy', 'The enzyme comes out of the reaction unchanged and keeps no energy. The products still release the same 30 kJ.', 'energy:changes-dG']], solution: 'Same: <b>30 kJ</b>. The reactants and products have the same energies with or without an enzyme, so ΔG is unchanged. Only the activation energy is lower.', hint: 'Does the enzyme change where the reaction starts or ends?' });
 }
 
 const SPEC = { absolute: 'Absolute specificity', group: 'Group specificity', linkage: 'Linkage specificity', stereo: 'Stereochemical specificity' };
@@ -1151,7 +1170,14 @@ const EB_ENZ={pepsin:{opt:2,home:'the stomach'},trypsin:{opt:8,home:'the small i
 const EB_UP='Activity goes up',EB_DOWN='Activity goes down',EB_SAME='Activity stays about the same';
 const ebTrend=(a,b)=>Math.abs(b-a)<8?EB_SAME:b>a?EB_UP:EB_DOWN;
 const EB_X={temp:{key:'T',label:'Temperature',unit:'°C',min:0,max:70,step:1},pH:{key:'pH',label:'pH',unit:'',min:0,max:14,step:1},sub:{key:'S',label:'Amount of substrate',unit:'',min:0,max:20,step:1},inh:{key:'S',label:'Amount of substrate',unit:'',min:0,max:20,step:1}};
-function ebSpec(fam,o){o=o||{};fam=fam||['temp','temp','pH','sub','inh'][Math.floor(Math.random()*5)];const pk=a=>a[Math.floor(Math.random()*a.length)];
+/* Inside a textbook box (iframe), a ?topic= link opens at the question, not the title banner (2026-11-14) */
+/* ?view=lab: compact view for a textbook box. Shows only the demo (and whatever it needs) plus a link to the full game,
+   so the box can stay short on a phone and the student can still scroll the textbook page around it (2026-11-14). */
+function ddLabView(keep){try{if(new URLSearchParams(location.search).get('view')!=='lab')return false;const ks=keep.map(k=>typeof k==='string'?document.getElementById(k):k).filter(Boolean);if(!ks.length)return false;const need=new Set();ks.forEach(k=>{for(let e=k;e&&e!==document.body;e=e.parentElement)need.add(e)});need.forEach(e=>{const p=e.parentElement;if(!p)return;[...p.children].forEach(c=>{if(need.has(c)||/^(SCRIPT|STYLE|DIALOG|CANVAS|TEMPLATE|LINK|NOSCRIPT)$/.test(c.tagName)||getComputedStyle(c).position==='fixed')return;c.setAttribute('data-dd-labhide','')})});const st=document.createElement('style');st.textContent='[data-dd-labhide]{display:none!important}.dd-labbar{display:flex;justify-content:flex-end;padding:4px 10px 0;font:600 14px/1.4 system-ui,-apple-system,sans-serif}.dd-labbar a{color:inherit;text-decoration:underline}';document.head.appendChild(st);document.documentElement.classList.add('dd-labview');const u=new URL(location.href);u.searchParams.delete('view');const bar=document.createElement('div');bar.className='dd-labbar';const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Open the full game ↗';bar.appendChild(a);document.body.insertBefore(bar,document.body.firstChild);window.scrollTo(0,0);return true}catch(e){return false}}
+function ddJumpTo(get){let moved=false;const stop=()=>{moved=true};['wheel','touchstart','keydown','pointerdown'].forEach(t=>addEventListener(t,stop,{once:true,passive:true}));const go=()=>{if(moved||document.documentElement.classList.contains('dd-labview'))return;const el=get();if(el)window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-8),behavior:'instant'})};requestAnimationFrame(()=>requestAnimationFrame(go));if(document.readyState!=='complete')addEventListener('load',()=>setTimeout(go,50),{once:true});setTimeout(go,700)}
+/* ?topic=bench&fam=temp,pH,sub (or inh): textbook links pick which bench families appear (2026-11-14) */
+let EB_FAMS=[];
+function ebSpec(fam,o){o=o||{};fam=fam||(EB_FAMS.length?EB_FAMS[Math.floor(Math.random()*EB_FAMS.length)]:['temp','temp','pH','sub','inh'][Math.floor(Math.random()*5)]);const pk=a=>a[Math.floor(Math.random()*a.length)];
  const base={T:37,pH:7,opt:7,S:20,inh:null};let start,target,enzyme='a typical body enzyme',ex,apply,predict;
  if(fam==='temp'){const [t0,t1]=o.pair||pk([[20,37],[37,10],[37,60],[37,55]]);start={...base,T:t0};target=t1;
   const cold=t1<t0,heat=t1>45;
@@ -1217,7 +1243,7 @@ function renderBench(){const q=state.q,s=q.bench,st=q.stage,steps=[['predict','P
  else if(st==='try')art+=`<p class="lab-ask">Your prediction: <b>${q.predHTML}</b>. Now move the <b>${s.x.label.toLowerCase()}</b> ${s.fam==='sub'||s.fam==='inh'?'to <b>'+(s.target>=18?'the maximum':'the marked amount ('+s.target+')')+'</b>':'to <b>'+s.target+(s.x.unit?' '+s.x.unit:'')+'</b>'} and watch the red dot.</p>`+ebControl(q)+view;
  else art+=ebControl(q)+view+q.obs;
  if(st==='explain')art+=`<p class="lab-ask"><b>Explain:</b> ${s.explain.ask}</p><div class="feedback eb-exfb${q.exMsg?' bad':''}" role="status" aria-live="polite">${q.exMsg||''}</div><div class="lab-choices">${q.exOpts.map(([k,h])=>`<button type="button" class="choice eb-choice${q.exTried.includes(k)?' wrong':''}" data-ee="${k}"${q.exTried.includes(k)?' disabled':''}>${h}</button>`).join('')}</div>`;
- if(st==='apply')art+=`<div class="feedback good"><b>✅ Explained.</b> ${s.explain.right}</div>`;
+ if(st==='apply')art+=`<div class="feedback good"><b>✅ Explained.</b> ${s.explain.right}<br><button type="button" class="btn eb-free" data-ebfree>🧪 Play with every control in free play</button></div>`;
  $('art').innerHTML=art;$('prompt').innerHTML=st==='predict'?s.predict.ask:st==='apply'?'<b>Apply it.</b> '+s.apply.q:'';
  const ch=$('choices');
  if(st==='predict'){ch.hidden=false;ch.className='choices';ch.innerHTML=s.predict.opts.map(([k,h])=>`<button type="button" class="choice" data-ep="${escAttr(k)}">${h}</button>`).join('');}
@@ -1235,6 +1261,83 @@ document.addEventListener('click',e=>{const q=state.q;if(!q||q.kind!=='lab'||!q.
 document.addEventListener('input',e=>{if(e.target.id!=='ebDial')return;const q=state.q;if(!q||!q.bench||q.stage!=='try')return;const s=q.bench,k=s.x.key;q.cur[k]=+e.target.value;
  const v=$('art').querySelector('.eb-view');if(v)v.outerHTML=`<div class="eb-view">${ebGraph(q)}${ebReadout(q)}</div>`;const now=q.cur[k];$('ebNow').textContent=s.fam==='sub'||s.fam==='inh'?(now<=2?'low':now>=18?'very high':now>=10?'high':'medium'):now+(s.x.unit?' '+s.x.unit:'');e.target.setAttribute('aria-valuetext',now+(s.x.unit?' '+s.x.unit:''));
  if(now===s.target){e.target.disabled=true;setTimeout(()=>{if(state.q===q&&q.stage==='try')benchObserved(q)},EB_RM()?200:900);}});
+
+/* ===================== Enzyme Bench: free play (2026-11-14) ===================== */
+/*EBX-LOGIC-START* (pure logic: tools/check-bench.js runs it with the EBENCH block) */
+/* Same model as the lab questions (ebActivity), plus two dials the labs keep fixed: how much enzyme, and how much inhibitor.
+   Rate is a percent of the NORMAL amount of enzyme's best rate, so doubling the enzyme can reach 200 %. Still no Km or Vmax. */
+const EBX_DEAD_T=45; /* once heated this far, the free-play enzyme stays denatured until a fresh one is chosen */
+const EBX_ENZ=[['a typical body enzyme',7],['pepsin',2],['trypsin',8]];
+const EBX_E=[0.5,1,1.5,2],EBX_ENAME=['half','normal','1.5 ×','double'];
+function ebxRate(st){if(st.dead)return 0;const T=tempCurve(37)(st.T),P=bell(st.opt,1.7)(st.pH),a=st.inh?st.amt/2:0;
+ const km=st.inh==='comp'?EB_KM*(1+(EB_COMP-1)*a):EB_KM,S=st.S/(st.S+km),N=st.inh==='nonc'?1/(1+a*(1/EB_NONC-1)):1;
+ return 100*EBX_E[st.e]*T*P*S*N;}
+const ebxFree=st=>ebxRate({...st,inh:null,amt:0});
+/* plain-language notes about the current settings (what a student should notice) */
+function ebxNotes(st){const n=[],r=ebxRate(st),f=ebxFree(st),name=EBX_ENZ.find(x=>x[1]===st.opt)[0];
+ if(st.dead)return [`This enzyme was denatured by heat (${EBX_DEAD_T} °C or hotter). Its shape is gone, so cooling it, adding substrate or fixing the pH cannot bring it back: the rate stays 0. Tap <b>Fresh enzyme</b> to start over.`];
+ if(st.T>=45)n.push(`At ${st.T} °C the enzyme is denatured: heat broke the bonds holding its shape, so the active site is gone. Cooling it down does not fold it back.`);
+ else if(st.T<=25)n.push(`At ${st.T} °C the molecules move slowly and collide less often, so the rate is low. The enzyme is not damaged: warm it to 37 °C and it recovers.`);
+ else if(Math.abs(st.T-37)<=3)n.push('Body temperature (about 37 °C) is this enzyme’s best temperature.');
+ else if(st.T>40)n.push(`At ${st.T} °C the enzyme is starting to unfold, so the rate is falling. A few degrees hotter and it loses its shape for good.`);
+ else n.push(`At ${st.T} °C collisions are a little slower than at body temperature, so the rate is a bit lower.`);
+ if(Math.abs(st.pH-st.opt)>=3)n.push(`pH ${st.pH} is far from ${name}’s best pH (about ${st.opt}). Extra or missing H⁺ changes the charges in the active site, so the substrate fits poorly.`);
+ else if(st.pH===st.opt)n.push(`pH ${st.pH} is ${name}’s best pH.`);
+ if(st.inh&&st.amt>0){const pct=f>0?Math.round(100*r/f):100;
+  n.push(st.inh==='comp'?(st.S>=15?`Lots of substrate crowds the competitive inhibitor out of the active sites: the rate is ${pct}% of the no-inhibitor rate.`:`The competitive inhibitor sits in the active site and blocks the substrate. Add more substrate to out-compete it.`)
+   :`The noncompetitive inhibitor binds away from the active site and changes the enzyme’s shape. More substrate cannot fix that: the rate is ${pct}% of the no-inhibitor rate.`);}
+ if(st.S===0)n.push('No substrate, no reaction.');
+ else if(!st.inh||!st.amt){const up=ebxRate({...st,S:Math.min(20,st.S+5)})-r;if(st.S>=12&&up<0.06*Math.max(r,1))n.push('Almost every active site is busy (saturated). More substrate barely helps; more enzyme would.');}
+ if(st.e!==1)n.push(st.e>1?`More enzyme (${EBX_ENAME[st.e]}) means more active sites, so the top rate goes up by the same factor.`:'Half the enzyme means half the active sites, so the top rate is half.');
+ if(!n.length)n.push('Move a control and watch how the red dot and the curve change.');
+ return n;}
+const EBX_GOALS=[
+ ['double','Push the rate to about twice the normal best',st=>ebxRate(st)>=180],
+ ['sat','Find where more substrate stops helping',st=>!(st.inh&&st.amt)&&st.S>=12&&ebxRate(st)>5&&ebxRate({...st,S:Math.min(20,st.S+5)})-ebxRate(st)<0.06*ebxRate(st)],
+ ['beat','Beat a competitive inhibitor (lots of inhibitor, rate back near normal)',st=>st.inh==='comp'&&st.amt>=2&&ebxFree(st)>20&&ebxRate(st)>=0.8*ebxFree(st)],
+ ['nonc','Show that substrate cannot beat a noncompetitive inhibitor',st=>st.inh==='nonc'&&st.amt>=2&&st.S===20&&ebxFree(st)>20&&ebxRate(st)<=0.7*ebxFree(st)],
+ ['denat','Denature the enzyme with heat, then cool it back down',st=>!!st.dead&&st.T<=40],
+ ['pepsin','Make pepsin work at its best',st=>st.opt===2&&st.pH===2&&Math.abs(st.T-37)<=3&&st.S>=10]];
+/*EBX-LOGIC-END*/
+const EBX={x:'S',st:{S:1,e:1,inh:null,amt:2,T:37,pH:7,opt:7},goals:{}};
+const EBX_AX={S:{label:'Amount of substrate',min:0,max:20,ticks:[0,5,10,15,20],xl:'Amount of substrate (low → high)'},T:{label:'Temperature',min:0,max:70,ticks:[0,10,20,30,40,50,60,70],xl:'Temperature (°C)',u:' °C'},pH:{label:'pH',min:0,max:14,ticks:[0,2,4,6,8,10,12,14],xl:'pH'}};
+const ebxWord=v=>v<=2?'low':v>=18?'very high':v>=10?'high':'medium';
+const ebxVal=(k,v)=>k==='S'?ebxWord(v)+' ('+v+')':k==='e'?EBX_ENAME[v]:k==='amt'?(v===0?'none':['','a little','some','a lot','a lot more'][v]):k==='T'?v+' °C':'pH '+v;
+function ebxGraph(){const st=EBX.st,ax=EBX_AX[EBX.x],k=EBX.x,r=ebxRate(st);
+ const curves=[{f:v=>ebxRate({...st,[k]:v})/200,label:st.dead?'denatured: rate 0':'',lx:ax.min+(ax.max-ax.min)*.5,ly:.08}];
+ if(st.inh&&st.amt)curves.unshift({f:v=>ebxFree({...st,[k]:v})/200,color:'#9aa3b8',dash:true,label:'no inhibitor',lx:ax.min+(ax.max-ax.min)*.72,ly:Math.min(1,ebxFree({...st,[k]:ax.min+(ax.max-ax.min)*.72})/200)+.02});
+ const ref=(X,Y)=>[[100,'100%'],[200,'200%']].map(([v,t])=>`<line x1="${X(ax.min)}" y1="${Y(v/200)}" x2="${X(ax.max)}" y2="${Y(v/200)}" stroke="#c9cfe3" stroke-width="1.5" stroke-dasharray="3 5"/><text x="${X(ax.min)+4}" y="${Y(v/200)-4}" class="tick" style="font-size:11px">${t}</text>`).join('');
+ return plotSVG({x0:ax.min,x1:ax.max,xl:ax.xl,yl:'Reaction rate',ticks:ax.ticks,curves,extra:(X,Y)=>ref(X,Y)+`<circle cx="${X(st[k])}" cy="${Y(r/200)}" r="8" fill="#e0675a" stroke="#fff" stroke-width="2.5"/>`})
+  .replace('role="img" aria-label="Graph of','role="img" aria-label="Rate now '+Math.round(r)+'% of the normal best. Graph of');}
+function ebxRead(){const st=EBX.st,r=Math.round(ebxRate(st));
+ return `<div class="eb-read"><div class="eb-meter" role="img" aria-label="Rate ${r} percent of the normal best"><span style="width:${Math.min(100,r/2)}%"></span></div><div class="eb-num">Rate <b>${r}%</b> <small>of the normal amount of enzyme’s best rate</small></div>${st.inh&&st.amt?`<div class="eb-num"><small>Without the inhibitor: ${Math.round(ebxFree(st))}%</small></div>`:''}</div>`;}
+function ebxLive(){const st=EBX.st;EBX_GOALS.forEach(([id,,t])=>{if(t(st))EBX.goals[id]=1;});
+ $('ebxView').innerHTML=ebxGraph()+ebxRead();
+ $('ebxNotes').innerHTML=ebxNotes(st).map(t=>'<li>'+t+'</li>').join('');
+ $('ebxGoals').innerHTML=EBX_GOALS.map(([id,t])=>`<li class="${EBX.goals[id]?'done':''}">${EBX.goals[id]?'✅':'⬜'} ${t}</li>`).join('');
+ $('ebxGoalCount').textContent=Object.keys(EBX.goals).length+' of '+EBX_GOALS.length;}
+function ebxSlider(k,label,min,max){const v=EBX.st[k],dis=k==='amt'&&!EBX.st.inh;
+ return `<div class="eb-ctl"><label for="ebx_${k}"><b>${label}</b> <span id="ebxv_${k}">${dis?'no inhibitor chosen':ebxVal(k,v)}</span></label><input type="range" id="ebx_${k}" data-ebx="${k}" min="${min}" max="${max}" step="1" value="${v}"${dis?' disabled':''} aria-valuetext="${ebxVal(k,v)}"></div>`;}
+function ebxSeg(group,val,label,on){return `<button type="button" class="ebx-seg" data-ebxg="${group}" data-ebxv="${val}" aria-pressed="${on}">${label}</button>`;}
+function renderExplore(focusSel){const st=EBX.st;
+ $('ebxBody').innerHTML=`<p class="ebx-intro">Every control is yours here. The red dot is the current setting; the curve shows what would happen if you moved the control on the bottom axis.</p>
+ <div class="eb-view ebx-view" id="ebxView"></div>
+ <div class="ebx-row" role="group" aria-label="Bottom axis"><b>Graph against</b>${Object.entries(EBX_AX).map(([k,a])=>ebxSeg('x',k,a.label,EBX.x===k)).join('')}</div>
+ <div class="ebx-row" role="group" aria-label="Enzyme"><b>Enzyme</b>${EBX_ENZ.map(([n,o])=>ebxSeg('opt',o,n==='a typical body enzyme'?'typical body enzyme (pH 7)':n+' (pH '+o+')',st.opt===o)).join('')}</div>
+ <div class="ebx-row" role="group" aria-label="Inhibitor"><b>Inhibitor</b>${[['','none'],['comp','competitive'],['nonc','noncompetitive']].map(([v,t])=>ebxSeg('inh',v,t,(st.inh||'')===v)).join('')}</div>
+ <div class="ebx-ctls">${ebxSlider('S','Substrate',0,20)}${ebxSlider('e','Amount of enzyme',0,3)}${ebxSlider('amt','Amount of inhibitor',0,4)}${ebxSlider('T','Temperature',0,70)}${ebxSlider('pH','pH',0,14)}</div>
+ <div class="eb-obs" role="status" aria-live="polite"><div class="result-title"><span>👀</span> What you are seeing</div><ul class="ebx-notes" id="ebxNotes"></ul></div>
+ <div class="eb-obs"><div class="result-title"><span>🎯</span> Try to <small id="ebxGoalCount" style="font-weight:600;color:var(--muted)"></small></div><ul class="ebx-goals" id="ebxGoals"></ul><button type="button" class="ebx-seg" data-ebxg="reset" data-ebxv="1">Fresh enzyme, body conditions</button></div>`;
+ ebxLive();if(focusSel)$('ebxBody').querySelector(focusSel)?.focus({preventScroll:true});}
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.ebx;if(!k)return;const v=+e.target.value;EBX.st[k]=v;if(k==='T'&&v>=EBX_DEAD_T)EBX.st.dead=true;
+ e.target.setAttribute('aria-valuetext',ebxVal(k,v));$('ebxv_'+k).textContent=ebxVal(k,v);ebxLive();});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ebxg],[data-ebfree]');if(!b)return;
+ if(b.dataset.ebfree!==undefined){const q=state.q,s=q&&q.bench;if(s){EBX.st={...EBX.st,dead:false,S:s.start.S,T:s.start.T,pH:s.start.pH,opt:s.start.opt,inh:s.start.inh,amt:s.start.inh?2:EBX.st.amt,e:1};EBX.x=s.x.key;}
+  const d=$('ebExplore');d.open=true;renderExplore();d.scrollIntoView({behavior:EB_RM()?'auto':'smooth',block:'start'});return;}
+ const g=b.dataset.ebxg,v=b.dataset.ebxv,st=EBX.st;
+ if(g==='x')EBX.x=v;else if(g==='opt'){st.opt=+v;st.pH=+v;st.dead=false;}else if(g==='inh'){st.inh=v||null;}else if(g==='reset'){EBX.st={S:1,e:1,inh:null,amt:2,T:37,pH:st.opt,opt:st.opt};if(EBX.x==='T')EBX.x='S';}
+ renderExplore(`[data-ebxg="${g}"][data-ebxv="${v}"]`);});
+document.getElementById('ebExplore').addEventListener('toggle',e=>{if(e.target.open&&!document.getElementById('ebxView'))renderExplore();});
 
 const TOPICS = {
   terms: { label: 'Key terms', gen: genTerms, video: 'protein' },
@@ -1368,7 +1471,7 @@ function renderStats() {
   $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
   $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
   $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
-  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best; $('sAssisted').textContent = P.assisted || 0;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
   $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${artImg(a[3], a[4])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
@@ -1412,7 +1515,7 @@ function makeQuestion() {
 }
 function newQuestion(focus) {
   const q = makeQuestion();
-  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false;
+  state.q = q; state.tries = 0; state.wrongPicks = []; state.helped = false; state.done = false; state.logged = false;
   $('emptyBox').hidden = true; $('reportBox').hidden = true; $('examHost').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
   const T = TOPICS[q.topic];
   $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.sel.size > 1 ? 'Mixed practice' : T.label;
@@ -1447,7 +1550,7 @@ function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; (state.wrongPicks = state.wrongPicks || []).push(i); grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
 }
 function tapHit(id, el) {
   const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
@@ -1494,11 +1597,22 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+/* when a choice question is over: why the right answer is right, and a reason for every other choice (Dr. Dan, 2026-11-14) */
+function whyAll(q) {
+  if (!q || q.kind !== 'choice' || !q.choices) return '';
+  const T = h => String(h || '').replace(/<[^>]+>/g, '').trim(), picked = state.wrongPicks || [];
+  const rows = q.choices.map((c, i) => { if (c.ok) return ''; const w = c.why || qbChoiceWhy(q, c); if (T(w).length < 9) return '';
+    return `<li><span class="wa-x" aria-hidden="true">✗</span><span><b>${c.html}</b>${picked.includes(i) ? ' <small>(your pick)</small>' : ''}<br>${w}</span></li>`; }).filter(Boolean);
+  return rows.length ? `<details class="whyall" open><summary>Why the other choices are wrong</summary><ul>${rows.join('')}</ul></details>` : '';
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind;
+  if (state.done && state.q && state.q.kind === 'choice') html = html.replace('<div class="sol">', '<div class="sol"><b>Why it’s right:</b> ') + whyAll(state.q);
+  f.innerHTML = html; }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
-  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
-  state.done = true; state.helped = true; save(); renderStats();
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); if (state.quiz) P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+  if (!state.quiz) P.assisted = (P.assisted || 0) + 1; /* house rule: Show answer counts as Assisted and keeps the streak */
+    state.done = true; state.helped = true; save(); renderStats();
   setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion(); setMood('thinking', 2500);
 }
 const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
@@ -1666,7 +1780,12 @@ function init() {
   if (topics.length) state.sel = new Set(topics); else if (OLD[mode]) state.sel = new Set(OLD[mode]); else state.sel = new Set((P.sel || []).map(t => t === 'clinic' ? 'dental' : t).filter(t => TOPICS[t]));
   renderStats(); renderChooser(); P.rankSeen = P.rankSeen || rankOf(P.xp).name;
   setVideoFor('protein');
+  EB_FAMS = (sp.get('fam') || '').split(',').filter(f => ['temp', 'pH', 'sub', 'inh'].includes(f));
   if (mode === 'exam') enterExam(); else if (state.sel.size) newQuestion(); else showEmpty();
+  if (topics.length && window.parent !== window && sp.get('explore') !== '1') ddJumpTo(() => $('play'));
+  ddLabView(sp.get('explore') === '1' ? ['ebExplore'] : ['play', 'ebExplore']);
+  /* ?explore=1 opens Enzyme Bench free play and scrolls this page (not the host page) to it */
+  if (sp.get('explore') === '1') { const d = $('ebExplore'); d.open = true; if (!document.getElementById('ebxView')) renderExplore(); ddJumpTo(() => $('ebExplore')); }
   setTimeout(() => { paintIcons(); }, 400);
   window.addEventListener('load', () => paintIcons());
 }

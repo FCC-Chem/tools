@@ -98,6 +98,11 @@ table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall{margin-top:8px;padding-top:4px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.feedback .whyall ul{list-style:none;margin:0;padding:0}
+.feedback .whyall li{display:flex;gap:8px;margin:0 0 8px;font-size:.97rem;line-height:1.4}
+.feedback .whyall .wa-x{color:var(--rose-ink);font-weight:700;flex:none}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
 .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
 .detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
@@ -946,7 +951,7 @@ function makeQuestion() {
 }
 function newQuestion(focus) {
   const q = makeQuestion();
-  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false;
+  state.q = q; state.tries = 0; state.wrongPicks = []; state.helped = false; state.done = false; state.logged = false;
   $('emptyBox').hidden = true; $('reportBox').hidden = true; $('examHost').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
   const T = TOPICS[q.topic];
   $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : state.sel.size > 1 ? 'Mixed practice' : T.label;
@@ -976,7 +981,7 @@ function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); btn.disabled = true; grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
+  else { btn.classList.add('wrong'); btn.disabled = true; (state.wrongPicks = state.wrongPicks || []).push(i); grade(false, c.slip, c.why || qbChoiceWhy(q, c)); }
 }
 function tapHit(id, el) {
   const q = state.q; if (state.done || !q || q.kind !== 'hit') return;
@@ -1023,7 +1028,17 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+/* when a choice question is over: why the right answer is right, and a reason for every other choice (Dr. Dan, 2026-11-14) */
+function whyAll(q) {
+  if (!q || q.kind !== 'choice' || !q.choices) return '';
+  const T = h => String(h || '').replace(/<[^>]+>/g, '').trim(), picked = state.wrongPicks || [];
+  const rows = q.choices.map((c, i) => { if (c.ok) return ''; const w = c.why || qbChoiceWhy(q, c); if (T(w).length < 9) return '';
+    return `<li><span class="wa-x" aria-hidden="true">✗</span><span><b>${c.html}</b>${picked.includes(i) ? ' <small>(your pick)</small>' : ''}<br>${w}</span></li>`; }).filter(Boolean);
+  return rows.length ? `<details class="whyall" open><summary>Why the other choices are wrong</summary><ul>${rows.join('')}</ul></details>` : '';
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind;
+  if (state.done && state.q && state.q.kind === 'choice') html = html.replace('<div class="sol">', '<div class="sol"><b>Why it’s right:</b> ') + whyAll(state.q);
+  f.innerHTML = html; }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
   if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }

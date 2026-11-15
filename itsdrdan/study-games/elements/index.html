@@ -218,6 +218,18 @@ table.data{border-collapse:collapse;font-size:.95rem;width:100%;background:#fff}
 }
 html.dd-embedded{scroll-padding-top:8px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.pt.sel{transform:none}}
+
+/* Phones (2026-11-14): the tap-to-answer table gets 44 px cells in a sideways-scrolling strip with the period numbers pinned; the reference table stays compact. */
+.pt-swipe{display:none}
+@media(max-width:700px){
+ .ptwrap.inter .pt-swipe{display:block;margin:0 0 6px;font-size:.85rem;font-weight:700;color:var(--faint);text-align:center}
+ .ptwrap.inter .pt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;padding-bottom:6px}
+ .ptwrap.inter .ptable{grid-template-columns:22px repeat(18,44px);gap:2px;width:max-content}
+ .ptwrap.inter .ptable .lab{font-size:.7rem;background:var(--surface,#fff)}
+ .ptwrap.inter .ptable .lab[style*="grid-column:1;"]{position:sticky;left:0;z-index:2}
+ .ptwrap.inter .pt{min-height:50px;font-size:1rem;border-radius:5px}
+ .ptwrap.inter .pt small{display:block;font-size:.55rem}
+}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -714,7 +726,7 @@ function genIons(o = {}) {
 /* ---------- Where is it? on the clickable table ---------- */
 function ptableHTML(o = {}) {
   const hl = new Set(o.hl || []), mark = o.mark || {}, inter = !!o.interactive;
-  let h = `<div class="ptwrap"><div class="ptable" role="${inter ? 'group' : 'img'}" aria-label="${inter ? 'Periodic table: tap an element' : 'Periodic table'}">`;
+  let h = `<div class="ptwrap${inter ? ' inter' : ''}">${inter ? '<p class="pt-swipe">Swipe sideways to see the whole table.</p><div class="pt-scroll">' : ''}<div class="ptable" role="${inter ? 'group' : 'img'}" aria-label="${inter ? 'Periodic table: tap an element' : 'Periodic table'}">`;
   for (let g = 1; g <= 18; g++) h += `<span class="lab" style="grid-column:${g + 1};grid-row:1">${g}</span>`;
   for (let p = 1; p <= 7; p++) h += `<span class="lab" style="grid-column:1;grid-row:${p + 1}">${p}</span>`;
   PT_LIST.forEach(e => {
@@ -725,7 +737,7 @@ function ptableHTML(o = {}) {
     if (inter && !ghost) h += `<button type="button" class="${cls}" style="${st}" data-z="${e.z}" aria-label="${e.name}, ${e.symbol}"><small>${e.z}</small>${e.symbol}</button>`;
     else h += `<span class="${cls}" style="${st}" title="${e.name}"><small>${e.z}</small>${e.symbol}</span>`;
   });
-  h += '</div>';
+  h += '</div>' + (inter ? '</div>' : '');
   if (o.key) h += '<div class="pt-key"><span><i style="background:#fff2cf;border:1.5px dashed #c79a2b"></i>Metalloids (staircase)</span><span>Left: metals</span><span>Right: nonmetals (+ H)</span></div>';
   return h + '</div>';
 }

@@ -88,6 +88,9 @@ select{border:1px solid var(--line2);border-radius:11px;padding:8px 10px;backgro
 .rs{position:absolute;left:0;top:0;bottom:0;width:.7em;height:100%}
 .rti{border-top:1.6px solid currentColor;padding:.2em .15em .06em .12em;display:inline-flex;align-items:center;gap:.25em}
 .last{margin-top:8px;min-height:1.5em;color:var(--muted);font-size:.95rem}
+.coach-row{display:flex;align-items:center;gap:10px;margin-top:8px}.coach-row .coach{flex:1;margin-top:0}.coach-row:has(>.coach[hidden]){display:none}
+.ex-mood{width:64px;height:64px;flex:none;object-fit:contain}.ex-mood.pop{animation:exPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes exPop{from{transform:scale(.8)}}
+@media(max-width:640px){.ex-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.ex-mood.pop{animation:none}}
 .coach{margin-top:8px;border-radius:var(--r-md);padding:10px 14px;font-size:1rem;background:#f7f8fc;border:1px solid var(--line);min-height:46px}
 .coach.good{background:var(--mint);border-color:var(--mint-line);color:#1d5c41}.coach.warn{background:var(--amber);border-color:var(--amber-line);color:#6b4f12}.coach.bad{background:var(--rose);border-color:var(--rose-line);color:#7d2637}.coach.info{background:var(--accent-soft);border-color:#c9cff8;color:#2f3a9e}
 .coach .eqline{font-family:var(--serif);font-size:1.25em;margin:6px 0;color:var(--ink)}
@@ -101,7 +104,7 @@ select{border:1px solid var(--line2);border-radius:11px;padding:8px 10px;backgro
 .levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:10px}
 .lvcard{display:flex;align-items:flex-start;gap:12px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;min-height:78px;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s}
 .lvcard:hover:not(:disabled){border-color:#aab2ea}
-.lvcard .ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;font:800 1rem/1 var(--serif);color:#3c47b8}
+.lvcard .ico{width:44px;height:44px;flex:none;object-fit:contain}
 .lvcard b{display:block;font-size:1rem;letter-spacing:-.01em;line-height:1.2}.lvcard small{display:block;color:var(--muted);font-size:.84rem;line-height:1.3;margin-top:2px}
 .lvcard .cnt{display:inline-block;margin-top:5px;font-size:.72rem;font-weight:750;color:var(--faint)}
 .lvcard.active{border:2px solid var(--accent);padding:11px 13px;background:linear-gradient(135deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d11f,var(--shadow)}.lvcard.active b{color:var(--accent-d)}
@@ -218,6 +221,7 @@ dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(760px,94vw);max-he
 .sheet-eq{font-family:var(--serif);font-size:1.12rem}.sheet-ch{margin:14px 0 4px;font-size:.95rem;color:var(--accent-d)}
 .toasts{position:fixed;right:14px;bottom:14px;z-index:80;display:grid;gap:8px}.toast{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px #1f2a442e;padding:10px 14px;max-width:320px;animation:tin .3s}.toast-icon{font-size:1.5rem}@keyframes tin{from{transform:translateY(12px);opacity:0}}
 </style>
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v1.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
@@ -235,7 +239,7 @@ dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(760px,94vw);max-he
 
 <div class="wrap">
  <section class="intro">
-  <img class="intro-mascot" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%20role%3D%22img%22%20aria-label%3D%22Isolation%20Station%20logo%3A%20a%20balance%20scale%20with%20a%20smiling%20x%20tile%20alone%20on%20one%20pan%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff6e6%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e7eaff%22/%3E%3C/linearGradient%3E%0A%3ClinearGradient%20id%3D%22tile%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffe08a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffc24d%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%22116%22%20height%3D%22116%22%20rx%3D%2230%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%3Crect%20x%3D%2256.5%22%20y%3D%2236%22%20width%3D%227%22%20height%3D%2258%22%20rx%3D%223.5%22%20fill%3D%22%236f79db%22/%3E%0A%3Crect%20x%3D%2234%22%20y%3D%2292%22%20width%3D%2252%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%234b57d1%22/%3E%0A%3Crect%20x%3D%2216%22%20y%3D%2233%22%20width%3D%2288%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%234b57d1%22/%3E%0A%3Cg%20stroke%3D%22%238a93d9%22%20stroke-width%3D%221.6%22%3E%3Cpath%20d%3D%22M27%2037%2017%2070M27%2037%2037%2070M93%2037%2083%2070M93%2037%20103%2070%22/%3E%3C/g%3E%0A%3Cpath%20d%3D%22M12%2070h30c-2%209-8%2013-15%2013s-13-4-15-13z%22%20fill%3D%22%23c9cff8%22%20stroke%3D%22%238a93d9%22%20stroke-width%3D%221.4%22/%3E%0A%3Cpath%20d%3D%22M78%2070h30c-2%209-8%2013-15%2013s-13-4-15-13z%22%20fill%3D%22%23c9cff8%22%20stroke%3D%22%238a93d9%22%20stroke-width%3D%221.4%22/%3E%0A%3Ccircle%20cx%3D%2260%22%20cy%3D%2236%22%20r%3D%227%22%20fill%3D%22%23ffd166%22%20stroke%3D%22%23e0a82e%22%20stroke-width%3D%222%22/%3E%0A%3Crect%20x%3D%2215.5%22%20y%3D%2245%22%20width%3D%2223%22%20height%3D%2225%22%20rx%3D%227%22%20fill%3D%22url%28%23tile%29%22%20stroke%3D%22%23d99a1e%22%20stroke-width%3D%222%22/%3E%0A%3Ctext%20x%3D%2227%22%20y%3D%2262%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2CCambria%2Cserif%22%20font-style%3D%22italic%22%20font-weight%3D%22700%22%20font-size%3D%2217%22%20fill%3D%22%237a4b00%22%3Ex%3C/text%3E%0A%3Ccircle%20cx%3D%2221%22%20cy%3D%2264.5%22%20r%3D%221.8%22%20fill%3D%22%23ff9aa2%22%20opacity%3D%22.8%22/%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2264.5%22%20r%3D%221.8%22%20fill%3D%22%23ff9aa2%22%20opacity%3D%22.8%22/%3E%0A%3Crect%20x%3D%2280%22%20y%3D%2258%22%20width%3D%2211%22%20height%3D%2212%22%20rx%3D%223.5%22%20fill%3D%22%23bfe8d4%22%20stroke%3D%22%235fb38c%22%20stroke-width%3D%221.4%22/%3E%0A%3Crect%20x%3D%2292%22%20y%3D%2258%22%20width%3D%2211%22%20height%3D%2212%22%20rx%3D%223.5%22%20fill%3D%22%23f9c9d2%22%20stroke%3D%22%23d98a99%22%20stroke-width%3D%221.4%22/%3E%0A%3Crect%20x%3D%2286%22%20y%3D%2246%22%20width%3D%2211%22%20height%3D%2212%22%20rx%3D%223.5%22%20fill%3D%22%23dcd3fb%22%20stroke%3D%22%239a88e0%22%20stroke-width%3D%221.4%22/%3E%0A%3Cpath%20d%3D%22M44%2046l1.6%203.6%203.6%201.6-3.6%201.6L44%2056.4l-1.6-3.6-3.6-1.6%203.6-1.6z%22%20fill%3D%22%23ffc24d%22/%3E%0A%3Cpath%20d%3D%22M8%2028l1%202.2%202.2%201-2.2%201L8%2034.4l-1-2.2-2.2-1%202.2-1z%22%20fill%3D%22%23a7b0f0%22/%3E%0A%3C/svg%3E" alt="">
+  <img class="intro-mascot" src="assets/mascot/ex-idle.webp" width="96" height="96" alt="Ex, the Isolation Station mascot: a yellow x tile in a conductor’s cap">
   <div>
    <p class="eyebrow">Algebra for Chemistry · FCC Chemistry · CHEM 3A • 1A • 1B</p>
    <h1>Isolation Station</h1>
@@ -261,7 +265,7 @@ dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(760px,94vw);max-he
   </div>
   <div class="stage" id="stage" aria-label="Equation"><div class="side" id="L"></div><div class="eqsign" aria-hidden="true">=</div><div class="side" id="R"></div></div>
   <div class="last" id="last" aria-live="polite"></div>
-  <div class="coach" id="coach" aria-live="polite"></div>
+  <div class="coach-row"><img class="ex-mood" id="exMood" src="assets/mascot/ex-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="coach" id="coach" aria-live="polite"></div></div>
   <div class="opbox">
    <p class="op-label">Do the same thing to <b>both sides</b></p>
    <div class="tools" id="tools" role="group" aria-label="Operations">
@@ -491,7 +495,10 @@ function numTxt(x,p){p=prec(p);let s;
 function countSF(str){let s=String(str).trim().replace(/^[+-]/,'');const m=s.match(/^([\d.]+)(?:e[+-]?\d+)?$/i);if(!m)return 0;s=m[1];
  const hasDot=s.includes('.');let d=s.replace('.','').replace(/^0+/,'');if(!hasDot)d=d.replace(/0+$/,'');if(!d&&hasDot)return Math.max(1,(s.split('.')[1]||'').length);return Math.max(d.length,hasDot?1:0)}
 /* student input -> {v, sf} or null.  Accepts 3.45E-4, 3.45e-4, 3.45*10^-4, 3.45x10^-4, 3.45×10^-4, commas, unicode minus */
-function readNum(raw){let s=String(raw||'').trim().replace(/[\s,]/g,'').replace(/[−–]/g,'-').replace(/⁻/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c));
+/* Shared number reading: games/brand/chemparse.v1.js (loaded in <head>). If it did not load, say so instead of marking answers wrong. */
+const CP=window.ChemParse||null;if(!CP)document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:sticky;top:0;z-index:999;background:#fff3cd;border-bottom:2px solid #e0a800;padding:12px 16px;font-weight:700;text-align:center';b.textContent='Part of this game did not load, so answers cannot be checked. Please reload the page.';document.body.prepend(b);});
+/* decimal commas ("2,5", "0,493") are not numbers; "10³" is 10^3, not 103 */
+function readNum(raw){if(CP.decimalComma(raw))return null;let s=String(raw||'').trim().replace(/^10(?=[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺])/,'10^').replace(/[\s,]/g,'').replace(/[−–]/g,'-').replace(/⁻/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c));
  if(!s)return null;let m=s.match(/^([+-]?(?:\d+\.?\d*|\.\d+))(?:(?:\*|x|×|·)10\^?\(?([+-]?\d+)\)?|[eE]([+-]?\d+))?$/);
  if(!m){m=s.match(/^10\^?\(?([+-]?\d+)\)?$/);if(m)return{v:Math.pow(10,+m[1]),sf:1};return null}
  const e=m[2]!=null?+m[2]:m[3]!=null?+m[3]:0;return{v:+m[1]*Math.pow(10,e),sf:countSF(m[1])}}
@@ -799,9 +806,9 @@ const PROG={first:p=>[p.solved,1],ten:p=>[p.solved,10],fifty:p=>[p.solved,50],st
  plug:p=>[p.plug,10],sig:p=>[p.sig,10],kelvin:p=>[p.kelvin,5],units:p=>[p.units,5],logs:p=>[p.logs,10],gas:p=>[GAS.filter(g=>p.eqs[g]).length,6],nernst:p=>[p.eqs.nernst?1:0,1],
  all:p=>{const L=courseEqs();return[L.filter(q=>p.eqs[q.id]).length,L.length]}};
 const achList=()=>ACH.filter(a=>!a[5]||a[5].includes(S.course));
-function addXP(n){if(!n)return;const before=rankFor(P_.xp).i;P_.xp+=n;const after=rankFor(P_.xp);if(after.i>before)toast(after.cur[1],'Rank up!','You are now a '+after.cur[2]+'.');save();renderStatus()}
+function addXP(n){if(!n)return;const before=rankFor(P_.xp).i;P_.xp+=n;const after=rankFor(P_.xp);if(after.i>before){exMood('victory',4000);toast(after.cur[1],'Rank up!','You are now a '+after.cur[2]+'.')}save();renderStatus()}
 function checkAch(){for(const[id,icon,title,d,test]of achList()){if(!P_.ach[id]&&test(P_)){P_.ach[id]=Date.now();P_.xp+=25;achToast(id,title,d)}}save();renderStatus();renderProgress()}
-function achToast(id,title,text){const box=$('toasts'),el=document.createElement('div');el.className='toast ach';
+function achToast(id,title,text){exMood('victory',4000);const box=$('toasts'),el=document.createElement('div');el.className='toast ach';
  el.innerHTML=Badges.svg(id,true,58)+'<div><span class="tb-label">Achievement unlocked · +25 XP</span><br><b>'+esc(title)+'</b><br><small>'+esc(text)+'</small></div>';box.appendChild(el);setTimeout(()=>el.remove(),5200)}
 function toast(icon,title,text){const box=$('toasts'),el=document.createElement('div');el.className='toast';el.innerHTML='<span class="toast-icon" aria-hidden="true">'+icon+'</span><div><b>'+esc(title)+'</b><br>'+esc(text)+'</div>';box.appendChild(el);setTimeout(()=>el.remove(),4200)}
 function renderStatus(){const r=rankFor(P_.xp);$('rankIcon').textContent=r.cur[1];$('rankName').textContent=r.cur[2];$('xpShort').textContent=P_.xp+' XP'+(r.next?' · '+(r.next[0]-P_.xp)+' to '+r.next[2]:'');
@@ -831,7 +838,12 @@ function newProblem(){walk=null;const p=pick();if(!p){cur={};$('goal').textConte
  $('plug').hidden=true;$('plug').innerHTML='';$('nextBtn').hidden=true;$('stage').classList.remove('win');
  setCoach('', 'Start by asking: what is attached to <span class="var-t">'+disp(TG)+'</span>, and how do I undo it?'+flipTip());
  $('last').innerHTML='&nbsp;';draw();renderChapterChip();renderVideos()}
-function setCoach(cls,html){const c=$('coach');c.className='coach'+(cls?' '+cls:'');c.innerHTML=html}
+/* Ex's mood follows the feedback: good → correct, bad → oops, warn/info → thinking, none → idle; victory for achievements and rank-ups */
+const EX_MOOD={good:'correct',bad:'oops',warn:'thinking',info:'thinking','':'idle'};let exHold=0;
+function exMood(m,hold){if(!hold&&Date.now()<exHold)return;if(hold)exHold=Date.now()+hold;const src='assets/mascot/ex-'+m+'.webp';
+ document.querySelectorAll('.ex-mood').forEach(im=>{if(im.getAttribute('src')===src)return;im.setAttribute('src',src);im.classList.remove('pop');void im.offsetWidth;im.classList.add('pop')})}
+['idle','thinking','correct','oops','victory'].forEach(m=>{const i=new Image();i.src='assets/mascot/ex-'+m+'.webp'});
+function setCoach(cls,html){const c=$('coach');c.className='coach'+(cls?' '+cls:'');c.innerHTML=html;exMood(EX_MOOD[cls||'']||'idle')}
 function draw(hi){REG=[];const L=rTop(st.L),R=rTop(st.R);PCS=REG.slice();$('L').innerHTML=L;$('R').innerHTML=R;
  const q=cur.q;$('eqTag').textContent=q.name+' · '+LEVELS.find(l=>l[0]===q.lvl)[2];
  $('goal').innerHTML='Get <span class="var-t">'+disp(TG)+'</span> alone on the <b>left</b> side.';
@@ -970,16 +982,17 @@ function buildPlug(){const q=cur.q,V=makeValues(q);if(!V)return false;
  const sfExp=q.sf&&kn.length?Math.min(...kn.map(d=>d.sf)):null;
  const lits=(q.f.match(/\d+\.\d+/g)||[]).map(s=>s.split('.')[1].length);
  const tDp=prec(tsp.p).dp!=null,dpK=kn.filter(d=>d.dp!=null).map(d=>d.dp);
- const dpExp=tDp?(q.lvl==='as'&&kn.length&&dpK.length===kn.length?Math.min(...dpK,...lits):prec(tsp.p).dp):null;
- const logSf=!tDp&&!q.sf&&q.lvl==='lg'&&dpK.length?Math.max(2,Math.min(...dpK)):3; /* pH 2 decimals -> 2 sig figs in [H3O+] */
+ const logDp=tDp&&q.lvl==='lg'&&kn.length?Math.min(...kn.map(d=>d.dp!=null?d.dp:d.sf)):null; /* log rule: decimals in pH = sig figs in [H3O+] */
+ const dpExp=tDp?(q.lvl==='as'&&kn.length&&dpK.length===kn.length?Math.min(...dpK,...lits):logDp!=null?logDp:prec(tsp.p).dp):null;
+ const logSf=!tDp&&!q.sf&&q.lvl==='lg'&&dpK.length?Math.max(1,Math.min(...dpK)):3; /* log rule the other way: decimals in pH -> sig figs in [H3O+] */
  const ansTxt=tsp.list?String(Math.round(A)):sfExp?numTxt(A,sfExp).html:dpExp!=null?numTxt(A,'dp'+dpExp).html:numTxt(A,logSf).html;
  SUBS=Wh;const work=rE(expr);SUBS=null;
- cur.plug={pem,pem2,hasE,seq:tiSeq(expr,WP),keys:tiKeys(expr,WP),expr,W,A,Ar,anyAlt,sfExp,dpExp,dispSf:sfExp||(dpExp==null&&!tsp.list?logSf:null),list:!!tsp.list,ansTxt,tries:0,unit:tsp.u,work,convs};
+ cur.plug={logDp,logIn:q.lvl==='lg'&&!tDp&&dpK.length?Math.max(1,Math.min(...dpK)):null,pem,pem2,hasE,seq:tiSeq(expr,WP),keys:tiKeys(expr,WP),expr,W,A,Ar,anyAlt,sfExp,dpExp,dispSf:sfExp||(dpExp==null&&!tsp.list?logSf:null),list:!!tsp.list,ansTxt,tries:0,unit:tsp.u,work,convs};
  const p=$('plug');p.hidden=false;
  p.innerHTML='<h3 id="plugTitle">🧮 Now plug in the numbers</h3><div class="formula"><span class="var-t">'+disp(TG)+'</span> = '+rE(expr)+'</div>'+
   '<div class="givens">'+givens.join('')+'</div>'+(anyAlt?'<p class="note-small">⚠️ Check the units. One value may need converting first.</p>':'')+
   '<form class="answer" id="ansForm" autocomplete="off"><label for="ans"><span class="var-t">'+disp(TG)+'</span> =</label><input id="ans" inputmode="text" spellcheck="false" placeholder="your answer"><span class="unit">'+esc(tsp.u)+'</span>'+
-  '<button class="btn primary" type="submit">Check answer</button></form><div class="plug-acts"><button class="btn" type="button" id="openCalc">🧮 Calculator</button><button class="btn" type="button" id="workBtn">🧭 Show the work</button></div><details class="ti" id="tiBox"><summary>🧮 TI-36X Pro keystrokes</summary>'+cur.plug.keys+'<div class="tools2"><button class="btn primary" type="button" id="playKeys">▶ Show me on the calculator</button></div></details><div class="coach" id="plugMsg" aria-live="polite" hidden></div>';
+  '<button class="btn primary" type="submit">Check answer</button></form><div class="plug-acts"><button class="btn" type="button" id="openCalc">🧮 Calculator</button><button class="btn" type="button" id="workBtn">🧭 Show the work</button></div><details class="ti" id="tiBox"><summary>🧮 TI-36X Pro keystrokes</summary>'+cur.plug.keys+'<div class="tools2"><button class="btn primary" type="button" id="playKeys">▶ Show me on the calculator</button></div></details><div class="coach-row"><img class="ex-mood" src="assets/mascot/ex-thinking.webp" width="64" height="64" alt="" aria-hidden="true"><div class="coach" id="plugMsg" aria-live="polite" hidden></div></div>';
  $('ansForm').onsubmit=e=>{e.preventDefault();checkPlug()};
  $('openCalc').onclick=()=>openCalc(true);
  $('playKeys').onclick=async()=>{cur.plug.watched=true;openCalc(false);await Calc.play(cur.plug.seq);const m=$('plugMsg');m.hidden=false;m.className='coach info';m.innerHTML='Watch the screen: that is the answer before rounding. Now round it and type it in. <small>(Watching the keys counts as help, so this one earns fewer XP.)</small>'};$('workBtn').onclick=()=>revealWork(true);
@@ -991,16 +1004,18 @@ function plugVerdict(c,r){const A=c.A,rel=cur.q.lvl==='lg'?.02:.01;
  const rounded=!exact&&!c.list&&r.sf>=1&&near(r.v,roundTo(A,r.sf),1e-6);return{ok:exact||rounded,rounded}}
 function showPlugMsg(){const m=$('plugMsg');m.hidden=false;setTimeout(()=>m.scrollIntoView({block:'nearest',behavior:'smooth'}),30)}
 function checkPlug(){const c=cur.plug;if(!c)return;const r=readNum($('ans').value),m=$('plugMsg');showPlugMsg();
- if(!r){m.className='coach warn';m.innerHTML='Type a number, like <b>2.45</b> or <b>3.4E-5</b>.';return}
- if(cur.phase!=='solved'){const v=plugVerdict(c,r);m.className='coach '+(v.ok?'good':'bad');
+ if(!r){m.className='coach warn';m.innerHTML=CP.decimalComma($('ans').value)?'Use a period for decimals: type <b>2.5</b>, not <b>2,5</b>.':'Type a number, like <b>2.45</b> or <b>3.4E-5</b>.';return}
+ if(cur.phase!=='solved'){const v=plugVerdict(c,r);m.className='coach '+(v.ok?'good':'bad');exMood(v.ok?'correct':'oops');
   m.innerHTML=(v.ok?'<b>✓ That matches!</b> ':'<b>✗ Not quite.</b> ')+'<span class="var-t">'+disp(TG)+'</span> = '+c.ansTxt+(c.unit?' '+esc(c.unit):'')+(c.sfExp&&v.ok&&r.sf!==c.sfExp?' (report '+c.sfExp+' sig figs)':'')+'. <small>Practice check, no XP. Tap <b>Next equation →</b> to keep going.</small>'+(m.dataset.work||'');return}
  c.tries++;const A=c.A;const V=plugVerdict(c,r),ok=V.ok;
  if(ok){let xp=c.tries===1&&!c.watched?10:5,sfNote='';
   if(V.rounded&&!c.sfExp)sfNote=' <br><small>Good rounding. The full answer is '+c.ansTxt+'.</small>';
+  if(c.logDp!=null){const typed=($('ans').value.split('.')[1]||'').replace(/\D.*$/,'').length;sfNote=typed===c.logDp?' Right number of decimals, too ('+c.logDp+')! 🎯':' <br><small>Log rule (sig figs in a concentration = decimal places in a p-value): your data allows <b>'+c.logDp+'</b> decimal place'+(c.logDp===1?'':'s')+', so report <b>'+c.ansTxt+'</b>. You gave '+typed+'.</small>';}
+  if(c.logIn!=null&&r.sf!==c.logIn)sfNote=' <br><small>Log rule: <b>'+c.logIn+'</b> decimal place'+(c.logIn===1?'':'s')+' in the p-value means <b>'+c.logIn+'</b> sig fig'+(c.logIn===1?'':'s')+' here: <b>'+c.ansTxt+'</b>. You gave '+r.sf+'.</small>';
   if(c.sfExp&&!c.list){if(r.sf===c.sfExp){xp+=5;P_.sig++;sfNote=' Right sig figs, too ('+c.sfExp+')! 🎯'}else sfNote=' <br><small>Sig figs: the fewest in your data is <b>'+c.sfExp+'</b>, so report <b>'+c.ansTxt+'</b>. You gave '+r.sf+'.</small>'}
   if(c.tries===1&&!c.watched){P_.plug++;if(c.anyAlt==='C')P_.kelvin++;else if(c.anyAlt)P_.units++}
   ddLog('Plug in',c.tries===1);
-  m.className='coach good';m.innerHTML='<b>✓ Correct!</b> <span class="var-t">'+disp(TG)+'</span> = '+c.ansTxt+(c.unit?' '+esc(c.unit):'')+'. <small>+'+xp+' XP</small>'+sfNote;
+  m.className='coach good';exMood('correct');m.innerHTML='<b>✓ Correct!</b> <span class="var-t">'+disp(TG)+'</span> = '+c.ansTxt+(c.unit?' '+esc(c.unit):'')+'. <small>+'+xp+' XP</small>'+sfNote;
   revealWork(false);addXP(xp);finishProblem(!cur.shown&&c.tries===1&&!c.watched);return}
  if(c.tries===1)ddLog('Plug in',false);
  let why='Not quite. Plug each number into the rearranged equation and check your calculator steps (put the bottom in parentheses).';
@@ -1013,7 +1028,7 @@ function checkPlug(){const c=cur.plug;if(!c)return;const r=readNum($('ans').valu
  else if(near(v,-A,.02))why='Close, but check the sign (+ or −).';
  else if(near(v,A*1000,.02)||near(v,A/1000,.02))why='Off by a factor of 1000. Check unit prefixes (mL vs L, J vs kJ).';
  else if(A!==0&&v!==0){const k=Math.log10(Math.abs(v/A));if(Math.abs(k-Math.round(k))<.01&&Math.round(k)!==0)why='The digits look right, but the power of 10 is off. On the TI-36X Pro type 3.4 '+kb('EE')+' '+kb('(−)')+' 5 for 3.4 × 10⁻⁵. Use '+kb('(−)')+' for a negative exponent, not the minus key.'}
- m.className='coach bad';m.innerHTML='✗ '+why+(c.tries>=2?'':' Try again.');P_.streak=0;save();renderStatus();
+ m.className='coach bad';exMood('oops');m.innerHTML='✗ '+why+(c.tries>=2?'':' Try again.');P_.streak=0;save();renderStatus();
  if(c.tries>=2)revealWork(true)}
 function revealWork(giveUp){const c=cur.plug;if(!c)return;const m=$('plugMsg');m.hidden=false;
  const conv=c.convs.length?'<div class="note-small">Convert first: '+c.convs.join('; ')+'</div>':'';
@@ -1029,7 +1044,7 @@ function renderControls(){document.querySelectorAll('#course button').forEach(b=
  const chs=[...new Set(courseEqs().map(q=>q.ch[S.course]))].sort((a,b)=>a-b);if(S.chap!=='all'&&!chs.includes(+S.chap))S.chap='all';
  $('chapter').innerHTML='<option value="all">All chapters</option>'+chs.map(c=>'<option value="'+c+'"'+(String(S.chap)===String(c)?' selected':'')+'>Ch '+c+': '+esc(CH[S.course][c]||'')+'</option>').join('');
  if(!pool().length){const f=LEVELS.find(l=>pool(l[0]).length);if(f)S.lvl=f[0]}
- $('levels').innerHTML=LEVELS.map(([k,n,l])=>{const c=pool(k).length,I=LVINFO[k];return'<button type="button" class="lvcard'+(k===S.lvl?' active':'')+'" data-l="'+k+'"'+(c?'':' disabled')+' aria-pressed="'+(k===S.lvl)+'"><span class="ico" style="background:'+I[3]+'">'+I[0]+'</span><span><b>'+n+' · '+I[1]+'</b><small>'+I[2]+'</small><span class="cnt">'+(c?c+' equation'+(c>1?'s':''):'None in CHEM '+S.course)+'</span></span></button>'}).join('');
+ $('levels').innerHTML=LEVELS.map(([k,n,l])=>{const c=pool(k).length,I=LVINFO[k];return'<button type="button" class="lvcard'+(k===S.lvl?' active':'')+'" data-l="'+k+'"'+(c?'':' disabled')+' aria-pressed="'+(k===S.lvl)+'"><img class="ico" src="assets/menu/mode-'+k+'.webp" width="44" height="44" alt="" aria-hidden="true"><span><b>'+n+' · '+I[1]+'</b><small>'+I[2]+'</small><span class="cnt">'+(c?c+' equation'+(c>1?'s':''):'None in CHEM '+S.course)+'</span></span></button>'}).join('');
  $('levels').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.lvl=b.dataset.l;renderControls();newProblem()})}
 function setCourse(c){S.course=c;loadCourse(c);S.chap='all';renderControls();renderStatus();renderProgress();newProblem();save()}
 

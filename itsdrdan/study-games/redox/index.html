@@ -205,6 +205,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v1.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
@@ -374,10 +375,11 @@ function speciesHTML(raw){let s=String(raw).trim();if(s==='?'||s==='No reaction'
 function plainSpecies(s){s=canon(s);const ch=s.match(/\^(\d*[+-])$/)?.[1]||'';return s.replace(/\^\d*[+-]$/,'').replace(/\d/g,d=>subDigits[+d])+(ch?[...ch].map(c=>/\d/.test(c)?superDigits[+c]:c==='+'?'⁺':'⁻').join(''):'')}
 function signed(n){return n>0?'+'+n:String(n).replace('-','−')}
 /* numbers: E notation (5.0E-3), ×10^ forms, thousands separators (96,485) and simple fractions; a decimal comma (2,5) is not a number */
-const decimalComma=raw=>{const t=String(raw).replace(/\s+/g,'');return t.includes(',')&&!/^[+\-−–]?\d{1,3}(,\d{3})+(\.\d*)?([eE×x*·].*)?$/.test(t)};
+/* Shared number reading: games/brand/chemparse.v1.js (loaded in <head>). If it did not load, say so instead of marking answers wrong. */
+const CP=window.ChemParse||null;if(!CP)document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:sticky;top:0;z-index:999;background:#fff3cd;border-bottom:2px solid #e0a800;padding:12px 16px;font-weight:700;text-align:center';b.textContent='Part of this game did not load, so answers cannot be checked. Please reload the page.';document.body.prepend(b);});
+const decimalComma=raw=>CP.decimalComma(raw);
 const SUPD='⁰¹²³⁴⁵⁶⁷⁸⁹';
-function numberValue(raw){if(decimalComma(raw))return NaN;let s=String(raw).trim().replace(/[−–]/g,'-').replace(/⁻/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>String(SUPD.indexOf(c)));if(/^[+-]?\d+\s*\/\s*\d+$/.test(s)){const [a,b]=s.split('/').map(Number);return b?a/b:NaN}
- s=s.replace(/,/g,'').replace(/\s+/g,'').replace(/[×x*·]10\^?([+-]?\d+)$/i,'e$1');return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(s)?Number(s):NaN}
+function numberValue(raw){const f=String(raw).trim().replace(/[−–⁻]/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>String(SUPD.indexOf(c)));if(/^[+-]?\d+\s*\/\s*\d+$/.test(f)){const [a,b]=f.split('/').map(Number);return b?a/b:NaN}return CP.parseValue(raw);} /* fractions such as 1/2 stay a redox feature */
 const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a),lcm=(a,b)=>a*b/gcd(a,b);
 function atoms(raw){const species=canon(raw);const body=species.replace(/\^\d*[+-]$/,'');if(body==='e')return {};let i=0;function parse(){const out={};while(i<body.length&&body[i]!==')'){let part={};if(body[i]==='('){i++;part=parse();if(body[i]!==')')throw Error('Unclosed formula '+body);i++}else{const m=body.slice(i).match(/^[A-Z][a-z]?/);if(!m)throw Error('Invalid formula '+body);i+=m[0].length;part[m[0]]=1}const m=body.slice(i).match(/^\d+/);const n=m?Number(m[0]):1;if(m)i+=m[0].length;for(const [el,v] of Object.entries(part))out[el]=(out[el]||0)+v*n}return out}const result=parse();if(i!==body.length)throw Error('Invalid formula '+body);return result}
 function charge(raw){const s=canon(raw);if(s==='e^-')return -1;const m=s.match(/\^(\d*)([+-])$/);return m?(Number(m[1]||1)*(m[2]==='+'?1:-1)):0}

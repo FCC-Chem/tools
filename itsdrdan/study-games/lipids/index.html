@@ -99,6 +99,11 @@ table.data{margin:auto;border-collapse:collapse;font-size:1.1rem;background:#fff
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall{margin-top:8px;padding-top:4px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.feedback .whyall ul{list-style:none;margin:0;padding:0}
+.feedback .whyall li{display:flex;gap:8px;margin:0 0 8px;font-size:.97rem;line-height:1.4}
+.feedback .whyall .wa-x{color:var(--rose-ink);font-weight:700;flex:none}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
 .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
 .detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
@@ -139,7 +144,7 @@ mark{background:#ffe08a;border-radius:4px;padding:0 2px;color:inherit}
 /* progress */
 .section{margin-top:18px;padding:20px}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
-.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
 .badge img{grid-row:span 2;width:40px;height:40px;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
@@ -322,6 +327,9 @@ svg.mol{width:100%;height:auto;display:block}
 .choice .ctext{min-width:0}.choices.grid .choice .ctext{display:block;width:100%;overflow-x:auto}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.res-mark{margin-left:.45em;font-weight:800}.choice.right .res-mark,.step.ok .res-mark{color:var(--mint-ink)}.choice.wrong .res-mark,.step.bad .res-mark{color:var(--rose-ink)}
+/* Touch targets: at least 44 px on phones (house rule, WCAG 2.2), 2026-11-14. Inline links inside sentences are exempt. */
+#resetBtn{min-height:44px}
+.chapter-links a{min-height:44px;display:flex;align-items:center}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -372,7 +380,7 @@ svg.mol{width:100%;height:auto;display:block}
 
  <section class="panel section" aria-labelledby="progressTitle">
   <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
-  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Fatty Acid Freshman</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Fatty Acid Freshman</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div><div class="stat" title="Questions where you used Show answer"><strong id="sAssisted">0</strong><small>👀 Assisted</small></div></div>
   <div class="badges" id="achGrid"></div>
   <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. Progress is saved on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
  </section>
@@ -1512,7 +1520,7 @@ function genFinal() {
   if (!BANK || !BANK.length) return null;
   const x = bankBag.next(), k = 0; // in the bank the correct answer is always c[0]; x.k is the calculator flag, not the key
   const figs = Array.isArray(x.f) ? x.f.filter(f => f.type === 'table').map(tableHTML).join('') : '';
-  return mcq({ topic: 'final', tag: 'Final Boss question', prompt: x.q, art: figs, right: x.c[k], wrong: x.c.filter((c, i) => i !== k).map(c => ({ html: c, why: '' })), hint: x.h, solution: x.w, flags: {}, bankId: x.id });
+  return mcq({ topic: 'final', tag: 'Final Boss question', prompt: x.q, art: figs, right: x.c[k], wrong: x.c.filter((c, i) => i !== k).map((c, i) => ({ html: c, why: (Array.isArray(x.x) && x.x[i + 1]) || '' })), /* the bank's own per-choice reasons */ hint: x.h, solution: x.w, flags: {}, bankId: x.id });
 }
 
 /* ---------- registry ---------- */
@@ -1625,7 +1633,7 @@ function renderStats() {
   $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
   $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
   $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
-  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best; $('sAssisted').textContent = P.assisted || 0;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
   $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${artImg(a[3], a[4])}<b>${a[1]}</b><small>${a[2]}${a[0] === 'family' ? ` (${(P.fams || []).length}/8)` : ''}</small></div>`).join('');
@@ -1680,7 +1688,7 @@ function makeQuestion() {
 }
 function newQuestion(focus) {
   const q = makeQuestion();
-  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false; state.atomSel = null;
+  state.q = q; state.tries = 0; state.wrongPicks = []; state.helped = false; state.done = false; state.logged = false; state.atomSel = null;
   $('emptyBox').hidden = true; $('reportBox').hidden = true; $('playArea').hidden = false; $('skipBtn').hidden = false;
   const T = TOPICS[q.topic];
   $('playTitle').textContent = state.quiz ? 'Skill Check Prep' : q.topic === 'final' ? 'Final-exam review' : state.sel.size > 1 ? 'Mixed practice' : T.label;
@@ -1734,7 +1742,7 @@ function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#choices [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip || 'choice', c.why || ''); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; (state.wrongPicks = state.wrongPicks || []).push(i); grade(false, c.slip || 'choice', c.why || ''); }
 }
 function ddLog(ok, slip) {
   try {
@@ -1775,11 +1783,22 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = scripts(html); }
+/* when a choice question is over: why the right answer is right, and a reason for every other choice (Dr. Dan, 2026-11-14) */
+function whyAll(q) {
+  if (!q || q.kind !== 'choice' || !q.choices) return '';
+  const T = h => String(h || '').replace(/<[^>]+>/g, '').trim(), picked = state.wrongPicks || [];
+  const rows = q.choices.map((c, i) => { if (c.ok) return ''; const w = c.why || ''; if (T(w).length < 9) return '';
+    return `<li><span class="wa-x" aria-hidden="true">✗</span><span><b>${c.html}</b>${picked.includes(i) ? ' <small>(your pick)</small>' : ''}<br>${w}</span></li>`; }).filter(Boolean);
+  return rows.length ? `<details class="whyall" open><summary>Why the other choices are wrong</summary><ul>${rows.join('')}</ul></details>` : '';
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind;
+  if (state.done && state.q && state.q.kind === 'choice') html = html.replace('<div class="sol">', '<div class="sol"><b>Why it’s right:</b> ') + whyAll(state.q);
+  f.innerHTML = scripts(html); }
 function showSolution() {
   const q = state.q; if (!q) return;
   if (!state.done) {
-    if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+    if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); if (state.quiz) P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+    if (!state.quiz) P.assisted = (P.assisted || 0) + 1; /* house rule: Show answer counts as Assisted and keeps the streak */
     state.done = true; state.helped = true; save(); renderStats();
     if (q.kind === 'lab') q.reveal();
     setFeedback('info', `<b>Answer: ${q.answer}</b><div class="sol">${q.solution}</div>`); finishQuestion();
@@ -1930,6 +1949,11 @@ const SUBS = '₀₁₂₃₄₅₆₇₈₉', SUPS = { '⁰': '0', '¹': '1', '
 function scripts(html) {
   return String(html).split(/(<svg[\s\S]*?<\/svg>)/).map((part, i) => i % 2 ? part : part.replace(/[₀-₉]+/g, m => `<sub>${[...m].map(c => SUBS.indexOf(c)).join('')}</sub>`).replace(/[⁰¹²³⁺⁻]+/g, m => `<sup>${[...m].map(c => SUPS[c]).join('')}</sup>`)).join('');
 }
+/* Inside a textbook box (iframe), a ?topic= link opens at the question, not the title banner (2026-11-14) */
+/* ?view=lab: compact view for a textbook box. Shows only the demo (and whatever it needs) plus a link to the full game,
+   so the box can stay short on a phone and the student can still scroll the textbook page around it (2026-11-14). */
+function ddLabView(keep){try{if(new URLSearchParams(location.search).get('view')!=='lab')return false;const ks=keep.map(k=>typeof k==='string'?document.getElementById(k):k).filter(Boolean);if(!ks.length)return false;const need=new Set();ks.forEach(k=>{for(let e=k;e&&e!==document.body;e=e.parentElement)need.add(e)});need.forEach(e=>{const p=e.parentElement;if(!p)return;[...p.children].forEach(c=>{if(need.has(c)||/^(SCRIPT|STYLE|DIALOG|CANVAS|TEMPLATE|LINK|NOSCRIPT)$/.test(c.tagName)||getComputedStyle(c).position==='fixed')return;c.setAttribute('data-dd-labhide','')})});const st=document.createElement('style');st.textContent='[data-dd-labhide]{display:none!important}.dd-labbar{display:flex;justify-content:flex-end;padding:4px 10px 0;font:600 14px/1.4 system-ui,-apple-system,sans-serif}.dd-labbar a{color:inherit;text-decoration:underline}';document.head.appendChild(st);document.documentElement.classList.add('dd-labview');const u=new URL(location.href);u.searchParams.delete('view');const bar=document.createElement('div');bar.className='dd-labbar';const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Open the full game ↗';bar.appendChild(a);document.body.insertBefore(bar,document.body.firstChild);window.scrollTo(0,0);return true}catch(e){return false}}
+function ddJumpTo(get){let moved=false;const stop=()=>{moved=true};['wheel','touchstart','keydown','pointerdown'].forEach(t=>addEventListener(t,stop,{once:true,passive:true}));const go=()=>{if(moved||document.documentElement.classList.contains('dd-labview'))return;const el=get();if(el)window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-8),behavior:'instant'})};requestAnimationFrame(()=>requestAnimationFrame(go));if(document.readyState!=='complete')addEventListener('load',()=>setTimeout(go,50),{once:true});setTimeout(go,700)}
 function init() {
   load(); bind();
   // ?mode= links from the old Lipid Lab (the CHEM 3B textbook uses them) and ?topic=
@@ -1939,7 +1963,7 @@ function init() {
   renderStats(); renderChooser(); wireArt(); paintIcons(); setMood('idle');
   if (m === 'final') return startFinal();
   const c = CATEGORIES.find(x => x.id === m); if (c) { state.sel = new Set(c.topics); afterSelect(); return; }
-  if (tp && TOPICS[tp]) { state.sel = new Set([tp]); afterSelect(); return; }
+  if (tp && TOPICS[tp]) { state.sel = new Set([tp]); afterSelect(); if (window.parent !== window) ddJumpTo(() => $('play')); ddLabView(['play']); return; }
   state.sel.size ? newQuestion() : showEmpty();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

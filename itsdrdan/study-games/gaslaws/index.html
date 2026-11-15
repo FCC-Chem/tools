@@ -310,6 +310,7 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
@@ -423,17 +424,17 @@ const R=0.082058,RJ=8.3144,RS='0.08206',VM=22.4,KOFF=273.15;
 /* ---------- 1. number + text helpers ---------- */
 const sup=s=>String(s).replace(/[0-9-]/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||'⁻');
 const unsup=s=>String(s).replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>({'⁻':'-','⁺':'+'})[c]??String('⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)));
-function fmt(x,s=3){if(!Number.isFinite(x))return '—';if(x===0)return '0';const r=Number(x.toPrecision(s)),e=Math.floor(Math.log10(Math.abs(r)));
- if(e>=5||e<=-4||e+1>s){const [m,p]=r.toExponential(s-1).split('e');return m+' × 10'+sup(Number(p));}
- let fx=r.toFixed(Math.max(0,s-1-e));if(e+1===s&&/0$/.test(fx))fx+='.';return fx;}
+/* Dr. Dan's rule (2026-11-14): a regular number whenever it can show the sig figs (0.0472, 380., 1230); scientific notation when it cannot (6000 to 2 sf is 6.0 × 10³) or the number is very large or very small. Shared: chemparse.v2.js */
+function fmt(x,s=3){return CP.fmt(x,s);}
 const rnd=(lo,hi,s=3)=>Number((lo+Math.random()*(hi-lo)).toPrecision(s));
 const rint=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
 const r3=(x,s=3)=>Number(x.toPrecision(s));
-const decimalComma=raw=>{const t=String(raw).replace(/\s+/g,'');return t.includes(',')&&!/^[+\-−–]?\d{1,3}(,\d{3})+(\.\d*)?([eE×x*·].*)?$/.test(t);};
-function parseValue(raw){if(decimalComma(raw))return NaN;const t=unsup(raw).replace(/[−–]/g,'-').trim().replace(/,/g,'').replace(/\s+/g,'').replace(/[×x*·]10\^?([+-]?\d+)$/i,'e$1');return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN;}
+/* Shared number reading: games/brand/chemparse.v1.js (loaded in <head>). If it did not load, say so instead of marking answers wrong. */
+const CP=window.ChemParse||null;if(!CP)document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:sticky;top:0;z-index:999;background:#fff3cd;border-bottom:2px solid #e0a800;padding:12px 16px;font-weight:700;text-align:center';b.textContent='Part of this game did not load, so answers cannot be checked. Please reload the page.';document.body.prepend(b);});
+const decimalComma=raw=>CP.decimalComma(raw);
+function parseValue(raw){return CP.parseValue(raw);}
 /* returns [min,max] sig figs. Instructor rule: trailing zeros with no decimal point are NOT significant (1200 = 2; 1200. or 1.20×10³ = 3), so min = max */
-function sfRange(s){let t=unsup(s).replace(/[−–]/g,'-').trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×x*·]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+\-−]/,'');if(!/^\d*\.?\d*$/.test(t)||!/\d/.test(t))return [0,0];
- if(t.includes('.')){const d=t.replace('.','').replace(/^0+/,'');const z=d?d.length:Math.max(1,(t.split('.')[1]||'').length);return [z,z];}t=t.replace(/^0+(?=\d)/,'');const core=t.replace(/0+$/,'').length;return [core||1,core||1];}
+function sfRange(s){const n=CP.sfCount(s);return [n,n];}
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const fhtml=f=>'<span class="formula">'+esc(f).replace(/(\d+)/g,'<sub>$1</sub>')+'</span>';
 const fsub=f=>esc(f).replace(/(\d+)/g,'<sub>$1</sub>');
@@ -874,11 +875,11 @@ function updateCoach(){const q=S.q;if(S.view==='learn'&&S.phase==='example'){S.e
  if(q&&q.lab&&q.stage!=='apply'){const c={predict:['🔮','<b>Predict first:</b> tap what you think will happen.','A wrong guess costs nothing.'],try:['🎚️','<b>Test it:</b> move the control in the lab and watch the readings.',''],explain:['🤔','<b>Explain:</b> tap the reason the lab shows.','Compare the before and after numbers.']}[q.stage];if(c){coach(...c);return}}
  if(S.quiz&&S.quiz.done)return coach('📋','Here is your study plan. Tap a <b>Practice</b> button to work on a topic.');
  if(q.quiz&&q.eq&&!q.cardOK&&!q.done)return coach('🃏','Question <b>'+(S.quiz.i+1)+' of 10</b>. First, <b>pick the equation card</b>.');
- if(q.quiz){if(q.done)return coach(q.quizRight?'🎉':'📝',q.quizRight?'Correct! Tap <b>Next question</b>.':'Not this time. Read the answer, then tap <b>Next question</b>.');return coach('🏆','Question <b>'+(S.quiz.i+1)+' of 10</b>. Answer on your own. One try per question.',q.sf?'Round to '+q.sf+' significant figures.':'');}
+ if(q.quiz){if(q.done)return coach(q.quizRight?'🎉':'📝',q.quizRight?'Correct! Tap <b>Next question</b>.':'Not this time. Read the answer, then tap <b>Next question</b>.');return coach('🏆','Question <b>'+(S.quiz.i+1)+' of 10</b>. Answer on your own. One try per question.',q.sf?'Round to '+q.sf+' significant figure'+(q.sf>1?'s':'')+'.':'');}
  if(q.scored)return coach('🎉','Correct! Tap <b>Next question</b> for another one.');
  if(q.eq&&!q.cardOK)return coach('🃏','First, <b>pick the equation card</b> that fits this problem.','Read it: what changes, and what stays the same?');
  const g=S.guideOn&&q.guide?.length;if(g&&S.gi<q.guide.length)return coach('✏️','Your turn: <b>Step '+(S.gi+1)+' of '+q.guide.length+' · '+esc(q.guide[S.gi].title)+'</b>. Answer it in the step box.','Stuck? Tap “Show me this step.”');
- coach(g?'🏁':'🧠',q.kind==='choice'?'Tap the correct answer below.':'Type your <b>final answer</b> below and tap <b>Check answer</b>.',q.sf?'Round to '+q.sf+' significant figures.':q.kind==='abs'?'Round to the nearest whole number is fine.':'');}
+ coach(g?'🏁':'🧠',q.kind==='choice'?'Tap the correct answer below.':'Type your <b>final answer</b> below and tap <b>Check answer</b>.',q.sf?'Round to '+q.sf+' significant figure'+(q.sf>1?'s':'')+'.':q.kind==='abs'?'Round to the nearest whole number is fine.':'');}
 function renderStepper(){const b=byId('trailSteps');b.hidden=S.view!=='learn';if(b.hidden)return;const k=S.phase==='example'?0:S.guideOn?1:2;b.innerHTML=[['example','Watch','See an example'],['guided','Try with help','One step at a time'],['solo','On your own','Double points!']].map(([id,t,s],i)=>'<button type="button" data-stage="'+id+'" class="'+(i===k?'on':i<k?'done':'')+'"><span>'+(i<k?'✓':i+1)+'</span><span style="all:unset"><b>'+t+'</b>'+s+'</span></button>').join('');}
 function answerText(q){return q.kind==='choice'?(q.options.find(o=>o.key===q.answer)||{html:q.answer}).html:q.kind==='abs'?esc(q.shown):esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit);}
 function showPanels(which){if(which!=='play')labQExit();byId('exampleBox').hidden=which!=='example';byId('quizBox').hidden=which!=='quiz';byId('playArea').hidden=which!=='play';}
@@ -890,7 +891,7 @@ function newQuestion(){let q;
  tagEq(q);q.level=S.view==='learn'?S.level:null;S.q=q;S.gi=0;S.setup=false;S.hint=0;if(S.view==='practice'&&!P.quests[S.quest]){P.quests[S.quest]=1;save();}
  showPanels('play');byId('next').hidden=S.view==='learn'||!!q.quiz;byId('skipQ').hidden=S.view!=='learn'&&!q.quiz;byId('skipQ').textContent=q.quiz?'Skip this question →':'Skip this one → new question';byId('bottomNext').hidden=true;byId('bottomNext').textContent='Next question →';
  byId('playTitle').textContent=q.quiz?'🏆 Readiness Check · Question '+(S.quiz.i+1)+' of 10':S.view==='learn'?unitById(S.unit).title+(unitSkills(unitById(S.unit)).length>1?' · '+levelById(S.level).title:''):(S.quest==='mixed'?'🎲 Mixed Practice':QUESTS.find(x=>x[0]===S.quest)[2]);
- byId('topicTag').textContent=q.mode;byId('sigTag').textContent=q.tagText?q.tagText:q.sf?q.sf+' significant figures':q.kind==='choice'?'choose an answer':'nearest whole number';
+ byId('topicTag').textContent=q.mode;byId('sigTag').textContent=q.tagText?q.tagText:q.sf?q.sf+' significant figure'+(q.sf>1?'s':''):q.kind==='choice'?'choose an answer':'nearest whole number';
  byId('equation').innerHTML=q.equationHTML||'';byId('equation').hidden=!q.equationHTML||!!q.eqHide;renderCards();byId('visual').innerHTML=q.visual||'';byId('prompt').innerHTML=q.prompt;byId('unit').innerHTML=q.kind==='choice'?'':unitHTML(q.unit);
  byId('answer').value='';byId('answer').disabled=false;byId('check').disabled=false;['feedback','hintBox','solution'].forEach(id=>byId(id).className=id==='feedback'?'feedback':'detail');
  byId('choiceBox').innerHTML=q.kind==='choice'?'<div class="choice-label">Choose one:</div>'+q.options.map((o,i)=>'<button type="button" class="choice" data-choice="'+esc(o.key)+'"><span class="opt-letter">'+'ABCDEFG'[i]+'</span><span class="opt-body">'+o.html+'</span></button>').join(''):'';
@@ -945,7 +946,7 @@ function trapMsg(q,n){for(const t of q.traps||[])if(Number.isFinite(t.v)&&t.v!==
 function quizResult(q,right,extra=''){ddLog(q,right);q.done=1;q.quizRight=right;S.quiz.results[S.quiz.i]=right;byId('answer').disabled=true;byId('check').disabled=true;byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);
  if(right){P.correct++;P.streak++;P.best=Math.max(P.best,P.streak);addXP(10);celebrate();}else{P.streak=0;save();renderStatus();}
  if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?(q.sfSlip?'close':'good'):'bad',(right&&!q.sfSlip?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
-function sfCloseMsg(raw,need,ans){const [lo,hi]=sfRange(raw);return '<b>Your math is right, but your significant figures are not.</b> '+(lo&&lo===hi?'You entered <b>'+lo+'</b> sig fig'+(lo===1?'':'s')+'. ':'')+'This answer needs <b>'+need+'</b>: <b>'+ans+'</b>. On a Skill Check or exam this would lose points, so fix it next time!';}
+function sfCloseMsg(raw,need,ans){return CP.sfCloseMsg(raw,need,ans);}
 function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');if(decimalComma(raw))return feedback('info','Use a period for decimals: type <b>2.5</b>, not <b>2,5</b>.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
  if(q.kind==='abs'){const ok=Math.abs(n-q.answer)<=q.tol;if(!ok){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}if(q.quiz)return quizResult(q,ok);return ok?feedback('good','Correct! '+esc(q.shown)+'.'+score(q)):(wrong(q),feedback('bad',(trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg||'Check your setup. Remember K = °C + 273.15.')));}
  /* sig-fig answers: within 0.5% AND ±1 in the last digit of the rounded answer (as Stoichiometry); extra digits are rounded to q.sf first, then get the yellow sig-fig notice */
@@ -1055,6 +1056,18 @@ const LAB_HINTS={
  avog:['The piston is free and T is locked. What happens to the volume when you add particles?','At constant P and T, V is <b>directly</b> proportional to moles: V₁/n₁ = V₂/n₂.','Example: 0.40 mol → 0.80 mol doubles n, so V doubles. For the last step, V₂ = V₁ × n₂ ÷ n₁.'],
  pn:['The piston is locked and T is locked. What happens to the pressure when you add particles?','At constant V and T, P is <b>directly</b> proportional to moles: P₁/n₁ = P₂/n₂.','Example: 0.50 mol → 1.00 mol doubles n, so P doubles. For the last step, P₂ = P₁ × n₂ ÷ n₁.'],
  swap:['Only the identity of the gas changes. n, T and V are all 🔒 locked.','PV = nRT has no molar mass in it. What does that say about the pressure?','Average kinetic energy depends only on T. Heavier particles move slower but hit harder.']};
+/* Apply-step data (Dr. Dan, 2026-11-14): each value has its own sig figs, anywhere from 1 to 5, printed so the count is
+   clear ("300. K", "0.40 mol", "3.0 × 10² K"); the answer gets the fewest. Lab settings keep their exact value. */
+const LAB_SF=[1,2,2,3,3,3,3,4,4,5];
+function sfNeed(x){for(let s=1;s<5;s++)if(Number(x.toPrecision(s))===x)return s;return 5;}
+/* vals: [{x, fixed}] (fixed: a lab setting, never rounded off). Returns {S, g:[{v, s, t}]}: S = answer sig figs, t = printed value */
+function labGivens(vals){const need=vals.map(o=>o.fixed?sfNeed(o.x):1);let S=pick(LAB_SF);
+ if(!need.some(n=>n<=S))S=Math.min(...need);
+ const lim=pick(vals.map((o,i)=>i).filter(i=>need[i]<=S));
+ const g=vals.map((o,i)=>{const sf=i===lim?S:rint(Math.max(S,need[i]),5),v=Number(o.x.toPrecision(sf));return {v,s:sf,t:fmt(v,sf)};});
+ return {S,g};}
+/* a Celsius value with d decimals, and the kelvin value it gives by the addition rule (decimal places, not sig figs) */
+function labCelsius(c,S){const d=rint(Math.max(0,S-3),2),t=d?c.toFixed(d):(c%10===0?c+'.':String(c)),K=(Math.round((c+KOFF)*10**d+1e-6)/10**d).toFixed(d);return {d,t,K};}
 /* a lab question: start state, the one control the student moves, and four stages (predict, try, explain, apply) */
 function labSpec(fam){fam=fam||pick(['boyle','boyle','gay','charles','avog','pn','swap']);
  const mk=(start,task,watch)=>{const a=labModel(start),end=Object.assign({},start,{[task.key]:task.target}),b=labModel(end);return {start,end,task,watch,before:a,after:b};};
@@ -1062,34 +1075,38 @@ function labSpec(fam){fam=fam||pick(['boyle','boyle','gay','charles','avog','pn'
  if(fam==='boyle'){const [v1,v2]=pick([[12,6],[10,5],[20,10],[24,12],[8,16],[6,18],[15,5],[10,20],[9,18]]);
   L=mk({gas:'He',n:1,T:300,V:v1,free:false,Pext:1},{key:'V',target:v2,label:'Volume',show:fmt(v2,3)+' L'},'P');ratio=L.after.P/L.before.P;law='Boyle’s law';video='boyle';
   predictAsk=`You will ${v2<v1?'squeeze':'expand'} the gas from ${fmt(v1,3)} L to ${fmt(v2,3)} L. Predict: what happens to the <b>pressure</b>?`;
-  const P1=r3(L.before.P);let v3;do{v3=rnd(5,25,3)}while(Math.abs(v3-v1)<1.5||Math.abs(v3-v2)<1.5);const ans=P1*v1/v3;
-  apply={kind:'numeric',prompt:`The gauge read <b>${fmt(P1,3)} atm</b> at <b>${fmt(v1,3)} L</b>. Use P₁V₁ = P₂V₂: what would the pressure be at <b>${fmt(v3,3)} L</b> (same T and n)?`,answer:ans,unit:'atm',sf:3,
-   traps:[{v:P1*v3/v1,msg:'You multiplied by V₂/V₁. P and V are <b>inverse</b>: P₂ = P₁ × V₁ ÷ V₂.'}],
-   steps:[`P₁V₁ = P₂V₂, so P₂ = P₁ × V₁ ÷ V₂`,`P₂ = ${fmt(P1,3)} atm × ${fmt(v1,3)} L ÷ ${fmt(v3,3)} L = <b>${fmt(ans,3)} atm</b>`]};
+  let v3;do{v3=rnd(5,25,3)}while(Math.abs(v3-v1)<1.5||Math.abs(v3-v2)<1.5);
+  const {S,g:[p,a,b]}=labGivens([{x:L.before.P},{x:v1,fixed:1},{x:v3,fixed:1}]),ans=p.v*a.v/b.v;
+  apply={kind:'numeric',prompt:`Lab data: <b>${p.t} atm</b> at <b>${a.t} L</b>. Use P₁V₁ = P₂V₂: what would the pressure be at <b>${b.t} L</b> (same T and n)?`,answer:ans,unit:'atm',sf:S,
+   traps:[{v:p.v*b.v/a.v,msg:'You multiplied by V₂/V₁. P and V are <b>inverse</b>: P₂ = P₁ × V₁ ÷ V₂.'}],
+   steps:[`P₁V₁ = P₂V₂, so P₂ = P₁ × V₁ ÷ V₂`,`P₂ = ${p.t} atm × ${a.t} L ÷ ${b.t} L = <b>${fmt(ans,S)} atm</b> (${S} sig fig${S>1?'s':''}, the fewest in the data)`]};
   if(v2>v1)fam='boyleUp';}
  else if(fam==='gay'){const [t1,t2]=pick([[300,600],[300,450],[400,600],[600,300],[200,400],[400,200]]);
   L=mk({gas:'He',n:1,T:t1,V:15,free:false,Pext:1},{key:'T',target:t2,label:'Temperature',show:t2+' K ('+C_OF(t2)+' °C)'},'P');ratio=t2/t1;law='Gay-Lussac’s law';video='temp';
   if(C_OF(t1)>0&&C_OF(t2)>0)cRatio=C_OF(t2)/C_OF(t1);
   predictAsk=`You will ${t2>t1?'heat':'cool'} the locked cylinder from ${t1} K (${C_OF(t1)} °C) to ${t2} K (${C_OF(t2)} °C). Predict: what happens to the <b>pressure</b>?`;
-  const P1=r3(L.before.P);let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30);const ans=P1*(c3+KOFF)/t1;
-  apply={kind:'numeric',prompt:`The gauge read <b>${fmt(P1,3)} atm</b> at <b>${t1} K</b>. Use P₁/T₁ = P₂/T₂: what would it read at <b>${c3} °C</b> (same V and n)?`,answer:ans,unit:'atm',sf:3,
-   traps:[{v:P1*c3/t1,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:P1*t1/(c3+KOFF),msg:'You flipped the ratio. P and T are <b>direct</b>: P₂ = P₁ × T₂ ÷ T₁.'}],
-   steps:[`T₂ = ${c3} + 273.15 = ${(c3+KOFF).toFixed(2)} K`,`P₂ = P₁ × T₂ ÷ T₁ = ${fmt(P1,3)} atm × ${(c3+KOFF).toFixed(2)} K ÷ ${t1} K = <b>${fmt(ans,3)} atm</b>`]};}
+  let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30||c3===0);
+  const {S,g:[p,a]}=labGivens([{x:L.before.P},{x:t1,fixed:1}]),c=labCelsius(c3,S),ans=p.v*(c3+KOFF)/a.v;
+  apply={kind:'numeric',prompt:`Lab data: <b>${p.t} atm</b> at <b>${a.t} K</b>. Use P₁/T₁ = P₂/T₂: what would it read at <b>${c.t} °C</b> (same V and n)?`,answer:ans,unit:'atm',sf:S,
+   traps:[{v:p.v*c3/a.v,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:p.v*a.v/(c3+KOFF),msg:'You flipped the ratio. P and T are <b>direct</b>: P₂ = P₁ × T₂ ÷ T₁.'}],
+   steps:[`T₂ = ${c.t} + 273.15 = ${c.K} K (adding: keep ${c.d} decimal place${c.d===1?'':'s'})`,`P₂ = P₁ × T₂ ÷ T₁ = ${p.t} atm × ${c.K} K ÷ ${a.t} K = <b>${fmt(ans,S)} atm</b> (${S} sig fig${S>1?'s':''}, the fewest in the data)`]};}
  else if(fam==='charles'){const [t1,t2]=pick([[300,600],[300,450],[450,300],[600,300],[400,600],[300,200]]);
   L=mk({gas:'N2',n:0.4,T:t1,V:15,free:true,Pext:1},{key:'T',target:t2,label:'Temperature',show:t2+' K ('+C_OF(t2)+' °C)'},'V');ratio=t2/t1;law='Charles’s law';video='temp';
   if(C_OF(t1)>0&&C_OF(t2)>0)cRatio=C_OF(t2)/C_OF(t1);
   predictAsk=`The piston is <b>free</b> (outside pressure 1.00 atm). You will ${t2>t1?'heat':'cool'} the gas from ${t1} K (${C_OF(t1)} °C) to ${t2} K (${C_OF(t2)} °C). Predict: what happens to the <b>volume</b>?`;
-  const V1=r3(L.before.V);let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30);const ans=V1*(c3+KOFF)/t1;
-  apply={kind:'numeric',prompt:`The volume was <b>${fmt(V1,3)} L</b> at <b>${t1} K</b>. Use V₁/T₁ = V₂/T₂: what would the volume be at <b>${c3} °C</b> (same P and n)?`,answer:ans,unit:'L',sf:3,
-   traps:[{v:V1*c3/t1,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:V1*t1/(c3+KOFF),msg:'You flipped the ratio. V and T are <b>direct</b>: V₂ = V₁ × T₂ ÷ T₁.'}],
-   steps:[`T₂ = ${c3} + 273.15 = ${(c3+KOFF).toFixed(2)} K`,`V₂ = V₁ × T₂ ÷ T₁ = ${fmt(V1,3)} L × ${(c3+KOFF).toFixed(2)} K ÷ ${t1} K = <b>${fmt(ans,3)} L</b>`]};}
+  let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30||c3===0);
+  const {S,g:[p,a]}=labGivens([{x:L.before.V},{x:t1,fixed:1}]),c=labCelsius(c3,S),ans=p.v*(c3+KOFF)/a.v;
+  apply={kind:'numeric',prompt:`Lab data: <b>${p.t} L</b> at <b>${a.t} K</b>. Use V₁/T₁ = V₂/T₂: what would the volume be at <b>${c.t} °C</b> (same P and n)?`,answer:ans,unit:'L',sf:S,
+   traps:[{v:p.v*c3/a.v,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:p.v*a.v/(c3+KOFF),msg:'You flipped the ratio. V and T are <b>direct</b>: V₂ = V₁ × T₂ ÷ T₁.'}],
+   steps:[`T₂ = ${c.t} + 273.15 = ${c.K} K (adding: keep ${c.d} decimal place${c.d===1?'':'s'})`,`V₂ = V₁ × T₂ ÷ T₁ = ${p.t} L × ${c.K} K ÷ ${a.t} K = <b>${fmt(ans,S)} L</b> (${S} sig fig${S>1?'s':''}, the fewest in the data)`]};}
  else if(fam==='avog'||fam==='pn'){const free=fam==='avog',[n1,n2]=pick(free?[[0.4,0.8],[0.5,1],[0.6,0.3],[0.8,0.4],[0.3,0.9]]:[[0.5,1],[1,2],[1,0.5],[0.6,1.8],[2,1]]);
   L=mk({gas:'He',n:n1,T:300,V:10,free,Pext:1},{key:'n',target:n2,label:'Moles',show:n2.toFixed(2)+' mol'},free?'V':'P');ratio=n2/n1;law='Avogadro’s law';video='avog';
   predictAsk=free?`The piston is <b>free</b> (outside pressure 1.00 atm). You will ${n2>n1?'add':'let out'} gas: ${n1.toFixed(2)} mol → ${n2.toFixed(2)} mol. Predict: what happens to the <b>volume</b>?`:`The piston is <b>locked</b>. You will ${n2>n1?'pump in':'let out'} gas: ${n1.toFixed(2)} mol → ${n2.toFixed(2)} mol. Predict: what happens to the <b>pressure</b>?`;
-  const X1=r3(free?L.before.V:L.before.P),u=free?'L':'atm',sym=free?'V':'P';let n3;do{n3=rnd(0.20,2.00,2)}while(Math.abs(n3-n1)<.15||Math.abs(n3-n2)<.15);const ans=X1*n3/n1;
-  apply={kind:'numeric',prompt:`It was <b>${fmt(X1,3)} ${u}</b> with <b>${n1.toFixed(2)} mol</b>. Use ${sym}₁/n₁ = ${sym}₂/n₂: what would it be with <b>${n3.toFixed(2)} mol</b> (same T${free?' and P':' and V'})?`,answer:ans,unit:u,sf:3,
-   traps:[{v:X1*n1/n3,msg:`You flipped the ratio. ${sym} and n are <b>direct</b>: ${sym}₂ = ${sym}₁ × n₂ ÷ n₁.`}],
-   steps:[`${sym}₂ = ${sym}₁ × n₂ ÷ n₁ = ${fmt(X1,3)} ${u} × ${n3.toFixed(2)} mol ÷ ${n1.toFixed(2)} mol = <b>${fmt(ans,3)} ${u}</b>`]};
+  const u=free?'L':'atm',sym=free?'V':'P';let n3;do{n3=rnd(0.20,2.00,2)}while(Math.abs(n3-n1)<.15||Math.abs(n3-n2)<.15);
+  const {S,g:[p,a,b]}=labGivens([{x:free?L.before.V:L.before.P},{x:n1,fixed:1},{x:n3,fixed:1}]),ans=p.v*b.v/a.v;
+  apply={kind:'numeric',prompt:`Lab data: <b>${p.t} ${u}</b> with <b>${a.t} mol</b>. Use ${sym}₁/n₁ = ${sym}₂/n₂: what would it be with <b>${b.t} mol</b> (same T${free?' and P':' and V'})?`,answer:ans,unit:u,sf:S,
+   traps:[{v:p.v*a.v/b.v,msg:`You flipped the ratio. ${sym} and n are <b>direct</b>: ${sym}₂ = ${sym}₁ × n₂ ÷ n₁.`}],
+   steps:[`${sym}₂ = ${sym}₁ × n₂ ÷ n₁ = ${p.t} ${u} × ${b.t} mol ÷ ${a.t} mol = <b>${fmt(ans,S)} ${u}</b> (${S} sig fig${S>1?'s':''}, the fewest in the data)`]};
   if(!free)law='Pressure and moles';}
  else{fam='swap';L=mk({gas:'He',n:1,T:300,V:15,free:false,Pext:1},{key:'gas',target:'Xe',label:'Gas',show:'xenon (Xe)'},'P');ratio=1;law='Kinetic molecular theory';video='kmt';
   predictAsk='Same moles, same temperature, same volume. You will swap the helium for <b>xenon</b>, which is about 33× heavier. Predict: what happens to the <b>pressure</b>?';
@@ -1170,7 +1187,7 @@ function genLab(fam){const sp=labSpec(fam),L=sp.lab,s=L.start;
   prompt:'<b>Piston Lab.</b> The cylinder holds <b>'+s.n.toFixed(2)+' mol of '+LGAS[s.gas].name+'</b> at <b>'+s.T+' K</b>. '+(s.free?'The piston is <b>free</b>, so it slides until the inside pressure matches the outside (1.00 atm).':sp.lab.task.key==='V'?'The volume is <b>'+fmt(s.V,3)+' L</b>, and <b>you</b> move the piston.':'The piston is <b>🔒 locked</b> at '+fmt(s.V,3)+' L.')+'<span class="lab-locks">'+locks.map(k=>'<span>🔒 '+esc(lockTxt[k])+'</span>').join('')+'</span>',
   locks,
   solSteps:[{title:'Predict',explain:sp.predict.options.find(o=>o.key===sp.predict.answer).html+'.'},{title:'Why',explain:sp.explain.right},...(sp.apply.kind==='numeric'?sp.apply.steps.map((t,i)=>({title:'Apply '+(i+1),explain:t})):[{title:'Apply',explain:sp.apply.explain}])],
-  finalExplain:sp.apply.kind==='numeric'?'Answer: <b>'+fmt(sp.apply.answer,3)+' '+sp.apply.unit+'</b>':sp.apply.explain};}
+  finalExplain:sp.apply.kind==='numeric'?'Answer: <b>'+fmt(sp.apply.answer,sp.apply.sf)+' '+sp.apply.unit+'</b> ('+sp.apply.sf+' sig fig'+(sp.apply.sf>1?'s':'')+')':sp.apply.explain};}
 function labQExit(){const body=byId('labBody');if(!byId('labSection').contains(body)){byId('labSection').insertBefore(body,byId('labAway'));}byId('labAway').hidden=true;byId('labQ').hidden=true;byId('labQ').innerHTML='';LAB.lockKeys=null;LAB.onChange=null;if(!byId('labSection').open)labPlay(false);}
 function renderLabQ(){const q=S.q;if(!q||!q.lab){labQExit();return;}const box=byId('labQ'),sp=q.lab,st=q.stage;box.hidden=false;
  /* park the lab back in its home before rebuilding, or innerHTML would destroy it */
@@ -1199,7 +1216,7 @@ function labExplain(k){const q=S.q,sp=q.lab;if(k===sp.explain.answer){q.exMsg=''
  q.exTried=(q.exTried||[]).concat(k);q.exMiss=true;q.exMsg='<b>Not quite.</b> '+(sp.explain.why[k]||'Look at the before and after readings again.');renderLabQ();byId('labQ').querySelector('.lab-exfb')?.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 function labApply(q){const a=q.lab.apply;Object.assign(q,{kind:a.kind,answer:a.answer,unit:a.unit||'',sf:a.sf||null,traps:a.traps||[],options:a.options||null});
  if(a.kind==='choice')q.finalExplain=a.explain;renderLabQ();
- byId('sigTag').textContent=q.sf?q.sf+' significant figures (treat lab readings as 3 sig figs)':'choose an answer';byId('unit').innerHTML=a.kind==='choice'?'':unitHTML(q.unit);
+ byId('sigTag').textContent=q.sf?q.sf+' significant figure'+(q.sf>1?'s':'')+' (the fewest in the data)':'choose an answer';byId('unit').innerHTML=a.kind==='choice'?'':unitHTML(q.unit);
  byId('choiceBox').innerHTML=a.kind==='choice'?'<div class="choice-label">Choose one:</div>'+q.options.map((o,i)=>'<button type="button" class="choice" data-choice="'+esc(o.key)+'"><span class="opt-letter">'+'ABCDEFG'[i]+'</span><span class="opt-body">'+o.html+'</span></button>').join(''):'';
  renderGuide();(a.kind==='choice'?byId('choiceBox'):byId('answerRow')).scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});if(a.kind!=='choice')byId('answer').focus({preventScroll:true});}
 byId('labQ').onclick=e=>{const p=e.target.closest('[data-lp]');if(p)return labPredict(p.dataset.lp);const x=e.target.closest('[data-le]');if(x&&!x.disabled)return labExplain(x.dataset.le);};

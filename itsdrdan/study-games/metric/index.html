@@ -187,6 +187,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v1.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
@@ -320,7 +321,12 @@ const answerText = (coef, e) => `${coef}E${e}`;
 /* ---------- reading what a student typed ---------- */
 const SUPS = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
 // Accepts 0.0045, 4.5E-6, 4.5e-6, 4.5×10^-6, 4.5*10^-6, 4.5 x 10^(-6), 4.5×10⁻⁶, 10^-3, 1e-3, .001, 4,500 and a unit at the end.
+/* Shared number reading: games/brand/chemparse.v1.js (loaded in <head>). If it did not load, say so instead of marking answers wrong. */
+const CP=window.ChemParse||null;if(!CP)document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:sticky;top:0;z-index:999;background:#fff3cd;border-bottom:2px solid #e0a800;padding:12px 16px;font-weight:700;text-align:center';b.textContent='Part of this game did not load, so answers cannot be checked. Please reload the page.';document.body.prepend(b);});
+/* a decimal comma ("2,5", "0,493") is not a number here; a typed unit after it ("2,5 mg") is ignored for this check, so "1,000 mL" still reads as 1000 */
+const metricComma = raw => CP.decimalComma(String(raw).trim().replace(/\s*[a-zµμ°]+[23²³]?$/i, ''));
 function parseNum(raw) {
+  if (metricComma(raw)) return null;
   // a superscript power right after a leading 10 ("10³") is 10^3, not 103
   let s = String(raw).trim().replace(/^10(?=[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺])/, '10^').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g, c => SUPS[c]).replace(/[−–—]/g, '-').replace(/\s+/g, '').replace(/,/g, '');
   s = s.replace(/[a-zµμ°]+[23²³]?$/i, m => (/^e[+-]?\d+$/i.test(m) ? m : ''));      // a typed unit at the end (mg, cm3, mcg)
@@ -408,7 +414,7 @@ const caseStep = p => ({
 // prefix numeric answer: slips exponent-sign, off-by-1000, mu-vs-m, symbol-case
 function checkPow(raw, p, viaSymbol) {
   const r = parseNum(raw);
-  if (!r) return { ok: false, slip: 'format', note: 'Type a power of ten, like 1E-3, 10^-3 or 0.001.' };
+  if (!r) return { ok: false, slip: 'format', note: metricComma(raw) ? 'Use a period for decimals: type <b>2.5</b>, not <b>2,5</b>.' : 'Type a power of ten, like 1E-3, 10^-3 or 0.001.' };
   const K = pow10Offset(r.v, Number('1e' + p.exponent), 1e-6);
   if (K === 0) return { ok: true };
   if (K === null) return { ok: false, slip: 'not-power', note: 'Every prefix is exactly 1 × a power of ten, like 10⁻³ (0.001).' };
@@ -552,7 +558,7 @@ function convQ(s) {
     steps, flags: { powered, health: !!s.health },
     check(raw) {
       const r = parseNum(raw);
-      if (!r) return { ok: false, slip: 'format', note: FORMAT_NOTE };
+      if (!r) return { ok: false, slip: 'format', note: metricComma(raw) ? 'Use a period for decimals: type <b>2.5</b>, not <b>2,5</b>.' : FORMAT_NOTE };
       const K = pow10Offset(r.v, value);
       if (K === 0) return { ok: true, sci: r.sci };
       if (K === null) return { ok: false, slip: 'digits-changed', note: `Prefixes only move the decimal point, so the digits stay <b>${s.coef.replace('.', '')}</b>. Check your arithmetic.` };

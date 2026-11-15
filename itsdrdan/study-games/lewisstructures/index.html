@@ -143,6 +143,12 @@ html body #practice{scroll-margin-top:8px}
  html body #practice .actions button{min-height:48px;font-size:.82rem;line-height:1.15;padding:6px 4px}
 }
 @media(max-width:899px) and (orientation:landscape){html body .hero p{display:none}}
+/* Touch targets: at least 44 px on phones (house rule, WCAG 2.2), 2026-11-14. Inline links inside sentences are exempt. */
+details>summary{min-height:44px;align-items:center;box-sizing:border-box}
+details:not(.directions)>summary{padding-top:9px;padding-bottom:9px}
+details.directions>summary{min-height:44px}
+li>a:only-child{display:inline-flex;align-items:center;min-height:44px}
+html body details.directions>summary{min-height:44px}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-<title>Functional Group Flashcards • Functional Groups • ItsDrDan</title>
-<meta name="description" content="Flashcards and quizzes for the 16 functional groups in CHEM 3B: alkanes to amides. Free study game by ItsDrDan.">
+<title>Functional Group Flashcards • ItsDrDan • CHEM 3B</title>
+<meta name="description" content="Flashcards, quizzes and real-molecule practice for the 17 functional groups in CHEM 3B: alkanes to amides, including phenols. Free study game by ItsDrDan.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='10' width='52' height='44' rx='10' fill='%23f1e3fa' stroke='%239555bd' stroke-width='4'/%3E%3Cpolygon points='32,20 43,26.5 43,39.5 32,46 21,39.5 21,26.5' fill='none' stroke='%239555bd' stroke-width='4'/%3E%3C/svg%3E">
 <style>
 :root{--ink:#3a3157;--muted:#6f6889;--soft:#6f6691;--line:#ece4f4;--bg:#fff8f1;--card:#fff;
@@ -47,7 +47,19 @@ details[open]>summary .sum-hint{background:#fff;color:var(--brand);border:1.5px 
 .ht-step b{font-size:15.5px}.ht-step span{font-size:14px;color:var(--muted)}
 
 /* modes */
-.mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0}
+.mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0}
+/* Spot It: tap an atom of the named group in a real molecule */
+.mol{width:100%;max-width:520px;max-height:340px;height:auto;display:block;margin:auto;touch-action:manipulation}
+.mol .el{font:900 24px Nunito,sans-serif;fill:var(--C)}.mol .sub{font-size:15px}
+.mol .O{fill:var(--O)}.mol .N{fill:var(--N)}.mol .S{fill:var(--S)}.mol .X{fill:var(--X)}
+.mol line{stroke:var(--C);stroke-width:3.2;stroke-linecap:round;fill:none}
+.mol .hit{fill:transparent;stroke:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mol .hit:focus{outline:none}.mol .hit:focus-visible{stroke:var(--brand);stroke-width:3;stroke-dasharray:5 4}
+.mol .glow{stroke:none;opacity:.32;pointer-events:none}.mol .glow.ok{fill:var(--good)}.mol .glow.no{fill:#f39c34}.mol .glow.ans{fill:var(--good);opacity:.22}
+.spotname{font:900 24px Nunito,sans-serif;text-align:center;margin:0}.spotuse{color:var(--muted);text-align:center;font-weight:700;margin:2px 0 0}
+.refs .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.refs .rcard{display:flex;gap:10px;align-items:center;background:#f6f1fb;border-radius:14px;padding:8px 10px}
+.refs .rcard .struct{width:96px;flex:none}.refs .rcard .struct .el{font-size:30px}.refs .rcard b{display:block}.refs .rcard span{font-size:14px;color:var(--muted);font-weight:700}
 .mode-btn{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:18px;background:linear-gradient(145deg,#fff,var(--mb));padding:12px 12px 12px;display:grid;grid-template-columns:44px 1fr;grid-template-areas:"i n" "i s";gap:2px 10px;align-items:center;transition:transform .12s;min-height:72px}
 .mode-btn:hover{transform:translateY(-2px)}
 .mode-btn.active{outline:3px solid var(--ma);outline-offset:2px}
@@ -137,7 +149,7 @@ details.journey>summary::-webkit-details-marker{display:none}
 .footer-note{color:var(--muted);font-size:13.5px;margin:12px 4px 0;line-height:1.5}
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--edge);color:#fff;padding:10px 18px;border-radius:999px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;z-index:50}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-@media(max-width:860px){.mode-grid{grid-template-columns:repeat(2,1fr)}.main{grid-template-columns:1fr}.answers.pics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){.mode-grid{grid-template-columns:repeat(2,1fr)}.mode-btn:last-child:nth-child(odd){grid-column:1/-1}.main{grid-template-columns:1fr}.answers.pics{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.hero{padding:14px 16px}.hero-logo{width:84px;height:84px}.answers{grid-template-columns:1fr}.answers.pics{grid-template-columns:repeat(2,1fr)}.mode-title{font-size:22px}.action{padding:10px 14px;font-size:16px}.stat{min-width:64px}}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
@@ -149,7 +161,7 @@ details.journey>summary::-webkit-details-marker{display:none}
 <body>
 <div class="toast" id="toast" role="status"></div>
 <div class="app">
-<section class="hero"><div><span class="badge"><span data-icon="book"></span> 16 functional groups • ItsDrDan • CHEM 3B</span>
+<section class="hero"><div><span class="badge"><span data-icon="book"></span> 17 functional groups • ItsDrDan • CHEM 3B</span>
 <h1><span class="a">Functional Group</span> <span class="b">Flashcards</span></h1>
 <p class="warmup"><span data-icon="stopwatch"></span> 5-minute warm-up for <a href="https://itsdrdan.github.io/functionalgroups/" target="_blank" rel="noopener noreferrer">Organic Origins</a></p>
 <p class="subtitle">Pick a mode below. Flip the cards first, then quiz yourself.</p></div>
@@ -159,7 +171,7 @@ details.journey>summary::-webkit-details-marker{display:none}
 <div class="howto">
 <div class="ht-step"><span class="ht-num">1</span><b>Start with Study</b><span>Tap a card to flip it.</span></div>
 <div class="ht-step"><span class="ht-num">2</span><b>Pick a quiz</b><span>Tap an answer, then <em>Check</em>.</span></div>
-<div class="ht-step"><span class="ht-num">3</span><b>Stuck?</b><span><em>Hint</em> helps. <em>Show Answer</em> explains (no XP).</span></div>
+<div class="ht-step"><span class="ht-num">3</span><b>Stuck?</b><span><em>Hint</em> helps. <em>Show Answer</em> explains it and counts as Assisted.</span></div>
 <div class="ht-step"><span class="ht-num">4</span><b>Fill the grid</b><span>Each group turns green after 3 correct in a row.</span></div>
 <div class="ht-step"><span class="ht-num">5</span><b>Before a skill check</b><span><em>Skill Check Prep</em>: 10 mixed questions, then a study plan.</span></div>
 </div></details>
@@ -169,13 +181,14 @@ details.journey>summary::-webkit-details-marker{display:none}
 <div class="main">
 <section class="card" id="practice">
   <div class="toprow"><h2 class="mode-title" id="modeTitle">Study</h2>
-    <div class="statbar"><span class="stat"><small>Correct</small><b id="sCorrect">0</b></span><span class="stat"><small>Streak <span data-icon="flame"></span></small><b id="sStreak">0</b></span><span class="stat"><small>Best</small><b id="sBest">0</b></span></div></div>
+    <div class="statbar"><span class="stat"><small>Correct</small><b id="sCorrect">0</b></span><span class="stat"><small>Streak <span data-icon="flame"></span></small><b id="sStreak">0</b></span><span class="stat"><small>Best</small><b id="sBest">0</b></span><span class="stat" title="Questions where you used Show Answer"><small>Assisted</small><b id="sAssisted">0</b></span></div></div>
   <div class="progress" id="progress"><i id="progressFill" style="width:0"></i></div>
   <div id="area"></div>
 </section>
 
-<section class="card mastery" id="mastery"><h2><span data-icon="target"></span> Your 16 groups</h2><p class="footer-note" style="margin-top:0">Grey = not yet · orange = started · yellow = getting there · green = mastered (3 in a row).</p><div class="mgrid" id="mgrid"></div></section>
+<section class="card mastery" id="mastery"><h2><span data-icon="target"></span> Your 17 groups</h2><p class="footer-note" style="margin-top:0">Grey = not yet · orange = started · yellow = getting there · green = mastered (3 in a row).</p><div class="mgrid" id="mgrid"></div></section>
 
+<details class="card journey refs" id="refs"><summary><span><span data-icon="book"></span> All 17 groups at a glance</span></summary><div class="rgrid" id="rgrid"></div></details>
 <details class="card journey" id="journey"><summary><span><span data-icon="compass"></span> Chemistry Journey</span> <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary>
   <div class="xp-row"><span id="xpLevel">Level 1</span><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><span id="xpText">0 / 100 XP</span></div>
   <p class="xp-note">10 XP for each answer you get on your own (+2 per streak step, up to +10), 2 XP when you peek at the answer. Saved in this browser only.</p>
@@ -188,17 +201,17 @@ details.journey>summary::-webkit-details-marker{display:none}
 </div>
 
 <script>
-/* ===================== the 16 groups ===================== */
+/* ===================== the 17 groups ===================== */
 /* draw: a tiny declarative structure language rendered to SVG below.
    atoms: [label, x, y, class]  bonds: [i, j, order]  (i/j index atoms; order 1,2,3) */
 const R = 'R', R2 = 'R′';
 const GROUPS = [
  {id:'alkane', name:'Alkane', family:'hydrocarbon', key:'Only C–C and C–H single bonds.', spot:'No double bonds, no O, N, S or halogen anywhere.',
   ex:[['CH₃CH₂CH₂CH₃','butane','lighter fuel'],['CH₄','methane','natural gas'],['CH₃CH₂CH₃','propane','camp stoves']], meet:'Propane, butane, and the long chains in petroleum jelly.',
-  draw:{atoms:[['',0,0.3],['',1,-0.3],['',2,0.3],['',3,-0.3]],bonds:[[0,1,1],[1,2,1],[2,3,1]],note:'every corner is a carbon'}},
+  draw:{atoms:[['',0,0.35355],['',1,-0.35355],['',2,0.35355],['',3,-0.35355]],bonds:[[0,1,1],[1,2,1],[2,3,1]],note:'every corner is a carbon'}},
  {id:'alkene', name:'Alkene', family:'hydrocarbon', key:'A C=C double bond.', spot:'Look for two lines between two carbons (no O, N or S).',
   ex:[['CH₂=CH₂','ethene (ethylene)','ripens fruit'],['CH₃CH=CH₂','propene','makes polypropylene']], meet:'Ethene ripens bananas; vegetable oils are “unsaturated” because of C=C.',
-  draw:{atoms:[['',0,0.3],['',1,-0.3],['',2,0.3],['',3,-0.3]],bonds:[[0,1,1],[1,2,2],[2,3,1]],note:'every corner is a carbon'}},
+  draw:{atoms:[['',0,0.28868],['',1,-0.28868],['',2,0.28868],['',3,-0.28868]],bonds:[[0,1,1],[1,2,2],[2,3,1]],note:'every corner is a carbon'}},
  {id:'alkyne', name:'Alkyne', family:'hydrocarbon', key:'A C≡C triple bond.', spot:'Three lines between two carbons; that part is straight (180°).',
   ex:[['HC≡CH','ethyne (acetylene)','welding torches'],['CH₃C≡CH','propyne','']], meet:'Acetylene torches burn hot enough to cut steel.',
   draw:{atoms:[[R,0,0,'R'],['C',1,0],['C',2,0],[R2,3,0,'R']],bonds:[[0,1,1],[1,2,3],[2,3,1]]}},
@@ -210,38 +223,45 @@ const GROUPS = [
   draw:{atoms:[[R,0,0,'R'],['X',1,0,'X']],bonds:[[0,1,1]],note:'X = F, Cl, Br or I'}},
  {id:'alcohol', name:'Alcohol', family:'oxygen', key:'An –OH on a carbon with only single bonds.', spot:'O–H attached to a carbon that is NOT a C=O.',
   ex:[['CH₃CH₂OH','ethanol','drinking alcohol, hand sanitizer'],['CH₃CH(OH)CH₃','2-propanol (isopropyl alcohol)','rubbing alcohol'],['CH₃OH','methanol','toxic: causes blindness']], meet:'Ethanol in sanitizer and drinks; isopropyl alcohol wipes before an injection.',
-  draw:{atoms:[[R,0,0.2,'R'],['O',1,-0.3,'O'],['H',2,0.2]],bonds:[[0,1,1],[1,2,1]]}},
+  draw:{atoms:[[R,0,0.35355,'R'],['O',1,-0.35355,'O'],['H',2,0.35355]],bonds:[[0,1,1],[1,2,1]]}},
+ {id:'phenol', name:'Phenol', family:'oxygen', key:'An –OH bonded directly to a benzene ring carbon.', spot:'O–H on a ring carbon of a benzene ring (not on a chain carbon).',
+  ex:[['C₆H₅OH','phenol','throat spray antiseptic'],['HOC₆H₄CH₃','4-methylphenol (p-cresol)','disinfectant']], meet:'Phenol was the first surgical antiseptic (1867) and is still in sore-throat sprays; tyrosine and estradiol contain phenol rings.',
+  draw:{benzene:true, oh:true}},
  {id:'ether', name:'Ether', family:'oxygen', key:'An oxygen between two carbons: C–O–C.', spot:'O with a carbon group on each side and no C=O.',
   ex:[['CH₃CH₂OCH₂CH₃','diethyl ether','the first surgical anesthetic (1846)'],['CH₃OCH₃','dimethyl ether','aerosol propellant']], meet:'Diethyl ether started modern anesthesia; MTBE was a gasoline additive.',
-  draw:{atoms:[[R,0,0.2,'R'],['O',1,-0.3,'O'],[R2,2,0.2,'R']],bonds:[[0,1,1],[1,2,1]]}},
+  draw:{atoms:[[R,0,0.35355,'R'],['O',1,-0.35355,'O'],[R2,2,0.35355,'R']],bonds:[[0,1,1],[1,2,1]]}},
  {id:'thiol', name:'Thiol', family:'sulfur', key:'An –SH on a carbon (the sulfur cousin of an alcohol).', spot:'S–H attached to carbon.',
   ex:[['CH₃CH₂SH','ethanethiol','added to natural gas so leaks smell'],['CH₃SH','methanethiol','bad breath, flatulence']], meet:'The “rotten egg” warning smell in natural gas; the amino acid cysteine.',
-  draw:{atoms:[[R,0,0.2,'R'],['S',1,-0.3,'S'],['H',2,0.2]],bonds:[[0,1,1],[1,2,1]]}},
+  draw:{atoms:[[R,0,0.35355,'R'],['S',1,-0.35355,'S'],['H',2,0.35355]],bonds:[[0,1,1],[1,2,1]]}},
  {id:'sulfide', name:'Sulfide (thioether)', short:'Sulfide', family:'sulfur', key:'A sulfur between two carbons: C–S–C.', spot:'S with a carbon group on each side.',
   ex:[['CH₃SCH₃','dimethyl sulfide','the smell of the sea'],['CH₃SCH₂CH₃','ethyl methyl sulfide','']], meet:'Dimethyl sulfide gives the ocean its smell; the amino acid methionine is a sulfide.',
-  draw:{atoms:[[R,0,0.2,'R'],['S',1,-0.3,'S'],[R2,2,0.2,'R']],bonds:[[0,1,1],[1,2,1]]}},
+  draw:{atoms:[[R,0,0.35355,'R'],['S',1,-0.35355,'S'],[R2,2,0.35355,'R']],bonds:[[0,1,1],[1,2,1]]}},
  {id:'disulfide', name:'Disulfide', family:'sulfur', key:'Two sulfurs bonded to each other: C–S–S–C.', spot:'S–S in the middle.',
   ex:[['CH₃SSCH₃','dimethyl disulfide','garlic and onion aroma'],['CH₃CH₂SSCH₂CH₃','diethyl disulfide','']], meet:'Disulfide bridges hold hair proteins in shape; a perm breaks and re-forms them.',
-  draw:{atoms:[[R,0,0.25,'R'],['S',1,-0.25,'S'],['S',2,0.25,'S'],[R2,3,-0.25,'R']],bonds:[[0,1,1],[1,2,1],[2,3,1]]}},
+  draw:{atoms:[[R,0,0.35355,'R'],['S',1,-0.35355,'S'],['S',2,0.35355,'S'],[R2,3,-0.35355,'R']],bonds:[[0,1,1],[1,2,1],[2,3,1]]}},
  {id:'aldehyde', name:'Aldehyde', family:'carbonyl', key:'A C=O at the END of a chain, with an H on it.', spot:'C=O with an H attached (–CHO).',
   ex:[['HCHO','methanal (formaldehyde)','preserves specimens'],['CH₃CHO','ethanal (acetaldehyde)','hangover culprit'],['C₆H₅CHO','benzaldehyde','almond flavor']], meet:'Formaldehyde preserves lab specimens; acetaldehyde is what makes hangovers hurt.',
-  draw:{atoms:[[R,0,0.55,'R'],['C',1,0],['O',1,-0.85,'O'],['H',2,0.55]],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
+  draw:{atoms:[[R,0,0.57735,'R'],['C',1,0],['O',1,-1,'O'],['H',2,0.57735]],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
  {id:'ketone', name:'Ketone', family:'carbonyl', key:'A C=O in the MIDDLE of a chain (carbon on both sides).', spot:'C=O with carbons on both sides and no O, N or H on that carbon.',
   ex:[['CH₃COCH₃','propanone (acetone)','nail polish remover, “ketone bodies”'],['CH₃COCH₂CH₃','butanone (MEK)','industrial solvent']], meet:'Acetone on a diabetic patient’s breath (ketoacidosis); nail polish remover.',
-  draw:{atoms:[[R,0,0.55,'R'],['C',1,0],['O',1,-0.85,'O'],[R2,2,0.55,'R']],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
+  draw:{atoms:[[R,0,0.57735,'R'],['C',1,0],['O',1,-1,'O'],[R2,2,0.57735,'R']],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
  {id:'acid', name:'Carboxylic acid', family:'carbonyl', key:'A C=O and an –OH on the SAME carbon: –COOH.', spot:'Look for C=O with O–H right next to it.',
   ex:[['CH₃COOH','ethanoic acid (acetic acid)','vinegar'],['HCOOH','methanoic acid (formic acid)','ant stings'],['CH₃CH₂COOH','propanoic acid','Swiss cheese flavor']], meet:'Vinegar, the sour bite of ant stings, and the acid end of every amino acid.',
-  draw:{atoms:[[R,0,0.55,'R'],['C',1,0],['O',1,-0.85,'O'],['O',2,0.55,'O'],['H',3,0]],bonds:[[0,1,1],[1,2,2],[1,3,1],[3,4,1]]}},
+  draw:{atoms:[[R,0,0.57735,'R'],['C',1,0],['O',1,-1,'O'],['O',2,0.57735,'O'],['H',2.8780,-0.1726]],bonds:[[0,1,1],[1,2,2],[1,3,1],[3,4,1]]}},
  {id:'ester', name:'Ester', family:'carbonyl', key:'A C=O next to an O that leads to another carbon: –COO–C.', spot:'C=O then O then another carbon group (no H on that O).',
   ex:[['CH₃COOCH₂CH₃','ethyl acetate','nail polish, pear smell'],['CH₃COOCH₂CH₂CH(CH₃)₂','isoamyl acetate','banana flavor']], meet:'Fruit flavors and perfumes; fats and oils are triesters; aspirin is an ester.',
-  draw:{atoms:[[R,0,0.55,'R'],['C',1,0],['O',1,-0.85,'O'],['O',2,0.55,'O'],[R2,3,0,'R']],bonds:[[0,1,1],[1,2,2],[1,3,1],[3,4,1]]}},
+  draw:{atoms:[[R,0,0.57735,'R'],['C',1,0],['O',1,-1,'O'],['O',2,0.57735,'O'],[R2,2.8780,-0.1726,'R']],bonds:[[0,1,1],[1,2,2],[1,3,1],[3,4,1]]}},
  {id:'amine', name:'Amine', family:'nitrogen', key:'A nitrogen with only single bonds to carbon (and H).', spot:'N attached to carbon, but NOT next to a C=O.',
   ex:[['CH₃NH₂','methylamine','fishy smell'],['(CH₃)₃N','trimethylamine','the smell of old fish'],['CH₃CH₂NH₂','ethylamine','']], meet:'Amphetamine, dopamine, epinephrine and most drug names ending in “-ine”.',
   draw:{atoms:[[R,0,0.2,'R'],['NH2',1,-0.3,'N']],bonds:[[0,1,1]],note:'also R–NH–R′ and R–N(R′)–R″'}},
  {id:'amide', name:'Amide', family:'carbonyl', key:'A C=O bonded directly to a nitrogen: –CON.', spot:'C=O with N right next to it.',
   ex:[['CH₃CONH₂','ethanamide (acetamide)',''],['HCONH₂','methanamide (formamide)',''],['CH₃CONHCH₃','N-methylethanamide','']], meet:'The peptide bond that links every amino acid in a protein; Tylenol and lidocaine are amides.',
-  draw:{atoms:[[R,0,0.55,'R'],['C',1,0],['O',1,-0.85,'O'],['NH2',2,0.55,'N']],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
+  draw:{atoms:[[R,0,0.57735,'R'],['C',1,0],['O',1,-1,'O'],['NH2',2,0.57735,'N']],bonds:[[0,1,1],[1,2,2],[1,3,1]]}},
 ];
+/* describing labels for screen readers: what the drawing shows, never the group name */
+const ALT = {"alkane":"zig-zag chain of carbons joined only by single bonds","alkene":"zig-zag chain of carbons with a C=C double bond in the middle","alkyne":"R–C≡C–R′, a straight C≡C triple bond","arene":"six-carbon ring with three alternating double bonds","phenol":"six-carbon ring with alternating double bonds and an –OH on one ring carbon","haloalkane":"R–X, where X = F, Cl, Br or I","alcohol":"R–O–H","ether":"R–O–R′","thiol":"R–S–H","sulfide":"R–S–R′","disulfide":"R–S–S–R′","aldehyde":"R–C(=O)–H","ketone":"R–C(=O)–R′","acid":"R–C(=O)–O–H","ester":"R–C(=O)–O–R′","amine":"R–NH₂","amide":"R–C(=O)–NH₂"};
+GROUPS.forEach(g => { g.alt = ALT[g.id]; });
+const N = GROUPS.length;
 const byId = Object.fromEntries(GROUPS.map(g => [g.id, g]));
 const label = g => g.short || g.name;
 
@@ -268,9 +288,9 @@ function bondLine(x1, y1, x2, y2, order, radius1, radius2) {
 /* generic structure -> svg. Grid unit 70px; zig-zag chains alternate up/down like a skeletal drawing. */
 function drawGroup(g, opts = {}) {
   const d = g.draw, U = 72;
-  const svg = svgEl('svg', {class: 'struct', viewBox: '0 0 320 180', role: 'img', 'aria-label': opts.hideName ? 'Structure' : g.name + ' structure'});
+  const svg = svgEl('svg', {class: 'struct', viewBox: '0 0 320 180', role: 'img', 'aria-label': (opts.hideName ? 'Structure: ' : g.name + ' structure: ') + g.alt});
   if (d.benzene) {
-    const cx = 160, cy = 92, r = 56, pts = [];
+    const cx = 160, cy = d.oh ? 112 : 92, r = d.oh ? 50 : 56, pts = [];
     for (let i = 0; i < 6; i++) { const a = (Math.PI / 180) * (60 * i - 90); pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
     svg.append(svgEl('polygon', {points: pts.map(p => p.join(',')).join(' ')}));
     for (let i = 0; i < 6; i += 2) { // inner double-bond lines
@@ -278,6 +298,7 @@ function drawGroup(g, opts = {}) {
       const ix = cx + (mx - cx) * .72, iy = cy + (my - cy) * .72, dx = x2 - x1, dy = y2 - y1;
       svg.append(svgEl('line', {x1: ix - dx * .32, y1: iy - dy * .32, x2: ix + dx * .32, y2: iy + dy * .32}));
     }
+    if (d.oh) { const [tx, ty] = pts[0]; svg.append(svgEl('line', {x1: tx, y1: ty, x2: tx, y2: ty - 32})); const t = atomText(tx - 9, ty - 50, 'OH', 'O'); t.setAttribute('text-anchor', 'start'); svg.append(t); }
     return svg;
   }
   const pos = d.atoms.map(([t, gx, gy]) => [gx * U, gy * U]);
@@ -338,13 +359,13 @@ const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('o
 
 const BADGES = [
   {id: 'first', ic: 'sparkle', name: 'First Flip', desc: 'Flip your first card'},
-  {id: 'deck', ic: 'book', name: 'Whole Deck', desc: 'Study all 16 cards'},
+  {id: 'deck', ic: 'book', name: 'Whole Deck', desc: `Study all ${N} cards`},
   {id: 'ten', ic: 'check', name: 'Ten Right', desc: '10 correct answers'},
   {id: 'streak5', ic: 'flame', name: 'On Fire', desc: '5 in a row'},
-  {id: 'streak16', ic: 'trophy', name: 'Perfect 16', desc: '16 in a row'},
+  {id: 'streak16', ic: 'trophy', name: `Perfect ${N}`, desc: `${N} in a row`},
   {id: 'carbonyl', ic: 'atom', name: 'Carbonyl Crew', desc: 'Master all 5 C=O groups'},
   {id: 'sulfur', ic: 'gem', name: 'Sulfur Squad', desc: 'Master thiol, sulfide, disulfide'},
-  {id: 'all', ic: 'target', name: 'All 16', desc: 'Master every group'},
+  {id: 'all', ic: 'target', name: `All ${N}`, desc: 'Master every group'},
   {id: 'skill', ic: 'clipboard', name: 'Skill Check Ready', desc: 'Score 8+ on Skill Check Prep'},
 ];
 function award(id) { if (P.badges[id]) return; P.badges[id] = 1; save(); const b = BADGES.find(x => x.id === id); toast(`Badge: ${b.name}`); renderJourney(); }
@@ -363,7 +384,7 @@ function renderMastery() {
   const mastered = GROUPS.filter(x => mlevel(x.id) === 3).map(x => x.id);
   if (['aldehyde', 'ketone', 'acid', 'ester', 'amide'].every(x => mastered.includes(x))) award('carbonyl');
   if (['thiol', 'sulfide', 'disulfide'].every(x => mastered.includes(x))) award('sulfur');
-  if (mastered.length === 16) award('all');
+  if (mastered.length === N) award('all');
 }
 function record(id, ok) { const m = P.mastery[id] = P.mastery[id] || {run: 0, seen: 0, right: 0}; m.seen++; if (ok) { m.run++; m.right++; } else m.run = 0; save(); renderMastery(); }
 /* one stat per question, on the first answer only */
@@ -384,49 +405,193 @@ const findSlip = (picked, right) => SLIPS.find(x => x.pair.includes(picked) && x
 
 /* ===================== modes ===================== */
 const MODES = [
-  {id: 'study', ic: 'book', name: 'Study', sub: 'Flip through the 16 cards'},
+  {id: 'study', ic: 'book', name: 'Study', sub: `Flip through the ${N} cards`},
   {id: 'p2n', ic: 'eye', name: 'Picture → Name', sub: 'See a structure, pick its name'},
   {id: 'n2p', ic: 'pencil', name: 'Name → Picture', sub: 'See a name, pick the structure'},
   {id: 'real', ic: 'flask', name: 'Real Molecules', sub: 'Formula of a real compound'},
+  {id: 'spot', ic: 'target', name: 'Spot It', sub: 'Tap the group in a real molecule'},
   {id: 'mixed', ic: 'dice', name: 'Mixed', sub: 'All three quiz styles'},
   {id: 'skill', ic: 'clipboard', name: 'Skill Check Prep', sub: '10 mixed questions, then a study plan'},
 ];
 function renderModes() {
   $('modeGrid').innerHTML = MODES.map(m => `<button type="button" class="mode-btn" data-mode="${m.id}"><span class="mode-icon">${ico(m.ic)}</span><span class="mode-name">${m.name}</span><small>${m.sub}</small></button>`).join('');
 }
+/* ?groups=alcohol,phenol,… limits Spot It to the families a textbook section has taught so far (2026-11-14) */
+function spotPool() { let only = []; try { only = (new URLSearchParams(location.search).get('groups') || '').split(',').filter(g => byId[g]); } catch {} const pool = only.length ? SPOT_TASKS.filter(t => only.includes(t.g)) : SPOT_TASKS; return pool.length ? pool : SPOT_TASKS; }
 /* deck (optional): a list of group ids to quiz, e.g. the groups missed on a Skill Check Prep */
 function setMode(id, deck, scroll = true) {
   S.mode = id; document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === id));
   $('modeTitle').textContent = deck ? 'Practice my missed groups' : MODES.find(m => m.id === id).name;
-  S.deck = deck ? shuffle(deck) : id === 'skill' ? shuffle(GROUPS.map(g => g.id)).slice(0, 10) : shuffle(GROUPS.map(g => g.id));
+  S.deck = id === 'spot' ? shuffle(spotPool()).slice(0, 10) : deck ? shuffle(deck) : id === 'skill' ? shuffle(GROUPS.map(g => g.id)).slice(0, 10) : shuffle(GROUPS.map(g => g.id));
   S.i = 0; S.correct = 0; S.streak = 0; S.results = []; updateStats();
-  if (id === 'study') renderStudy(); else nextQuestion();
+  if (id === 'study') renderStudy(); else if (id === 'spot') nextSpot(); else nextQuestion();
   if (scroll) $('practice').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
-function updateStats() { $('sCorrect').textContent = S.correct; $('sStreak').textContent = S.streak; $('sBest').textContent = P.best; $('progressFill').style.width = (S.mode === 'study' ? (S.flipIdx + 1) / 16 : S.i / S.deck.length) * 100 + '%'; }
+function updateStats() { $('sAssisted').textContent = P.assisted || 0; $('sCorrect').textContent = S.correct; $('sStreak').textContent = S.streak; $('sBest').textContent = P.best; $('progressFill').style.width = (S.mode === 'study' ? (S.flipIdx + 1) / N : S.i / S.deck.length) * 100 + '%'; }
 
 /* ----- Study: flip cards ----- */
 function renderStudy() {
-  const area = $('area'); S.flipIdx = Math.min(S.flipIdx, 15);
+  const area = $('area'); S.flipIdx = Math.min(S.flipIdx, N - 1);
   const g = GROUPS[S.order[S.flipIdx]];
-  area.innerHTML = `<p class="kicker">Tap the card to flip it. Card ${S.flipIdx + 1} of 16${S.shuffled ? ' · shuffled' : ''}.</p>
+  area.innerHTML = `<p class="kicker">Tap the card to flip it. Card ${S.flipIdx + 1} of ${N}${S.shuffled ? ' · shuffled' : ''}.</p>
   <div class="flash" id="flash" tabindex="0" role="button" aria-label="Flashcard: tap to flip"><div class="inner">
     <div class="face front"><div id="frontStruct"></div><span class="tap">tap to flip ↻</span></div>
     <div class="face back"><h3>${esc(g.name)}</h3><p class="key">${esc(g.key)}</p><p class="ex"><b>Spot it:</b> ${esc(g.spot)}</p><p class="ex"><b>Example:</b> ${g.ex[0][0]} — ${esc(g.ex[0][1])}${g.ex[0][2] ? ' (' + esc(g.ex[0][2]) + ')' : ''}</p><p class="ex"><b>Where you’ll meet it:</b> ${esc(g.meet)}</p></div>
   </div></div>
-  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / 16</span><button class="action primary" id="nextCard" type="button">Next ›</button><button class="action" id="shuffleBtn" type="button" title="${S.shuffled ? 'Back to textbook order' : 'Shuffle the deck'}">${S.shuffled ? ico('levels') + ' In order' : ico('loop') + ' Shuffle'}</button></div>`;
-  $('frontStruct').append(drawGroup(g));
+  <div class="flashnav"><button class="action" id="prevCard" type="button">‹ Back</button><span class="cnt">${S.flipIdx + 1} / ${N}</span><button class="action primary" id="nextCard" type="button">Next ›</button><button class="action" id="shuffleBtn" type="button" title="${S.shuffled ? 'Back to textbook order' : 'Shuffle the deck'}">${S.shuffled ? ico('levels') + ' In order' : ico('loop') + ' Shuffle'}</button></div>`;
+  $('frontStruct').append(drawGroup(g, {hideName: true}));
   const flash = $('flash');
-  const flip = () => { flash.classList.toggle('flipped'); if (flash.classList.contains('flipped')) { P.studied[g.id] = 1; save(); award('first'); if (Object.keys(P.studied).length === 16) award('deck'); } };
+  const flip = () => { flash.classList.toggle('flipped'); if (flash.classList.contains('flipped')) { P.studied[g.id] = 1; save(); award('first'); if (GROUPS.every(x => P.studied[x.id])) award('deck'); } };
   flash.addEventListener('click', flip); flash.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } });
-  $('prevCard').onclick = () => { S.flipIdx = (S.flipIdx + 15) % 16; renderStudy(); };
-  $('nextCard').onclick = () => { S.flipIdx = (S.flipIdx + 1) % 16; renderStudy(); };
+  $('prevCard').onclick = () => { S.flipIdx = (S.flipIdx + N - 1) % N; renderStudy(); };
+  $('nextCard').onclick = () => { S.flipIdx = (S.flipIdx + 1) % N; renderStudy(); };
   $('shuffleBtn').onclick = () => { S.shuffled = !S.shuffled; S.order = S.shuffled ? shuffle(GROUPS.map((_, i) => i)) : GROUPS.map((_, i) => i); S.flipIdx = 0; renderStudy(); toast(S.shuffled ? 'Deck shuffled' : 'Back in order'); };
   updateStats();
 }
 
+
+/* ===================== Spot It: real molecules ===================== */
+/* Atoms [label, x, y, colour class]; '' = a skeletal carbon (a corner or line end). y grows downward. Bond length 1, 120° angles
+   (ring molecules are drawn on a hexagonal grid). groups: group id -> list of atom sets, one set per copy of that group.
+   Checked by tools/check-organic.js (bond lengths, overlaps, groups exist, every target is tappable). */
+const RA = 0.8660254;
+const RING = [['', 0, -1], ['', RA, -0.5], ['', RA, 0.5], ['', 0, 1], ['', -RA, 0.5], ['', -RA, -0.5]];
+const RINGB = [[0, 1, 2], [1, 2, 1], [2, 3, 2], [3, 4, 1], [4, 5, 2], [5, 0, 1]];
+const ring = (...rest) => RING.concat(rest);
+const SPOT_MOLS = [
+  {id: 'aspirin', name: 'Aspirin', use: 'pain reliever', ring: true,
+   atoms: ring(['', 0, -2], ['O', -RA, -2.5, 'O'], ['OH', RA, -2.5, 'O'], ['O', 2 * RA, -1, 'O'], ['', 3 * RA, -0.5], ['O', 3 * RA, 0.5, 'O'], ['', 4 * RA, -1]),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 2], [6, 8, 1], [1, 9, 1], [9, 10, 1], [10, 11, 2], [10, 12, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], acid: [[6, 7, 8]], ester: [[9, 10, 11]]}},
+  {id: 'acetaminophen', name: 'Acetaminophen (Tylenol)', use: 'pain and fever reliever', ring: true,
+   atoms: ring(['N', 0, -2, 'N'], ['', RA, -2.5], ['O', RA, -3.5, 'O'], ['', 2 * RA, -2], ['OH', 0, 2, 'O'], ['H', -RA, -2.5]),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 1], [7, 8, 2], [7, 9, 1], [3, 10, 1], [6, 11, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], amide: [[6, 7, 8, 11]], phenol: [[10, 3]]}},
+  {id: 'dopamine', name: 'Dopamine', use: 'a brain messenger (neurotransmitter)', ring: true,
+   atoms: ring(['', 0, -2], ['', RA, -2.5], ['NH2', 2 * RA, -2, 'N'], ['OH', 0, 2, 'O'], ['HO', -2 * RA, 1, 'O']),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 1], [7, 8, 1], [3, 9, 1], [4, 10, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], amine: [[8]], phenol: [[9, 3], [10, 4]]}},
+  {id: 'vanillin', name: 'Vanillin', use: 'the flavor of vanilla', ring: true,
+   atoms: ring(['', 0, -2], ['O', RA, -2.5, 'O'], ['H', -RA, -2.5], ['OH', 0, 2, 'O'], ['O', -2 * RA, 1, 'O'], ['', -3 * RA, 0.5]),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 2], [6, 8, 1], [3, 9, 1], [4, 10, 1], [10, 11, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], aldehyde: [[6, 7, 8]], phenol: [[9, 3]], ether: [[10]]}},
+  {id: 'ibuprofen', name: 'Ibuprofen (Advil)', use: 'pain reliever and anti-inflammatory', ring: true,
+   atoms: ring(['', 0, -2], ['', -RA, -2.5], ['', RA, -2.5], ['O', RA, -3.5, 'O'], ['OH', 2 * RA, -2, 'O'], ['', 0, 2], ['', RA, 2.5], ['', 2 * RA, 2], ['', RA, 3.5]),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 1], [6, 8, 1], [8, 9, 2], [8, 10, 1], [3, 11, 1], [11, 12, 1], [12, 13, 1], [12, 14, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], acid: [[8, 9, 10]]}},
+  {id: 'benzocaine', name: 'Benzocaine', use: 'numbing gel for sore gums', ring: true,
+   atoms: ring(['', 0, -2], ['O', -RA, -2.5, 'O'], ['O', RA, -2.5, 'O'], ['', 2 * RA, -2], ['', 3 * RA, -2.5], ['NH2', 0, 2, 'N']),
+   bonds: RINGB.concat([[0, 6, 1], [6, 7, 2], [6, 8, 1], [8, 9, 1], [9, 10, 1], [3, 11, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], ester: [[6, 7, 8]], amine: [[11]]}},
+  {id: 'raspberry', name: 'Raspberry ketone', use: 'the smell of raspberries', ring: true,
+   atoms: ring(['', 2 * RA, -1], ['', 3 * RA, -0.5], ['', 4 * RA, -1], ['O', 4 * RA, -2, 'O'], ['', 5 * RA, -0.5], ['HO', -2 * RA, 1, 'O']),
+   bonds: RINGB.concat([[1, 6, 1], [6, 7, 1], [7, 8, 1], [8, 9, 2], [8, 10, 1], [4, 11, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], ketone: [[8, 9]], phenol: [[11, 4]]}},
+  {id: 'cinnamaldehyde', name: 'Cinnamaldehyde', use: 'the flavor of cinnamon', ring: true,
+   atoms: ring(['', 2 * RA, -1], ['', 3 * RA, -0.5], ['', 4 * RA, -1], ['O', 5 * RA, -0.5, 'O'], ['H', 4 * RA, -2]),
+   bonds: RINGB.concat([[1, 6, 1], [6, 7, 2], [7, 8, 1], [8, 9, 2], [8, 10, 1]]),
+   groups: {arene: [[0, 1, 2, 3, 4, 5]], alkene: [[6, 7]], aldehyde: [[8, 9, 10]]}},
+  {id: 'cysteine', name: 'Cysteine', use: 'an amino acid',
+   atoms: [['HS', 0, 0, 'S'], ['', RA, 0.5], ['', 2 * RA, 0], ['NH2', 2 * RA, -1, 'N'], ['', 3 * RA, 0.5], ['O', 3 * RA, 1.5, 'O'], ['OH', 4 * RA, 0, 'O']],
+   bonds: [[0, 1, 1], [1, 2, 1], [2, 3, 1], [2, 4, 1], [4, 5, 2], [4, 6, 1]],
+   groups: {thiol: [[0]], amine: [[3]], acid: [[4, 5, 6]]}},
+  {id: 'lactic', name: 'Lactic acid', use: 'made by working muscles; in yogurt',
+   atoms: [['', 0, 0], ['', RA, -0.5], ['OH', RA, -1.5, 'O'], ['', 2 * RA, 0], ['O', 2 * RA, 1, 'O'], ['OH', 3 * RA, -0.5, 'O']],
+   bonds: [[0, 1, 1], [1, 2, 1], [1, 3, 1], [3, 4, 2], [3, 5, 1]],
+   groups: {alcohol: [[2]], acid: [[3, 4, 5]]}},
+  {id: 'garlic', name: 'Diallyl disulfide', use: 'the smell of garlic',
+   atoms: [0, 1, 2, 3, 4, 5, 6, 7].map(i => [i === 3 || i === 4 ? 'S' : '', i * RA, i % 2 ? -0.5 : 0, i === 3 || i === 4 ? 'S' : undefined]),
+   bonds: [[0, 1, 2], [1, 2, 1], [2, 3, 1], [3, 4, 1], [4, 5, 1], [5, 6, 1], [6, 7, 2]],
+   groups: {alkene: [[0, 1], [6, 7]], disulfide: [[3, 4]]}},
+  {id: 'allylsulfide', name: 'Allyl methyl sulfide', use: 'the cause of garlic breath',
+   atoms: [0, 1, 2, 3, 4].map(i => [i === 3 ? 'S' : '', i * RA, i % 2 ? -0.5 : 0, i === 3 ? 'S' : undefined]),
+   bonds: [[0, 1, 2], [1, 2, 1], [2, 3, 1], [3, 4, 1]],
+   groups: {alkene: [[0, 1]], sulfide: [[3]]}},
+];
+const SPOT_TASKS = SPOT_MOLS.flatMap(m => Object.keys(m.groups).map(gid => ({m: m.id, g: gid})));
+const molById = Object.fromEntries(SPOT_MOLS.map(m => [m.id, m]));
+const ELN = {C: 'carbon', O: 'oxygen', N: 'nitrogen', S: 'sulfur', H: 'hydrogen'};
+const atomEl = t => t === '' ? 'C' : t.replace(/^H(?=[A-Z])/, '')[0];
+/* describing label for an atom: its element, attached H, and what it is bonded to (never the group name) */
+function atomAlt(m, i) {
+  const t = m.atoms[i][0], el = atomEl(t), hs = (t.match(/H(\d?)/) && el !== 'H') ? (t.match(/H(\d?)/)[1] || '1') : '';
+  const nb = m.bonds.filter(b => b[0] === i || b[1] === i).map(b => { const j = b[0] === i ? b[1] : b[0]; return (b[2] === 2 ? 'double bond to ' : b[2] === 3 ? 'triple bond to ' : '') + ELN[atomEl(m.atoms[j][0])]; });
+  return `${ELN[el]}${hs ? ' with ' + (hs === '1' ? 'an H' : hs + ' H') : ''}${m.ring && i < 6 ? ', in the ring' : ''}, bonded to ${nb.join(', ')}`;
+}
+function drawMol(m, onTap) {
+  const U = 60, pad = 30, P = m.atoms.map(a => [a[1] * U, a[2] * U]);
+  const xs = P.map(p => p[0]), ys = P.map(p => p[1]), x0 = Math.min(...xs) - pad - 8, y0 = Math.min(...ys) - pad, w = Math.max(...xs) - Math.min(...xs) + 2 * pad + 16, h = Math.max(...ys) - Math.min(...ys) + 2 * pad;
+  const svg = svgEl('svg', {class: 'mol', viewBox: `${x0} ${y0} ${w} ${h}`, role: 'group', 'aria-label': 'Structure of ' + m.name + '. Each atom is a button.'});
+  const glow = svgEl('g', {}), lines = svgEl('g', {}), labels = svgEl('g', {}), hits = svgEl('g', {});
+  svg.append(glow, lines, labels, hits);
+  const rad = t => t === '' ? 0 : 14, cx = m.ring ? 0 : null;
+  for (const [i, j, o] of m.bonds) {
+    const [x1, y1] = P[i], [x2, y2] = P[j];
+    if (m.ring && i < 6 && j < 6 && o === 2) { /* aromatic C=C: outer line + shorter inner line toward the ring centre */
+      lines.append(bondLine(x1, y1, x2, y2, 1, 0, 0));
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, k = 0.78, dx = (x2 - x1) * 0.34, dy = (y2 - y1) * 0.34;
+      lines.append(svgEl('line', {x1: mx * k - dx, y1: my * k - dy, x2: mx * k + dx, y2: my * k + dy}));
+    } else lines.append(bondLine(x1, y1, x2, y2, o, rad(m.atoms[i][0]), rad(m.atoms[j][0])));
+  }
+  m.atoms.forEach(([t, , , cls], i) => {
+    if (!t) return; const el = atomText(P[i][0], P[i][1], t, cls);
+    if (t.length > 1 && /^H[A-Z]/.test(t)) { el.setAttribute('text-anchor', 'end'); el.setAttribute('x', P[i][0] + 10); }
+    else if (t.length > 1) { el.setAttribute('text-anchor', 'start'); el.setAttribute('x', P[i][0] - 9.5); }
+    labels.append(el);
+  });
+  m.atoms.forEach((a, i) => {
+    const c = svgEl('circle', {class: 'hit', cx: P[i][0], cy: P[i][1], r: U * 0.48, role: 'button', tabindex: '0', 'aria-label': 'Atom ' + (i + 1) + ': ' + atomAlt(m, i), 'data-i': i});
+    c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(i); } });
+    hits.append(c);
+  });
+  /* a tap anywhere on the drawing goes to the nearest atom (atoms sit about 40 px apart on a phone, so this gives every atom the biggest target it can have) */
+  svg.addEventListener('click', e => { const ctm = svg.getScreenCTM(); if (!ctm) return; const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+    let best = -1, bd = Infinity; P.forEach((p, i) => { const d = Math.hypot(p[0] - pt.x, p[1] - pt.y); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0 && bd < U * 0.8) onTap(best); });
+  svg.mark = (idx, cls) => idx.forEach(i => glow.append(svgEl('circle', {class: 'glow ' + cls, cx: P[i][0], cy: P[i][1], r: U * 0.42})));
+  svg.clear = () => glow.replaceChildren();
+  return svg;
+}
+function nextSpot() {
+  if (S.i >= S.deck.length) return renderDone();
+  const task = S.deck[S.i], m = molById[task.m], g = byId[task.g];
+  const q = S.q = {g, m, kind: 'spot'};
+  S.answered = false; S.tries = 0; S.hinted = false; S.picked = null; S.logged = false;
+  const area = $('area');
+  area.innerHTML = `<p class="kicker">Tap any atom of the <b style="color:var(--C)">${esc(g.name.toLowerCase())}</b> group. <span style="color:var(--soft)">(${S.i + 1} of ${S.deck.length})</span></p>
+  <p class="spotname">${esc(m.name)}</p><p class="spotuse">${esc(m.use)}</p><div class="prompt" id="prompt" style="min-height:0"></div>
+  <div class="btn-row"><button class="action" id="hintBtn" type="button">${ico('bulb')} Hint</button><button class="action" id="showBtn" type="button">Show Answer</button><button class="action primary next hidden" id="nextBtn" type="button">Next →</button></div>
+  <div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>`;
+  const svg = q.svg = drawMol(m, i => spotTap(i));
+  $('prompt').append(svg);
+  $('hintBtn').onclick = hint; $('showBtn').onclick = () => { q.svg.clear(); q.svg.mark(m.groups[g.id].flat(), 'ans'); finish(false, true); }; $('nextBtn').onclick = () => { S.i++; nextSpot(); };
+  updateStats();
+}
+function spotTap(i) {
+  if (S.answered) return; const q = S.q, m = q.m, g = q.g;
+  const set = m.groups[g.id].find(x => x.includes(i));
+  q.svg.clear();
+  if (set) { q.svg.mark(set, 'ok'); S.tries++; return finish(true, false); }
+  S.tries++;
+  const other = Object.keys(m.groups).filter(k => k !== g.id && m.groups[k].some(x => x.includes(i)));
+  const fb = $('feedback'); fb.className = 'feedback bad';
+  let slip = null;
+  if (other.length) {
+    const o = byId[other.includes('phenol') ? 'phenol' : other[0]]; q.svg.mark(m.groups[o.id].find(x => x.includes(i)), 'no'); slip = findSlip(o.id, g.id);
+    fb.innerHTML = `<b>Not yet.</b> That atom is part of the <b>${esc(o.name.toLowerCase())}</b> group: ${esc(o.key)}${slip ? `<br><span class="tip-label">${ico('bulb')} Professor Tip:</span> ${esc(slip.tip)}` : ''} Find the ${esc(g.name.toLowerCase())}${S.tries >= 2 ? ', or tap <b>Hint</b> or <b>Show Answer</b>' : ''}.`;
+  } else {
+    q.svg.mark([i], 'no');
+    fb.innerHTML = `<b>Not yet.</b> That ${ELN[atomEl(m.atoms[i][0])]} is part of the carbon skeleton, not a functional group. Find the ${esc(g.name.toLowerCase())}${S.tries >= 2 ? ', or tap <b>Hint</b> or <b>Show Answer</b>' : ''}.`;
+  }
+  if (S.tries === 1) { S.streak = 0; updateStats(); record(g.id, false); ddLog('Spot It', g.name, false, slip ? slip.id : 'other', S.hinted ? 'hint' : ''); S.results.push({id: g.id, kind: 'spot', ok: false, slip: slip && slip.id}); }
+}
+
 /* ----- quizzes ----- */
 function pickDistractors(g, n) {
+  if (g.id === 'phenol') return pickDistractorsBase(g, n + 1).filter(x => x.id !== 'arene').slice(0, n);
+  return pickDistractorsBase(g, n);
+}
+function pickDistractorsBase(g, n) {
   // prefer the classic look-alike partner (SLIPS: ester/ether, amine/amide...), then the same family, then anything else
   const partners = (typeof SLIPS === 'undefined' ? [] : SLIPS).filter(x => x.pair.includes(g.id)).map(x => byId[x.pair.find(y => y !== g.id)]).filter(Boolean);
   const same = GROUPS.filter(x => x.id !== g.id && x.family === g.family && !partners.includes(x)), rest = GROUPS.filter(x => x.id !== g.id && x.family !== g.family && !partners.includes(x));
@@ -451,7 +616,7 @@ function nextQuestion() {
   const ans = $('answers');
   q.opts.forEach(o => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'opt' + (kind === 'n2p' ? ' pic' : ''); b.dataset.id = o.id; b.setAttribute('aria-pressed', 'false');
-    if (kind === 'n2p') { b.append(drawGroup(o, {hideName: true, noNote: true})); b.setAttribute('aria-label', 'Structure option'); } else b.textContent = o.name;
+    if (kind === 'n2p') { b.append(drawGroup(o, {hideName: true, noNote: true})); b.setAttribute('aria-label', 'Structure option: ' + o.alt); } else b.textContent = o.name;
     b.onclick = () => { if (S.answered) return; S.picked = o.id; ans.querySelectorAll('.opt').forEach(x => x.setAttribute('aria-pressed', String(x === b))); };
     ans.append(b);
   });
@@ -459,7 +624,7 @@ function nextQuestion() {
   updateStats();
 }
 function fmt(f) { return esc(f).replace(/[₀-₉]+/g, m => '<sub>' + [...m].map(c => '₀₁₂₃₄₅₆₇₈₉'.indexOf(c)).join('') + '</sub>'); }
-function hint() { if (S.answered) return; S.hinted = true; const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = `<span class="tip-label">${ico('bulb')} Professor Tip:</span> ` + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot); }
+function hint() { if (S.answered) return; S.hinted = true; const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = `<span class="tip-label">${ico('bulb')} Professor Tip:</span> ` + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot) + (q.kind === 'spot' ? ' ' + esc(q.g.key) : ''); }
 function check() {
   if (S.answered) return; if (!S.picked) { toast('Tap an answer first'); return; }
   S.tries++; const ok = S.picked === S.q.g.id;
@@ -469,22 +634,23 @@ function check() {
   const fb = $('feedback'); fb.className = 'feedback bad'; fb.innerHTML = `<b>Not yet.</b> That one is ${esc(byId[S.picked].name.toLowerCase())}: ${esc(byId[S.picked].key)}${slip ? `<br><span class="tip-label">${ico('bulb')} Professor Tip:</span> ${esc(slip.tip)}` : ''} Try again${S.tries >= 2 ? ', or tap <b>Show Answer</b>' : ''}.`;
   if (S.tries === 1) { S.streak = 0; updateStats(); record(S.q.g.id, false); ddLog(modeName(), S.q.g.name, false, slip ? slip.id : 'other', S.hinted ? 'hint' : ''); S.results.push({id: S.q.g.id, kind: S.q.kind, ok: false, slip: slip && slip.id}); }
 }
-function modeName() { if (S.mode === 'skill') return 'Skill Check Prep'; return S.q.kind === 'p2n' ? 'Picture to Name' : S.q.kind === 'n2p' ? 'Name to Picture' : 'Real Molecules'; }
+function modeName() { if (S.mode === 'skill') return 'Skill Check Prep'; if (S.q.kind === 'spot') return 'Spot It'; return S.q.kind === 'p2n' ? 'Picture to Name' : S.q.kind === 'n2p' ? 'Name to Picture' : 'Real Molecules'; }
 function finish(ok, revealed) {
   S.answered = true; const q = S.q, g = q.g;
   document.querySelectorAll('.opt').forEach(b => { b.disabled = true; if (b.dataset.id === g.id) b.classList.add('right'); });
-  $('checkBtn').classList.add('hidden'); $('hintBtn').classList.add('hidden'); $('showBtn').classList.add('hidden'); $('nextBtn').classList.remove('hidden'); $('nextBtn').focus({preventScroll: true});
+  if ($('checkBtn')) $('checkBtn').classList.add('hidden'); $('hintBtn').classList.add('hidden'); $('showBtn').classList.add('hidden'); $('nextBtn').classList.remove('hidden'); $('nextBtn').focus({preventScroll: true});
   const firstTry = ok && S.tries === 1 && !S.hinted;
   const fb = $('feedback');
-  const why = `<b>${esc(g.name)}:</b> ${esc(g.key)} ${q.kind === 'real' ? `${fmt(q.ex[0])} is <b>${esc(q.ex[1])}</b>${q.ex[2] ? ' (' + esc(q.ex[2]) + ')' : ''}.` : ''}<br><span style="color:var(--muted)">Where you’ll meet it: ${esc(g.meet)}</span>`;
+  if (q.kind === 'spot') { const k = q.m.groups[g.id].length; if (ok) { q.svg.clear(); q.svg.mark(q.m.groups[g.id].flat(), 'ok'); } $('hintBtn').classList.add('hidden'); q.spotNote = `${esc(q.m.name)} has ${k === 1 ? 'one' : k === 2 ? 'two' : k} ${esc(g.name.toLowerCase())} group${k > 1 ? 's' : ''}, highlighted in green. `; }
+  const why = (q.spotNote || '') + `<b>${esc(g.name)}:</b> ${esc(g.key)} ${q.kind === 'real' ? `${fmt(q.ex[0])} is <b>${esc(q.ex[1])}</b>${q.ex[2] ? ' (' + esc(q.ex[2]) + ')' : ''}.` : ''}<br><span style="color:var(--muted)">Where you’ll meet it: ${esc(g.meet)}</span>`;
   if (ok) { fb.className = 'feedback good'; fb.innerHTML = `<b>${ico('check')} Correct!</b> ` + why; }
   else { fb.className = 'feedback shown'; fb.innerHTML = why; }
   if (firstTry) {
     S.correct++; S.streak++; P.best = Math.max(P.best, S.streak); P.answered++;
     addXp(10 + Math.min(10, 2 * (S.streak - 1))); record(g.id, true); ddLog(modeName(), g.name, true); S.results.push({id: g.id, kind: q.kind, ok: true});
-    if (S.streak >= 5) award('streak5'); if (S.streak >= 16) award('streak16'); if (P.answered >= 10) award('ten');
+    if (S.streak >= 5) award('streak5'); if (S.streak >= N) award('streak16'); if (P.answered >= 10) award('ten');
   } else if (ok) { S.correct++; addXp(4); if (S.tries === 1) { ddLog(modeName(), g.name, true, '', 'hint'); S.results.push({id: g.id, kind: q.kind, ok: true, hinted: true}); } }
-  else { S.streak = 0; if (S.tries === 0) { record(g.id, false); ddLog(modeName(), g.name, false, '', 'revealed'); S.results.push({id: g.id, kind: q.kind, ok: false}); } addXp(2); }
+  else { P.assisted = (P.assisted || 0) + 1; if (S.tries === 0) { record(g.id, false); ddLog(modeName(), g.name, false, '', 'revealed'); S.results.push({id: g.id, kind: q.kind, ok: false}); } addXp(2); } /* assisted: streak kept */
   save(); updateStats();
 }
 function renderDone() {
@@ -498,7 +664,7 @@ function renderDone() {
 
 /* ----- Skill Check Prep: score + study plan ----- */
 const FAMILY = {hydrocarbon: 'Hydrocarbons (C and H only)', halogen: 'Halogen groups', oxygen: 'Oxygen groups without C=O', sulfur: 'Sulfur groups', carbonyl: 'Carbonyl (C=O) groups', nitrogen: 'Nitrogen groups'};
-const KIND = {p2n: 'Picture → Name', n2p: 'Name → Picture', real: 'Real Molecules'};
+const KIND = {p2n: 'Picture → Name', n2p: 'Name → Picture', real: 'Real Molecules', spot: 'Spot It'};
 function renderPlan() {
   const res = S.results, n = S.deck.length, score = res.filter(r => r.ok).length;
   P.bestSkill = Math.max(P.bestSkill || 0, score); save(); if (score >= 8) award('skill');
@@ -525,12 +691,21 @@ function renderPlan() {
 $('journeyReset').onclick = () => { if (!confirm('Reset XP, badges and mastery for this game?')) return; P.xp = 0; P.bestSkill = 0; P.badges = {}; P.mastery = {}; P.answered = 0; P.studied = {}; P.best = 0; save(); renderJourney(); renderMastery(); updateStats(); toast('Progress reset'); };
 
 P.bestSkill = P.bestSkill || 0;
+/* scroll this page (never the host page) to an element, once layout settles; stops if the student scrolls first */
+/* ?view=lab: compact view for a textbook box. Shows only the demo (and whatever it needs) plus a link to the full game,
+   so the box can stay short on a phone and the student can still scroll the textbook page around it (2026-11-14). */
+function ddLabView(keep){try{if(new URLSearchParams(location.search).get('view')!=='lab')return false;const ks=keep.map(k=>typeof k==='string'?document.getElementById(k):k).filter(Boolean);if(!ks.length)return false;const need=new Set();ks.forEach(k=>{for(let e=k;e&&e!==document.body;e=e.parentElement)need.add(e)});need.forEach(e=>{const p=e.parentElement;if(!p)return;[...p.children].forEach(c=>{if(need.has(c)||/^(SCRIPT|STYLE|DIALOG|CANVAS|TEMPLATE|LINK|NOSCRIPT)$/.test(c.tagName)||getComputedStyle(c).position==='fixed')return;c.setAttribute('data-dd-labhide','')})});const st=document.createElement('style');st.textContent='[data-dd-labhide]{display:none!important}.dd-labbar{display:flex;justify-content:flex-end;padding:4px 10px 0;font:600 14px/1.4 system-ui,-apple-system,sans-serif}.dd-labbar a{color:inherit;text-decoration:underline}';document.head.appendChild(st);document.documentElement.classList.add('dd-labview');const u=new URL(location.href);u.searchParams.delete('view');const bar=document.createElement('div');bar.className='dd-labbar';const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Open the full game ↗';bar.appendChild(a);document.body.insertBefore(bar,document.body.firstChild);window.scrollTo(0,0);return true}catch(e){return false}}
+function ddJumpTo(get){let moved=false;const stop=()=>{moved=true};['wheel','touchstart','keydown','pointerdown'].forEach(t=>addEventListener(t,stop,{once:true,passive:true}));const go=()=>{if(moved||document.documentElement.classList.contains('dd-labview'))return;const el=get();if(el)window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-8),behavior:'instant'})};requestAnimationFrame(()=>requestAnimationFrame(go));if(document.readyState!=='complete')addEventListener('load',()=>setTimeout(go,50),{once:true});setTimeout(go,700)}
 function init() {
   renderModes();
   $('modeGrid').addEventListener('click', e => { const b = e.target.closest('.mode-btn'); if (b) setMode(b.dataset.mode); });
+  $('rgrid').innerHTML = ''; GROUPS.forEach(g => { const c = document.createElement('div'); c.className = 'rcard'; c.append(drawGroup(g, {noNote: true, noPairs: true})); const t = document.createElement('div'); t.innerHTML = `<b>${esc(g.name)}</b><span>${esc(g.key)}</span>`; c.append(t); $('rgrid').append(c); });
   paintIcons(); renderJourney(); renderMastery();
-  setMode('study', null, false);
-  window.scrollTo(0, 0);
+  /* ?mode=spot (any mode id) opens that mode; scroll this page only, never the host page (2026-11-14) */
+  let m0 = 'study'; try { const m = new URLSearchParams(location.search).get('mode'); if (MODES.some(x => x.id === m)) m0 = m; } catch {}
+  setMode(m0, null, false);
+  if (m0 === 'study') window.scrollTo(0, 0); else ddJumpTo(() => $('practice'));
+  ddLabView(['practice']);
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>

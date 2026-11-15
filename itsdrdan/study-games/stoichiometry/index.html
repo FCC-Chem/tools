@@ -196,6 +196,7 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <style>/* sweep 2026-11-05: keep the top bar inside a 375px phone screen */@media(max-width:400px){.tb{gap:5px;padding:0 8px}.seg button{padding:6px 8px}.tb-streak{padding:5px 7px}.tb-btn{padding:6px 9px}.tb-brand img{width:34px;height:34px}}</style>
@@ -337,11 +338,14 @@ const byId=id=>document.getElementById(id),pick=a=>a[Math.floor(Math.random()*a.
 function mm(f){const a=formulas[f];if(!a)throw Error('No formula for '+f);const dp=Math.min(...Object.keys(a).map(e=>(masses[e].split('.')[1]||'').length));const value=Object.entries(a).reduce((s,[e,n])=>s+Number(masses[e])*n,0);return Number(value.toFixed(dp));}
 function mmText(f){const dp=Math.min(...Object.keys(formulas[f]).map(e=>(masses[e].split('.')[1]||'').length));return mm(f).toFixed(dp);}
 function normalizeScientific(raw){return String(raw).replace(/[−–]/g,'-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>({'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'})[c]);}
-function sfCount(s){let t=normalizeScientific(s).trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×xX*]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(/^0*\.?0*$/.test(t))return Math.max(1,(t.split('.')[1]||'').length);if(t.includes('.'))return t.replace('.','').replace(/^0+/,'').length;return t.replace(/0+$/,'').length;}
-function fmt(x,s=3){if(x===0)return '0';const rounded=Number(x.toPrecision(s)),exp=Math.floor(Math.log10(Math.abs(rounded)));const fixed=rounded.toFixed(Math.max(0,s-1-exp));if(exp===s-1&&exp>=1&&exp<=4&&!fixed.includes('.')&&fixed.endsWith('0'))return fixed+'.'; /* 380 to 3 sig figs shows as "380." instead of 3.80 × 10² */if(exp>=5||exp<=-3||exp>=s||(!fixed.includes('.')&&fixed.endsWith('0'))){const e=rounded.toExponential(s-1);const [mantissa,power]=e.split('e');return mantissa+' × 10'+String(Number(power)).replace(/[0-9-]/g,c=>({'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'})[c]);}return fixed;}
+/* Shared number reading: games/brand/chemparse.v1.js (loaded in <head>). If it did not load, say so instead of marking answers wrong. */
+const CP=window.ChemParse||null;if(!CP)document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:sticky;top:0;z-index:999;background:#fff3cd;border-bottom:2px solid #e0a800;padding:12px 16px;font-weight:700;text-align:center';b.textContent='Part of this game did not load, so answers cannot be checked. Please reload the page.';document.body.prepend(b);});
+function sfCount(s){return CP.sfCount(s);}
+/* Dr. Dan's rule (2026-11-14): a regular number whenever it can show the sig figs (0.0472, 380., 1230); scientific notation when it cannot (6000 to 2 sf is 6.0 × 10³) or the number is very large or very small. Shared: chemparse.v2.js */
+function fmt(x,s=3){return CP.fmt(x,s);}
 /* a comma that is not a thousands separator (2,5) is a decimal comma: not a number here */
-const decimalComma=raw=>{const t=String(raw).replace(/\s+/g,'');return t.includes(',')&&!/^[+\-−–]?\d{1,3}(,\d{3})+(\.\d*)?([eE×x*·].*)?$/.test(t)};
-function parseValue(raw){if(decimalComma(raw))return NaN;let t=normalizeScientific(raw).trim().replace(/,/g,'').replace(/\s+/g,'').replace(/[×x*]10\^?([+-]?\d+)$/i,'e$1');if(!/^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t))return NaN;return Number(t);}
+const decimalComma=raw=>CP.decimalComma(raw);
+function parseValue(raw){return CP.parseValue(raw);}
 function fhtml(f){return '<span class="formula">'+f.replace(/(\d+)/g,'<sub>$1</sub>')+'</span>';}
 function rxn(e){const side=a=>a.map(([f,n])=>(n===1?'':n+' ')+fhtml(f)).join(' + ');return side(e.lhs)+' &rarr; '+side(e.rhs);}
 function coeff(e,f){return [...e.lhs,...e.rhs].find(x=>x[0]===f)[1];}
@@ -1000,7 +1004,7 @@ function scoreCorrect(q,extra=''){if(q.scored)return '';ddLog(q,!q.solutionShown
  if(q.modeKey)P.modes[q.modeKey]=(P.modes[q.modeKey]||0)+1;
  if(q.guide&&state.guideIdx<q.guide.length){state.guideIdx=q.guide.length;renderGuide();}
  addXP(xp);celebrate();checkAchievements();return ' <span class="xp-pop">+'+xp+' XP</span>'+extra;}
-function sfCloseMsg(raw,need,ans){const got=sfCount(raw);return '<b>Your math is right, but your significant figures are not.</b> '+(got?'You entered <b>'+got+'</b> sig fig'+(got===1?'':'s')+'. ':'')+'This answer needs <b>'+need+'</b>: <b>'+ans+'</b>. On a Skill Check or exam this would lose points, so fix it next time!';}
+function sfCloseMsg(raw,need,ans){return CP.sfCloseMsg(raw,need,ans);}
 /* got = sig figs typed, need = sig figs required. Extra digits: round the entry to `need`, then allow ±1 in the last digit (same rule as a correctly rounded entry). */
 function sfAgree(n,ans,got,need){if(got>need){const t=Number(Number(ans).toPrecision(need)),step=t?Math.pow(10,Math.floor(Math.log10(Math.abs(t)))-need+1):0;return Math.abs(Number(Number(n).toPrecision(need))-t)<=step*1.001;}const m=Math.max(1,Math.min(got,need,15));return Number(Number(n).toPrecision(m))===Number(Number(ans).toPrecision(m));}
 function checkAnswer(){const q=state.q;if(q.reactionTask&&!q.reactionTask.solved){setFeedback('info','Complete Part 1 before entering the stoichiometry answer.');return}if(q.challenge){checkChallengeAnswer(q);return}

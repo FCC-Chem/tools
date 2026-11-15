@@ -427,7 +427,7 @@ const ions = [
         name: "mercury(I)",
         html: "Hg<sub>2</sub><sup>2+</sup>",
         formulas: ["Hg2^2+"],
-        names: ["mercury(I)", "mercury 1", "mercury(I) ion", "mercury one"],
+        names: ["mercury(I)", "mercury 1", "mercury(I) ion", "mercury one", "mercurous", "mercurous ion"],
         group: "common"
       },
       {
@@ -521,7 +521,7 @@ const ions = [
         name: "hydrogenphosphate",
         html: "HPO<sub>4</sub><sup>2−</sup>",
         formulas: ["HPO4^2-"],
-        names: ["hydrogenphosphate", "hydrogen phosphate"],
+        names: ["hydrogenphosphate", "hydrogen phosphate", "monohydrogen phosphate", "monohydrogenphosphate"],
         group: "rules"
       },
       {
@@ -794,7 +794,7 @@ function gradeFormula(raw, ion) {
 }
 function gradeName(raw, ion) {
   const k = nameKey(raw);
-  if (isNameCorrect(raw, ion)) return { ok: true, note: /sulph/i.test(raw) ? 'We spell it “sulf-” in this class, but “sulph-” is the British spelling, so it counts.' : '' };
+  if (isNameCorrect(raw, ion)) return { ok: true, note: /sulph/i.test(raw) ? 'We spell it “sulf-” in this class, but “sulph-” is the British spelling, so it counts.' : /mercurous/i.test(raw) ? '“Mercurous” is the older name, so it counts. In this class we write <b>mercury(I)</b>.' : /monohydrogen/i.test(raw) ? '“Monohydrogen phosphate” is another name for it, so it counts. In this class we write <b>hydrogen phosphate</b>.' : '' }; /* older or alternate names accepted with a note (Dr. Dan, 2026-11-14) */
   const other = NAME_IDX[k];
   if (other && other !== ion) {
     const fs = famSlip(ion, other);

@@ -107,6 +107,12 @@ table.data{margin:6px auto 12px;border-collapse:collapse;font-size:1.02rem;backg
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall{margin-top:8px;padding-top:4px;border-top:1px dashed currentColor;color:var(--ink)}
+.feedback .whyall summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.feedback .whyall ul{list-style:none;margin:0;padding:0}
+.feedback .whyall li{display:flex;gap:8px;margin:0 0 8px;font-size:.97rem;line-height:1.4}
+.feedback .whyall .wa-x{color:var(--rose-ink);font-weight:700;flex:none}
+.feedback .whyall .lt{font-weight:900;margin-right:6px}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
 .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
 .detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
@@ -136,7 +142,7 @@ table.data{margin:6px auto 12px;border-collapse:collapse;font-size:1.02rem;backg
 /* progress */
 .section{margin-top:18px;padding:20px}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.section-head h2{margin:0;font-size:1.2rem;font-weight:600}.section-head span{color:var(--faint);font-weight:700;font-size:.88rem}
-.stat-row{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
+.stat-row{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:9px;margin-bottom:14px}.stat{border-radius:var(--r-sm);padding:10px 12px;background:#f5f6fa}.stat strong{display:block;font-size:1.3rem;line-height:1.2}.stat small{color:var(--muted);font-weight:700;font-size:.78rem}.stat.rank{background:var(--lav)}.stat.rank strong{font-size:1.04rem}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
 .badge{display:grid;grid-template-columns:auto 1fr;gap:0 10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:#fafbfd;color:var(--faint)}
 .badge img{grid-row:span 2;width:44px;height:44px;object-fit:contain;filter:grayscale(1);opacity:.4}.badge b{font-size:.88rem;color:#656c83;line-height:1.2}.badge small{font-size:.76rem;line-height:1.3}
@@ -268,7 +274,7 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
 
  <section class="panel section" aria-labelledby="progressTitle">
   <div class="section-head"><h2 id="progressTitle">Progress &amp; achievements</h2><span id="achCount"></span></div>
-  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Couch Starter</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div></div>
+  <div class="stat-row"><div class="stat rank"><strong id="rankLine">Couch Starter</strong><small id="xpText">0 XP</small></div><div class="stat"><strong id="sCorrect">0</strong><small>Correct</small></div><div class="stat"><strong id="sTried">0</strong><small>Tried</small></div><div class="stat"><strong id="sStreak">0</strong><small>Streak</small></div><div class="stat"><strong id="sBest">0</strong><small>Best streak</small></div><div class="stat" title="Questions where you used Show answer"><strong id="sAssisted">0</strong><small>👀 Assisted</small></div></div>
   <div class="badges" id="achGrid"></div>
   <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. Saved on this device only.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
  </section>
@@ -1095,6 +1101,8 @@ const DOUBLE = [
   { a: 'Glucose 6-phosphate', b: 'Ribulose 5-phosphate', over: 'NADP^+ → NADPH, − CO2', ans: ['Oxidation', 'Decarboxylation'], why: 'The pentose phosphate pathway oxidizes the sugar (NADP+ is reduced) and removes one carbon as CO2.' },
   { a: 'Glutamate + H2O', b: 'α-Ketoglutarate + NH4^+', over: 'NAD^+ → NADH', ans: ['Oxidation', 'Deamination'], why: 'The carbon is oxidized (NAD+ is reduced) and the amino group leaves as NH4+: oxidative deamination.' }
 ];
+/* reason for each flipped half of a wrong pair (2026-11-14) */
+const DOUBLE_WHY = { Reduction: 'Not reduction: the coenzyme goes from NAD⁺ (or NADP⁺) to NADH (or NADPH), so it takes H from the substrate. The substrate is oxidized.', 'Phosphate transfer': 'Not a phosphate transfer: the new phosphate comes from free Pi, not from another molecule, so this is a phosphorylation.', Carboxylation: 'Not carboxylation: CO₂ leaves (− CO₂ on the arrow), so this is a decarboxylation.', Condensation: 'Not condensation: the thioester bond is broken, not formed, so this is a hydrolysis.', Transamination: 'Not transamination: the amino group leaves as NH₄⁺ instead of moving to an α-keto acid, so this is a deamination.' };
 const DOUBLE_PAIRS = { Oxidation: 'Reduction', Phosphorylation: 'Phosphate transfer', Decarboxylation: 'Carboxylation', Hydrolysis: 'Condensation', Deamination: 'Transamination' };
 const MATCH_END = [['Glycolysis', 'Pyruvate'], ['Gluconeogenesis', 'Glucose'], ['Glycogenesis', 'Glycogen'], ['Glycogenolysis', 'Glucose 6-phosphate'], ['β-Oxidation', 'Acetyl CoA'], ['Ketogenesis', 'Ketone bodies'], ['Lipogenesis', 'Fatty acids'], ['Urea cycle', 'Urea'], ['Pentose phosphate pathway', 'Ribose 5-phosphate + NADPH'], ['Pyruvate in a muscle without enough O2', 'Lactate'], ['Pyruvate in yeast without O2', 'Ethanol + CO2']];
 
@@ -1179,9 +1187,132 @@ const FIG = { urea: () => ureaSVG(), etc: () => etcSVG({}), box: () => boxHTML()
 
 /* ===================== question builders ===================== */
 // item: {q, a, w:[...], why, h, s, slip, slips:{wrong: slip}, one}
+/*DIAGRAM-WHYS-START*/
+/* Reasons for the diagram questions built inline in genDiagram (2026-11-14). mcq() looks these up by question start
+   when an item has no whys of its own. Pool-drawn distractors get a description of what that molecule or complex really
+   does, so the reason is right whichever answer the question has. */
+const MCQ_WHYS = {
+  'What does the protein marked with ★ do?': { h: 'It is the last protein in the membrane, and H⁺ flows through it.', w: {
+    'Pumps H^+ out of the matrix using ATP': 'That would run it backward. ATP synthase lets H⁺ flow back in and uses that energy to make ATP; complexes I, III and IV do the pumping.',
+    'Passes electrons to O2': 'That is complex IV (cytochrome c oxidase).',
+    'Turns NADH into NAD^+': 'That is complex I, which takes electrons from NADH.' } },
+  'Why is this pathway called <b>β</b>-oxidation?': { w: {
+    'It uses vitamin B': 'β is the Greek letter for a carbon position, not vitamin B.',
+    'It is the second pathway after glycolysis': 'β names a carbon position (the second carbon from the C=O end), not an order of pathways.',
+    'It only works on β-glucose': 'β-Oxidation breaks down fatty acids, not glucose.' } },
+  'This pathway ends by making the same molecule': { w: {
+    'Citrate': 'Citrate is made in step 1 and used in step 2; it is not made again at the end.',
+    'Acetyl CoA': 'Acetyl CoA enters in step 1 and is used up; it is not made again.',
+    'Succinate': 'Succinate is a middle intermediate, made in step 5 and used in step 6.' } },
+  'Name the mobile electron carrier marked with ★.': { h: 'Mobile carriers move between complexes: one inside the membrane, one on its outer face.', w: {
+    'Coenzyme Q': 'Coenzyme Q is the carrier inside the membrane, between complexes I and II and complex III.',
+    'Cytochrome c': 'Cytochrome c is the carrier on the outer face of the membrane, between complexes III and IV.',
+    'ATP synthase': 'ATP synthase is a fixed complex that makes ATP; it does not carry electrons.',
+    'NADH': 'NADH gives electrons to complex I from the matrix; it does not shuttle them between complexes.',
+    'Complex II': 'Complex II is fixed in the membrane; it takes electrons from succinate.' } },
+  'One glucose gives <b>2 acetyl CoA</b>. Using the diagram, how many <b>NADH</b>': { h: 'Count the NADH made in one turn, then remember one glucose turns the cycle twice.', w: {
+    '3': 'That is one turn. One glucose gives 2 acetyl CoA, so the cycle turns twice.',
+    '2': 'Count the NADH arrows in one turn, then double for the 2 acetyl CoA from one glucose.',
+    '4': 'Count the NADH arrows in one turn, then double for the 2 acetyl CoA from one glucose.',
+    '8': 'Count the NADH arrows in one turn, then double for the 2 acetyl CoA from one glucose.',
+    '10': '10 counts more than NADH. Count only the NADH arrows in one turn, then double.' } },
+  'Which side of the inner membrane has the higher H<sup>+</sup> concentration?': { h: 'Which way do complexes I, III and IV pump H⁺?', w: {
+    'The matrix': 'The complexes pump H⁺ out of the matrix, so the matrix has less H⁺.',
+    'Both sides are equal': 'The pumps build a gradient. If both sides were equal, ATP synthase would have nothing to run on.',
+    'The cytosol outside the cell': 'The pumps move H⁺ from the matrix into the intermembrane space, not out into the cytosol.' } },
+  'Which part of glycolysis <b>spends</b> ATP?': { w: {
+    'Steps 6–10, the energy payoff phase': 'The payoff phase makes ATP (steps 7 and 10); it does not spend it.',
+    'Only step 10': 'Step 10 makes ATP. The ATP is spent earlier, to prepare glucose.',
+    'None of the steps': 'Two early steps spend ATP to prepare glucose for splitting.' } },
+  'What is the <b>final electron acceptor</b> of the chain?': { h: 'What do we breathe in for this chain?', w: {
+    'H2O': 'Water is the product. O₂ is what accepts the electrons, and it becomes H₂O.',
+    'NAD^+': 'NAD⁺ is an electron carrier, made again at complex I; it is not the final acceptor.',
+    'FAD': 'FAD is an electron carrier that feeds electrons into the chain, not the final acceptor.' } },
+  'Which compound belongs at the <b>?</b> in the diagram?': { w: {
+    'Malate': 'Malate is made when fumarate is hydrated.',
+    'Oxaloacetate': 'Oxaloacetate is made when malate is oxidized, and it joins acetyl CoA in step 1.',
+    'Fumarate': 'Fumarate is made when FAD removes 2 H from succinate.',
+    'Citrate': 'Citrate is the 6-carbon molecule made when acetyl CoA joins oxaloacetate.',
+    'Lactate': 'Lactate is not in the citric acid cycle; it comes from pyruvate when O₂ is short.',
+    'Pyruvate': 'Pyruvate is the end of glycolysis; it becomes acetyl CoA before the cycle.' } },
+  'Where do electrons from <b>FADH<sub>2</sub></b> enter the chain?': { h: 'FADH₂ is made by succinate dehydrogenase, which is part of one of the complexes.', w: {
+    'Complex I': 'Complex I takes electrons from NADH, not FADH₂.',
+    'Complex III': 'Complex III receives electrons from coenzyme Q, after they have entered at complex I or II.',
+    'Complex IV': 'Complex IV passes electrons to O₂ at the end of the chain.' } },
+  'In what form does the toxic NH<sub>4</sub><sup>+</sup> enter the cycle?': { h: 'Ammonium is packaged before it enters.', w: {
+    'Urea': 'Urea is the product that leaves the cycle, not how NH₄⁺ enters.',
+    'Free NH3 gas': 'Ammonium is not released as a gas; it is packaged first.',
+    'Fumarate': 'Fumarate leaves the cycle and carries no nitrogen.' } },
+  'Which product of the urea cycle goes on to the citric acid cycle?': { h: 'Which product is also a citric acid cycle intermediate?', w: {
+    'Urea': 'Urea leaves the body in the urine.',
+    'Ornithine': 'Ornithine is made again and stays in the urea cycle.',
+    'Citrulline': 'Citrulline is an intermediate inside the urea cycle.' } },
+  'Which molecule brings in the <b>second</b> nitrogen atom of urea?': { h: 'Look for the amino acid that joins the cycle.', w: {
+    'Fumarate': 'Fumarate leaves the cycle and carries no nitrogen.',
+    'Ornithine': 'Ornithine is the carrier that is made again each turn; it does not give its nitrogen to urea.',
+    'Glucose': 'Glucose has no nitrogen.' } },
+  'Why does everything in steps 6–10 happen <b>twice</b> per glucose?': { w: {
+    'Glycolysis runs twice for every glucose': 'Glycolysis runs once per glucose; the split in step 4 is what doubles the later steps.',
+    'Each step needs two enzymes': 'Each step uses one enzyme; the steps repeat because there are two 3-carbon pieces.',
+    'Two ATP were spent in steps 1 and 3': 'Spending ATP prepares glucose but does not double the later steps; the split in step 4 does.' } },
+  'Which complex does <b>not</b> pump H<sup>+</sup>?': { h: 'One complex passes electrons along without pumping, which is why FADH₂ is worth less ATP.', w: {
+    'Complex I': 'Complex I does pump H⁺.',
+    'Complex III': 'Complex III does pump H⁺.',
+    'Complex IV': 'Complex IV does pump H⁺.' } },
+  'Which molecule is made again at the end, so the cycle can repeat?': { h: 'Which molecule starts the next turn?', w: {
+    'Arginine': 'Arginine is split in the last step; the piece that is made again starts the next turn.',
+    'Urea': 'Urea leaves the cycle as waste.',
+    'Aspartate': 'Aspartate goes into the cycle; it is not made again.' } },
+  'Where does the urea go after it is made?': { h: 'Urea dissolves in water.', w: {
+    'Back into the citric acid cycle': 'Urea is waste nitrogen; it is not used again.',
+    'Into the lungs, exhaled': 'Urea is not a gas; it travels in the blood to the kidneys.',
+    'Into muscle, stored as protein': 'Urea is waste nitrogen; it is not used to build protein.' } },
+  'Cyanide binds the complex marked with ★. What stops?': { h: 'If the last complex cannot pass electrons to O₂, what happens upstream?', w: {
+    'Only glycolysis stops': 'Glycolysis can keep going for a while; the electron transport chain is what stops.',
+    'NADH is made faster': 'NADH piles up because it can no longer be oxidized; it is not made faster.',
+    'H^+ pumping speeds up': 'With the electrons stuck, the pumps stop.' } },
+  'Read the diagram. How many <b>NADH</b> does one turn': { h: 'Count the arrows that make NADH in one turn.', w: {
+    '6': '6 is per glucose (two turns). The question asks about one turn.',
+    '1': 'Count every arrow that makes NADH in one turn; there is more than one.',
+    '2': 'Count every arrow that makes NADH in one turn.',
+    '4': 'Count every arrow that makes NADH in one turn.' } },
+  'Read the diagram. How many <b>FADH<sub>2</sub></b> does one turn': { h: 'FAD is used only where a C–C single bond becomes C=C.', w: {
+    '0': 'One step uses FAD: succinate → fumarate.',
+    '2': 'Only one step uses FAD (succinate → fumarate); the others use NAD⁺.',
+    '3': 'Only one step uses FAD; the three NAD⁺ steps make NADH, not FADH₂.' } },
+  'Read the diagram. How many <b>CO<sub>2</sub></b> does one turn': { h: 'Count the arrows where CO₂ leaves.', w: {
+    '1': 'Count every arrow where CO₂ leaves in one turn; there is more than one.',
+    '3': 'Count only the arrows where CO₂ leaves.',
+    '4': '4 is per glucose (two turns). The question asks about one turn.',
+    '6': 'Count only the arrows where CO₂ leaves in one turn.' } },
+  'Read the diagram. How many <b>GTP</b> does one turn': { h: 'Count the arrow that makes GTP.', w: {
+    '0': 'One step makes GTP: succinyl CoA → succinate.',
+    '2': '2 is per glucose (two turns). The question asks about one turn.',
+    '3': 'Only one step makes GTP.' } },
+  'Read the diagram. Per glucose, how many ATP are spent?': { h: 'Look for the steps where ATP turns into ADP.', w: {
+    '0': 'ATP is spent in the energy investment phase to prepare glucose.',
+    '1': 'Two different steps spend ATP. Look at steps 1 and 3.',
+    '4': '4 is the ATP made, not spent.' } },
+  'Read the diagram. Per glucose, how many ATP are made?': { h: 'Everything after the split in step 4 happens twice.', w: {
+    '2': '2 is the net gain. Count every ATP made, before subtracting the ATP spent.',
+    '6': 'Two steps make ATP, and each happens twice per glucose.',
+    '8': 'Two steps make ATP, and each happens twice per glucose.' } },
+  'Read the diagram. Per glucose, how many NADH are made?': { h: 'Only one step makes NADH, but it happens twice.', w: {
+    '1': 'Step 6 happens twice per glucose (once for each 3-carbon half).',
+    '4': 'Only step 6 makes NADH, and it happens twice.',
+    '6': 'Only step 6 makes NADH, and it happens twice.' } },
+  'Read the diagram. Per glucose, how many ATP is the net gain?': { h: 'Net = ATP made − ATP spent.', w: {
+    '0': 'More ATP is made than spent, so the net is not zero.',
+    '4': '4 is the ATP made; subtract the ATP spent.',
+    '6': 'Net = ATP made − ATP spent.' } }
+};
+const mcqExtra = q => { const k = Object.keys(MCQ_WHYS).find(p => String(q).startsWith(p)); return k ? MCQ_WHYS[k] : null; };
+const BOX_STEP_WHY = { 1: 'Step 1 is the FAD oxidation: a C–C becomes C=C and FADH₂ forms.', 2: 'Step 2 is the hydration: water adds across the C=C.', 3: 'Step 3 is the NAD⁺ oxidation: the alcohol becomes a ketone and NADH forms.', 4: 'Step 4 is the cleavage by CoA: acetyl CoA is released.' };
+/*DIAGRAM-WHYS-END*/
 function mcq(topic, item, extra = {}) {
-  const right = { html: f(item.a), ok: true }, wrongs = item.w.map(w => ({ html: f(w), ok: false, slip: (item.slips && item.slips[w]) || item.slip || extra.slip || TOPICS[topic].slipDefault || 'choice', why: item.whys && item.whys[w] ? f(item.whys[w]) : '' }));
-  return Object.assign({ topic, kind: 'choice', scenario: item.s ? f(item.s) : '', prompt: f(item.q), choices: shuffle([right, ...wrongs]), one: item.one || item.a.length > 46 || item.w.some(w => w.length > 46), answer: f(item.a), solution: f(item.why), hint: item.h ? f(item.h) : '', art: item.fig ? FIG[item.fig]() : undefined }, extra);
+  const xw = item.whys ? null : mcqExtra(item.q);
+  const right = { html: f(item.a), ok: true }, wrongs = item.w.map(w => ({ html: f(w), ok: false, slip: (item.slips && item.slips[w]) || item.slip || extra.slip || TOPICS[topic].slipDefault || 'choice', why: item.whys && item.whys[w] ? f(item.whys[w]) : xw && xw.w[String(w)] ? f(xw.w[String(w)]) : '' }));
+  return Object.assign({ topic, kind: 'choice', scenario: item.s ? f(item.s) : '', prompt: f(item.q), choices: shuffle([right, ...wrongs]), one: item.one || item.a.length > 46 || item.w.some(w => w.length > 46), answer: f(item.a), solution: f(item.why), hint: item.h ? f(item.h) : xw && xw.h ? f(xw.h) : '', art: item.fig ? FIG[item.fig]() : undefined }, extra);
 }
 const numChoices = (n, pool) => [String(n), ...shuffle(pool.filter(x => x !== n)).slice(0, 3).map(String)];
 function numq(topic, art, q, n, pool, why, extra = {}) { const c = numChoices(n, pool); return mcq(topic, { q, a: c[0], w: c.slice(1), why }, Object.assign({ art }, extra)); }
@@ -1227,7 +1358,7 @@ function genDiagram() {
   }
   if (kind === 'box') {
     const r = rint(1, 3);
-    if (r === 1) { const [ev, k] = pick([['a C–C single bond becomes a C=C double bond', 1], ['NAD⁺ is reduced to NADH', 3], ['a hydration happens', 2], ['acetyl CoA is produced', 4], ['FAD is reduced to FADH₂', 1], ['a 2° alcohol becomes a ketone', 3]]); return { topic: 'diagram', tag: 'β-Oxidation', kind: 'choice', art: boxHTML(), prompt: `At which step of β-oxidation does this happen? <b>${ev}</b>`, choices: [1, 2, 3, 4].map(n => ({ html: `Step ${n}`, ok: n === k, slip: 'diagram-read' })), grid: 1, answer: `Step ${k}`, solution: f(`Step 1: oxidation by FAD (C=C forms). Step 2: hydration. Step 3: oxidation by NAD+ (alcohol → ketone). Step 4: cleavage by CoA (acetyl CoA released).`), hint: 'Read the label beside each arrow.' }; }
+    if (r === 1) { const [ev, k] = pick([['a C–C single bond becomes a C=C double bond', 1], ['NAD⁺ is reduced to NADH', 3], ['a hydration happens', 2], ['acetyl CoA is produced', 4], ['FAD is reduced to FADH₂', 1], ['a 2° alcohol becomes a ketone', 3]]); return { topic: 'diagram', tag: 'β-Oxidation', kind: 'choice', art: boxHTML(), prompt: `At which step of β-oxidation does this happen? <b>${ev}</b>`, choices: [1, 2, 3, 4].map(n => ({ html: `Step ${n}`, ok: n === k, slip: 'diagram-read', why: n === k ? '' : BOX_STEP_WHY[n] })), grid: 1, answer: `Step ${k}`, solution: f(`Step 1: oxidation by FAD (C=C forms). Step 2: hydration. Step 3: oxidation by NAD+ (alcohol → ketone). Step 4: cleavage by CoA (acetyl CoA released).`), hint: 'Read the label beside each arrow.' }; }
     if (r === 2) { const k = rint(1, 4), t = { 1: 'ox', 2: 'hyd', 3: 'ox', 4: 'cleave' }[k]; return { topic: 'diagram', tag: 'β-Oxidation', kind: 'choice', art: BOX_STEP_SVG[k], prompt: `Here is <b>step ${k}</b> of β-oxidation. What <b>type of reaction</b> is it?`, hint: 'Compare the two structures (the changed part is highlighted). Curved arrows show what goes in and what comes out. No curved arrow means the atoms were only rearranged.', choices: rtChoices(t), answer: f(RT[t]), solution: f({ 1: 'FAD takes 2 H and a trans C=C forms: oxidation.', 2: 'Water adds across the C=C: hydration.', 3: 'NAD+ takes 2 H and the 2° alcohol becomes a ketone: oxidation.', 4: 'CoA–SH cuts off a 2-carbon acetyl CoA: cleavage.' }[k]), steps: rtSteps(t, 'Compare the structures on each side of the arrow. What changed?'), video: RT_VIDEO[t] }; }
     return mcq('diagram', { q: 'Why is this pathway called <b>β</b>-oxidation?', a: 'The β carbon (the second carbon from the carboxyl end) is the one that gets oxidized to a ketone', w: ['It uses vitamin B', 'It is the second pathway after glycolysis', 'It only works on β-glucose'], why: 'Steps 1–3 turn the β carbon into a C=O, so the chain can be cut between the α and β carbons.', h: 'Look at the names: β-hydroxyacyl, β-ketoacyl.', one: 1 }, { art: boxHTML(), tag: 'β-Oxidation', slip: 'diagram-read' });
   }
@@ -1313,6 +1444,346 @@ const ENERGY = [
   { q: 'Each turn of the citric acid cycle makes 1 GTP. In ATP accounting, one GTP counts as how many ATP?', a: '1', w: ['0', '2.5', '1.5'], why: 'GTP is energy-equivalent to ATP, so it is counted as 1 ATP.' },
   { q: 'Why does a gram of fat (9 kcal) give more energy than a gram of carbohydrate (4 kcal)?', a: 'Fat carbons are more reduced (more C–H bonds), so oxidizing them makes more NADH and FADH2', w: ['Fat contains more oxygen', 'Fat is burned without O2', 'Carbohydrates cannot be fully oxidized'], why: 'The more reduced a carbon is, the more electrons it can give to NAD+ and FAD, and the more ATP it yields.', one: 1 }
 ];
+/*WHYS-OVERLAY-START*/
+/* Hints and per-choice reasons for the Energy, Predict and Exam banks (2026-11-14, for Dr. Dan's review).
+   Keyed by the start of each question; tools/check-whys.js confirms every wrong choice has a reason and every item a hint. */
+const WHYS_ADD = {
+  // ---------- ENERGY ----------
+  'The 2 NADH made in glycolysis are in the': { h: 'Mitochondria cannot take in NADH itself. Think of a shuttle that carries its electrons in.', w: {
+    'NADH crosses the membrane directly': 'The inner mitochondrial membrane has no transporter for NADH, so it cannot cross. Only its electrons get in, carried by a shuttle.',
+    'They cannot be used, so glycolysis NADH gives no ATP': 'They are used: a shuttle carries the electrons into the matrix, which is why glycolysis NADH counts toward the 32 ATP.',
+    'They are turned into FADH2 by complex II': 'Complex II takes electrons from succinate in the citric acid cycle, not from cytosolic NADH. In the 32-ATP count, the malate–aspartate shuttle carries the electrons in.' } },
+  'Which of these has the most energy stored in': { h: 'Count the phosphoanhydride (phosphate–phosphate) bonds in each molecule.', w: {
+    'ADP (two phosphates)': 'ADP has one phosphoanhydride bond; ATP has two. ADP stores less.',
+    'AMP (one phosphate)': 'AMP has no phosphoanhydride bond left (its one phosphate is a phosphoester), so it stores the least.',
+    'All three are equal': 'They are not equal: ATP has two phosphoanhydride bonds, ADP one and AMP none.' } },
+  'ATP + H<sub>2</sub>O → ADP + P<sub>i</sub>. Is energy released': { h: 'ATP is the cell’s energy currency. Is hydrolysis spending it or saving it?', w: {
+    'Absorbed (endothermic, positive energy change)': 'That describes the reverse reaction. Making ATP absorbs energy; hydrolyzing it releases energy.',
+    'Neither': 'ATP hydrolysis is the cell’s main energy-releasing reaction; it powers muscle contraction and coupled reactions.',
+    'Only released if O2 is present': 'O₂ is not part of this reaction. ATP hydrolysis releases energy with or without oxygen; O₂ is needed only at the end of the electron transport chain.' } },
+  'ADP + P<sub>i</sub> → ATP (phosphorylation).': { h: 'This is the reverse of ATP hydrolysis.', w: {
+    'Released': 'That is ATP hydrolysis, the reverse. Building ATP stores energy in a new phosphoanhydride bond, so energy is absorbed.',
+    'Neither': 'Making a phosphoanhydride bond stores energy, and that energy has to come from catabolism.',
+    'It depends on the temperature': 'Making ATP always absorbs energy; temperature does not change that.' } },
+  'Adding a phosphate to glucose needs energy.': { h: 'Which molecule does hexokinase use along with glucose?', w: {
+    'It heats the cell up': 'Heating the cell would not supply this energy and would harm other proteins. The cell couples the step to ATP hydrolysis.',
+    'It waits until enough glucose builds up': 'More glucose does not make an energy-requiring step happen on its own; the energy comes from ATP.',
+    'It uses O2 to push the reaction': 'O₂ is used only at the end of the electron transport chain; it does not drive the phosphorylation of glucose.' } },
+  'What are the bonds <b>between the phosphate groups</b>': { h: 'Two acid groups joined with the loss of water make an anhydride.', w: {
+    'Phosphoester bonds': 'A phosphoester joins a phosphate to a carbon’s –O (the phosphate–ribose bond in ATP). Phosphate–phosphate bonds are phosphoanhydrides.',
+    'Glycosidic bonds': 'Glycosidic bonds join a sugar to another sugar or to a base (ribose to adenine in ATP), not phosphate to phosphate.',
+    'Peptide bonds': 'Peptide bonds join amino acids in proteins.' } },
+  'PEP + ADP → pyruvate + ATP.': { h: 'Does the phosphate come straight from a molecule (substrate), or from an H⁺ gradient?', w: {
+    'Oxidative phosphorylation': 'Oxidative phosphorylation uses ATP synthase and the H⁺ gradient. Here PEP hands its phosphate directly to ADP.',
+    'Photophosphorylation': 'Photophosphorylation uses light in photosynthesis; human cells do not do it.',
+    'ATP hydrolysis': 'ATP is made here, not broken down.' } },
+  'ATP synthase uses the H<sup>+</sup> gradient': { h: 'The H⁺ gradient is built by oxidizing NADH and FADH₂ in electron transport.', w: {
+    'Substrate-level phosphorylation': 'Substrate-level phosphorylation hands a phosphate directly from a high-energy molecule such as PEP. ATP synthase uses the H⁺ gradient instead.',
+    'Glycolysis': 'Glycolysis is a pathway in the cytosol. ATP synthase is in the inner mitochondrial membrane.',
+    'Fermentation': 'Fermentation regenerates NAD⁺ without O₂; it does not use ATP synthase.' } },
+  'Burning one mole of glucose releases about 686': { h: 'Divide 234 by 686.', w: {
+    'About 100%; nothing is lost': 'No energy conversion is perfect. 234 ÷ 686 is about 0.34; the rest is released as heat.',
+    'About 5%; the rest is stored as fat': '234 ÷ 686 is about 0.34, not 0.05, and the lost energy becomes heat, not fat.',
+    'About 90%; the rest becomes CO2': '234 ÷ 686 is about 0.34. CO₂ is a waste product; it does not carry the lost energy.' } },
+  'ATP synthase has two parts: F<sub>0</sub>': { h: 'Which part sits in the membrane, where H⁺ crosses?', w: {
+    'F0 makes the ATP; F1 is the channel': 'Swapped: F₀ is the channel in the membrane that H⁺ flows through; F₁, in the matrix, makes the ATP.',
+    'Both parts pump H^+ out': 'ATP synthase lets H⁺ flow back in. Complexes I, III and IV are the ones that pump H⁺ out.',
+    'F0 binds O2; F1 binds NADH': 'O₂ is reduced at complex IV and NADH is oxidized at complex I; neither binds ATP synthase.' } },
+  'Catabolic reactions break molecules down.': { h: 'Catabolism vs anabolism: which one supplies the energy to make ATP?', w: {
+    'absorb energy': 'That is anabolism, which builds molecules and generally absorbs energy.',
+    'neither release nor absorb energy': 'Breaking molecules down releases energy, which the cell captures as ATP.',
+    'only happen in plants': 'Every organism carries out catabolism, including you right now.' } },
+  'Each turn of the citric acid cycle makes 1 GTP.': { h: 'GTP carries the same energy as ATP.', w: {
+    '0': 'GTP stores the same energy as ATP, so it counts as 1 ATP.',
+    '2.5': '2.5 is the value for NADH, not GTP.',
+    '1.5': '1.5 is the value for FADH₂, not GTP.' } },
+  'Why does a gram of fat (9 kcal) give more': { h: 'Compare how many C–H bonds (electrons to give away) each carbon has.', w: {
+    'Fat contains more oxygen': 'The opposite: fat has less oxygen than carbohydrate. Its carbons are more reduced, so they have more electrons to give.',
+    'Fat is burned without O2': 'Fat cannot be fully burned without O₂: its NADH and FADH₂ must be reoxidized by the electron transport chain.',
+    'Carbohydrates cannot be fully oxidized': 'Carbohydrates are fully oxidized to CO₂ and water too. They start out more oxidized, so they give fewer electrons.' } },
+  // ---------- EXAM (added with EXAMQ.push) ----------
+  'In complex I, NADH + H^+ + CoQ → NAD^+ + CoQH2.': { h: 'NADH carries a hydride ion, H⁻.', w: {
+    '0': 'Electrons do move here: NADH is oxidized and coenzyme Q is reduced.',
+    '1': 'NADH carries a hydride (H⁻), which is 2 electrons.',
+    '4': '4 electrons is what one O₂ needs at complex IV; one NADH gives 2.',
+    [NOTA]: 'One choice is right: NADH passes 2 electrons.' } },
+  'In complex IV, one O2 molecule is reduced to two H2O.': { h: 'Each O atom in H₂O needs 2 electrons.', w: {
+    '1': 'O₂ + 4 H⁺ + 4 e⁻ → 2 H₂O: each O atom needs 2 electrons, so one O₂ needs 4.',
+    '2': 'That is enough for only one O atom. Both O atoms need 2 electrons each: 4 in all.',
+    '6': 'Two O atoms × 2 electrons = 4, not 6.',
+    [NOTA]: 'One choice is right: one O₂ accepts 4 electrons.' } },
+  'Which equation correctly shows what happens to the iron': { h: 'Gaining an electron (a negative charge) lowers the charge: reduction.', w: {
+    'Fe^2+ + e⁻ → Fe^3+ (iron is oxidized)': 'Adding an electron lowers the charge, so Fe³⁺ + e⁻ → Fe²⁺. The charge cannot go up by gaining a negative electron.',
+    'Fe^3+ → Fe^2+ + e⁻ (iron is reduced)': 'The electron is on the wrong side. Fe³⁺ gains an electron, so e⁻ belongs on the left.',
+    'Fe^2+ → Fe^3+ + 2 e⁻ (iron is reduced)': 'Losing electrons is oxidation, not reduction, and Fe²⁺ → Fe³⁺ loses only 1 electron.',
+    [NOTA]: 'One choice is right: Fe³⁺ + e⁻ → Fe²⁺.' } },
+  'In complex III, CoQH2 → CoQ + 2 H^+ + 2 e⁻': { h: 'Check each statement on its own before choosing.', w: {
+    'CoQH2 is oxidized.': 'True, but the other two statements are true as well, so “all of the above” is the best answer.',
+    'The Fe^3+ ions are reduced.': 'True, but the other two statements are true as well, so “all of the above” is the best answer.',
+    'One CoQH2 reduces two cytochrome c molecules.': 'True, but the other two statements are true as well, so “all of the above” is the best answer.' } },
+  'In the electron transport chain, which metal ion in the cytochromes': { h: 'Cytochromes contain heme, the same group that holds O₂ in hemoglobin.', w: {
+    'zinc': 'Zinc is a cofactor in some enzymes, but cytochromes carry electrons with the iron in heme.',
+    'magnesium': 'Magnesium binds ATP and sits in chlorophyll; cytochromes use iron.',
+    'sodium': 'Sodium has only one ion charge (Na⁺), so it cannot pass electrons back and forth.',
+    'calcium': 'Calcium has only one ion charge (Ca²⁺), so it cannot pass electrons back and forth.' } },
+  'Succinyl CoA → succinate + CoA–SH releases energy.': { h: 'An energy-releasing step is coupled to an energy-absorbing one.', w: {
+    'GTP → GDP + Pi': 'That also releases energy. The energy released here is used to make GTP, not to break it down.',
+    'NAD^+ → NADH + H^+': 'Nothing is oxidized in this step, so NAD⁺ is not reduced.',
+    'FADH2 → FAD': 'FADH₂ is oxidized in the electron transport chain, not in this step.',
+    'ATP → AMP + 2 Pi': 'That releases energy too. The released energy has to drive an energy-absorbing reaction, such as making GTP.' } },
+  'Glyceraldehyde 3-phosphate + Pi → 1,3-bisphosphoglycerate.': { h: 'Gaining bonds to O is oxidation. Which coenzyme is reduced?', w: {
+    'Yes, ATP → ADP': 'The phosphate comes from Pᵢ, not from ATP.',
+    'Yes, ADP → ATP': 'ATP is made in the next step (phosphoglycerate kinase), not this one.',
+    'No; NADH + H^+ → NAD^+ is more likely': 'The aldehyde gains bonds to O, so it is oxidized; NAD⁺ is reduced to NADH, not the reverse.' } },
+  'During the first step of β-oxidation, where does the new C=C': { h: 'α is carbon 2 and β is carbon 3.', w: {
+    'between carbons 1 and 2': 'Carbon 1 is the C=O carbon of the thioester; FAD removes H from carbons 2 and 3.',
+    'between carbons 3 and 4': 'The double bond forms between the α (C2) and β (C3) carbons, right next to the C=O.',
+    'at the methyl end of the chain': 'β-Oxidation works at the CoA end of the chain, not the methyl end.',
+    [NOTA]: 'One choice is right: between carbons 2 and 3.' } },
+  'Which enzyme most likely catalyzes fructose 6-phosphate + ATP': { h: 'A phosphate moves from ATP onto a sugar: look for a kinase.', w: {
+    'aldolase': 'Aldolase splits fructose 1,6-bisphosphate in the next step; it does not add a phosphate.',
+    'phosphoglucose isomerase': 'That enzyme turns glucose 6-phosphate into fructose 6-phosphate, the step before.',
+    'fructose 1,6-bisphosphatase': 'That gluconeogenesis enzyme removes this phosphate with water: the reverse reaction.',
+    'pyruvate carboxylase': 'Pyruvate carboxylase adds CO₂ to pyruvate in gluconeogenesis.' } },
+  'Which enzyme most likely catalyzes 3-phosphoglycerate': { h: 'The phosphate moves to another carbon in the same molecule.', w: {
+    'phosphoglycerate kinase': 'Phosphoglycerate kinase moves a phosphate between 1,3-bisphosphoglycerate and ADP (step 7).',
+    'enolase': 'Enolase removes water from 2-phosphoglycerate to make PEP (step 9).',
+    'glyceraldehyde 3-phosphate dehydrogenase': 'That dehydrogenase oxidizes glyceraldehyde 3-phosphate (step 6).',
+    'aldolase': 'Aldolase splits the 6-carbon sugar (step 4).' } },
+  'In fatty acid synthesis, CH3–CO–CH2–CO–ACP + NADPH': { h: 'The ketone gains H from NADPH: a reduction.', w: {
+    'acetyl CoA carboxylase': 'That enzyme adds CO₂ to acetyl CoA to make malonyl CoA, at the very start.',
+    '3-hydroxyacyl ACP dehydrase': 'The dehydrase removes water from the alcohol, the step after this one.',
+    '3-ketoacyl ACP synthase': 'The synthase joins the growing chain to a malonyl unit (releasing CO₂), the step before.',
+    'malonyl CoA transacylase': 'The transacylase moves malonyl onto ACP; it does not reduce anything.' } },
+  'Which pathway does NOT use NAD^+ as an oxidizing agent?': { h: 'Which pathway builds molecules, using NADPH?', w: {
+    'glycolysis': 'Glycolysis uses NAD⁺ in step 6 (glyceraldehyde 3-phosphate dehydrogenase).',
+    'the citric acid cycle': 'The citric acid cycle uses NAD⁺ three times per turn.',
+    'β-oxidation': 'β-Oxidation uses NAD⁺ in step 3.',
+    'oxidative deamination': 'Glutamate dehydrogenase uses NAD⁺ to remove the amino group.' } },
+  'Below are steps for using dietary protein.': { h: 'Follow the food: stomach, small intestine, blood, then the liver.', w: {
+    'I, II, III, IV': 'Amino acids cannot be absorbed until the protein is digested, so digestion (II, III) comes first.',
+    'III, II, I, IV': 'Digestion starts in the stomach (II) before the small intestine (III).',
+    'II, I, III, IV': 'Amino acids are absorbed after trypsin and chymotrypsin finish in the small intestine.',
+    'IV, II, III, I': 'Excess amino acids are broken down last, after they are absorbed.' } },
+  'In the ________ stage of metabolism, called ________': { h: 'Stage 1 breaks polymers into monomers.', w: {
+    'second; degradation': 'Degradation (stage 2) breaks monomers into smaller units such as acetyl CoA. Hydrolyzing starch is digestion, stage 1.',
+    'third; oxidation': 'Stage 3 is oxidation in the citric acid cycle and electron transport.',
+    'first; degradation': 'Right stage number, wrong name: stage 1 is called digestion.',
+    'second; digestion': 'Digestion is stage 1, not stage 2.' } },
+  'When a muscle cell has plenty of O2, the pyruvate': { h: 'With O₂, pyruvate enters the mitochondria and loses CO₂.', w: {
+    'lactate': 'Lactate forms when O₂ is short, to regenerate NAD⁺.',
+    'ethanol': 'Ethanol is made by yeast fermentation, not by human muscle.',
+    'glucose': 'Making glucose from pyruvate is gluconeogenesis, in the liver, not in a working muscle with O₂.',
+    'glycogen': 'Glycogen is built from glucose, not directly from pyruvate.' } },
+  'Which statement explains why a gram of fat provides': { h: 'Compare how reduced the carbons are.', w: {
+    'Fat contains more oxygen per carbon than glucose.': 'The opposite: fat has less oxygen per carbon; its carbons are more reduced.',
+    'Fat is oxidized without using the citric acid cycle.': 'Fatty acids give acetyl CoA, which does go through the citric acid cycle.',
+    'Fat is broken down in the stomach.': 'Fat is digested in the small intestine, and where it is digested does not change how much energy it holds.',
+    'A gram of glucose contains more moles of carbon than a gram of fat, but glucose cannot be oxidized.': 'Glucose is fully oxidized to CO₂ and water; it just gives fewer electrons per carbon.' } },
+  // ---------- PREDICT ----------
+  '<b>Lactate</b> is oxidized by NAD': { h: 'NAD⁺ removes two H: one from the O–H and one from the C–H of the alcohol carbon.', w: {
+    'CH3–CH2–COO⁻': 'That removed the –OH completely, which is a reduction. Oxidizing a 2° alcohol keeps the O and makes a C=O.',
+    'CH2=CH–COO⁻': 'Losing water to make a C=C is a dehydration, not an oxidation by NAD⁺.',
+    'CH3–CH(OH)–CHO': 'The –COO⁻ end was changed instead of the alcohol carbon. NAD⁺ oxidizes the 2° alcohol to a ketone.' } },
+  '<b>Fumarate</b> is hydrated.': { h: 'Hydration adds H₂O across the C=C: H on one carbon, OH on the other.', w: {
+    '⁻OOC–CH2–CH2–COO⁻': 'Adding H₂ across the C=C is a reduction (that gives succinate). Hydration adds H and OH.',
+    '⁻OOC–CO–CH2–COO⁻': 'A ketone would need an oxidation as well. Hydration only adds H₂O, which gives an alcohol.',
+    '⁻OOC–CH(OH)–CH(OH)–COO⁻': 'Hydration adds one H₂O: one H and one OH, not two OH groups.' } },
+  '<b>Acetoacetate</b> is decarboxylated.': { h: 'Decarboxylation removes the –COO⁻ group as CO₂; the rest stays the same.', w: {
+    'CH3–CH(OH)–CH2–COO⁻': 'That is a reduction of the ketone (it gives β-hydroxybutyrate). Decarboxylation removes CO₂.',
+    'CH3–CO–COO⁻': 'That removed a CH₂ instead of the –COO⁻. Decarboxylation releases the carboxylate as CO₂.',
+    'CH3–CH2–CH3': 'The ketone does not change in a decarboxylation; only the –COO⁻ leaves as CO₂.' } },
+  'A fatty acyl CoA is <b>oxidized by FAD</b>': { h: 'FAD takes two H from the α and β carbons.', w: {
+    'R–CH(OH)–CH2–CO–S–CoA': 'Adding –OH happens in the next step (hydration). FAD removes two H to make a C=C.',
+    'R–CO–CH2–CO–S–CoA': 'The β-ketone forms two steps later (hydration, then oxidation by NAD⁺).',
+    'R–CH2–CH2–COO⁻ + CoA–SH': 'Cutting off CoA is a hydrolysis, not an oxidation by FAD.' } },
+  '<b>Pyruvate</b> is carboxylated': { h: 'Carboxylation adds CO₂ as a new –COO⁻ group.', w: {
+    'CH3–CHO + CO2': 'That is a decarboxylation, the opposite: CO₂ is removed. Carboxylation adds a –COO⁻.',
+    'CH3–CO–S–CoA': 'Acetyl CoA comes from oxidative decarboxylation (pyruvate dehydrogenase), which loses CO₂.',
+    'CH3–CH(OH)–COO⁻': 'Lactate comes from reducing pyruvate’s ketone; no CO₂ is added.' } },
+  '<b>Alanine</b> gives its amino group': { h: 'In transamination, the C–NH₃⁺ becomes C=O.', w: {
+    'CH3–CH2–COO⁻': 'The amino group is replaced by C=O, not by H.',
+    'CH3–CH(OH)–COO⁻': 'Transamination gives a ketone (C=O), not an alcohol.',
+    'CH3–CH(NH3^+)–CHO': 'The –COO⁻ end stays the same. The carbon that had the NH₃⁺ becomes the C=O.' } },
+  '<b>β-Hydroxybutyrate</b> is oxidized by NAD': { h: 'NAD⁺ turns a 2° alcohol into a ketone.', w: {
+    'CH3–CH=CH–COO⁻': 'Losing water to make a C=C is a dehydration, not an oxidation by NAD⁺.',
+    'CH3–CO–CH3': 'Acetone forms when acetoacetate is decarboxylated. Here NAD⁺ only turns the 2° alcohol into a ketone.',
+    'CH3–CH2–CH2–COO⁻': 'Removing the –OH completely would be a reduction. Oxidizing a 2° alcohol gives a ketone.' } },
+  '<b>Ethanol</b> is oxidized by NAD': { h: 'A 1° alcohol is oxidized first to an aldehyde.', w: {
+    'CH3–CO–CH3': 'Acetone has 3 carbons; ethanol has 2. A 1° alcohol gives an aldehyde.',
+    'CH2=CH2': 'Losing water to make a C=C is a dehydration, not an oxidation by NAD⁺.',
+    'CH3–CH3': 'Removing the –OH completely would be a reduction. Oxidizing a 1° alcohol gives an aldehyde.' } },
+  '<b>Isopropyl alcohol</b> (rubbing alcohol)': { h: 'Is the carbon with the –OH bonded to one other carbon or to two?', w: {
+    'CH3–CH2–CHO': 'An aldehyde comes from a 1° alcohol. Here the –OH is on the middle carbon (2°), so the product is a ketone.',
+    'CH3–CH=CH2': 'Losing water to make a C=C is a dehydration, not an oxidation by NAD⁺.',
+    'CH3–CH2–COOH': 'A carboxylic acid needs a 1° alcohol and two oxidations. A 2° alcohol stops at the ketone.' } },
+  'A <b>trans-enoyl CoA</b> is hydrated': { h: 'Water adds across the C=C, putting the OH on the β carbon.', w: {
+    'R–CH2–CH2–CO–S–CoA': 'Adding H₂ across the C=C is a reduction. Hydration adds H and OH.',
+    'R–CO–CH2–CO–S–CoA': 'The ketone forms in the next step, when NAD⁺ oxidizes the alcohol.',
+    'R–COO⁻ + CH3–CO–S–CoA': 'Cutting off acetyl CoA is the last step of the turn (thiolysis), not a hydration.' } },
+  'A triacylglycerol is <b>completely hydrolyzed</b>': { h: 'A triacylglycerol has three ester bonds; complete hydrolysis breaks all of them.', w: {
+    'Monoacylglycerol + 2 fatty acids': 'That is the incomplete hydrolysis done by pancreatic lipase. Complete hydrolysis breaks all three ester bonds.',
+    '3 acetyl CoA + glycerol': 'Acetyl CoA comes later, from β-oxidation of the fatty acids. Hydrolysis only breaks the ester bonds.',
+    'Glucose + 3 fatty acids': 'A triacylglycerol contains no glucose; its backbone is glycerol.' } },
+  'Pancreatic lipase digests a triacylglycerol': { h: 'Pancreatic lipase breaks two of the three ester bonds.', w: {
+    'Glycerol + 3 fatty acids': 'That is complete hydrolysis (lipoprotein lipase). In the intestine only two ester bonds are broken.',
+    'Diacylglycerol + glycerol': 'A triacylglycerol has only one glycerol, so it cannot give both a diacylglycerol and a free glycerol.',
+    '3 acetyl CoA': 'Acetyl CoA is made later by β-oxidation; digestion only hydrolyzes ester bonds.' } },
+  'Use the urea cycle diagram. <b>Arginine</b>': { h: 'Find the arrow that leaves arginine on the diagram.', w: {
+    'Urea + citrulline': 'Citrulline is made earlier, when ornithine picks up carbamoyl phosphate. Arginase gives back ornithine.',
+    'NH4^+ + fumarate': 'Fumarate leaves in the step before, when argininosuccinate splits. Arginase releases urea, not free NH₄⁺.',
+    'Aspartate + fumarate': 'Aspartate is used (not made) in the cycle, and fumarate leaves in the step before arginase.' } },
+  '<b>Glycerol 3-phosphate</b> is oxidized': { h: 'The 2° alcohol becomes a ketone; the phosphate stays.', w: {
+    'Glyceraldehyde (an aldehyde, no phosphate)': 'The –OH that is oxidized is on the middle (2°) carbon, which gives a ketone, and the phosphate stays on.',
+    'Glycerol (phosphate removed)': 'Removing the phosphate is a hydrolysis, not an oxidation by NAD⁺.',
+    'Pyruvate': 'Pyruvate is many steps away, at the end of glycolysis.' } },
+  // ---------- EXAM ----------
+  'The coenzyme FAD is reduced to FADH2 when': { h: 'FAD works on –CH₂–CH₂–, as in succinate → fumarate.', w: {
+    'C–O single; C=O double': 'Turning C–O into C=O (alcohol → ketone) is NAD⁺’s job, not FAD’s.',
+    'C=C double; C–C single': 'Reversed: turning C=C into C–C is a reduction, which would oxidize FADH₂, not reduce FAD.',
+    'C–H; C–OH': 'Adding an –OH is a hydration or hydroxylation, not the reaction FAD does.',
+    [NOTA]: 'One choice is right: FAD makes a C=C from a C–C single bond.' } },
+  'Use the β-oxidation diagram. Which compound is NOT': { h: 'Three of these are the intermediates of one turn, plus its product. Which one belongs to building fatty acids?', w: {
+    'trans-enoyl CoA': 'trans-Enoyl CoA is formed in step 1 (FAD oxidation).',
+    'β-hydroxyacyl CoA': 'β-Hydroxyacyl CoA is formed in step 2 (hydration).',
+    'β-ketoacyl CoA': 'β-Ketoacyl CoA is formed in step 3 (NAD⁺ oxidation).',
+    'acetyl CoA': 'Acetyl CoA is the product of step 4 (thiolysis).' } },
+  'An enzyme that removes CO2 from a substrate': { h: 'Which class breaks bonds without water, ATP or redox?', w: {
+    'ligase': 'Ligases join two molecules using ATP. This enzyme removes a group without ATP.',
+    'oxidoreductase': 'Nothing is oxidized or reduced, and no coenzyme such as NAD⁺ is used.',
+    'hydrolase': 'Hydrolases use water to split a bond; this enzyme does not.',
+    'isomerase': 'An isomerase rearranges atoms within one molecule; here CO₂ is removed.' } },
+  'In the electron transport chain, the O2 we breathe': { h: 'At complex IV, O₂ accepts electrons and H⁺.', w: {
+    'CO2': 'The CO₂ you breathe out comes from decarboxylations in pyruvate oxidation and the citric acid cycle, not from O₂.',
+    'ATP': 'O₂ is not built into ATP; ATP synthase makes ATP from ADP and Pᵢ.',
+    'NADH': 'NADH gives electrons at the start of the chain; O₂ accepts them at the end.',
+    'urea': 'Urea is made from nitrogen in the urea cycle; it is not related to O₂.' } },
+  'A saturated fatty acid with 12 carbons gives': { h: 'Acetyl CoA = carbons ÷ 2. The last turn releases two acetyl CoA, so turns = acetyl CoA − 1.', w: {
+    '6; 6': 'The last turn releases two acetyl CoA at once, so there is one fewer turn than acetyl CoA: 5.',
+    '12; 11': 'Each acetyl CoA has 2 carbons: 12 ÷ 2 = 6.',
+    '5; 6': 'Swapped: 6 acetyl CoA come from 5 turns.',
+    '12; 6': 'Each acetyl CoA has 2 carbons, so 12 carbons give 6 acetyl CoA.' } },
+  'What is the product when CH3–CH(OH)–CH2–COO⁻': { h: 'NAD⁺ turns a 2° alcohol into a ketone.', w: {
+    'CH3–CH=CH–COO⁻': 'Losing water to make a C=C is a dehydration, not an oxidation by NAD⁺.',
+    'CH3–CH2–CH2–COO⁻': 'Removing the –OH completely would be a reduction.',
+    'CH3–CO–CH3': 'Acetone forms when acetoacetate is decarboxylated; NAD⁺ only makes the ketone.',
+    [NOTA]: 'One choice is right: the 2° alcohol becomes a ketone, CH₃–CO–CH₂–COO⁻.' } },
+  'In glycolysis, one step splits a six-carbon sugar': { h: 'A bond broken without water, ATP or redox points to a lyase.', w: {
+    'hexokinase, a transferase': 'Hexokinase moves a phosphate from ATP to glucose (step 1); it does not split the sugar.',
+    'a dehydrogenase, an oxidoreductase': 'A dehydrogenase uses NAD⁺ (step 6); nothing is oxidized when the sugar splits.',
+    'pyruvate kinase, a transferase': 'Pyruvate kinase moves a phosphate from PEP to ADP (step 10).',
+    'an isomerase': 'An isomerase rearranges one molecule (steps 2, 5, 8); this step makes two molecules.' } },
+  'Which statement about NADPH is TRUE?': { h: 'NADPH is the reducing agent for building molecules.', w: {
+    'It is the coenzyme used in β-oxidation.': 'β-Oxidation uses FAD and NAD⁺, not NADPH.',
+    'It is the final electron acceptor of the electron transport chain.': 'O₂ is the final electron acceptor.',
+    'It contains riboflavin (vitamin B2).': 'Riboflavin (B2) is in FAD. NADPH contains niacin (B3).',
+    'It is the oxidized form of NADP^+.': 'NADPH is the reduced form; NADP⁺ is the oxidized form.' } },
+  'Glycogenolysis is a(n) ________ pathway': { h: '-lysis means breaking down; -genesis means making.', w: {
+    'anabolic; catabolic': 'Swapped: glycogenolysis breaks glycogen down (catabolic); glycogenesis builds it (anabolic).',
+    'anabolic; anabolic': '-lysis means breaking down, so glycogenolysis is catabolic.',
+    'catabolic; catabolic': '-genesis means making, so glycogenesis builds glycogen: anabolic.',
+    [NOTA]: 'One choice is right: breaking down is catabolic and building is anabolic.' } },
+  'Use the urea cycle diagram. Which pair of molecules': { h: 'Follow the arrows that leave the cycle and do not come back.', w: {
+    'urea and aspartate': 'Aspartate goes in (it brings the second N); it is not a product.',
+    'NH4^+ and ornithine': 'NH₄⁺ goes in (as carbamoyl phosphate), and ornithine is made again and stays in the cycle.',
+    'ornithine and citrulline': 'Both stay in the cycle as intermediates.',
+    'CO2 and NH3': 'CO₂ and NH₄⁺ go in, as carbamoyl phosphate; they are not products.' } },
+  'Palmitoleic acid has 16 carbons and one cis double': { h: 'Turns = carbons ÷ 2 − 1. Then subtract one FADH₂ for each existing C=C.', w: {
+    '8': '16 carbons give 8 acetyl CoA but only 7 turns, and the C=C skips one more FAD step.',
+    '7': '7 turns would make 7 FADH₂ for a saturated chain, but the existing C=C skips one FAD step: 7 − 1.',
+    '5': 'There is only one C=C, so only one FAD step is skipped: 7 − 1 = 6.',
+    '14': 'Each turn makes 1 FADH₂, not 2.' } },
+  'Which coenzyme is made from pantothenic acid': { h: 'Match each coenzyme to its vitamin: B1, B2, B3, B5, B6.', w: {
+    'NAD^+': 'NAD⁺ is made from niacin (B3).',
+    'FAD': 'FAD is made from riboflavin (B2).',
+    'thiamine pyrophosphate': 'Thiamine pyrophosphate is made from thiamine (B1).',
+    'pyridoxal phosphate': 'Pyridoxal phosphate is made from pyridoxine (B6).' } },
+  'Glycolysis makes ATP, and ATP acts as a feedback': { h: 'If the cell already has plenty of ATP, does it need to break down more glucose?', w: {
+    'activated; speeds up': 'High ATP means the cell has plenty of energy, so it slows glucose breakdown: ATP inhibits PFK.',
+    'inhibited; speeds up': 'When the enzyme is inhibited, the pathway it controls slows down.',
+    'activated; slows down': 'An activated enzyme speeds its pathway up. High ATP inhibits PFK.',
+    'unaffected; continues': 'ATP is an allosteric inhibitor of PFK, so high ATP does affect it.' } },
+  'Which process does NOT take place in the mitochondrial': { h: 'Only one of these happens in the cytosol.', w: {
+    'the citric acid cycle': 'The citric acid cycle runs in the mitochondrial matrix.',
+    'β-oxidation': 'β-Oxidation runs in the mitochondrial matrix.',
+    'pyruvate → acetyl CoA': 'Pyruvate dehydrogenase is in the mitochondrial matrix.',
+    'ketogenesis in the liver': 'Ketone bodies are made in liver mitochondria (the matrix).' } },
+  'Hydrolysis of ATP to ADP + Pi is ________': { h: 'ATP is spent to drive reactions that cannot happen on their own.', w: {
+    'endothermic; release': 'Both are reversed: ATP hydrolysis releases energy, and it drives reactions that need energy.',
+    'exothermic; release': 'A reaction that already releases energy does not need ATP. Coupling drives reactions that require energy.',
+    'endothermic; require': 'ATP hydrolysis releases energy (exothermic).',
+    [NOTA]: 'One choice is right: exothermic ATP hydrolysis drives energy-requiring reactions.' } },
+  'Ketone bodies are made in the ________ when': { h: 'Ketone bodies come from the 2-carbon unit made by β-oxidation.', w: {
+    'kidneys; urea': 'Urea is a nitrogen waste; ketone bodies come from acetyl CoA in the liver.',
+    'muscle; lactate': 'Lactate comes from pyruvate when O₂ is short; ketone bodies are made in the liver.',
+    'brain; glucose': 'The brain uses ketone bodies during fasting but does not make them; they come from acetyl CoA in the liver.',
+    'liver; pyruvate': 'Right organ, wrong molecule: ketone bodies are made from excess acetyl CoA.' } },
+  'Using 2.5 ATP per NADH and 1.5 ATP per FADH2': { h: 'Glycolysis 7 + pyruvate oxidation 5 + two turns of the citric acid cycle.', w: {
+    '2 ATP': '2 ATP is the net from glycolysis alone.',
+    '12 ATP': '12 stops before the citric acid cycle (glycolysis 7 + pyruvate oxidation 5). Add 20 from two turns of the cycle.',
+    '36 ATP': '36 uses the older values (3 per NADH, 2 per FADH₂) with a different shuttle.',
+    '38 ATP': '38 uses the older values of 3 ATP per NADH and 2 per FADH₂.' } },
+  'In R–CH2–CH2–CO–S–CoA → R–CH=CH–CO–S–CoA': { h: 'Which one loses 2 H, and which one gains them?', w: {
+    'reduced; oxidized': 'Swapped: the substrate loses 2 H (oxidized) and FAD gains them (reduced).',
+    'oxidized; oxidized': 'In a redox reaction one partner is oxidized and the other is reduced. FAD gains H and becomes FADH₂.',
+    'reduced; reduced': 'The substrate loses 2 H, so it is oxidized, not reduced.',
+    'hydrated; dehydrated': 'No water is added or removed; 2 H atoms are removed, which is an oxidation.' } },
+  'In transamination, the C=O of a keto acid becomes': { h: 'Keep the same carbon skeleton: count the carbons and –COO⁻ groups.', w: {
+    'alanine (3 C, one –COO⁻ group)': 'Alanine comes from pyruvate (3 C). Oxaloacetate has 4 C.',
+    'glutamate (5 C, two –COO⁻ groups)': 'Glutamate comes from α-ketoglutarate (5 C). Oxaloacetate has 4 C.',
+    'tyrosine (aromatic side chain)': 'The carbon skeleton stays the same, and oxaloacetate has no aromatic ring.',
+    'lysine (basic side chain)': 'The skeleton stays the same: two –COO⁻ groups make an acidic amino acid, not a basic one.' } },
+  'Lactate builds up in muscle during strenuous': { h: 'Glycolysis needs NAD⁺. What regenerates it when O₂ is short?', w: {
+    'too much O2 reaches the muscle': 'The opposite: lactate builds up when O₂ is short.',
+    'glycogen stores are full': 'Lactate is about regenerating NAD⁺, not about glycogen storage.',
+    'β-oxidation produces lactate': 'β-Oxidation makes acetyl CoA, not lactate; lactate comes from pyruvate.',
+    'the urea cycle stops': 'The urea cycle handles nitrogen; it is not involved in lactate.' } },
+  'In gluconeogenesis, fructose 1,6-bisphosphate + H2O': { h: 'Water removes a phosphate.', w: {
+    'a kinase (a transferase)': 'A kinase adds a phosphate from ATP; here water removes a phosphate.',
+    'a dehydrogenase (an oxidoreductase)': 'Nothing is oxidized; water removes a phosphate.',
+    'a mutase (an isomerase)': 'A mutase moves a phosphate within one molecule; here the phosphate leaves.',
+    'a synthetase (a ligase)': 'A synthetase joins molecules using ATP; here a bond is split by water.' } },
+  'Each turn of the citric acid cycle releases': { h: 'Count the decarboxylations and the NAD⁺ oxidations in one turn.', w: {
+    '3; 2': 'Swapped: 2 CO₂ and 3 NADH per turn.',
+    '2; 2': 'There are three NAD⁺ oxidations per turn (isocitrate, α-ketoglutarate, malate).',
+    '1; 3': 'There are two decarboxylations per turn (isocitrate, α-ketoglutarate), so 2 CO₂.',
+    '4; 6': 'That is per glucose (two turns). The question asks about one turn.' } },
+  'Which statement about glycerol released from': { h: 'Glycerol becomes a 3-carbon intermediate of glycolysis.', w: {
+    'It is broken down by β-oxidation.': 'β-Oxidation breaks down fatty acid chains, not glycerol.',
+    'It is converted directly to urea.': 'Urea is made from nitrogen; glycerol has no nitrogen.',
+    'It cannot be used for energy.': 'It can: glycerol becomes DHAP and enters glycolysis or gluconeogenesis.',
+    'It is turned into ketone bodies.': 'Ketone bodies come from acetyl CoA; glycerol becomes DHAP.' } },
+  'The positive charge in NAD^+ is located on the': { h: 'Find the N that makes 4 bonds.', w: {
+    'adenine ring': 'The adenine ring is not charged in NAD⁺; the + is on the nicotinamide N.',
+    'phosphate groups': 'The phosphates carry negative charges, not the +.',
+    'ribose sugar': 'Ribose is neutral.',
+    [NOTA]: 'One choice is right: the nicotinamide N, with 4 bonds, carries the +.' } },
+  'Which coenzyme accepts the hydrogens when malate': { h: 'Which coenzyme oxidizes alcohols to ketones? Check whether it is in the list.', w: {
+    'FAD': 'FAD makes a C=C from a C–C (as in succinate → fumarate). Alcohol → ketone uses NAD⁺.',
+    'NADPH': 'NADPH is a reduced coenzyme that gives H for biosynthesis; it does not accept them here.',
+    'coenzyme A': 'Coenzyme A carries acyl groups, not hydrogens.',
+    'ATP': 'ATP is an energy carrier, not a hydrogen acceptor.' } },
+  'Which pathway converts acetyl CoA into fatty acids': { h: 'Building fatty acids is anabolic and uses NADPH.', w: {
+    'β-oxidation': 'β-Oxidation breaks fatty acids down into acetyl CoA, in the mitochondria.',
+    'ketogenesis': 'Ketogenesis makes ketone bodies from acetyl CoA, in liver mitochondria.',
+    'gluconeogenesis': 'Gluconeogenesis makes glucose, and acetyl CoA cannot be turned into net glucose.',
+    'glycogenesis': 'Glycogenesis builds glycogen from glucose.' } },
+  'How many electrons are passed along when one FADH2': { h: 'FADH₂ carries two H atoms.', w: {
+    '0': 'FADH₂ does pass electrons; that is how it powers the chain.',
+    '1': 'FADH₂ carries 2 H atoms, which is 2 electrons.',
+    '3': 'FADH₂ carries 2 H atoms, which is 2 electrons.',
+    '4': '4 electrons is what one O₂ needs at complex IV; one FADH₂ gives 2.' } },
+  'Amino acids whose carbon skeletons are degraded': { h: 'Acetyl CoA can make ketone bodies but not net glucose.', w: {
+    'glucogenic': 'Glucogenic amino acids give pyruvate or citric acid cycle intermediates, which can become glucose. Acetyl CoA cannot.',
+    'essential': 'Essential vs nonessential is about whether the body can make the amino acid, not what it is broken down to.',
+    'nonessential': 'Essential vs nonessential is about whether the body can make the amino acid, not what it is broken down to.',
+    [NOTA]: 'One choice is right: amino acids that give acetyl CoA are ketogenic.' } }
+};
+for (const bank of [ENERGY, PREDICT, EXAMQ]) for (const it of bank) {
+  const k = Object.keys(WHYS_ADD).find(p => it.q.startsWith(p)); if (!k) continue;
+  const add = WHYS_ADD[k]; if (!it.h) it.h = add.h; it.whys = Object.assign({}, add.w, it.whys || {});
+}
+/*WHYS-OVERLAY-END*/
 
 /* wrong-choice feedback for ATP & energy (same order as each item's w list) */
 [
@@ -1357,6 +1828,49 @@ const ENZ_NOT_WITH = { 'pyruvate dehydrogenase': ['pyruvate decarboxylase (yeast
 const STRUCT_ENZ = (() => { const seen = {}; STRUCT_Q.forEach(r => { seen[r.enz] = (seen[r.enz] || 0) + 1; }); return STRUCT_Q.filter(r => r.enz && seen[r.enz] === 1 && !/^\(/.test(r.enz) && !ENZ_REVERSE.includes(r.enz)).map(r => r.enz); })();
 const TWIN = { NADH: 'NADPH', NADPH: 'NADH' };
 const structBag = bag(STRUCT_Q);
+/* per-choice reasons for Structures: enzyme and Structures: coenzyme (2026-11-14): what the wrong choice would do */
+const ENZ_DOES = {
+ "succinate dehydrogenase": "oxidizes succinate to fumarate: a C–C becomes a C=C and FAD takes the 2 H",
+ "fumarase": "adds water across the C=C of fumarate to make malate (a hydration)",
+ "malate dehydrogenase": "oxidizes the 2° alcohol of malate to the ketone of oxaloacetate; NAD⁺ takes the 2 H",
+ "pyruvate dehydrogenase": "turns pyruvate into acetyl CoA: CO₂ leaves, NAD⁺ is reduced and CoA is added (oxidative decarboxylation)",
+ "isocitrate dehydrogenase": "oxidizes isocitrate and removes CO₂ to give α-ketoglutarate; NAD⁺ is reduced",
+ "α-ketoglutarate dehydrogenase": "turns α-ketoglutarate into succinyl CoA: CO₂ leaves, NAD⁺ is reduced and CoA is added",
+ "hexokinase": "puts a phosphate from ATP on C6 of glucose",
+ "phosphofructokinase": "puts a phosphate from ATP on C1 of fructose 6-phosphate, making fructose 1,6-bisphosphate",
+ "glycerol kinase": "puts a phosphate from ATP on glycerol, making glycerol 3-phosphate",
+ "phosphoglycerate kinase": "moves a phosphate from 1,3-bisphosphoglycerate to ADP, making ATP",
+ "pyruvate kinase": "moves the phosphate from phosphoenolpyruvate to ADP, making ATP and pyruvate",
+ "phosphoglucose isomerase": "rearranges glucose 6-phosphate (an aldose) into fructose 6-phosphate (a ketose)",
+ "phosphoglycerate mutase": "moves the phosphate from C3 to C2 of 3-phosphoglycerate",
+ "phosphoglucomutase": "moves a phosphate between C1 and C6 of glucose",
+ "transaminase (PLP)": "swaps the amino group of an amino acid with the C=O of an α-keto acid, using PLP",
+ "glutamate dehydrogenase": "removes the amino group of glutamate as NH₄⁺ (oxidative deamination), giving α-ketoglutarate",
+ "pyruvate decarboxylase (yeast)": "removes CO₂ from pyruvate to make acetaldehyde in yeast fermentation",
+ "glycerol 3-phosphate dehydrogenase": "oxidizes the alcohol of glycerol 3-phosphate to the ketone of dihydroxyacetone phosphate",
+ "acyl CoA dehydrogenase": "starts β-oxidation: it removes 2 H to make a C=C next to the thioester, and FAD takes them",
+ "enoyl CoA hydratase": "adds water across the C=C in β-oxidation, putting an OH on the β carbon",
+ "β-hydroxyacyl CoA dehydrogenase": "oxidizes the β-OH to a β-ketone in β-oxidation; NAD⁺ takes the 2 H",
+ "enolase": "removes water from 2-phosphoglycerate to make phosphoenolpyruvate (a dehydration)",
+ "dehydratase (lipogenesis)": "removes water from the β-OH to make a C=C while building a fatty acid",
+ "pyruvate carboxylase": "adds CO₂ to pyruvate, paid for by ATP, to make oxaloacetate",
+ "acetyl CoA carboxylase": "adds CO₂ to acetyl CoA, paid for by ATP, to make malonyl CoA",
+ "arginase": "uses water to split arginine into urea and ornithine",
+ "argininosuccinate synthetase": "joins citrulline and aspartate into argininosuccinate, paid for by ATP",
+ "aldolase": "splits fructose 1,6-bisphosphate into two 3-carbon pieces",
+ "argininosuccinate lyase": "splits argininosuccinate into arginine and fumarate"
+};
+const COENZ_DOES = {
+ "NAD^+": "NAD⁺ takes 2 H when an alcohol is oxidized to a C=O. It would show up as NAD⁺ → NADH on the arrow.",
+ "NADH": "NADH gives 2 H to reduce a molecule (outside fatty-acid synthesis). It would show up as NADH → NAD⁺.",
+ "FAD": "FAD takes 2 H when a C–C becomes a C=C. It would show up as FAD → FADH₂.",
+ "NADPH": "NADPH gives 2 H when the body builds molecules, such as fatty acids on ACP.",
+ "Coenzyme A": "Coenzyme A ends up on the product as a thioester (S–CoA).",
+ "ATP / ADP": "ATP gives a phosphate (phosphorylation) or pays to join CO₂; ADP takes a phosphate to make ATP.",
+ "PLP (vitamin B6)": "PLP carries an amino group from one molecule to another (transamination).",
+ "None": "This step does use a coenzyme: something on the hidden arrow changes form. Compare the structures to see what."
+};
+const enzWhy = e => ENZ_DOES[e] ? `${fe(e).charAt(0).toUpperCase() + fe(e).slice(1)} ${ENZ_DOES[e]}. That is a different step.` : '';
 function genStruct() {
   const r = structBag.next(), key = r.a + '|' + r.b, why = f(r.why);
   const kinds = ['type', 'class', 'class'];
@@ -1374,11 +1888,11 @@ function genStruct() {
   if (k === 'coenz') {
     const right = pick(r.co), pool = COENZ_OPTS.filter(c => !r.co.includes(c) && c !== TWIN[right]);
     const opts = shuffle([right, ...shuffle(pool).slice(0, 3)]);
-    return Object.assign(base, { tag: 'Structures: coenzyme', prompt: 'The coenzyme labels on the arrow are hidden (?). Which <b>coenzyme</b> does this step use?', choices: opts.map(c => ({ html: f(c), ok: c === right, slip: 'struct-coenzyme' })), answer: f(right),
+    return Object.assign(base, { tag: 'Structures: coenzyme', prompt: 'The coenzyme labels on the arrow are hidden (?). Which <b>coenzyme</b> does this step use?', choices: opts.map(c => ({ html: f(c), ok: c === right, slip: 'struct-coenzyme', why: c === right ? '' : (COENZ_DOES[c] || '') })), answer: f(right),
       solution: `${why}<br><b>Coenzyme:</b> ${r.co.map(f).join(' and ')}.`, hint: 'Count the H atoms. Losing 2 H (alcohol → C=O, or C–C → C=C next to a C=O) needs an oxidized coenzyme: NAD⁺ for an alcohol, FAD for a C=C. Gaining 2 H needs NADH (NADPH when building fatty acids on ACP). A phosphate going on comes from ATP. CoA ends up on the product as S–CoA.', video: 'redox' });
   }
   const others = shuffle(STRUCT_ENZ.filter(e => e !== r.enz && !(ENZ_NOT_WITH[r.enz] || []).includes(e))).slice(0, 3);
-  return Object.assign(base, { tag: 'Structures: enzyme', prompt: 'Which <b>enzyme</b> catalyzes this step?', choices: shuffle([r.enz, ...others]).map(e => ({ html: fe(e), ok: e === r.enz, slip: 'struct-enzyme' })), answer: fe(r.enz),
+  return Object.assign(base, { tag: 'Structures: enzyme', prompt: 'Which <b>enzyme</b> catalyzes this step?', choices: shuffle([r.enz, ...others]).map(e => ({ html: fe(e), ok: e === r.enz, slip: 'struct-enzyme', why: e === r.enz ? '' : enzWhy(e) })), answer: fe(r.enz),
     solution: `${why}<br><b>Enzyme:</b> ${fe(r.enz)}, ${/^[AEIOU]/.test(r.cls) ? 'an' : 'a'} ${r.cls.toLowerCase()}.`, hint: 'Name the substrate, then the change: a dehydrogenase removes H, a kinase adds a phosphate from ATP, an isomerase or mutase rearranges, a hydratase adds water, a carboxylase adds CO₂.', video: 'redox' });
 }
 function genRxn() {
@@ -1495,7 +2009,7 @@ function genExam() {
   const it = examBag.next(), L = 'ABCDE';
   const all = shuffle([{ t: it.a, ok: true }, ...it.w.map(t => ({ t, ok: false }))]);
   const i = all.findIndex(x => x.t === NOTA || /^all of the above/.test(x.t)); if (i >= 0) all.push(all.splice(i, 1)[0]);
-  return { topic: 'exam', tag: 'Exam-style', kind: 'choice', one: 1, art: it.fig ? FIG[it.fig]() : '', prompt: f(it.q), choices: all.map((x, k) => ({ html: `<span class="lt">${L[k]}</span>${f(x.t)}`, ok: x.ok, slip: (it.slips && it.slips[x.t]) || it.slip || 'exam-style' })), answer: f(it.a), solution: f(it.why), hint: it.h ? f(it.h) : '' };
+  return { topic: 'exam', tag: 'Exam-style', kind: 'choice', one: 1, art: it.fig ? FIG[it.fig]() : '', prompt: f(it.q), choices: all.map((x, k) => ({ html: `<span class="lt">${L[k]}</span>${f(x.t)}`, ok: x.ok, slip: (it.slips && it.slips[x.t]) || it.slip || 'exam-style', why: !x.ok && it.whys && it.whys[x.t] ? f(it.whys[x.t]) : '' })), answer: f(it.a), solution: f(it.why), hint: it.h ? f(it.h) : '' };
 }
 GENERATORS.table = genTable; GENERATORS.exam = genExam;
 
@@ -1503,7 +2017,7 @@ GENERATORS.table = genTable; GENERATORS.exam = genExam;
 function genDouble() {
   const d = pick(DOUBLE), [x, y] = d.ans, X = DOUBLE_PAIRS[x], Y = DOUBLE_PAIRS[y];
   const opts = shuffle([[x, y, true], [X, y], [x, Y], [X, Y]]);
-  return { topic: 'rxn', tag: 'Two reactions in one step', kind: 'choice', grid: 1, eq: rxnBox(d, false), prompt: 'This counts as one step, but it is really <b>two</b> reactions. Which two?', choices: opts.map(([a, b, ok]) => ({ html: `${a} and ${b}`, ok: !!ok, slip: (a !== x ? 'redox-flip' : 'double-rxn') })), answer: `${x} and ${y}`, solution: f(d.why), hint: 'Look at each change over the arrow separately: the coenzyme, then any CO₂, phosphate, water or NH₄⁺.' };
+  return { topic: 'rxn', tag: 'Two reactions in one step', kind: 'choice', grid: 1, eq: rxnBox(d, false), prompt: 'This counts as one step, but it is really <b>two</b> reactions. Which two?', choices: opts.map(([a, b, ok]) => ({ html: `${a} and ${b}`, ok: !!ok, slip: (a !== x ? 'redox-flip' : 'double-rxn'), why: ok ? '' : [a !== x ? DOUBLE_WHY[a] : '', b !== y ? DOUBLE_WHY[b] : ''].filter(Boolean).join(' ') })), answer: `${x} and ${y}`, solution: f(d.why), hint: 'Look at each change over the arrow separately: the coenzyme, then any CO₂, phosphate, water or NH₄⁺.' };
 }
 function genMatchEnd() {
   const rows = shuffle(MATCH_END).slice(0, 4);
@@ -1513,7 +2027,7 @@ function genMatchEnd() {
 function genFattyFormula() {
   const C = pick([12, 14, 16]), n = C - 2, ac = C / 2, t = ac - 1, ac2 = n / 2;
   const opts = [[`${ac}, ${t}, ${t}`, 1, ''], [`${ac}, ${ac}, ${ac}`, 0, 'turns-equal-acetyl'], [`${ac}, ${ac + 1}, ${ac + 1}`, 0, 'turns-equal-acetyl'], [`${ac2}, ${ac2 - 1}, ${ac2 - 1}`, 0, 'carbon-count']];
-  return { topic: 'fatty', tag: 'Fatty acid formula', kind: 'choice', grid: 1, flags: { fat: 1 }, eq: `<div class="rxn"><span class="side cf">${f(`CH3(CH2)${n}COOH`)}</span></div>`, prompt: 'During the complete β-oxidation of this fatty acid, how many <b>acetyl CoA</b>, <b>NADH</b> and <b>FADH<sub>2</sub></b> are produced? (in that order)', choices: shuffle(opts).map(([h, ok, s]) => ({ html: h, ok: !!ok, slip: s || 'fatty-count', why: s === 'carbon-count' ? `Count the carbons: CH₃ + ${n} CH₂ + COOH = ${C}, not ${n}.` : '' })), answer: `${ac}, ${t}, ${t}`, solution: `Carbons: 1 (CH₃) + ${n} (CH₂) + 1 (COOH) = <b>${C}</b>. Acetyl CoA = ${C} ÷ 2 = ${ac}. Turns = ${ac} − 1 = ${t}, each making 1 NADH and 1 FADH₂.`, hint: 'First count all the carbons, including the CH₃ and the COOH carbon.' };
+  return { topic: 'fatty', tag: 'Fatty acid formula', kind: 'choice', grid: 1, flags: { fat: 1 }, eq: `<div class="rxn"><span class="side cf">${f(`CH3(CH2)${n}COOH`)}</span></div>`, prompt: 'During the complete β-oxidation of this fatty acid, how many <b>acetyl CoA</b>, <b>NADH</b> and <b>FADH<sub>2</sub></b> are produced? (in that order)', choices: shuffle(opts).map(([h, ok, s]) => ({ html: h, ok: !!ok, slip: s || 'fatty-count', why: s === 'carbon-count' ? `Count the carbons: CH₃ + ${n} CH₂ + COOH = ${C}, not ${n}.` : s === 'turns-equal-acetyl' ? 'The last turn releases two acetyl CoA at once, so there is one fewer turn than acetyl CoA. Each turn makes 1 NADH and 1 FADH₂.' : '' })), answer: `${ac}, ${t}, ${t}`, solution: `Carbons: 1 (CH₃) + ${n} (CH₂) + 1 (COOH) = <b>${C}</b>. Acetyl CoA = ${C} ÷ 2 = ${ac}. Turns = ${ac} − 1 = ${t}, each making 1 NADH and 1 FADH₂.`, hint: 'First count all the carbons, including the CH₃ and the COOH carbon.' };
 }
 /* ---------- Challenge: two steps in a row (A → B → C), drawn with the step close-ups; no names to memorize ---------- */
 // per step: [reaction type (RT key), coenzymes (COENZ keys), enzyme class or null if not asked, classes never offered as distractors]
@@ -1638,7 +2152,7 @@ function renderStats() {
   $('rankName').textContent = r.name; $('rankLine').textContent = r.name;
   $('xpShort').textContent = r.to ? `${P.xp} / ${r.to} XP` : `${P.xp} XP`; $('xpText').textContent = `${P.xp} XP` + (r.to ? ` · ${r.to - P.xp} to next rank` : '');
   $('xpFill').style.width = (r.to ? Math.min(100, (P.xp - r.from) / (r.to - r.from) * 100) : 100) + '%';
-  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
+  $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best; $('sAssisted').textContent = P.assisted || 0;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
   $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${artImg(a[3], a[4])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
@@ -1689,7 +2203,7 @@ function renderQ(q) {
 }
 function newQuestion(focus) {
   const q = makeQuestion();
-  state.q = q; state.tries = 0; state.helped = false; state.done = false; state.logged = false; state.picked = []; state.boss = false;
+  state.q = q; state.tries = 0; state.wrongPicks = []; state.helped = false; state.done = false; state.logged = false; state.picked = []; state.boss = false;
   showPanel('play');
   const T = TOPICS[q.topic];
   $('playTitle').textContent = state.quiz ? 'Exam Prep Check' : state.sel.size > 1 ? 'Mixed practice' : T.label;
@@ -1762,7 +2276,7 @@ function choose(i) {
   const q = state.q; if (state.done) return;
   const c = q.choices[i], btn = document.querySelector(`#qBox [data-choice="${i}"]`);
   if (c.ok) { btn.classList.add('right'); markRes(btn, true); grade(true, '', ''); }
-  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; grade(false, c.slip || 'choice', c.why || qbChoiceWhy(q, c)); }
+  else { btn.classList.add('wrong'); markRes(btn, false); btn.disabled = true; (state.wrongPicks = state.wrongPicks || []).push(i); grade(false, c.slip || 'choice', c.why || qbChoiceWhy(q, c)); }
 }
 function ddLog(ok, slip) {
   try {
@@ -1806,11 +2320,22 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+/* when a choice question is over: why the right answer is right, and a reason for every other choice (Dr. Dan, 2026-11-14) */
+function whyAll(q) {
+  if (!q || q.kind !== 'choice' || !q.choices) return '';
+  const T = h => String(h || '').replace(/<[^>]+>/g, '').trim(), picked = state.wrongPicks || [];
+  const rows = q.choices.map((c, i) => { if (c.ok) return ''; const w = c.why || qbChoiceWhy(q, c); if (T(w).length < 9) return '';
+    return `<li><span class="wa-x" aria-hidden="true">✗</span><span><b>${c.html}</b>${picked.includes(i) ? ' <small>(your pick)</small>' : ''}<br>${w}</span></li>`; }).filter(Boolean);
+  return rows.length ? `<details class="whyall" open><summary>Why the other choices are wrong</summary><ul>${rows.join('')}</ul></details>` : '';
+}
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind;
+  if (state.done && state.q && state.q.kind === 'choice') html = html.replace('<div class="sol">', '<div class="sol"><b>Why it’s right:</b> ') + whyAll(state.q);
+  f.innerHTML = html; }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
-  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
-  state.done = true; state.helped = true;
+  if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); if (state.quiz) P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
+  if (!state.quiz) P.assisted = (P.assisted || 0) + 1; /* house rule: Show answer counts as Assisted and keeps the streak */
+    state.done = true; state.helped = true;
   if (q.kind === 'fields') q.fields.forEach((fd, i) => { const el = $('fd' + i); el.value = fd.value; el.classList.remove('bad'); el.classList.add('ok'); fieldRes(el, true); });
   if (q.kind === 'order') { state.picked = q.seq.map(s => q.order.indexOf(s)); renderSeq(true); }
   save(); renderStats();
