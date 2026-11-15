@@ -153,6 +153,13 @@ svg.mol .el-O{fill:#c2412d}svg.mol .el-N{fill:#2f5fc4}svg.mol .el-H{fill:#55607a
 svg.mol .tapatom{cursor:pointer}svg.mol .tapatom:focus{outline:none}svg.mol .tapatom:focus .hit,svg.mol .tapatom.sel .hit{stroke:#4b57d1;stroke-width:3;fill:#eef0fe}
 svg.mol .tnum{fill:#4b57d1}svg.mol .tnum.ok{fill:#2f8a64}svg.mol .tnum.no{fill:#c4475d}
 svg.mol .tnumt{font:800 12px var(--font);fill:#fff;pointer-events:none}
+svg.mol .bepick{cursor:pointer;-webkit-tap-highlight-color:transparent}svg.mol .bepick:focus{outline:none}svg.mol .bepick:focus-visible line[stroke="transparent"]{stroke:#4b57d133}
+/* v21: stop iOS double-tap zoom when bonds or buttons are tapped quickly; pinch zoom still works */ html{touch-action:manipulation}
+.bep-side{border:1.5px dashed var(--line2);border-radius:14px;padding:6px 8px;margin:6px 0}.bep-side.active{border:2px solid #3a9a71;background:#f3fbf6}.bep-side.dim{opacity:.55}
+.bep-cap{font-weight:800;font-size:.9rem;color:var(--muted);text-align:center}.bep-side.active .bep-cap{color:#1f6b47}
+.bep-side .rxn-row svg.mol{max-width:min(300px,100%)}svg.mol .el{pointer-events:none}
+.bep-build{border:1.5px solid var(--line);border-radius:12px;background:#fbfbfe;padding:8px 12px;margin-top:8px;font-weight:800;text-align:center}.bep-build small{display:block;font-weight:600;color:var(--muted);margin-top:2px}
+.bep-f{font-size:1.05rem}.bep-term{white-space:nowrap}
 svg.mol .tapbond{cursor:pointer}svg.mol .tapbond:focus{outline:none}svg.mol .tapbond:focus .tnum,svg.mol .tapbond.sel .tnum{stroke:#1f2a44;stroke-width:2.5}
 svg .zone{cursor:pointer;color:#4b57d1}svg .zone:hover,svg .zone:focus{color:#2f3bb0;outline:none}svg .zone.right{color:#2f8a64}svg .zone.wrong{color:#c4475d}
 .lrow .lslots{display:flex;gap:8px;flex-wrap:wrap;flex:1 1 260px}.lrow label{display:flex;align-items:center;gap:6px;font-weight:800;color:var(--muted)}
@@ -589,8 +596,14 @@ function molSvg(S, o = {}) {
   S.bonds.forEach((b, i) => {
     const p = P[b.a], q = P[b.b], dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, px = -uy, py = ux, r = 15, hi = o.hl === i || o.bsel === i;
     const offs = b.o === 1 ? [0] : b.o === 2 ? [-3.8, 3.8] : [-6.5, 0, 6.5];
-    if (hi) out += `<line x1="${p.x + ux * r}" y1="${p.y + uy * r}" x2="${q.x - ux * r}" y2="${q.y - uy * r}" stroke="#ffd6df" stroke-width="20" stroke-linecap="round"/>`;
-    offs.forEach(k => { out += `<line x1="${(p.x + ux * r + px * k).toFixed(1)}" y1="${(p.y + uy * r + py * k).toFixed(1)}" x2="${(q.x - ux * r + px * k).toFixed(1)}" y2="${(q.y - uy * r + py * k).toFixed(1)}" stroke="${hi ? '#d9577f' : '#3d4a73'}" stroke-width="${hi ? 3.4 : 2.6}" stroke-linecap="round"/>`; });
+    /* v21: o.pick = { id, sel, done } makes every bond a tap target (bond-energy "tap the bonds" steps); picked bonds glow green */
+    const pk = o.pick, on = pk && (pk.all || pk.sel[i]), col = on ? '#1f8a5a' : hi ? '#d9577f' : '#3d4a73';
+    let seg = '';
+    if (hi) seg += `<line x1="${p.x + ux * r}" y1="${p.y + uy * r}" x2="${q.x - ux * r}" y2="${q.y - uy * r}" stroke="#ffd6df" stroke-width="20" stroke-linecap="round"/>`;
+    if (on) seg += `<line x1="${(p.x + ux * (r - 4)).toFixed(1)}" y1="${(p.y + uy * (r - 4)).toFixed(1)}" x2="${(q.x - ux * (r - 4)).toFixed(1)}" y2="${(q.y - uy * (r - 4)).toFixed(1)}" stroke="#bfeccf" stroke-width="${b.o === 1 ? 14 : 22}" stroke-linecap="round"/>`;
+    offs.forEach(k => { seg += `<line x1="${(p.x + ux * r + px * k).toFixed(1)}" y1="${(p.y + uy * r + py * k).toFixed(1)}" x2="${(q.x - ux * r + px * k).toFixed(1)}" y2="${(q.y - uy * r + py * k).toFixed(1)}" stroke="${col}" stroke-width="${hi || on ? 3.4 : 2.6}" stroke-linecap="round"/>`; });
+    if (pk && !pk.all) { const nm = beLabel(S.atoms[b.a].el, S.atoms[b.b].el, b.o); out += `<g class="bepick${on ? ' on' : ''}" data-bep="${pk.id}:${i}" role="button" tabindex="0" aria-pressed="${!!on}" aria-label="${nm} bond${on ? ', marked' : ''}"><line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}" stroke="transparent" stroke-width="30" stroke-linecap="butt"/>${seg}</g>`; }
+    else out += seg;
     if (o.bnums && o.bnums[i] != null) top += bondBadge(i, o.bnums[i], p, q, px, py, b.o, o.bmarks && o.bmarks[i], `${S.atoms[b.a].el}–${S.atoms[b.b].el}`);
   });
   S.atoms.forEach((a, i) => {
@@ -610,7 +623,7 @@ function molSvg(S, o = {}) {
     x1 += 26;
   }
   const w = x1 - x0, h = y1 - y0;
-  return `<svg class="mol" viewBox="${x0.toFixed(0)} ${y0.toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}" style="width:${Math.min(w, o.maxW || 520).toFixed(0)}px" role="${top ? 'group' : 'img'}" aria-label="${esc(o.label || 'Lewis structure')}">${out}${top}</svg>`;
+  return `<svg class="mol" viewBox="${x0.toFixed(0)} ${y0.toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}" style="width:${Math.min(w, o.maxW || 520).toFixed(0)}px" role="${top || (o.pick && !o.pick.all) ? 'group' : 'img'}" aria-label="${esc(o.label || 'Lewis structure')}">${out}${top}</svg>`;
 }
 /* numbered, tappable bond badge (Bond Labeler) */
 function bondBadge(i, n, p, q, px, py, ord, mark, name) {
@@ -1516,16 +1529,47 @@ function beMiniTable(an) {
 const beSumTxt = c => Object.entries(c).map(([k, v]) => `${v > 1 ? v + '(' + beD(k) + ')' : beD(k)}`).join(' + ');
 const beSigned = n => (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n);
 function beDHdiag(an) { return v => v === an.sf - an.sb && an.dH ? ['be-sign-flip', 'That’s formed − broken. ΔH = ΣD(bonds <b>broken</b>) − ΣD(bonds <b>formed</b>): energy in for breaking, energy out for forming.'] : v === an.sbNo - an.sfNo && an.sbNo - an.sfNo !== an.dH ? ['be-no-coefficients', 'Multiply each molecule’s bonds by its coefficient in the balanced equation.'] : v === Math.abs(an.dH) && an.dH < 0 ? ['be-sign-flip', 'Check the sign: more energy is released forming bonds than is used breaking them, so ΔH is negative.'] : ['be-arith', `ΔH = ΣD(broken) − ΣD(formed) = ${an.sb} − ${an.sf}.`]; }
+/* v21: Tap the Bonds. Steps 1–2: tap every bond that breaks (reactants) and every bond that forms (products) on the Lewis structures.
+   Each tap builds the formula with the coefficient already in it (2 CO₂, both C=O tapped → 4(C=O)). Step 3: use the table to put in D values.
+   Every bond is in the answer (the OpenStax method breaks every reactant bond and forms every product bond), so a check can only find bonds left untapped. */
+const beMols = R => [...R[0].map(([n, f], j) => ({ id: 'r' + j, side: 're', n, f, S: beSpec(f) })), ...R[1].map(([n, f], j) => ({ id: 'p' + j, side: 'pr', n, f, S: beSpec(f) }))];
+function bePickCounts(mols, side, sel) {
+  const c = {}, terms = {};
+  mols.filter(m => m.side === side).forEach(m => {
+    const s = sel[m.id] || {}, per = {};
+    m.S.bonds.forEach((b, i) => { if (!s[i]) return; const k = beLabel(m.S.atoms[b.a].el, m.S.atoms[b.b].el, b.o); per[k] = (per[k] || 0) + 1; });
+    Object.entries(per).forEach(([k, v]) => { c[k] = (c[k] || 0) + v * m.n; (terms[k] = terms[k] || []).push([m.n, m.f, v]); });
+  });
+  return { c, terms };
+}
+const beOrderKeys = (c, ref) => Object.keys(c).sort((x, y) => { const ix = ref.indexOf(x), iy = ref.indexOf(y); return (ix < 0 ? 99 : ix) - (iy < 0 ? 99 : iy); });
+const beFormula = (c, ref) => beOrderKeys(c, ref || Object.keys(c)).map(k => `<span class="bep-term">${c[k]}(${k})</span>`).join(' + ');
+const beBreakdown = (pc, ref) => beOrderKeys(pc.c, ref).filter(k => pc.terms[k].length > 1 || pc.terms[k][0][0] > 1).map(k => `<span class="bep-term">${pc.c[k]}(${k}) = ${pc.terms[k].map(([n, f, v]) => `${n} ${F(f)} × ${v}`).join(' + ')}</span>`).join(' · ');
+const beFullSel = (mols, side) => { const sel = {}; mols.filter(m => m.side === side).forEach(m => { sel[m.id] = {}; m.S.bonds.forEach((b, i) => { sel[m.id][i] = true; }); }); return sel; };
+function checkBePick(p, sel) {
+  const mols = p.mols.filter(m => m.side === p.side), tapped = mols.reduce((s, m) => s + Object.keys(sel[m.id] || {}).length, 0);
+  if (!tapped) return null;
+  const miss = mols.map(m => [m, m.S.bonds.filter((b, i) => !(sel[m.id] || {})[i]).length]).filter(([, k]) => k);
+  if (!miss.length) return { ok: true };
+  const verb = p.side === 're' ? 'breaks' : 'forms', where = p.side === 're' ? 'reactant' : 'product';
+  return { ok: false, slip: 'be-missed-bond', why: miss.map(([m, k]) => { const t = m.S.bonds.length; return `${F(m.f)}: ${k === t ? (t === 1 ? 'its bond is not tapped yet.' : `none of its ${t} bonds are tapped yet.`) : `${k} of its ${t} bonds ${k > 1 ? 'are' : 'is'} not tapped yet.`}`; }).join(' ') + ` Every bond in every ${where} ${verb}. (A double or triple bond is one bond: tap it once.)` };
+}
+const beEx = c => { const [k, n] = Object.entries(c).sort((a, b) => b[1] - a[1])[0]; return `${n}(${k}) means ${n} × ${beD(k)} = ${n * beD(k)} kJ`; };
 function genBondEnergy() {
-  const R = drawBag('bondenergy', BE_RXN), an = beAnalyze(R);
-  const countField = (side, k, n) => { const one = {}; side.forEach(([c, f]) => { const b = beBonds(f)[k]; if (b) one[f] = [c, b]; }); return { key: (side === an.re ? 'b' : 'f') + k.replace(/[^A-Za-z]/g, '') + ['', 's', 'd', 't'][k.includes('≡') ? 3 : k.includes('=') ? 2 : 1], label: `${k} bonds`, answer: n, diag: v => Object.values(one).some(([c, b]) => c > 1 && v === b) ? ['be-no-coefficients', `That’s one molecule. Multiply by the coefficient: ${Object.entries(one).map(([f, [c, b]]) => `${c} ${F(f)} × ${b}`).join(' + ')}.`] : ['be-count', `Count every ${k} bond in each ${side === an.re ? 'reactant' : 'product'} drawing, then multiply by that molecule’s coefficient.`] }; };
-  const sideFields = (side, c) => Object.entries(c).map(([k, n]) => countField(side, k, n));
-  const p1 = numPart('<b>Bonds broken:</b> how many of each bond are in the reactants (count every bond, times the coefficient), and how much energy does breaking them all take?', [...sideFields(an.re, an.br), { key: 'sb', label: 'ΣD broken (kJ)', answer: an.sb, diag: v => v === an.shortB && an.shortB !== an.sb ? ['be-shortcut', 'That’s the shortcut (only the bonds that change). It gives the same ΔH, but this step asks for <b>every</b> bond in the reactants.'] : v === an.sbNo && an.sbNo !== an.sb ? ['be-no-coefficients', 'Multiply each molecule’s bond energies by its coefficient.'] : ['be-arith', 'Multiply each count by its D value from the table, then add.'] }], { hint: 'Every bond in every reactant breaks. Count each kind of bond in one molecule from its drawing, multiply by the coefficient, then multiply by D from the table and add.', solution: `ΣD(broken) = ${beSumTxt(an.br)} = <b>${an.sb} kJ</b>` });
-  const p2 = numPart('<b>Bonds formed:</b> how many of each bond are in the products, and how much energy is released forming them?', [...sideFields(an.pr, an.fo), { key: 'sf', label: 'ΣD formed (kJ)', answer: an.sf, diag: v => v === an.shortF && an.shortF !== an.sf ? ['be-shortcut', 'That’s the shortcut (only the bonds that change). This step asks for <b>every</b> bond in the products.'] : v === an.sfNo && an.sfNo !== an.sf ? ['be-no-coefficients', 'Multiply each product’s bond energies by its coefficient.'] : ['be-arith', 'Multiply each count by its D value, then add.'] }], { hint: 'Every bond in every product forms. Count bonds in one molecule, multiply by the coefficient, then by D.', solution: `ΣD(formed) = ${beSumTxt(an.fo)} = <b>${an.sf} kJ</b>` });
-  const p3 = numPart('Estimate ΔH for the reaction. Include the sign.', [{ key: 'dh', label: 'ΔH (kJ)', answer: an.dH, show: beSigned(an.dH), diag: beDHdiag(an) }], { hint: 'ΔH = ΣD(bonds broken) − ΣD(bonds formed).', solution: `ΔH = ${an.sb} − ${an.sf} = <b>${beSigned(an.dH)} kJ</b>` });
+  const R = drawBag('bondenergy', BE_RXN), an = beAnalyze(R), mols = beMols(R), refB = Object.keys(an.br), refF = Object.keys(an.fo);
+  const fB = beFormula(an.br, refB), fF = beFormula(an.fo, refF);
+  const bdB = beBreakdown(bePickCounts(mols, 're', beFullSel(mols, 're')), refB), bdF = beBreakdown(bePickCounts(mols, 'pr', beFullSel(mols, 'pr')), refF);
+  const box = (lab, f, bd) => `<div class="bep-build">${lab}: <span class="bep-f">${f}</span><small>${bd}</small></div>`;
+  const p1 = { kind: 'bepick', side: 're', mols, ref: refB, ask: '<b>Bonds broken.</b> Every bond in the reactants breaks. Tap each one on the Lewis structures (it turns green). The formula builds as you tap, with the coefficients already in.', answer: box('Bonds broken', fB, bdB), formula: fB, hint: 'Tap every line between two atoms in the reactants. A double bond (=) or triple bond (≡) counts as one bond: one tap. You only need to tap one copy of each molecule: the coefficient in front multiplies it for you.', solution: `Every reactant bond breaks: ${fB}.` };
+  const p2 = { kind: 'bepick', side: 'pr', mols, ref: refF, ask: '<b>Bonds formed.</b> Every bond in the products forms. Tap each one.', answer: box('Bonds formed', fF, bdF), formula: fF, hint: 'Tap every bond in each product molecule. The coefficient in front multiplies each bond you tap.', solution: `Every product bond forms: ${fF}.` };
+  const p3 = numPart(`<b>Use the table.</b> Put each bond’s D value (kJ/mol) into your formulas and add them up.${box('ΣD(broken)', fB, '')}${box('ΣD(formed)', fF, '')}${beMiniTable(an)}`, [
+    { key: 'sb', label: 'ΣD broken (kJ)', answer: an.sb, diag: v => v === an.shortB && an.shortB !== an.sb ? ['be-shortcut', 'That’s the shortcut (only the bonds that change). It gives the same ΔH, but this step asks for <b>every</b> bond in the reactants.'] : v === an.sbNo && an.sbNo !== an.sb ? ['be-no-coefficients', `Use the number in front of each bond in the formula: ${beEx(an.br)}.`] : ['be-arith', 'Multiply each count by its D value from the table, then add.'] },
+    { key: 'sf', label: 'ΣD formed (kJ)', answer: an.sf, diag: v => v === an.shortF && an.shortF !== an.sf ? ['be-shortcut', 'That’s the shortcut (only the bonds that change). This step asks for <b>every</b> bond in the products.'] : v === an.sfNo && an.sfNo !== an.sf ? ['be-no-coefficients', `Use the number in front of each bond in the formula: ${beEx(an.fo)}.`] : ['be-arith', 'Multiply each count by its D value, then add.'] }
+  ], { hint: 'Find each bond in the table, multiply its D by the number in front, and add. Example: 4(C=O) = 4 × 741 = 2964 kJ.', solution: `ΣD(broken) = ${beSumTxt(an.br)} = <b>${an.sb} kJ</b>. ΣD(formed) = ${beSumTxt(an.fo)} = <b>${an.sf} kJ</b>.` });
+  const p4 = numPart('Estimate ΔH for the reaction. Include the sign.', [{ key: 'dh', label: 'ΔH (kJ)', answer: an.dH, show: beSigned(an.dH), diag: beDHdiag(an) }], { hint: 'ΔH = ΣD(bonds broken) − ΣD(bonds formed).', solution: `ΔH = ${an.sb} − ${an.sf} = <b>${beSigned(an.dH)} kJ</b>` });
   const exo = an.dH < 0;
-  const p4 = choicePart('Is the reaction exothermic or endothermic?', [opt('Exothermic (heat released)', exo, exo ? 'ΔH is negative: the bonds formed are stronger than the bonds broken, so more energy comes out than goes in.' : 'ΔH is positive, so heat is absorbed.', 'be-exo-endo'), opt('Endothermic (heat absorbed)', !exo, !exo ? 'ΔH is positive: breaking the reactant bonds takes more energy than forming the product bonds releases.' : 'ΔH is negative, so heat is released.', 'be-exo-endo')], { keep: true, hint: 'Negative ΔH → exothermic. Positive ΔH → endothermic.', solution: exo ? 'Exothermic (ΔH < 0).' : 'Endothermic (ΔH > 0).' });
-  return { topic: 'bondenergy', tag: R[0].map(([, f]) => F(f)).join(' + '), stem: `<p class="lead">Use bond energies to estimate ΔH.</p>${beEquation(R)}${beDrawings(R)}${beMiniTable(an)}`, tip: 'ΔH ≈ ΣD(bonds broken) − ΣD(bonds formed). Breaking bonds takes energy in; forming bonds releases energy.', parts: [p1, p2, p3, p4] };
+  const p5 = choicePart('Is the reaction exothermic or endothermic?', [opt('Exothermic (heat released)', exo, exo ? 'ΔH is negative: the bonds formed are stronger than the bonds broken, so more energy comes out than goes in.' : 'ΔH is positive, so heat is absorbed.', 'be-exo-endo'), opt('Endothermic (heat absorbed)', !exo, !exo ? 'ΔH is positive: breaking the reactant bonds takes more energy than forming the product bonds releases.' : 'ΔH is negative, so heat is released.', 'be-exo-endo')], { keep: true, hint: 'Negative ΔH → exothermic. Positive ΔH → endothermic.', solution: exo ? 'Exothermic (ΔH < 0).' : 'Endothermic (ΔH > 0).' });
+  return { topic: 'bondenergy', tag: R[0].map(([, f]) => F(f)).join(' + '), stem: `<p class="lead">Use bond energies to estimate ΔH. Tap the bonds first; the bond energy table comes in step 3.</p>${beEquation(R)}`, tip: 'ΔH ≈ ΣD(bonds broken) − ΣD(bonds formed). Breaking bonds takes energy in; forming bonds releases energy.', parts: [p1, p2, p3, p4, p5] };
 }
 function genBEQuick() {
   const R = drawBag('bequick', BE_RXN), an = beAnalyze(R);
@@ -2520,6 +2564,7 @@ function initWork(p) {
   if (p.kind === 'ovlabel') return { sel: {}, marks: {}, cur: 0 };
   if (p.kind === 'roles' || p.kind === 'bondtype') return { sel: {}, marks: {} };
   if (p.kind === 'rank') return { order: [] };
+  if (p.kind === 'bepick') return { sel: {} };
   return null;
 }
 function newQuestion(focus) {
@@ -2597,6 +2642,16 @@ function partBody(p) {
     const rows = p.rows.map((r, k) => `<div class="tagrow${w.marks[k] ? ' ' + w.marks[k] : ''}" data-btrow="${k}"><span class="tn">${k + 1}</span><span class="te">${r.title}${r.n > 1 ? ` <small style="color:var(--faint)">×${r.n}</small>` : ''}</span><span class="topts">${[1, 2, 3].map(o => `<button type="button" class="topt${String(w.sel[k]) === String(o) ? ' on' : ''}" data-btype="${k}:${o}" aria-pressed="${String(w.sel[k]) === String(o)}">${BTYPE[o]}</button>`).join('')}</span></div>`).join('');
     return `<div class="figure">${svg}</div><div class="tagrows">${rows}</div><div class="checkrow"><button type="button" class="btn primary" data-check>Check</button></div>`;
   }
+  if (p.kind === 'bepick') {
+    const side = s => {
+      const act = s === p.side, past = s === 're' && p.side === 'pr', ms = p.mols.filter(m => m.side === s);
+      const cap = s === 're' ? (act ? 'Reactants: tap every bond that <b>breaks</b>' : 'Reactants: bonds broken ✓') : (act ? 'Products: tap every bond that <b>forms</b>' : 'Products: next step');
+      return `<div class="bep-side${act ? ' active' : ' dim'}"><div class="bep-cap">${cap}</div><div class="rxn-row">${ms.map(m => `<span class="rxn-sp">${m.n > 1 ? `<span class="rxn-co">${m.n}</span>` : ''}${molSvg(m.S, { unit: 50, maxW: 300, label: 'Lewis structure of ' + (BE_NAME[m.f] || m.f) + (act ? ': tap its bonds' : ''), pick: act ? { id: m.id, sel: w.sel[m.id] || {} } : past ? { all: true } : null })}</span>`).join('<span class="rxn-plus">+</span>')}</div></div>`;
+    };
+    const pc = bePickCounts(p.mols, p.side, w.sel), has = Object.keys(pc.c).length;
+    const build = `<div class="bep-build" aria-live="polite">${p.side === 're' ? 'Bonds broken' : 'Bonds formed'}: <span class="bep-f">${has ? beFormula(pc.c, p.ref) : '<span style="color:var(--faint)">tap a bond to start</span>'}</span>${has ? `<small>${beBreakdown(pc, p.ref)}</small>` : ''}</div>`;
+    return side('re') + '<div style="text-align:center;margin:2px 0" aria-hidden="true"><svg viewBox="0 0 14 34" width="14" height="30"><path d="M7 1v22" stroke="#1f2a44" stroke-width="2.4"/><path d="M1.5 21L7 33 12.5 21z" fill="#1f2a44"/></svg></div>' + side('pr') + build + `<div class="checkrow"><button type="button" class="btn primary" data-check>Check</button><button type="button" class="btn" data-clear>Clear</button></div>`;
+  }
   if (p.kind === 'text') return `<div class="fields"><div class="field" id="field-t"><label for="in-t">Your answer</label><input id="in-t" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"></div></div><div class="checkrow"><button type="button" class="btn primary" data-check>Check</button></div>${p.note ? `<p class="typing-note">${p.note}</p>` : ''}`;
   if (p.kind === 'mixer') {
     const c = mixCounts(w), name = mixName(c), n = c.s + c.p + c.d;
@@ -2667,6 +2722,7 @@ function checkCurrent() {
   if (p.kind === 'roles') { const w = state.work; if (p.rows.some(r => !w.sel[r.set + r.j])) return setFeedback('info', 'Choose a job for every orbital first.'); const r = checkRoles(p, w.sel); w.marks = {}; if (!r.ok) { const ms = a => [...a].sort().join('|'); ['hy', 'p'].forEach(set => { const got = p.rows.filter(x => x.set === set).map(x => w.sel[x.set + x.j]); if (ms(got) !== ms(p.box.roles[set])) p.rows.filter(x => x.set === set).forEach(x => w.marks[x.set + x.j] = 'no'); }); p.rows.forEach(x => { if (!roleFits(x, w.sel[x.set + x.j])) w.marks[x.set + x.j] = 'no'; }); } rerenderCurrent(); return r.ok ? right() : wrong(r.slip, r.why); }
   if (p.kind === 'bondtype') { const w = state.work; if (p.rows.some((r, k) => !w.sel[k])) return setFeedback('info', 'Pick σ/π for every numbered bond first.'); const r = checkBondType(p, w.sel); w.marks = {}; p.rows.forEach((x, k) => { w.marks[k] = +w.sel[k] === x.o ? 'ok' : 'no'; }); rerenderCurrent(); return r.ok ? right() : wrong(r.slip, r.why); }
   if (p.kind === 'mixer') { const r = checkMixer(p, mixCounts(state.work)); if (!r) return setFeedback('info', 'Put some orbital cards in the mixer first.'); return r.ok ? right() : wrong(r.slip, r.why); }
+  if (p.kind === 'bepick') { const r = checkBePick(p, state.work.sel); if (!r) return setFeedback('info', 'Tap the bonds on the Lewis structures first.'); return r.ok ? right() : wrong(r.slip, r.why); }
   if (p.kind === 'rank') { const r = checkRank(p, state.work.order); if (!r) return setFeedback('info', 'Tap every species to put them all in order.'); return r.ok ? right() : wrong(r.slip, r.why); }
   if (p.kind === 'tapcurve') { const r = checkTapcurve(state.work.r); if (!r) return setFeedback('info', 'Tap the curve first.'); return r.ok ? right() : wrong(r.slip, r.why); }
   if (p.kind === 'labeler') {
@@ -2704,11 +2760,12 @@ function givenText(p) {
   try {
     if (p.kind === 'nums') return p.fields.map(f => { const el = $('in-' + f.key), v = el ? el.value.trim() : '', ok = v && Math.abs(parseNum(v) - f.answer) < (f.tol || 1e-6); return `${f.label}: ${!v ? '—' : ok ? esc(v) + ' ✓' : '<s>' + esc(v) + '</s>'}`; }).join(' · ');
     if (p.kind === 'text') { const el = $('in-t'); return el ? '<s>' + esc(el.value.trim()) + '</s>' : ''; }
+    if (p.kind === 'bepick') { const pc = bePickCounts(p.mols, p.side, state.work.sel); return Object.keys(pc.c).length ? '<s>' + beFormula(pc.c, p.ref) + '</s>' : ''; }
     if (p.kind === 'choice') { const b = document.querySelector('#parts .part.current .choice.wrong'); return b ? '<s>' + b.innerHTML + '</s>' : ''; }
   } catch (e) {}
   return '';
 }
-const answerText = p => p.kind === 'mo' ? 'see the filled diagram' : p.kind === 'boxes' ? fillTxt(p.box.hy) + (p.box.p.length ? ' | p ' + fillTxt(p.box.p) : '') : p.answer;
+const answerText = p => p.kind === 'bepick' ? p.formula : p.kind === 'mo' ? 'see the filled diagram' : p.kind === 'boxes' ? fillTxt(p.box.hy) + (p.box.p.length ? ' | p ' + fillTxt(p.box.p) : '') : p.answer;
 function right(why) {
   const p = state.q.parts[state.pi];
   if (p.mag && !state.wrong && !state.revealed) P.mag = (P.mag || 0) + 1;
@@ -2991,6 +3048,7 @@ function bind() {
     const ovl = t.closest('#parts [data-ovl]'); if (ovl) { const k = ovl.dataset.ovl; state.work.cur = +k; rerenderCurrent(`[data-ovk="${k}:σ"]`); return; }
     const bt = t.closest('#parts [data-btype]'); if (bt) { const [k, o] = bt.dataset.btype.split(':'); if (state.done) return; state.work.sel[k] = o; delete state.work.marks[k]; return rerenderCurrent(`[data-btype="${k}:${o}"]`); }
     const bb = t.closest('#parts [data-bond]'); if (bb && state.q && state.q.parts[state.pi] && state.q.parts[state.pi].kind === 'bondtype') { const k = state.q.parts[state.pi].rows.findIndex(r => r.bond === +bb.dataset.bond); const el = document.querySelector(`#parts [data-btype="${k}:1"]`); if (el) try { el.focus(); el.scrollIntoView({ block: 'nearest', behavior: smoothB() }); } catch (e) {} return; }
+    const bep = t.closest('#parts [data-bep]'); if (bep) { const w = state.work; if (state.done || !w || !w.sel) return; const [id, i] = bep.dataset.bep.split(':'), m = w.sel[id] || (w.sel[id] = {}); if (m[i]) delete m[i]; else m[i] = true; return rerenderCurrent(`[data-bep="${id}:${i}"]`); }
     const mx = t.closest('#parts [data-mix]'); if (mx) { const w = state.work, i = +mx.dataset.mix; if (state.done || !w) return; w.in = w.in.includes(i) ? w.in.filter(x => x !== i) : w.in.concat(i); return rerenderCurrent(`[data-mix="${i}"]`); }
     const rk = t.closest('#parts [data-rank]'); if (rk) { const w = state.work, i = +rk.dataset.rank; if (state.done || !w) return; w.order = w.order.includes(i) ? w.order.filter(x => x !== i) : w.order.concat(i); return rerenderCurrent(`[data-rank="${i}"]`); }
     const nu = t.closest('#parts [data-nudge]'); if (nu) return peNudge(+nu.dataset.nudge);

@@ -74,7 +74,8 @@ main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
 .btn[aria-pressed="true"]{background:var(--mint);border-color:var(--mint-line);color:var(--mint-ink)}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tag{font-size:.78rem;font-weight:800;color:var(--muted);background:#f2f3f8;border-radius:99px;padding:4px 10px}.tag.quiz{background:var(--lav);color:#4b4590}.tag.cat-path{background:#fdeee8;color:#9a4a20}.tag.cat-atp{background:#e8f6ef;color:#23704f}.tag.cat-rxn{background:#eaf4fb;color:#2c5f9c}.tag.cat-fates{background:#f2e8f7;color:#76408a}
 .question{border:1px solid var(--line);border-radius:var(--r-md);background:#fbfbfe;padding:16px}
-.scenario{font-style:italic;color:#3d4a73;background:#fff;border-left:4px solid #e8b98f;border-radius:0 10px 10px 0;padding:8px 12px;margin:0 0 10px;font-size:1.05rem}
+.scenario{color:#2c2a4a;background:#fff6ec;border:2px solid #f2cfa8;border-left:7px solid #e0904f;border-radius:14px;padding:14px 18px;margin:0 0 14px;font-size:1.22rem;line-height:1.55;font-weight:650}
+.scenario .who{display:inline-block;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#9a4a16;background:#ffe2c6;border-radius:999px;padding:2px 11px;margin:0 0 6px}
 .prompt{font-size:1.22rem;line-height:1.5;font-weight:650;margin:0}
 .rxn{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;text-align:center;font-size:clamp(1.05rem,3vw,1.3rem);font-weight:800;background:var(--accent-soft);border-radius:var(--r-sm);padding:14px 12px;margin-bottom:12px;color:#26326a}
 .rxn .side{max-width:100%}.rxn .arrow .ol{display:block;white-space:nowrap;line-height:1.35}
@@ -208,7 +209,7 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
  .intro img{width:84px;height:84px}
  .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:150px;padding:12px 8px}.cat img{width:64px;height:64px}.cat b{font-size:1.02rem}.chip-row>span{min-width:100%}
  .prep-row{grid-template-columns:1fr}
- main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}
+ main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}.scenario{font-size:1.1rem;padding:12px 14px}
  .actions{grid-template-columns:1fr 1fr}.actions .btn{white-space:nowrap;font-size:.95rem;padding:10px 8px}
  .stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
  .lesson-layout,.rule-grid{grid-template-columns:1fr}.next-row .btn.primary,.check-row .btn.primary{width:100%}
@@ -2191,7 +2192,10 @@ function makeQuestion() {
 }
 function renderQ(q) {
   let h = '';
-  if (q.scenario) h += `<p class="scenario">${q.scenario}</p>`;
+  if (q.scenario) {   // the case comes first and reads as its own box; a "Nursing:" style lead-in becomes its label
+    const m = /^([A-Z][A-Za-z ]{1,24}):\s+/.exec(q.scenario);
+    h += m ? `<p class="scenario"><span class="who">${m[1]}</span><br>${q.scenario.charAt(m[0].length).toUpperCase() + q.scenario.slice(m[0].length + 1)}</p>` : `<p class="scenario">${q.scenario}</p>`;
+  }
   if (q.eq) h += q.eq;
   if (q.art) h += q.art.includes('art wide') ? `<div class="art-wrap">${q.art}</div><p class="swipe">↔ Swipe sideways to see the whole diagram</p>` : q.art;
   h += `<p class="prompt">${q.prompt}</p>`;

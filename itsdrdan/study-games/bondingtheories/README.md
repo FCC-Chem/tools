@@ -4,7 +4,14 @@ Working title **Orbital Overlap**. Repo/hub label: **Bonding Theories**. Suggest
 
 - **Courses:** CHEM 1A (default) and CHEM 1B review. Link with `?course=1A` or `?course=1B`; progress is saved separately per course on the student's device.
 - **Source:** OpenStax *Chemistry 2e* §7.6 (VSEPR) and §8.1–8.4. Numbers in the game: the H₂ energy curve (74 pm, 436 kJ/mol, §8.1), real angles (NH₃ 107.3°, H₂O 104.5°, §8.2; v1 said 107°, corrected in v2 to match OpenStax), and bond lengths/energies from **Table 8.1** (H–Cl, H–Br, H–I, C–C/C=C/C≡C, C–N/C=N/C≡N, C–O/C=O/C≡O), all checked against openstax.org on 2026-11-11. Bond orders, electron counts, unpaired electrons and magnetism are **computed** from the MO filling, never typed in.
-- **Current file:** `bonding-theories-v20.html` (version in the file name only). Earlier versions are kept here for comparison.
+- **Current file:** `bonding-theories-v21.html` (version in the file name only). Earlier versions are kept here for comparison.
+- **v21 Tap the Bonds (2026-11-15):** the **Bond energies → ΔH** topic is now interactive, five steps instead of four.
+  - **Step 1, bonds broken:** students tap each bond on the reactant Lewis structures (a double or triple bond is one tap). Tapped bonds turn green, and the formula builds as they tap with the coefficients already in: tap both C=O in 2 CO₂ and it shows **4(C=O)**, with a small line under it (4(C=O) = 2 CO₂ × 2). Tapping a green bond again un-marks it. Check names any molecule with bonds left untapped.
+  - **Step 2, bonds formed:** the same on the products. The reactants stay on screen, all green.
+  - **Step 3, use the table:** the two built formulas and the short D table sit together; students type ΣD broken and ΣD formed. Forgetting a coefficient gets an example from that reaction (e.g. "4(O–H) means 4 × 464 = 1856 kJ").
+  - **Steps 4–5:** ΔH with sign, then exothermic or endothermic (unchanged).
+  - **Quick ΔH** (one typed step, Skill Check, question-bank sampler) is unchanged.
+  - Also: iOS no longer zooms when bonds or buttons are tapped quickly (pinch zoom still works).
 - **v20 more bond-energy problems and resonance bond order (2026-11-12):**
   - **16 new bond-energy reactions, 37 in all.** All values are recomputed with OpenStax Table 7.3. The Tro test bank uses its own values (C=O 799, C–H 414), so only its reactions were used as models; the wording is original.
     - Modeled on OpenStax Ch 7 exercises 65–66: CH₄ + I₂ (+30 kJ, a true endothermic one), C₂H₄ + 3 O₂ (−1055), 2 C₂H₆ + 7 O₂ (−2340), Cl₂ + 3 F₂ → 2 ClF₃ (−807).
