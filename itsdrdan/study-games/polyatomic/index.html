@@ -189,6 +189,56 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 @media(max-width:400px){.tb-xp{display:none}}
 html.dd-embedded{scroll-padding-top:8px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* ---------- Ion Builder lab ---------- */
+.ib-lab{margin:6px 0 14px;border:1.5px solid var(--line2);border-radius:18px;padding:12px 14px;background:#fbfbff}
+.ib-steps{display:flex;gap:6px;flex-wrap:wrap;list-style:none;margin:0 0 10px;padding:0}
+.ib-steps li{font-size:.8rem;font-weight:800;padding:4px 11px;border-radius:99px;background:#eef0f7;color:var(--muted)}
+.ib-steps li.now{background:var(--accent);color:#fff}.ib-steps li.done{background:var(--mint);color:var(--mint-ink)}
+.ib-ask{margin:6px 0 10px}
+.ib-opts{display:grid;gap:8px}.ib-opts .choice{text-align:left}
+.ib-ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:8px;margin:0 0 10px}
+.ib-b{font-size:1.1rem;font-weight:800;min-height:52px;padding:8px 6px;white-space:nowrap}.ib-b:disabled{opacity:.4}
+.ib-stage{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:14px;align-items:center}
+.ib-svg{width:100%;height:auto;max-width:300px}
+.ib-read{display:grid;gap:8px}.ib-read div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px 11px}
+.ib-read small{display:block;color:var(--muted);font-weight:700;font-size:.78rem}.ib-read b{font-size:1.15rem}.ib-none{font-size:.9rem;color:var(--faint);font-weight:600}
+.ib-got,.ib-ok{color:var(--mint-ink);font-weight:800;margin:8px 0}
+.ib-verdict{margin:6px 0 10px}
+.ib-fb:not(:empty){background:#fff4f2;border:1px solid #f1c4bd;border-radius:12px;padding:8px 11px;margin:0 0 8px}
+.ib-table{border-collapse:collapse;margin:10px 0 4px;width:100%;max-width:440px;font-size:.95rem}
+.ib-table caption{text-align:left;font-weight:800;margin-bottom:4px}
+.ib-table th,.ib-table td{border:1px solid var(--line);padding:5px 9px;text-align:left}.ib-table thead th{background:#f2f3fa}
+.ib-pop{transform-box:fill-box;transform-origin:center;animation:ibPop .25s ease-out}
+@keyframes ibPop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.ib-pop{animation:none}}
+@media (max-width:620px){.ib-stage{grid-template-columns:1fr}.ib-svg{margin:0 auto;display:block;max-width:240px}.ib-read{grid-template-columns:repeat(3,1fr)}.ib-read div{padding:6px 8px}.ib-read b{font-size:1rem}}
+@media (max-width:620px){.ib-read{grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}.ib-read b{overflow-wrap:anywhere}}
+
+/* ---------- Oxyanion Table mode ---------- */
+.modes{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:760px){.modes{grid-template-columns:1fr 1fr}.modes .mode:last-child:nth-child(odd){grid-column:1/-1}}
+.ot-lab{margin:6px 0 14px}
+.ot-seg{display:inline-flex;gap:4px;background:#eef0f7;border-radius:12px;padding:4px;margin-bottom:8px}
+.ot-seg button{border:0;background:none;border-radius:9px;padding:8px 14px;min-height:44px;font-weight:800;color:var(--muted)}
+.ot-seg button[aria-pressed="true"]{background:#fff;color:var(--accent-d);box-shadow:0 1px 3px #0002}
+.ot-count{margin:0 0 6px;font-weight:700;color:var(--muted);font-size:.9rem}
+.ot-type label{display:block;margin-bottom:6px}.ot-row{display:flex;gap:8px}.ot-row input{flex:1;min-width:0;font-size:1.15rem;padding:10px 12px;border:2px solid var(--line2);border-radius:12px;min-height:48px}
+.ot-row input:focus{outline:none;border-color:var(--accent)}
+.ot-tray{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.ot-tile{border:2px solid var(--line2);background:#fff;border-radius:12px;min-height:48px;min-width:64px;padding:6px 10px;font-size:1.15rem;font-weight:800;color:#26326a;cursor:grab}
+.ot-n{font-size:.78rem;font-weight:800;color:var(--muted);margin-left:5px}.ot-tile.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 3px #4b57d126}
+.ot-x{display:inline-block;width:.9em;height:.95em;border:2px dashed #8a93ad;border-radius:4px;vertical-align:-.12em;margin-right:2px}
+.ot-fb{min-height:0;margin:0 0 8px}.ot-fb:not(:empty){border-radius:12px;padding:8px 11px;border:1px solid var(--line)}
+.ot-fb.bad{background:#fff4f2;border-color:#f1c4bd}.ot-fb.good{background:var(--mint);border-color:var(--mint-line)}.ot-fb.info{background:#f4f6fd}
+.ot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-width:520px}
+.ot-cell{border:2px dashed var(--line2);background:#fff;border-radius:12px;min-height:68px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#26326a}
+.ot-cell .ot-el{font-size:1.4rem;font-weight:800}
+.ot-cell.sel{border-style:solid;border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 3px #4b57d126}
+.ot-cell.done{border-style:solid;border-color:var(--mint-line);background:var(--mint)}.ot-cell.done.helped{background:#fff8e6;border-color:#f0d89a}
+.ot-cell .ot-f{font-size:1.02rem;font-weight:800}.ot-cell small{font-size:.72rem;color:var(--muted);font-weight:700}
+@media(max-width:420px){.ot-cell{min-height:60px}.ot-cell .ot-f{font-size:.9rem}.ot-cell small{font-size:.64rem}}
+/* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -227,7 +277,7 @@ html.dd-embedded{scroll-padding-top:8px}
   <div id="playArea" hidden>
    <div class="quiz-bar" id="quizBar" hidden><span></span></div>
    <div class="tags"><span class="tag" id="modeTag"></span><span class="tag" id="deckTag"></span><span class="tag quiz" id="quizTag" hidden></span></div>
-   <section class="question"><div class="given" id="given" hidden></div><div class="equation" id="equation"></div><p class="prompt" id="prompt"></p></section>
+   <section class="question"><div class="given" id="given" hidden></div><div class="equation" id="equation"></div><p class="prompt" id="prompt"></p></section><div class="ib-lab" id="ibLab" hidden></div><div class="ot-lab" id="otLab" hidden></div>
    <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn primary" id="checkBtn">Check</button></div>
    <p class="readback" id="readback" aria-live="polite"></p>
    <div class="choices" id="choices" hidden></div>
@@ -432,7 +482,7 @@ const ions = [
       {
         name: "acetate",
         html: "C<sub>2</sub>H<sub>3</sub>O<sub>2</sub><sup>−</sup>",
-        formulas: ["C2H3O2^-", "CH3COO^-"],
+        formulas: ["C2H3O2^-", "CH3COO^-", "CH3CO2^-"],
         names: ["acetate"],
         group: "common",
         displayNoteHtml: "Also written <span class='chem'>CH<sub>3</sub>COO<sup>−</sup></span>"
@@ -850,6 +900,93 @@ function weightedFam() { const tot = FAMILIES.reduce((a, F) => a + F.weight, 0);
 // Public maker (also used by the question-bank sampler): makeQ('n2f'|'f2n'|'charge', ion) or makeQ('family', {fam, given, target, dir})
 function makeQ(mode, x) { return mode === 'family' ? qFamily(x || {}) : mode === 'n2f' ? qName2Formula(x) : mode === 'f2n' ? qFormula2Name(x) : qCharge(x); }
 var generate = makeQ;
+/*IB-LOGIC-START*/
+/* ---------- Ion Builder lab (inside The -ate/-ite Family) ----------
+   Start from one family member, tap +O / −O / +H⁺ / −H⁺ to build another.
+   Model: an O atom is neutral, so O changes leave the charge alone; each H joins as H⁺ (+1). */
+const IB_O_MIN = 1, IB_O_MAX = 5;
+function ibComp(ion) { const m = MEMBER.get(ion), c = centralOf(ion), a = atomList(baseOf(ion)), o = (a.find(x => x[0] === 'O') || [0, 0])[1]; return { c, o, h: m.h, q0: chargeOf(m.fam.parent) }; }
+const ibCharge = s => s.q0 + s.h;
+const ibBase = s => (s.h ? 'H' + (s.h > 1 ? s.h : '') : '') + s.c + 'O' + (s.o > 1 ? s.o : '');
+function ibIon(s) { const ion = BASE_IDX[ibBase(s)]; return ion && chargeOf(ion) === ibCharge(s) ? ion : null; }
+const ibMaxH = s => -s.q0 - 1; /* keep the ion negative */
+const ibCan = (s, k) => k === 'o+' ? s.o < IB_O_MAX : k === 'o-' ? s.o > IB_O_MIN : k === 'h+' ? s.h < ibMaxH(s) : k === 'h-' ? s.h > 0 : false;
+function ibStep(s, k) { if (!ibCan(s, k)) return s; const n = { ...s }; if (k === 'o+') n.o++; if (k === 'o-') n.o--; if (k === 'h+') n.h++; if (k === 'h-') n.h--; return n; }
+let IB_PAIRS = null; /* only pairs whose change also happens in another family (needed for Apply) */
+const ibPairs = () => IB_PAIRS || (IB_PAIRS = ibAllPairs().filter(([F, g, t]) => ibApplyPairs(F, g, t).length));
+const ibSame = (a, b) => a.c === b.c && a.o === b.o && a.h === b.h;
+/* builder pairs: family pairs without thio- */
+function ibAllPairs() { const out = []; FAMILIES.forEach(F => familyPairs(F).forEach(([g, t]) => { const a = MEMBER.get(g), b = MEMBER.get(t); if (a.level !== 'thio' && b.level !== 'thio') out.push([F, g, t]); })); return out; }
+function ibCase(g, t) { const a = ibComp(g), b = ibComp(t), dO = b.o - a.o, dh = b.h - a.h; return { dO, dh, kind: dh && dO ? 'both' : dh ? 'H' : 'O' }; }
+const IB_SIGN = d => (d > 0 ? '+' : '−') + Math.abs(d);
+const IB_PRED = { 0: 'The charge stays the same', 1: 'It gets 1 less negative', 2: 'It gets 2 less negative', '-1': 'It gets 1 more negative', '-2': 'It gets 2 more negative' };
+function ibExplain(kind) {
+  if (kind === 'O') return { answer: 'neutral', opts: [
+    ['neutral', 'An O atom is neutral. Adding or removing one changes the formula, not the charge.', ''],
+    ['oxide', 'Each O is 2−, so every O added or removed should change the charge by 2.', 'Inside the ion, O is not a separate O²⁻ ion. The whole family shares one charge: ClO₄⁻, ClO₃⁻, ClO₂⁻ and ClO⁻ are all 1−.'],
+    ['electrons', 'Fewer O atoms means fewer electrons, so the ion should turn less negative.', 'A whole O atom leaves with its own protons and electrons together, so the balance does not change.'],
+    ['ending', 'The ending sets the charge: -ite ions are one less negative than -ate ions.', 'Compare sulfate SO₄²⁻ and sulfite SO₃²⁻: both 2−. The ending tells you the O count, not the charge.']] };
+  if (kind === 'H') return { answer: 'proton', opts: [
+    ['proton', 'H joins as H⁺, a bare proton. Each H added makes the ion 1 less negative; each H removed makes it 1 more negative.', ''],
+    ['neutral', 'H atoms are neutral, so the charge should stay the same.', 'Here H comes on as H⁺, a proton with no electron. That is why HPO₄²⁻ is less negative than PO₄³⁻.'],
+    ['electron', 'H brings an electron, so the ion gets more negative.', 'That would be hydride, H⁻. In these ions H joins as H⁺ (+1).'],
+    ['swap', 'The H takes the place of an O.', 'Look at your build: the O count did not change. The H is added on top.']] };
+  return { answer: 'only-h', opts: [
+    ['only-h', 'Only the H⁺ changes the charge (+1 each). The O atom is neutral, so it does not.', ''],
+    ['both', 'Both change it: the O and the H each shift the charge.', 'An O atom is neutral. Only the number of H⁺ changes the charge.'],
+    ['none', 'Neither changes it: the central atom fixes the charge.', 'Each H⁺ adds +1, so the charge does change with H.'],
+    ['oxide', 'Each O is 2−, so the O change matters most.', 'Inside the ion, O is not a separate O²⁻. The family keeps one charge until H⁺ is added.']] };
+}
+/* apply: same change (same start level/h and end level/h) in another family; else same ΔO and ΔH anywhere else */
+function ibApplyPairs(F, g, t) {
+  const a = MEMBER.get(g), b = MEMBER.get(t), all = ibAllPairs().filter(p => p[0] !== F);
+  const exact = all.filter(([, g2, t2]) => { const a2 = MEMBER.get(g2), b2 = MEMBER.get(t2); return a2.level === a.level && a2.h === a.h && b2.level === b.level && b2.h === b.h; });
+  if (exact.length) return exact;
+  const c = ibCase(g, t); return all.filter(([, g2, t2]) => { const c2 = ibCase(g2, t2); return c2.dO === c.dO && c2.dh === c.dh; });
+}
+function ibSpec(o = {}) {
+  let F = o.fam, g = o.given, t = o.target;
+  if (!g || !t) { const P = ibPairs(); [F, g, t] = pick(P); }
+  const c = ibCase(g, t), preds = [...new Set([0, 1, -1, c.dh])].sort((x, y) => x - y);
+  const ap = pick(ibApplyPairs(F, g, t));
+  return { fam: F, given: g, target: t, start: ibComp(g), goal: ibComp(t), dO: c.dO, dh: c.dh, kind: c.kind,
+    predict: { answer: String(c.dh), opts: preds.map(d => [String(d), IB_PRED[d]]) }, explain: ibExplain(c.kind), apply: ap ? { fam: ap[0], given: ap[1], target: ap[2] } : null };
+}
+/*IB-LOGIC-END*/
+/*OT-LOGIC-START*/
+/* ---------- Oxyanion Table mode: fill in the Green Sheet -ate table ----------
+   Type it: type each cell's ion. Tiles (easier): place "□O₄²⁻" pieces; a tile fits any cell whose ion has that O count and charge. */
+const OT_LAYOUT = ['borate', 'carbonate', 'nitrate', null, 'silicate', 'phosphate', 'sulfate', 'chlorate', null, 'arsenate', 'selenate', 'bromate', null, null, 'tellurate', 'iodate']; /* same staircase as the Green Sheet dialog */
+const OT_IONS = OT_LAYOUT.filter(Boolean).map(n => byName(n));
+function otPat(ion) { const a = atomList(baseOf(ion)); return { el: a[0][0], o: (a.find(x => x[0] === 'O') || [0, 0])[1], q: chargeOf(ion) }; }
+const otKey = p => p.o + '|' + p.q;
+const otFits = (key, ion) => key === otKey(otPat(ion));
+function otTiles() { return shuffle(OT_IONS.map(i => otKey(otPat(i)))); }
+const OT_O_RULE = 'O count: top row 3 O; below, 4 O, except Si, Cl, Br and I (3 O).';
+const OT_Q_RULE = 'Charge: B 3−, C 2−, N 1− across the top; below, P and As 3−, Si, S, Se and Te 2−, Cl, Br and I 1−.';
+/* why a tile does not fit a cell (first miss: the rule; later misses: the column tip too) */
+function otWhy(key, ion, miss) {
+  const [o, q] = key.split('|').map(Number), p = otPat(ion), bits = [];
+  if (o !== p.o && q !== p.q) bits.push(`Both the O count and the charge are off for ${p.el}.`, OT_O_RULE, OT_Q_RULE);
+  else if (o !== p.o) bits.push(`The charge fits ${p.el}, but the O count does not.`, OT_O_RULE);
+  else bits.push(`The O count fits ${p.el}, but the charge does not.`, OT_Q_RULE);
+  if (miss > 1 && COLUMN_TIP[p.el]) bits.push(COLUMN_TIP[p.el]);
+  return bits.join(' ');
+}
+/* grade a typed cell with the game's own grader, plus a table rule for the part that is wrong */
+function otGrade(raw, ion, miss) {
+  const r = gradeFormula(raw, ion); if (r.ok) return r;
+  const p = parseIon(raw), want = otPat(ion), extra = [];
+  const typedEl = (atomList(p.base)[0] || [''])[0];
+  if (p.base && typedEl && typedEl !== want.el && typedEl.toLowerCase() !== want.el.toLowerCase()) extra.push(`This cell is <b>${want.el}</b>; start the formula with ${want.el}.`);
+  else if (!r.parts.formula) extra.push(OT_O_RULE);
+  if (!r.parts.charge && p.charge != null) extra.push(OT_Q_RULE);
+  if (miss > 1 && COLUMN_TIP[want.el]) extra.push(COLUMN_TIP[want.el]);
+  return { ...r, note: [r.note, ...extra].filter((x, i, a) => x && a.indexOf(x) === i).join(' ') };
+}
+const OT_RECAP = 'Professor Tip: learn the table by its pattern. Top row: BO₃³⁻, CO₃²⁻, NO₃⁻ (3 O; charges 3−, 2−, 1−). Below: PO₄³⁻ and AsO₄³⁻; SO₄²⁻, SeO₄²⁻, TeO₄²⁻; the halogens ClO₃⁻, BrO₃⁻, IO₃⁻; and silicate SiO₃²⁻ is the odd one.';
+MODES.table = { label: 'Oxyanion Table', short: 'Oxyanion Table', blurb: 'Fill in the Green Sheet -ate table: type it, or place tiles.', icon: 'levels' };
+/*OT-LOGIC-END*/
 </script>
 <script>
 /* ===================== Polyatomic Posse: game UI ===================== */
@@ -1177,6 +1314,214 @@ function init() {
   // icons.js loads with defer; paint again once it is ready
   window.addEventListener('load', () => { paintIcons(); renderChooser(); });
 }
+/* ---------- Ion Builder: UI ---------- */
+const IB_COL = { Cl: '#3aa655', Br: '#a2512c', I: '#7a3ea8', S: '#d1a514', N: '#3b6fd6', P: '#e07b26', C: '#4a4f5c', As: '#8a6bbd', Se: '#c0751a', Te: '#6b7f8c' };
+function ibSVG(s, add) {
+  const cx = 150, cy = 105, R = 62, col = IB_COL[s.c] || '#5b6378', ion = ibIon(s), q = ibCharge(s), atoms = [];
+  for (let i = 0; i < s.o; i++) {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / s.o, x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    atoms.push(`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#9aa3b8" stroke-width="5"/>`);
+    if (i < s.h) { const hx = cx + (R + 34) * Math.cos(a), hy = cy + (R + 34) * Math.sin(a); atoms.push(`<line x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="#9aa3b8" stroke-width="4"/><g class="${add === 'h+' && i === s.h - 1 ? 'ib-pop' : ''}"><circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="13" fill="#fff" stroke="#7d869c" stroke-width="2"/><text x="${hx.toFixed(1)}" y="${(hy + 5).toFixed(1)}" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a44">H</text></g>`); }
+    atoms.push(`<g class="${add === 'o+' && i === s.o - 1 ? 'ib-pop' : ''}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="#e5484d"/><text x="${x.toFixed(1)}" y="${(y + 6).toFixed(1)}" text-anchor="middle" font-size="17" font-weight="800" fill="#fff">O</text></g>`);
+  }
+  const desc = `${s.c} atom with ${s.o} oxygen${s.o > 1 ? 's' : ''}${s.h ? ' and ' + s.h + ' hydrogen' + (s.h > 1 ? 's' : '') : ''}. Formula ${ionUni(ibBase(s) + '^' + Math.abs(q) + (q < 0 ? '-' : '+'))}, charge ${chargeTxt(q)}${ion ? ', ' + ion.name : ''}.`;
+  return `<svg class="ib-svg" viewBox="0 0 300 215" role="img" aria-label="${desc}"><path d="M28 12 h-12 v191 h12 M272 12 h12 v191 h-12" fill="none" stroke="#1f2a44" stroke-width="3"/><text x="290" y="22" font-size="20" font-weight="800" fill="#1f2a44" text-anchor="end">${Math.abs(q) === 1 ? '' : Math.abs(q)}${q < 0 ? '−' : '+'}</text>${atoms.join('')}<circle cx="${cx}" cy="${cy}" r="27" fill="${col}"/><text x="${cx}" y="${cy + 7}" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">${s.c}</text></svg>`;
+}
+function ibReadout(s) {
+  const ion = ibIon(s), q = ibCharge(s);
+  return `<div class="ib-read"><div><small>Formula</small><b class="chem">${baseHTML(ibBase(s))}${chargeHTML(q)}</b></div><div><small>Charge</small><b>${chargeTxt(q)}</b></div><div><small>Name</small><b>${ion ? ion.name : '<span class="ib-none">not an ion in this game</span>'}</b></div></div>`;
+}
+const IB_STAGES = [['predict', 'Predict'], ['build', 'Build'], ['explain', 'Explain'], ['apply', 'Apply']];
+function ibChips(stage) { const i = IB_STAGES.findIndex(x => x[0] === stage); return `<ol class="ib-steps">${IB_STAGES.map(([k, l], j) => `<li class="${j < i ? 'done' : j === i ? 'now' : ''}"${j === i ? ' aria-current="step"' : ''}>${j < i ? '✓ ' : ''}${l}</li>`).join('')}</ol>`; }
+const ibBtns = s => [['o+', '+ O', 'Add one oxygen'], ['o-', '− O', 'Remove one oxygen'], ['h+', '+ H⁺', 'Add one H⁺'], ['h-', '− H⁺', 'Remove one H⁺']].map(([k, l, a]) => `<button type="button" class="btn ib-b" data-ib="${k}" aria-label="${a}"${ibCan(s, k) && !state.q.lab.reached ? '' : ' disabled'}>${l}</button>`).join('');
+function ibTable(L) {
+  const row = (lab, f) => `<tr><th scope="row">${lab}</th><td>${f(L.spec.start)}</td><td>${f(L.cur)}</td></tr>`;
+  return `<table class="ib-table"><caption>What you built</caption><thead><tr><th></th><th scope="col">${L.spec.given.name}</th><th scope="col">${L.spec.target.name}</th></tr></thead><tbody>${row('Formula', s => `<span class="chem">${baseHTML(ibBase(s))}${chargeHTML(ibCharge(s))}</span>`)}${row('O atoms', s => s.o)}${row('H⁺ added', s => s.h)}${row('Charge', s => chargeTxt(ibCharge(s)))}</tbody></table><p class="ib-verdict">${L.pred === L.spec.predict.answer ? '✓ Your prediction was right.' : `Your prediction: “${IB_PRED[L.pred]}.” The bench shows: <b>${IB_PRED[L.spec.predict.answer].toLowerCase()}</b>.`}</p>`;
+}
+function renderIB() {
+  const q = state.q, L = q.lab, S = L.spec, box = $('ibLab'); if (!box) return;
+  box.hidden = false;
+  let html = ibChips(L.stage);
+  if (L.stage === 'predict') {
+    html += `<p class="ib-ask">You will build <b>${S.target.name}</b> starting from ${S.given.name} ${chemHTML(S.given)}. <b>Predict:</b> what happens to the charge?</p><div class="ib-opts">${S.predict.opts.map(([k, l]) => `<button type="button" class="choice" data-ibp="${k}">${l}</button>`).join('')}</div>`;
+  } else if (L.stage === 'build') {
+    html += `<p class="ib-ask">Tap the buttons to turn ${S.given.name} into <b>${S.target.name}</b>. Watch the charge.</p><div class="ib-ctrl" role="group" aria-label="Build controls">${ibBtns(L.cur)}</div>`;
+  }
+  if (L.stage !== 'predict') html += `<div class="ib-stage">${ibSVG(L.cur, L.stage === 'build' ? L.lastAdd : null)}${ibReadout(L.cur)}</div>`;
+  if (L.stage === 'build' && L.reached) html += `<p class="ib-got">✓ That is ${S.target.name}!</p>`;
+  if (L.stage === 'explain' || L.stage === 'apply') html += ibTable(L);
+  if (L.stage === 'explain') {
+    html += `<p class="ib-ask"><b>Explain:</b> why did the charge ${S.dh ? 'change' : 'stay the same'}?</p><div class="ib-fb" role="status" aria-live="polite">${L.efb || ''}</div><div class="ib-opts">${S.explain.opts.map(([k, l]) => `<button type="button" class="choice${L.ewrong.includes(k) ? ' wrong' : ''}" data-ibe="${k}"${L.ewrong.includes(k) ? ' disabled' : ''}>${l}</button>`).join('')}</div>`;
+  }
+  if (L.stage === 'apply') html += `<p class="ib-ok">✓ ${S.explain.opts.find(o => o[0] === S.explain.answer)[1]}</p>`;
+  box.innerHTML = html;
+}
+function ibToApply() {
+  const q = state.q, L = q.lab; L.stage = 'apply';
+  const A = q; /* q is already the apply family question */
+  $('given').hidden = false; $('given').innerHTML = A.givenHTML;
+  const eq = $('equation'); eq.innerHTML = A.eq; eq.classList.add('name');
+  $('prompt').innerHTML = '<b>Apply:</b> same change, new family. ' + A.prompt;
+  $('answerRow').hidden = false; $('readback').hidden = false; $('guideBtn').hidden = false;
+  $('typingNote').innerHTML = 'Smart typing: <code>SO4^2-</code>, <code>SO42-</code> or <code>SO4-2</code> → SO₄²⁻. Symbols are case-sensitive (Cl, not CL).';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  renderIB();
+  if (!coarse()) { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
+}
+function qBuilder() {
+  const spec = ibSpec(), ap = spec.apply;
+  const q = qFamily({ fam: ap.fam, given: ap.given, target: ap.target, dir: 'formula' });
+  q.lab = { spec, stage: 'predict', cur: { ...spec.start }, pred: null, ewrong: [], efb: '', reached: false, taps: 0 };
+  q.hint = 'Professor Tip: per-…-ate = one more O than -ate. -ite = one fewer O. hypo-…-ite = two fewer O. Each H⁺ adds +1 to the charge.';
+  return q;
+}
+let ibCount = 0;
+const _ibMake = makeQuestion;
+makeQuestion = function () {
+  if (!state.quiz && !state.review && state.mode === 'family' && (ibCount++ === 0 || Math.random() < 1 / 3)) { state.deckInfo = null; return qBuilder(); }
+  return _ibMake();
+};
+const _ibNew = newQuestion;
+newQuestion = function (focus) {
+  _ibNew(focus);
+  const q = state.q, box = $('ibLab');
+  if (!q || !q.lab) { if (box) { box.hidden = true; box.innerHTML = ''; } return; }
+  const S = q.lab.spec;
+  $('given').hidden = false; $('given').innerHTML = `Start: <span>${S.given.name}</span> = ${chemHTML(S.given)}`;
+  const eq = $('equation'); eq.innerHTML = 'Build: ' + S.target.name; eq.classList.add('name');
+  $('prompt').innerHTML = 'Ion Builder lab: predict, build it, explain, then write a new one.';
+  $('answerRow').hidden = true; $('readback').hidden = true; $('guideBtn').hidden = true; setGuide(false); $('typingNote').innerHTML = '';
+  renderIB();
+};
+const _ibSol = showSolution;
+showSolution = function () {
+  const q = state.q;
+  if (q && q.lab && q.lab.stage !== 'apply' && !state.done) { const L = q.lab; if (!L.pred) L.pred = L.spec.predict.answer; L.cur = { ...L.spec.goal }; L.reached = true; ibToApply(); }
+  _ibSol();
+};
+document.addEventListener('click', e => {
+  const q = state.q; if (!q || !q.lab) return; const L = q.lab;
+  const p = e.target.closest('[data-ibp]');
+  if (p && L.stage === 'predict') { L.pred = p.dataset.ibp; L.stage = 'build'; renderIB(); const b = document.querySelector('#ibLab [data-ib]:not([disabled])'); if (b && !coarse()) b.focus(); return; }
+  const b = e.target.closest('[data-ib]');
+  if (b && L.stage === 'build' && !L.reached) {
+    L.cur = ibStep(L.cur, b.dataset.ib); L.taps++; L.lastAdd = b.dataset.ib;
+    if (ibSame(L.cur, L.spec.goal)) { L.reached = true; renderIB(); setTimeout(() => { if (state.q === q && L.stage === 'build') { L.stage = 'explain'; renderIB(); } }, 900); }
+    else { renderIB(); const nb = document.querySelector(`#ibLab [data-ib="${b.dataset.ib}"]`); if (nb && !nb.disabled) nb.focus(); }
+    return;
+  }
+  const x = e.target.closest('[data-ibe]');
+  if (x && L.stage === 'explain') {
+    const k = x.dataset.ibe, o = L.spec.explain.opts.find(o => o[0] === k);
+    if (k === L.spec.explain.answer) { ibToApply(); return; }
+    if (!L.ewrong.includes(k)) L.ewrong.push(k); L.efb = `<b>Not quite.</b> ${o[2]}`; renderIB();
+  }
+});
+/* ---------- Oxyanion Table: UI ---------- */
+function otNewQ() {
+  const sub = P.otSub === 'tiles' ? 'tiles' : 'type', cells = {};
+  OT_IONS.forEach(i => { cells[i.name] = { done: false, miss: 0, tries: 0, helped: false }; });
+  const keys = otTiles();
+  return { mode: 'table', kind: 'table', ion: null, eq: 'Oxyanion Table', eqName: true, steps: null, answer: '', solution: '',
+    prompt: sub === 'type' ? 'Tap a cell, then type that element’s -ate ion with its charge.' : 'Tap a tile, then tap the cell it fits. A tile fits every cell with that O count and charge.',
+    hint: OT_RECAP, ot: { sub, cells, sel: OT_IONS[0].name, tiles: keys.map(k => ({ key: k, used: false })), tsel: null, fb: '', fbKind: '', mistakes: 0, firstTry: 0 } };
+}
+const otTileHTML = key => { const [o, q] = key.split('|').map(Number); return `<span class="ot-x" aria-hidden="true"></span>O<sub>${o}</sub>${chargeHTML(q)}`; };
+const otTileLabel = key => { const [o, q] = key.split('|').map(Number); return `Tile: blank plus O ${o}, charge ${chargeTxt(q)}`; };
+function otCellHTML(ion, T) {
+  const c = T.cells[ion.name], p = otPat(ion), sel = T.sub === 'type' && T.sel === ion.name && !c.done;
+  const lab = c.done ? `${p.el}: ${ion.name}, ${baseOf(ion)} charge ${chargeTxt(p.q)}` : `${p.el}, empty${sel ? ', selected' : ''}`;
+  return `<button type="button" class="ot-cell${c.done ? ' done' + (c.helped ? ' helped' : '') : ''}${sel ? ' sel' : ''}" data-otc="${ion.name}" aria-label="${lab}"${c.done ? ' aria-disabled="true"' : ''}>${c.done ? `<span class="ot-f">${chemHTML(ion)}</span><small>${ion.name}</small>` : `<span class="ot-el">${p.el}</span>`}</button>`;
+}
+function renderOT(focusInput) {
+  const q = state.q, T = q.ot, box = $('otLab'); if (!box) return;
+  box.hidden = false;
+  const left = OT_IONS.filter(i => !T.cells[i.name].done).length, selIon = byName(T.sel);
+  let html = `<div class="ot-seg" role="group" aria-label="How to fill the table"><button type="button" data-otsub="type" aria-pressed="${T.sub === 'type'}">Type it</button><button type="button" data-otsub="tiles" aria-pressed="${T.sub === 'tiles'}">Tiles (easier)</button></div>`;
+  html += `<p class="ot-count">${12 - left} of 12 filled</p>`;
+  if (left && T.sub === 'type') html += `<div class="ot-type"><label for="otIn">Type the -ate ion for <b>${otPat(selIon).el}</b>:</label><div class="ot-row"><input id="otIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="like SO4^2-"><button type="button" class="btn primary" id="otCheck">Check</button></div></div>`;
+  if (left && T.sub === 'tiles') html += `<div class="ot-tray" role="group" aria-label="Tiles">${[...new Set(T.tiles.map(t => t.key))].map(k => { const n = T.tiles.filter(t => !t.used && t.key === k).length; return n ? `<button type="button" class="ot-tile${T.tsel === k ? ' on' : ''}" data-ott="${k}" draggable="true" aria-pressed="${T.tsel === k}" aria-label="${otTileLabel(k)}, ${n} left">${otTileHTML(k)}<span class="ot-n" aria-hidden="true">×${n}</span></button>` : ''; }).join('')}</div>`;
+  html += `<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`;
+  html += `<div class="ot-grid">${OT_LAYOUT.map(n => n ? otCellHTML(byName(n), T) : '<div class="ot-blank" aria-hidden="true"></div>').join('')}</div>`;
+  box.innerHTML = html;
+  q.hint = left && T.sub === 'type' && COLUMN_TIP[otPat(selIon).el] ? 'Professor Tip: ' + COLUMN_TIP[otPat(selIon).el] : OT_RECAP;
+  const inp = $('otIn');
+  if (inp) { inp.addEventListener('input', e => { if (e.isComposing) return; const v = inp.value, atEnd = inp.selectionStart === v.length; if (atEnd) { const f = liveFormat(v); if (f !== v) inp.value = f; } }); inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); otCheckTyped(); } }); if (focusInput && (!coarse() || focusInput === 'keep')) { try { inp.focus({ preventScroll: true }); } catch (e) {} } }
+}
+function otLog(topic, ok, slip) { try { if (window.ddTrack) window.ddTrack({ game: 'polyatomic', course: state.course, mode: 'Oxyanion Table', topic, correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') }); } catch (e) {} }
+function otCellRight(ion, viaHelp) {
+  const T = state.q.ot, c = T.cells[ion.name]; c.done = true; if (viaHelp) c.helped = true;
+  const first = c.miss === 0 && !c.helped;
+  if (T.sub === 'type') {
+    if (first) { T.firstTry++; P.streak++; P.best = Math.max(P.best, P.streak); P.right[ion.name] = 1; }
+    P.xp += first ? 3 : 1; P.correct++;
+  } else { if (first) T.firstTry++; P.xp += first ? 1 : 0; }
+  const next = OT_IONS.find(i => !T.cells[i.name].done);
+  if (next) T.sel = next.name; else otFinish();
+  save(); renderStats(); checkAch();
+}
+function otFinish() {
+  const T = state.q.ot; state.done = true;
+  const bonus = T.sub === 'type' ? 10 : 5; P.xp += bonus;
+  if (T.sub === 'tiles') otLog('Oxyanion Table · tiles', T.mistakes === 0, T.mistakes ? 'tile-misplaced' : '');
+  T.fbKind = 'good'; T.fb = `<b>Table complete!</b> <span class="xp-pop">+${bonus} XP</span> ${T.firstTry} of 12 right on the first try.${T.sub === 'tiles' ? ' Next, try <b>Type it</b>.' : ''}<div class="sol">${tip(OT_RECAP)}</div>`;
+  $('nextBtn').hidden = false; $('nextBtn').innerHTML = 'New table ' + ico('arrow');
+}
+function otCheckTyped() {
+  const q = state.q, T = q.ot, inp = $('otIn'); if (!inp || state.done) return;
+  const raw = inp.value; if (!raw.trim()) { T.fbKind = 'info'; T.fb = 'Type an answer first.'; renderOT('keep'); return; }
+  const ion = byName(T.sel), c = T.cells[ion.name], firstTry = c.tries === 0; c.tries++;
+  const r = otGrade(raw, ion, c.miss + 1);
+  if (firstTry) { P.tried++; bump('table', r.ok); otLog('Oxyanion Table · ' + ion.name, r.ok, r.slip); }
+  if (r.ok) { T.fbKind = 'good'; T.fb = `✓ ${otPat(ion).el}: ${chemHTML(ion)} is <b>${ion.name}</b>.`; otCellRight(ion); }
+  else { c.miss++; if (firstTry) P.streak = 0; T.fbKind = 'bad'; T.fb = `<b>Not quite.</b>${partsHTML(r)} ${r.note || 'Check it and try again.'}${c.miss >= 2 ? ' <br>Stuck? Tap <b>Show answer</b> for this cell.' : ''}`; save(); renderStats(); }
+  renderOT('keep');
+}
+function otPlace(key, name) {
+  const q = state.q, T = q.ot, t = T.tiles.find(x => !x.used && x.key === key), ion = byName(name), c = T.cells[name];
+  if (!t || t.used || c.done || state.done) return;
+  if (otFits(t.key, ion)) { t.used = true; if (!T.tiles.some(x => !x.used && x.key === key)) T.tsel = null; T.fbKind = 'good'; T.fb = `✓ ${otPat(ion).el} + ${otTileHTML(t.key)} = ${chemHTML(ion)}, <b>${ion.name}</b>.`; otCellRight(ion); }
+  else { c.miss++; T.mistakes++; T.fbKind = 'bad'; T.fb = `<b>That tile does not fit ${otPat(ion).el}.</b> ${otWhy(t.key, ion, c.miss)}`; save(); }
+  renderOT();
+  if (!state.done) { const b = document.querySelector('#otLab .ot-tile'); if (b && !coarse()) b.focus(); }
+}
+const _otMake = makeQuestion;
+makeQuestion = function () { if (!state.quiz && state.mode === 'table') { state.deckInfo = null; return otNewQ(); } return _otMake(); };
+const _otNew = newQuestion;
+newQuestion = function (focus) {
+  _otNew(focus);
+  const q = state.q, box = $('otLab');
+  if (!q || q.mode !== 'table') { if (box) { box.hidden = true; box.innerHTML = ''; } return; }
+  state.logged = true; /* the table logs each cell itself */
+  $('answerRow').hidden = true; $('readback').hidden = true; $('typingNote').innerHTML = ''; $('given').hidden = true;
+  renderOT(focus);
+};
+const _otSol = showSolution;
+showSolution = function () {
+  const q = state.q; if (!q || q.mode !== 'table') return _otSol();
+  if (state.done) return; const T = q.ot;
+  if (T.sub === 'type') { const ion = byName(T.sel); if (T.cells[ion.name].tries === 0) { T.cells[ion.name].tries++; P.tried++; bump('table', false); otLog('Oxyanion Table · ' + ion.name, false, 'gave-up'); P.streak = 0; } T.fbKind = 'info'; T.fb = `<b>Answer:</b> ${otPat(ion).el} → ${chemHTML(ion)}, ${ion.name}. ${tip('Professor Tip: ' + (COLUMN_TIP[otPat(ion).el] || ''))}`; otCellRight(ion, true); }
+  else { const ion = OT_IONS.find(i => !T.cells[i.name].done), k = T.tiles.findIndex(t => !t.used && otFits(t.key, ion)); T.tiles[k].used = true; T.tsel = null; T.mistakes++; T.fbKind = 'info'; T.fb = `<b>Placed for you:</b> ${otPat(ion).el} + ${otTileHTML(T.tiles[k].key)} = ${chemHTML(ion)}, ${ion.name}.`; otCellRight(ion, true); }
+  renderOT(true);
+};
+const _otChooser = renderChooser;
+renderChooser = function () { _otChooser(); if (state.mode === 'table' && !state.quiz) $('setWrap').hidden = true; };
+document.addEventListener('click', e => {
+  const q = state.q; if (!q || q.mode !== 'table') return; const T = q.ot;
+  if (e.target.closest('#hintBtn')) { const c = T.cells[T.sel]; if (T.sub === 'type' && c && !c.done) c.helped = true; return; }
+  const s = e.target.closest('[data-otsub]'); if (s) { if (s.dataset.otsub !== T.sub) { P.otSub = s.dataset.otsub; save(); newQuestion(true); } return; }
+  if (e.target.closest('#otCheck')) return otCheckTyped();
+  const t = e.target.closest('[data-ott]'); if (t) { const k = t.dataset.ott; T.tsel = T.tsel === k ? null : k; T.fb = ''; T.fbKind = ''; renderOT(); const b = document.querySelector(`#otLab [data-ott="${k}"]`); if (b && !coarse()) b.focus(); return; }
+  const c = e.target.closest('[data-otc]'); if (!c) return; const name = c.dataset.otc;
+  if (T.cells[name].done) return;
+  if (T.sub === 'type') { T.sel = name; T.fb = ''; T.fbKind = ''; renderOT(true); const inp = $('otIn'); if (inp && coarse()) { try { inp.focus({ preventScroll: true }); } catch (er) {} } return; }
+  if (T.tsel == null) { T.fbKind = 'info'; T.fb = 'Tap a tile first, then tap the cell it fits.'; renderOT(); return; }
+  otPlace(T.tsel, name);
+});
+document.addEventListener('dragstart', e => { const t = e.target.closest && e.target.closest('[data-ott]'); if (t) { e.dataTransfer.setData('text/plain', t.dataset.ott); e.dataTransfer.effectAllowed = 'move'; } });
+document.addEventListener('dragover', e => { if (e.target.closest && e.target.closest('#otLab [data-otc]')) e.preventDefault(); });
+document.addEventListener('drop', e => { const c = e.target.closest && e.target.closest('#otLab [data-otc]'); if (!c) return; e.preventDefault(); const i = e.dataTransfer.getData('text/plain'); if (i) otPlace(i, c.dataset.otc); });
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>
+<script>/* iOS: a quick second tap on a button that just turned disabled must not zoom the page (2026-11-14) */document.addEventListener("touchend",e=>{const b=e.target&&e.target.closest&&e.target.closest("button");if(b&&b.disabled&&e.cancelable)e.preventDefault()},{passive:false});</script>
 </body></html>

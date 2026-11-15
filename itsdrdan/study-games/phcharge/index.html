@@ -315,6 +315,26 @@ table.data.lab td.hi{color:#b4233d;font-weight:800}
 #art{text-align:center}
 svg.fischer{width:200px;max-width:100%}svg.fischer .fl{font:800 17px Nunito,Inter,Helvetica,Arial,sans-serif;fill:#2e2b38}
 .choices.grid .molbox.mini{background:transparent}.optletter{display:block;font:700 1.15rem var(--font-display);color:var(--accent-d);text-align:center;margin-bottom:2px}.molbox.pep{max-width:100%;overflow-x:auto}.molbox.pep svg{max-width:100%;height:auto}.molbox svg.mol{max-width:100%;height:auto}svg.mol .hitbox{fill:transparent;stroke:none}.molbox.mini svg.mol{max-width:170px;max-height:260px}
+
+/* pH Dial */
+.lab-steps{display:flex;gap:6px;list-style:none;padding:0;margin:0 0 10px;flex-wrap:wrap}.lab-steps li{padding:5px 11px;border-radius:99px;background:#f0f1f7;color:#5b6680;font-weight:700;font-size:.82rem}.lab-steps li.on{background:#e8ebff;color:#3a46b8;box-shadow:0 0 0 2px #8b95ee}.lab-steps li.done{background:#e3f6ec;color:#23704c}
+.lab-ask{margin:8px 0;font-size:1.02rem;text-align:left}.lab-choices{display:grid;gap:8px;text-align:left}
+.dial-choice{width:100%;text-align:left}.dial-choice.wrong{opacity:.55;text-decoration:line-through}
+.dial-view{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:12px;align-items:center;margin:8px 0}
+.dial-read{display:grid;gap:8px;text-align:left}.dial-net{font-size:1.05rem}.dial-net b{font-size:1.4rem;margin-left:4px}
+.dial-groups{border-collapse:collapse;font-size:.92rem;width:100%}.dial-groups td{padding:3px 6px;border-bottom:1px solid #e6e9f2}.dial-groups td:last-child{text-align:right;font-weight:800}
+.dial-lane{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;font-size:.78rem;font-weight:700;color:#5b6680}
+.dial-lane .track{position:relative;height:30px;border-radius:8px;background:linear-gradient(90deg,#e8ecff,#f6f7fb 50%,#ffeceb)}
+.dial-lane .start{position:absolute;left:50%;top:4px;bottom:4px;width:2px;background:#b6bdd4}
+.dial-lane .spot{position:absolute;top:3px;transform:translateX(-50%);min-width:30px;height:24px;border-radius:12px;display:grid;place-items:center;font-size:.85rem;color:#fff;background:#6b7280;transition:left .6s ease}
+.dial-lane .spot.pos{background:#3a46b8}.dial-lane .spot.negc{background:#c2410c}
+@media (prefers-reduced-motion:reduce){.dial-lane .spot{transition:none}}
+.dial-ctl{text-align:left;margin:6px 0}.dial-ctl label{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.95rem}.dial-ctl input{width:100%;height:36px;accent-color:#4b57d1}
+.dial-ticks{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;color:#5b6680}
+.dial-obs{border:1px solid #dfe4f0;border-left:5px solid #7884ea;border-radius:12px;padding:10px 12px;background:#fbfbff;margin:8px 0;text-align:left;overflow-x:auto}.dial-obs table{border-collapse:collapse;width:100%;font-size:.9rem}.dial-obs th,.dial-obs td{padding:4px 6px;border-bottom:1px solid #e6e9f2;text-align:left}.dial-obs p{margin:6px 0 0}
+.dial-exfb:empty{display:none}
+@media(max-width:640px){.dial-view{grid-template-columns:1fr}}
+/* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -808,6 +828,78 @@ const CLINIC = [
 const clinicBag = bag(CLINIC);
 function genClinic() { const x = clinicBag(); return mcq({ topic: 'clinic', tag: 'clinic', prompt: x.q, right: x.a, wrongs: x.w, solution: x.why, hint: x.h }); }
 
+/* ===================== pH Dial: lab questions (predict → turn the dial → explain → apply) ===================== */
+/*DIAL-LOGIC-START* (pure logic; tools/check-dial.js runs it in Node with AA) */
+/* No pKa numbers (course rule): the dial has named stops only. Order is by pH: the pI of every neutral and acidic
+   amino acid here is below 7.4, and basic amino acids get no pI stop (their pI form is outside this course). */
+const DIAL_STOPS={acid:'Strongly acidic (well below the pI)',pi:'At its pI',zwit:'Physiological pH (7.4)',base:'Strongly basic (well above the pI)'};
+const DIAL_LC={acid:'strongly acidic (well below the pI)',pi:'its pI',zwit:'physiological pH (7.4)',base:'strongly basic (well above the pI)'};
+function dialStops(name){return AA[name][1]==='basic'?['acid','zwit','base']:['acid','pi','zwit','base'];}
+/* every ionizable group and its form at each stop: [label, charge] */
+function dialGroups(name,stop){const t=AA[name][1],g=[];
+ g.push(stop==='base'?['α-amino group: –NH₂',0]:['α-amino group: –NH₃⁺',1]);
+ g.push(stop==='acid'?['α-carboxyl group: –COOH',0]:['α-carboxyl group: –COO⁻',-1]);
+ if(t==='acidic')g.push(stop==='acid'||stop==='pi'?['side chain: –COOH',0]:['side chain: –COO⁻',-1]);
+ if(t==='basic')g.push(stop==='base'?[name==='lysine'?'side chain: –NH₂':'side chain: N group (neutral)',0]:[name==='lysine'?'side chain: –NH₃⁺':'side chain: N group (+)',1]);
+ return g;}
+const dialNet=(name,stop)=>dialGroups(name,stop).reduce((s,x)=>s+x[1],0);
+const DIAL_EXPLAIN={
+ acid:{ask:'Why did the net charge change?',answer:'addH',options:[['addH','Extra H⁺ joined every –COO⁻ group, making neutral –COOH; the –NH₃⁺ groups stayed positive'],['remH','H⁺ was pulled off the –NH₃⁺ groups'],['side','Only the side chain changed; the backbone stayed a zwitterion'],['elec','The amino acid lost electrons']],
+  why:{remH:'In acid there is <b>more</b> H⁺, so groups gain H⁺, not lose it. Look at the table: –COO⁻ became –COOH.',side:'Check the backbone row: the α-carboxyl group changed from –COO⁻ to –COOH too.',elec:'Acid–base changes move H⁺ (protons), not electrons. Nothing was oxidized.'},
+  right:'In strong acid there is so much H⁺ that every –COO⁻ picks one up and becomes neutral –COOH. Amino groups were already –NH₃⁺, so only + charges are left.'},
+ base:{ask:'Why did the net charge change?',answer:'remH',options:[['remH','Base pulled H⁺ off every –NH₃⁺ group, making neutral –NH₂; the –COO⁻ groups stayed negative'],['addH','Base added H⁺ to the –COO⁻ groups'],['oh','Base attached OH⁻ groups to the molecule'],['side','Only the side chain changed; the backbone stayed a zwitterion']],
+  why:{addH:'Base <b>removes</b> H⁺. Look at the table: –NH₃⁺ became –NH₂.',oh:'OH⁻ takes an H⁺ away (making water). It does not bond to the amino acid.',side:'Check the backbone row: the α-amino group changed from –NH₃⁺ to –NH₂ too.'},
+  right:'In strong base, OH⁻ pulls H⁺ off every –NH₃⁺ group, leaving neutral –NH₂. The –COO⁻ groups stay negative, so only − charges are left.'},
+ pi:{ask:'The net charge at the pI is 0. Which description fits the molecule?',answer:'cancel',options:[['cancel','It still has charged groups, but the + and − charges cancel'],['none','Every group is uncharged: no charges at all'],['seven','The pI is where the pH is exactly 7'],['allplus','Every group is positive']],
+  why:{none:'The table still shows –NH₃⁺ and –COO⁻. At the pI the charges <b>balance</b>; they do not disappear.',seven:'Each amino acid has its own pI. For this one it is below 7.4, and for acidic amino acids it is much lower.',allplus:'If every group were positive, the net charge would be positive, not 0.'},
+  right:'At the pI the amino acid is a zwitterion: it still carries + and − charges, and they cancel to a net charge of 0. (For an acidic amino acid, the side-chain –COOH keeps its H⁺ at the pI.)'}};
+const sgnTxt=q=>q>0?'+'+q:q<0?'−'+Math.abs(q):'0';
+/* one dial question: start at pH 7.4, turn to a target stop, then the same stop for a second amino acid */
+function dialSpec(name,target,other){const stops=dialStops(name);target=target||stops.filter(s=>s!=='zwit')[Math.floor(Math.random()*(stops.length-1))];
+ if(!other){const pool=Object.keys(AA).filter(n=>n!==name&&dialStops(n).includes(target)&&dialNet(n,target)!==dialNet(name,target));const pool2=pool.length?pool:Object.keys(AA).filter(n=>n!==name&&dialStops(n).includes(target));other=pool2[Math.floor(Math.random()*pool2.length)];}
+ const start='zwit',q0=dialNet(name,start),q1=dialNet(name,target),qo=dialNet(other,target),ex=DIAL_EXPLAIN[target];
+ const opts=['−2','−1','0','+1','+2'];
+ return {name,other,start,target,stops,q0,q1,qo,opts,
+  predict:{ask:`Now ${name} is at <b>physiological pH (7.4)</b>, net charge ${sgnTxt(q0)}. You will turn the dial to <b>${DIAL_LC[target]}</b>. Predict its net charge there.`,answer:sgnTxt(q1)},
+  explain:{ask:ex.ask,answer:ex.answer,options:ex.options.map(([key,html])=>({key,html})),why:ex.why,right:ex.right},
+  apply:{prompt:`Apply it: <b>${other}</b> is in the same solution (${DIAL_LC[target]}). What is its net charge?`,answer:sgnTxt(qo),
+   solution:`${other[0].toUpperCase()+other.slice(1)} (${AA[other][1]}): ${dialGroups(other,target).map(g=>g[0]+' ('+sgnTxt(g[1])+')').join('; ')}. Net charge <b>${sgnTxt(qo)}</b>.`}};}
+/*DIAL-LOGIC-END*/
+const DIAL_RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function genDial(){const names=Object.keys(AA).concat(CHG_AA,CHG_AA),name=names[Math.floor(Math.random()*names.length)],s=dialSpec(name);
+ return {kind:'lab',dial:s,stage:'predict',pos:s.stops.indexOf('zwit'),tag:name+' · '+{acid:'strong acid',pi:'at the pI',base:'strong base'}[s.target],art:'',prompt:'',exTried:[],hint:'At pH 7.4 the backbone is a zwitterion (+1 and −1 cancel), so start from the side chain. Strong acid adds H⁺ to every –COO⁻; strong base removes H⁺ from every –NH₃⁺.',
+  answer:s.apply.answer,solution:`Turning ${name} to ${DIAL_LC[s.target]} gives a net charge of ${sgnTxt(s.q1)}. ${s.explain.right} ${s.apply.solution}`};}
+function dialLane(q){const pct=50-q*18;return `<div class="dial-lane" role="img" aria-label="Electrophoresis: net charge ${sgnTxt(q)}, ${q>0?'moves toward the negative electrode':q<0?'moves toward the positive electrode':'stays at the start'}"><span class="pole neg">− electrode</span><span class="track"><i class="start"></i><b class="spot ${q>0?'pos':q<0?'negc':'zero'}" style="left:${pct}%">${sgnTxt(q)}</b></span><span class="pole pos">+ electrode</span></div>`;}
+function dialView(q){const s=q.dial,stop=s.stops[q.pos],net=dialNet(s.name,stop),form=stop==='pi'&&AA[s.name][1]!=='acidic'?'zwit':stop;
+ return `<div class="dial-view">${aaPic(s.name,form,DIAL_STOPS[stop],true)}<div class="dial-read"><div class="dial-net">Net charge <b>${sgnTxt(net)}</b></div><table class="dial-groups">${dialGroups(s.name,stop).map(g=>`<tr><td>${g[0]}</td><td>${sgnTxt(g[1])}</td></tr>`).join('')}</table>${dialLane(net)}</div></div>`;}
+function dialControl(q){const s=q.dial,locked=q.stage!=='try';return `<div class="dial-ctl"><label for="phDial"><b>pH dial</b> <span id="dialNow">${DIAL_STOPS[s.stops[q.pos]]}</span></label><input type="range" id="phDial" min="0" max="${s.stops.length-1}" step="1" value="${q.pos}"${locked?' disabled':''} aria-valuetext="${DIAL_STOPS[s.stops[q.pos]]}"><div class="dial-ticks">${s.stops.map((k,i)=>`<span>${['Acid','pI','7.4','Base'][['acid','pi','zwit','base'].indexOf(k)]}</span>`).join('')}</div></div>`;}
+function renderDial(){const q=state.q,s=q.dial,st=q.stage,steps=[['predict','Predict'],['try','Turn the dial'],['explain','Explain'],['apply','Apply']],ix=steps.findIndex(x=>x[0]===st);
+ const head=`<ol class="lab-steps" aria-label="Lab steps">${steps.map(([k,t],i)=>`<li class="${i<ix?'done':i===ix?'on':''}"${i===ix?' aria-current="step"':''}>${i<ix?'✓ ':''}${t}</li>`).join('')}</ol>`;
+ let art=head;
+ if(st==='predict')art+=dialView(q);
+ else if(st==='try')art+=`<p class="lab-ask">Your prediction: <b>${q.pred}</b>. Now turn the dial to <b>${DIAL_STOPS[s.target]}</b> and watch each group.</p>`+dialControl(q)+dialView(q);
+ else art+=dialControl(q)+dialView(q)+q.obs;
+ if(st==='explain')art+=`<p class="lab-ask"><b>Explain:</b> ${s.explain.ask}</p><div class="feedback dial-exfb${q.exMsg?' bad':''}" role="status" aria-live="polite">${q.exMsg||''}</div><div class="lab-choices">${s.explain.options.map(o=>`<button type="button" class="choice dial-choice${q.exTried.includes(o.key)?' wrong':''}" data-de="${o.key}"${q.exTried.includes(o.key)?' disabled':''}>${o.html}</button>`).join('')}</div>`;
+ if(st==='apply')art+=`<div class="feedback good"><b>✅ Explained.</b> ${s.explain.right}</div>`;
+ $('art').innerHTML=art;
+ $('prompt').innerHTML=st==='predict'?s.predict.ask:st==='apply'?s.apply.prompt:'';
+ const ch=$('choices');
+ if(st==='predict'){ch.hidden=false;ch.className='choices';ch.innerHTML=s.opts.map(o=>`<button type="button" class="choice" data-dp="${o}">${o}</button>`).join('');}
+ else if(st==='apply'){ch.hidden=false;ch.className='choices';ch.innerHTML=q.choices.map((c,i)=>`<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');}
+ else{ch.hidden=true;ch.innerHTML='';}
+ $('say').textContent={predict:'Commit to a guess first. Wrong guesses cost nothing here.',try:'Turn the dial and watch the groups.',explain:'Use what the table showed.',apply:'Same solution, new amino acid.'}[st];}
+function dialStage(q,st){q.stage=st;q.hint={predict:q.hint,try:'Move the slider to the named stop. Each stop redraws the amino acid in its main form there.',explain:'Compare the table at pH 7.4 with the table now: which groups gained or lost H⁺?',apply:'Use the same rules: strong acid → every –COO⁻ becomes –COOH; strong base → every –NH₃⁺ becomes –NH₂; at the pI the charges cancel. Then add up the groups.'}[st]||q.hint;renderDial();}
+function dialObserved(q){const s=q.dial,a=dialGroups(s.name,'zwit'),b=dialGroups(s.name,s.target);
+ q.obs=`<div class="dial-obs"><div class="result-title"><span>👀</span> What changed</div><table><tr><th>Group</th><th>pH 7.4</th><th>${DIAL_STOPS[s.target]}</th></tr>${a.map((g,i)=>`<tr><td>${g[0].split(':')[0]}</td><td>${g[0].split(': ')[1]} (${sgnTxt(g[1])})</td><td>${b[i][0].split(': ')[1]} (${sgnTxt(b[i][1])})</td></tr>`).join('')}<tr><th>Net charge</th><th>${sgnTxt(s.q0)}</th><th>${sgnTxt(s.q1)}</th></tr></table><p>${q.pred===sgnTxt(s.q1)?'✅ Your prediction was right.':'Your prediction was <i>'+q.pred+'</i>. The dial says otherwise. That is fine: now figure out why.'}</p></div>`;
+ dialStage(q,'explain');$('art').querySelector('.dial-obs')?.scrollIntoView({block:'nearest',behavior:DIAL_RM()?'auto':'smooth'});}
+document.addEventListener('click',e=>{const q=state.q;if(!q||q.kind!=='lab'||state.done)return;const b=e.target.closest('button');if(!b||b.disabled)return;const s=q.dial;
+ if(b.dataset.dp){e.stopImmediatePropagation();q.pred=b.dataset.dp;dialStage(q,'try');$('phDial')?.focus({preventScroll:true});return}
+ if(b.dataset.de){e.stopImmediatePropagation();if(b.dataset.de===s.explain.answer){q.exMsg='';const m=mcq({topic:q.topic,tag:q.tag,prompt:s.apply.prompt,right:s.apply.answer,wrongs:s.opts.filter(o=>o!==s.apply.answer).map(o=>o===sgnTxt(s.q1)?[o,`That is ${s.name}'s charge here. ${s.other[0].toUpperCase()+s.other.slice(1)} has a different side chain (${AA[s.other][1]}), so count its groups again.`,'dial:apply-copied']:o===sgnTxt(dialNet(s.other,'zwit'))?[o,`That is ${s.other}'s charge at pH 7.4. In this solution the backbone groups change too.`,'dial:apply-stayed-7.4']:[o,`Go group by group for ${s.other}: α-amino, α-carboxyl, then the side chain, and add the charges.`,'dial:apply-count']),keep:s.opts,solution:s.apply.solution,hint:''});q.choices=m.choices;dialStage(q,'apply');q.kind='choice';$('choices').querySelector('.choice')?.focus({preventScroll:true});return}
+  q.exTried.push(b.dataset.de);q.exMsg='<b>Not quite.</b> '+(s.explain.why[b.dataset.de]||'Look at the table again.');renderDial();$('art').querySelector('.dial-exfb')?.scrollIntoView({block:'nearest',behavior:DIAL_RM()?'auto':'smooth'});}},true);
+document.addEventListener('input',e=>{if(e.target.id!=='phDial')return;const q=state.q;if(!q||!q.dial||q.stage!=='try')return;q.pos=+e.target.value;const s=q.dial,stop=s.stops[q.pos];
+ $('dialNow').textContent=DIAL_STOPS[stop];e.target.setAttribute('aria-valuetext',DIAL_STOPS[stop]);const v=$('art').querySelector('.dial-view');if(v)v.outerHTML=dialView(q);
+ if(stop===s.target){e.target.disabled=true;setTimeout(()=>{if(state.q===q&&q.stage==='try')dialObserved(q)},DIAL_RM()?200:900);}});
+
 /* ===================== topic table ===================== */
 const TOPICS = {
   groups: { label: 'Acid, base or neither?', gen: genGroups, video: 'conj' },
@@ -818,6 +910,7 @@ const TOPICS = {
   pi: { label: 'Above or below the pI', gen: genPI, video: 'zw' },
   aaform: { label: 'Pick the right form', gen: genAAForm, video: 'zw' },
   peptide: { label: 'Peptide net charge', gen: genPeptide, video: 'zw' },
+  dial: { label: 'pH Dial lab', gen: genDial, video: 'zw' },
   salt: { label: 'Neutralization products', gen: genSalt, video: 'salts' },
   solu: { label: 'Salts and solubility', gen: genSolu, video: 'salts' },
   clinic: { label: 'Drugs, absorption & blood pH', gen: genClinic, video: 'ph' }
@@ -825,10 +918,13 @@ const TOPICS = {
 const CATEGORIES = [
   { id: 'acidbase', title: 'Acids & Bases', blurb: 'Which groups give or take H⁺, and which is strongest', art: 'cat-acidbase', fallback: 'acidbase', topics: ['groups', 'strength'] },
   { id: 'charge', title: 'Charge at Body pH', blurb: 'COOH, amines, amides at pH 7.4 and in the stomach', art: 'cat-charge', fallback: 'phgauge', topics: ['form74', 'net'] },
-  { id: 'amino', title: 'Amino Acids & pI', blurb: 'Zwitterions, pI, peptides', art: 'cat-amino', fallback: 'molecule', topics: ['aa74', 'pi', 'aaform', 'peptide'] },
+  { id: 'amino', title: 'Amino Acids & pI', blurb: 'Zwitterions, pI, peptides', art: 'cat-amino', fallback: 'molecule', topics: ['aa74', 'pi', 'aaform', 'peptide', 'dial'] },
   { id: 'salts', title: 'Salts & Solubility', blurb: 'Neutralization and water solubility', art: 'cat-salts', fallback: 'dissolve', topics: ['salt', 'solu'] },
   { id: 'health', title: 'Health & Clinic', blurb: 'Drug absorption, anesthetics, blood pH', art: 'cat-health', fallback: 'medal', topics: ['clinic'] }
 ];
+/* lab questions also appear inside these topics (about 1 in 3), never in Skill Check Prep */
+for (const t of ['aa74', 'pi', 'aaform']) { const g = TOPICS[t].gen; TOPICS[t].gen = () => (!state.quiz && Math.random() < 1 / 3 ? genDial() : g()); }
+TOPICS.dial.gen = () => (state.quiz ? genAA74() : genDial());
 function generate(topic) { let q; for (let t = 0; t < 5 && !q; t++) q = TOPICS[topic].gen(); q.topic = topic; return q; }
 
 /* ===================== Proton Patrol: game UI ===================== */
@@ -982,8 +1078,9 @@ function newQuestion(focus) {
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   setVideoFor(q.video || T.video);
+  if (q.kind === 'lab') renderDial();
   renderChooser(); paintIcons($('play'));
-  setMood('idle', 0, true); $('say').textContent = q.kind === 'hit' ? 'Tap the right part of the picture!' : pick(SAY.idle);
+  setMood('idle', 0, true); $('say').textContent = q.kind === 'hit' ? 'Tap the right part of the picture!' : q.kind === 'lab' ? 'Commit to a guess first. Wrong guesses cost nothing here.' : pick(SAY.idle);
   if (focus && !coarse()) { const first = q.kind === 'hit' ? $('art').querySelector('.hit') : ch.querySelector('.choice'); try { first && first.focus({ preventScroll: true }); } catch (e) {} }
 }
 
@@ -1209,4 +1306,5 @@ function init() {
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 </script>
+<script>/* iOS: a quick second tap on a button that just turned disabled must not zoom the page (2026-11-14) */document.addEventListener("touchend",e=>{const b=e.target&&e.target.closest&&e.target.closest("button");if(b&&b.disabled&&e.cancelable)e.preventDefault()},{passive:false});</script>
 </body></html>

@@ -301,14 +301,19 @@ function plainOf(coef, e) {                       // "4.5", 3 → "4500"; "4.5",
   if (pt <= 0) s = '0.' + '0'.repeat(-pt) + digits;
   else if (pt >= digits.length) s = digits + '0'.repeat(pt - digits.length);
   else s = digits.slice(0, pt) + '.' + digits.slice(pt);
+  /* instructor sig-fig rule: trailing zeros count only with a decimal point. "5.0", 1 → "50." (2 sf) */
+  if (!s.includes('.') && /0$/.test(s) && pt === digits.length && sigCount(s) < digits.replace(/^0+/, '').length) s += '.';
   return addCommas(s);
 }
+const sigCount = s => s.replace(/^[0.]+/, '').replace(/\.$/, '').replace(/0+$/, '').length || 1;
+/* plain form only when it shows the right number of sig figs; "1.0", 3 would be "1000" (1 sf), so use 1.0 × 10³ */
+function plainOK(coef, e) { const digits = coef.replace('.', ''), s = plainOf(coef, e).replace(/,/g, ''); return s.includes('.') || sigCount(s) === digits.replace(/^0+/, '').length; }
 const sciOf = (coef, e) => `${coef} × ${pow10HTML(e)}`;
-const numHTML = (coef, e) => (e >= -3 && e <= 4 ? plainOf(coef, e) : sciOf(coef, e));       // how a given value is shown
+const numHTML = (coef, e) => (e >= -3 && e <= 4 && plainOK(coef, e) ? plainOf(coef, e) : sciOf(coef, e));       // how a given value is shown
 function answerHTML(coef, e, unit) {
   const u = unit ? ' ' + unit : '';
-  if (e >= -2 && e <= 3) return plainOf(coef, e) + u;
-  return sciOf(coef, e) + u + (Math.abs(e) <= 9 ? ` = ${plainOf(coef, e)}${u}` : '');
+  if (e >= -2 && e <= 3 && plainOK(coef, e)) return plainOf(coef, e) + u;
+  return sciOf(coef, e) + u + (Math.abs(e) <= 9 && plainOK(coef, e) ? ` = ${plainOf(coef, e)}${u}` : '');
 }
 const answerText = (coef, e) => `${coef}E${e}`;
 

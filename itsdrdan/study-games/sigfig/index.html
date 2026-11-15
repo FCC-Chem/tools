@@ -396,7 +396,7 @@ function sfOfDigits(whole, dot, frac) {
 }
 function parseEntry(raw) {
   let s = cleanTyped(raw).replace(/[()]/g, '').replace(/^x?10\^/, '1e').replace(/x10\^?/, 'e');
-  s = s.replace(/[a-zµμ°/%]+$/i, m => (/^e[+-]?\d*$/.test(m) ? m : ''));   // allow a typed unit at the end
+  s = s.replace(/[a-zµμ°/%]+(?:\^?[23²³])?$/i, m => (/^e[+-]?\d*$/.test(m) ? m : ''));   // allow a typed unit at the end, including squared/cubed units (cm2, cm^2, cm²)
   const m = s.match(/^([+-]?)(\d*)(\.?)(\d*)(?:e([+-]?\d+))?$/);
   if (!m || (m[2] + m[4]).length === 0) return null;
   const [, sign, whole, dot, frac, exp] = m;

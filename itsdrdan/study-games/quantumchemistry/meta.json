@@ -2,7 +2,7 @@
   "title": "Quantum Quest — Quantum Chemistry Study Game",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3A, CHEM 1A",
-  "description": "Practice light and photons, the electromagnetic spectrum, the photoelectric effect, Bohr transitions, matter waves, quantum numbers, electron configurations, orbital diagrams, magnetism, and periodic trends. Students choose their course: CHEM 1A (default, 1,706 problems) or a focused CHEM 3A set (688 problems: simple light calculations, Bohr model and spectra, shells and subshells, orbital diagrams, full and noble-gas configurations of main-group atoms and ions, and basic periodic trends). Includes diagrams, typed configurations, hints, explanations, skill-check prep, keyboard shortcuts, XP, and achievements. New: successive-ionization-energy tables (period 2 and 3, NIST data) to identify the element, count valence electrons, and write its noble-gas configuration. Also adds ACS-style items: valence-shell configurations, impossible vs. ground-state configurations, identifying a species from its configuration, electronegativity trends, and stable-ion prediction from ionization energies.",
+  "description": "Practice light and photons, the electromagnetic spectrum, the photoelectric effect, Bohr transitions, matter waves, quantum numbers, electron configurations, orbital diagrams, magnetism, and periodic trends. Students choose their course: CHEM 1A (default, 1,706 problems) or a focused CHEM 3A set (688 problems: simple light calculations, Bohr model and spectra, shells and subshells, orbital diagrams, full and noble-gas configurations of main-group atoms and ions, and basic periodic trends). Includes diagrams, typed configurations, hints, explanations, skill-check prep, keyboard shortcuts, XP, and achievements. New: successive-ionization-energy tables (period 2 and 3, NIST data) to identify the element, count valence electrons, and write its noble-gas configuration. Also adds ACS-style items: valence-shell configurations, impossible vs. ground-state configurations, identifying a species from its configuration, electronegativity trends, and stable-ion prediction from ionization energies. New: Photoelectric Bench lab questions in CHEM 1A Light & photons: predict, move the brightness or wavelength slider, watch electrons leave the metal, explain why, then calculate the threshold wavelength or maximum kinetic energy.",
   "icon": "⚛️",
   "tags": [
     "chemistry",
@@ -31,7 +31,8 @@
     "metallic character",
     "successive ionization energies",
     "electronegativity",
-    "ACS exam review"
+    "ACS exam review",
+    "interactive lab"
   ],
   "version": "12",
   "status": "working"

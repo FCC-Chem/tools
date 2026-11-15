@@ -309,6 +309,20 @@ table.data.lab td.hi{color:#b4233d;font-weight:800}
 .cats.six{grid-template-columns:repeat(3,minmax(0,1fr))}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}.res-mark{margin-left:.45em;font-weight:800}.choice.right .res-mark,.step.ok .res-mark{color:var(--mint-ink)}.choice.wrong .res-mark,.step.bad .res-mark{color:var(--rose-ink)}
+
+/* Enzyme Bench */
+.lab-steps{display:flex;gap:6px;list-style:none;padding:0;margin:0 0 10px;flex-wrap:wrap}.lab-steps li{padding:5px 11px;border-radius:99px;background:#f0f1f7;color:#5b6680;font-weight:700;font-size:.82rem}.lab-steps li.on{background:#e8ebff;color:#3a46b8;box-shadow:0 0 0 2px #8b95ee}.lab-steps li.done{background:#e3f6ec;color:#23704c}
+.lab-ask{margin:8px 0;font-size:1.02rem;text-align:left}.lab-choices{display:grid;gap:8px;text-align:left}.eb-choice{width:100%;text-align:left}.eb-choice.wrong{opacity:.55;text-decoration:line-through}
+.eb-view{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;align-items:center;margin:8px 0}
+.eb-read{display:grid;gap:8px;text-align:left}.eb-meter{height:16px;border-radius:9px;background:#eef0f7;overflow:hidden}.eb-meter span{display:block;height:100%;background:linear-gradient(90deg,#72c9a8,#7884ea);transition:width .4s}
+@media (prefers-reduced-motion:reduce){.eb-meter span{transition:none}}
+.eb-num{font-size:1rem}.eb-num b{font-size:1.4rem}.eb-num small{display:block;color:#6b7280}
+.eb-fixed{display:flex;flex-wrap:wrap;gap:6px}.eb-fixed span{font-size:.82rem;font-weight:700;padding:3px 9px;border-radius:99px;background:#f3f0fb;color:#5a3f9e}
+.eb-ctl{text-align:left;margin:6px 0}.eb-ctl label{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.eb-ctl input{width:100%;height:36px;accent-color:#4b57d1}
+.eb-obs{border:1px solid #dfe4f0;border-left:5px solid #7884ea;border-radius:12px;padding:10px 12px;background:#fbfbff;margin:8px 0;text-align:left}.eb-obs p{margin:4px 0}
+.eb-exfb:empty{display:none}
+@media(max-width:640px){.eb-view{grid-template-columns:1fr}}
+/* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -1128,6 +1142,100 @@ function genVitSort() {
   return mcq({ topic: 'vitsort', tag: 'Sort the list', prompt: `Which list contains <b>only ${kind}</b> vitamins?`, right: 'Vitamins ' + mk(right), wrongs, grid: true, solution: `Vitamins ${mk(right)} are all <b>${kind}</b>. Fat-soluble: A, D, E, K. Water-soluble: the B vitamins and C.`, hint: 'Remember “ADEK” for the fat-soluble four.' });
 }
 
+/* ===================== Enzyme Bench: lab questions (predict → turn one control → explain → apply) ===================== */
+/*EBENCH-LOGIC-START* (pure logic: tools/check-bench.js runs it in Node with bell, tempCurve, sat) */
+/* Relative activity only (0–100 % of the enzyme's best rate): the course is qualitative, so no Km or Vmax numbers appear. */
+const EB_KM=0.5,EB_COMP=4,EB_NONC=0.5; /* competitive: apparent affinity 4× weaker; noncompetitive: half the enzymes out of action */
+function ebActivity(st){const T=tempCurve(37)(st.T),P=bell(st.opt,1.7)(st.pH),km=st.inh==='comp'?EB_KM*EB_COMP:EB_KM,S=st.S/(st.S+km),N=st.inh==='nonc'?EB_NONC:1;return Math.round(100*T*P*S*N);}
+const EB_ENZ={pepsin:{opt:2,home:'the stomach'},trypsin:{opt:8,home:'the small intestine'},'a typical body enzyme':{opt:7,home:'the blood and most cells'}};
+const EB_UP='Activity goes up',EB_DOWN='Activity goes down',EB_SAME='Activity stays about the same';
+const ebTrend=(a,b)=>Math.abs(b-a)<8?EB_SAME:b>a?EB_UP:EB_DOWN;
+const EB_X={temp:{key:'T',label:'Temperature',unit:'°C',min:0,max:70,step:1},pH:{key:'pH',label:'pH',unit:'',min:0,max:14,step:1},sub:{key:'S',label:'Amount of substrate',unit:'',min:0,max:20,step:1},inh:{key:'S',label:'Amount of substrate',unit:'',min:0,max:20,step:1}};
+function ebSpec(fam,o){o=o||{};fam=fam||['temp','temp','pH','sub','inh'][Math.floor(Math.random()*5)];const pk=a=>a[Math.floor(Math.random()*a.length)];
+ const base={T:37,pH:7,opt:7,S:20,inh:null};let start,target,enzyme='a typical body enzyme',ex,apply,predict;
+ if(fam==='temp'){const [t0,t1]=o.pair||pk([[20,37],[37,10],[37,60],[37,55]]);start={...base,T:t0};target=t1;
+  const cold=t1<t0,heat=t1>45;
+  ex=heat?{ask:'Why did the activity drop?',answer:'denat',opts:[['denat','Heat broke the bonds that hold the enzyme’s shape, so the active site was destroyed (denatured)'],['fast','The molecules moved too fast to bind'],['used','The substrate was used up'],['cold','The molecules slowed down']],
+     why:{fast:'Faster molecules collide <b>more</b> often. The drop comes from the enzyme losing its shape.',used:'There is plenty of substrate (it is held constant). Only the temperature changed.',cold:'Heating speeds molecules up. This drop happened because the enzyme was damaged.'},
+     right:'Above about 40–45 °C the weak attractions holding a human enzyme’s shape break. The active site changes shape (denaturation), and activity drops sharply. Cooling it again does not fix it.'}
+   :cold?{ask:'Why did the activity drop?',answer:'slow',opts:[['slow','The molecules move more slowly, so the enzyme and substrate collide less often; the enzyme is not damaged'],['denat','The cold denatured the enzyme'],['frozen','The active site closed up permanently'],['used','The substrate was used up']],
+     why:{denat:'Cold slows enzymes down but does not destroy them. Warm the enzyme back to 37 °C and the activity returns.',frozen:'Nothing permanent happened: warming the enzyme brings its activity back.',used:'Substrate is held constant here. Only the temperature changed.'},
+     right:'In the cold, molecules move slowly and collide less often, so the rate falls. The enzyme keeps its shape, so warming it back up restores the activity. (That is why refrigerated food spoils slowly.)'}
+   :{ask:'Why did the activity rise?',answer:'collide',opts:[['collide','Faster-moving molecules collide more often and with more energy, up to the optimum'],['more','Warming makes more enzyme'],['denat','Warming denatured the enzyme'],['shape','Warming changed the substrate into a new molecule']],
+     why:{more:'The amount of enzyme stays the same. The same enzymes just work faster.',denat:'Denaturing lowers activity. Below the optimum, warming only speeds things up.',shape:'The substrate is the same molecule. It just reaches the active site more often.'},
+     right:'Up to the optimum (about 37 °C for human enzymes), warming makes molecules move faster, so enzyme and substrate collide more often and with more energy.'};
+  apply=heat?{q:'A patient’s blood sample is accidentally left in a 70 °C water bath, then cooled to 37 °C. What happens to its enzymes’ activity?',a:'It stays low: the enzymes were denatured',w:[['It returns to normal once it is cooled',"Denaturation is not undone by cooling: the enzyme's shape is lost."],['It is higher than before','Heating past the optimum destroys the active site.']]}
+   :cold?{q:'Why does refrigerating food slow down spoiling?',a:'Cold slows the enzymes of microbes and of the food itself without destroying them',w:[['Cold denatures every enzyme in the food','Cold does not denature them: warm the food up and the enzymes work again.'],['Cold removes the substrates','The substrates are still there; they just react more slowly.']]}
+   :{q:'A person’s body temperature drops to 33 °C (hypothermia). What happens to the rate of most of their enzyme reactions?',a:'They slow down, because 33 °C is below the optimum',w:[['They speed up','Below the optimum, lower temperature means slower reactions.'],['They stop completely because the enzymes denature','33 °C is cool, not hot. The enzymes slow down but are not destroyed.']]};}
+ else if(fam==='pH'){enzyme=o.enzyme||pk(Object.keys(EB_ENZ));const opt=EB_ENZ[enzyme].opt;const t1=o.to??pk([0,2,7,8,12].filter(v=>Math.abs(v-opt)>=4));start={...base,opt,pH:opt};target=t1;
+  ex={ask:'Why did the activity change?',answer:'charge',opts:[['charge','Away from its optimum pH, the charges in the active site change, so the substrate no longer binds well'],['used','The enzyme was used up'],['temp','The pH change also changed the temperature'],['more','The pH change made more substrate']],
+   why:{used:'Enzymes are catalysts: they are not used up. The active site just stopped working well.',temp:'Temperature is held at 37 °C. Only the pH changed.',more:'The amount of substrate is held constant.'},
+   right:`Each enzyme has an optimum pH that matches its home (${EB_ENZ[enzyme].home}, about pH ${opt}). Moving away adds or removes H⁺ on groups in the active site, so the substrate no longer binds well, and far enough away the enzyme can denature.`};
+  apply=enzyme==='pepsin'?{q:'Pepsin passes with food from the stomach (pH about 2) into the small intestine (pH about 8). What happens to pepsin there?',a:'It stops working well, because pH 8 is far from its optimum',w:[['It works faster, because pH 8 is closer to neutral','Pepsin’s optimum is pH 2. Neutral is not best for every enzyme.'],['Nothing changes: pH does not affect enzymes','Each enzyme has an optimum pH.']]}
+   :enzyme==='trypsin'?{q:'Trypsin works in the small intestine (pH about 8). How would it work in the stomach (pH about 2)?',a:'Poorly, because pH 2 is far from its optimum',w:[['Better, because acid speeds up every reaction','Each enzyme has its own optimum. Trypsin’s is about pH 8.'],['The same, because pH does not affect enzymes','Changing pH changes the charges in the active site.']]}
+   :{q:'In severe acidosis the blood pH falls from 7.4 toward 7.0. Why is that dangerous?',a:'Enzymes in the blood and cells move away from their optimum pH and work less well',w:[['Enzymes work faster in acid, so reactions run out of control','Most body enzymes are best near pH 7.4; moving away slows them.'],['The pH change raises body temperature','pH and temperature are separate factors.']]};}
+ else if(fam==='sub'){const [s0,s1]=o.pair||pk([[1,10],[2,15],[10,20],[12,20]]);start={...base,S:s0};target=s1;const satd=s0>=10;
+  ex=satd?{ask:'Why did adding substrate barely change the activity?',answer:'full',opts:[['full','Almost every active site is already busy (saturated), so extra substrate has to wait its turn'],['inhib','Extra substrate inhibits the enzyme'],['used','The enzyme is being used up'],['denat','Too much substrate denatures the enzyme']],
+    why:{inhib:'The rate does not drop; it levels off. Substrate is not an inhibitor.',used:'Enzymes are not used up. Each one goes back to work after every reaction.',denat:'Denaturing would make the rate fall. Here it just stops rising.'},
+    right:'With a fixed amount of enzyme, the rate rises with substrate until nearly every active site is busy. After that (saturation) only more enzyme would speed things up.'}
+   :{ask:'Why did the activity rise?',answer:'sites',opts:[['sites','More substrate means more collisions with empty active sites'],['enz','More substrate makes more enzyme'],['temp','More substrate raises the temperature'],['shape','More substrate changes the enzyme’s shape']],
+    why:{enz:'The amount of enzyme is fixed. The same enzymes are just busier.',temp:'Temperature is held at 37 °C.',shape:'Substrate binds to the active site but does not reshape the enzyme permanently.'},
+    right:'At low substrate many active sites sit empty. Adding substrate fills more of them, so the rate rises (until saturation).'};
+  apply={q:'An enzyme reaction is running with so much substrate that every active site is busy. What would speed it up?',a:'Adding more enzyme',w:[['Adding more substrate','The active sites are already full, so extra substrate just waits.'],['Removing some enzyme','Fewer enzymes means fewer active sites and a slower rate.']]};}
+ else{const kind=o.kind||pk(['comp','nonc']);start={...base,S:1,inh:kind};target=20;
+  ex=kind==='comp'?{ask:'Why did flooding with substrate bring the activity almost all the way back?',answer:'compete',opts:[['compete','The inhibitor competes for the active site; with lots of substrate, the substrate wins most of the time'],['destroy','The extra substrate destroyed the inhibitor'],['shape','The inhibitor changed the enzyme’s shape permanently'],['never','It did not come back at all']],
+    why:{destroy:'The inhibitor is still there. It just loses the competition for the active site.',shape:'If the shape had changed, more substrate would not help. That is noncompetitive inhibition.',never:'Look at the readout: the activity climbed close to the no-inhibitor curve.'},
+    right:'A competitive inhibitor looks like the substrate and binds the active site. Flooding with substrate out-competes it, so the enzyme reaches almost the same top rate, just more slowly.'}
+   :{ask:'Why did flooding with substrate NOT bring the activity back to normal?',answer:'else',opts:[['else','The inhibitor binds somewhere else and changes the enzyme’s shape; those enzymes stay out of action no matter how much substrate is added'],['compete','The inhibitor competes for the active site'],['used','The substrate was used up'],['denat','Too much substrate denatured the enzyme']],
+    why:{compete:'If it competed for the active site, extra substrate would push it out. Here the top rate stayed low.',used:'Substrate was being added, not used up.',denat:'Substrate does not denature enzymes. The inhibitor is what changed the shape.'},
+    right:'A noncompetitive inhibitor binds away from the active site (allosteric site) and changes the enzyme’s shape. Those enzymes are out of action, so even with lots of substrate the top rate stays lower.'};
+  apply=kind==='comp'?{q:'A drug slows an enzyme, but its effect almost disappears when the patient has a lot of the substrate. What kind of inhibitor is it?',a:'Competitive',w:[['Noncompetitive','A noncompetitive inhibitor’s effect does not go away with more substrate.'],['Irreversible','An irreversible inhibitor bonds permanently; extra substrate cannot undo it.']]}
+   :{q:'A heavy metal ion binds to an enzyme away from its active site and changes its shape. Adding more substrate does not help. What kind of inhibition is this?',a:'Noncompetitive',w:[['Competitive','A competitive inhibitor binds the active site and can be out-competed by substrate.'],['No inhibition: the substrate ran out','Substrate was plentiful; the enzyme’s shape was the problem.']]};}
+ const a0=ebActivity(start),a1=ebActivity({...start,[EB_X[fam].key]:target});
+ const predictOpts=fam==='inh'?[['back','Activity climbs nearly back to the no-inhibitor level'],['low','Activity climbs, but stays well below the no-inhibitor level'],['same','Activity does not change']]:[[EB_UP,EB_UP],[EB_DOWN,EB_DOWN],[EB_SAME,EB_SAME]];
+ const free=ebActivity({...start,inh:null,S:target});
+ predict=fam==='inh'?{ask:`An inhibitor is present and the substrate is low (activity ${a0}%). You will flood the enzyme with substrate. Predict:`,answer:a1>=free-12?'back':'low',opts:predictOpts}
+  :{ask:`Now ${fam==='pH'?enzyme+' is at pH '+start.pH+' ('+EB_ENZ[enzyme].home+')':fam==='temp'?'the enzyme is at '+start.T+' °C':'the substrate is '+(start.S>=10?'high':'low')}, activity ${a0}%. You will turn the ${EB_X[fam].label.toLowerCase()} to ${fam==='sub'?(target>=15?'the maximum':'a higher amount'):target+(EB_X[fam].unit?' '+EB_X[fam].unit:'')}. Predict:`,answer:ebTrend(a0,a1),opts:predictOpts};
+ return {fam,enzyme,start,target,x:EB_X[fam],a0,a1,free,predict,explain:{ask:ex.ask,answer:ex.answer,opts:ex.opts,why:ex.why,right:ex.right},apply};}
+/*EBENCH-LOGIC-END*/
+
+const EB_RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function genBench(fam){const s=ebSpec(fam);const cur={...s.start};
+ return {kind:'lab',bench:s,cur,stage:'predict',tag:{temp:'temperature',pH:'pH · '+s.enzyme,sub:'substrate',inh:s.start.inh==='comp'?'inhibitor (competitive)':'inhibitor (noncompetitive)'}[s.fam],art:'',prompt:'',exTried:[],
+  hint:'Only one control changes; everything else stays at body conditions. Think about collisions, the enzyme’s shape, and how many active sites are free.',
+  answer:s.apply.a,solution:`${s.explain.right} Apply: ${s.apply.a}.`};}
+function ebGraph(q){const s=q.bench,x=s.x,k=x.key,f=v=>ebActivity({...q.cur,[k]:v})/100;
+ const curves=[{f}];if(s.fam==='inh')curves.unshift({f:v=>ebActivity({...q.cur,inh:null,[k]:v})/100,color:'#9aa3b8',dash:true,label:'no inhibitor',lx:x.max*.72,ly:1.02});
+ const ticks=s.fam==='temp'?[0,10,20,30,40,50,60,70]:s.fam==='pH'?[0,2,4,6,8,10,12,14]:[0,5,10,15,20];
+ return plotSVG({x0:x.min,x1:x.max,xl:x.label+(x.unit?' ('+x.unit+')':s.fam==='pH'?'':' (low → high)'),yl:'Enzyme activity',ticks,curves,extra:(X,Y)=>`<circle cx="${X(q.cur[k])}" cy="${Y(ebActivity(q.cur)/100)}" r="8" fill="#e0675a" stroke="#fff" stroke-width="2.5"/>`}).replace('role="img" aria-label="Graph of','role="img" aria-label="Activity now '+ebActivity(q.cur)+'%. Graph of');}
+function ebReadout(q){const a=ebActivity(q.cur),s=q.bench;return `<div class="eb-read"><div class="eb-meter" role="img" aria-label="Activity ${a} percent of the best rate"><span style="width:${a}%"></span></div><div class="eb-num">Activity <b>${a}%</b> <small>of this enzyme’s best rate</small></div><div class="eb-fixed">${['temp','pH','sub'].filter(f=>f!==s.fam&&!(s.fam==='inh'&&f==='sub')).map(f=>`<span>🔒 ${f==='temp'?q.cur.T+' °C':f==='pH'?'pH '+q.cur.pH:'plenty of substrate'}</span>`).join('')}${s.start.inh?`<span>🧪 inhibitor present</span>`:''}</div></div>`;}
+function ebControl(q){const s=q.bench,x=s.x,k=x.key,lock=q.stage!=='try';const v=q.cur[k];return `<div class="eb-ctl"><label for="ebDial"><b>${x.label}</b> <span id="ebNow">${s.fam==='sub'||s.fam==='inh'?(v<=2?'low':v>=18?'very high':v>=10?'high':'medium'):v+(x.unit?' '+x.unit:'')}</span></label><input type="range" id="ebDial" min="${x.min}" max="${x.max}" step="${x.step}" value="${v}"${lock?' disabled':''} aria-valuetext="${v}${x.unit?' '+x.unit:''}"></div>`;}
+function renderBench(){const q=state.q,s=q.bench,st=q.stage,steps=[['predict','Predict'],['try','Turn the control'],['explain','Explain'],['apply','Apply']],ix=steps.findIndex(x=>x[0]===st);
+ let art=`<ol class="lab-steps" aria-label="Lab steps">${steps.map(([k,t],i)=>`<li class="${i<ix?'done':i===ix?'on':''}"${i===ix?' aria-current="step"':''}>${i<ix?'✓ ':''}${t}</li>`).join('')}</ol>`;
+ const view=`<div class="eb-view">${ebGraph(q)}${ebReadout(q)}</div>`;
+ if(st==='predict')art+=view;
+ else if(st==='try')art+=`<p class="lab-ask">Your prediction: <b>${q.predHTML}</b>. Now move the <b>${s.x.label.toLowerCase()}</b> ${s.fam==='sub'||s.fam==='inh'?'to <b>'+(s.target>=18?'the maximum':'the marked amount ('+s.target+')')+'</b>':'to <b>'+s.target+(s.x.unit?' '+s.x.unit:'')+'</b>'} and watch the red dot.</p>`+ebControl(q)+view;
+ else art+=ebControl(q)+view+q.obs;
+ if(st==='explain')art+=`<p class="lab-ask"><b>Explain:</b> ${s.explain.ask}</p><div class="feedback eb-exfb${q.exMsg?' bad':''}" role="status" aria-live="polite">${q.exMsg||''}</div><div class="lab-choices">${q.exOpts.map(([k,h])=>`<button type="button" class="choice eb-choice${q.exTried.includes(k)?' wrong':''}" data-ee="${k}"${q.exTried.includes(k)?' disabled':''}>${h}</button>`).join('')}</div>`;
+ if(st==='apply')art+=`<div class="feedback good"><b>✅ Explained.</b> ${s.explain.right}</div>`;
+ $('art').innerHTML=art;$('prompt').innerHTML=st==='predict'?s.predict.ask:st==='apply'?'<b>Apply it.</b> '+s.apply.q:'';
+ const ch=$('choices');
+ if(st==='predict'){ch.hidden=false;ch.className='choices';ch.innerHTML=s.predict.opts.map(([k,h])=>`<button type="button" class="choice" data-ep="${escAttr(k)}">${h}</button>`).join('');}
+ else if(st==='apply'){ch.hidden=false;ch.className='choices';ch.innerHTML=q.choices.map((c,i)=>`<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');}
+ else{ch.hidden=true;ch.innerHTML='';}
+ $('say').textContent={predict:'Commit to a guess first. Wrong guesses cost nothing here.',try:'Move the slider and watch the red dot.',explain:'Use what the graph showed.',apply:'Same idea, new situation.'}[st];}
+const escAttr=s=>String(s).replace(/"/g,'&quot;');
+function benchStage(q,st){q.stage=st;q.hint={predict:q.hint,try:'Drag the slider (or use the arrow keys) to the target. The red dot shows the activity at each setting.',explain:'Compare the activity before and after. Did the enzyme slow down, lose its shape, run out of free active sites, or get blocked?',apply:'Use the same reasoning as the lab: which factor changed, and what does it do to collisions, shape or free active sites?'}[st]||q.hint;renderBench();}
+function benchObserved(q){const s=q.bench;q.obs=`<div class="eb-obs"><div class="result-title"><span>👀</span> What the bench showed</div><p>${s.x.label}: ${s.fam==='sub'||s.fam==='inh'?(s.start[s.x.key]<=2?'low':'high')+' → '+(s.target>=18?'maximum':'higher'):s.start[s.x.key]+' → '+s.target+(s.x.unit?' '+s.x.unit:'')}. Activity: <b>${s.a0}% → ${s.a1}%</b>${s.fam==='inh'?` (without the inhibitor it would be ${s.free}%)`:''}.</p><p>${q.pred===s.predict.answer?'✅ Your prediction was right.':'Your prediction was <i>'+q.predHTML+'</i>. The bench says otherwise. That is fine: now figure out why.'}</p></div>`;
+ q.exOpts=s.explain.opts.slice().sort(()=>Math.random()-.5);benchStage(q,'explain');$('art').querySelector('.eb-obs')?.scrollIntoView({block:'nearest',behavior:EB_RM()?'auto':'smooth'});}
+document.addEventListener('click',e=>{const q=state.q;if(!q||q.kind!=='lab'||!q.bench||state.done)return;const b=e.target.closest('button');if(!b||b.disabled)return;const s=q.bench;
+ if(b.dataset.ep){e.stopImmediatePropagation();q.pred=b.dataset.ep;q.predHTML=s.predict.opts.find(o=>o[0]===q.pred)[1];benchStage(q,'try');$('ebDial')?.focus({preventScroll:true});return}
+ if(b.dataset.ee){e.stopImmediatePropagation();if(b.dataset.ee===s.explain.answer){q.exMsg='';const m=mcq({topic:q.topic,tag:q.tag,prompt:s.apply.q,right:s.apply.a,wrongs:s.apply.w.map(([t,why])=>[t,why,'bench:'+s.fam+'-apply']),solution:s.explain.right,hint:''});q.choices=m.choices;benchStage(q,'apply');q.kind='choice';$('choices').querySelector('.choice')?.focus({preventScroll:true});return}
+  q.exTried.push(b.dataset.ee);q.exMsg='<b>Not quite.</b> '+(s.explain.why[b.dataset.ee]||'Look at the graph again.');renderBench();$('art').querySelector('.eb-exfb')?.scrollIntoView({block:'nearest',behavior:EB_RM()?'auto':'smooth'});}},true);
+document.addEventListener('input',e=>{if(e.target.id!=='ebDial')return;const q=state.q;if(!q||!q.bench||q.stage!=='try')return;const s=q.bench,k=s.x.key;q.cur[k]=+e.target.value;
+ const v=$('art').querySelector('.eb-view');if(v)v.outerHTML=`<div class="eb-view">${ebGraph(q)}${ebReadout(q)}</div>`;const now=q.cur[k];$('ebNow').textContent=s.fam==='sub'||s.fam==='inh'?(now<=2?'low':now>=18?'very high':now>=10?'high':'medium'):now+(s.x.unit?' '+s.x.unit:'');e.target.setAttribute('aria-valuetext',now+(s.x.unit?' '+s.x.unit:''));
+ if(now===s.target){e.target.disabled=true;setTimeout(()=>{if(state.q===q&&q.stage==='try')benchObserved(q)},EB_RM()?200:900);}});
+
 const TOPICS = {
   terms: { label: 'Key terms', gen: genTerms, video: 'protein' },
   parts: { label: 'Label the enzyme', gen: genParts, video: 'protein' },
@@ -1139,6 +1247,7 @@ const TOPICS = {
   structs: { label: 'From the structures', gen: genStructs, video: 'redox' },
   plot: { label: 'Read the graph', gen: genPlot, video: 'protein' },
   predict: { label: 'Predict the rate', gen: genPredict, video: 'protein' },
+  bench: { label: 'Enzyme Bench lab', gen: genBench, video: 'protein' },
   inhibit: { label: 'Spot the inhibitor', gen: genInhibit, video: 'protein' },
   regulate: { label: 'Regulation', gen: genRegulate, video: 'protein' },
   dental: { label: 'Dental hygiene chairside', gen: () => genHealth('dental'), video: 'protein' },
@@ -1154,11 +1263,14 @@ const TOPICS = {
 const CATEGORIES = [
   { id: 'basics', title: 'Enzyme Basics', blurb: 'Terms, active site, models, activation energy', art: 'cat-basics', fallback: 'molecule', topics: ['terms', 'parts', 'models', 'energy', 'specific'] },
   { id: 'classify', title: 'Classify Enzymes', blurb: 'The six classes, from the reaction, the name or the structures', art: 'cat-classify', fallback: 'checklist', topics: ['six', 'names', 'structs'] },
-  { id: 'activity', title: 'Enzyme Activity', blurb: 'Temperature, pH and concentration graphs', art: 'cat-activity', fallback: 'heat', topics: ['plot', 'predict'] },
+  { id: 'activity', title: 'Enzyme Activity', blurb: 'Temperature, pH and concentration graphs', art: 'cat-activity', fallback: 'heat', topics: ['plot', 'predict', 'bench'] },
   { id: 'control', title: 'Inhibitors & Control', blurb: 'Inhibitors, feedback, allosteric control, zymogens', art: 'cat-control', fallback: 'target', topics: ['inhibit', 'regulate'] },
   { id: 'vitamins', title: 'Cofactors & Vitamins', blurb: 'Metal ions, coenzymes, deficiencies, classify vitamins', art: 'cat-vitamins', fallback: 'water', topics: ['cofactor', 'bvit', 'deficiency', 'soluble', 'vitsort'] },
   { id: 'health', title: 'Health & Clinic', blurb: 'Dental hygiene, nursing, meds, lab tests', art: 'cat-health', fallback: 'medal', fbSrc: 'assets/ach-clinic.webp', topics: ['dental', 'nursing', 'labs', 'disorders'] }
 ];
+/* lab questions also appear inside these topics (about 1 in 3), never in Skill Check Prep */
+for (const [t, fams] of [['plot', ['temp', 'temp', 'pH', 'sub']], ['predict', ['temp', 'pH', 'sub']], ['inhibit', ['inh']]]) { const g = TOPICS[t].gen; TOPICS[t].gen = () => (!state.quiz && !state.exam && Math.random() < 1 / 3 ? genBench(fams[Math.floor(Math.random() * fams.length)]) : g()); }
+TOPICS.bench.gen = () => (state.quiz || state.exam ? genPredict() : genBench());
 function generate(topic) { const q = TOPICS[topic].gen(); q.topic = topic; return q; }
 
 /* ===================== Enzyme Engine: game UI ===================== */
@@ -1319,8 +1431,9 @@ function newQuestion(focus) {
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   setVideoFor(q.video || T.video);
+  if (q.kind === 'lab') renderBench();
   renderChooser(); paintIcons($('play'));
-  setMood('idle', 0, true); $('say').textContent = q.kind === 'hit' ? 'Tap the right part of the picture!' : pick(SAY.idle);
+  setMood('idle', 0, true); $('say').textContent = q.kind === 'hit' ? 'Tap the right part of the picture!' : q.kind === 'lab' ? 'Commit to a guess first. Wrong guesses cost nothing here.' : pick(SAY.idle);
   if (focus && !coarse()) { const first = q.kind === 'hit' ? $('art').querySelector('.hit') : ch.querySelector('.choice'); try { first && first.focus({ preventScroll: true }); } catch (e) {} }
 }
 
@@ -1559,4 +1672,5 @@ function init() {
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 </script>
+<script>/* iOS: a quick second tap on a button that just turned disabled must not zoom the page (2026-11-14) */document.addEventListener("touchend",e=>{const b=e.target&&e.target.closest&&e.target.closest("button");if(b&&b.disabled&&e.cancelable)e.preventDefault()},{passive:false});</script>
 </body></html>

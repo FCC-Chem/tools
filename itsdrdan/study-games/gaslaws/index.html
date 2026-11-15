@@ -176,6 +176,19 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 .lab-side{display:grid;gap:10px}.slider{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-weight:650;font-size:.94rem}.slider b{color:var(--accent-d)}.slider input{grid-column:1/-1;width:100%;accent-color:var(--accent);height:30px}
 .gauge{border-radius:var(--r-md);background:var(--lav);padding:10px 14px}.gauge-label{font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6b5aa6}.gauge-val{font-size:1.6rem;font-weight:800;color:#3b2f7a}.gauge-bar{height:8px;border-radius:9px;background:#fff;overflow:hidden;margin:4px 0}.gauge-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#72c9a8,#7884ea,#e0675a);transition:width .3s}.gauge-sub{font-size:.8rem;color:var(--muted)}
 .lab-gas{width:100%}.lab-gas button{flex:1}.lab-note{margin:0;font-size:.86rem;color:var(--muted)}
+/* piston lab (v27) */
+.gauge-sub{min-height:1.2em}.kmt-read{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 0}.kmt-read div{background:#fff;border-radius:10px;padding:5px 7px;text-align:center}.kmt-read dt{font-size:.7rem;font-weight:700;line-height:1.15;color:#6b5aa6}.kmt-read dd{margin:0;font-weight:800;font-size:1.05rem;color:#3b2f7a}
+.lab-mode{width:100%}.lab-mode button{flex:1}.slider.locked{opacity:.55}.slider input:disabled{cursor:not-allowed}
+.lab-model-note{margin:6px 2px 0;font-size:.78rem;color:var(--faint)}.lab-away{padding:0 20px 16px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.labq{margin:4px 0 14px;display:grid;gap:10px}.labq[hidden]{display:none}.labq .lab-ask{margin:0;font-size:1.02rem}.lab-choices{display:grid;gap:8px}.lab-choices .choice{width:100%;text-align:left;justify-content:flex-start;min-height:48px}
+.lab-steps{display:flex;gap:6px;list-style:none;padding:0;margin:0;flex-wrap:wrap}.lab-steps li{padding:5px 11px;border-radius:99px;background:#f0f1f7;color:var(--muted);font-weight:700;font-size:.82rem}.lab-steps li.on{background:var(--accent-soft);color:var(--accent-d);box-shadow:0 0 0 2px #8b95ee}.lab-steps li.done{background:var(--mint);color:var(--mint-ink)}
+.lab-locks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.lab-locks span{font-size:.82rem;font-weight:700;padding:3px 9px;border-radius:99px;background:#f3f0fb;color:#5a3f9e}
+.lab-obs{border:1px solid var(--line);border-left:5px solid #7884ea;border-radius:12px;padding:10px 12px;background:#fbfbff}.lab-obs table{border-collapse:collapse;width:100%;font-size:.92rem;margin:6px 0}.lab-obs th,.lab-obs td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}.lab-obs p{margin:6px 0 0}
+.feature.lab .f-ico{background:#e7f6e9}.lab-exfb:empty{display:none}
+.labq .lab-body{padding:0}.labq .slider.locked,.labq .lab-mode,.labq .lab-note{display:none}.labq .lab-gas:has(button:disabled){display:none}
+@media(max-width:900px){.labq .lab-body{display:flex;flex-direction:column}.labq .lab-side{order:-1}}
+
 /* reference */
 .law-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-bottom:12px}.law{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fbfbff}.law b{display:block;font-size:.82rem;color:var(--muted)}.law span{font-family:var(--serif);font-size:1.08rem}
 .ref-h{font-size:1rem;margin:14px 0 6px}.vp-table .mini-table{margin:0}
@@ -293,6 +306,7 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 .howto{justify-content:center}
 .skills{justify-content:center}
 @media(max-width:680px){.skills{flex-wrap:wrap;overflow-x:visible;margin:0 0 12px;padding:0;gap:6px}.skill{padding:6px 11px;font-size:.88rem;min-height:40px}}
+/* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
@@ -331,6 +345,7 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
   <div id="playArea">
    <div class="tags"><span class="tag" id="topicTag"></span><span class="tag" id="sigTag"></span></div>
    <section class="question"><div class="equation" id="equation"></div><div id="visual"></div><p class="prompt" id="prompt"></p></section>
+   <section class="labq" id="labQ" hidden aria-label="Lab question"></section>
    <section class="cardpick" id="cardPick" hidden></section>
    <label class="guide-toggle" id="guideToggleLabel"><input type="checkbox" id="guideToggle"><span>🪜 Step-by-step help<small>Solve one small step at a time.</small></span></label>
    <div class="guide" id="guide" hidden></div>
@@ -343,19 +358,23 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
    <p class="note-small">Scientific notation: type <b>4.10E2</b> or <b>4.10*10^2</b>. Use K = °C + 273.15 and R = 0.08206 L·atm/(mol·K).</p>
   </div>
  </main>
- <details class="panel section" id="labSection"><summary><span>🎈 Particle Playground<small>Slide temperature, volume and moles. Watch the pressure change.</small></span></summary>
-  <div class="lab-body">
-   <div class="lab-stage"><canvas id="labCanvas" width="640" height="300" aria-label="Animated gas particles in a box"></canvas></div>
+ <details class="panel section" id="labSection"><summary><span>🎈 Piston Lab (free play)<small>Slide temperature, volume and moles. Lock or free the piston. Watch the pressure.</small></span></summary>
+  <div class="lab-body" id="labBody">
+   <div class="lab-stage"><canvas id="labCanvas" width="640" height="300" role="img" aria-label="Animated gas particles in a cylinder with a piston on the right. The readouts beside it describe the same state in words."></canvas><p class="lab-model-note">Simplified model: about 30 dots stand for each mole. Speeds, hits and push are scaled from kinetic molecular theory, not measured.</p></div>
    <div class="lab-side">
-    <div class="gauge"><div class="gauge-label">Pressure</div><div class="gauge-val" id="labP">0.00 atm</div><div class="gauge-bar"><span id="labBar"></span></div><div class="gauge-sub" id="labHits">wall hits: 0 /s</div></div>
+    <div class="gauge"><div class="gauge-label">Pressure</div><div class="gauge-val" id="labP">0.00 atm</div><div class="gauge-bar"><span id="labBar"></span></div><div class="gauge-sub" id="labPsub"></div>
+     <dl class="kmt-read"><div><dt>Hits per second</dt><dd id="labHits">100</dd></div><div><dt>Push per hit</dt><dd id="labPush">1.00×</dd></div><div><dt>Speed</dt><dd id="labSpeed">1.00×</dd></div></dl></div>
+    <p class="sr-only" id="labSay" role="status" aria-live="polite"></p>
     <label class="slider">🌡️ Temperature <b id="labTv">300 K</b><input type="range" id="labT" min="100" max="600" step="10" value="300"></label>
     <label class="slider">📦 Volume <b id="labVv">15.0 L</b><input type="range" id="labV" min="5" max="25" step="0.5" value="15"></label>
     <label class="slider">⚛️ Moles <b id="labNv">1.00 mol</b><input type="range" id="labN" min="0.2" max="2" step="0.1" value="1"></label>
-    <div class="seg lab-gas" id="labGas"><button type="button" class="active" data-gas="He">He</button><button type="button" data-gas="N2">N₂</button><button type="button" data-gas="Xe">Xe</button></div>
+    <div class="seg lab-gas" id="labGas" role="group" aria-label="Gas"><button type="button" class="active" data-gas="He" aria-pressed="true">He</button><button type="button" data-gas="N2" aria-pressed="false">N₂</button><button type="button" data-gas="Xe" aria-pressed="false">Xe</button></div>
+    <div class="seg lab-mode" id="labMode" role="group" aria-label="Piston"><button type="button" class="active" data-pmode="locked" aria-pressed="true">🔒 Piston locked</button><button type="button" data-pmode="free" aria-pressed="false">🎈 Piston free</button></div>
     <button type="button" class="btn" id="labPlay">⏸ Pause</button>
     <p class="lab-note" id="labNote">Same temperature = same average kinetic energy. Lighter particles move faster.</p>
    </div>
   </div>
+  <p class="note-small lab-away" id="labAway" hidden>The lab is open inside your current question. Finish or skip that question to play freely here.</p>
  </details>
  <section class="panel section"><div class="section-head"><h2>Progress &amp; achievements</h2><span id="achCount"></span></div>
   <div class="stat-row"><div class="stat rank"><strong id="rankLine"></strong><small id="xpText"></small></div><div class="stat"><strong id="correct">0</strong><small>Correct</small></div><div class="stat"><strong id="attempts">0</strong><small>Tried</small></div><div class="stat"><strong id="streak2">0</strong><small>Streak</small></div><div class="stat"><strong id="best">0</strong><small>Best streak</small></div></div>
@@ -410,7 +429,8 @@ function fmt(x,s=3){if(!Number.isFinite(x))return '—';if(x===0)return '0';cons
 const rnd=(lo,hi,s=3)=>Number((lo+Math.random()*(hi-lo)).toPrecision(s));
 const rint=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
 const r3=(x,s=3)=>Number(x.toPrecision(s));
-function parseValue(raw){const t=unsup(raw).replace(/[−–]/g,'-').trim().replace(/,/g,'').replace(/\s+/g,'').replace(/[×x*·]10\^?([+-]?\d+)$/i,'e$1');return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN;}
+const decimalComma=raw=>{const t=String(raw).replace(/\s+/g,'');return t.includes(',')&&!/^[+\-−–]?\d{1,3}(,\d{3})+(\.\d*)?([eE×x*·].*)?$/.test(t);};
+function parseValue(raw){if(decimalComma(raw))return NaN;const t=unsup(raw).replace(/[−–]/g,'-').trim().replace(/,/g,'').replace(/\s+/g,'').replace(/[×x*·]10\^?([+-]?\d+)$/i,'e$1');return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN;}
 /* returns [min,max] sig figs. Instructor rule: trailing zeros with no decimal point are NOT significant (1200 = 2; 1200. or 1.20×10³ = 3), so min = max */
 function sfRange(s){let t=unsup(s).replace(/[−–]/g,'-').trim().replace(/,/g,'').replace(/\s/g,'').replace(/(?:[×x*·]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+\-−]/,'');if(!/^\d*\.?\d*$/.test(t)||!/\d/.test(t))return [0,0];
  if(t.includes('.')){const d=t.replace('.','').replace(/^0+/,'');const z=d?d.length:Math.max(1,(t.split('.')[1]||'').length);return [z,z];}t=t.replace(/^0+(?=\d)/,'');const core=t.replace(/0+$/,'').length;return [core||1,core||1];}
@@ -765,9 +785,13 @@ const UNITS=[
  {id:'mix',icon:'🥤',title:'Gas Mixtures',blurb:'Partial pressures',mb:'#fde7e7',ma:'#d48a8a',skills:['dalton','wet'],courses:BOTH},
  {id:'rxn',icon:'⚗️',title:'Gas Reactions',blurb:'Gas stoichiometry',mb:'#f0e8fc',ma:'#ad8cce',skills:['stoich'],courses:BOTH},
  {id:'speed',icon:'🚀',title:'Speed & Real Gases',blurb:'Molecular speed, effusion',mb:'#e3f5f5',ma:'#6fb3b3',skills:['rms','graham','real'],courses:ONLY1A}];
+/* lab questions appear inside these topics (about 1 in 3 practice questions), never in worked examples or the Readiness Check */
+const LAB_FOR={kmt:['swap'],boyle:['boyle'],temp:['gay','charles'],avog:['avog','pn']};
+const labAllowed=()=>!S.noLab&&!(S.view==='practice'&&S.quest==='check');
+for(const [id,fams] of Object.entries(LAB_FOR)){const l=LEVELS.find(x=>x.id===id),base=l.gen;l.gen=()=>labAllowed()&&Math.random()<1/3?genLab(pick(fams)):base();}
 const unitById=id=>UNITS.find(u=>u.id===id),unitOf=lid=>UNITS.find(u=>u.skills.includes(lid));
 const QUESTS=[['mixed','🎲','Mixed','Everything, shuffled',BOTH,()=>levelById(pick(courseLevels().filter(l=>!['units','which'].includes(l.id))).id).gen()],
- ...UNITS.map(u=>[u.id,u.icon,u.title,u.blurb,u.courses,()=>levelById(pick(u.skills.filter(k=>k!=='which'))).gen()]),
+ ...UNITS.map(u=>[u.id,u.icon,u.title,u.blurb,u.courses,()=>levelById(pick(u.skills.filter(k=>k!=='which'))).gen()]),['lab','🧪','Piston Lab','Predict, slide, watch the gauge',BOTH,()=>genLab()],
  ['check','🏆','Readiness Check','10 questions, then a study plan',BOTH,null]];
 const VIDEOS={units:['qcuMu3m77Yw',374,'Introduction to Gases and KMT: pressure units'],kmt:['qcuMu3m77Yw',0,'Introduction to Gases and Kinetic Molecular Theory'],
  boyle:['uexlvfNkuhs',64,'Gas Laws (Part 1): Boyle’s, Charles’s, Gay-Lussac’s'],temp:['uexlvfNkuhs',421,'Gas Laws (Part 1): Charles’s and Gay-Lussac’s laws'],
@@ -813,7 +837,7 @@ const ACH=[['first','🌱','First Breath','Answer your first question correctly.
  ['streak5','🔥','Heating Up','Reach a 5-question streak.',p=>p.best>=5],['streak10','☄️','Supercritical','Reach a 10-question streak.',p=>p.best>=10],['guide','🪜','Step by Step','Finish 10 guided steps.',p=>p.guideSteps>=10],
  ['solo','🦅','Solo Flyer','5 correct with no help.',p=>p.solo>=5],['boyle','🎈','Squeeze Play','Master Boyle’s Law.',()=>mastered('boyle')],['ideal','🧪','PV = nRT','Master the Ideal Gas Law.',()=>mastered('ideal')],
  ['mystery','🔎','Gas Detective','Master Molar Mass & Mystery Gas.',()=>mastered('molar')],['dalton','🥤','Partial to Pressure','Master Partial Pressures.',()=>mastered('dalton')],['explorer','🧭','Explorer','Try every Practice Quest for your class.',()=>courseQuests().every(q=>P.quests[q[0]])],
- ['lab','🔬','Lab Rat','Play with the Particle Playground.',p=>p.lab>=1],['check','📋','Check-Up','Finish a Readiness Check.',p=>p.checks>=1],['ace','🏆','Ready for the Exam','Score 9 or 10 on a Readiness Check.',p=>p.bestCheck>=9],
+ ['lab','🔬','Lab Rat','Use the Piston Lab.',p=>p.lab>=1],['check','📋','Check-Up','Finish a Readiness Check.',p=>p.checks>=1],['ace','🏆','Ready for the Exam','Score 9 or 10 on a Readiness Check.',p=>p.bestCheck>=9],
  ['trail','🗺️','Trail Blazer','Master every Learn Trail level for your class.',()=>courseLevels().every(l=>mastered(l.id))]];
 function toast(icon,title,text){const el=document.createElement('div');el.className='toast';el.innerHTML='<span class="toast-icon">'+icon+'</span><div><b>'+esc(title)+'</b><br>'+esc(text)+'</div>';byId('toasts').appendChild(el);setTimeout(()=>el.classList.add('out'),3800);setTimeout(()=>el.remove(),4400);}
 function addXP(n){const b=rankFor(P.xp).i;P.xp+=n;const a=rankFor(P.xp);if(a.i>b)toast(a.cur[1],'Rank up!','You are now a '+a.cur[2]+'.');save();renderStatus();}
@@ -841,12 +865,13 @@ function renderTrail(){byId('trail').innerHTML=courseUnits().map((u,i)=>{const p
 function renderSkills(){const box=byId('skillRow');const u=unitById(S.unit),sk=unitSkills(u);box.hidden=S.view!=='learn'||sk.length<2;if(box.hidden)return;
  box.innerHTML=sk.map(k=>{const l=levelById(k),p=Math.min(6,P.levels[k]||0);return '<button type="button" class="skill'+(S.level===k?' on':'')+'" data-skill="'+k+'"><span>'+l.icon+'</span>'+esc(l.title)+(p>=6?' <i>★</i>':'')+'</button>';}).join('');}
 function renderQuests(){const sub=S.course==='1A'?'Skill Check prep · 10 questions + study plan':'10 questions + a study plan';
- byId('featured').innerHTML='<button type="button" class="feature mixed'+(S.quest==='mixed'?' active':'')+'" data-quest="mixed"><span class="f-ico">🎲</span><span><b>Mixed Practice</b><small>Every topic, shuffled. The best way to study!</small></span></button><button type="button" class="feature check'+(S.quest==='check'?' active':'')+'" data-quest="check"><span class="f-ico">🏆</span><span><b>Readiness Check</b><small>'+sub+'</small></span></button>';
- byId('modeGrid').innerHTML=courseQuests().filter(q=>q[0]!=='mixed').map(([id,ic,t,d])=>{const u=unitById(id);return '<button type="button" class="pick unit'+(S.quest===id?' active':'')+'" data-quest="'+id+'" style="--mb:'+u.mb+';--ma:'+u.ma+'"><span class="ico">'+ic+'</span><span class="ptxt"><b>'+t+'</b><small>'+d+'</small></span></button>';}).join('');}
+ byId('featured').innerHTML='<button type="button" class="feature mixed'+(S.quest==='mixed'?' active':'')+'" data-quest="mixed"><span class="f-ico">🎲</span><span><b>Mixed Practice</b><small>Every topic, shuffled. The best way to study!</small></span></button><button type="button" class="feature lab'+(S.quest==='lab'?' active':'')+'" data-quest="lab"><span class="f-ico">🧪</span><span><b>Piston Lab</b><small>Predict, slide the controls, then explain what you saw.</small></span></button><button type="button" class="feature check'+(S.quest==='check'?' active':'')+'" data-quest="check"><span class="f-ico">🏆</span><span><b>Readiness Check</b><small>'+sub+'</small></span></button>';
+ byId('modeGrid').innerHTML=courseQuests().filter(q=>q[0]!=='mixed'&&q[0]!=='lab').map(([id,ic,t,d])=>{const u=unitById(id);return '<button type="button" class="pick unit'+(S.quest===id?' active':'')+'" data-quest="'+id+'" style="--mb:'+u.mb+';--ma:'+u.ma+'"><span class="ico">'+ic+'</span><span class="ptxt"><b>'+t+'</b><small>'+d+'</small></span></button>';}).join('');}
 const levelNum=id=>courseLevels().findIndex(l=>l.id===id)+1;
 function ensurePlay(){const t=byId('play').getBoundingClientRect().top;if(t<60||t>innerHeight*.55)byId('play').scrollIntoView({block:'start',behavior:reduceMotion()?'auto':'smooth'});}
 function coach(icon,main,sub=''){byId('coach').innerHTML='<span class="c-ico">'+icon+'</span><div>'+main+(sub?'<small>'+sub+'</small>':'')+'</div>';}
 function updateCoach(){const q=S.q;if(S.view==='learn'&&S.phase==='example'){S.exStep<S.ex.guide.length+(S.ex.eq?1:0)?coach('👀','Watch: tap <b>Show the next step</b> to see how this problem is solved.','You do not type anything yet.'):coach('✏️','Now tap <b>My turn</b> to try one yourself.');return}
+ if(q&&q.lab&&q.stage!=='apply'){const c={predict:['🔮','<b>Predict first:</b> tap what you think will happen.','A wrong guess costs nothing.'],try:['🎚️','<b>Test it:</b> move the control in the lab and watch the readings.',''],explain:['🤔','<b>Explain:</b> tap the reason the lab shows.','Compare the before and after numbers.']}[q.stage];if(c){coach(...c);return}}
  if(S.quiz&&S.quiz.done)return coach('📋','Here is your study plan. Tap a <b>Practice</b> button to work on a topic.');
  if(q.quiz&&q.eq&&!q.cardOK&&!q.done)return coach('🃏','Question <b>'+(S.quiz.i+1)+' of 10</b>. First, <b>pick the equation card</b>.');
  if(q.quiz){if(q.done)return coach(q.quizRight?'🎉':'📝',q.quizRight?'Correct! Tap <b>Next question</b>.':'Not this time. Read the answer, then tap <b>Next question</b>.');return coach('🏆','Question <b>'+(S.quiz.i+1)+' of 10</b>. Answer on your own. One try per question.',q.sf?'Round to '+q.sf+' significant figures.':'');}
@@ -856,8 +881,8 @@ function updateCoach(){const q=S.q;if(S.view==='learn'&&S.phase==='example'){S.e
  coach(g?'🏁':'🧠',q.kind==='choice'?'Tap the correct answer below.':'Type your <b>final answer</b> below and tap <b>Check answer</b>.',q.sf?'Round to '+q.sf+' significant figures.':q.kind==='abs'?'Round to the nearest whole number is fine.':'');}
 function renderStepper(){const b=byId('trailSteps');b.hidden=S.view!=='learn';if(b.hidden)return;const k=S.phase==='example'?0:S.guideOn?1:2;b.innerHTML=[['example','Watch','See an example'],['guided','Try with help','One step at a time'],['solo','On your own','Double points!']].map(([id,t,s],i)=>'<button type="button" data-stage="'+id+'" class="'+(i===k?'on':i<k?'done':'')+'"><span>'+(i<k?'✓':i+1)+'</span><span style="all:unset"><b>'+t+'</b>'+s+'</span></button>').join('');}
 function answerText(q){return q.kind==='choice'?(q.options.find(o=>o.key===q.answer)||{html:q.answer}).html:q.kind==='abs'?esc(q.shown):esc(fmt(q.answer,q.sf))+' '+unitHTML(q.unit);}
-function showPanels(which){byId('exampleBox').hidden=which!=='example';byId('quizBox').hidden=which!=='quiz';byId('playArea').hidden=which!=='play';}
-function newExample(){const l=levelById(S.level);S.ex=tagEq(l.gen());S.exStep=0;S.quiz=null;showPanels('example');byId('next').hidden=true;byId('playTitle').textContent=unitById(S.unit).title+(unitSkills(unitById(S.unit)).length>1?' · '+l.title:'');renderSkills();renderStepper();renderExample();setVideo(S.ex.video||l.video);}
+function showPanels(which){if(which!=='play')labQExit();byId('exampleBox').hidden=which!=='example';byId('quizBox').hidden=which!=='quiz';byId('playArea').hidden=which!=='play';}
+function newExample(){const l=levelById(S.level);S.noLab=true;try{S.ex=tagEq(l.gen());}finally{S.noLab=false;}S.exStep=0;S.quiz=null;showPanels('example');byId('next').hidden=true;byId('playTitle').textContent=unitById(S.unit).title+(unitSkills(unitById(S.unit)).length>1?' · '+l.title:'');renderSkills();renderStepper();renderExample();setVideo(S.ex.video||l.video);}
 function renderExample(){const q=S.ex,l=levelById(S.level),steps=(q.eq?[{title:'Pick the equation',ask:'Which equation card fits this problem?',explain:cardWhy(q)}]:[]).concat(q.guide),n=steps.length;
  byId('exampleBox').innerHTML='<span class="ex-label">Worked example</span><div class="idea"><span>💡</span><div>'+l.idea+'</div></div><div class="question">'+(q.equationHTML&&!q.eqHide?'<div class="equation">'+q.equationHTML+'</div>':'')+(q.visual?'<div>'+q.visual+'</div>':'')+'<p class="prompt">'+q.prompt+'</p>'+(q.kind==='choice'&&!n?'<div class="choice-box">'+q.options.map(o=>'<span class="choice small" style="cursor:default">'+o.html+'</span>').join('')+'</div>':'')+'</div><ol class="ex-steps">'+steps.slice(0,S.exStep).map((s,k)=>'<li><div class="ex-title">Step '+(k+1)+' of '+n+' · '+esc(s.title)+'</div><div class="ex-ask">'+s.ask+'</div><div class="work">'+s.explain+'</div></li>').join('')+'</ol>'+(S.exStep>=n?'<div class="ex-answer">✅ '+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+(q.kind!=='choice'&&q.sf?' <small>(rounded to '+q.sf+' sig figs)</small>':'')+'</div>':'')+'<div class="ex-actions">'+(S.exStep<n?'<button type="button" class="btn primary big-next" data-ex="next">Show the next step ▶</button>':'<button type="button" class="btn primary big-next" data-ex="try">✏️ My turn →</button>')+'<button type="button" class="link-btn" data-ex="another">🔁 Another example</button></div>';updateCoach();}
 function newQuestion(){let q;
@@ -865,11 +890,11 @@ function newQuestion(){let q;
  tagEq(q);q.level=S.view==='learn'?S.level:null;S.q=q;S.gi=0;S.setup=false;S.hint=0;if(S.view==='practice'&&!P.quests[S.quest]){P.quests[S.quest]=1;save();}
  showPanels('play');byId('next').hidden=S.view==='learn'||!!q.quiz;byId('skipQ').hidden=S.view!=='learn'&&!q.quiz;byId('skipQ').textContent=q.quiz?'Skip this question →':'Skip this one → new question';byId('bottomNext').hidden=true;byId('bottomNext').textContent='Next question →';
  byId('playTitle').textContent=q.quiz?'🏆 Readiness Check · Question '+(S.quiz.i+1)+' of 10':S.view==='learn'?unitById(S.unit).title+(unitSkills(unitById(S.unit)).length>1?' · '+levelById(S.level).title:''):(S.quest==='mixed'?'🎲 Mixed Practice':QUESTS.find(x=>x[0]===S.quest)[2]);
- byId('topicTag').textContent=q.mode;byId('sigTag').textContent=q.sf?q.sf+' significant figures':q.kind==='choice'?'choose an answer':'nearest whole number';
+ byId('topicTag').textContent=q.mode;byId('sigTag').textContent=q.tagText?q.tagText:q.sf?q.sf+' significant figures':q.kind==='choice'?'choose an answer':'nearest whole number';
  byId('equation').innerHTML=q.equationHTML||'';byId('equation').hidden=!q.equationHTML||!!q.eqHide;renderCards();byId('visual').innerHTML=q.visual||'';byId('prompt').innerHTML=q.prompt;byId('unit').innerHTML=q.kind==='choice'?'':unitHTML(q.unit);
  byId('answer').value='';byId('answer').disabled=false;byId('check').disabled=false;['feedback','hintBox','solution'].forEach(id=>byId(id).className=id==='feedback'?'feedback':'detail');
  byId('choiceBox').innerHTML=q.kind==='choice'?'<div class="choice-label">Choose one:</div>'+q.options.map((o,i)=>'<button type="button" class="choice" data-choice="'+esc(o.key)+'"><span class="opt-letter">'+'ABCDEFG'[i]+'</span><span class="opt-body">'+o.html+'</span></button>').join(''):'';
- byId('helpActions').hidden=!!q.quiz;byId('guideToggle').checked=S.guideOn;renderStepper();renderGuide();setVideo(q.video||(q.level&&levelById(q.level).video)||'tips');}
+ byId('helpActions').hidden=!!q.quiz;byId('guideToggle').checked=S.guideOn;renderStepper();renderGuide();renderLabQ();setVideo(q.video||(q.level&&levelById(q.level).video)||'tips');}
 function renderCards(){const q=S.q,box=byId('cardPick');box.hidden=!q.eq;if(!q.eq)return;
  if(q.cardOK){const c=cardBy(q.eq);box.innerHTML='<div class="card-done"><span class="eqcard picked"><span class="eqf">'+c.html()+'</span></span><div><b>✓ '+c.name+'</b><small>'+cardWhy(q).replace(/ So use .*$/,'')+'</small></div></div>';return;}
  box.innerHTML='<div class="card-head"><b>🃏 Step 1 · Pick the equation card</b><small>Which variables change? Which stay the same?</small></div><div class="eqcards" role="group" aria-label="Equation cards">'+CARDS.map((c,i)=>'<button type="button" class="eqcard c'+i+(q.cardTried?.includes(c.k)?' wrong':'')+'" data-card="'+c.k+'"'+(q.cardTried?.includes(c.k)?' disabled':'')+'><span class="eqf">'+c.html()+'</span></button>').join('')+'</div><div class="g-msg" id="cardMsg"></div>';}
@@ -877,7 +902,7 @@ function pickCard(k){const q=S.q;if(q.cardOK)return;if(k===q.eq){q.cardOK=true;i
  ddLog(q,false);q.cardTried=[...(q.cardTried||[]),k];q.failed=1;renderCards();const m=byId('cardMsg');m.className='g-msg bad';m.innerHTML='Not that card. '+cardMiss(q,k);}
 function toastCard(q){const el=byId('cardPick').querySelector('.picked');el&&el.animate&&!reduceMotion()&&el.animate([{transform:'rotateY(90deg)'},{transform:'none'}],{duration:350,easing:'ease-out'});}
 function renderGuide(){const q=S.q,box=byId('guide'),has=q.guide?.length&&!q.quiz,cardLock=!!q.eq&&!q.cardOK,on=S.guideOn&&has&&!cardLock;byId('guideToggleLabel').classList.toggle('hidden',!has||S.view==='learn'||cardLock);box.hidden=!on;
- const lock=cardLock||(S.view==='learn'&&on&&S.gi<q.guide.length&&!q.scored);byId('answerRow').classList.toggle('hidden',lock||q.kind==='choice');byId('choiceBox').classList.toggle('hidden',lock||q.kind!=='choice');updateCoach();if(!on)return;
+ const lock=cardLock||(S.view==='learn'&&on&&S.gi<q.guide.length&&!q.scored);byId('answerRow').classList.toggle('hidden',lock||q.kind==='choice'||q.kind==='lab');byId('choiceBox').classList.toggle('hidden',lock||q.kind!=='choice');updateCoach();if(!on)return;
  const g=q.guide;box.innerHTML='<div class="guide-head"><b>🪜 Step-by-step</b><span>'+Math.min(S.gi,g.length)+' of '+g.length+' done</span></div><ol class="guide-steps">'+g.map((s,k)=>{const lab='Step '+(k+1)+' of '+g.length+' · '+esc(s.title);
   if(k<S.gi)return '<li class="done"><div class="g-title">✓ '+lab+'</div><div class="g-work">'+s.explain+'</div></li>';if(k>S.gi)return '<li class="later"><div class="g-title">'+lab+'</div></li>';
   let b='<div class="g-ask">'+s.ask+'</div>';if(s.setup)b+=S.setup?'<div class="g-setup">'+s.setup+' = ?</div>':'<button type="button" class="link-btn" data-g="setup">Show me the setup</button>';
@@ -886,7 +911,7 @@ function renderGuide(){const q=S.q,box=byId('guide'),has=q.guide?.length&&!q.qui
 function guideNext(earned){const q=S.q;q.guideUsed=true;if(earned){P.guideSteps++;addXP(2);}else q.usedHelp=true;S.gi++;S.setup=false;renderGuide();checkAch();(byId('guide').querySelector('li.current')||byId('guide').querySelector('.g-finish')||byId('answerRow'))?.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});byId('gIn')?.focus({preventScroll:true});if(S.gi>=q.guide.length&&q.kind!=='choice')byId('answer').focus({preventScroll:true});}
 function gMsg(t,cls='bad'){const el=byId('gMsg');if(el){el.className='g-msg '+cls;el.innerHTML=t;}}
 function stepTrap(s,n){if(s.unit==='K'&&Math.abs(n-(s.answer-KOFF))<0.6)return 'That is still in °C. Add 273.15.';if(Math.abs(s.answer)>0&&Math.abs(n*s.answer-1)<.02&&Math.abs(s.answer-1)>.05)return 'Looks like the fraction is upside down.';const ratio=n/s.answer;if(Math.abs(ratio-1000)<15||Math.abs(ratio-.001)<.000015)return 'Off by a factor of 1000. Check mL vs L or g vs kg.';if(Math.abs(ratio-760)<8||Math.abs(ratio-1/760)<.0001)return 'Off by a factor of 760. Check the mmHg ↔ atm conversion.';return '';}
-function checkStep(){const s=S.q.guide[S.gi],n=parseValue(byId('gIn').value);if(!Number.isFinite(n))return gMsg('Type a number first (like 0.0472 or 4.72E-2).','info');const tol=s.exact?1e-9:s.abs!=null?s.abs:Math.max(Math.abs(s.answer)*.015,1e-12);if(Math.abs(n-s.answer)<=tol)return guideNext(true);const t=stepTrap(s,n);gMsg(t||('Not yet. '+(s.setup?'Tap “Show me the setup.”':'Look at the step again.')));}
+function checkStep(){const s=S.q.guide[S.gi],n=parseValue(byId('gIn').value);if(decimalComma(byId('gIn').value))return gMsg('Use a period for decimals: type 2.5, not 2,5.','info');if(!Number.isFinite(n))return gMsg('Type a number first (like 0.0472 or 4.72E-2).','info');const tol=s.exact?1e-9:s.abs!=null?s.abs:Math.max(Math.abs(s.answer)*.015,1e-12);if(Math.abs(n-s.answer)<=tol)return guideNext(true);const t=stepTrap(s,n);gMsg(t||('Not yet. '+(s.setup?'Tap “Show me the setup.”':'Look at the step again.')));}
 function stepChoice(k){const q=S.q,s=q.guide[S.gi];if(k!==s.answer){byId('guide').querySelector('[data-gc="'+CSS.escape(k)+'"]')?.classList.add('wrong');return gMsg('Not that one. Think about it again.');}const last=S.gi===q.guide.length-1;guideNext(true);if(last&&q.kind==='choice'&&s.answer===q.answer)checkChoice(k);}
 function feedback(type,html){const el=byId('feedback');el.className='feedback '+type;el.innerHTML=type==='close'?'<div class="result-title"><span>⚠️</span><strong>Close! Fix your sig figs</strong></div>'+html:(type!=='info'?'<div class="result-title"><span>'+(type==='good'?'✓':'✕')+'</span><strong>'+(type==='good'?pick(['Nice work!','You got it!','Great job!','Under control!']):S.q.quiz?'Not quite':'Not correct yet, try again')+'</strong></div>':'')+html;
  byId('bottomNext').hidden=!(((type==='good'||type==='close')&&S.q.scored)||(S.q.quiz&&S.q.done));byId('skipQ').hidden=!(S.view==='learn'||(S.q.quiz&&!S.q.done))||!!S.q.scored;updateCoach();if(type!=='good')el.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
@@ -921,7 +946,7 @@ function quizResult(q,right,extra=''){ddLog(q,right);q.done=1;q.quizRight=right;
  if(right){P.correct++;P.streak++;P.best=Math.max(P.best,P.streak);addXP(10);celebrate();}else{P.streak=0;save();renderStatus();}
  if(S.quiz.i===9)byId('bottomNext').textContent='See my results →';feedback(right?(q.sfSlip?'close':'good'):'bad',(right&&!q.sfSlip?'Correct! ':'')+extra+(right?'':'<div style="margin-top:6px">Answer: <b>'+answerText(q)+'</b></div>'+(q.finalExplain?'<div class="stepnote">'+q.finalExplain+'</div>':'')));checkAch();}
 function sfCloseMsg(raw,need,ans){const [lo,hi]=sfRange(raw);return '<b>Your math is right, but your significant figures are not.</b> '+(lo&&lo===hi?'You entered <b>'+lo+'</b> sig fig'+(lo===1?'':'s')+'. ':'')+'This answer needs <b>'+need+'</b>: <b>'+ans+'</b>. On a Skill Check or exam this would lose points, so fix it next time!';}
-function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
+function checkAnswer(){const q=S.q,raw=byId('answer').value.trim();if(q.done)return;if(!raw)return feedback('info','Enter an answer first.');if(decimalComma(raw))return feedback('info','Use a period for decimals: type <b>2.5</b>, not <b>2,5</b>.');const n=parseValue(raw);if(!Number.isFinite(n))return feedback('info','Enter a number, like 0.0472 or 4.72E-2.');tried(q);
  if(q.kind==='abs'){const ok=Math.abs(n-q.answer)<=q.tol;if(!ok){const t=trapMsg(q,n),dg=t?null:ddDiagnose(n,q.answer,q.unit);ddSlip(q,t?'trap':dg?dg.code:'other');}if(q.quiz)return quizResult(q,ok);return ok?feedback('good','Correct! '+esc(q.shown)+'.'+score(q)):(wrong(q),feedback('bad',(trapMsg(q,n)||(ddDiagnose(n,q.answer,q.unit)||{}).msg||'Check your setup. Remember K = °C + 273.15.')));}
  /* sig-fig answers: within 0.5% AND ±1 in the last digit of the rounded answer (as Stoichiometry); extra digits are rounded to q.sf first, then get the yellow sig-fig notice */
  const [lo,hi]=q.sf?sfRange(raw):[0,0],sfOff=!!q.sf&&(q.sf<lo||q.sf>hi),target=q.sf?Number(Number(q.answer).toPrecision(q.sf)):q.answer,step=q.sf&&target?Math.pow(10,Math.floor(Math.log10(Math.abs(target)))-q.sf+1):0,nr=sfOff&&lo>q.sf?Number(n.toPrecision(q.sf)):n;
@@ -938,7 +963,7 @@ function checkChoice(k){const q=S.q;if(q.done||q.scored)return;tried(q);const bt
  if(q.quiz){if(k!==q.answer){ddSlip(q,'choice');byId('choiceBox').querySelector('[data-choice="'+CSS.escape(q.answer)+'"]')?.classList.add('right');}return quizResult(q,k===q.answer);}
  if(k===q.answer){byId('choiceBox').querySelectorAll('button').forEach(b=>b.disabled=true);feedback('good',(q.finalExplain||'Correct!')+score(q));}else{btn&&(btn.disabled=true);ddSlip(q,'choice');wrong(q);feedback('bad','Not that one. '+(qbOpt(q,k)||(q.hints?.[0]?'Hint: '+q.hints[0]:'Try again.')));}}
 function hint(){const q=S.q;q.usedHelp=true;const i=Math.min(S.hint,q.hints.length-1);byId('hintBox').className='detail show';byId('hintBox').innerHTML='<h3>💡 Hint '+(i+1)+' of '+q.hints.length+'</h3>'+q.hints[i];S.hint=Math.min(i+1,q.hints.length-1);}
-function solution(){const q=S.q;if(!q.tried&&!q.firstSlip)q.firstSlip='revealed';ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+(q.guide?.length?'<ol class="sol-steps">'+q.guide.map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function solution(){const q=S.q;if(!q.tried&&!q.firstSlip)q.firstSlip='revealed';ddLog(q,false);q.usedHelp=q.solutionShown=true;byId('solution').className='detail show';if(q.eq&&!q.cardOK){q.cardOK=true;renderCards();renderGuide();}byId('solution').innerHTML='<h3>👀 Worked solution</h3>'+(q.eq?'<p class="stepnote"><b>Equation:</b> '+cardWhy(q)+' ('+cardBy(q.eq).name+')</p>':'')+((q.solSteps||q.guide)?.length?'<ol class="sol-steps">'+(q.solSteps||q.guide).map(s=>'<li><b>'+esc(s.title)+':</b> '+s.explain+'</li>').join('')+'</ol>':'')+'<div class="stepnote final-line">'+(q.finalExplain||'Answer: <b>'+answerText(q)+'</b>')+'</div><div class="note-small">Viewing the solution earns 3 XP and does not count toward your streak.</div>';byId('solution').scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
 /* readiness check */
 function startQuiz(){const core=S.course==='3A'?['units','kmt','boyle','temp','avog','combined','ideal','stp','molar','dalton','wet','stoich']:['kmt','boyle','temp','combined','ideal','stp','molar','dalton','wet','stoich','rms','graham','real'];
  const must=S.course==='3A'?['boyle','combined','ideal','stp','dalton']:['combined','ideal','molar','dalton','stoich'];const rest=shuffle(core.filter(x=>!must.includes(x))).slice(0,10-must.length);
@@ -983,14 +1008,122 @@ byId('moreBadges').onclick=()=>{showAll=!showAll;renderBadges();};
 let armed=false;byId('reset').onclick=()=>{const b=byId('reset');if(!armed){armed=true;b.textContent='Tap again to erase all XP and badges';b.classList.add('armed');setTimeout(()=>{armed=false;b.textContent='↻ Reset my progress';b.classList.remove('armed')},4000);return}armed=false;P=fresh();save();b.textContent='↻ Reset my progress';b.classList.remove('armed');renderStatus();renderBadges();renderTrail();};
 byId('vpTable').innerHTML=vpTable(null);
 
-/* ---------- 7. Particle Playground ---------- */
-const LAB={T:300,V:15,n:1,gas:'He',parts:[],run:false,hits:0,hitT:0,rate:0,raf:0,last:0};
-const LGAS={He:{M:4.003,c:'#f2b541',r:6},N2:{M:28.014,c:'#5b8def',r:6,di:1},Xe:{M:131.29,c:'#a77be0',r:9.5}};
+/* ---------- 7. Piston Lab: one particle model, used by the Playground and by lab questions ---------- */
+/*LAB-LOGIC-START* (pure logic, no DOM: tools/check-lab.js runs this block in Node) */
+const LGAS={He:{M:4.003,c:'#f2b541',r:6,name:'helium'},N2:{M:28.014,c:'#5b8def',r:6,di:1,name:'nitrogen'},Xe:{M:131.29,c:'#a77be0',r:9.5,name:'xenon'}};
+const LREF={T:300,V:15,n:1,M:4.003},LV_MIN=5,LV_MAX=25;
+/* free piston: the piston slides until inside pressure = outside pressure, so V = nRT/Pext (kept between the stops) */
+function labVolume(s){if(!s.free)return s.V;return Math.min(LV_MAX,Math.max(LV_MIN,s.n*R*s.T/s.Pext));}
+/* kinetic model. hits = collisions with the piston per second (relative, 100 = He, 1 mol, 300 K, 15 L);
+   push = momentum per hit (relative). hits ∝ n·u/V, push ∝ m·u, u ∝ √(T/M), so hits × push ∝ nT/V ∝ P. */
+function labModel(s){const M=LGAS[s.gas].M,V=labVolume(s),u=Math.sqrt(s.T/M),u0=Math.sqrt(LREF.T/LREF.M);
+ return {V,P:s.n*R*s.T/V,hits:100*(s.n/LREF.n)*(u/u0)*(LREF.V/V),push:Math.sqrt(M*s.T/(LREF.M*LREF.T)),speed:u/u0};}
+const ratioText=x=>Math.abs(x-1)<1e-9?'Stays the same':x>1?'Goes up: '+fmtRatio(x)+'× as large':'Drops: '+fmtRatio(1/x,true)+' as large';
+function fmtRatio(x,inv){const n=Math.round(x*100)/100,f={2:'1/2',3:'1/3',4:'1/4',9:'1/9',1.5:'2/3',2.25:'4/9'};if(inv)return f[n]||('1/'+n);return String(n);}
+/* answer choices for "how does it change?": the true ratio, its inverse (the classic direct/inverse swap), no change, the square, and a °C ratio when temperatures are involved */
+function ratioOptions(r,cRatio){const keys=[r,1/r,1,r*r].map(x=>Math.round(x*1000)/1000);const seen=new Set(),out=[];
+ for(const k of keys){if(seen.has(k))continue;seen.add(k);out.push({key:String(k),html:ratioText(k)});}
+ if(r>1&&cRatio&&Number.isFinite(cRatio)&&cRatio>1&&Math.abs(cRatio-r)>.3){out.pop();out.push({key:'C',html:'Goes up: about '+Math.round(cRatio)+'× as large (from the °C values)'});}
+ return {options:shuffle(out),answer:String(Math.round(r*1000)/1000)};}
+const C_OF=T=>Math.round(T-KOFF);
+const LAB_EXPLAIN={
+ boyle:{ask:'Why did the pressure change?',answer:'room',options:[{key:'room',html:'The particles kept the same speed, but with less room they reach the piston more often'},{key:'fast',html:'Squeezing the gas made the particles move faster'},{key:'big',html:'The particles got bigger when they were squeezed'},{key:'more',html:'Squeezing added more particles'}],
+  why:{fast:'The temperature did not change, so the particles did not speed up. Watch the <b>push per hit</b>: it stayed the same.',big:'Particles do not change size. Gas is mostly empty space; only the space between them shrank.',more:'The number of moles did not change (it is 🔒 locked).'},
+  right:'Same T means same speed and same push per hit. Less volume means each particle crosses the cylinder faster, so <b>hits per second</b> go up, and so does the pressure.'},
+ boyleUp:{ask:'Why did the pressure change?',answer:'room',options:[{key:'room',html:'The particles kept the same speed, but with more room they reach the piston less often'},{key:'slow',html:'Expanding the gas made the particles slow down'},{key:'small',html:'The particles got smaller'},{key:'less',html:'Some particles escaped'}],
+  why:{slow:'The temperature did not change, so the particles did not slow down. The <b>push per hit</b> stayed the same.',small:'Particles do not change size; only the space between them grew.',less:'The cylinder is sealed: n is 🔒 locked.'},
+  right:'Same T means same speed and same push per hit. More volume means each trip across the cylinder takes longer, so there are <b>fewer hits per second</b> and less pressure.'},
+ gay:{ask:'Why did the pressure change?',answer:'both',options:[{key:'both',html:'The particles moved faster, so they hit the piston more often AND harder'},{key:'big',html:'The particles got bigger when heated'},{key:'more',html:'Heating made more gas particles'},{key:'often',html:'They hit more often, but each hit pushed the same'}],
+  why:{big:'Particles do not swell when heated. Heating changes how fast they move.',more:'Heating does not make new particles: n is 🔒 locked.',often:'Look at the <b>push per hit</b> reading: faster particles also hit harder. Both effects together make P ∝ T.'},
+  right:'Temperature is average kinetic energy. Faster particles reach the piston more often and push harder each time, so P rises in proportion to the <b>kelvin</b> temperature.'},
+ charles:{ask:'Why did the volume change?',answer:'balance',options:[{key:'balance',html:'Faster particles pushed harder, so the piston slid until the inside pressure matched the outside again'},{key:'expand',html:'Each particle expanded when it got hot'},{key:'pdouble',html:'The pressure inside went up and stayed up'},{key:'more',html:'Heating made more gas particles'}],
+  why:{expand:'The particles themselves stay the same size. The space between them grows.',pdouble:'Look at the gauge: with a free piston the pressure ends up equal to the outside pressure again. The volume changed instead.',more:'Heating does not make new particles: n is 🔒 locked.'},
+  right:'With a free piston, P stays equal to the outside pressure. Faster particles push harder, so the piston slides out until the hits per second drop enough to balance. V rises in proportion to the <b>kelvin</b> temperature.'},
+ avog:{ask:'Why did the volume change?',answer:'balance',options:[{key:'balance',html:'More particles hit the piston, so it slid out until the hits per second balanced the outside pressure again'},{key:'fast',html:'Adding gas made every particle move faster'},{key:'big',html:'The new particles are bigger than the old ones'},{key:'pup',html:'The pressure inside went up and stayed up'}],
+  why:{fast:'Same temperature means same average speed. Check the <b>push per hit</b>: it did not change.',big:'It is the same gas, so the particles are the same size.',pup:'With a free piston, P ends up equal to the outside pressure. The volume changed instead.'},
+  right:'At constant T and P, each particle claims the same share of space. Doubling the particles doubles the volume: V ∝ n.'},
+ pn:{ask:'Why did the pressure change?',answer:'count',options:[{key:'count',html:'More particles means more hits on the piston every second'},{key:'fast',html:'Adding gas made the particles move faster'},{key:'big',html:'The particles got bigger'},{key:'temp',html:'Adding gas raised the temperature'}],
+  why:{fast:'Same temperature means same speed. The <b>push per hit</b> did not change.',big:'Same gas, same particle size.',temp:'T is 🔒 locked in this lab.'},
+  right:'Same speed and same push per hit, but more particles, so more hits per second: P ∝ n at constant V and T.'},
+ swap:{ask:'Why did the pressure stay the same?',answer:'cancel',options:[{key:'cancel',html:'Xenon atoms hit less often, but each hit is harder; the two effects cancel'},{key:'size',html:'Pressure depends on how big the particles are'},{key:'heavy',html:'Heavier gases always push harder, so P went up'},{key:'slow',html:'Xenon is slower, so it does not push the piston at all'}],
+  why:{size:'Particle size barely matters for an ideal gas: gas is mostly empty space. Only n, T and V set the pressure.',heavy:'Check the gauge: P did not change. Each xenon hit is harder, but there are fewer hits.',slow:'Xenon still hits the piston, just less often. Look at the hits per second.'},
+  right:'Same T means same average kinetic energy (½mu²). Heavy xenon moves slower, so it hits less often, but each hit carries more momentum. Pressure depends only on n, T and V, not on which gas.'}};
+const LAB_HINTS={
+ boyle:['Look at the 🔒 tags: which of P, V, T and n are held constant?','At constant T and n, P and V are <b>inverse</b>: if V becomes k× as large, P becomes 1/k as large.','Example: 12.0 L → 6.0 L halves V, so P doubles. For the last step, P₁V₁ = P₂V₂, so P₂ = P₁V₁ ÷ V₂.'],
+ gay:['Look at the 🔒 tags: V and n are locked, so only T changes.','At constant V and n, P is <b>directly</b> proportional to the <b>kelvin</b> temperature. Never use °C in a ratio.','Example: 300 K → 600 K doubles T, so P doubles. For the last step, P₁/T₁ = P₂/T₂ with T in K (K = °C + 273.15).'],
+ charles:['The piston is free, so the gas pressure always matches the outside pressure. What changes instead?','At constant P and n, V is <b>directly</b> proportional to the <b>kelvin</b> temperature.','Example: 300 K → 450 K is 1.5× the temperature, so V is 1.5× as large. For the last step, V₁/T₁ = V₂/T₂ with T in K.'],
+ avog:['The piston is free and T is locked. What happens to the volume when you add particles?','At constant P and T, V is <b>directly</b> proportional to moles: V₁/n₁ = V₂/n₂.','Example: 0.40 mol → 0.80 mol doubles n, so V doubles. For the last step, V₂ = V₁ × n₂ ÷ n₁.'],
+ pn:['The piston is locked and T is locked. What happens to the pressure when you add particles?','At constant V and T, P is <b>directly</b> proportional to moles: P₁/n₁ = P₂/n₂.','Example: 0.50 mol → 1.00 mol doubles n, so P doubles. For the last step, P₂ = P₁ × n₂ ÷ n₁.'],
+ swap:['Only the identity of the gas changes. n, T and V are all 🔒 locked.','PV = nRT has no molar mass in it. What does that say about the pressure?','Average kinetic energy depends only on T. Heavier particles move slower but hit harder.']};
+/* a lab question: start state, the one control the student moves, and four stages (predict, try, explain, apply) */
+function labSpec(fam){fam=fam||pick(['boyle','boyle','gay','charles','avog','pn','swap']);
+ const mk=(start,task,watch)=>{const a=labModel(start),end=Object.assign({},start,{[task.key]:task.target}),b=labModel(end);return {start,end,task,watch,before:a,after:b};};
+ let L,predictAsk,ratio,cRatio=null,apply,law,video;
+ if(fam==='boyle'){const [v1,v2]=pick([[12,6],[10,5],[20,10],[24,12],[8,16],[6,18],[15,5],[10,20],[9,18]]);
+  L=mk({gas:'He',n:1,T:300,V:v1,free:false,Pext:1},{key:'V',target:v2,label:'Volume',show:fmt(v2,3)+' L'},'P');ratio=L.after.P/L.before.P;law='Boyle’s law';video='boyle';
+  predictAsk=`You will ${v2<v1?'squeeze':'expand'} the gas from ${fmt(v1,3)} L to ${fmt(v2,3)} L. Predict: what happens to the <b>pressure</b>?`;
+  const P1=r3(L.before.P);let v3;do{v3=rnd(5,25,3)}while(Math.abs(v3-v1)<1.5||Math.abs(v3-v2)<1.5);const ans=P1*v1/v3;
+  apply={kind:'numeric',prompt:`The gauge read <b>${fmt(P1,3)} atm</b> at <b>${fmt(v1,3)} L</b>. Use P₁V₁ = P₂V₂: what would the pressure be at <b>${fmt(v3,3)} L</b> (same T and n)?`,answer:ans,unit:'atm',sf:3,
+   traps:[{v:P1*v3/v1,msg:'You multiplied by V₂/V₁. P and V are <b>inverse</b>: P₂ = P₁ × V₁ ÷ V₂.'}],
+   steps:[`P₁V₁ = P₂V₂, so P₂ = P₁ × V₁ ÷ V₂`,`P₂ = ${fmt(P1,3)} atm × ${fmt(v1,3)} L ÷ ${fmt(v3,3)} L = <b>${fmt(ans,3)} atm</b>`]};
+  if(v2>v1)fam='boyleUp';}
+ else if(fam==='gay'){const [t1,t2]=pick([[300,600],[300,450],[400,600],[600,300],[200,400],[400,200]]);
+  L=mk({gas:'He',n:1,T:t1,V:15,free:false,Pext:1},{key:'T',target:t2,label:'Temperature',show:t2+' K ('+C_OF(t2)+' °C)'},'P');ratio=t2/t1;law='Gay-Lussac’s law';video='temp';
+  if(C_OF(t1)>0&&C_OF(t2)>0)cRatio=C_OF(t2)/C_OF(t1);
+  predictAsk=`You will ${t2>t1?'heat':'cool'} the locked cylinder from ${t1} K (${C_OF(t1)} °C) to ${t2} K (${C_OF(t2)} °C). Predict: what happens to the <b>pressure</b>?`;
+  const P1=r3(L.before.P);let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30);const ans=P1*(c3+KOFF)/t1;
+  apply={kind:'numeric',prompt:`The gauge read <b>${fmt(P1,3)} atm</b> at <b>${t1} K</b>. Use P₁/T₁ = P₂/T₂: what would it read at <b>${c3} °C</b> (same V and n)?`,answer:ans,unit:'atm',sf:3,
+   traps:[{v:P1*c3/t1,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:P1*t1/(c3+KOFF),msg:'You flipped the ratio. P and T are <b>direct</b>: P₂ = P₁ × T₂ ÷ T₁.'}],
+   steps:[`T₂ = ${c3} + 273.15 = ${(c3+KOFF).toFixed(2)} K`,`P₂ = P₁ × T₂ ÷ T₁ = ${fmt(P1,3)} atm × ${(c3+KOFF).toFixed(2)} K ÷ ${t1} K = <b>${fmt(ans,3)} atm</b>`]};}
+ else if(fam==='charles'){const [t1,t2]=pick([[300,600],[300,450],[450,300],[600,300],[400,600],[300,200]]);
+  L=mk({gas:'N2',n:0.4,T:t1,V:15,free:true,Pext:1},{key:'T',target:t2,label:'Temperature',show:t2+' K ('+C_OF(t2)+' °C)'},'V');ratio=t2/t1;law='Charles’s law';video='temp';
+  if(C_OF(t1)>0&&C_OF(t2)>0)cRatio=C_OF(t2)/C_OF(t1);
+  predictAsk=`The piston is <b>free</b> (outside pressure 1.00 atm). You will ${t2>t1?'heat':'cool'} the gas from ${t1} K (${C_OF(t1)} °C) to ${t2} K (${C_OF(t2)} °C). Predict: what happens to the <b>volume</b>?`;
+  const V1=r3(L.before.V);let c3;do{c3=rint(-50,250)}while(Math.abs(c3+KOFF-t1)<30);const ans=V1*(c3+KOFF)/t1;
+  apply={kind:'numeric',prompt:`The volume was <b>${fmt(V1,3)} L</b> at <b>${t1} K</b>. Use V₁/T₁ = V₂/T₂: what would the volume be at <b>${c3} °C</b> (same P and n)?`,answer:ans,unit:'L',sf:3,
+   traps:[{v:V1*c3/t1,msg:'Looks like you used °C. Gas-law temperatures must be in <b>kelvins</b> (K = °C + 273.15).'},{v:V1*t1/(c3+KOFF),msg:'You flipped the ratio. V and T are <b>direct</b>: V₂ = V₁ × T₂ ÷ T₁.'}],
+   steps:[`T₂ = ${c3} + 273.15 = ${(c3+KOFF).toFixed(2)} K`,`V₂ = V₁ × T₂ ÷ T₁ = ${fmt(V1,3)} L × ${(c3+KOFF).toFixed(2)} K ÷ ${t1} K = <b>${fmt(ans,3)} L</b>`]};}
+ else if(fam==='avog'||fam==='pn'){const free=fam==='avog',[n1,n2]=pick(free?[[0.4,0.8],[0.5,1],[0.6,0.3],[0.8,0.4],[0.3,0.9]]:[[0.5,1],[1,2],[1,0.5],[0.6,1.8],[2,1]]);
+  L=mk({gas:'He',n:n1,T:300,V:10,free,Pext:1},{key:'n',target:n2,label:'Moles',show:n2.toFixed(2)+' mol'},free?'V':'P');ratio=n2/n1;law='Avogadro’s law';video='avog';
+  predictAsk=free?`The piston is <b>free</b> (outside pressure 1.00 atm). You will ${n2>n1?'add':'let out'} gas: ${n1.toFixed(2)} mol → ${n2.toFixed(2)} mol. Predict: what happens to the <b>volume</b>?`:`The piston is <b>locked</b>. You will ${n2>n1?'pump in':'let out'} gas: ${n1.toFixed(2)} mol → ${n2.toFixed(2)} mol. Predict: what happens to the <b>pressure</b>?`;
+  const X1=r3(free?L.before.V:L.before.P),u=free?'L':'atm',sym=free?'V':'P';let n3;do{n3=rnd(0.20,2.00,2)}while(Math.abs(n3-n1)<.15||Math.abs(n3-n2)<.15);const ans=X1*n3/n1;
+  apply={kind:'numeric',prompt:`It was <b>${fmt(X1,3)} ${u}</b> with <b>${n1.toFixed(2)} mol</b>. Use ${sym}₁/n₁ = ${sym}₂/n₂: what would it be with <b>${n3.toFixed(2)} mol</b> (same T${free?' and P':' and V'})?`,answer:ans,unit:u,sf:3,
+   traps:[{v:X1*n1/n3,msg:`You flipped the ratio. ${sym} and n are <b>direct</b>: ${sym}₂ = ${sym}₁ × n₂ ÷ n₁.`}],
+   steps:[`${sym}₂ = ${sym}₁ × n₂ ÷ n₁ = ${fmt(X1,3)} ${u} × ${n3.toFixed(2)} mol ÷ ${n1.toFixed(2)} mol = <b>${fmt(ans,3)} ${u}</b>`]};
+  if(!free)law='Pressure and moles';}
+ else{fam='swap';L=mk({gas:'He',n:1,T:300,V:15,free:false,Pext:1},{key:'gas',target:'Xe',label:'Gas',show:'xenon (Xe)'},'P');ratio=1;law='Kinetic molecular theory';video='kmt';
+  predictAsk='Same moles, same temperature, same volume. You will swap the helium for <b>xenon</b>, which is about 33× heavier. Predict: what happens to the <b>pressure</b>?';
+  const which=Math.random()<.5;
+  apply=which?{kind:'choice',prompt:'At the same temperature, how does the average kinetic energy of xenon atoms compare with helium atoms?',answer:'same',options:shuffle([{key:'same',html:'The same'},{key:'xe',html:'Xenon’s is higher (heavier atoms)'},{key:'he',html:'Helium’s is higher (faster atoms)'},{key:'p',html:'It depends on the pressure'}]),
+    explain:'Average kinetic energy depends <b>only</b> on the kelvin temperature. Xenon is heavier but slower; ½mu² comes out the same.'}
+   :{kind:'choice',prompt:'At the same temperature, which atoms move faster on average?',answer:'he',options:shuffle([{key:'he',html:'Helium'},{key:'xe',html:'Xenon'},{key:'same',html:'Same speed'},{key:'p',html:'Whichever has the higher pressure'}]),
+    explain:'Same kinetic energy, so the lighter atom moves faster: u<sub>rms</sub> ∝ √(T/M). That is why xenon hits the piston less often.'};}
+ const pr=fam==='swap'?{options:shuffle([{key:'1',html:'Stays the same'},{key:'up',html:'Goes up (xenon is heavier)'},{key:'down',html:'Goes down (xenon is slower)'},{key:'big',html:'Goes up (xenon atoms are bigger)'}]),answer:'1'}:ratioOptions(ratio,cRatio);
+ const ex=LAB_EXPLAIN[fam];
+ return {fam,law,video,lab:L,predict:{ask:predictAsk,options:pr.options,answer:pr.answer},explain:{ask:ex.ask,answer:ex.answer,options:shuffle(ex.options),why:ex.why,right:ex.right},apply,hints:LAB_HINTS[fam==='boyleUp'?'boyle':fam],ratio};}
+/*LAB-LOGIC-END*/
+
+/* ---------- Piston Lab: drawing + controls ---------- */
 function labCourse(){}
-function labBW(W){return W*(0.22+0.56*(LAB.V-5)/20);}
+const LAB={T:300,V:15,n:1,gas:'He',free:false,Pext:1,Vshow:15,parts:[],run:false,raf:0,last:0,userPaused:false,lockKeys:null,onChange:null};
+function labBW(W){return W*(0.22+0.56*(LAB.Vshow-5)/20);}
 function labReset(){const cnt=Math.round(LAB.n*30);while(LAB.parts.length<cnt)LAB.parts.push({x:Math.random(),y:Math.random(),a:Math.random()*Math.PI*2,f:.6+Math.random()*.8,rot:Math.random()*Math.PI,spin:(Math.random()-.5)*.006});LAB.parts.length=cnt;}
-function labRead(){LAB.T=+byId('labT').value;LAB.V=+byId('labV').value;LAB.n=+byId('labN').value;byId('labTv').textContent=LAB.T+' K';byId('labVv').textContent=LAB.V.toFixed(1)+' L';byId('labNv').textContent=LAB.n.toFixed(2)+' mol';
- const Pv=LAB.n*R*LAB.T/LAB.V;byId('labP').textContent=Pv.toFixed(2)+' atm';byId('labBar').style.width=Math.min(100,Pv/(2*R*600/5)*100)+'%';labReset();if(!LAB.run)labDraw();}
+let labSayT=0;
+/* read the sliders into the model (a lab question may lock some), then repaint every readout */
+function labRead(fromUser){if(!LAB.lockKeys||!LAB.lockKeys.includes('T'))LAB.T=+byId('labT').value;if(!LAB.free&&(!LAB.lockKeys||!LAB.lockKeys.includes('V')))LAB.V=+byId('labV').value;if(!LAB.lockKeys||!LAB.lockKeys.includes('n'))LAB.n=+byId('labN').value;labPaint(fromUser);}
+function labSync(){byId('labT').value=LAB.T;byId('labN').value=LAB.n;byId('labV').value=labVolume(LAB);byId('labGas').querySelectorAll('[data-gas]').forEach(b=>{const on=b.dataset.gas===LAB.gas;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});byId('labMode').querySelectorAll('[data-pmode]').forEach(b=>{const on=(b.dataset.pmode==='free')===LAB.free;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});}
+function labPaint(fromUser){const m=labModel(LAB);if(LAB.free)LAB.V=m.V;if(reduceMotion()||!LAB.run)LAB.Vshow=m.V;
+ byId('labTv').textContent=LAB.T+' K ('+C_OF(LAB.T)+' °C)';byId('labVv').textContent=fmt(m.V,3)+' L'+(LAB.free?' (piston sets it)':'');byId('labNv').textContent=LAB.n.toFixed(2)+' mol';
+ byId('labP').textContent=fmt(m.P,3)+' atm';byId('labPsub').textContent=LAB.free?(m.V>=LV_MAX-1e-9||m.V<=LV_MIN+1e-9?'Piston is at its stop, so P no longer matches the outside.':'Free piston: inside P = outside P ('+fmt(LAB.Pext,3)+' atm)'):byId('labV').disabled?'Piston locked: V cannot change':'You set V: the piston stays where you put it';
+ byId('labBar').style.width=Math.min(100,m.P/5*100)+'%';
+ byId('labHits').textContent=Math.round(m.hits);byId('labPush').textContent=m.push.toFixed(2)+'×';byId('labSpeed').textContent=m.speed.toFixed(2)+'×';
+ byId('labV').disabled=LAB.free||!!(LAB.lockKeys&&LAB.lockKeys.includes('V'));byId('labT').disabled=!!(LAB.lockKeys&&LAB.lockKeys.includes('T'));byId('labN').disabled=!!(LAB.lockKeys&&LAB.lockKeys.includes('n'));
+ byId('labGas').querySelectorAll('button').forEach(b=>b.disabled=!!(LAB.lockKeys&&LAB.lockKeys.includes('gas')));byId('labMode').querySelectorAll('button').forEach(b=>b.disabled=!!LAB.lockKeys);
+ ['labT','labV','labN'].forEach(id=>byId(id).closest('.slider').classList.toggle('locked',byId(id).disabled));
+ if(!LAB.free)byId('labPsub').textContent=byId('labV').disabled?'Piston locked: V cannot change':'You set V: the piston stays where you put it';
+ labReset();if(!LAB.run)labDraw();
+ clearTimeout(labSayT);labSayT=setTimeout(()=>{byId('labSay').textContent=`${LGAS[LAB.gas].name}, ${LAB.n.toFixed(2)} mol, ${LAB.T} K, ${fmt(m.V,3)} L: pressure ${fmt(m.P,3)} atm. Piston hits ${Math.round(m.hits)} per second, push per hit ${m.push.toFixed(2)} times.`;},500);
+ if(fromUser&&LAB.onChange)LAB.onChange();}
 function labDraw(){const cv=byId('labCanvas'),x=cv.getContext('2d'),W=cv.width,H=cv.height,bw=labBW(W);x.clearRect(0,0,W,H);const wall=10,top=6,bot=H-6,barrelEnd=W-70;
  /* cylinder barrel: closed on the left, open on the right where the piston slides */
  x.fillStyle='#ffffff';x.fillRect(4+wall,top+wall,barrelEnd-4-wall,bot-top-2*wall);
@@ -998,36 +1131,83 @@ function labDraw(){const cv=byId('labCanvas'),x=cv.getContext('2d'),W=cv.width,H
  x.fillStyle=g1;x.fillRect(4,top,barrelEnd-4,wall);x.fillRect(4,bot-wall,barrelEnd-4,wall);x.fillRect(4,top,wall,bot-top);
  x.strokeStyle='#7f89d6';x.lineWidth=2;x.beginPath();x.moveTo(barrelEnd,top);x.lineTo(4,top);x.lineTo(4,bot);x.lineTo(barrelEnd,bot);x.stroke();x.beginPath();x.moveTo(barrelEnd,top+wall);x.lineTo(14,top+wall);x.lineTo(14,bot-wall);x.lineTo(barrelEnd,bot-wall);x.lineWidth=1;x.stroke();
  x.fillStyle='#eef0f8';x.fillRect(bw+18,top+wall,barrelEnd-bw-18,bot-top-2*wall);
- /* piston head */
+ /* piston head: a padlock when locked */
  const hw=18,hx=bw,ht=top+wall,hh=bot-top-2*wall;const g2=x.createLinearGradient(hx,0,hx+hw,0);g2.addColorStop(0,'#8e98dd');g2.addColorStop(.5,'#c6cdf3');g2.addColorStop(1,'#7c86d2');
  x.fillStyle=g2;x.fillRect(hx,ht,hw,hh);x.strokeStyle='#4b57d1';x.lineWidth=1.5;x.strokeRect(hx,ht,hw,hh);
  x.strokeStyle='#5a64c8';x.lineWidth=1;for(const f of [.25,.75]){x.beginPath();x.moveTo(hx+3,ht+hh*f);x.lineTo(hx+hw-3,ht+hh*f);x.stroke();}
- /* rod + handle */
+ for(const p of LAB.parts)if(p.flash>0){const cy=top+wall+8+p.y*(bot-top-2*wall-16);x.fillStyle='rgba(224,103,90,'+(p.flash/8)+')';x.beginPath();x.arc(hx+2,cy,5+p.flash*.6*Math.min(2,LGAS[LAB.gas].M/20+.6),0,7);x.fill();}
  const ry=(top+bot)/2,rodEnd=W-18;const g3=x.createLinearGradient(0,ry-6,0,ry+6);g3.addColorStop(0,'#c9cee8');g3.addColorStop(.5,'#f4f5fc');g3.addColorStop(1,'#aab2d6');
  x.fillStyle=g3;x.fillRect(hx+hw,ry-6,rodEnd-hx-hw,12);x.strokeStyle='#8a93c4';x.strokeRect(hx+hw,ry-6,rodEnd-hx-hw,12);
- x.fillStyle='#e0675a';x.beginPath();x.roundRect?x.roundRect(rodEnd-4,ry-34,14,68,6):x.rect(rodEnd-4,ry-34,14,68);x.fill();x.strokeStyle='#b84c40';x.stroke();
+ x.fillStyle=LAB.free?'#46b98c':'#e0675a';x.beginPath();x.roundRect?x.roundRect(rodEnd-4,ry-34,14,68,6):x.rect(rodEnd-4,ry-34,14,68);x.fill();x.strokeStyle=LAB.free?'#2f8a66':'#b84c40';x.stroke();
+ x.font='600 15px system-ui,sans-serif';x.fillStyle='#3f4b70';x.textAlign='center';x.fillText(LAB.free?'free':'🔒',rodEnd+3,ry-42);
  const g=LGAS[LAB.gas];x.strokeStyle='#2f385a';x.lineWidth=1.2;
  for(const p of LAB.parts){const cx=4+wall+8+p.x*(bw-4-wall-16),cy=top+wall+8+p.y*(bot-top-2*wall-16);x.fillStyle=g.c;
   if(g.di){const dx=Math.cos(p.rot)*g.r*.8,dy=Math.sin(p.rot)*g.r*.8;
    x.beginPath();x.arc(cx-dx,cy-dy,g.r,0,7);x.fill();x.stroke();x.beginPath();x.arc(cx+dx,cy+dy,g.r,0,7);x.fill();x.stroke();
    x.fillStyle='#ffffff99';x.beginPath();x.arc(cx-dx-g.r*.3,cy-dy-g.r*.3,g.r*.28,0,7);x.arc(cx+dx-g.r*.3,cy+dy-g.r*.3,g.r*.28,0,7);x.fill();}
   else{x.beginPath();x.arc(cx,cy,g.r,0,7);x.fill();x.stroke();x.fillStyle='#ffffff99';x.beginPath();x.arc(cx-g.r*.3,cy-g.r*.3,g.r*.28,0,7);x.fill();}}}
-function labStep(now){if(!LAB.run)return;const dt=Math.min(50,now-(LAB.last||now));LAB.last=now;const cv=byId('labCanvas'),W=cv.width,bw=labBW(W),g=LGAS[LAB.gas];
- const sp=Math.sqrt(LAB.T/g.M)*0.00012*dt*(15/ (bw/W*15+3));
- for(const p of LAB.parts){p.rot+=p.spin*dt*Math.sqrt(LAB.T/300);p.x+=Math.cos(p.a)*sp*p.f*(W/bw);p.y+=Math.sin(p.a)*sp*p.f*2.1;if(p.x<0||p.x>1){p.a=Math.PI-p.a;p.x=Math.max(0,Math.min(1,p.x));LAB.hits++;}if(p.y<0||p.y>1){p.a=-p.a;p.y=Math.max(0,Math.min(1,p.y));LAB.hits++;}}
- if(now-LAB.hitT>1000){LAB.rate=LAB.hits;LAB.hits=0;LAB.hitT=now;byId('labHits').textContent='wall hits: '+LAB.rate+' /s (more hits = more pressure)';}
+/* particle speed depends only on T and M (u ∝ √(T/M)); volume changes only how far they travel between hits */
+function labStep(now){if(!LAB.run)return;const dt=Math.min(50,now-(LAB.last||now));LAB.last=now;const cv=byId('labCanvas'),W=cv.width,g=LGAS[LAB.gas];
+ const tv=labVolume(LAB);LAB.Vshow+=(tv-LAB.Vshow)*Math.min(1,dt/250);const bw=labBW(W),inner=bw-30,sp=Math.sqrt(LAB.T/g.M)*0.00017*dt;
+ for(const p of LAB.parts){p.rot+=p.spin*dt*Math.sqrt(LAB.T/300);if(p.flash>0)p.flash--;p.x+=Math.cos(p.a)*sp*p.f*(W/inner);p.y+=Math.sin(p.a)*sp*p.f*2.1;
+  if(p.x>1){p.flash=8;}if(p.x<0||p.x>1){p.a=Math.PI-p.a;p.x=Math.max(0,Math.min(1,p.x));}if(p.y<0||p.y>1){p.a=-p.a;p.y=Math.max(0,Math.min(1,p.y));}}
  labDraw();LAB.raf=requestAnimationFrame(labStep);}
-function labPlay(on){LAB.run=on;byId('labPlay').textContent=on?'⏸ Pause':'▶ Play';cancelAnimationFrame(LAB.raf);if(on){LAB.last=0;LAB.raf=requestAnimationFrame(labStep);}}
-['labT','labV','labN'].forEach(id=>byId(id).addEventListener('input',()=>{labRead();if(!P.lab){P.lab=1;save();checkAch();}}));
-byId('labGas').onclick=e=>{const b=e.target.closest('[data-gas]');if(!b)return;LAB.gas=b.dataset.gas;byId('labGas').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));byId('labNote').textContent=LAB.gas==='He'?'Helium is light, so its particles zip around fastest.':LAB.gas==='Xe'?'Xenon is heavy: slower particles, but the SAME pressure and kinetic energy at the same T.':'Nitrogen makes up 78% of the air you breathe.';labRead();};
+function labPlay(on){LAB.run=on;byId('labPlay').textContent=on?'⏸ Pause':'▶ Play';cancelAnimationFrame(LAB.raf);if(on){LAB.last=0;LAB.raf=requestAnimationFrame(labStep);}else{LAB.Vshow=labVolume(LAB);labDraw();}}
+const labShown=()=>byId('labSection').open||byId('labQ').contains(byId('labBody'));
+['labT','labV','labN'].forEach(id=>byId(id).addEventListener('input',()=>{labRead(true);if(!P.lab){P.lab=1;save();checkAch();}}));
+byId('labGas').onclick=e=>{const b=e.target.closest('[data-gas]');if(!b||b.disabled)return;LAB.gas=b.dataset.gas;labSync();byId('labNote').innerHTML=LAB.gas==='He'?'Helium is light, so its atoms zip around fastest and hit the piston most often.':LAB.gas==='Xe'?'Xenon is heavy: fewer hits, but each hit is harder. Same pressure at the same n, T and V.':'Nitrogen makes up 78% of the air you breathe.';labPaint(true);};
+byId('labMode').onclick=e=>{const b=e.target.closest('[data-pmode]');if(!b||b.disabled)return;const free=b.dataset.pmode==='free';if(free===LAB.free)return;if(free)LAB.Pext=labModel(LAB).P;else LAB.V=Math.round(labVolume(LAB)*2)/2;LAB.free=free;labSync();labPaint(true);};
 byId('labPlay').onclick=()=>{LAB.userPaused=LAB.run;labPlay(!LAB.run);};
-byId('labSection').addEventListener('toggle',()=>{if(byId('labSection').open){labRead();labPlay(!reduceMotion());}else labPlay(false);});
-/* pause automatically when the playground is scrolled off screen; resume when it comes back (unless the student paused it) */
-LAB.userPaused=false;if('IntersectionObserver' in window)new IntersectionObserver(es=>{const vis=es[0].isIntersecting;if(!byId('labSection').open)return;if(!vis&&LAB.run)labPlay(false);else if(vis&&!LAB.run&&!LAB.userPaused&&!reduceMotion())labPlay(true);},{threshold:.15}).observe(byId('labCanvas'));
+byId('labSection').addEventListener('toggle',()=>{if(byId('labSection').open){if(!byId('labSection').contains(byId('labBody')))return;labSync();labRead();labPlay(!reduceMotion());}else if(!labShown())labPlay(false);});
+/* pause automatically when the lab is scrolled off screen; resume when it comes back (unless the student paused it) */
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{const vis=es[0].isIntersecting;if(!labShown())return;if(!vis&&LAB.run)labPlay(false);else if(vis&&!LAB.run&&!LAB.userPaused&&!reduceMotion())labPlay(true);},{threshold:.15}).observe(byId('labCanvas'));
+
+/* ---------- lab questions: Predict → Try it → Explain → Apply ---------- */
+function genLab(fam){const sp=labSpec(fam),L=sp.lab,s=L.start;
+ const locks=['T','V','n','gas'].filter(k=>k!==sp.lab.task.key);
+ const lockTxt={T:'T '+s.T+' K',V:s.free?'P '+fmt(s.Pext,3)+' atm (free piston)':'V '+fmt(s.V,3)+' L',n:'n '+s.n.toFixed(2)+' mol',gas:LGAS[s.gas].name};
+ return {mode:'Piston Lab · '+sp.law,lab:sp,kind:'lab',stage:'predict',video:sp.video,hints:sp.hints,guide:[],tagText:'Predict, test, explain',
+  prompt:'<b>Piston Lab.</b> The cylinder holds <b>'+s.n.toFixed(2)+' mol of '+LGAS[s.gas].name+'</b> at <b>'+s.T+' K</b>. '+(s.free?'The piston is <b>free</b>, so it slides until the inside pressure matches the outside (1.00 atm).':sp.lab.task.key==='V'?'The volume is <b>'+fmt(s.V,3)+' L</b>, and <b>you</b> move the piston.':'The piston is <b>🔒 locked</b> at '+fmt(s.V,3)+' L.')+'<span class="lab-locks">'+locks.map(k=>'<span>🔒 '+esc(lockTxt[k])+'</span>').join('')+'</span>',
+  locks,
+  solSteps:[{title:'Predict',explain:sp.predict.options.find(o=>o.key===sp.predict.answer).html+'.'},{title:'Why',explain:sp.explain.right},...(sp.apply.kind==='numeric'?sp.apply.steps.map((t,i)=>({title:'Apply '+(i+1),explain:t})):[{title:'Apply',explain:sp.apply.explain}])],
+  finalExplain:sp.apply.kind==='numeric'?'Answer: <b>'+fmt(sp.apply.answer,3)+' '+sp.apply.unit+'</b>':sp.apply.explain};}
+function labQExit(){const body=byId('labBody');if(!byId('labSection').contains(body)){byId('labSection').insertBefore(body,byId('labAway'));}byId('labAway').hidden=true;byId('labQ').hidden=true;byId('labQ').innerHTML='';LAB.lockKeys=null;LAB.onChange=null;if(!byId('labSection').open)labPlay(false);}
+function renderLabQ(){const q=S.q;if(!q||!q.lab){labQExit();return;}const box=byId('labQ'),sp=q.lab,st=q.stage;box.hidden=false;
+ /* park the lab back in its home before rebuilding, or innerHTML would destroy it */
+ if(box.contains(byId('labBody')))byId('labSection').insertBefore(byId('labBody'),byId('labAway'));
+ const steps=[['predict','Predict'],['try','Try it'],['explain','Explain'],['apply','Apply']],idx=steps.findIndex(x=>x[0]===st);
+ let h='<ol class="lab-steps" aria-label="Lab steps">'+steps.map(([k,t],i)=>'<li class="'+(i<idx?'done':i===idx?'on':'')+'"'+(i===idx?' aria-current="step"':'')+'>'+(i<idx?'✓ ':'')+t+'</li>').join('')+'</ol>';
+ if(st==='predict')h+='<p class="lab-ask">'+sp.predict.ask+'</p><div class="lab-choices">'+sp.predict.options.map(o=>'<button type="button" class="choice" data-lp="'+esc(o.key)+'">'+o.html+'</button>').join('')+'</div><p class="note-small">Commit to a guess first. Wrong guesses cost nothing here: the lab will show you.</p>';
+ else if(st==='try')h+='<p class="lab-ask">Your prediction: <b>'+q.predHTML+'</b>. Now test it: '+(sp.lab.task.key==='gas'?'tap <b>Xe</b> in the lab.':'move the <b>'+sp.lab.task.label+'</b> slider to <b>'+sp.lab.task.show+'</b>.')+' Watch the '+(sp.lab.watch==='P'?'pressure gauge':'piston and the volume')+'.</p>';
+ if(st!=='predict'&&st!=='try')h+=q.obsHTML;
+ if(st==='explain')h+='<p class="lab-ask">'+sp.explain.ask+'</p><div class="feedback lab-exfb'+(q.exMsg?' bad':'')+'" role="status" aria-live="polite">'+(q.exMsg||'')+'</div><div class="lab-choices">'+sp.explain.options.map(o=>'<button type="button" class="choice'+(q.exTried&&q.exTried.includes(o.key)?' wrong':'')+'" data-le="'+esc(o.key)+'"'+(q.exTried&&q.exTried.includes(o.key)?' disabled':'')+'>'+o.html+'</button>').join('')+'</div>';
+ if(st==='apply')h+='<div class="feedback good"><div class="result-title"><span>✅</span> Explained</div>'+sp.explain.right+'</div><p class="lab-ask"><b>Apply it.</b> '+sp.apply.prompt+'</p>';
+ box.innerHTML=h;if(st==='try'||st==='explain'||st==='apply'){const slot=document.createElement('div');slot.className='lab-slot';box.appendChild(slot);}
+ const slot=box.querySelector('.lab-slot');const body=byId('labBody');
+ if(slot){if(st==='apply')box.insertBefore(slot,box.querySelector('.lab-ask:last-of-type'));slot.appendChild(body);byId('labAway').hidden=false;}else{if(!byId('labSection').contains(body))byId('labSection').insertBefore(body,byId('labAway'));byId('labAway').hidden=true;}
+ LAB.lockKeys=st==='try'?q.locks:['T','V','n','gas'];
+ if(slot){labSync();labPaint();if(!LAB.run&&!LAB.userPaused&&!reduceMotion())labPlay(true);}updateCoach();}
+function labStartState(q){const s=q.lab.lab.start;Object.assign(LAB,{T:s.T,V:s.V,n:s.n,gas:s.gas,free:s.free,Pext:s.Pext});LAB.Vshow=labVolume(LAB);LAB.userPaused=false;}
+function labPredict(k){const q=S.q,sp=q.lab,o=sp.predict.options.find(x=>x.key===k);q.pred=k;q.predHTML=o.html;q.predRight=k===sp.predict.answer;tried(q);q.stage='try';labStartState(q);
+ LAB.onChange=()=>{if(q!==S.q||q.stage!=='try')return;const t=sp.lab.task,v=t.key==='gas'?LAB.gas:LAB[t.key];if(t.key==='gas'?v===t.target:Math.abs(v-t.target)<1e-6)labObserved(q);};
+ renderLabQ();byId('labQ').querySelector('.lab-ask')?.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function labObserved(q){const sp=q.lab,L=sp.lab,w=L.watch,a=L.before,b=L.after,u=w==='P'?'atm':'L',nm=w==='P'?'Pressure':'Volume',r=b[w]/a[w];
+ const rt=Math.abs(r-1)<.005?'no change':(fmt(r,3)+'× as much');
+ q.obsHTML='<div class="lab-obs"><div class="result-title"><span>👀</span> What the lab showed</div><table><tr><th></th><th>Before</th><th>After</th></tr><tr><th>'+nm+'</th><td>'+fmt(a[w],3)+' '+u+'</td><td>'+fmt(b[w],3)+' '+u+'</td></tr><tr><th>Piston hits per second</th><td>'+Math.round(a.hits)+'</td><td>'+Math.round(b.hits)+'</td></tr><tr><th>Push per hit</th><td>'+a.push.toFixed(2)+'×</td><td>'+b.push.toFixed(2)+'×</td></tr></table><p>'+nm+': <b>'+rt+'</b>. '+(q.predRight?'✅ Your prediction was right.':'Your prediction was <i>'+q.predHTML+'</i>. The lab says otherwise. That is fine: now figure out why.')+'</p></div>';
+ q.stage='explain';q.hints=sp.hints;S.hint=0;LAB.onChange=null;renderLabQ();byId('labQ').querySelector('.lab-obs')?.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function labExplain(k){const q=S.q,sp=q.lab;if(k===sp.explain.answer){q.exMsg='';q.stage='apply';labApply(q);return;}
+ q.exTried=(q.exTried||[]).concat(k);q.exMiss=true;q.exMsg='<b>Not quite.</b> '+(sp.explain.why[k]||'Look at the before and after readings again.');renderLabQ();byId('labQ').querySelector('.lab-exfb')?.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});}
+function labApply(q){const a=q.lab.apply;Object.assign(q,{kind:a.kind,answer:a.answer,unit:a.unit||'',sf:a.sf||null,traps:a.traps||[],options:a.options||null});
+ if(a.kind==='choice')q.finalExplain=a.explain;renderLabQ();
+ byId('sigTag').textContent=q.sf?q.sf+' significant figures (treat lab readings as 3 sig figs)':'choose an answer';byId('unit').innerHTML=a.kind==='choice'?'':unitHTML(q.unit);
+ byId('choiceBox').innerHTML=a.kind==='choice'?'<div class="choice-label">Choose one:</div>'+q.options.map((o,i)=>'<button type="button" class="choice" data-choice="'+esc(o.key)+'"><span class="opt-letter">'+'ABCDEFG'[i]+'</span><span class="opt-body">'+o.html+'</span></button>').join(''):'';
+ renderGuide();(a.kind==='choice'?byId('choiceBox'):byId('answerRow')).scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});if(a.kind!=='choice')byId('answer').focus({preventScroll:true});}
+byId('labQ').onclick=e=>{const p=e.target.closest('[data-lp]');if(p)return labPredict(p.dataset.lp);const x=e.target.closest('[data-le]');if(x&&!x.disabled)return labExplain(x.dataset.le);};
 
 (function init(){let c='';try{c=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim()}catch(e){}renderStatus();renderBadges();byId('viewTabs').querySelector('[data-view="learn"]').classList.add('active');setCourse(['3A','1A'].includes(c)?c:DEFAULT_COURSE);})();
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>
 <script>/* sig-fig "close" state: tint the answer box yellow while the yellow notice shows */(()=>{const fb=document.getElementById("feedback"),a=document.getElementById("answer");if(!fb||!a)return;new MutationObserver(()=>a.classList.toggle("sf-close",fb.classList.contains("close"))).observe(fb,{attributes:true,attributeFilter:["class"]});})();</script>
-<script>/* reference-sheet images: the base64 sits in data-src so it is not decoded at page load; each image loads the first time its panel is shown */(()=>{const imgs=[...document.querySelectorAll('img[data-src]')],load=i=>{if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}};if(!('IntersectionObserver' in window))return imgs.forEach(load);const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('img[data-src]').forEach(load);io.unobserve(e.target)}}),{rootMargin:'600px'});imgs.forEach(i=>io.observe(i.parentElement));/* fallback: after any click, load images whose panel is now shown (does not depend on the page being painted) */document.addEventListener('click',()=>setTimeout(()=>imgs.forEach(i=>{if(i.dataset.src&&i.parentElement.offsetParent!==null)load(i)}),0),true)})();</script></body></html>
+<script>/* reference-sheet images: the base64 sits in data-src so it is not decoded at page load; each image loads the first time its panel is shown */(()=>{const imgs=[...document.querySelectorAll('img[data-src]')],load=i=>{if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}};if(!('IntersectionObserver' in window))return imgs.forEach(load);const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('img[data-src]').forEach(load);io.unobserve(e.target)}}),{rootMargin:'600px'});imgs.forEach(i=>io.observe(i.parentElement));/* fallback: after any click, load images whose panel is now shown (does not depend on the page being painted) */document.addEventListener('click',()=>setTimeout(()=>imgs.forEach(i=>{if(i.dataset.src&&i.parentElement.offsetParent!==null)load(i)}),0),true)})();</script><script>/* iOS: a quick second tap on a button that just turned disabled must not zoom the page (2026-11-14) */document.addEventListener("touchend",e=>{const b=e.target&&e.target.closest&&e.target.closest("button");if(b&&b.disabled&&e.cancelable)e.preventDefault()},{passive:false});</script>
+</body></html>
