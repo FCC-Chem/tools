@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Name That Compound! • Naming &amp; Formulas • ItsDrDan</title>
 <meta name="description" content="Naming and formula practice for CHEM 3A and CHEM 1A: Type I and Type II ionic compounds, polyatomic ions, binary covalent molecules, acids and hydrates, with step-by-step help and mistake catchers.">
-<link rel="icon" type="image/webp" href="https://itsdrdan.github.io/games/brand/badges/lattice.webp">
+<link rel="icon" type="image/webp" href="assets/logo-256.webp">
 <style>
 :root{
  --bg:#f5f6fb;--surface:#fff;--ink:#1f2a44;--muted:#4f5a74;--faint:#646c82;--line:#e3e6f0;--line2:#d5d9e8;
@@ -95,6 +95,10 @@ main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
 .feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.sal-row{display:flex;align-items:center;gap:10px;margin-top:14px}
+/* no mascot row until there is feedback */.sal-row:has(>.feedback:empty){display:none}.sal-row .feedback{flex:1;margin-top:0}#fbSalRow:has(>.feedback:not(.good):not(.bad):not(.info)){display:none}
+.sal-mood{width:64px;height:64px;flex:none;object-fit:contain}.sal-mood.pop{animation:salPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes salPop{from{transform:scale(.8)}}
+@media(max-width:640px){.sal-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.sal-mood.pop{animation:none}}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
 .sol ol{margin:4px 0 0;padding-left:22px}.sol li{margin:2px 0}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
@@ -235,7 +239,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
- <div class="tb-brand"><img src="https://itsdrdan.github.io/games/brand/badges/lattice.webp" onerror="this.style.visibility='hidden'" alt="">Name That Compound!</div>
+ <div class="tb-brand"><img src="assets/logo-256.webp" width="40" height="40" alt="">Name That Compound!</div>
  <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
  <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Ion Rookie</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
  <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
@@ -243,7 +247,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </div></header>
 
 <div class="wrap">
- <section class="intro"><img src="https://itsdrdan.github.io/games/brand/badges/lattice.webp" onerror="this.style.visibility='hidden'" alt="Name That Compound! logo: an ionic crystal lattice"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Chapter 2.7: Chemical Nomenclature</p><h1>Name That Compound!</h1><p class="lede">Pick a mode, then name compounds or write their formulas.</p></div></section>
+ <section class="intro"><img src="assets/mascot/sal-idle.webp" width="104" height="104" alt="Sal, the Name That Compound! mascot: a salt cube holding up a blank name tag"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Chapter 2.7: Chemical Nomenclature</p><h1>Name That Compound!</h1><p class="lede">Pick a mode, then name compounds or write their formulas.</p></div></section>
  <details class="howplay"><summary><span data-icon="bulb" aria-hidden="true"></span>How to play</summary><ul>
   <li>Tap one or more cards below. Each card has topics you can turn on or off.</li>
   <li>Formulas: just type numbers. <b>Ca3(PO4)2</b> turns into <b>Ca₃(PO₄)₂</b> by itself. Capital letters matter (Co is cobalt, CO is carbon monoxide).</li>
@@ -254,7 +258,7 @@ html.dd-embedded{scroll-padding-top:8px}
   <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
   <div class="cats" id="cats"></div>
   <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Topics <small>Tap to turn on or off. Mix as many as you like.</small></h3><div class="chips" id="chips"></div></div>
-  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/trophy.webp" onerror="this.style.visibility='hidden'" alt=""><span><b>Skill Check Prep</b><small id="skillSub">10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  <button type="button" class="skill-card" id="skillCard"><img src="assets/menu/mode-skill.webp" width="58" height="58" alt="" aria-hidden="true"><span><b>Skill Check Prep</b><small id="skillSub">10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
  </section>
 
  <main class="panel" id="play">
@@ -268,7 +272,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer"><button type="button" class="btn primary" id="checkBtn">Check</button></div>
    <div class="choices" id="choices" hidden></div>
    <p class="typing-note" id="typingNote"></p>
-   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="sal-row"><img class="sal-mood" id="salMood" src="assets/mascot/sal-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div></div>
    <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
    <div class="guide" id="guide" hidden></div>
    <div class="detail" id="hintBox" hidden></div>
@@ -288,7 +292,7 @@ html.dd-embedded{scroll-padding-top:8px}
     <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap"><button type="button" class="btn primary" id="fbCheck" disabled>Check my work</button><button type="button" class="btn" id="fbLog" disabled>Add to compound log</button></div>
    </div>
    <p class="typing-note" id="fbHint">Balance the charges above to unlock checking.</p>
-   <div class="feedback" id="fbFeedback" role="status" aria-live="polite"></div>
+   <div class="sal-row" id="fbSalRow"><img class="sal-mood" id="fbSalMood" src="assets/mascot/sal-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="fbFeedback" role="status" aria-live="polite"></div></div>
    <div class="section-head" style="margin-top:14px"><h2 style="font-size:1.05rem">Compound log</h2><button type="button" class="btn small" id="fbClearLog">Clear log</button></div>
    <div class="log-wrap" id="fbLogWrap"><p class="note-small" style="margin:0">No compounds recorded yet. Build one above and tap "Add to compound log."</p></div>
   </div>
@@ -1098,6 +1102,15 @@ const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
 const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
 const STORE = 'ddNameThatCompound.v1';
 const badgeImg = (n, alt = '') => `<img src="${BADGE(n)}" alt="${alt}" loading="lazy" onerror="this.style.visibility='hidden'">`;
+const achImg = id => `<img src="assets/achievements/ach-${id}.webp" alt="" aria-hidden="true">`;
+/* Sal's mood follows the feedback: good → correct, bad → oops, info/hint → thinking, new question → idle; victory for achievements and rank-ups (held 4 s) */
+const SAL_MOOD = { good: 'correct', bad: 'oops', info: 'thinking', '': 'idle' }; let salHold = 0;
+function salMood(m, hold, id = 'salMood') {
+  if (!hold && Date.now() < salHold) return; if (hold) salHold = Date.now() + hold;
+  const im = $(id), src = `assets/mascot/sal-${m}.webp`; if (!im || im.getAttribute('src') === src) return;
+  im.setAttribute('src', src); im.classList.remove('pop'); void im.offsetWidth; im.classList.add('pop');
+}
+['idle', 'thinking', 'correct', 'oops', 'victory'].forEach(m => { const i = new Image(); i.src = `assets/mascot/sal-${m}.webp`; });
 
 const VIDEOS = {
   naming: { id: 'CTvvJRGMdxY', start: 0, title: 'How to Name Ionic Compounds', why: 'Type I and Type II ionic names.' },
@@ -1146,7 +1159,7 @@ function renderStats() {
   $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
-  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${achImg(a[0])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
 }
 function setCourse(c) {
   state.course = c; loadCourse(c);
@@ -1161,7 +1174,7 @@ function setCourse(c) {
 /* ---------- chooser ---------- */
 const catOn = c => catTopics(c).some(t => state.sel.has(t));
 function renderChooser() {
-  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span>${badgeImg(c.badge)}<b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><img src="assets/menu/mode-${c.id}.webp" width="80" height="80" alt="" aria-hidden="true"><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
   const open = CATEGORIES.filter(catOn);
   $('chipsWrap').hidden = !open.length;
   $('chips').innerHTML = open.map(c => `<div class="chip-row"><span>${c.title}</span>${catTopics(c).map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="cstat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`).join('');
@@ -1214,7 +1227,7 @@ function newQuestion(focus) {
   if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');
   $('typingNote').innerHTML = isChoice ? '' : isBuild ? 'Tap an ion to add a piece. Tap a piece to remove it.' : isFormulaQ(q) ? `Numbers turn into subscripts: Ca3(PO4)2 → Ca₃(PO₄)₂. Capital letters matter.${q.topic.endsWith('hyd') ? ' For the hydrate dot, type * or a period.' : ''}` : 'Spelling counts. Roman numerals go in parentheses: iron(III).';
   $('ptNote').textContent = isFormulaQ(q) ? 'tap a symbol to type it' : 'reference';
-  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = ''; salMood('idle');
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   setVideoFor(q.video || T.video);
@@ -1318,7 +1331,7 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; salMood(SAL_MOOD[kind] || 'idle'); }
 function showSolution() {
   const q = state.q; if (!q) return;
   if (!state.done) {
@@ -1356,7 +1369,7 @@ function renderGuide() {
 }
 function guideChoose(i, k) {
   const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
-  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.');
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else { q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.'); salMood('thinking'); }
   renderGuide();
   if (c.ok && q.steps[q._g.at] && q.steps[q._g.at].final && (q.kind === 'name' || q.kind === 'formula') && !coarse()) { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
 }
@@ -1384,12 +1397,12 @@ function showReport() {
 
 /* ---------- achievements, toasts, confetti ---------- */
 function checkAch() {
-  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
-  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); salMood('victory', 4000); toast(a[3], 'Achievement unlocked!', a[1], achImg(a[0])); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) { salMood('victory', 4000); toast('medal', 'New rank!', r.name); } P.rankSeen = r.name; }
   save(); renderStats();
 }
-function toast(badge, title, text) {
-  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+function toast(badge, title, text, img) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${img || badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
   $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
 }
 function confetti() {
@@ -1463,7 +1476,7 @@ const FB_CATIONS = QUIZ_CATIONS, FB_ANIONS = ANIONS;
 function fbReady(bal) {
   $('fbCheck').disabled = !bal; $('fbLog').disabled = !bal;
   $('fbHint').textContent = bal ? 'Now type the formula, pick the type and type the name, then check your work.' : 'Balance the charges above to unlock checking.';
-  $('fbFeedback').className = 'feedback'; $('fbFeedback').innerHTML = '';
+  $('fbFeedback').className = 'feedback'; $('fbFeedback').innerHTML = ''; salMood('idle', 0, 'fbSalMood');
 }
 function fbCurrent() {
   const st = fb.builder.st, c = byId(CATIONS, st.c), a = byId(ANIONS, st.a), counts = correctCounts(c, a);
@@ -1476,7 +1489,7 @@ function fbGrade() {
 }
 function fbCheck() {
   const r = fbGrade(), q = r.q;
-  $('fbFeedback').className = 'feedback ' + (r.all ? 'good' : 'bad');
+  $('fbFeedback').className = 'feedback ' + (r.all ? 'good' : 'bad'); salMood(r.all ? 'correct' : 'oops', 0, 'fbSalMood');
   $('fbFeedback').innerHTML = `${r.lowest ? '' : `<div class="fb-row bad">Your pieces balance, but the lowest ratio is ${q.counts.cCount} : ${q.counts.aCount}.</div>`}
    <div class="fb-row ${r.f.ok ? 'ok' : 'bad'}">Formula: ${r.f.ok ? '✓ Correct!' : `✗ ${r.f.note || ''} Correct formula: <b>${fHTML(q.formula)}</b>`}</div>
    <div class="fb-row ${r.typeOk ? 'ok' : 'bad'}">Type: ${r.typeOk ? '✓ Correct!' : `✗ This is Type ${q.c.type === 2 ? 'II (the metal has more than one possible charge, so it needs a Roman numeral)' : 'I (this cation only forms one charge)'}.`}</div>
@@ -1513,7 +1526,7 @@ function bind() {
   $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
   $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
   smartType($('answer'), () => isFormulaQ(state.q)); smartType($('fbFormula'), () => true);
-  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; salMood('thinking'); };
   $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
   $('solBtn').onclick = showSolution;
   const openRules = () => { renderRules(); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };

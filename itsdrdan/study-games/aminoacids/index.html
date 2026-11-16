@@ -206,12 +206,15 @@ svg.diag{max-width:100%;height:auto}
 .logo-anim .lg-body{transform-origin:390px 480px;animation:lgBob 3.2s ease-in-out infinite}
 .logo-anim .lg-armL{transform-origin:240px 300px;animation:lgWaveL 3.2s ease-in-out infinite}
 .logo-anim .lg-armR{transform-origin:540px 330px;animation:lgWaveR 3.2s ease-in-out infinite}
-.mascot[data-mood=happy] .lg-body{animation:lgJump .6s ease-in-out 3}
-.mascot[data-mood=happy] .lg-armL{animation:lgCheerL .3s ease-in-out 6 alternate}
-.mascot[data-mood=happy] .lg-armR{animation:lgCheerR .3s ease-in-out 6 alternate}
-.mascot[data-mood=wow] .lg-body{animation:lgWow .9s ease-in-out 2}
-.mascot[data-mood=hmm] .lg-body{animation:lgHmm 1.2s ease-in-out 2}
-.mascot[data-mood=hmm] .lg-armL,.mascot[data-mood=hmm] .lg-armR{animation:lgDroop 1.2s ease-in-out 2}
+/* Pep (new art 2026-11): mood picture beside the feedback; mode and badge art */
+.pep-row{display:flex;align-items:flex-start;gap:10px;margin-top:10px}.pep-row .feedback{flex:1;min-width:0;margin-top:0}
+.pep-exam{display:none}#practice[data-mode=exam] .pep-exam{display:flex}#practice[data-mode=exam] .pep-row:not(.pep-exam){display:none}
+.pep-mood{width:64px;height:64px;flex:none;object-fit:contain}.pep-mood.pop{animation:pepPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes pepPop{from{transform:scale(.8)}}
+@media(max-width:640px){.pep-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.pep-mood.pop{animation:none}}
+.mode-icon.art{background:none!important;width:44px;height:44px}.mode-icon.art img{width:100%;height:100%;object-fit:contain;display:block}
+@media(max-width:700px){.mode-icon.art{width:34px;height:34px}}
+.jbadge{display:flex;gap:8px;align-items:center}.jb-ico{width:40px;height:40px;flex:none;object-fit:contain}.jbadge:not(.earned) .jb-ico{filter:grayscale(1)}
+.toast img{width:40px;height:40px;vertical-align:middle;margin-right:8px}
 @keyframes lgBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 @keyframes lgWaveL{0%,100%{transform:rotate(0)}50%{transform:rotate(-9deg)}}
 @keyframes lgWaveR{0%,100%{transform:rotate(0)}50%{transform:rotate(9deg)}}
@@ -702,8 +705,8 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
 <p class="footer-note progress-note" id="progressLabel"></p>
 <div id="questionArea"></div>
 <div class="btn-row"><button class="action primary" id="checkBtn">Check Answer</button><button class="action secondary" id="hintBtn">Hint</button><button class="action secondary" id="showBtn">Show Answer</button></div>
-<div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>
-<div id="fbxHost"></div>
+<div class="hintbox" id="hintBox"></div><div class="pep-row"><img class="pep-mood" src="assets/mascot/pep-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite"></div></div>
+<div id="fbxHost"></div><div class="pep-row pep-exam"><img class="pep-mood" src="assets/mascot/pep-idle.webp" width="64" height="64" alt="" aria-hidden="true"></div>
 </section>
 <details class="card journey" id="journey"><summary>🧭 Chemistry Journey <span class="journey-chip" id="jChip">Level 1 • 0 XP</span></summary><div class="body">
 <div class="xp-row"><span id="xpLevel">Level 1</span><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><span id="xpText">0 / 100 XP</span></div>
@@ -1351,19 +1354,26 @@ const BADGES=[
 /* mascot: the bubble guy inside the Peptide Party logo; faces: normal, happy, wow, hmm */
 const LGN='#0b1550';
 const LGFACE={
- normal:`<circle cx="360" cy="292" r="14" fill="${LGN}"/><circle cx="470" cy="286" r="14" fill="${LGN}"/><circle cx="365" cy="287" r="5" fill="#fff"/><circle cx="475" cy="281" r="5" fill="#fff"/><path d="M398 338q34 32 68 0" fill="none" stroke="${LGN}" stroke-width="13" stroke-linecap="round"/>`,
- happy:`<path d="M334 300q26-34 52 0M444 294q26-34 52 0" fill="none" stroke="${LGN}" stroke-width="14" stroke-linecap="round"/><path d="M386 330q46 0 92 0q-4 62-46 62t-46-62z" fill="#f2576c" stroke="${LGN}" stroke-width="12" stroke-linejoin="round"/><path d="M406 370q26-18 52 0q-10 16-26 16t-26-16z" fill="#ff98a6"/>`,
- wow:`<circle cx="360" cy="288" r="24" fill="${LGN}"/><circle cx="470" cy="282" r="24" fill="${LGN}"/><circle cx="368" cy="279" r="9" fill="#fff"/><circle cx="478" cy="273" r="9" fill="#fff"/><circle cx="352" cy="298" r="4" fill="#fff"/><circle cx="462" cy="292" r="4" fill="#fff"/><ellipse cx="430" cy="358" rx="22" ry="28" fill="#f2576c" stroke="${LGN}" stroke-width="12"/>`,
- hmm:`<circle cx="360" cy="298" r="13" fill="${LGN}"/><circle cx="470" cy="292" r="13" fill="${LGN}"/><path d="M330 268l44-14M500 262l-44-14" stroke="${LGN}" stroke-width="12" stroke-linecap="round"/><path d="M396 356q17-14 34 0t34 0" fill="none" stroke="${LGN}" stroke-width="13" stroke-linecap="round"/><path d="M548 228c-14 20-20 29-20 37a20 20 0 0 0 40 0c0-8-6-17-20-37z" fill="#bfe3fa" stroke="#3b8fd6" stroke-width="7"/>`};
-let mascotT=0;function mascot(kind,hold){const m=$('mascot'),f=$('lgFace');if(!m||!f)return;kind=kind||'normal';f.innerHTML=LGFACE[kind]||LGFACE.normal;m.dataset.mood='';void m.offsetWidth;m.dataset.mood=kind;clearTimeout(mascotT);if(hold)mascotT=setTimeout(()=>mascot('normal'),hold)}
-let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600)}
+ normal:`<circle cx="360" cy="292" r="14" fill="${LGN}"/><circle cx="470" cy="286" r="14" fill="${LGN}"/><circle cx="365" cy="287" r="5" fill="#fff"/><circle cx="475" cy="281" r="5" fill="#fff"/><path d="M398 338q34 32 68 0" fill="none" stroke="${LGN}" stroke-width="13" stroke-linecap="round"/>`,};
+/* Pep's mood pictures replace the old face swap: normal→idle, happy/wow→correct, hmm→oops; thinking and victory are new.
+   victory (badge, level up) is held so a following answer mood does not overwrite it; short holds go back to idle. */
+const PEP_MOOD={normal:'idle',happy:'correct',wow:'correct',hmm:'oops'};let mascotT=0,pepHold=0,pepLast='idle';
+function pepSet(m){const src='assets/mascot/pep-'+m+'.webp';document.querySelectorAll('.pep-mood').forEach(im=>{if(im.getAttribute('src')===src)return;im.setAttribute('src',src);im.classList.remove('pop');void im.offsetWidth;im.classList.add('pop')})}
+function mascot(kind,hold){const m=PEP_MOOD[kind]||kind||'idle';clearTimeout(mascotT);
+ if(m==='victory'){pepHold=Date.now()+(hold||4000);pepSet('victory');mascotT=setTimeout(()=>{pepHold=0;pepSet(pepLast)},hold||4000);return}
+ pepLast=m;if(Date.now()<pepHold){mascotT=setTimeout(()=>{pepHold=0;pepSet(pepLast)},pepHold-Date.now());return}
+ pepSet(m);if(hold)mascotT=setTimeout(()=>{pepLast='idle';pepSet('idle')},hold)}
+['idle','thinking','correct','oops','victory'].forEach(m=>{const i=new Image();i.src='assets/mascot/pep-'+m+'.webp'});
+const badgeName=b=>b.t.replace(/^\S+\s+/,'');
+{const f=document.getElementById('lgFace');if(f)f.innerHTML=LGFACE.normal}
+let toastT=0;function toast(t,img){const el=$('toast');el.innerHTML=(img?'<img src="'+img+'" width="40" height="40" alt="" aria-hidden="true">':'')+esc(t);el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2600)}
 function renderJourney(){const lvl=Math.floor(journey.xp/100)+1,into=journey.xp%100;$('jChip').textContent=`Level ${lvl} • ${journey.xp} XP`;$('xpLevel').textContent='Level '+lvl;$('xpFill').style.width=into+'%';$('xpText').textContent=into+' / 100 XP';
  $('modeXp').innerHTML=MODES.map(m=>`<div><b>${journey.modes[m.id]||0}</b>${m.title}</div>`).join('');
- $('jbadges').innerHTML=BADGES.map(b=>`<div class="jbadge ${journey.badges[b.id]?'earned':''}"><div class="bt">${b.t}</div>${b.d}</div>`).join('')}
+ $('jbadges').innerHTML=BADGES.map(b=>`<div class="jbadge ${journey.badges[b.id]?'earned':''}"><img class="jb-ico" src="assets/achievements/ach-${b.id}.webp" width="40" height="40" alt="" aria-hidden="true"><div><div class="bt">${badgeName(b)}</div>${b.d}</div></div>`).join('')}
 function awardXP(assisted){const before=Math.floor(journey.xp/100);if(assisted){journey.xp+=2;journey.assisted++}else{journey.xp+=10+Math.min(state.streak,5)*2;journey.correct++;journey.modes[state.mode]=(journey.modes[state.mode]||0)+1;journey.best=Math.max(journey.best,state.streak)}
- BADGES.forEach(b=>{if(!journey.badges[b.id]&&b.ok(journey)){journey.badges[b.id]=1;toast('Badge earned: '+b.t)}});if(Math.floor(journey.xp/100)>before)toast('Level up! You reached level '+(Math.floor(journey.xp/100)+1));jSave();renderJourney()}
+ BADGES.forEach(b=>{if(!journey.badges[b.id]&&b.ok(journey)){journey.badges[b.id]=1;mascot('victory',4000);toast('Badge earned: '+badgeName(b),'assets/achievements/ach-'+b.id+'.webp')}});if(Math.floor(journey.xp/100)>before){mascot('victory',4000);toast('Level up! You reached level '+(Math.floor(journey.xp/100)+1))}jSave();renderJourney()}
 const state={mode:'aa',q:null,selected:null,done:false,revealed:false,correct:0,streak:0,assisted:0};
-function buildModes(){$('modeGrid').innerHTML=MODES.map(m=>`<button class="mode-btn ${m.id===state.mode?'active':''}" data-mode="${m.id}" aria-pressed="${m.id===state.mode}"><span class="mode-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${m.icon}</svg></span><span class="mode-name">${m.title}</span><small>${m.short}</small></button>`).join('');
+function buildModes(){$('modeGrid').innerHTML=MODES.map(m=>`<button class="mode-btn ${m.id===state.mode?'active':''}" data-mode="${m.id}" aria-pressed="${m.id===state.mode}"><span class="mode-icon art"><img src="assets/menu/mode-${m.id}.webp" width="44" height="44" alt="" aria-hidden="true"></span><span class="mode-name">${m.title}</span><small>${m.short}</small></button>`).join('');
  $('modeGrid').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;buildModes();nextQ();mascot('happy',1800);setVideoFor(state.mode);if(matchMedia('(max-width:700px)').matches)requestAnimationFrame(()=>requestAnimationFrame(()=>{const c=$('practice');window.scrollTo({top:Math.max(0,scrollY+c.getBoundingClientRect().top-8),behavior:'smooth'})}))})}
 function fb(kind,html){const f=$('feedback');f.className='feedback '+kind;f.innerHTML=html}
 /* remember open/closed state of the codon chart */
@@ -1385,19 +1395,19 @@ function examEnter(){state.q=null;state.done=true;mascot('normal');$('modeTitle'
  FBXI=FBX.mount($('fbxHost'),d.items,{topics:d.topics,storageKey:'itsdrdan-amino-exam-v1',onAnswer:examAnswer})}
 function examAnswer(item,correct,info){
  try{if(window.ddTrack)ddTrack({game:'aminoacids',course:'3B',mode:'Exam Practice',topic:info.topic,correct:!!correct})}catch(e){}
- if(correct){state.correct++;state.streak++;awardXP(false);confetti();mascot(state.streak>=3?'wow':'happy',3500)}
- else{state.assisted++;state.streak=0;awardXP(true);mascot('hmm',2600)}
+ if(correct){state.correct++;state.streak++;awardXP(false);confetti();mascot(state.streak>=3?'wow':'happy')}
+ else{state.assisted++;state.streak=0;awardXP(true);mascot('hmm')}
  updateStats()}
 function updateStats(){$('correct').textContent=state.correct;$('streak').textContent=state.streak;$('assisted').textContent=state.assisted}
 function finish(){ddLog(!state.revealed);state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
  if(q.kind==='mc')$('questionArea').querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.dataset.key===q.answer)b.classList.add('right')});else if(q.lock)q.lock();
- if(state.revealed){state.assisted++;state.streak=0;mascot('normal');fb('good','👀 <b>Why it’s right:</b> '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>'+whyAllP(q));awardXP(true)}
- else{state.correct++;state.streak++;confetti();fb('good','✅ <b>Correct!</b> <b>Why it’s right:</b> '+q.why+whyAllP(q));awardXP(false);mascot(state.streak>=3?'wow':'happy',3500)}updateStats();
+ if(state.revealed){state.assisted++;state.streak=0;mascot('thinking');fb('good','👀 <b>Why it’s right:</b> '+q.why+'<br><small>Assisted: this question earns no point. Try the next one on your own.</small>'+whyAllP(q));awardXP(true)}
+ else{state.correct++;state.streak++;confetti();fb('good','✅ <b>Correct!</b> <b>Why it’s right:</b> '+q.why+whyAllP(q));awardXP(false);mascot(state.streak>=3?'wow':'happy')}updateStats();
  const f=$('feedback'),r=f.getBoundingClientRect();if(r.bottom>innerHeight&&f.scrollIntoView)f.scrollIntoView({behavior:'smooth',block:'nearest'})}
 function ddLog(ok){try{const q=state.q;if(!q||q.ddLogged||!window.ddTrack)return;q.ddLogged=1;const m=MODES.find(x=>x.id===state.mode);ddTrack({game:'aminoacids',course:'3B',mode:'Practice',topic:m?m.title:state.mode,correct:!!ok});}catch(e){}}
 /* wrong-choice reason for the current question, from the shared question bank */
 function qbWhyQ(q,k){try{const sk={aa:'amino-acids',build:'condense-hydrolyze',codon:'codons',name:'name-peptides',levels:'protein-structure',interact:'r-group-interactions'}[q.mode||state.mode];if(!sk||!q.options)return '';const t=o=>o.html,o=q.options,a=o.find(x=>x.key===q.answer),p=o.find(x=>x.key===k);if(!a||!p)return '';return qbWhy({skill:'aminoacids.'+sk,prompt:q.html,choices:o.map(t),answer:t(a),explain:q.why||''},t(p),{AA:typeof AA!=='undefined'?AA:undefined})}catch(e){return ''}}
-function wrong(msg){ddLog(false);state.streak=0;updateStats();mascot('hmm',2600);fb('bad','🔎 Not quite. '+msg)}
+function wrong(msg){ddLog(false);state.streak=0;updateStats();mascot('hmm');fb('bad','🔎 Not quite. '+msg)}
 /* a reason for a wrong choice built from its key (2026-11-14) */
 const FORMWHY={acid:'This is the acidic form: –NH₃⁺ and –COOH, net charge +1. It is the main form only far below the pI.',base:'This is the basic form: –NH₂ and –COO⁻, net charge −1. It is the main form only far above the pI.',zwit:'This is the zwitterion: –NH₃⁺ and –COO⁻, net charge 0. It is the main form at the pI (and near pH 7 for neutral side chains).',unch:'No charges at all (–NH₂ and –COOH) is never the main form in water: the –COOH gives up H⁺ and the –NH₂ picks one up.'};
 function aaAutoWhy(q,k){try{if(FORMWHY[k])return FORMWHY[k];if(AA[k]&&FEAT[k])return 'That is <b>'+full(k)+'</b>: '+FEAT[k]+'.';
@@ -1448,7 +1458,7 @@ buildModes();renderRef();renderJourney();initVideos();nextQ();
 if(urlMode){setVideoFor(state.mode);ddJumpTo(()=>$('practice'))}
 /* in the short textbook box the phone-only sticky button row would cover the question, so it scrolls with the page there */
 if(ddLabView(['practice'])){const st=document.createElement('style');st.textContent='.btn-row{position:static!important;background:none!important}';document.head.appendChild(st)}
-$('refDetails').addEventListener('toggle',()=>{if($('refDetails').open)mascot('wow',1800)});$('hintBtn').addEventListener('click',()=>{if(!state.done)mascot('hmm',1500)});
+$('refDetails').addEventListener('toggle',()=>{if($('refDetails').open)mascot('wow',1800)});$('hintBtn').addEventListener('click',()=>{if(!state.done)mascot('thinking')});
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>

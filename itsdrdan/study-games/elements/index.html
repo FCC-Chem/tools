@@ -52,6 +52,7 @@ details.howto ul{margin:6px 0 0;padding-left:20px}details.howto li{margin:3px 0}
 .cat:hover{border-color:#aab2ea}.cat b{font-family:var(--font-display);font-weight:600;font-size:1.15rem;line-height:1.2}.cat small{color:var(--muted);font-size:.86rem;line-height:1.3}
 .cat .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;color:#fff}
 .cat.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.cat.on .tick{background:var(--accent);border-color:var(--accent)}
+.cat-art .mode-ico{width:74px;height:74px;object-fit:contain}
 .cat-art{height:74px;display:flex;align-items:center;justify-content:center;gap:6px}
 .mini-tile{position:relative;display:inline-grid;place-items:center;width:62px;height:66px;border-radius:12px;background:#fff;border:2px solid #b9c0ec;font:600 1.7rem/1 var(--font-display);color:#26326a;box-shadow:0 3px 0 #dfe3f7}
 .mini-tile small{position:absolute;top:5px;left:7px;font:800 .62rem/1 var(--font);color:var(--faint)}
@@ -94,6 +95,10 @@ main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
 .choice{border:1.5px solid var(--line2);background:#fff;border-radius:12px;padding:12px 16px;min-height:56px;font-size:1.06rem;font-weight:750;color:#2b3760;text-align:left}
 .choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
 .typing-note{font-size:.85rem;color:var(--faint);margin:8px 2px 0}
+.fb-row{display:flex;align-items:center;gap:10px;margin-top:14px}
+/* no mascot row until there is feedback */.fb-row:has(>.feedback:empty){display:none}.fb-row .feedback{flex:1;margin-top:0}
+.kit-mood{width:64px;height:64px;flex:none;object-fit:contain}.kit-mood.pop{animation:kitPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes kitPop{from{transform:scale(.8)}}
+@media(max-width:640px){.kit-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.kit-mood.pop{animation:none}}
 .feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
 .feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
@@ -201,7 +206,7 @@ table.data{border-collapse:collapse;font-size:.95rem;width:100%;background:#fff}
  .seg button{padding:8px 13px}
  .wrap{padding:10px 12px 40px}
  .intro{gap:12px}.intro img{width:60px;height:60px}.intro h1{font-size:1.55rem}.lede{font-size:.95rem;line-height:1.4}
- .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:128px;padding:10px 8px;gap:3px}.cat-art{height:54px}.mini-tile{width:46px;height:50px;font-size:1.3rem}.mini-tile small{font-size:.55rem;top:4px;left:5px}.mini-pt{grid-template-columns:repeat(18,4.5px);grid-auto-rows:5px;gap:1px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}
+ .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:128px;padding:10px 8px;gap:3px}.cat-art{height:54px}.cat-art .mode-ico{width:54px;height:54px}.mini-tile{width:46px;height:50px;font-size:1.3rem}.mini-tile small{font-size:.55rem;top:4px;left:5px}.mini-pt{grid-template-columns:repeat(18,4.5px);grid-auto-rows:5px;gap:1px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}
  .chip-row>span{min-width:100%}
  .cat .tick{width:22px;height:22px;top:6px;right:6px}.cat-art{gap:3px;margin-top:8px}.cat-art .arrow{font-size:.9rem}.mini-tile.mint{font-size:.8rem!important;padding:0 5px!important}
  main.panel{padding:12px}.question{padding:10px}.prompt{font-size:1.08rem}
@@ -247,7 +252,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </div></header>
 
 <div class="wrap">
- <section class="intro"><img class="logo-img" src="https://itsdrdan.github.io/games/assets/games/elements.webp" alt="Symbol Safari logo"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Chapter 2: Atoms, Molecules, and Ions</p><h1>Symbol Safari</h1><p class="lede">Pick a tile, then type the symbol or name. Capital letters count.</p></div></section>
+ <section class="intro"><img class="intro-mascot" src="assets/mascot/kit-idle.webp" width="96" height="96" alt="Kit the meerkat, the Symbol Safari mascot, holding an element tile"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Chapter 2: Atoms, Molecules, and Ions</p><h1>Symbol Safari</h1><p class="lede">Pick a tile, then type the symbol or name. Capital letters count.</p></div></section>
  <details class="howto"><summary>How to play</summary><ul>
   <li><b>Pick one or more tiles</b> below. Mix them for mixed practice, or take <b>Skill Check Prep</b> for a 10-question quiz and a study plan.</li>
   <li><b>Typing symbols:</b> first letter capital, second letter lowercase (Co is cobalt, CO is carbon monoxide). Names can be any case, and British spellings like aluminium, sulphur and caesium count.</li>
@@ -259,7 +264,7 @@ html.dd-embedded{scroll-padding-top:8px}
   <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
   <div class="cats" id="cats"></div>
   <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Options <small>Tap to turn on or off.</small></h3><div class="chips" id="chips"></div></div>
-  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/trophy.webp" alt="" onerror="this.style.visibility='hidden'"><span><b>Skill Check Prep</b><small id="skillBlurb">10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  <button type="button" class="skill-card" id="skillCard"><img src="assets/menu/mode-skill.webp" width="58" height="58" alt="" aria-hidden="true"><span><b>Skill Check Prep</b><small id="skillBlurb">10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
  </section>
 
  <main class="panel" id="play">
@@ -273,7 +278,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer"><span class="picked" id="picked" hidden></span><button type="button" class="btn primary" id="checkBtn">Check</button></div>
    <div class="choices" id="choices" hidden></div>
    <p class="typing-note" id="typingNote"></p>
-   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="fb-row"><img class="kit-mood" id="kitMood" src="assets/mascot/kit-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div></div>
    <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
    <div class="guide" id="guide" hidden></div>
    <div class="detail" id="hintBox" hidden></div>
@@ -800,6 +805,7 @@ const LOGO_FB = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://w
 const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
 const STORE = 'ddElementSymbols.v1';
 const badgeImg = n => `<img src="${BADGE(n)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`;
+const achImg = id => `<img src="assets/achievements/ach-${id}.webp" alt="" aria-hidden="true">`;
 
 const VIDEOS = {
   alphabet: { id: 'ARE5_CgcxW4', start: 525, title: 'The chemist’s alphabet', why: 'Elements are the letters chemistry is written with.' },
@@ -857,7 +863,7 @@ function renderStats() {
   $('streak').textContent = P.streak; $('sBest').textContent = P.best;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried; $('sAcc').textContent = P.tried ? Math.round(P.correct / P.tried * 100) + '%' : '—';
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
-  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${achImg(a[0])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
   renderMissed();
 }
 function renderMissed() {
@@ -879,7 +885,7 @@ function setCourse(c) {
 /* ---------- chooser ---------- */
 const catOn = c => c.topics.some(t => state.sel.has(t));
 function renderChooser() {
-  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><span class="cat-art" aria-hidden="true">${c.art}</span><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><span class="cat-art" aria-hidden="true"><img class="mode-ico" src="assets/menu/mode-${c.id}.webp" width="74" height="74" alt=""></span><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
   const open = CATEGORIES.filter(catOn), rows = [];
   if (state.sel.has('n2s') || state.sel.has('s2n') || (state.sel.has('locate'))) {
     const missN = courseScope(state.course).filter(e => P.missed[e.symbol] > 0).length;
@@ -933,7 +939,7 @@ function newQuestion(focus) {
   $('checkBtn').textContent = 'Check'; $('checkBtn').disabled = false;
   if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');
   $('typingNote').innerHTML = q.topic === 'n2s' || q.topic === 'latin' ? 'Capital first letter, lowercase second: <b>Co</b> is cobalt, <b>CO</b> is carbon monoxide.' : q.topic === 's2n' || q.topic === 'latinback' ? 'Any capitalization is fine for names. Aluminium, sulphur and caesium count too.' : isTable ? 'Tap an element. It turns blue. Tap another to change your pick.' : '';
-  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = ''; kitMood('idle');
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   $('ptipText').innerHTML = ' ' + (q.tip || capsTip(CORE[0]));
@@ -1015,7 +1021,12 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; kitMood(KIT_MOOD[kind] || 'idle'); }
+/* Kit's mood follows the feedback: good → correct, bad → oops, info/hint/step by step → thinking, new question → idle; victory for achievements and rank-ups */
+const KIT_MOOD = { good: 'correct', bad: 'oops', info: 'thinking' }; let kitHold = 0;
+function kitMood(m, hold) { if (!hold && Date.now() < kitHold) return; if (hold) kitHold = Date.now() + hold; const src = 'assets/mascot/kit-' + m + '.webp';
+  document.querySelectorAll('.kit-mood').forEach(im => { if (im.getAttribute('src') === src) return; im.setAttribute('src', src); im.classList.remove('pop'); void im.offsetWidth; im.classList.add('pop'); }); }
+['idle', 'thinking', 'correct', 'oops', 'victory'].forEach(m => { const i = new Image(); i.src = 'assets/mascot/kit-' + m + '.webp'; });
 function showSolution() {
   const q = state.q; if (!q) return;
   if (!state.done) {
@@ -1089,12 +1100,12 @@ function showReport() {
 
 /* ---------- achievements, toasts, confetti ---------- */
 function checkAch() {
-  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
-  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); kitMood('victory', 4000); toast('ach:' + a[0], 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) { kitMood('victory', 4000); toast('medal', 'New rank!', r.name); } P.rankSeen = r.name; }
   save(); renderStats();
 }
 function toast(badge, title, text) {
-  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badge.startsWith('ach:') ? achImg(badge.slice(4)) : badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
   $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
 }
 function confetti() {
@@ -1161,8 +1172,8 @@ function bind() {
   $('checkBtn').onclick = check; $('nextBtn').onclick = next;
   $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
   $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
-  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
-  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; kitMood('thinking'); };
+  $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) { state.helped = true; kitMood('thinking'); } setGuide(state.guideOn); };
   $('solBtn').onclick = showSolution;
   const openRules = () => { renderRules(); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };
   $('rulesBtn').onclick = openRules; $('closeRules').onclick = () => { try { $('rulesDialog').close(); } catch (e) { $('rulesDialog').removeAttribute('open'); } };

@@ -33,7 +33,7 @@ button,select,input{font:inherit;color:inherit}
 .plan li{background:#f6f1fb;border-radius:12px;padding:8px 12px}.plan li.ok{background:var(--good-bg)}
 .plan-box{margin-top:12px;background:#fff8e6;border:1.5px solid #ffd59a;border-radius:16px;padding:12px 14px}
 .badge{display:inline-block;background:#fff;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;color:var(--brand);border:1.5px solid #e4d3f2}
-.hero-logo{width:128px;height:128px;flex:none;filter:drop-shadow(0 6px 8px #0002)}.hero-logo svg{width:100%;height:100%;display:block}
+.hero-logo{width:128px;height:128px;flex:none;filter:drop-shadow(0 6px 8px #0002)}.hero-logo svg{width:100%;height:100%;display:block}img.hero-logo{object-fit:contain}
 
 /* directions */
 details.directions{margin:12px 0;border:2px solid #c9b6e6;border-bottom-width:5px;border-radius:20px;background:linear-gradient(120deg,#f6f2ff,#fff6f0)}
@@ -63,7 +63,7 @@ details[open]>summary .sum-hint{background:#fff;color:var(--brand);border:1.5px 
 .mode-btn{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:18px;background:linear-gradient(145deg,#fff,var(--mb));padding:12px 12px 12px;display:grid;grid-template-columns:44px 1fr;grid-template-areas:"i n" "i s";gap:2px 10px;align-items:center;transition:transform .12s;min-height:72px}
 .mode-btn:hover{transform:translateY(-2px)}
 .mode-btn.active{outline:3px solid var(--ma);outline-offset:2px}
-.mode-icon{grid-area:i;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#fff;font-size:24px}
+.mode-icon{grid-area:i;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#fff;font-size:24px}img.mode-icon{background:none;border-radius:0;object-fit:contain}
 .mode-name{grid-area:n;font-weight:600;font-size:16.5px;line-height:1.15}
 .mode-btn small{grid-area:s;font-size:12.5px;color:var(--muted);font-weight:700}
 .mode-btn[data-mode=study]{--mb:#fff1ea;--ma:#e59a7a}.mode-btn[data-mode=p2n]{--mb:#e7f6e9;--ma:#7caf86}.mode-btn[data-mode=n2p]{--mb:#e6f2ff;--ma:#82afd2}.mode-btn[data-mode=real]{--mb:#fdeaf3;--ma:#d68aae}.mode-btn[data-mode=mixed]{--mb:#f0e8fc;--ma:#ad8cce}.mode-btn[data-mode=skill]{--mb:#fff6dc;--ma:#e0b851}
@@ -110,6 +110,10 @@ details[open]>summary .sum-hint{background:#fff;color:var(--brand);border:1.5px 
 .feedback.shown{display:block;background:#f1ebff;border:1.5px solid #cdbdf0}
 .hintbox{display:none;margin-top:10px;background:#fff8e6;border:1.5px solid #ffd59a;border-radius:14px;padding:10px 12px}
 .hintbox.on{display:block}
+.fb-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+/* no mascot row until there is feedback */.fb-row:not(:has(.hintbox.on,.feedback.good,.feedback.bad,.feedback.shown)){display:none}.fb-col{flex:1;min-width:0}.fb-col>.hintbox,.fb-col>.feedback{margin-top:0}.fb-col>.hintbox.on+.feedback{margin-top:10px}
+.flip-mood{width:64px;height:64px;flex:none;object-fit:contain}.flip-mood.pop{animation:flipPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes flipPop{from{transform:scale(.8)}}
+@media(max-width:560px){.flip-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.flip-mood.pop{animation:none}}
 .progress{height:10px;border-radius:6px;background:#eee7f6;overflow:hidden;margin:10px 0 2px}
 .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),#d96b5f);transition:width .3s}
 
@@ -144,7 +148,8 @@ details.journey>summary::-webkit-details-marker{display:none}
 .jbadges{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .jbadge{display:flex;gap:10px;align-items:center;border-radius:14px;padding:8px 10px;background:#f6f1fb;opacity:.45;font-size:13px}
 .jbadge.on{opacity:1;background:#fff6d6;border:1.5px solid #ffd59a}
-.jbadge .ic{font-size:24px;color:var(--brand-d);display:grid;place-items:center}.jbadge b{display:block;font-size:14px}
+.jbadge .ic{font-size:24px;color:var(--brand-d);display:grid;place-items:center}.jbadge img.ic{width:40px;height:40px;flex:none;object-fit:contain}
+.toast .t-ic{width:28px;height:28px;vertical-align:middle;margin:-4px 8px -4px -6px}.jbadge b{display:block;font-size:14px}
 .journey-reset{margin-top:10px;border:0;background:none;color:var(--soft);text-decoration:underline;cursor:pointer;font-size:13px}
 .footer-note{color:var(--muted);font-size:13.5px;margin:12px 4px 0;line-height:1.5}
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--edge);color:#fff;padding:10px 18px;border-radius:999px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;z-index:50}
@@ -165,7 +170,7 @@ details.journey>summary::-webkit-details-marker{display:none}
 <h1><span class="a">Functional Group</span> <span class="b">Flashcards</span></h1>
 <p class="warmup"><span data-icon="stopwatch"></span> 5-minute warm-up for <a href="https://itsdrdan.github.io/functionalgroups/" target="_blank" rel="noopener noreferrer">Organic Origins</a></p>
 <p class="subtitle">Pick a mode below. Flip the cards first, then quiz yourself.</p></div>
-<div class="hero-logo" id="heroLogo" role="img" aria-label="Stack of flashcards with a benzene ring"></div></section>
+<img class="hero-logo" id="heroLogo" src="assets/mascot/flip-idle.webp" width="128" height="128" alt="Flip, the Functional Group Flashcards mascot: a smiling flashcard"></section>
 
 <details class="directions" id="howTo"><summary><span><span data-icon="book"></span> How to play</span> <span class="sum-hint">Tap to open</span></summary>
 <div class="howto">
@@ -340,7 +345,6 @@ function drawGroup(g, opts = {}) {
 }
 
 /* hero logo: a stack of cards with a benzene on top */
-document.getElementById('heroLogo').innerHTML = `<svg viewBox="0 0 128 128" aria-hidden="true"><rect x="22" y="34" width="86" height="64" rx="12" fill="#ffd6a8" stroke="#5a4d96" stroke-width="3" transform="rotate(8 65 66)"/><rect x="16" y="30" width="86" height="64" rx="12" fill="#e3f0ff" stroke="#5a4d96" stroke-width="3" transform="rotate(-6 59 62)"/><rect x="20" y="30" width="86" height="64" rx="12" fill="#fff" stroke="#5a4d96" stroke-width="3"/><polygon points="63,40 80,50 80,70 63,80 46,70 46,50" fill="#f1e3fa" stroke="#8c47b7" stroke-width="4" stroke-linejoin="round"/><path d="M68 47 76 52M76 68 68 73M50 52 50 68" stroke="#8c47b7" stroke-width="3.5" stroke-linecap="round"/><circle cx="100" cy="34" r="9" fill="#ffb547"/><path d="M96 34l3 3 6-7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 /* ===================== state, XP, mastery ===================== */
 const $ = id => document.getElementById(id);
@@ -356,6 +360,12 @@ const P = Object.assign({xp: 0, best: 0, mastery: {}, badges: {}, answered: 0, s
 const S = {mode: 'study', results: [], logged: false, correct: 0, streak: 0, q: null, answered: false, tries: 0, hinted: false, deck: [], i: 0, picked: null, flipIdx: 0, order: GROUPS.map((_, i) => i), shuffled: false};
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); };
+/* Flip's mood follows the feedback: right → correct, wrong → oops, hint / Show Answer → thinking, new question → idle; victory for badges and level-ups (held 4 s) */
+let flipHold = 0;
+function flipMood(m, hold) { if (!hold && Date.now() < flipHold) return; if (hold) flipHold = Date.now() + hold; const src = 'assets/mascot/flip-' + m + '.webp';
+  document.querySelectorAll('.flip-mood').forEach(im => { if (im.getAttribute('src') === src) return; im.setAttribute('src', src); im.classList.remove('pop'); void im.offsetWidth; im.classList.add('pop'); }); }
+['idle', 'thinking', 'correct', 'oops', 'victory'].forEach(m => { const i = new Image(); i.src = 'assets/mascot/flip-' + m + '.webp'; });
+const FLIP_ROW = (fbInner) => `<div class="fb-row"><img class="flip-mood" src="assets/mascot/flip-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="fb-col">${fbInner}</div></div>`;
 
 const BADGES = [
   {id: 'first', ic: 'sparkle', name: 'First Flip', desc: 'Flip your first card'},
@@ -368,13 +378,13 @@ const BADGES = [
   {id: 'all', ic: 'target', name: `All ${N}`, desc: 'Master every group'},
   {id: 'skill', ic: 'clipboard', name: 'Skill Check Ready', desc: 'Score 8+ on Skill Check Prep'},
 ];
-function award(id) { if (P.badges[id]) return; P.badges[id] = 1; save(); const b = BADGES.find(x => x.id === id); toast(`Badge: ${b.name}`); renderJourney(); }
-function addXp(n) { P.xp += n; save(); renderJourney(); }
+function award(id) { if (P.badges[id]) return; P.badges[id] = 1; save(); const b = BADGES.find(x => x.id === id); toast(`Badge: ${b.name}`); $('toast').insertAdjacentHTML('afterbegin', `<img class="t-ic" src="assets/achievements/ach-${b.id}.webp" width="28" height="28" alt="" aria-hidden="true">`); flipMood('victory', 4000); renderJourney(); }
+function addXp(n) { const before = Math.floor(P.xp / 100); P.xp += n; if (Math.floor(P.xp / 100) > before) flipMood('victory', 4000); save(); renderJourney(); }
 function renderJourney() {
   const lvl = Math.floor(P.xp / 100) + 1, into = P.xp % 100;
   $('xpLevel').textContent = 'Level ' + lvl; $('xpText').textContent = `${into} / 100 XP`; $('xpFill').style.width = into + '%';
   $('jChip').textContent = `Level ${lvl} • ${P.xp} XP`;
-  $('jbadges').innerHTML = BADGES.map(b => `<div class="jbadge ${P.badges[b.id] ? 'on' : ''}"><span class="ic">${ico(b.ic)}</span><span><b>${b.name}</b>${b.desc}</span></div>`).join('');
+  $('jbadges').innerHTML = BADGES.map(b => `<div class="jbadge ${P.badges[b.id] ? 'on' : ''}"><img class="ic" src="assets/achievements/ach-${b.id}.webp" width="40" height="40" alt="" aria-hidden="true"><span><b>${b.name}</b>${b.desc}</span></div>`).join('');
   $('sBest').textContent = P.best;
 }
 const mlevel = id => { const m = P.mastery[id] || {run: 0, seen: 0}; return m.run >= 3 ? 3 : m.run >= 1 ? 2 : m.seen ? 1 : 0; };
@@ -414,7 +424,7 @@ const MODES = [
   {id: 'skill', ic: 'clipboard', name: 'Skill Check Prep', sub: '10 mixed questions, then a study plan'},
 ];
 function renderModes() {
-  $('modeGrid').innerHTML = MODES.map(m => `<button type="button" class="mode-btn" data-mode="${m.id}"><span class="mode-icon">${ico(m.ic)}</span><span class="mode-name">${m.name}</span><small>${m.sub}</small></button>`).join('');
+  $('modeGrid').innerHTML = MODES.map(m => `<button type="button" class="mode-btn" data-mode="${m.id}"><img class="mode-icon" src="assets/menu/mode-${m.id}.webp" width="44" height="44" alt="" aria-hidden="true"><span class="mode-name">${m.name}</span><small>${m.sub}</small></button>`).join('');
 }
 /* ?groups=alcohol,phenol,… limits Spot It to the families a textbook section has taught so far (2026-11-14) */
 function spotPool() { let only = []; try { only = (new URLSearchParams(location.search).get('groups') || '').split(',').filter(g => byId[g]); } catch {} const pool = only.length ? SPOT_TASKS.filter(t => only.includes(t.g)) : SPOT_TASKS; return pool.length ? pool : SPOT_TASKS; }
@@ -561,9 +571,9 @@ function nextSpot() {
   area.innerHTML = `<p class="kicker">Tap any atom of the <b style="color:var(--C)">${esc(g.name.toLowerCase())}</b> group. <span style="color:var(--soft)">(${S.i + 1} of ${S.deck.length})</span></p>
   <p class="spotname">${esc(m.name)}</p><p class="spotuse">${esc(m.use)}</p><div class="prompt" id="prompt" style="min-height:0"></div>
   <div class="btn-row"><button class="action" id="hintBtn" type="button">${ico('bulb')} Hint</button><button class="action" id="showBtn" type="button">Show Answer</button><button class="action primary next hidden" id="nextBtn" type="button">Next →</button></div>
-  <div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>`;
+  ${FLIP_ROW('<div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>')}`;
   const svg = q.svg = drawMol(m, i => spotTap(i));
-  $('prompt').append(svg);
+  $('prompt').append(svg); flipMood('idle');
   $('hintBtn').onclick = hint; $('showBtn').onclick = () => { q.svg.clear(); q.svg.mark(m.groups[g.id].flat(), 'ans'); finish(false, true); }; $('nextBtn').onclick = () => { S.i++; nextSpot(); };
   updateStats();
 }
@@ -574,7 +584,7 @@ function spotTap(i) {
   if (set) { q.svg.mark(set, 'ok'); S.tries++; return finish(true, false); }
   S.tries++;
   const other = Object.keys(m.groups).filter(k => k !== g.id && m.groups[k].some(x => x.includes(i)));
-  const fb = $('feedback'); fb.className = 'feedback bad';
+  const fb = $('feedback'); fb.className = 'feedback bad'; flipMood('oops');
   let slip = null;
   if (other.length) {
     const o = byId[other.includes('phenol') ? 'phenol' : other[0]]; q.svg.mark(m.groups[o.id].find(x => x.includes(i)), 'no'); slip = findSlip(o.id, g.id);
@@ -604,11 +614,11 @@ function nextQuestion() {
   const q = S.q = {g, kind, opts: shuffle([g, ...pickDistractors(g, 3)])};
   if (kind === 'real') q.ex = g.ex[Math.floor(Math.random() * g.ex.length)];
   S.answered = false; S.tries = 0; S.hinted = false; S.picked = null; S.logged = false;
-  const area = $('area');
+  const area = $('area'); flipMood('idle');
   const kicker = kind === 'p2n' ? 'Which functional group is this?' : kind === 'n2p' ? 'Which structure shows this group?' : 'Which functional group does this real compound contain?';
   area.innerHTML = `<p class="kicker">${kicker} <span style="color:var(--soft)">(${S.i + 1} of ${S.deck.length})</span></p><div class="prompt ${kind === 'p2n' ? '' : 'short'}" id="prompt"></div><div class="answers ${kind === 'n2p' ? 'pics' : ''}" id="answers" role="group" aria-label="Answer choices"></div>
   <div class="btn-row"><button class="action primary" id="checkBtn" type="button">Check Answer</button><button class="action" id="hintBtn" type="button">${ico('bulb')} Hint</button><button class="action" id="showBtn" type="button">Show Answer</button><button class="action primary next hidden" id="nextBtn" type="button">Next →</button></div>
-  <div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>`;
+  ${FLIP_ROW('<div class="hintbox" id="hintBox"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div>')}`;
   const prompt = $('prompt');
   if (kind === 'p2n') prompt.append(drawGroup(g, {hideName: true}));
   else if (kind === 'n2p') { const d = document.createElement('div'); d.className = 'bigname'; d.textContent = g.name; prompt.append(d); }
@@ -624,14 +634,14 @@ function nextQuestion() {
   updateStats();
 }
 function fmt(f) { return esc(f).replace(/[₀-₉]+/g, m => '<sub>' + [...m].map(c => '₀₁₂₃₄₅₆₇₈₉'.indexOf(c)).join('') + '</sub>'); }
-function hint() { if (S.answered) return; S.hinted = true; const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = `<span class="tip-label">${ico('bulb')} Professor Tip:</span> ` + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot) + (q.kind === 'spot' ? ' ' + esc(q.g.key) : ''); }
+function hint() { if (S.answered) return; S.hinted = true; flipMood('thinking'); const q = S.q; const h = $('hintBox'); h.classList.add('on'); h.innerHTML = `<span class="tip-label">${ico('bulb')} Professor Tip:</span> ` + (q.kind === 'real' ? `This compound is <b>${esc(q.ex[1])}</b>. ` : '') + esc(q.kind === 'n2p' ? q.g.key : q.g.spot) + (q.kind === 'spot' ? ' ' + esc(q.g.key) : ''); }
 function check() {
   if (S.answered) return; if (!S.picked) { toast('Tap an answer first'); return; }
   S.tries++; const ok = S.picked === S.q.g.id;
   if (ok) return finish(true, false);
   const b = document.querySelector(`.opt[data-id="${S.picked}"]`); b.classList.add('wrong'); b.disabled = true;
   const slip = findSlip(S.picked, S.q.g.id);
-  const fb = $('feedback'); fb.className = 'feedback bad'; fb.innerHTML = `<b>Not yet.</b> That one is ${esc(byId[S.picked].name.toLowerCase())}: ${esc(byId[S.picked].key)}${slip ? `<br><span class="tip-label">${ico('bulb')} Professor Tip:</span> ${esc(slip.tip)}` : ''} Try again${S.tries >= 2 ? ', or tap <b>Show Answer</b>' : ''}.`;
+  const fb = $('feedback'); fb.className = 'feedback bad'; flipMood('oops'); fb.innerHTML = `<b>Not yet.</b> That one is ${esc(byId[S.picked].name.toLowerCase())}: ${esc(byId[S.picked].key)}${slip ? `<br><span class="tip-label">${ico('bulb')} Professor Tip:</span> ${esc(slip.tip)}` : ''} Try again${S.tries >= 2 ? ', or tap <b>Show Answer</b>' : ''}.`;
   if (S.tries === 1) { S.streak = 0; updateStats(); record(S.q.g.id, false); ddLog(modeName(), S.q.g.name, false, slip ? slip.id : 'other', S.hinted ? 'hint' : ''); S.results.push({id: S.q.g.id, kind: S.q.kind, ok: false, slip: slip && slip.id}); }
 }
 function modeName() { if (S.mode === 'skill') return 'Skill Check Prep'; if (S.q.kind === 'spot') return 'Spot It'; return S.q.kind === 'p2n' ? 'Picture to Name' : S.q.kind === 'n2p' ? 'Name to Picture' : 'Real Molecules'; }
@@ -643,8 +653,8 @@ function finish(ok, revealed) {
   const fb = $('feedback');
   if (q.kind === 'spot') { const k = q.m.groups[g.id].length; if (ok) { q.svg.clear(); q.svg.mark(q.m.groups[g.id].flat(), 'ok'); } $('hintBtn').classList.add('hidden'); q.spotNote = `${esc(q.m.name)} has ${k === 1 ? 'one' : k === 2 ? 'two' : k} ${esc(g.name.toLowerCase())} group${k > 1 ? 's' : ''}, highlighted in green. `; }
   const why = (q.spotNote || '') + `<b>${esc(g.name)}:</b> ${esc(g.key)} ${q.kind === 'real' ? `${fmt(q.ex[0])} is <b>${esc(q.ex[1])}</b>${q.ex[2] ? ' (' + esc(q.ex[2]) + ')' : ''}.` : ''}<br><span style="color:var(--muted)">Where you’ll meet it: ${esc(g.meet)}</span>`;
-  if (ok) { fb.className = 'feedback good'; fb.innerHTML = `<b>${ico('check')} Correct!</b> ` + why; }
-  else { fb.className = 'feedback shown'; fb.innerHTML = why; }
+  if (ok) { fb.className = 'feedback good'; fb.innerHTML = `<b>${ico('check')} Correct!</b> ` + why; flipMood('correct'); }
+  else { fb.className = 'feedback shown'; fb.innerHTML = why; flipMood('thinking'); }
   if (firstTry) {
     S.correct++; S.streak++; P.best = Math.max(P.best, S.streak); P.answered++;
     addXp(10 + Math.min(10, 2 * (S.streak - 1))); record(g.id, true); ddLog(modeName(), g.name, true); S.results.push({id: g.id, kind: q.kind, ok: true});

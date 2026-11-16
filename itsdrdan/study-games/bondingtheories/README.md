@@ -12,6 +12,8 @@ Working title **Orbital Overlap**. Repo/hub label: **Bonding Theories**. Suggest
   - **Steps 4–5:** ΔH with sign, then exothermic or endothermic (unchanged).
   - **Quick ΔH** (one typed step, Skill Check, question-bank sampler) is unchanged.
   - Also: iOS no longer zooms when bonds or buttons are tapped quickly (pinch zoom still works).
+  - **v21.2 (2026-11-15): Skill Check Prep is now 12 questions.** The tap-the-bonds question is the 12th, alongside the typed Quick ΔH; both draw from one shuffled list of the 37 reactions, so a round never gives the same reaction twice. The menu card now reads "12 questions you type or tap". The Skill Check Ready badge now needs 9 or more right (v21.3; it was 8 of 11). Students who already earned it keep it, since badges are saved once unlocked.
+  - **v21.1 (2026-11-15):** the coefficient example in step 3 now names a bond whose count comes from a coefficient greater than 1 (for CH₄ + 2 O₂: "2(O=O) means 2 × 498 = 996 kJ"), not just the biggest count. Finished tap steps, and Learn's worked example, now show that side's Lewis structures with every bond green above the formula (Learn showed no structures before).
 - **v20 more bond-energy problems and resonance bond order (2026-11-12):**
   - **16 new bond-energy reactions, 37 in all.** All values are recomputed with OpenStax Table 7.3. The Tro test bank uses its own values (C=O 799, C–H 414), so only its reactions were used as models; the wording is original.
     - Modeled on OpenStax Ch 7 exercises 65–66: CH₄ + I₂ (+30 kJ, a true endothermic one), C₂H₄ + 3 O₂ (−1055), 2 C₂H₆ + 7 O₂ (−2340), Cl₂ + 3 F₂ → 2 ClF₃ (−807).
@@ -32,7 +34,7 @@ Working title **Orbital Overlap**. Repo/hub label: **Bonding Theories**. Suggest
 - **v19 bond energies → ΔH (OpenStax §7.5, 2026-11-12):**
   - **Two new topics in the Overlap Basics tile** (the tile now reads §7.5, §8.1).
     - **Bond energies → ΔH:** four steps. (1) Count every bond in the reactants (times the coefficients) and add up ΣD broken. (2) The same for bonds formed in the products. (3) ΔH = ΣD(broken) − ΣD(formed). (4) Exothermic or endothermic.
-    - **Quick ΔH from bond energies:** one typed step. It is also the 11th item in Skill Check Prep, and the question-bank sampler sends it to Daily 5 under chapter 1A-7.
+    - **Quick ΔH from bond energies:** one typed step. It is also an item in Skill Check Prep (the 11th of 12 since v21.2), and the question-bank sampler sends it to Daily 5 under chapter 1A-7.
   - **Data:** bond energies are OpenStax Table 7.3 (Bond Energies, kJ/mol), copied from openstax.org on 2026-11-12. Note that C=O is 741 and C≡O is 1080. The book's own examples come out right with them: H₂ + Cl₂ is −185 kJ, and the ethylene + water Check Your Learning is −35 kJ. Every bond in the reactants is broken and every bond in the products is formed, as in the OpenStax method.
   - **Reactions:** 21 gas-phase reactions, all balanced and checked by hand. 17 are exothermic (H₂ + halogens, H₂ + O₂, the Haber process, CH₄/CH₃OH/C₃H₈ combustion, hydrogenations, chlorinations, N₂H₄ + O₂, 2 H₂O₂, HCN + 2 H₂) and 4 are endothermic reverses. OpenStax's own worked example (CO + 2 H₂) and Check Your Learning reaction are left out.
   - **What students see:** each reaction shows Lewis structures. Bond counts come from the drawings, so the two can't disagree. A short D table lists the bonds in the reaction, their single/double/triple versions, and a few distractors. The full Table 7.3 opens in the Hint and in the Bonding Sheet.

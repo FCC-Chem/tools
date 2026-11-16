@@ -22,7 +22,7 @@ button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cu
 html.dd-embedded .topbar{position:relative}
 .tb{max-width:1180px;margin:auto;min-height:var(--topbar);padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .tb-brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:1.12rem;white-space:nowrap;margin-right:auto}
-.logo-tile{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#7c87f0,#4b57d1);color:#fff;font-size:1.35rem;flex:none;box-shadow:0 3px 8px #4b57d140}
+.logo-tile{width:40px;height:40px;flex:none;object-fit:contain}
 .seg{display:inline-flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px}
 .seg button{border:0;background:none;border-radius:11px;padding:8px 18px;font-weight:800;color:var(--muted);min-height:46px;white-space:nowrap}
 .seg button.active{background:var(--accent);color:#fff;box-shadow:0 2px 6px #4b57d14d}
@@ -35,8 +35,7 @@ html.dd-embedded .topbar{position:relative}
 /* page */
 .wrap{max-width:1180px;margin:auto;padding:20px 16px 50px}
 .intro{display:flex;align-items:center;gap:16px;margin-bottom:10px}
-.intro-logo{width:96px;height:96px;flex:none;border-radius:26px;display:grid;place-items:center;background:linear-gradient(135deg,#f3f4ff,#e4e8ff);color:var(--accent);font-size:3.2rem;box-shadow:0 6px 14px #4b57d126}
-.intro-logo b{font-family:var(--font-display);font-size:1.6rem;line-height:1;color:var(--accent-d)}
+.intro-logo{width:96px;height:96px;flex:none;object-fit:contain}
 .eyebrow{margin:0;font-size:.78rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
 .intro h1{margin:2px 0 2px;font-size:clamp(1.7rem,3.6vw,2.35rem);line-height:1.1;font-weight:600}
 .lede{margin:0;color:var(--muted)}
@@ -69,6 +68,10 @@ main.panel{padding:20px;scroll-margin-top:calc(var(--topbar) + 10px)}
 .choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}.choice.right{border-color:#3a9a71;background:var(--mint);color:var(--mint-ink)}.choice.wrong{border-color:#d4677a;background:var(--rose);color:var(--rose-ink)}
 .typing-note{font-size:.88rem;color:var(--faint);margin:8px 2px 0}
 .calc-tip{font-size:.88rem;color:var(--muted);margin:6px 2px 0;padding:7px 11px;border-radius:10px;background:var(--sky)}
+.fb-row{display:flex;align-items:flex-start;gap:10px;margin-top:14px}
+/* no mascot row until there is feedback */.fb-row:has(>.feedback:empty){display:none}.fb-row .feedback{flex:1;margin-top:0;min-width:0}
+.milli-mood{width:64px;height:64px;flex:none;object-fit:contain}.milli-mood.pop{animation:milliPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes milliPop{from{transform:scale(.8)}}
+@media(max-width:640px){.milli-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.milli-mood.pop{animation:none}}
 .feedback{margin-top:14px;padding:12px 15px;border-radius:var(--r-md);display:none;font-size:1.04rem}
 .feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
@@ -151,8 +154,7 @@ table.ref td.std{font-variant-numeric:tabular-nums;word-break:break-all}
 .cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .cat{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;border:2px solid var(--line2);background:#fff;border-radius:20px;padding:16px 12px 14px;box-shadow:var(--shadow);min-height:170px}
 .cat:hover{border-color:#aab2ea}.cat b{font-family:var(--font-display);font-weight:600;font-size:1.15rem;line-height:1.2}.cat small{color:var(--muted);font-size:.86rem;line-height:1.3}
-.cat-ico{width:72px;height:72px;border-radius:22px;display:grid;place-items:center;font-size:2.3rem;background:var(--accent-soft);color:var(--accent-d)}
-.cat[data-cat="onestep"] .cat-ico{background:var(--mint);color:var(--mint-ink)}.cat[data-cat="twostep"] .cat-ico{background:var(--amber);color:var(--amber-ink)}.cat[data-cat="power"] .cat-ico{background:var(--rose);color:var(--rose-ink)}
+.cat-ico{width:72px;height:72px;flex:none;object-fit:contain}
 .cat .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:2px solid var(--line2);background:#fff;display:grid;place-items:center;color:#fff}
 .cat.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.cat.on .tick{background:var(--accent);border-color:var(--accent)}
 .chips-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:6px 16px 16px;margin-top:12px}
@@ -170,10 +172,10 @@ table.ref td.std{font-variant-numeric:tabular-nums;word-break:break-all}
 
 @media(max-width:760px){
  html{scroll-padding-top:8px}
- .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.logo-tile{width:34px;height:34px;font-size:1.15rem}.tb-xp{min-width:0}.tb-xp .xpbar{width:70px}.tb-btn .lbl{display:none}
+ .tb{gap:8px;padding:8px 10px}.tb-brand{font-size:1rem}.logo-tile{width:34px;height:34px}.tb-xp{min-width:0}.tb-xp .xpbar{width:70px}.tb-btn .lbl{display:none}
  .topbar{position:relative}
- .seg button{padding:8px 13px}.intro-logo{width:64px;height:64px;font-size:2.2rem;border-radius:18px}.intro-logo b{font-size:1.15rem}
- .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:140px;padding:12px 8px}.cat-ico{width:54px;height:54px;font-size:1.7rem;border-radius:16px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}.chip-row>span{min-width:100%}
+ .seg button{padding:8px 13px}.intro-logo{width:64px;height:64px}
+ .cats{grid-template-columns:1fr 1fr;gap:9px}.cat{min-height:140px;padding:12px 8px}.cat-ico{width:54px;height:54px}.cat b{font-size:1.02rem}.cat small{font-size:.8rem}.chip-row>span{min-width:100%}
  main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}
  .actions{grid-template-columns:1fr 1fr}.actions .btn{white-space:nowrap;font-size:.95rem;padding:10px 8px}.stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
  .lesson-layout,.rule-grid{grid-template-columns:1fr}
@@ -194,7 +196,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
- <div class="tb-brand"><span class="logo-tile" data-icon="levels" aria-hidden="true"></span>Prefix Power-Up</div>
+ <div class="tb-brand"><img class="logo-tile" src="assets/logo-256.webp" width="40" height="40" alt="" aria-hidden="true">Prefix Power-Up</div>
  <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
  <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Prefix Rookie</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
  <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
@@ -202,12 +204,12 @@ html.dd-embedded{scroll-padding-top:8px}
 </div></header>
 
 <div class="wrap">
- <section class="intro"><div class="intro-logo" aria-hidden="true"><b>10ⁿ</b></div><div><p class="eyebrow" id="eyebrow">CHEM 3A · Chapter 1: Basics of Measurement</p><h1>Prefix Power-Up</h1><p class="lede">Learn the SI prefixes, then use them to convert units. Pick a tile to start.</p></div></section>
+ <section class="intro"><img class="intro-logo" src="assets/logo-256.webp" width="96" height="96" alt="Prefix Power-Up logo: Milli the tape measure leaping up a staircase of blocks toward a lightning bolt"><div><p class="eyebrow" id="eyebrow">CHEM 3A · Chapter 1: Basics of Measurement</p><h1>Prefix Power-Up</h1><p class="lede">Learn the SI prefixes, then use them to convert units. Pick a tile to start.</p></div></section>
  <section class="chooser" aria-labelledby="pickTitle">
   <h2 class="pick-title" id="pickTitle"><span class="stepnum">1</span>What do you want to practice? <small>Pick one or more.</small></h2>
   <div class="cats" id="cats"></div>
   <div class="chips-wrap" id="chipsWrap" hidden><h3 class="pick-title small"><span class="stepnum">2</span>Topics <small>Tap to turn on or off. Mix as many as you like.</small></h3><div class="chips" id="chips"></div></div>
-  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/trophy.webp" alt="" onerror="this.style.visibility='hidden'"><span><b>Skill Check Prep</b><small>10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  <button type="button" class="skill-card" id="skillCard"><img src="assets/menu/mode-skill.webp" width="58" height="58" alt="" aria-hidden="true"><span><b>Skill Check Prep</b><small>10 mixed questions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
   <details class="howto-d"><summary><span data-icon="bulb" aria-hidden="true"></span>How to play</summary><div>
    <ul>
     <li>Tap one or more tiles above. Each tile opens its topics, which you can turn on or off.</li>
@@ -229,7 +231,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <div class="answer" id="answerRow"><input id="answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer"><span class="unit" id="unit"></span><button type="button" class="btn primary" id="checkBtn">Check</button></div>
    <p class="typing-note" id="typingNote"></p>
    <p class="calc-tip" id="calcTip" hidden></p>
-   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="fb-row"><img class="milli-mood" id="milliMood" src="assets/mascot/milli-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div></div>
    <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
    <div class="guide" id="guide" hidden></div>
    <div class="detail" id="hintBox" hidden></div>
@@ -706,7 +708,12 @@ const $ = id => document.getElementById(id);
 const BADGE = n => `https://itsdrdan.github.io/games/brand/badges/${n}.webp`;
 const ico = n => (window.ddIcon ? window.ddIcon(n) : '');
 const STORE = 'ddPrefixPowerUp.v1';
-const badgeImg = (n, alt = '') => `<img src="${BADGE(n)}" alt="${alt}" loading="lazy" onerror="this.style.visibility='hidden'">`;
+const badgeImg = (n, alt = '') => `<img src="${n.includes('/') ? n : BADGE(n)}" alt="${alt}"${n.includes('/') ? '' : ' loading="lazy"'} onerror="this.style.visibility='hidden'">`;
+const ACH_ART = id => `assets/achievements/ach-${id}.webp`;
+/* Milli's mood follows the feedback: good → correct, bad → oops, info/hint → thinking, new question → idle; victory for achievements and rank-ups */
+const MILLI_MOOD = { good: 'correct', bad: 'oops', info: 'thinking' }; let milliHold = 0;
+function milliMood(m, hold) { if (!hold && Date.now() < milliHold) return; if (hold) milliHold = Date.now() + hold; const im = $('milliMood'), src = `assets/mascot/milli-${m}.webp`; if (!im || im.getAttribute('src') === src) return; im.setAttribute('src', src); im.classList.remove('pop'); void im.offsetWidth; im.classList.add('pop'); }
+['idle', 'thinking', 'correct', 'oops', 'victory'].forEach(m => { const i = new Image(); i.src = `assets/mascot/milli-${m}.webp`; });
 
 const VIDEOS = {
   prefixes: { id: 's7Dr7FSQ4R8', start: 607, title: 'What are prefixes in the metric system?', why: 'The prefix ladder and what each one means.' },
@@ -777,7 +784,7 @@ function renderStats() {
   $('streak').textContent = P.streak; $('sBest').textContent = P.best;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried; $('sAcc').textContent = (P.tried ? Math.round(P.correct / P.tried * 100) : 0) + '%';
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
-  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(ACH_ART(a[0]))}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
   const m = Object.entries(P.missed || {}).sort((a, b) => b[1] - a[1]);
   $('missedList').innerHTML = m.length ? m.map(([n, c]) => `<span class="missed-item">${n} (${PNAME[n].symbol}) = ${pow10HTML(PNAME[n].exponent)} · missed ${c} time${c === 1 ? '' : 's'}</span>`).join('') : '<span class="missed-none">No missed prefixes yet!</span>';
 }
@@ -793,7 +800,7 @@ function setCourse(c) {
 /* ---------- chooser: 4 tiles → topic chips ---------- */
 const catOn = c => catTopics(c, state.course).some(t => state.sel.has(t));
 function renderChooser() {
-  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><span class="cat-ico" aria-hidden="true">${ico(c.icon)}</span><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
+  $('cats').innerHTML = CATEGORIES.map(c => `<button type="button" class="cat${catOn(c) ? ' on' : ''}" data-cat="${c.id}" aria-pressed="${catOn(c)}"><span class="tick" aria-hidden="true">${ico('check')}</span><img class="cat-ico" src="assets/menu/mode-${c.id}.webp" width="72" height="72" alt="" aria-hidden="true"><b>${c.title}</b><small>${c.blurb}</small></button>`).join('');
   const open = CATEGORIES.filter(catOn);
   $('chipsWrap').hidden = !open.length;
   $('chips').innerHTML = open.map(c => `<div class="chip-row"><span>${c.title}</span>${catTopics(c, state.course).map(t => { const s = P.topic[t]; return `<button type="button" class="chip${state.sel.has(t) ? ' on' : ''}" data-topic="${t}" aria-pressed="${state.sel.has(t)}">${TOPICS[t].label}${s && s.a ? ` <span class="stat">${s.c}/${s.a}</span>` : ''}</button>`; }).join('')}</div>`).join('');
@@ -835,7 +842,7 @@ function newQuestion(focus) {
   inp.setAttribute('inputmode', 'text'); $('checkBtn').textContent = 'Check';
   $('typingNote').innerHTML = typingNote(q);
   $('calcTip').hidden = !q.calcTip; $('calcTip').innerHTML = q.calcTip ? calcTip(q) : '';
-  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = ''; milliMood('idle');
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   setVideoFor(q.video || T.video);
@@ -895,7 +902,7 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; milliMood(MILLI_MOOD[kind] || 'idle'); }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
   if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bumpTopic(q.topic, false); markMissed(q); P.streak = 0; if (state.quiz) state.quiz.results.push({ topic: q.topic, tag: q.tag, ok: false }); }
@@ -931,7 +938,7 @@ function renderGuide() {
 }
 function guideChoose(i, k) {
   const q = state.q, c = q.steps[i].choices[k]; state.helped = true;
-  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.');
+  if (c.ok) { q._g.at = i + 1; delete q._g.msg[i]; } else { q._g.msg[i] = 'Not that one. ' + (c.why || 'Try another.'); milliMood('thinking'); }
   renderGuide();
   if (c.ok && q.steps[q._g.at] && q.steps[q._g.at].final && !coarse()) { try { $('answer').focus({ preventScroll: true }); } catch (e) {} }
 }
@@ -958,8 +965,8 @@ function showReport() {
 
 /* ---------- achievements, toasts, confetti ---------- */
 function checkAch() {
-  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
-  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); milliMood('victory', 4000); toast(ACH_ART(a[0]), 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) { milliMood('victory', 4000); toast('medal', 'New rank!', r.name); } P.rankSeen = r.name; }
   save(); renderStats();
 }
 function toast(badge, title, text) {
@@ -1014,7 +1021,7 @@ function bind() {
   $('checkBtn').onclick = check; $('nextBtn').onclick = next;
   $('skipBtn').onclick = () => { if (state.quiz && !state.done) return showSolution(); if (state.quiz) return next(); newQuestion(true); scrollToQuestion(); };
   $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
-  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = `<b>Hint:</b> ${state.q.hint}`; milliMood('thinking'); };
   $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
   $('solBtn').onclick = showSolution;
   const openRules = () => { renderRules(); try { $('rulesDialog').showModal(); } catch (e) { $('rulesDialog').setAttribute('open', ''); } };

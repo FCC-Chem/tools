@@ -53,6 +53,7 @@ details.howto ul{margin:6px 0 0;padding-left:20px}
 .mode b{font-family:var(--font-display);font-weight:600;font-size:1.12rem;line-height:1.2}.mode small{color:var(--muted);font-size:.86rem;line-height:1.3}
 .mode .meter{position:absolute;left:14px;right:14px;bottom:7px;height:4px;background:#eceef5;border-radius:9px;overflow:hidden}.mode .meter span{display:block;height:100%;background:#5cb892}
 .mode.on{border-color:var(--accent);background:linear-gradient(180deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.mode.on .ms-ico{background:var(--accent);color:#fff}
+.mode img.ms-ico,.mode.on img.ms-ico{background:none;border-radius:50%;object-fit:contain}
 .chips-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
 .chips-wrap>span{font-weight:800;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-right:4px}
 .chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);background:#fff;border-radius:99px;padding:8px 15px;min-height:44px;font-weight:800;color:#3d4a73}
@@ -93,6 +94,10 @@ main.panel{padding:20px;margin-top:16px;scroll-margin-top:calc(var(--topbar) + 1
 .feedback.good{display:block;border:1px solid var(--mint-line);background:var(--mint);color:var(--mint-ink)}
 .feedback.bad{display:block;border:1px solid var(--rose-line);background:var(--rose);color:var(--rose-ink)}
 .feedback.info{display:block;border:1px solid var(--amber-line);background:var(--amber);color:var(--amber-ink)}
+.fb-row{display:flex;align-items:center;gap:10px;margin-top:14px}.fb-row .feedback{flex:1;min-width:0;margin-top:0}.fb-row:has(>.feedback:not(.good):not(.bad):not(.info)){display:none}.fb-row.lab{margin:0 0 8px}.fb-row.lab>div{flex:1;min-width:0;margin:0}
+.sully-mood{width:64px;height:64px;flex:none;object-fit:contain}.sully-mood.pop{animation:sullyPop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes sullyPop{from{transform:scale(.8)}}
+@media(max-width:640px){.sully-mood{width:52px;height:52px}}@media(prefers-reduced-motion:reduce){.sully-mood.pop{animation:none}}
+.empty-mascot{display:block;width:96px;height:96px;margin:0 auto 6px;object-fit:contain}
 .feedback .sol{margin-top:8px;padding-top:8px;border-top:1px dashed currentColor;color:var(--ink)}
 .parts{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 2px}.part{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 11px;font-weight:800;font-size:.92rem;background:#fff}
 .part.ok{color:var(--mint-ink);border:1px solid var(--mint-line)}.part.no{color:var(--rose-ink);border:1px solid var(--rose-line)}
@@ -256,7 +261,7 @@ html.dd-embedded{scroll-padding-top:8px}
 </div></header>
 
 <div class="wrap">
- <section class="intro"><img class="intro-logo" src="https://itsdrdan.github.io/games/brand/badges/molecule.webp" alt="Polyatomic Posse logo" onerror="this.hidden=true"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Green Sheet polyatomic ions</p><h1>Polyatomic Posse</h1><p class="lede">Learn every Green Sheet ion: its name, formula and charge.</p></div></section>
+ <section class="intro"><img class="intro-logo" src="assets/logo-256.webp" width="96" height="96" alt="Polyatomic Posse logo: Sully the ion cluster in a cowboy hat" onerror="this.hidden=true"><div><p class="eyebrow" id="eyebrow">CHEM 1A · Green Sheet polyatomic ions</p><h1>Polyatomic Posse</h1><p class="lede">Learn every Green Sheet ion: its name, formula and charge.</p></div></section>
  <details class="howto"><summary>How to play</summary><ul>
   <li>Pick a game below. Every question has <b>Hint</b>, <b>Step by step</b> and <b>Show answer</b>.</li>
   <li>Type formulas the easy way: <b>SO4^2-</b>, <b>SO42-</b> or <b>SO4-2</b> all become SO₄²⁻. Numbers after a letter turn into subscripts, and <b>^</b> or a + or − at the end makes the charge.</li>
@@ -267,12 +272,12 @@ html.dd-embedded{scroll-padding-top:8px}
  <section class="chooser" aria-label="Choose a game">
   <div class="modes" id="modes"></div>
   <div class="chips-wrap" id="setWrap"><span>Ion set</span><span id="setChips" style="display:contents"></span></div>
-  <button type="button" class="skill-card" id="skillCard"><img src="https://itsdrdan.github.io/games/brand/badges/checklist.webp" alt="" onerror="this.hidden=true"><span><b>Skill Check Prep</b><small>10 mixed questions on all the ions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
+  <button type="button" class="skill-card" id="skillCard"><img src="assets/menu/mode-skill.webp" width="56" height="56" alt="" aria-hidden="true" onerror="this.hidden=true"><span><b>Skill Check Prep</b><small>10 mixed questions on all the ions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
  </section>
 
  <main class="panel" id="play">
   <div class="play-head"><h2 class="play-title" id="playTitle">Practice</h2><button type="button" id="skipBtn" class="btn">New question <span data-icon="arrow" aria-hidden="true"></span></button></div>
-  <div class="empty" id="emptyBox"><span data-icon="arrow" aria-hidden="true"></span> Pick a game above to get your first question.</div>
+  <div class="empty" id="emptyBox"><img class="empty-mascot" src="assets/mascot/sully-idle.webp" width="96" height="96" alt="Sully, the Polyatomic Posse mascot: an ion cluster in a cowboy hat"><span data-icon="arrow" aria-hidden="true"></span> Pick a game above to get your first question.</div>
   <section id="reportBox" class="example" hidden></section>
   <div id="playArea" hidden>
    <div class="quiz-bar" id="quizBar" hidden><span></span></div>
@@ -282,7 +287,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <p class="readback" id="readback" aria-live="polite"></p>
    <div class="choices" id="choices" hidden></div>
    <p class="typing-note" id="typingNote"></p>
-   <div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div>
+   <div class="fb-row"><img class="sully-mood" src="assets/mascot/sully-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div></div>
    <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button></div>
    <div class="guide" id="guide" hidden></div>
    <div class="detail" id="hintBox" hidden></div>
@@ -1015,6 +1020,16 @@ function loadCourse(c) { try { PALL = JSON.parse(localStorage.getItem(STORE) || 
 function save() { try { P.lastMode = state.mode; P.set = state.set; PALL[state.course] = P; PALL.last = state.course; localStorage.setItem(STORE, JSON.stringify(PALL)); } catch (e) {} }
 function paintIcons(root = document) { root.querySelectorAll('[data-icon]').forEach(el => { if (!el.dataset.painted && window.ddIcon) { el.insertAdjacentHTML('afterbegin', ico(el.dataset.icon)); el.dataset.painted = 1; } }); }
 const badgeImg = n => `<img src="${BADGE(n)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`;
+const achImg = id => `<img src="assets/achievements/ach-${id}.webp" alt="" aria-hidden="true" onerror="this.style.visibility='hidden'">`;
+/* Sully's mood follows the feedback: good → correct, bad → oops, info/hint → thinking, new question → idle; victory for achievements and rank-ups */
+const SULLY_MOOD = { good: 'correct', bad: 'oops', info: 'thinking', '': 'idle' }; let sullyNow = 'idle', sullyHold = 0;
+const sullySrc = m => 'assets/mascot/sully-' + m + '.webp';
+function sullyMood(m, hold) {
+  if (!hold && Date.now() < sullyHold) return; if (hold) sullyHold = Date.now() + hold; sullyNow = m; const src = sullySrc(m);
+  document.querySelectorAll('.sully-mood').forEach(im => { if (im.getAttribute('src') === src) return; im.setAttribute('src', src); im.classList.remove('pop'); void im.offsetWidth; im.classList.add('pop'); });
+}
+const sullyRow = inner => `<div class="fb-row lab"><img class="sully-mood" src="${sullySrc(sullyNow)}" width="64" height="64" alt="" aria-hidden="true">${inner}</div>`;
+['idle', 'thinking', 'correct', 'oops', 'victory'].forEach(m => { const i = new Image(); i.src = sullySrc(m); });
 const reduced = () => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
 const coarse = () => { try { return matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } };
 
@@ -1028,7 +1043,7 @@ function renderStats() {
   $('streak').textContent = P.streak; $('sStreak').textContent = P.streak; $('sBest').textContent = P.best;
   $('sCorrect').textContent = P.correct; $('sTried').textContent = P.tried;
   $('achCount').textContent = `${ACH.filter(a => P.ach[a[0]]).length} of ${ACH.length} unlocked`;
-  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${badgeImg(a[3])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
+  $('achGrid').innerHTML = ACH.map(a => `<div class="badge${P.ach[a[0]] ? ' got' : ''}">${achImg(a[0])}<b>${a[1]}</b><small>${a[2]}</small></div>`).join('');
   const got = ions.filter(i => P.right[i.name]).length;
   $('ionTally').innerHTML = `<span style="background:none;padding-left:0">Green Sheet ions mastered: ${got} of ${ions.length}</span>` + ions.map(i => `<span class="${P.right[i.name] ? 'got' : ''}">${i.name}</span>`).join('');
 }
@@ -1044,7 +1059,7 @@ function setCourse(c) {
 
 /* ---------- chooser ---------- */
 function renderChooser() {
-  $('modes').innerHTML = Object.entries(MODES).map(([k, m]) => { const s = P.mode[k]; const pct = s && s.a ? Math.round(s.c / s.a * 100) : 0; return `<button type="button" class="mode${state.mode === k && !state.quiz ? ' on' : ''}" data-mode="${k}" aria-pressed="${state.mode === k && !state.quiz}"><span class="ms-ico">${ico(m.icon)}</span><b>${m.label}</b><small>${m.blurb}</small>${s && s.a ? `<span class="meter" title="${s.c} of ${s.a} right"><span style="width:${pct}%"></span></span>` : ''}</button>`; }).join('');
+  $('modes').innerHTML = Object.entries(MODES).map(([k, m]) => { const s = P.mode[k]; const pct = s && s.a ? Math.round(s.c / s.a * 100) : 0; return `<button type="button" class="mode${state.mode === k && !state.quiz ? ' on' : ''}" data-mode="${k}" aria-pressed="${state.mode === k && !state.quiz}"><img class="ms-ico" src="assets/menu/mode-${k}.webp" width="56" height="56" alt="" aria-hidden="true"><b>${m.label}</b><small>${m.blurb}</small>${s && s.a ? `<span class="meter" title="${s.c} of ${s.a} right"><span style="width:${pct}%"></span></span>` : ''}</button>`; }).join('');
   const famMode = state.mode === 'family' || state.quiz;
   $('setWrap').hidden = !!famMode;
   $('setChips').innerHTML = GROUPS.map(([k, l]) => `<button type="button" class="chip${state.set === k ? ' on' : ''}" data-set="${k}" aria-pressed="${state.set === k}">${l} <small>${k === 'all' ? ions.length : ions.filter(i => i.group === k).length}</small></button>`).join('');
@@ -1089,7 +1104,7 @@ function newQuestion(focus) {
   if (isChoice) $('choices').innerHTML = q.choices.map((c, i) => `<button type="button" class="choice" data-choice="${i}">${c.html}</button>`).join('');
   $('typingNote').innerHTML = q.kind === 'formula' ? 'Smart typing: <code>SO4^2-</code>, <code>SO42-</code> or <code>SO4-2</code> → SO₄²⁻. Symbols are case-sensitive (Cl, not CL).' : q.kind === 'name' ? 'Capitals don’t matter. “hydrogen phosphate” or “hydrogenphosphate” both work.' : '';
   updateReadback();
-  $('feedback').className = 'feedback'; $('feedback').innerHTML = '';
+  $('feedback').className = 'feedback'; $('feedback').innerHTML = ''; sullyMood('idle');
   $('hintBox').hidden = true; $('nextBtn').hidden = true; $('solBtn').classList.remove('pulse');
   $('guideBtn').hidden = !q.steps || !q.steps.length; setGuide(state.guideOn && !state.quiz);
   renderChooser(); paintIcons($('play'));
@@ -1165,7 +1180,7 @@ function finishQuestion() {
   $('nextBtn').innerHTML = (state.quiz && state.quiz.i === state.quiz.plan.length - 1 ? 'See my results ' : 'Next question ') + ico('arrow');
   if (!coarse()) { try { $('nextBtn').focus({ preventScroll: true }); } catch (e) {} }
 }
-function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; }
+function setFeedback(kind, html) { const f = $('feedback'); f.className = 'feedback ' + kind; f.innerHTML = html; sullyMood(SULLY_MOOD[kind] || 'idle'); }
 function showSolution() {
   const q = state.q; if (!q || state.done) return;
   if (!state.logged) { ddLog(false, 'gave-up'); P.tried++; bump(q.mode, false); P.streak = 0; if (state.quiz) state.quiz.results.push({ mode: q.mode, ion: q.ion, ok: false, slip: 'gave-up' }); }
@@ -1238,12 +1253,12 @@ function showReport() {
 
 /* ---------- achievements, toasts, confetti ---------- */
 function checkAch() {
-  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); toast(a[3], 'Achievement unlocked!', a[1]); confetti(); } });
-  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) toast('medal', 'New rank!', r.name); P.rankSeen = r.name; }
+  ACH.forEach(a => { if (!P.ach[a[0]] && a[4](P)) { P.ach[a[0]] = Date.now(); sullyMood('victory', 4000); toast(achImg(a[0]), 'Achievement unlocked!', a[1]); confetti(); } });
+  const r = rankOf(P.xp); if (P.rankSeen !== r.name) { if (P.rankSeen) { sullyMood('victory', 4000); toast('medal', 'New rank!', r.name); } P.rankSeen = r.name; }
   save(); renderStats();
 }
 function toast(badge, title, text) {
-  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `${badge.startsWith('<') ? badge : badgeImg(badge)}<div><b>${title}</b><br>${text}</div>`;
   $('toasts').appendChild(t); setTimeout(() => t.classList.add('out'), 3600); setTimeout(() => t.remove(), 4200);
 }
 function confetti() {
@@ -1298,7 +1313,7 @@ function bind() {
   $('answer').addEventListener('input', onType);
   $('answer').addEventListener('blur', () => { const q = state.q; if (q && q.kind === 'formula' && !state.done) { const inp = $('answer'); inp.value = liveFormat(inp.value); updateReadback(); } });
   $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); state.done ? next() : check(); } });
-  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; const h = $('hintBox'); h.hidden = false; h.innerHTML = tip(state.q.hint.startsWith('Professor Tip') ? state.q.hint : 'Professor Tip: ' + state.q.hint); };
+  $('hintBtn').onclick = () => { if (!state.q) return; state.helped = true; sullyMood('thinking'); const h = $('hintBox'); h.hidden = false; h.innerHTML = tip(state.q.hint.startsWith('Professor Tip') ? state.q.hint : 'Professor Tip: ' + state.q.hint); };
   $('guideBtn').onclick = () => { state.guideOn = $('guideBtn').getAttribute('aria-pressed') !== 'true'; if (state.guideOn) state.helped = true; setGuide(state.guideOn); };
   $('solBtn').onclick = showSolution;
   const openSheet = () => { renderSheet(); try { $('sheetDialog').showModal(); } catch (e) { $('sheetDialog').setAttribute('open', ''); } };
@@ -1351,7 +1366,7 @@ function renderIB() {
   if (L.stage === 'build' && L.reached) html += `<p class="ib-got">✓ That is ${S.target.name}!</p>`;
   if (L.stage === 'explain' || L.stage === 'apply') html += ibTable(L);
   if (L.stage === 'explain') {
-    html += `<p class="ib-ask"><b>Explain:</b> why did the charge ${S.dh ? 'change' : 'stay the same'}?</p><div class="ib-fb" role="status" aria-live="polite">${L.efb || ''}</div><div class="ib-opts">${S.explain.opts.map(([k, l]) => `<button type="button" class="choice${L.ewrong.includes(k) ? ' wrong' : ''}" data-ibe="${k}"${L.ewrong.includes(k) ? ' disabled' : ''}>${l}</button>`).join('')}</div>`;
+    html += `<p class="ib-ask"><b>Explain:</b> why did the charge ${S.dh ? 'change' : 'stay the same'}?</p>${L.efb ? sullyRow(`<div class="ib-fb" role="status" aria-live="polite">${L.efb}</div>`) : '<div class="ib-fb" role="status" aria-live="polite"></div>'}<div class="ib-opts">${S.explain.opts.map(([k, l]) => `<button type="button" class="choice${L.ewrong.includes(k) ? ' wrong' : ''}" data-ibe="${k}"${L.ewrong.includes(k) ? ' disabled' : ''}>${l}</button>`).join('')}</div>`;
   }
   if (L.stage === 'apply') html += `<p class="ib-ok">✓ ${S.explain.opts.find(o => o[0] === S.explain.answer)[1]}</p>`;
   box.innerHTML = html;
@@ -1414,7 +1429,7 @@ document.addEventListener('click', e => {
   if (x && L.stage === 'explain') {
     const k = x.dataset.ibe, o = L.spec.explain.opts.find(o => o[0] === k);
     if (k === L.spec.explain.answer) { ibToApply(); return; }
-    if (!L.ewrong.includes(k)) L.ewrong.push(k); L.efb = `<b>Not quite.</b> ${o[2]}`; renderIB();
+    if (!L.ewrong.includes(k)) L.ewrong.push(k); L.efb = `<b>Not quite.</b> ${o[2]}`; sullyMood('oops'); renderIB();
   }
 });
 /* ---------- Oxyanion Table: UI ---------- */
@@ -1441,7 +1456,8 @@ function renderOT(focusInput) {
   html += `<p class="ot-count">${12 - left} of 12 filled</p>`;
   if (left && T.sub === 'type') html += `<div class="ot-type"><label for="otIn">Type the -ate ion for <b>${otPat(selIon).el}</b>:</label><div class="ot-row"><input id="otIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="like SO4^2-"><button type="button" class="btn primary" id="otCheck">Check</button></div></div>`;
   if (left && T.sub === 'tiles') html += `<div class="ot-tray" role="group" aria-label="Tiles">${[...new Set(T.tiles.map(t => t.key))].map(k => { const n = T.tiles.filter(t => !t.used && t.key === k).length; return n ? `<button type="button" class="ot-tile${T.tsel === k ? ' on' : ''}" data-ott="${k}" draggable="true" aria-pressed="${T.tsel === k}" aria-label="${otTileLabel(k)}, ${n} left">${otTileHTML(k)}<span class="ot-n" aria-hidden="true">×${n}</span></button>` : ''; }).join('')}</div>`;
-  html += `<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`;
+  sullyMood(SULLY_MOOD[T.fbKind] || 'idle');
+  html += T.fb ? sullyRow(`<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`) : `<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`;
   html += `<div class="ot-grid">${OT_LAYOUT.map(n => n ? otCellHTML(byName(n), T) : '<div class="ot-blank" aria-hidden="true"></div>').join('')}</div>`;
   box.innerHTML = html;
   q.hint = left && T.sub === 'type' && COLUMN_TIP[otPat(selIon).el] ? 'Professor Tip: ' + COLUMN_TIP[otPat(selIon).el] : OT_RECAP;
