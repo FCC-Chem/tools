@@ -753,20 +753,20 @@ function staticQ(topic, it) {
 /* ================= TILE 1: Overlap Basics (§8.1) ================= */
 const T1_WHAT = [
   { q: 'In valence bond theory, when does a covalent bond form?', c: [
-    ['When a half-filled orbital on one atom overlaps a half-filled orbital on another atom', true, 'The two electrons pair up (opposite spins) in the overlap region, between the two nuclei.'],
-    ['When two filled orbitals overlap', false, 'Two filled orbitals would put 4 electrons in one overlap region. Only one pair fits, so no bond forms.', 'filled-overlap'],
-    ['When one atom hands an electron to the other', false, 'That is electron transfer, which makes ions (an ionic bond). A covalent bond shares a pair.', 'ionic-vs-covalent'],
-    ['When two empty orbitals overlap', false, 'Empty orbitals have no electrons to share, so there is nothing to hold the atoms together.', 'empty-overlap']], hint: 'Each atom brings one electron to the bond.' },
+    ['When half-filled orbitals on two atoms overlap', true, 'The two electrons pair up (opposite spins) in the overlap region, between the two nuclei.'],
+    ['When two filled orbitals overlap and share all four electrons', false, 'Two filled orbitals would put 4 electrons in one overlap region. Only one pair fits, so no bond forms.', 'filled-overlap'],
+    ['When one atom hands an electron over to the other atom', false, 'That is electron transfer, which makes ions (an ionic bond). A covalent bond shares a pair.', 'ionic-vs-covalent'],
+    ['When two empty orbitals overlap between the nuclei', false, 'Empty orbitals have no electrons to share, so there is nothing to hold the atoms together.', 'empty-overlap']], hint: 'Each atom brings one electron to the bond.' },
   { q: 'Valence bond theory predicts that He₂ does not form. Why?', c: [
-    ['Each He atom’s 1s orbital is already full, so there is no half-filled orbital to overlap', true, 'With no unpaired electron, a He atom has nothing to share.'],
-    ['He atoms are too small to overlap', false, 'Size is not the problem: H atoms are smaller and still bond. He has no half-filled orbital.'],
-    ['Helium is a gas', false, 'H₂, N₂ and O₂ are gases too, and they have bonds. Look at the electrons: He’s 1s is full.'],
-    ['A He–He bond would be ionic', false, 'Two identical atoms can’t transfer electrons to make ions. The real reason: no half-filled orbitals.']] },
+    ['Each He 1s orbital is full, so no half-filled orbital can overlap', true, 'With no unpaired electron, a He atom has nothing to share.'],
+    ['He atoms are too small for their 1s orbitals to overlap well', false, 'Size is not the problem: H atoms are smaller and still bond. He has no half-filled orbital.'],
+    ['Helium is a gas at room temperature, so its atoms stay apart', false, 'H₂, N₂ and O₂ are gases too, and they have bonds. Look at the electrons: He’s 1s is full.'],
+    ['A He–He bond would be ionic instead of covalent', false, 'Two identical atoms can’t transfer electrons to make ions. The real reason: no half-filled orbitals.']] },
   { q: 'Where is the shared electron pair of a σ bond most concentrated?', c: [
     ['Between the two nuclei, on the line joining them', true, 'σ (sigma) bonds put the density right on the internuclear axis, between the nuclei.'],
     ['Above and below the line joining the nuclei', false, 'That describes a π bond. A σ bond has its density on the axis.', 'sigma-vs-pi'],
     ['On the far side of each nucleus', false, 'Density behind the nuclei would not hold them together. Bonding density sits between them, attracting both nuclei.'],
-    ['Inside the nuclei', false, 'Electrons stay outside the nucleus. The bond is the shared region between the two atoms.']] },
+    ['Inside the two nuclei, where the protons are', false, 'Electrons stay outside the nucleus. The bond is the shared region between the two atoms.']] },
   { q: 'In general, more orbital overlap makes a bond…', c: [
     ['stronger', true, 'More overlap puts more shared electron density between the nuclei, so the bond is stronger.'],
     ['weaker', false, 'It’s the other way around: more shared density between the nuclei holds them together more tightly.'],
@@ -799,14 +799,14 @@ function genPecurve() {
       opt('C', false, 'C is the most stable point (lowest energy), not the repulsion wall.', 'pe-read')], { keep: true, hint: 'Find the very short distance on the left.', solution: 'At D the nuclei are too close and repel.' }),
     () => choicePart('What does the <b>depth</b> of the well (from 0 down to the lowest point) tell you?', [
       opt('The bond energy: 436 kJ/mol for H₂', true, 'That depth is the energy you must add to pull the bonded atoms apart.'),
-      opt('The bond length', false, 'Bond length is read on the x-axis (distance) at the minimum: 74 pm.', 'pe-read'),
-      opt('How many electrons are shared', false, 'The curve shows energy vs distance only. A single H–H bond shares 2 electrons.', 'pe-read'),
-      opt('The energy of point D', false, 'Point D is on the repulsion wall. The well depth is measured at the minimum.', 'pe-read')], { hint: 'Depth is measured on the energy axis.', solution: 'Well depth = bond energy (436 kJ/mol for H₂).' }),
+      opt('The bond length, read at the bottom of the well', false, 'Bond length is read on the x-axis (distance) at the minimum: 74 pm.', 'pe-read'),
+      opt('How many electrons the two atoms share in the bond', false, 'The curve shows energy vs distance only. A single H–H bond shares 2 electrons.', 'pe-read'),
+      opt('The energy of point D on the steep left wall', false, 'Point D is on the repulsion wall. The well depth is measured at the minimum.', 'pe-read')], { hint: 'Depth is measured on the energy axis.', solution: 'Well depth = bond energy (436 kJ/mol for H₂).' }),
     () => choicePart('Why does the energy shoot up when the atoms get closer than the bond length?', [
       opt('The two positive nuclei repel each other', true, 'Too close, the nucleus–nucleus repulsion wins over the attraction to the shared electrons.'),
-      opt('The bond has already broken', false, 'At short distance the atoms are squeezed together, not pulled apart.', 'pe-read'),
-      opt('The electrons leave the atoms', false, 'No electrons are lost. The rise comes from the nuclei repelling.', 'pe-read'),
-      opt('The overlap gets smaller', false, 'Overlap actually increases as atoms approach. The rise is caused by nucleus–nucleus repulsion.', 'pe-read')], { hint: 'Think about the two protons.', solution: 'Nucleus–nucleus repulsion makes the energy rise at short distance.' })
+      opt('The bond has already broken and the atoms fly apart', false, 'At short distance the atoms are squeezed together, not pulled apart.', 'pe-read'),
+      opt('The electrons leave the atoms and the bond is lost', false, 'No electrons are lost. The rise comes from the nuclei repelling.', 'pe-read'),
+      opt('The orbital overlap gets smaller as the atoms approach', false, 'Overlap actually increases as atoms approach. The rise is caused by nucleus–nucleus repulsion.', 'pe-read')], { hint: 'Think about the two protons.', solution: 'Nucleus–nucleus repulsion makes the energy rise at short distance.' })
   ];
   if (chance(0.5)) {
     const order = shuffle(['depth', 'length', 'partial']);
@@ -849,19 +849,19 @@ function genWhich() {
 const T2_WHY = [
   { q: 'If carbon used its pure 2s and three 2p orbitals to bond in CH₄, what would you predict?', c: [
     ['Three bonds at 90° and one different bond', true, 'The three 2p orbitals are 90° apart and the 2s is different, so you’d get unequal bonds. Experiment says otherwise, which is why we need hybrids.'],
-    ['Four identical bonds at 109.5°', false, 'That is what experiments actually show. Pure 2s + 2p orbitals can’t give it; hybrid orbitals can.', 'hyb-why'],
+    ['Four identical bonds at 109.5°, like a tetrahedron', false, 'That is what experiments actually show. Pure 2s + 2p orbitals can’t give it; hybrid orbitals can.', 'hyb-why'],
     ['Four identical bonds at 90°', false, 'The 2s orbital is different from the 2p orbitals, so the bonds wouldn’t all be the same.', 'hyb-why'],
-    ['Two bonds in a straight line', false, 'Carbon makes four bonds in CH₄. The question is what angles pure orbitals would give.', 'hyb-why']], tip: 'Hybridization explains the shapes we actually measure.' },
+    ['Two bonds in a straight line, 180° apart', false, 'Carbon makes four bonds in CH₄. The question is what angles pure orbitals would give.', 'hyb-why']], tip: 'Hybridization explains the shapes we actually measure.' },
   { q: 'Experiments show CH₄ has four identical C–H bonds at 109.5°. How does valence bond theory explain this?', c: [
-    ['C mixes its 2s and three 2p orbitals into four identical sp³ hybrid orbitals', true, 'Four equal hybrids point to the corners of a tetrahedron: 109.5° apart.'],
-    ['C uses its 2s and 2p orbitals unchanged', false, 'Unmixed orbitals would give one different bond and 90° angles.', 'hyb-why'],
-    ['C uses four 2p orbitals', false, 'There are only three 2p orbitals in any p subshell.', 'hybrid-count'],
-    ['Each H atom hybridizes', false, SLIP['hydrogen-hybridized'], 'hydrogen-hybridized']] },
+    ['C mixes its 2s and three 2p orbitals into four sp³ hybrids', true, 'Four equal hybrids point to the corners of a tetrahedron: 109.5° apart.'],
+    ['C uses its 2s and 2p orbitals unchanged, without any mixing', false, 'Unmixed orbitals would give one different bond and 90° angles.', 'hyb-why'],
+    ['C uses four 2p orbitals, one for each C–H bond', false, 'There are only three 2p orbitals in any p subshell.', 'hybrid-count'],
+    ['Each H atom hybridizes its 1s orbital to fit the carbon', false, SLIP['hydrogen-hybridized'], 'hydrogen-hybridized']] },
   { q: 'The number of hybrid orbitals an atom uses equals…', c: [
-    ['the number of electron groups around it (bonded atoms + lone pairs)', true, 'One hybrid per group: each σ bond and each lone pair gets its own hybrid.'],
-    ['the number of bonds it makes', false, 'Lone pairs need hybrids too, and a double bond uses only one hybrid (for its σ part).', 'forgot-lone-pairs'],
-    ['its number of valence electrons', false, 'N has 5 valence electrons but uses 4 sp³ hybrids in NH₃. Count groups, not electrons.', 'hybrid-count'],
-    ['always 4', false, 'BF₃ uses 3 (sp²) and BeCl₂ uses 2 (sp). It depends on the number of groups.', 'hybrid-count']] },
+    ['the number of electron groups (bonded atoms + lone pairs)', true, 'One hybrid per group: each σ bond and each lone pair gets its own hybrid.'],
+    ['the number of bonds it makes, counting a double bond twice', false, 'Lone pairs need hybrids too, and a double bond uses only one hybrid (for its σ part).', 'forgot-lone-pairs'],
+    ['its number of valence electrons, one hybrid per electron', false, 'N has 5 valence electrons but uses 4 sp³ hybrids in NH₃. Count groups, not electrons.', 'hybrid-count'],
+    ['always 4, since there is one s and three p orbitals', false, 'BF₃ uses 3 (sp²) and BeCl₂ uses 2 (sp). It depends on the number of groups.', 'hybrid-count']] },
   { q: 'What do hybrid orbitals hold?', c: [
     ['σ bonds and lone pairs', true, 'Hybrids point toward bonded atoms (σ) or hold lone pairs.'],
     ['π bonds', false, SLIP['pi-from-hybrid'], 'pi-from-hybrid'],
@@ -871,14 +871,14 @@ const T2_WHY = [
 T2_WHY.push(
   { q: 'Why can’t a carbon atom form five bonds using sp³d hybrid orbitals?', c: [
     ['Carbon’s valence shell (n = 2) has no d orbitals', true, 'Only n = 3 and higher shells have d orbitals, so sp³d and sp³d² are only possible from period 3 on (P, S, Cl, Xe…).'],
-    ['sp³d hybrids are only for metals', false, 'PCl₅ and SF₄ use sp³d and they are nonmetals. The issue is that n = 2 has no d orbitals.', 'hyb-why'],
-    ['Five bonds would need five s orbitals', false, 'A hybrid set uses one s. sp³d uses s + 3 p + 1 d, and carbon has no d.', 'hybrid-count'],
-    ['Carbon’s 2s orbital is full', false, 'Carbon promotes a 2s electron when it hybridizes. The missing d orbitals are the problem.', 'hyb-why']] },
+    ['sp³d hybrids are only for metals, not for nonmetals like carbon', false, 'PCl₅ and SF₄ use sp³d and they are nonmetals. The issue is that n = 2 has no d orbitals.', 'hyb-why'],
+    ['Five bonds would need five s orbitals, and carbon has only one', false, 'A hybrid set uses one s. sp³d uses s + 3 p + 1 d, and carbon has no d.', 'hybrid-count'],
+    ['Carbon’s 2s orbital is full, so it can’t join a hybrid', false, 'Carbon promotes a 2s electron when it hybridizes. The missing d orbitals are the problem.', 'hyb-why']] },
   { q: 'PF₅ exists, but NF₅ does not. Why?', c: [
-    ['N (period 2) has no d orbitals, so it can’t make 5 hybrids; P (period 3) can use sp³d', true, 'N is limited to 4 electron groups (sp³ at most).'],
-    ['N is more electronegative than P', false, 'Electronegativity isn’t the reason. N has no valence d orbitals for a 5th hybrid.', 'hyb-why'],
-    ['F can’t bond to N', false, 'NF₃ exists, so N–F bonds are fine. N just can’t hold 5 groups.', 'hyb-why'],
-    ['P has more valence electrons than N', false, 'Both have 5 valence electrons. The difference is d orbitals in P’s n = 3 shell.', 'hyb-why']] });
+    ['N (period 2) has no d orbitals for a fifth hybrid; P can use sp³d', true, 'N is limited to 4 electron groups (sp³ at most).'],
+    ['N is more electronegative than P, so it can’t share five electron pairs', false, 'Electronegativity isn’t the reason. N has no valence d orbitals for a 5th hybrid.', 'hyb-why'],
+    ['F can’t bond to N, because both atoms are too electronegative', false, 'NF₃ exists, so N–F bonds are fine. N just can’t hold 5 groups.', 'hyb-why'],
+    ['P has more valence electrons than N to share with five F atoms', false, 'Both have 5 valence electrons. The difference is d orbitals in P’s n = 3 shell.', 'hyb-why']] });
 function genWhy(numOnly) {
   if (numOnly || chance(0.45)) {
     const n = rint(1, 3), hyb = ['sp', 'sp2', 'sp3'][n - 1];
@@ -1146,19 +1146,19 @@ function genLabel() {
 const T3_PI = [
   { q: 'Which orbitals overlap to make a π bond?', c: [
     ['Unhybridized p orbitals, side by side', true, 'The leftover p orbitals stand parallel and overlap above and below the bond axis.'],
-    ['Hybrid orbitals, side by side', false, SLIP['pi-from-hybrid'], 'pi-from-hybrid'],
-    ['p orbitals, head-on', false, 'Head-on overlap puts density on the axis: that makes a σ bond.', 'sigma-vs-pi'],
-    ['s orbitals', false, 's orbitals are spheres, so they can only overlap head-on (σ).', 'pi-from-s']] },
+    ['Hybrid orbitals, overlapping side by side', false, SLIP['pi-from-hybrid'], 'pi-from-hybrid'],
+    ['p orbitals, head-on along the bond axis', false, 'Head-on overlap puts density on the axis: that makes a σ bond.', 'sigma-vs-pi'],
+    ['s orbitals, overlapping above and below the axis', false, 's orbitals are spheres, so they can only overlap head-on (σ).', 'pi-from-s']] },
   { q: 'In ethene (C₂H₄), where is the π electron density?', art: etheneSvg(), c: [
     ['Above and below the plane of the molecule', true, 'Each C keeps one unhybridized 2p orbital standing up out of the plane. They overlap above and below.'],
-    ['Along the C–C axis', false, 'That is where the σ bond’s density is. The π density is above and below the axis.', 'sigma-vs-pi'],
-    ['In the C–H bonds', false, 'The C–H bonds are σ bonds (C sp² – H 1s). The π bond is between the two carbons.', 'pi-location'],
-    ['On the H atoms', false, 'H only uses 1s and never makes π bonds.', 'pi-location']] },
+    ['Along the C–C axis, between the two nuclei', false, 'That is where the σ bond’s density is. The π density is above and below the axis.', 'sigma-vs-pi'],
+    ['In the four C–H bonds around the carbons', false, 'The C–H bonds are σ bonds (C sp² – H 1s). The π bond is between the two carbons.', 'pi-location'],
+    ['On the H atoms at the ends of the molecule', false, 'H only uses 1s and never makes π bonds.', 'pi-location']] },
   { q: 'How are the two π bonds in ethyne (C₂H₂) arranged?', c: [
-    ['At 90° to each other, both wrapped around the C–C axis', true, 'Each sp carbon has two leftover p orbitals at right angles, so the two π bonds are perpendicular.'],
-    ['Parallel, on the same side of the axis', false, 'The two leftover p orbitals on each C are perpendicular, so the π bonds are too.', 'pi-geometry'],
-    ['Both on the C–C axis', false, 'Density on the axis belongs to the σ bond. π density is off the axis.', 'sigma-vs-pi'],
-    ['One is between C and H', false, 'The C–H bonds are σ (C sp – H 1s). Both π bonds are between the carbons.', 'pi-location']] },
+    ['At 90° to each other, around the C–C axis', true, 'Each sp carbon has two leftover p orbitals at right angles, so the two π bonds are perpendicular.'],
+    ['Parallel to each other, on the same side of the axis', false, 'The two leftover p orbitals on each C are perpendicular, so the π bonds are too.', 'pi-geometry'],
+    ['Both on the C–C axis, between the two nuclei', false, 'Density on the axis belongs to the σ bond. π density is off the axis.', 'sigma-vs-pi'],
+    ['One between the carbons, one between C and H', false, 'The C–H bonds are σ (C sp – H 1s). Both π bonds are between the carbons.', 'pi-location']] },
   { q: 'How many unhybridized p orbitals does an sp² carbon have?', c: [
     ['1', true, 'sp² uses one s + two p, so one p is left over. It can make one π bond.'],
     ['0', false, 'That describes sp³ (all three p orbitals mixed in).', 'hybrid-count'],
@@ -1172,38 +1172,38 @@ const T3_PI = [
 ];
 T3_PI.push(
   { q: 'A classmate says N₂ has three π bonds, one from each pair of p orbitals. Do you agree?', c: [
-    ['No: one pair of p orbitals overlaps head-on (σ), so N≡N is 1 σ + 2 π', true, 'Only the two p orbitals perpendicular to the bond axis can overlap side by side. The one along the axis makes the σ bond.'],
-    ['Yes: three p orbitals make three π bonds', false, 'The p orbital pointing along the axis overlaps end-on, which is σ, not π.', 'sigma-pi-total'],
-    ['No: N₂ has no π bonds', false, 'A triple bond has two π bonds.', 'pi-count'],
-    ['No: N₂ has one π bond', false, 'Triple = 1 σ + 2 π.', 'pi-count']] },
+    ['No: one p pair overlaps head-on (σ), so N≡N is 1 σ + 2 π', true, 'Only the two p orbitals perpendicular to the bond axis can overlap side by side. The one along the axis makes the σ bond.'],
+    ['Yes: each of the three pairs of p orbitals makes one π bond', false, 'The p orbital pointing along the axis overlaps end-on, which is σ, not π.', 'sigma-pi-total'],
+    ['No: N₂ has no π bonds, only three σ bonds', false, 'A triple bond has two π bonds.', 'pi-count'],
+    ['No: N₂ has one π bond, and the other two bonds are σ', false, 'Triple = 1 σ + 2 π.', 'pi-count']] },
   { q: 'In allene, H₂C=C=CH₂, how are the two CH₂ groups arranged?', c: [
-    ['In perpendicular planes', true, 'The middle C is sp with two p orbitals at 90°. Each makes a π bond with a different end carbon, which locks the two CH₂ planes at 90° to each other.'],
-    ['In the same plane', false, 'The two π bonds use the middle carbon’s two perpendicular p orbitals, so the ends are twisted 90° apart.', 'pi-geometry'],
-    ['Free to rotate', false, 'Both C=C bonds have a π bond, which blocks rotation.', 'rotation-sigma'],
-    ['Tilted at 109.5°', false, 'The two p orbitals on the sp carbon are at 90°, so the planes are perpendicular.', 'pi-geometry']] });
+    ['In perpendicular planes (90° apart)', true, 'The middle C is sp with two p orbitals at 90°. Each makes a π bond with a different end carbon, which locks the two CH₂ planes at 90° to each other.'],
+    ['In the same flat plane, like the H atoms of ethene', false, 'The two π bonds use the middle carbon’s two perpendicular p orbitals, so the ends are twisted 90° apart.', 'pi-geometry'],
+    ['Free to rotate around the C=C=C axis', false, 'Both C=C bonds have a π bond, which blocks rotation.', 'rotation-sigma'],
+    ['In planes tilted 109.5° from each other', false, 'The two p orbitals on the sp carbon are at 90°, so the planes are perpendicular.', 'pi-geometry']] });
 const T3_ROT = [
   { q: 'Why can’t the two ends of a C=C double bond twist freely?', art: etheneSvg(), c: [
-    ['Twisting turns the p orbitals away from each other and breaks the π overlap', true, 'π overlap needs the two p orbitals parallel. A twist destroys it, which costs a lot of energy.'],
-    ['Twisting would break the σ bond', false, 'A σ bond is symmetric around the axis, so spinning doesn’t change its overlap. The π bond is the problem.', 'rotation-sigma'],
+    ['Twisting breaks the side-by-side π overlap', true, 'π overlap needs the two p orbitals parallel. A twist destroys it, which costs a lot of energy.'],
+    ['Twisting would stretch and break the σ bond', false, 'A σ bond is symmetric around the axis, so spinning doesn’t change its overlap. The π bond is the problem.', 'rotation-sigma'],
     ['The carbon atoms are too heavy to rotate', false, 'Mass is not the issue: C–C single bonds rotate freely.', 'rotation-why'],
-    ['The H atoms bump into each other', false, 'The hydrogens are not the reason. The side-by-side π overlap would be lost.', 'rotation-why']] },
+    ['The H atoms on the two ends bump into each other', false, 'The hydrogens are not the reason. The side-by-side π overlap would be lost.', 'rotation-why']] },
   { q: 'Which bond allows free rotation at room temperature?', c: [
     ['The C–C single bond in ethane', true, 'A single bond is only σ, and σ overlap stays the same as the ends spin.'],
     ['The C=C double bond in ethene', false, 'The π part of a double bond locks the rotation.', 'rotation-sigma'],
-    ['Both rotate freely', false, 'The double bond’s π overlap would be broken by twisting.', 'rotation-sigma'],
-    ['Neither one can rotate', false, 'Single (σ-only) bonds rotate freely.', 'rotation-sigma']] },
+    ['Both rotate freely at room temperature', false, 'The double bond’s π overlap would be broken by twisting.', 'rotation-sigma'],
+    ['Neither one can rotate; all bonds are locked', false, 'Single (σ-only) bonds rotate freely.', 'rotation-sigma']] },
   { q: 'Ethene’s two CH₂ ends are twisted 90° from each other. What happens to the p orbitals?', c: [
     ['They end up perpendicular, so there is no π overlap', true, 'At 90° the p orbitals don’t overlap at all, so the π bond is broken.'],
-    ['They overlap even more', false, 'Overlap is best when the p orbitals are parallel. Twisting reduces it.', 'rotation-why'],
+    ['They overlap even more, making the π bond stronger', false, 'Overlap is best when the p orbitals are parallel. Twisting reduces it.', 'rotation-why'],
     ['They turn into hybrid orbitals', false, 'Twisting doesn’t change hybridization. It just pulls the p orbitals out of alignment.', 'rotation-why'],
-    ['Nothing changes', false, 'The π overlap depends on the p orbitals being parallel. At 90° it’s gone.', 'rotation-why']] }
+    ['Nothing changes; the π bond stays intact', false, 'The π overlap depends on the p orbitals being parallel. At 90° it’s gone.', 'rotation-why']] }
 ];
 const T3_RES = [
   { q: 'Experiments show all three C–O bonds in CO₃²⁻ are identical. What is the best explanation?', c: [
-    ['The π electrons are delocalized over all three O atoms (a resonance hybrid)', true, 'No single Lewis structure is right. The π electrons are spread over the whole ion.'],
+    ['The π electrons are spread over all three C–O bonds', true, 'No single Lewis structure is right. The π electrons are spread over the whole ion.'],
     ['The double bond rapidly flips from one O to another', false, 'The ion is not switching back and forth. It is one structure, a blend of the resonance forms.', 'resonance-flip'],
-    ['There are three C=O double bonds', false, 'That would put 12 electrons around C, more than an octet. Each C–O bond is about 1⅓.', 'resonance'],
-    ['There are no π bonds in carbonate', false, 'There is one π bond’s worth of electrons, spread over all three C–O bonds.', 'resonance']] },
+    ['There are three C=O double bonds, one to each O atom', false, 'That would put 12 electrons around C, more than an octet. Each C–O bond is about 1⅓.', 'resonance'],
+    ['There are no π bonds in carbonate, only σ bonds', false, 'There is one π bond’s worth of electrons, spread over all three C–O bonds.', 'resonance']] },
   { q: 'What is the bond order of each C–O bond in CO₃²⁻?', c: [
     ['1⅓', true, '4 bonds’ worth (3 σ + 1 π) spread over 3 C–O links: 4 ÷ 3 = 1⅓.'],
     ['1½', false, '1½ is for two equivalent bonds sharing one π (like O₃ or NO₂⁻). Carbonate has three.', 'resonance'],
@@ -1232,9 +1232,9 @@ const genResonance = () => staticQ('resonance', Object.assign({ tip: 'Resonance 
 /* ================= TILE 4: MO Builder (§8.4) ================= */
 const T4_LCAO = [
   { q: 'Two 1s orbitals combine in phase (same sign). What forms?', c: [
-    ['A bonding σ1s MO with extra density between the nuclei', true, 'Waves in phase add up between the nuclei: bonding, lower in energy.'],
+    ['A bonding σ1s MO, with density between the nuclei', true, 'Waves in phase add up between the nuclei: bonding, lower in energy.'],
     ['An antibonding σ*1s MO with a node between the nuclei', false, 'That comes from combining out of phase (opposite signs).', 'lcao-phase'],
-    ['A π1s MO', false, 's orbitals are spheres and only overlap head-on, so they make σ MOs only.', 'pi-from-s'],
+    ['A π1s MO with density above and below the axis', false, 's orbitals are spheres and only overlap head-on, so they make σ MOs only.', 'pi-from-s'],
     ['Nothing: two 1s orbitals cannot combine', false, 'They combine in H₂. In phase gives bonding, out of phase gives antibonding.', 'lcao-phase']] },
   { q: 'A molecular orbital has a node (zero density) between the two nuclei. It is…', c: [
     ['antibonding', true, 'Out-of-phase waves cancel between the nuclei. Antibonding MOs are higher in energy.'],
@@ -1243,9 +1243,9 @@ const T4_LCAO = [
     ['a core orbital', false, 'Node position tells bonding vs antibonding, not core vs valence.', 'lcao-phase']] },
   { q: 'Combining 2 atomic orbitals gives how many molecular orbitals?', c: [
     ['2: one bonding and one antibonding', true, 'Orbitals are conserved: 2 in, 2 out.'],
-    ['1', false, 'Orbitals are never lost: 2 AOs in → 2 MOs out.', 'mo-count'],
-    ['4', false, 'You get exactly as many MOs as AOs you started with.', 'mo-count'],
-    ['3', false, 'n AOs in = n MOs out, so 2 in gives 2 out.', 'mo-count']] },
+    ['1: a single bonding MO', false, 'Orbitals are never lost: 2 AOs in → 2 MOs out.', 'mo-count'],
+    ['4: two bonding and two antibonding', false, 'You get exactly as many MOs as AOs you started with.', 'mo-count'],
+    ['3: bonding, nonbonding and antibonding', false, 'n AOs in = n MOs out, so 2 in gives 2 out.', 'mo-count']] },
   { q: 'Compared with the two atomic orbitals it came from, a bonding MO is…', c: [
     ['lower in energy', true, 'Electrons in a bonding MO are attracted to both nuclei, so they are more stable.'],
     ['higher in energy', false, 'That is the antibonding MO.', 'lcao-phase'],
@@ -1267,7 +1267,7 @@ function genLcao() {
 }
 const orderOpts = an => [
   opt('π2p below σ2p (s–p mixing)', an.type === 'low', an.type === 'low' ? `${an.atom} is in the Li–N group, where s–p mixing pushes σ2p above π2p.` : SLIP['wrong-ordering'], 'wrong-ordering'),
-  opt('σ2p below π2p', an.type === 'high', an.type === 'high' ? `${an.atom} is in the O–Ne group, where σ2p is below π2p.` : SLIP['wrong-ordering'], 'wrong-ordering')];
+  opt('σ2p below π2p (no s–p mixing)', an.type === 'high', an.type === 'high' ? `${an.atom} is in the O–Ne group, where σ2p is below π2p.` : SLIP['wrong-ordering'], 'wrong-ordering')];
 function genOrdering() {
   const [a, q] = drawBag('ordering', MO_SPECIES.filter(s => moType(s[0]) !== '1s')), an = moAnalyze(a, q);
   return { topic: 'ordering', tag: F(an.f), stem: '', tip: 'For the second row the 2p ordering flips partway across the period. Find which element the molecule is made of; an ion uses its element’s diagram.', parts: [choicePart(`Which energy ordering does the MO diagram for ${F(an.f)} use?`, orderOpts(an), { keep: true, hint: 'Which element is it? The charge doesn’t change the ordering.', solution: an.type === 'low' ? 'π2p below σ2p (Li₂ through N₂).' : 'σ2p below π2p (O₂ through Ne₂).' })] };
@@ -1401,10 +1401,10 @@ const T1_STRENGTH = [
     ['H–I', false, 'H–I is the longest, so it is the <b>weakest</b> (298 kJ/mol). The big 5p orbital of I overlaps H 1s poorly.', 'length-strength'],
     ['They are all equal: each is one σ bond', false, 'Each is a single σ bond, but the overlap differs. In this series, the shorter bond overlaps better and is stronger.', 'length-strength']], sol: 'H–Cl 431 > H–Br 366 > H–I 298 kJ/mol: in this series, shorter bond, better overlap, stronger bond.' }),
   () => ({ q: 'A C=C bond (614 kJ/mol) is not twice as strong as a C–C bond (347 kJ/mol). What does that tell you about the π bond?', art: t81(['C–C', 'C=C', 'C≡C'], 'LE'), c: [
-    ['The π bond adds only about 267 kJ/mol, so it is weaker than the σ bond', true, 'Side-by-side p overlap is smaller than end-to-end overlap, so a π bond is weaker than a σ bond (OpenStax §8.1).'],
-    ['The π bond is stronger than the σ bond', false, 'If π were stronger, C=C would be more than 2 × 347 = 694 kJ/mol. It is only 614.', 'pi-strength'],
-    ['σ and π bonds are equally strong', false, 'Then C=C would be 2 × 347 = 694 kJ/mol. The actual 614 shows the π part is weaker.', 'pi-strength'],
-    ['A C=C bond has no σ bond', false, SLIP['sigma-pi-total'], 'sigma-pi-total']], sol: '614 − 347 = 267 kJ/mol for the π part, less than the σ bond’s 347: π overlap (side by side) is weaker than σ overlap (end to end).' }),
+    ['The π part (about 267 kJ/mol) is weaker than the σ bond', true, 'Side-by-side p overlap is smaller than end-to-end overlap, so a π bond is weaker than a σ bond (OpenStax §8.1).'],
+    ['The π bond is stronger than the σ bond, so it adds the most', false, 'If π were stronger, C=C would be more than 2 × 347 = 694 kJ/mol. It is only 614.', 'pi-strength'],
+    ['σ and π bonds are equally strong, about 347 kJ/mol each', false, 'Then C=C would be 2 × 347 = 694 kJ/mol. The actual 614 shows the π part is weaker.', 'pi-strength'],
+    ['A C=C bond has no σ bond, only two π bonds', false, SLIP['sigma-pi-total'], 'sigma-pi-total']], sol: '614 − 347 = 267 kJ/mol for the π part, less than the σ bond’s 347: π overlap (side by side) is weaker than σ overlap (end to end).' }),
   () => { const s = pick([['C–N', 'C=N', 'C≡N'], ['C–O', 'C=O', 'C≡O'], ['C–C', 'C=C', 'C≡C']]); return { q: 'Which of these bonds is the <b>shortest</b>?', art: t81(s, 'E'), c: [
     [s[2], true, `${s[2]} has the most shared pairs (1σ + 2π), so the atoms are pulled closest: ${T81[s[2]][0]} pm. It is also the strongest.`],
     [s[1], false, `${s[1]} (${T81[s[1]][0]} pm) is shorter than ${s[0]} but longer than ${s[2]}. More bonds → shorter.`, 'bo-length-backwards'],
@@ -1412,19 +1412,19 @@ const T1_STRENGTH = [
     ['All the same length', false, 'More shared electron pairs pull the nuclei closer, so the lengths differ.', 'bo-length-backwards']], sol: s.map(b => `${b} ${T81[b][0]} pm`).join(' · ') + '. More bonds: shorter and stronger.' }; },
   () => ({ q: 'A C≡C bond (839 kJ/mol) is not three times as strong as a C–C bond (347 kJ/mol). Why?', art: t81(['C–C', 'C≡C'], 'E'), c: [
     ['The two π bonds are each weaker than the σ bond', true, '3 × 347 = 1041 kJ/mol, but C≡C is only 839. Side-by-side π overlap is weaker than end-to-end σ overlap.'],
-    ['A triple bond has three σ bonds', false, SLIP['sigma-pi-total'], 'sigma-pi-total'],
-    ['The triple bond is longer', false, 'C≡C (120.8 pm) is shorter than C–C (150.6 pm).', 'bo-length-backwards'],
-    ['π bonds are stronger than σ bonds', false, 'Then C≡C would be more than 1041 kJ/mol. It’s less.', 'pi-strength']], sol: '839 − 347 = 492 kJ/mol for two π bonds: about 246 each, weaker than the 347 σ.' }),
+    ['A triple bond has three σ bonds, not one', false, SLIP['sigma-pi-total'], 'sigma-pi-total'],
+    ['The triple bond is longer, so its overlap is weaker', false, 'C≡C (120.8 pm) is shorter than C–C (150.6 pm).', 'bo-length-backwards'],
+    ['π bonds are stronger than σ bonds of the same atoms', false, 'Then C≡C would be more than 1041 kJ/mol. It’s less.', 'pi-strength']], sol: '839 − 347 = 492 kJ/mol for two π bonds: about 246 each, weaker than the 347 σ.' }),
   () => ({ q: 'Two p orbitals on different atoms overlap the most when they are…', c: [
-    ['pointed end to end, along the line between the nuclei', true, 'OpenStax §8.1: overlap is greatest when the orbitals point at each other along the internuclear axis. That makes a σ bond.'],
+    ['pointed end to end, along the bond axis', true, 'OpenStax §8.1: overlap is greatest when the orbitals point at each other along the internuclear axis. That makes a σ bond.'],
     ['tilted at an angle to each other', false, 'Any arrangement other than end to end gives less overlap.', 'overlap-direction'],
-    ['side by side', false, 'Side-by-side overlap (π) is smaller than end-to-end overlap (σ). That is why a π bond is weaker.', 'overlap-direction'],
+    ['side by side, parallel to each other', false, 'Side-by-side overlap (π) is smaller than end-to-end overlap (σ). That is why a π bond is weaker.', 'overlap-direction'],
     ['in any direction: overlap is the same', false, 'That is only true for two s orbitals, which are spheres. p orbitals point in one direction.', 'overlap-direction']] }),
   () => ({ q: 'The H–H bond energy is 436 kJ/mol. What does that mean?', c: [
-    ['436 kJ is released when 1 mol of H–H bonds forms, and the same is needed to break them', true, 'Bond energy is the depth of the energy well: released on forming, required to break (OpenStax §8.1).'],
-    ['436 kJ is absorbed when 1 mol of H–H bonds forms', false, 'Forming a bond lowers the energy, so energy is released, not absorbed.', 'bond-energy-sign'],
-    ['One H–H bond holds 436 kJ', false, 'The value is per mole of bonds. One bond is only 7.24 × 10⁻¹⁹ J.', 'bond-energy-mole'],
-    ['The bond is 436 pm long', false, 'Bond length is a distance (74 pm for H₂). 436 kJ/mol is an energy.', 'pe-read']] })
+    ['Forming 1 mol of H–H bonds releases 436 kJ; breaking them takes 436 kJ', true, 'Bond energy is the depth of the energy well: released on forming, required to break (OpenStax §8.1).'],
+    ['436 kJ is absorbed when 1 mol of H–H bonds forms from H atoms', false, 'Forming a bond lowers the energy, so energy is released, not absorbed.', 'bond-energy-sign'],
+    ['One H–H bond holds 436 kJ, so breaking one bond takes 436 kJ', false, 'The value is per mole of bonds. One bond is only 7.24 × 10⁻¹⁹ J.', 'bond-energy-mole'],
+    ['The bond is 436 pm long, measured between the two nuclei', false, 'Bond length is a distance (74 pm for H₂). 436 kJ/mol is an energy.', 'pe-read']] })
 ];
 /* ================= v19: Bond energies → ΔH (OpenStax Chemistry 2e §7.5) =================
    ΔH ≈ ΣD(bonds broken) − ΣD(bonds formed). D values are OpenStax Table 7.3 (Bond Energies, kJ/mol), checked on openstax.org 2026-11-12.
@@ -1598,11 +1598,11 @@ function genIsomer() {
 const BS_GROUPS = [['C–C', 'C=C', 'C≡C'], ['C–N', 'C=N', 'C≡N'], ['C–O', 'C=O', 'C≡O'], ['N–N', 'N=N', 'N≡N'], ['O–O', 'O=O'], ['H–F', 'H–Cl', 'H–Br', 'H–I'], ['C–F', 'C–Cl', 'C–Br', 'C–I'], ['C–H', 'N–H', 'O–H'], ['C–N', 'C–O'], ['C–C', 'C–N', 'C–O']];
 const BS_WHY = g => /[=≡]/.test(g.join('')) ? 'Between the same two atoms, more shared pairs → stronger and shorter: triple > double > single.' : /^H–/.test(g[0]) ? 'Down the halogen group the atoms get bigger, the bond gets longer, and overlap gets weaker.' : /^C–[FClBrI]/.test(g[0]) ? 'Bigger halogen → longer bond → weaker bond.' : 'Look each one up in the bond energy table.';
 const T_BECON = [
-  { q: 'Breaking a covalent bond in a gas-phase molecule is always…', c: [['endothermic: energy must be put in', true, 'D is always positive. Pulling bonded atoms apart takes energy.'], ['exothermic: energy is released', false, 'Energy is released when bonds <b>form</b>, not when they break.'], ['either one, depending on the bond', false, 'Every bond takes energy to break; that is why D is always positive.'], ['neither: no energy change', false, 'Bonded atoms are lower in energy than separate atoms, so breaking takes energy.']] },
+  { q: 'Breaking a covalent bond in a gas-phase molecule is always…', c: [['endothermic: energy must be put in', true, 'D is always positive. Pulling bonded atoms apart takes energy.'], ['exothermic: energy is released', false, 'Energy is released when bonds <b>form</b>, not when they break.'], ['either one, depending on the bond', false, 'Every bond takes energy to break; that is why D is always positive.'], ['neither: there is no energy change at all', false, 'Bonded atoms are lower in energy than separate atoms, so breaking takes energy.']] },
   { q: 'A reaction is most likely to be exothermic when…', c: [['weak bonds are broken and strong bonds are formed', true, 'Little energy goes in, more comes out: ΔH = ΣD(broken) − ΣD(formed) is negative.'], ['strong bonds are broken and weak bonds are formed', false, 'That takes in more energy than it releases: endothermic.'], ['the products have weaker bonds than the reactants', false, 'Weaker product bonds release less energy than it took to break the reactants: endothermic.'], ['no bonds are broken', false, 'Reactions break and form bonds; compare their strengths.']] },
-  { q: 'Why is ΔH calculated from bond energies only an estimate?', c: [['Bond energies are averages over many different molecules', true, 'A C–H bond in CH₄ is not exactly the same as one in CH₃OH, so table values are averages.'], ['Bond energies are negative numbers', false, 'D is always positive.'], ['The method only works for liquids', false, 'Bond energies are for gas-phase molecules.'], ['Coefficients are ignored', false, 'Coefficients are used: multiply each molecule’s bonds by its coefficient.']] },
+  { q: 'Why is ΔH calculated from bond energies only an estimate?', c: [['Bond energies are averages from many molecules', true, 'A C–H bond in CH₄ is not exactly the same as one in CH₃OH, so table values are averages.'], ['Bond energies are negative numbers, so the signs get mixed up', false, 'D is always positive.'], ['The method only works for liquids, not for gases', false, 'Bond energies are for gas-phase molecules.'], ['Coefficients in the balanced equation are ignored', false, 'Coefficients are used: multiply each molecule’s bonds by its coefficient.']] },
   { q: 'For bonds between the same two atoms, which is the strongest and shortest?', c: [['a triple bond', true, 'More shared pairs pull the nuclei closer and hold them tighter: triple > double > single.'], ['a double bond', false, 'A triple bond is stronger and shorter still.'], ['a single bond', false, 'A single bond is the weakest and longest of the three.'], ['they are all the same', false, 'Bond strength and length depend on bond order.']] },
-  { q: 'The bond energy D for a bond is the energy needed to…', c: [['break one mole of that bond in gas-phase molecules', true, 'That is the OpenStax definition (§7.5).'], ['form one mole of that bond in a solid', false, 'D is for breaking bonds, in the gas phase.'], ['break one mole of that bond in a liquid', false, 'D is defined for gas-phase molecules.'], ['remove an electron from the atom', false, 'That is ionization energy.']] },
+  { q: 'The bond energy D for a bond is the energy needed to…', c: [['break one mole of that bond in the gas phase', true, 'That is the OpenStax definition (§7.5).'], ['form one mole of that bond in a solid', false, 'D is for breaking bonds, in the gas phase.'], ['break one mole of that bond in a liquid', false, 'D is defined for gas-phase molecules.'], ['remove an electron from the atom', false, 'That is ionization energy.']] },
   { q: 'Forming 2 mol of H–Cl bonds from separate H and Cl atoms (D for H–Cl = 432 kJ/mol)…', c: [['releases 864 kJ', true, 'Forming bonds releases energy: 2 × 432 = 864 kJ.'], ['absorbs 864 kJ', false, 'Forming bonds releases energy; breaking absorbs it.'], ['releases 432 kJ', false, 'Two moles of bonds: 2 × 432.'], ['absorbs 432 kJ', false, 'Forming bonds releases energy, and there are two moles of bonds.']] }
 ];
 function genBEStrong() {
@@ -2036,15 +2036,15 @@ function genMOOrder() {
 /* MO concept questions (ideas from OpenStax Ch 8 exercises 33–49, original wording) */
 const T4_CONCEPT = [
   { q: 'Can a molecule with an <b>odd</b> number of electrons be diamagnetic?', c: [
-    ['No: with an odd count, at least one electron has to be unpaired', true, 'Paired electrons come in twos, so an odd total always leaves at least one single electron → paramagnetic.'],
-    ['Yes, if all of its electrons are in bonding MOs', false, 'Where the electrons sit doesn’t matter; an odd number can’t all be paired.', 'para-dia-flip'],
-    ['Yes, if it is an ion', false, 'Charge changes the count, but an odd count is still odd: one electron is left unpaired.', 'para-dia-flip'],
-    ['Only if it has a triple bond', false, 'Bond type doesn’t change the count. Odd always leaves one unpaired electron.', 'para-dia-flip']] },
+    ['No: an odd count always leaves one electron unpaired', true, 'Paired electrons come in twos, so an odd total always leaves at least one single electron → paramagnetic.'],
+    ['Yes, as long as all of its electrons are in bonding MOs', false, 'Where the electrons sit doesn’t matter; an odd number can’t all be paired.', 'para-dia-flip'],
+    ['Yes, if it is an ion with an extra or missing electron', false, 'Charge changes the count, but an odd count is still odd: one electron is left unpaired.', 'para-dia-flip'],
+    ['Only if it has a triple bond that pairs every electron', false, 'Bond type doesn’t change the count. Odd always leaves one unpaired electron.', 'para-dia-flip']] },
   { q: 'Can a molecule with an <b>even</b> number of electrons be paramagnetic?', c: [
-    ['Yes: O₂ has 12 valence electrons and still has 2 unpaired electrons', true, 'Hund’s rule puts O₂’s last two electrons in the two π*2p orbitals, one each. B₂ is another example.'],
-    ['No: an even number always pairs up completely', false, 'Degenerate orbitals fill one electron each first (Hund), so an even count can still leave unpaired electrons, like O₂.', 'para-dia-flip'],
-    ['Only ions can be paramagnetic', false, 'Neutral O₂ and B₂ are paramagnetic.', 'para-dia-flip'],
-    ['Only if it has no π orbitals', false, 'O₂’s unpaired electrons are in its π* orbitals.', 'para-dia-flip']] },
+    ['Yes: O₂ has 12 valence electrons, but 2 are unpaired', true, 'Hund’s rule puts O₂’s last two electrons in the two π*2p orbitals, one each. B₂ is another example.'],
+    ['No: an even number of electrons always pairs up completely', false, 'Degenerate orbitals fill one electron each first (Hund), so an even count can still leave unpaired electrons, like O₂.', 'para-dia-flip'],
+    ['Only ions can be paramagnetic, never neutral molecules', false, 'Neutral O₂ and B₂ are paramagnetic.', 'para-dia-flip'],
+    ['Only if it has no π orbitals to hold electrons', false, 'O₂’s unpaired electrons are in its π* orbitals.', 'para-dia-flip']] },
   { q: 'Atom A brings 5 atomic orbitals and atom B brings 5. How many molecular orbitals form?', c: [
     ['10', true, 'Orbitals are conserved: 5 + 5 = 10 MOs (half bonding or nonbonding, half antibonding).'],
     ['5', false, 'Every atomic orbital that goes in comes out as part of an MO: 5 + 5 = 10.', 'mo-count'],
@@ -2052,34 +2052,34 @@ const T4_CONCEPT = [
     ['20', false, 'n AOs in → n MOs out: 10 in, 10 out.', 'mo-count']] },
   { q: 'Why is an electron in H₂’s σ1s orbital lower in energy than one in a lone H atom’s 1s?', c: [
     ['In σ1s it is attracted to both nuclei at once', true, 'The bonding MO puts electron density between the two nuclei, so each electron feels two positive charges.'],
-    ['It moves faster in the molecule', false, 'Speed isn’t the reason; the extra nuclear attraction is.', 'lcao-phase'],
-    ['It sits closer to one nucleus only', false, 'Bonding density sits between both nuclei, attracted to both.', 'lcao-phase'],
-    ['Its spin flips in the molecule', false, 'Spin pairing is required, but the energy drop comes from attraction to two nuclei.', 'lcao-phase']] },
+    ['It moves faster in the molecule than in the atom', false, 'Speed isn’t the reason; the extra nuclear attraction is.', 'lcao-phase'],
+    ['It sits closer to one nucleus only, away from the other', false, 'Bonding density sits between both nuclei, attracted to both.', 'lcao-phase'],
+    ['Its spin flips when it pairs up in the molecule', false, 'Spin pairing is required, but the energy drop comes from attraction to two nuclei.', 'lcao-phase']] },
   { q: 'What charge on F₂ would give an ion with a bond order of 2?', c: [
     ['+2 (F₂²⁺)', true, 'Removing 2 electrons from the π*2p orbitals: 12 valence electrons, BO = ½ (8 − 4) = 2.'],
     ['−2 (F₂²⁻)', false, 'Adding 2 electrons puts them in σ*2p: 16 electrons, BO = 0. ' + SLIP['charge-sign'], 'charge-sign'],
     ['+1 (F₂⁺)', false, 'F₂⁺ has 13 valence electrons: BO = ½ (8 − 5) = 1.5.', 'bo-count'],
     ['0 (neutral F₂)', false, 'Neutral F₂ has BO = 1.', 'bo-count']] },
   { q: 'N₂²⁺ and O₂⁴⁺ both have 8 valence electrons. Why is N₂²⁺ diamagnetic but O₂⁴⁺ paramagnetic?', c: [
-    ['Different MO orders: N₂²⁺ fills both π2p orbitals; O₂⁴⁺ fills σ2p first, leaving one electron in each π2p', true, 'After σ2s and σ*2s, 4 electrons remain. With π2p lowest (N) they pair in π2p; with σ2p lowest (O), 2 go to σ2p and 2 spread over the π2p pair.'],
-    ['O has more protons, so its electrons can’t pair', false, 'Nuclear charge doesn’t stop pairing. The MO energy order is what differs.', 'wrong-ordering'],
-    ['O₂⁴⁺ has a higher bond order', false, 'Both have bond order 2. The difference is which MOs hold the electrons.', 'wrong-ordering'],
-    ['N₂²⁺ is diamagnetic because it is an ion', false, 'Both are ions. Magnetism depends on unpaired electrons, set by the MO order.', 'para-dia-flip']] },
+    ['O’s σ2p fills before π2p, leaving one electron in each π2p', true, 'After σ2s and σ*2s, 4 electrons remain. With π2p lowest (N) they pair in π2p; with σ2p lowest (O), 2 go to σ2p and 2 spread over the π2p pair.'],
+    ['O has more protons, so its electrons can’t pair up in the same MO', false, 'Nuclear charge doesn’t stop pairing. The MO energy order is what differs.', 'wrong-ordering'],
+    ['O₂⁴⁺ has a higher bond order, which leaves electrons unpaired', false, 'Both have bond order 2. The difference is which MOs hold the electrons.', 'wrong-ordering'],
+    ['N₂²⁺ is diamagnetic because it is an ion with a 2+ charge', false, 'Both are ions. Magnetism depends on unpaired electrons, set by the MO order.', 'para-dia-flip']] },
   { q: 'Which has the higher first ionization energy: an H atom or an H₂ molecule?', c: [
-    ['H₂: its electrons are in σ1s, lower in energy than H’s 1s', true, 'Lower energy = more tightly held, so more energy is needed to remove one.'],
-    ['The H atom', false, 'H₂’s electrons sit in a bonding MO below the atomic 1s, so they are harder to remove.', 'ionize-wrong-mo'],
-    ['They are the same', false, 'Bonding lowers the electron energy, so H₂ holds its electrons more tightly.', 'ionize-wrong-mo'],
+    ['H₂: its σ1s electrons are lower in energy than H’s 1s', true, 'Lower energy = more tightly held, so more energy is needed to remove one.'],
+    ['The H atom: its single electron is held more tightly', false, 'H₂’s electrons sit in a bonding MO below the atomic 1s, so they are harder to remove.', 'ionize-wrong-mo'],
+    ['They are the same, since both electrons come from H 1s orbitals', false, 'Bonding lowers the electron energy, so H₂ holds its electrons more tightly.', 'ionize-wrong-mo'],
     ['H₂, because it has two protons in one nucleus', false, 'H₂ has two separate nuclei. The reason is the lower-energy bonding MO.', 'ionize-wrong-mo']] },
   { q: 'Which has the higher first ionization energy: an O atom or an O₂ molecule?', c: [
-    ['The O atom: O₂ loses an electron from π*2p, which is higher in energy than O’s 2p', true, 'O₂’s HOMO is antibonding (above the atomic 2p), so that electron is easier to remove.'],
+    ['The O atom: O₂ loses a higher-energy π*2p electron', true, 'O₂’s HOMO is antibonding (above the atomic 2p), so that electron is easier to remove.'],
     ['O₂: bonding always holds electrons more tightly', false, 'Not for O₂: its highest electrons are in antibonding π*2p, above the atomic 2p.', 'ionize-wrong-mo'],
-    ['They are the same', false, 'O₂’s HOMO (π*2p) is higher in energy than O’s 2p, so they differ.', 'ionize-wrong-mo'],
+    ['They are the same, since both lose a 2p electron', false, 'O₂’s HOMO (π*2p) is higher in energy than O’s 2p, so they differ.', 'ionize-wrong-mo'],
     ['O₂, because it is paramagnetic', false, 'Magnetism doesn’t set ionization energy. Compare the energy of the electron being removed.', 'ionize-wrong-mo']] },
   { q: 'Boron is 2s²2p¹. In the MO diagram of B₂, how many 2p orbitals from each B atom combine?', c: [
-    ['All three: every valence orbital combines, even the empty ones', true, 'MOs form from all valence AOs; empty ones simply give MOs that stay empty.'],
+    ['All three, even the empty ones', true, 'MOs form from all valence AOs; empty ones simply give MOs that stay empty.'],
     ['Only one, because B has one p electron', false, 'Electron count doesn’t limit which orbitals combine. All three 2p orbitals form MOs.', 'mo-count'],
-    ['Two', false, 'All three 2p orbitals on each atom combine.', 'mo-count'],
-    ['None: B₂ uses only 2s orbitals', false, 'B₂’s bonding electrons are in the π2p orbitals.', 'mo-count']] }
+    ['Two: the ones that line up with the other atom', false, 'All three 2p orbitals on each atom combine.', 'mo-count'],
+    ['None: B₂ uses only its 2s orbitals to bond', false, 'B₂’s bonding electrons are in the π2p orbitals.', 'mo-count']] }
 ];
 const genMOConcept = () => staticQ('moconcept', Object.assign({ tip: 'Unpaired electrons → paramagnetic. n AOs → n MOs. Electron energy decides ionization.' }, drawBag('t4con', T4_CONCEPT)));
 /* ================= v8: Orbital Studio: place orbitals on atoms in 3D, then label the overlaps ================= */

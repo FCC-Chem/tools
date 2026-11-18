@@ -597,7 +597,24 @@ function spotTap(i) {
 }
 
 /* ----- quizzes ----- */
-function pickDistractors(g, n) {
+function pickDistractors(g, n) { return lengthFair(g, pickDistractorsRaw(g, n)); }
+// When the right name would be the longest choice (Carboxylic acid, Alcohol...), most of the time trade one
+// distractor that is not the look-alike partner for a group whose name is about as long or longer.
+// Otherwise "pick the longest name" pays off. Never swap in a group that would also be right (benzaldehyde has a ring).
+const KEEP_LONGEST = 0.2;  // sometimes leave it longest, as chance would
+const NO_SWAP_IN = {phenol: ['arene'], aldehyde: ['arene']};
+function lengthFair(g, d) {
+  const near = x => x.name.length * 1.2 > g.name.length || g.name.length - x.name.length < 4;  // not much shorter
+  if (!d.length || d.some(x => x.name.length >= g.name.length) || Math.random() < KEEP_LONGEST) return d;
+  const keep = new Set([g.id, ...d.map(x => x.id), ...(NO_SWAP_IN[g.id] || [])]);
+  const pool = GROUPS.filter(x => !keep.has(x.id) && near(x));
+  if (!pool.length) return d;
+  const partner = x => SLIPS.some(s => s.pair.includes(g.id) && s.pair.includes(x.id));
+  let i = d.length - 1; while (i > 0 && partner(d[i])) i--;
+  if (partner(d[i])) return d;
+  const out = d.slice(); out[i] = pool[Math.floor(Math.random() * pool.length)]; return out;
+}
+function pickDistractorsRaw(g, n) {
   if (g.id === 'phenol') return pickDistractorsBase(g, n + 1).filter(x => x.id !== 'arene').slice(0, n);
   return pickDistractorsBase(g, n);
 }
