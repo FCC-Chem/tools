@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Polyatomic Posse • Polyatomic Ions • ItsDrDan</title>
-<meta name="description" content="Polyatomic ion practice for CHEM 3A and CHEM 1A from the Green Sheet: name to formula and charge, formula to name, the -ate/-ite family game, charge check, and Skill Check Prep.">
+<meta name="description" content="Polyatomic ion practice for CHEM 3A and CHEM 1A from the Green Sheet: name to formula and charge, formula to name, the Ion Families game, charge check, and Skill Check Prep.">
 <link rel="icon" type="image/webp" href="https://itsdrdan.github.io/games/brand/badges/molecule.webp">
 <style>
 :root{
@@ -80,7 +80,7 @@ main.panel{padding:20px;margin-top:16px;scroll-margin-top:calc(var(--topbar) + 1
 .equation.name{font-family:var(--font-display);font-weight:600;font-size:clamp(1.7rem,6vw,2.6rem)}
 .equation .q{color:#c0577a}
 .prompt{font-size:1.2rem;line-height:1.5;font-weight:650;margin:0}
-.answer{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.answer{display:flex;gap:10px;margin-top:14px;align-items:flex-start;flex-wrap:wrap}
 .answer input{flex:1;min-width:0;padding:12px 14px;font-size:1.45rem;min-height:58px;border:1.5px solid var(--line2);border-radius:12px;background:#fff;font-weight:700;letter-spacing:.02em}
 .answer input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px #4b57d11f}
 .answer input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -103,7 +103,7 @@ main.panel{padding:20px;margin-top:16px;scroll-margin-top:calc(var(--topbar) + 1
 .part.ok{color:var(--mint-ink);border:1px solid var(--mint-line)}.part.no{color:var(--rose-ink);border:1px solid var(--rose-line)}
 .tip{display:block;margin-top:8px;padding:8px 11px;border-radius:10px;background:#fff8;color:#5b4714;border:1px solid var(--amber-line)}.tip b{color:#80601a}
 .xp-pop{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:99px;background:#fff;color:#4a3fb0;font-weight:800;font-size:.9rem}
-.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
+.actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
 .detail{margin-top:12px;padding:12px 15px;border-radius:var(--r-md);background:#fafaff;border:1px solid var(--line)}
 .next-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}.next-row .btn.primary{min-width:220px;min-height:56px;font-size:1.08rem}
 .note-small{font-size:.82rem;color:var(--faint);margin:14px 0 0}
@@ -153,7 +153,7 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
 .modal-body{overflow:auto;padding:16px 18px;max-height:calc(90vh - 70px)}
 .sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sheet{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fbfbfe}.sheet h3{margin:0 0 6px;font-size:1rem}.sheet.wide{grid-column:1/-1}
 .sheet table{width:100%;border-collapse:collapse;font-size:.98rem}.sheet td{padding:4px 6px;border-top:1px solid var(--line)}.sheet td:last-child{text-align:right;font-weight:800;color:#26326a}
-.ox-table{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ox-table div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px;text-align:center;font-size:.9rem}.ox-table b{display:block;color:#26326a;font-size:1.02rem}.ox-table .blank{background:none;border:0}
+.ox-table{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;max-width:640px}.ox-table div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 3px;text-align:center;font-size:.86rem;overflow-wrap:anywhere}.ox-table b{display:block;color:#26326a;font-size:1rem}.ox-table .blank{background:none;border:1px dashed #e6e8f0;color:#c9cdda;font-weight:700;display:grid;place-items:center}.ox-table .grp{background:none;border:0;padding:0;font-size:.72rem;font-weight:800;color:var(--faint)}
 
 /* periodic table (kept from the original game) */
 .periodic-instructions{margin:0 0 12px;color:var(--muted);font-size:.9rem}
@@ -185,13 +185,29 @@ dialog{border:0;border-radius:18px;box-shadow:0 24px 80px #14173855;padding:0;wi
  .modes{grid-template-columns:1fr 1fr;gap:9px}.mode{min-height:0;padding:10px 8px 12px;gap:3px}.mode .ms-ico{width:42px;height:42px;font-size:1.25rem;border-radius:12px}.mode b{font-size:1rem}.mode small{font-size:.78rem}
  .skill-card{padding:10px 12px}.skill-card img{width:44px;height:44px}
  main.panel{padding:14px}.question{padding:12px}.prompt{font-size:1.08rem}
- .answer input{flex:1 1 100%}.answer .btn.primary{flex:1}.next-row .btn.primary{width:100%}
+ .answer input,.answer .ce{flex:1 1 100%}.answer .btn.primary{flex:1}.next-row .btn.primary{width:100%}
  .actions{gap:6px}.actions .btn{white-space:nowrap;font-size:.86rem;padding:8px 4px;gap:4px;min-width:0}
  .stat-row{grid-template-columns:1fr 1fr}.stat.rank{grid-column:1/-1}
- .sheet-grid{grid-template-columns:1fr}.ox-table{grid-template-columns:repeat(2,minmax(0,1fr))}.ox-table .blank{display:none}
+ .sheet-grid{grid-template-columns:1fr}.ox-table{gap:4px}.ox-table div{font-size:.54rem;padding:5px 1px;overflow-wrap:normal;letter-spacing:-.01em}.ox-table b{font-size:.84rem}
  html{scroll-padding-top:8px}
 }
 @media(max-width:400px){.tb-xp{display:none}}
+.tb-short,.seg-short{display:none}
+/* Phones: keep the top bar on one row (2026-11-17). Title shortens to logo + "Posse" (logo only under 360px);
+   the hidden words stay readable to screen readers. Course labels shorten to 3A / 1A (aria-labels keep CHEM). */
+@media(max-width:480px){
+ .tb{flex-wrap:nowrap;gap:6px;padding:4px 8px;min-height:0}
+ .tb-brand{gap:6px;min-width:0}
+ .tb-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+ .tb-short{display:inline}
+ .seg{flex:none;padding:3px;gap:3px;border-radius:13px}
+ .seg button{padding:6px 10px;min-height:44px;min-width:46px;font-size:1rem}
+ .seg-full{display:none}.seg-short{display:inline}
+ .tb-xp{display:none}
+ .tb-streak{flex:none;min-height:44px;min-width:44px;justify-content:center;padding:6px 9px}
+ #sheetBtn{flex:none;min-width:44px;justify-content:center;padding:7px 10px}
+}
+@media(max-width:359px){.tb-short{display:none}}
 html.dd-embedded{scroll-padding-top:8px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
@@ -224,11 +240,44 @@ html.dd-embedded{scroll-padding-top:8px}
 .modes{grid-template-columns:repeat(5,minmax(0,1fr))}
 @media(max-width:760px){.modes{grid-template-columns:1fr 1fr}.modes .mode:last-child:nth-child(odd){grid-column:1/-1}}
 .ot-lab{margin:6px 0 14px}
+/* smart formula editor */
+.ce{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+input.ce-src{display:none!important}
+.ce-field{display:flex;align-items:flex-start;gap:6px;border:1.5px solid #ddd0ea;border-radius:12px;background:#fff;min-height:58px;padding:5px 8px 5px 14px;cursor:text}
+.ce-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px #6a4fd822}
+.ce .ce-main{flex:1;min-width:0;min-height:0;border:0;border-radius:0;box-shadow:none;outline:none;background:none;font-size:1.45rem;font-weight:700;letter-spacing:.02em;padding:6px 0;align-self:center;color:#26326a}
+.ce-cbox{display:flex;flex-direction:row;align-items:center;gap:6px;flex:none;align-self:flex-start;margin-top:1px}
+.ce-cbox small{order:-1;font-size:.64rem;font-weight:800;color:#9a86b5;text-transform:uppercase;letter-spacing:.06em;line-height:1}
+.ce-ico{font-style:normal;font-weight:800;font-size:1.05rem;color:#5a3c9b}.ce-ico b{font-size:.7em;vertical-align:.55em;margin-left:1px}
+.ce .ce-chg{flex:none;min-height:0;box-shadow:none;width:3.6em;height:32px;border:2px dashed var(--p-lav-l,#c4aeef);border-radius:8px;background:#faf7ff;font-size:1.06rem;font-weight:800;text-align:center;color:#5a3c9b;outline:none;padding:0 4px}
+.ce .ce-chg:focus{border-style:solid;border-color:var(--accent);background:#fff;box-shadow:none}
+.ce.has-chg .ce-chg{border-style:solid;background:#f1ebff}
+.ce-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ce-tools button{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #e3d6ee;background:#fff;border-radius:10px;min-height:40px;padding:4px 10px;font-weight:800;color:#4b3f5c;font-size:.95rem}
+.ce-tools button:hover{border-color:var(--p-lav-l,#c4aeef);background:#faf7ff}
+.ce-tools button span{font-size:.78rem;font-weight:700;color:#7a6a8a}
+.ce-q{display:inline-flex;gap:4px;flex-wrap:wrap;padding-left:6px;border-left:2px solid #efe6f6}
+.ce-q button{min-width:44px;justify-content:center;background:var(--p-lav,#efe8fd);border-color:var(--p-lav-l,#c4aeef);color:var(--p-lav-i,#5a3c9b)}
+.ce-q button.on{background:linear-gradient(135deg,#7b5ce3,#c45c9b);color:#fff;border-color:transparent}
+.ce-clear{margin-left:auto}
+.ce.tip-sub .ce-field::after{content:'Numbers after a letter turn into subscripts: SO4 → SO₄';position:absolute;transform:translateY(-130%);background:#3d2a6b;color:#fff;font-size:.8rem;font-weight:700;border-radius:8px;padding:4px 9px;pointer-events:none}
+.ce-field{position:relative}
+.ce.off{opacity:.7}
+.ot-row .ce{flex:1}
+@media(max-width:560px){.ce-cbox small{display:none}.ce .ce-main{font-size:1.25rem}.ce-tools button span{display:none}.ce-q{padding-left:0;border-left:0}.ce-clear{margin-left:0}}
+/* Learn with Dr. Dan: bottom video player (same layout as the other games) */
+.video-body{padding:0 20px 20px}.lesson-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.lesson-player{aspect-ratio:16/9;background:#1e2538;border-radius:var(--r-md);overflow:hidden}.lesson-player iframe{width:100%;height:100%;border:0;display:block}
+.lesson-meta h3{margin:10px 0 2px;font-size:1rem}.lesson-meta a{color:var(--accent-d);font-weight:750}
+.video-list{display:grid;gap:8px;align-content:start}.lesson-card{display:flex;gap:11px;text-align:left;align-items:start;border:1px solid var(--line);background:#fafbff;border-radius:12px;padding:9px;width:100%}
+.lesson-card img{width:96px;aspect-ratio:16/9;object-fit:cover;border-radius:7px;flex:none;background:#e6e8f2}.lesson-card b{display:block;font-size:.9rem;line-height:1.3}.lesson-card small{display:block;color:var(--muted);font-size:.76rem}.lesson-card.active{border-color:var(--accent);background:var(--accent-soft)}
+.chapter-links{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:16px;padding-top:12px;font-size:.92rem}.chapter-links a{color:var(--accent-d);font-weight:750}
+@media(max-width:760px){.lesson-layout{grid-template-columns:1fr}.video-body{padding:0 14px 14px}}
 .ot-seg{display:inline-flex;gap:4px;background:#eef0f7;border-radius:12px;padding:4px;margin-bottom:8px}
 .ot-seg button{border:0;background:none;border-radius:9px;padding:8px 14px;min-height:44px;font-weight:800;color:var(--muted)}
 .ot-seg button[aria-pressed="true"]{background:#fff;color:var(--accent-d);box-shadow:0 1px 3px #0002}
 .ot-count{margin:0 0 6px;font-weight:700;color:var(--muted);font-size:.9rem}
-.ot-type label{display:block;margin-bottom:6px}.ot-row{display:flex;gap:8px}.ot-row input{flex:1;min-width:0;font-size:1.15rem;padding:10px 12px;border:2px solid var(--line2);border-radius:12px;min-height:48px}
+.ot-type label{display:block;margin-bottom:6px}.ot-row{display:flex;gap:8px;align-items:flex-start}.ot-row>.btn{min-height:58px}.ot-row input{flex:1;min-width:0;font-size:1.15rem;padding:10px 12px;border:2px solid var(--line2);border-radius:12px;min-height:48px}
 .ot-row input:focus{outline:none;border-color:var(--accent)}
 .ot-tray{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
 .ot-tile{border:2px solid var(--line2);background:#fff;border-radius:12px;min-height:48px;min-width:64px;padding:6px 10px;font-size:1.15rem;font-weight:800;color:#26326a;cursor:grab}
@@ -236,13 +285,28 @@ html.dd-embedded{scroll-padding-top:8px}
 .ot-x{display:inline-block;width:.9em;height:.95em;border:2px dashed #8a93ad;border-radius:4px;vertical-align:-.12em;margin-right:2px}
 .ot-fb{min-height:0;margin:0 0 8px}.ot-fb:not(:empty){border-radius:12px;padding:8px 11px;border:1px solid var(--line)}
 .ot-fb.bad{background:#fff4f2;border-color:#f1c4bd}.ot-fb.good{background:var(--mint);border-color:var(--mint-line)}.ot-fb.info{background:#f4f6fd}
-.ot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-width:520px}
+.ot-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;max-width:600px}
+.ot-grp{text-align:center;font-size:.72rem;font-weight:800;color:var(--faint);letter-spacing:.02em}
+.ot-blank{border:1px dashed #e6e8f0;border-radius:12px;display:grid;place-items:center;color:#c9cdda;font-weight:800;font-size:1rem;min-height:68px}
+/* T43 pastels: blue T, purple 4, pink 3 (colors from the T43 video) */
+.t43-T{--tc:#e4f3fc;--tl:#8fc6e6;--ti:#1f5f86}.t43-4{--tc:#f1e8fc;--tl:#c3a6ea;--ti:#5b3a8f}.t43-3{--tc:#fdeae6;--tl:#efae9f;--ti:#8e3b2a}
+.ot-cell[class*="t43-"],.ox-table div[class*="t43-"]{background:var(--tc);border-color:var(--tl)}.ox-table div[class*="t43-"] b{color:var(--ti)}
+.ot-cell[class*="t43-"] .ot-el{color:var(--ti)}
+.ot-cell[class*="t43-"].sel{background:var(--tc);border-color:var(--accent);border-width:3px}
+.t43-key{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;margin:0 0 10px;max-width:600px;font-size:.9rem}
+.t43-head{margin:0 0 8px;line-height:1.35}.t43-q{margin:8px 0 0;font-size:.84rem;color:var(--muted);line-height:1.35}
+.t43-rows{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.t43-rows li{display:flex;align-items:center;gap:10px;background:var(--tc);border:1.5px solid var(--tl);border-radius:11px;padding:6px 10px;color:#2a2f45;line-height:1.3}
+.t43-rows li b{color:var(--ti)}.t43-rows small{display:block;color:var(--ti);opacity:.85;font-weight:700;font-size:.8rem}
+.t43-badge{flex:none;width:34px;height:34px;border-radius:9px;background:#fff;border:2px solid var(--tl);color:var(--ti);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1.25rem}
 .ot-cell{border:2px dashed var(--line2);background:#fff;border-radius:12px;min-height:68px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#26326a}
 .ot-cell .ot-el{font-size:1.4rem;font-weight:800}
 .ot-cell.sel{border-style:solid;border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 3px #4b57d126}
-.ot-cell.done{border-style:solid;border-color:var(--mint-line);background:var(--mint)}.ot-cell.done.helped{background:#fff8e6;border-color:#f0d89a}
+.ot-cell{position:relative}.ot-cell.done{border-style:solid;border-color:var(--ti,var(--mint-line))}.ot-cell.done::after{content:'✓';position:absolute;top:3px;right:6px;font-size:.8rem;font-weight:900;color:var(--mint-ink)}
+.ot-cell.done.helped{border-color:#e7c25e;box-shadow:inset 0 0 0 2px #f6e2a6}.ot-cell.done.helped::after{color:#a57a12}
+.ot-cell.done .ot-f{color:var(--ti,#26326a)}
 .ot-cell .ot-f{font-size:1.02rem;font-weight:800}.ot-cell small{font-size:.72rem;color:var(--muted);font-weight:700}
-@media(max-width:420px){.ot-cell{min-height:60px}.ot-cell .ot-f{font-size:.9rem}.ot-cell small{font-size:.64rem}}
+@media(max-width:480px){.ot-grid{gap:4px}.ot-cell,.ot-blank{min-height:58px;border-radius:10px}.ot-cell .ot-el{font-size:1.2rem}.ot-cell .ot-f{font-size:.78rem;letter-spacing:-.02em}.ot-cell small{font-size:.56rem;overflow-wrap:anywhere}.ot-blank{font-size:.8rem}.t43-key{font-size:.84rem;padding:9px 10px}.ot-cell.done::after{display:none}}
 /* iOS: no double-tap zoom when buttons are tapped quickly; pinch zoom still works (2026-11-14) */ html{touch-action:manipulation}
 </style>
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
@@ -250,11 +314,87 @@ html.dd-embedded{scroll-padding-top:8px}
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <!-- Canvas: grow the iframe to fit the game (no inner scrollbar). Idea: Rob Gilley -->
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+<style>
+/* ===== Polyatomic Posse theme: warm "sunset ranch" pastels (loads after the shared brand sheet) ===== */
+:root{--accent:#6a4fd8;--accent-d:#553cc0;--accent-soft:#f1edff;
+ --p-sky:#e3f1fd;--p-sky-l:#a9d0f2;--p-sky-i:#1f5f8c;--p-mint:#e2f6ec;--p-mint-l:#9fd9bd;--p-mint-i:#1f6f4c;
+ --p-lav:#efe8fd;--p-lav-l:#c4aeef;--p-lav-i:#5a3c9b;--p-sun:#fff1d6;--p-sun-l:#f2c879;--p-sun-i:#8a5a0b;--p-rose:#fde7ec;--p-rose-l:#f2aabb;--p-rose-i:#9a2f4b;
+ --shadow:0 1px 2px #5a3c9b14,0 8px 22px #5a3c9b12}
+body{background:
+  radial-gradient(#e9dcff 1.2px,transparent 1.3px) 0 0/22px 22px,
+  linear-gradient(180deg,#fff3e6 0,#fbeef6 380px,#f3f0fd 900px,#f6f4fc 100%);background-attachment:fixed}
+.topbar{background:linear-gradient(90deg,#fff7ecee,#fdf0f7ee,#f2eefeee);border-bottom:1px solid #eadff3}
+.tb-logo{background:linear-gradient(135deg,#ffe2b8,#f8c6d8);color:#8a3a5a}
+.seg{background:#f1e9f7}.seg button.active{background:linear-gradient(135deg,#7b5ce3,#c45c9b);box-shadow:0 3px 10px #7b5ce355}
+.tb-streak{background:#ffe9df;color:#b4451f}
+
+/* hero */
+.intro{position:relative;background:linear-gradient(120deg,#ffe8cf 0%,#fcd9e6 48%,#e4dcfd 100%);border:1px solid #f3d6dc;border-radius:26px;padding:16px 20px;margin:4px 0 10px;box-shadow:var(--shadow);overflow:hidden}
+.intro::before,.intro::after{content:'★';position:absolute;color:#fff;opacity:.65;font-size:2.2rem;pointer-events:none}
+.intro::before{right:28px;top:10px;transform:rotate(12deg)}.intro::after{right:92px;bottom:6px;font-size:1.3rem;transform:rotate(-10deg)}
+.intro-logo{background:#fff;border-radius:50%;padding:6px;box-shadow:0 6px 18px #c45c9b33,0 0 0 4px #ffffffaa;width:104px;height:104px}
+.intro h1{background:linear-gradient(90deg,#7a3fb8,#c4467e 55%,#d9752d);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700}
+.eyebrow{color:#9a4a78!important}.intro .lede{color:#4b3f5c}
+details.howto summary{color:#9a4a78}
+
+/* game cards: one pastel per game */
+.mode{--mc:#fff;--ml:var(--line2);--mi:#2a2f45;background:linear-gradient(180deg,#fff 0,var(--mc) 100%);border:2px solid var(--ml);transition:transform .15s ease,box-shadow .15s ease}
+.mode:hover{transform:translateY(-3px);box-shadow:0 10px 24px #5a3c9b22;border-color:var(--mi)}
+.mode b{color:var(--mi)}.mode small{color:#5b5470}
+.mode img.ms-ico{background:#fff!important;border-radius:50%;box-shadow:0 3px 10px #0000001a;padding:3px;width:62px;height:62px}
+.mode[data-mode="n2f"]{--mc:var(--p-sky);--ml:var(--p-sky-l);--mi:var(--p-sky-i)}
+.mode[data-mode="f2n"]{--mc:var(--p-mint);--ml:var(--p-mint-l);--mi:var(--p-mint-i)}
+.mode[data-mode="family"]{--mc:var(--p-lav);--ml:var(--p-lav-l);--mi:var(--p-lav-i)}
+.mode[data-mode="charge"]{--mc:var(--p-sun);--ml:var(--p-sun-l);--mi:var(--p-sun-i)}
+.mode[data-mode="table"]{--mc:var(--p-rose);--ml:var(--p-rose-l);--mi:var(--p-rose-i)}
+.mode.on{background:var(--mc);border-color:var(--mi);box-shadow:0 0 0 4px #ffffffcc,0 0 0 6px var(--ml),0 10px 24px #5a3c9b22}
+.mode.on::after{content:'★';position:absolute;top:8px;right:11px;color:var(--mi);font-size:1rem}
+.mode .meter{background:#ffffffaa}.mode .meter span{background:var(--mi)}
+
+/* ion-set chips */
+.chips-wrap>span{color:#9a4a78}
+.chip{background:#fff;border-color:#e6d9ee;color:#4b3f5c}.chip small{background:#f4eef9;border-radius:99px;padding:0 7px;color:#7a5f8f}
+.chip:hover{border-color:var(--p-lav-l)}
+.chip.on{background:linear-gradient(135deg,#7b5ce3,#b55aa6);border-color:transparent;color:#fff;box-shadow:0 3px 10px #7b5ce344}.chip.on small{background:#ffffff33;color:#fff}
+
+/* skill check card */
+.skill-card{background:linear-gradient(120deg,#fff1cf,#ffe0e6 60%,#efe3ff);border:2px solid #f2c879}
+.skill-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px #c48a2033}.skill-card b{color:#8a4a0b}
+.skill-card .go{background:#fff;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;color:#c4467e}
+
+/* play panel */
+.panel{border-color:#eadff3}
+main.panel{position:relative;background:linear-gradient(180deg,#fff 0,#fffbfd 100%);padding-top:24px}
+main.panel::before{content:'';position:absolute;left:0;right:0;top:0;height:7px;border-radius:var(--r-lg) var(--r-lg) 0 0;background:linear-gradient(90deg,#f2c879,#f2aabb,#c4aeef,#a9d0f2)}
+.play-title{color:#5a3c9b}
+.tag{background:#f4eef9;color:#6a4f86}.tag.quiz{background:var(--p-sun);color:var(--p-sun-i)}
+.question{background:linear-gradient(180deg,#fdfaff,#fff);border-color:#ece3f5}
+.equation{background:linear-gradient(135deg,#efe8fd,#fde7ec);color:#3d2a6b;border:1px solid #e7dbf7}
+.empty{border-color:#e4d5ef;background:#fffafd}
+.answer input{border-color:#ddd0ea}.answer input:focus{border-color:var(--accent);box-shadow:0 0 0 4px #6a4fd822}
+.btn.primary{background:linear-gradient(135deg,#7b5ce3,#c45c9b);border-color:transparent;box-shadow:0 4px 12px #7b5ce344}.btn.primary:hover{background:linear-gradient(135deg,#6a4ad6,#b44c8b)}
+#hintBtn{background:var(--p-sun);border-color:var(--p-sun-l);color:var(--p-sun-i)}
+#guideBtn{background:var(--p-lav);border-color:var(--p-lav-l);color:var(--p-lav-i)}#guideBtn[aria-pressed="true"]{background:#dccff9}
+#solBtn{background:var(--p-rose);border-color:var(--p-rose-l);color:var(--p-rose-i)}
+#videoBtn{background:var(--p-sky);border-color:var(--p-sky-l);color:var(--p-sky-i)}
+.actions .btn:hover{filter:brightness(.97)}
+#skipBtn{background:#fff;border-color:#e3d6ee;color:#5a3c9b}
+.ot-seg{background:#f4eef9}.ot-seg button small{font-size:.72rem;font-weight:800;background:var(--p-mint);color:var(--p-mint-i);border-radius:99px;padding:1px 7px;margin-left:3px}
+.ot-tile{background:linear-gradient(180deg,#fff,#fff6e3);border-color:var(--p-sun-l);color:#6b4708}
+
+/* progress */
+.stat{background:var(--p-sky)}.stat:nth-child(3){background:var(--p-mint)}.stat:nth-child(4){background:var(--p-sun)}.stat:nth-child(5){background:var(--p-rose)}
+.stat.rank{background:linear-gradient(120deg,#efe8fd,#fde7ec)}
+.ion-tally span.got{background:linear-gradient(135deg,#d9f3e6,#e6f0ff);color:#1f6f4c}
+details.section>summary small{color:#7a6a8a}
+.lesson-card.active{border-color:var(--accent);background:var(--accent-soft)}
+@media(max-width:560px){.actions{grid-template-columns:1fr 1fr}.intro{padding:12px 14px;border-radius:20px}.intro-logo{width:76px;height:76px}.intro::after{display:none}}
+</style>
 </head>
 <body><canvas id="celebrationCanvas" aria-hidden="true" hidden></canvas><div class="toasts" id="toasts" aria-live="polite"></div>
 <header class="topbar"><div class="tb">
- <div class="tb-brand"><span class="tb-logo" data-icon="atom" aria-hidden="true"></span>Polyatomic Posse</div>
- <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A">CHEM 3A</button><button type="button" data-course="1A">CHEM 1A</button></div>
+ <div class="tb-brand" aria-label="Polyatomic Posse"><span class="tb-logo" data-icon="atom" aria-hidden="true"></span><span class="tb-name">Polyatomic Posse</span><span class="tb-short" aria-hidden="true">Posse</span></div>
+ <div class="seg" id="course" role="group" aria-label="Course"><button type="button" data-course="3A" aria-label="CHEM 3A"><span class="seg-full">CHEM 3A</span><span class="seg-short">3A</span></button><button type="button" data-course="1A" aria-label="CHEM 1A"><span class="seg-full">CHEM 1A</span><span class="seg-short">1A</span></button></div>
  <div class="tb-xp"><span class="ico" data-icon="trophy" aria-hidden="true"></span><div><b id="rankName">Ion Intern</b><div class="xpbar" aria-hidden="true"><span id="xpFill"></span></div><small id="xpShort">0 XP</small></div></div>
  <div class="tb-streak" title="Current streak"><span data-icon="flame" aria-hidden="true"></span><b id="streak">0</b></div>
  <button type="button" class="tb-btn" id="sheetBtn" aria-label="Open the Green Sheet ion list"><span data-icon="book" aria-hidden="true"></span><span class="lbl">Green Sheet</span></button>
@@ -271,7 +411,7 @@ html.dd-embedded{scroll-padding-top:8px}
 
  <section class="chooser" aria-label="Choose a game">
   <div class="modes" id="modes"></div>
-  <div class="chips-wrap" id="setWrap"><span>Ion set</span><span id="setChips" style="display:contents"></span></div>
+  <div class="chips-wrap" id="setWrap"><span>Practice</span><span id="setChips" style="display:contents"></span></div>
   <button type="button" class="skill-card" id="skillCard"><img src="assets/menu/mode-skill.webp" width="56" height="56" alt="" aria-hidden="true" onerror="this.hidden=true"><span><b>Skill Check Prep</b><small>10 mixed questions on all the ions, then a study plan.</small></span><span class="go" data-icon="arrow" aria-hidden="true"></span></button>
  </section>
 
@@ -288,7 +428,7 @@ html.dd-embedded{scroll-padding-top:8px}
    <div class="choices" id="choices" hidden></div>
    <p class="typing-note" id="typingNote"></p>
    <div class="fb-row"><img class="sully-mood" src="assets/mascot/sully-idle.webp" width="64" height="64" alt="" aria-hidden="true"><div class="feedback" id="feedback" role="status" aria-live="polite" tabindex="-1"></div></div>
-   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button></div>
+   <div class="actions"><button type="button" class="btn" id="hintBtn"><span data-icon="bulb" aria-hidden="true"></span>Hint</button><button type="button" class="btn" id="guideBtn" aria-pressed="false"><span data-icon="levels" aria-hidden="true"></span>Step by step</button><button type="button" class="btn" id="solBtn"><span data-icon="eye" aria-hidden="true"></span>Show answer</button><button type="button" class="btn" id="videoBtn"><span data-icon="video" aria-hidden="true"></span>Video</button></div>
    <div class="guide" id="guide" hidden></div>
    <div class="detail" id="hintBox" hidden></div>
    <div class="next-row"><button type="button" id="nextBtn" class="btn primary" hidden>Next question <span data-icon="arrow" aria-hidden="true"></span></button></div>
@@ -303,6 +443,11 @@ html.dd-embedded{scroll-padding-top:8px}
   <div class="ion-tally" id="ionTally" aria-label="Green Sheet ions you have gotten right"></div>
   <div class="section-foot"><span class="note-small" style="margin:0">XP: +10 correct, +5 first try, +5 with no help, plus a streak bonus. CHEM 3A and CHEM 1A progress are saved separately on this device.</span><button type="button" class="reset-btn" id="resetBtn">Reset my progress</button></div>
  </section>
+
+ <details class="panel section" id="videoSection"><summary><span>Learn with Dr. Dan<small id="videoContext">Videos picked for the current question</small></span></summary>
+  <div class="video-body"><div class="lesson-layout"><div><div class="lesson-player"><iframe id="player" title="Dr. Dan video lesson" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="lesson-meta"><h3 id="lessonTitle"></h3><a id="lessonLink" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a><p class="note-small" style="margin-top:4px">If the video won’t play inside Canvas, use the YouTube link.</p></div></div><div class="video-list" id="videoList"></div></div>
+  <div class="chapter-links"><a href="https://www.youtube.com/@itsdrdan" target="_blank" rel="noopener noreferrer">More from ItsDrDan on YouTube ↗</a><a href="https://itsdrdan.github.io/games/" target="_blank" rel="noopener noreferrer">Dr. Dan’s Chemistry Study Hub ↗</a></div></div>
+ </details>
 
  <details class="panel section" id="ptSection"><summary><span>Periodic table reference<small>Tap an element for its name and atomic number.</small></span></summary>
   <div class="dbody">
@@ -579,12 +724,13 @@ const FAMILIES = [
   { id: 'Te', weight: 1, members: [['tellurate', 'ate'], ['tellurite', 'ite']] }
 ];
 const LEVEL = { per: 1, ate: 0, ite: -1, hypo: -2 };
-const GROUPS = [['all', 'All Green Sheet ions'], ['oxyanions', 'Oxyanion table'], ['common', 'Other common ions'], ['rules', 'Naming-rule examples'], ['solubility', 'Solubility table ion']];
+const GROUPS = [['all', 'All ions'], ['oxyanions', 'Oxyanions'], ['common', 'Common ions'], ['rules', 'Naming rules']]; /* sulfite (solubility table) rides with the naming rules */
+const inSet = (i, k) => k === 'all' || i.group === k || (k === 'rules' && i.group === 'solubility');
 const MODES = {
-  n2f: { label: 'Name → Formula & Charge', short: 'Name → Formula', blurb: 'See the name, type the formula with its charge.', icon: 'pencil' },
-  f2n: { label: 'Formula → Name', short: 'Formula → Name', blurb: 'See the formula, type the ion’s name.', icon: 'eye' },
-  family: { label: 'The -ate/-ite Family', short: '-ate/-ite Family', blurb: 'Know one ion, build its whole family.', icon: 'loop' },
-  charge: { label: 'Charge Check', short: 'Charge Check', blurb: 'Just the charge. Tap it.', icon: 'bolt' }
+  n2f: { label: 'Write the Formula', short: 'Write the Formula', blurb: 'See the name. Type the formula and charge.', icon: 'pencil', stat: 'Name → Formula & Charge', statShort: 'Name → Formula' },
+  f2n: { label: 'Name the Ion', short: 'Name the Ion', blurb: 'See the formula. Type the name.', icon: 'eye', stat: 'Formula → Name', statShort: 'Formula → Name' },
+  family: { label: 'Ion Families', short: 'Ion Families', blurb: 'Build -ite, per-, hypo- and hydrogen- ions.', icon: 'loop', stat: 'The -ate/-ite Family', statShort: '-ate/-ite Family' },
+  charge: { label: 'Charge Check', short: 'Charge Check', blurb: 'Just tap the charge.', icon: 'bolt' }
 };
 const SKILL_PLAN = ['n2f', 'n2f', 'n2f', 'n2f', 'f2n', 'f2n', 'family', 'family', 'charge', 'charge'];
 
@@ -685,10 +831,10 @@ const onSheet = ion => ions.includes(ion);
 
 /* ---------- teaching text ---------- */
 const COLUMN_TIP = {
-  B: 'Boron starts the oxyanion table: BO₃³⁻.', C: 'Period 2 -ate ions have 3 O: BO₃³⁻, CO₃²⁻, NO₃⁻ (charges 3−, 2−, 1− going across).', N: 'Period 2 -ate ions have 3 O: BO₃³⁻, CO₃²⁻, NO₃⁻ (charges 3−, 2−, 1− going across).',
-  Si: 'Silicate is the odd one in period 3: only 3 O, SiO₃²⁻.', P: 'P and As are in the same column: PO₄³⁻ and AsO₄³⁻.', As: 'P and As are in the same column: PO₄³⁻ and AsO₄³⁻.',
-  S: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Se: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Te: 'S, Se and Te are in the same column: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.',
-  Cl: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.', Br: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.', I: 'The halogen -ate ions all look alike: ClO₃⁻, BrO₃⁻, IO₃⁻.'
+  B: 'T43: B is in the blue T (B, C, N, Si), so 3 O. The T runs backward on charge: B 3−, C 2−, N 1−. BO₃³⁻.', C: 'T43: C is in the blue T, so 3 O, and its charge is 2−: CO₃²⁻.', N: 'T43: N is in the blue T, so 3 O. The T runs backward on charge, so N is only 1−: NO₃⁻.',
+  Si: 'T43: Si sits right under C at the bottom of the blue T, so 3 O and the same 2− as carbonate: SiO₃²⁻.', P: 'T43: P and As are in the purple 4, so 4 O, with group 15’s 3− charge: PO₄³⁻ and AsO₄³⁻.', As: 'T43: P and As are in the purple 4, so 4 O, with group 15’s 3− charge: PO₄³⁻ and AsO₄³⁻.',
+  S: 'T43: S, Se and Te are in the purple 4, so 4 O, with group 16’s 2− charge: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Se: 'T43: S, Se and Te are in the purple 4, so 4 O, with group 16’s 2− charge: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.', Te: 'T43: S, Se and Te are in the purple 4, so 4 O, with group 16’s 2− charge: SO₄²⁻, SeO₄²⁻, TeO₄²⁻.',
+  Cl: 'T43: the halogens Cl, Br and I make the pink 3, so 3 O, with group 17’s 1− charge: ClO₃⁻, BrO₃⁻, IO₃⁻.', Br: 'T43: the halogens Cl, Br and I make the pink 3, so 3 O, with group 17’s 1− charge: ClO₃⁻, BrO₃⁻, IO₃⁻.', I: 'T43: the halogens Cl, Br and I make the pink 3, so 3 O, with group 17’s 1− charge: ClO₃⁻, BrO₃⁻, IO₃⁻.'
 };
 const COMMON_TIP = {
   hydronium: 'Hydronium is water plus H⁺: H₂O + H⁺ → H₃O⁺. It is positive.',
@@ -961,14 +1107,24 @@ function ibSpec(o = {}) {
 /*OT-LOGIC-START*/
 /* ---------- Oxyanion Table mode: fill in the Green Sheet -ate table ----------
    Type it: type each cell's ion. Tiles (easier): place "□O₄²⁻" pieces; a tile fits any cell whose ion has that O count and charge. */
-const OT_LAYOUT = ['borate', 'carbonate', 'nitrate', null, 'silicate', 'phosphate', 'sulfate', 'chlorate', null, 'arsenate', 'selenate', 'bromate', null, null, 'tellurate', 'iodate']; /* same staircase as the Green Sheet dialog */
+/* lined up like the periodic table: groups 13-17 across, periods 2-5 down (Si under C, P under N...) */
+const OT_COLS = [13, 14, 15, 16, 17];
+const OT_LAYOUT = ['borate', 'carbonate', 'nitrate', null, null,
+  null, 'silicate', 'phosphate', 'sulfate', 'chlorate',
+  null, null, 'arsenate', 'selenate', 'bromate',
+  null, null, null, 'tellurate', 'iodate'];
+/* faint periodic-table neighbors in the empty spots, so the shape reads as the real table */
+const OT_GHOST = ['', '', '', 'O', 'F', 'Al', '', '', '', '', 'Ga', 'Ge', '', '', '', 'In', 'Sn', 'Sb', '', ''];
+/* T43 method: the blue T (B, C, N + Si) = 3 O, the purple 4 (P, S, As, Se, Te) = 4 O, the pink 3 (Cl, Br, I) = 3 O */
+const T43 = { B: 'T', C: 'T', N: 'T', Si: 'T', P: '4', S: '4', As: '4', Se: '4', Te: '4', Cl: '3', Br: '3', I: '3' };
+const T43_KEY = [['T', 'T', 'the T shape', 'B, C, N, Si', '3 O', 'BO₃³⁻, CO₃²⁻, NO₃⁻, SiO₃²⁻'], ['4', '4', 'the 4 shape', 'P, S, As, Se, Te', '4 O', 'PO₄³⁻, SO₄²⁻, AsO₄³⁻…'], ['3', '3', 'the 3 shape', 'Cl, Br, I', '3 O', 'ClO₃⁻, BrO₃⁻, IO₃⁻']];
 const OT_IONS = OT_LAYOUT.filter(Boolean).map(n => byName(n));
 function otPat(ion) { const a = atomList(baseOf(ion)); return { el: a[0][0], o: (a.find(x => x[0] === 'O') || [0, 0])[1], q: chargeOf(ion) }; }
 const otKey = p => p.o + '|' + p.q;
 const otFits = (key, ion) => key === otKey(otPat(ion));
 function otTiles() { return shuffle(OT_IONS.map(i => otKey(otPat(i)))); }
-const OT_O_RULE = 'O count: top row 3 O; below, 4 O, except Si, Cl, Br and I (3 O).';
-const OT_Q_RULE = 'Charge: B 3−, C 2−, N 1− across the top; below, P and As 3−, Si, S, Se and Te 2−, Cl, Br and I 1−.';
+const OT_O_RULE = 'O count (T43): the blue T (B, C, N, Si) has 3 O; the purple 4 (P, S, As, Se, Te) has 4 O; the pink 3 (Cl, Br, I) has 3 O.';
+const OT_Q_RULE = 'Charge: follow the column’s ion charge: P and As 3−, S, Se and Te 2−, Cl, Br and I 1−. The T runs backward: B 3−, C and Si 2−, N 1−.';
 /* why a tile does not fit a cell (first miss: the rule; later misses: the column tip too) */
 function otWhy(key, ion, miss) {
   const [o, q] = key.split('|').map(Number), p = otPat(ion), bits = [];
@@ -989,8 +1145,8 @@ function otGrade(raw, ion, miss) {
   if (miss > 1 && COLUMN_TIP[want.el]) extra.push(COLUMN_TIP[want.el]);
   return { ...r, note: [r.note, ...extra].filter((x, i, a) => x && a.indexOf(x) === i).join(' ') };
 }
-const OT_RECAP = 'Professor Tip: learn the table by its pattern. Top row: BO₃³⁻, CO₃²⁻, NO₃⁻ (3 O; charges 3−, 2−, 1−). Below: PO₄³⁻ and AsO₄³⁻; SO₄²⁻, SeO₄²⁻, TeO₄²⁻; the halogens ClO₃⁻, BrO₃⁻, IO₃⁻; and silicate SiO₃²⁻ is the odd one.';
-MODES.table = { label: 'Oxyanion Table', short: 'Oxyanion Table', blurb: 'Fill in the Green Sheet -ate table: type it, or place tiles.', icon: 'levels' };
+const OT_RECAP = 'Professor Tip: use the T43 method. On the periodic table, B, C, N and Si make a T (3 O: BO₃³⁻, CO₃²⁻, NO₃⁻, SiO₃²⁻), P, S, As, Se and Te make a 4 (4 O: PO₄³⁻, AsO₄³⁻, SO₄²⁻, SeO₄²⁻, TeO₄²⁻), and Cl, Br and I make a 3 (3 O: ClO₃⁻, BrO₃⁻, IO₃⁻). Charges follow each column’s ion charge, except the T runs backward: B 3−, C 2−, N 1−.';
+MODES.table = { label: 'Oxyanion Table', short: 'Oxyanion Table', blurb: 'Fill in the -ate ions on the periodic table.', icon: 'levels' };
 /*OT-LOGIC-END*/
 </script>
 <script>
@@ -1005,7 +1161,7 @@ const ACH = [
   ['first', 'First Ion', 'Get your first answer right', 'stars', P => P.correct >= 1],
   ['streak5', 'On a Roll', '5 right in a row', 'stars', P => P.best >= 5],
   ['streak10', 'Unstoppable', '10 right in a row', 'trophy', P => P.best >= 10],
-  ['family', 'Family Reunion', '10 -ate/-ite family questions right', 'molecule', P => (P.mode.family ? P.mode.family.c : 0) >= 10],
+  ['family', 'Family Reunion', '10 Ion Families questions right', 'molecule', P => (P.mode.family ? P.mode.family.c : 0) >= 10],
   ['charge', 'Charge Champ', '15 charges right in Charge Check', 'balance', P => (P.mode.charge ? P.mode.charge.c : 0) >= 15],
   ['positive', 'Positive Vibes', 'Get NH₄⁺, H₃O⁺ and Hg₂²⁺ right', 'react', P => ['ammonium', 'hydronium', 'mercury(I)'].every(n => P.right[n])],
   ['hydrogen', 'H Hopper', '5 hydrogen-ion questions right', 'acidbase', P => (P.hRight || 0) >= 5],
@@ -1049,7 +1205,7 @@ function renderStats() {
 }
 function setCourse(c) {
   state.course = c; loadCourse(c); state.quiz = null; state.review = null;
-  state.set = GROUPS.some(g => g[0] === P.set) ? P.set : 'all';
+  state.set = P.set === 'solubility' ? 'rules' : GROUPS.some(g => g[0] === P.set) ? P.set : 'all';
   document.querySelectorAll('#course button').forEach(b => { b.classList.toggle('active', b.dataset.course === c); b.setAttribute('aria-pressed', b.dataset.course === c); });
   $('eyebrow').textContent = EYEBROW[c];
   try { const u = new URL(location.href); u.searchParams.set('course', c); history.replaceState(null, '', u); } catch (e) {}
@@ -1062,7 +1218,7 @@ function renderChooser() {
   $('modes').innerHTML = Object.entries(MODES).map(([k, m]) => { const s = P.mode[k]; const pct = s && s.a ? Math.round(s.c / s.a * 100) : 0; return `<button type="button" class="mode${state.mode === k && !state.quiz ? ' on' : ''}" data-mode="${k}" aria-pressed="${state.mode === k && !state.quiz}"><img class="ms-ico" src="assets/menu/mode-${k}.webp" width="56" height="56" alt="" aria-hidden="true"><b>${m.label}</b><small>${m.blurb}</small>${s && s.a ? `<span class="meter" title="${s.c} of ${s.a} right"><span style="width:${pct}%"></span></span>` : ''}</button>`; }).join('');
   const famMode = state.mode === 'family' || state.quiz;
   $('setWrap').hidden = !!famMode;
-  $('setChips').innerHTML = GROUPS.map(([k, l]) => `<button type="button" class="chip${state.set === k ? ' on' : ''}" data-set="${k}" aria-pressed="${state.set === k}">${l} <small>${k === 'all' ? ions.length : ions.filter(i => i.group === k).length}</small></button>`).join('');
+  $('setChips').innerHTML = GROUPS.map(([k, l]) => `<button type="button" class="chip${state.set === k ? ' on' : ''}" data-set="${k}" aria-pressed="${state.set === k}">${l} <small>${ions.filter(i => inSet(i, k)).length}</small></button>`).join('');
   $('skillCard').classList.toggle('on', !!state.quiz);
 }
 function pickMode(k) { state.mode = k; state.quiz = null; state.review = null; save(); renderChooser(); newQuestion(); scrollToPlay(); }
@@ -1071,7 +1227,7 @@ function showEmpty() { state.q = null; $('emptyBox').hidden = false; $('playArea
 function scrollToPlay() { try { $('play').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); } catch (e) {} }
 
 /* ---------- decks: no repeats until the whole set has been seen ---------- */
-const setIons = () => (state.review && state.review.length ? state.review : state.set === 'all' ? ions : ions.filter(i => i.group === state.set));
+const setIons = () => (state.review && state.review.length ? state.review : ions.filter(i => inSet(i, state.set)));
 function drawIon(mode) {
   const pool = setIons(), key = mode + '|' + (state.review ? 'review' : state.set);
   let d = state.decks[key];
@@ -1143,7 +1299,7 @@ function ddLog(ok, slip) {
   try {
     if (state.logged || !window.ddTrack) return; state.logged = true;
     const q = state.q;
-    window.ddTrack({ game: 'polyatomic', course: state.course, mode: state.quiz ? 'Skill Check Prep' : MODES[q.mode].label, topic: MODES[q.mode].short + ' · ' + q.ion.name, correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
+    window.ddTrack({ game: 'polyatomic', course: state.course, mode: state.quiz ? 'Skill Check Prep' : (MODES[q.mode].stat || MODES[q.mode].label), topic: (MODES[q.mode].statShort || MODES[q.mode].short) + ' · ' + q.ion.name, correct: !!ok, tries: ok ? '' : 'slip:' + (slip || 'other'), slip: ok ? '' : (slip || 'other') });
   } catch (e) {}
 }
 function bump(mode, ok) { const s = P.mode[mode] || (P.mode[mode] = { c: 0, a: 0 }); s.a++; if (ok) s.c++; }
@@ -1242,7 +1398,7 @@ function showReport() {
      ${weakModes.map(m => `<li>Practice <b>${MODES[m].label}</b>.</li>`).join('')}
      ${missedSheet.length ? `<li>Ions to review: ${missedSheet.map(i => `${i.name} ${chemHTML(i)}`).join(', ')}.</li>` : ''}
      ${slips.map(s => `<li>${SLIP_MSG[s]}</li>`).join('')}</ul>
-     <div class="ex-actions">${missedSheet.length ? `<button type="button" class="btn primary" id="practiceMissed">Practice my missed ions ${ico('arrow')}</button>` : ''}${weakModes.includes('family') ? `<button type="button" class="btn" id="practiceFamily">Play the -ate/-ite Family</button>` : ''}</div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
+     <div class="ex-actions">${missedSheet.length ? `<button type="button" class="btn primary" id="practiceMissed">Practice my missed ions ${ico('arrow')}</button>` : ''}${weakModes.includes('family') ? `<button type="button" class="btn" id="practiceFamily">Play Ion Families</button>` : ''}</div>` : '<p>No misses. Take another one to keep your streak going!</p>'}
    <div class="ex-actions"><button type="button" class="btn" id="quizAgain">Take another Skill Check Prep</button></div>`;
   state.quiz = null; renderChooser();
   $('quizAgain').onclick = () => { startQuiz(); scrollToPlay(); };
@@ -1272,9 +1428,9 @@ function confetti() {
 /* ---------- Green Sheet list ---------- */
 function renderSheet() {
   const row = i => `<tr><td>${i.name}</td><td>${chemHTML(i)}${i.displayNoteHtml ? `<br><small style="font-weight:600;color:var(--faint)">${i.displayNoteHtml}</small>` : ''}</td></tr>`;
-  const ox = ['borate', 'carbonate', 'nitrate', null, 'silicate', 'phosphate', 'sulfate', 'chlorate', null, 'arsenate', 'selenate', 'bromate', null, null, 'tellurate', 'iodate'];
+  const ox = OT_LAYOUT;
   $('sheetBody').innerHTML = `<div class="sheet-grid">
-   <div class="sheet wide"><h3>Oxyanions</h3><div class="ox-table">${ox.map(n => (n ? `<div>${n}<b>${chemHTML(byName(n))}</b></div>` : '<div class="blank"></div>')).join('')}</div></div>
+   <div class="sheet wide"><h3>Oxyanions</h3>${otKeyHTML()}<div class="ox-table">${OT_COLS.map(g => `<div class="grp">${g}</div>`).join('')}${ox.map((n, i) => (n ? `<div class="t43-${T43[otPat(byName(n)).el]}">${n}<b>${chemHTML(byName(n))}</b></div>` : `<div class="blank">${OT_GHOST[i]}</div>`)).join('')}</div></div>
    <div class="sheet"><h3>Other common polyatomic ions</h3><table>${ions.filter(i => i.group === 'common').map(row).join('')}</table></div>
    <div class="sheet"><h3>Naming-rule examples</h3><table>${ions.filter(i => i.group === 'rules').map(row).join('')}</table>
     <p style="font-size:.92rem;margin:8px 0 0">per-…-ate: one more O · -ite: one less O · hypo-…-ite: two less O · thio-: swap an O for S · hydrogen-: add H⁺ (one less negative)</p></div>
@@ -1439,26 +1595,28 @@ function otNewQ() {
   const keys = otTiles();
   return { mode: 'table', kind: 'table', ion: null, eq: 'Oxyanion Table', eqName: true, steps: null, answer: '', solution: '',
     prompt: sub === 'type' ? 'Tap a cell, then type that element’s -ate ion with its charge.' : 'Tap a tile, then tap the cell it fits. A tile fits every cell with that O count and charge.',
-    hint: OT_RECAP, ot: { sub, cells, sel: OT_IONS[0].name, tiles: keys.map(k => ({ key: k, used: false })), tsel: null, fb: '', fbKind: '', mistakes: 0, firstTry: 0 } };
+    hint: OT_RECAP, ot: { sub, cells, sel: OT_IONS[0].name, tiles: keys.map(k => ({ key: k, used: false })), tsel: null, showKey: false, fb: '', fbKind: '', mistakes: 0, firstTry: 0 } };
 }
 const otTileHTML = key => { const [o, q] = key.split('|').map(Number); return `<span class="ot-x" aria-hidden="true"></span>O<sub>${o}</sub>${chargeHTML(q)}`; };
 const otTileLabel = key => { const [o, q] = key.split('|').map(Number); return `Tile: blank plus O ${o}, charge ${chargeTxt(q)}`; };
 function otCellHTML(ion, T) {
   const c = T.cells[ion.name], p = otPat(ion), sel = T.sub === 'type' && T.sel === ion.name && !c.done;
   const lab = c.done ? `${p.el}: ${ion.name}, ${baseOf(ion)} charge ${chargeTxt(p.q)}` : `${p.el}, empty${sel ? ', selected' : ''}`;
-  return `<button type="button" class="ot-cell${c.done ? ' done' + (c.helped ? ' helped' : '') : ''}${sel ? ' sel' : ''}" data-otc="${ion.name}" aria-label="${lab}"${c.done ? ' aria-disabled="true"' : ''}>${c.done ? `<span class="ot-f">${chemHTML(ion)}</span><small>${ion.name}</small>` : `<span class="ot-el">${p.el}</span>`}</button>`;
+  return `<button type="button" class="ot-cell t43-${T43[p.el]}${c.done ? ' done' + (c.helped ? ' helped' : '') : ''}${sel ? ' sel' : ''}" data-otc="${ion.name}" aria-label="${lab}"${c.done ? ' aria-disabled="true"' : ''}>${c.done ? `<span class="ot-f">${chemHTML(ion)}</span><small>${ion.name}</small>` : `<span class="ot-el">${p.el}</span>`}</button>`;
 }
+const otKeyHTML = () => `<div class="t43-key" role="note" aria-label="T43 method key"><p class="t43-head"><b>T43 key:</b> the colored cells trace a <b>T</b>, a <b>4</b> and a <b>3</b> on the periodic table. Each shape tells you how many O the -ate ion has.</p><ul class="t43-rows">${T43_KEY.map(k => `<li class="t43-${k[0]}"><span class="t43-badge" aria-hidden="true">${k[1]}</span><span><b>${k[1]} = ${k[4]}</b> · ${k[2]}: ${k[3]}<small>${k[5]}</small></span></li>`).join('')}</ul><p class="t43-q">Charge: use each column’s usual ion charge (P, As 3−; S, Se, Te 2−; Cl, Br, I 1−). The T runs backward: B 3−, C and Si 2−, N 1−.</p></div>`;
 function renderOT(focusInput) {
   const q = state.q, T = q.ot, box = $('otLab'); if (!box) return;
   box.hidden = false;
   const left = OT_IONS.filter(i => !T.cells[i.name].done).length, selIon = byName(T.sel);
-  let html = `<div class="ot-seg" role="group" aria-label="How to fill the table"><button type="button" data-otsub="type" aria-pressed="${T.sub === 'type'}">Type it</button><button type="button" data-otsub="tiles" aria-pressed="${T.sub === 'tiles'}">Tiles (easier)</button></div>`;
+  let html = `<div class="ot-seg" role="group" aria-label="How to fill the table"><button type="button" data-otsub="type" aria-pressed="${T.sub === 'type'}">Type it</button><button type="button" data-otsub="tiles" aria-pressed="${T.sub === 'tiles'}">Use tiles <small>easier</small></button></div>`;
   html += `<p class="ot-count">${12 - left} of 12 filled</p>`;
   if (left && T.sub === 'type') html += `<div class="ot-type"><label for="otIn">Type the -ate ion for <b>${otPat(selIon).el}</b>:</label><div class="ot-row"><input id="otIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="like SO4^2-"><button type="button" class="btn primary" id="otCheck">Check</button></div></div>`;
   if (left && T.sub === 'tiles') html += `<div class="ot-tray" role="group" aria-label="Tiles">${[...new Set(T.tiles.map(t => t.key))].map(k => { const n = T.tiles.filter(t => !t.used && t.key === k).length; return n ? `<button type="button" class="ot-tile${T.tsel === k ? ' on' : ''}" data-ott="${k}" draggable="true" aria-pressed="${T.tsel === k}" aria-label="${otTileLabel(k)}, ${n} left">${otTileHTML(k)}<span class="ot-n" aria-hidden="true">×${n}</span></button>` : ''; }).join('')}</div>`;
   sullyMood(SULLY_MOOD[T.fbKind] || 'idle');
   html += T.fb ? sullyRow(`<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`) : `<div class="ot-fb ${T.fbKind}" role="status" aria-live="polite">${T.fb}</div>`;
-  html += `<div class="ot-grid">${OT_LAYOUT.map(n => n ? otCellHTML(byName(n), T) : '<div class="ot-blank" aria-hidden="true"></div>').join('')}</div>`;
+  if (T.showKey) html += otKeyHTML(); /* the T43 key is help: it appears after Hint, Show answer or a second miss */
+  html += `<div class="ot-grid">${OT_COLS.map(g => `<div class="ot-grp" aria-hidden="true">${g}</div>`).join('')}${OT_LAYOUT.map((n, i) => n ? otCellHTML(byName(n), T) : `<div class="ot-blank" aria-hidden="true">${OT_GHOST[i]}</div>`).join('')}</div>`;
   box.innerHTML = html;
   q.hint = left && T.sub === 'type' && COLUMN_TIP[otPat(selIon).el] ? 'Professor Tip: ' + COLUMN_TIP[otPat(selIon).el] : OT_RECAP;
   const inp = $('otIn');
@@ -1490,14 +1648,14 @@ function otCheckTyped() {
   const r = otGrade(raw, ion, c.miss + 1);
   if (firstTry) { P.tried++; bump('table', r.ok); otLog('Oxyanion Table · ' + ion.name, r.ok, r.slip); }
   if (r.ok) { T.fbKind = 'good'; T.fb = `✓ ${otPat(ion).el}: ${chemHTML(ion)} is <b>${ion.name}</b>.`; otCellRight(ion); }
-  else { c.miss++; if (firstTry) P.streak = 0; T.fbKind = 'bad'; T.fb = `<b>Not quite.</b>${partsHTML(r)} ${r.note || 'Check it and try again.'}${c.miss >= 2 ? ' <br>Stuck? Tap <b>Show answer</b> for this cell.' : ''}`; save(); renderStats(); }
+  else { c.miss++; if (c.miss >= 2) T.showKey = true; if (firstTry) P.streak = 0; T.fbKind = 'bad'; T.fb = `<b>Not quite.</b>${partsHTML(r)} ${r.note || 'Check it and try again.'}${c.miss >= 2 ? ' <br>Stuck? Tap <b>Show answer</b> for this cell.' : ''}`; save(); renderStats(); }
   renderOT('keep');
 }
 function otPlace(key, name) {
   const q = state.q, T = q.ot, t = T.tiles.find(x => !x.used && x.key === key), ion = byName(name), c = T.cells[name];
   if (!t || t.used || c.done || state.done) return;
   if (otFits(t.key, ion)) { t.used = true; if (!T.tiles.some(x => !x.used && x.key === key)) T.tsel = null; T.fbKind = 'good'; T.fb = `✓ ${otPat(ion).el} + ${otTileHTML(t.key)} = ${chemHTML(ion)}, <b>${ion.name}</b>.`; otCellRight(ion); }
-  else { c.miss++; T.mistakes++; T.fbKind = 'bad'; T.fb = `<b>That tile does not fit ${otPat(ion).el}.</b> ${otWhy(t.key, ion, c.miss)}`; save(); }
+  else { c.miss++; if (c.miss >= 2) T.showKey = true; T.mistakes++; T.fbKind = 'bad'; T.fb = `<b>That tile does not fit ${otPat(ion).el}.</b> ${otWhy(t.key, ion, c.miss)}`; save(); }
   renderOT();
   if (!state.done) { const b = document.querySelector('#otLab .ot-tile'); if (b && !coarse()) b.focus(); }
 }
@@ -1507,15 +1665,17 @@ const _otNew = newQuestion;
 newQuestion = function (focus) {
   _otNew(focus);
   const q = state.q, box = $('otLab');
+  $('equation').hidden = false; $('skipBtn').innerHTML = 'New question ' + ico('arrow');
   if (!q || q.mode !== 'table') { if (box) { box.hidden = true; box.innerHTML = ''; } return; }
   state.logged = true; /* the table logs each cell itself */
   $('answerRow').hidden = true; $('readback').hidden = true; $('typingNote').innerHTML = ''; $('given').hidden = true;
+  $('equation').hidden = true; $('skipBtn').innerHTML = 'New table ' + ico('arrow');
   renderOT(focus);
 };
 const _otSol = showSolution;
 showSolution = function () {
   const q = state.q; if (!q || q.mode !== 'table') return _otSol();
-  if (state.done) return; const T = q.ot;
+  if (state.done) return; const T = q.ot; T.showKey = true;
   if (T.sub === 'type') { const ion = byName(T.sel); if (T.cells[ion.name].tries === 0) { T.cells[ion.name].tries++; P.tried++; bump('table', false); otLog('Oxyanion Table · ' + ion.name, false, 'gave-up'); P.streak = 0; } T.fbKind = 'info'; T.fb = `<b>Answer:</b> ${otPat(ion).el} → ${chemHTML(ion)}, ${ion.name}. ${tip('Professor Tip: ' + (COLUMN_TIP[otPat(ion).el] || ''))}`; otCellRight(ion, true); }
   else { const ion = OT_IONS.find(i => !T.cells[i.name].done), k = T.tiles.findIndex(t => !t.used && otFits(t.key, ion)); T.tiles[k].used = true; T.tsel = null; T.mistakes++; T.fbKind = 'info'; T.fb = `<b>Placed for you:</b> ${otPat(ion).el} + ${otTileHTML(T.tiles[k].key)} = ${chemHTML(ion)}, ${ion.name}.`; otCellRight(ion, true); }
   renderOT(true);
@@ -1524,7 +1684,7 @@ const _otChooser = renderChooser;
 renderChooser = function () { _otChooser(); if (state.mode === 'table' && !state.quiz) $('setWrap').hidden = true; };
 document.addEventListener('click', e => {
   const q = state.q; if (!q || q.mode !== 'table') return; const T = q.ot;
-  if (e.target.closest('#hintBtn')) { const c = T.cells[T.sel]; if (T.sub === 'type' && c && !c.done) c.helped = true; return; }
+  if (e.target.closest('#hintBtn')) { const c = T.cells[T.sel]; if (T.sub === 'type' && c && !c.done) c.helped = true; if (!T.showKey) { T.showKey = true; renderOT(); } return; }
   const s = e.target.closest('[data-otsub]'); if (s) { if (s.dataset.otsub !== T.sub) { P.otSub = s.dataset.otsub; save(); newQuestion(true); } return; }
   if (e.target.closest('#otCheck')) return otCheckTyped();
   const t = e.target.closest('[data-ott]'); if (t) { const k = t.dataset.ott; T.tsel = T.tsel === k ? null : k; T.fb = ''; T.fbKind = ''; renderOT(); const b = document.querySelector(`#otLab [data-ott="${k}"]`); if (b && !coarse()) b.focus(); return; }
@@ -1534,9 +1694,134 @@ document.addEventListener('click', e => {
   if (T.tsel == null) { T.fbKind = 'info'; T.fb = 'Tap a tile first, then tap the cell it fits.'; renderOT(); return; }
   otPlace(T.tsel, name);
 });
+/* ---------- Learn with Dr. Dan: the most relevant ItsDrDan clips for each part of the game ---------- */
+const VIDEOS = {
+  t43_shape: { id: 'REdYqnSIjCg', start: 95, title: 'T43 Method: the T, 4 and 3 on the periodic table', why: 'The shape tells you the number of O.' },
+  t43_intro: { id: 'REdYqnSIjCg', start: 0, title: 'How to Memorize the Polyatomic Ions (T43)', why: 'Start with the -ate ions.' },
+  t43_charge: { id: 'REdYqnSIjCg', start: 281, title: 'T43 Method: charges follow the periodic table', why: 'Column charges, and the T runs backward.' },
+  gs_tour: { id: 'wCVdwxuh__U', start: 0, title: 'How to Use the Green Sheet', why: 'A tour of the polyatomic ion sheet.' },
+  gs_ate: { id: 'wCVdwxuh__U', start: 56, title: 'Green Sheet: start with the -ates', why: 'The -ate table is the T43 shape.' },
+  gs_mod: { id: 'wCVdwxuh__U', start: 125, title: 'Green Sheet: per-, -ite and hypo-', why: 'Count the O against the -ate.' },
+  gs_h: { id: 'wCVdwxuh__U', start: 193, title: 'Green Sheet: adding hydrogen', why: 'Each H⁺ makes it one less negative.' },
+  gs_weird: { id: 'wCVdwxuh__U', start: 307, title: 'Green Sheet: the “weird” ions', why: 'Ammonium, hydroxide, cyanide and more.' },
+  formulas: { id: 'A1-PS3fGOw8', start: 0, title: 'Writing Ionic Formulas with Polyatomic Ions', why: 'Put the ions to work in compounds.' }
+};
+const MODE_VIDEO = { table: 't43_shape', n2f: 't43_intro', f2n: 'gs_tour', family: 'gs_mod', charge: 't43_charge', skill: 'gs_tour' };
+const MODE_VIDEOS = {
+  table: ['t43_shape', 'gs_ate', 't43_charge', 't43_intro'],
+  n2f: ['t43_intro', 'gs_mod', 'gs_h', 'gs_weird', 'formulas'],
+  f2n: ['gs_tour', 'gs_mod', 'gs_weird', 't43_intro'],
+  family: ['gs_mod', 'gs_h', 't43_intro', 'gs_ate'],
+  charge: ['t43_charge', 'gs_h', 'gs_weird', 't43_shape'],
+  skill: ['gs_tour', 't43_intro', 'gs_mod', 'formulas']
+};
+/* pick the clip for this exact question when we can tell */
+function videoKeyFor(q) {
+  const mode = state.quiz ? 'skill' : (q && q.mode) || state.mode, n = q && q.ion && q.ion.name || '';
+  if (q && q.mode !== 'table' && n) {
+    if (/hydrogen/.test(n)) return [mode, 'gs_h'];
+    if (q.ion.group === 'common') return [mode, 'gs_weird'];
+    if (/^(per|hypo)|ite$/.test(n) && q.mode !== 'charge') return [mode, 'gs_mod'];
+  }
+  return [mode, MODE_VIDEO[mode] || 'gs_tour'];
+}
+function setVideoFor(mode, key) {
+  const v = VIDEOS[key] || VIDEOS.gs_tour, pl = $('player'), src = `https://www.youtube-nocookie.com/embed/${v.id}?rel=0&start=${v.start || 0}`;
+  pl.dataset.src = src; if ($('videoSection').open && pl.src !== src) pl.src = src;
+  $('lessonTitle').textContent = v.title; $('lessonLink').href = `https://www.youtube.com/watch?v=${v.id}&t=${v.start || 0}s`;
+  $('videoContext').textContent = mode && MODES[mode] ? 'Videos picked for ' + (mode === 'skill' ? 'Skill Check Prep' : MODES[mode].label) : 'Videos picked for the current question';
+  const keys = [key, ...(MODE_VIDEOS[mode] || Object.keys(VIDEOS)).filter(k => k !== key)].slice(0, 5);
+  $('videoList').innerHTML = keys.map(k => { const w = VIDEOS[k]; return `<button type="button" class="lesson-card${k === key ? ' active' : ''}" data-video="${k}" data-vmode="${mode || ''}"><img src="https://i.ytimg.com/vi/${w.id}/mqdefault.jpg" alt="" loading="lazy"><span><b>${w.title}</b><small>${w.why}</small></span></button>`; }).join('');
+}
+const _vidNew = newQuestion;
+newQuestion = function (focus) { _vidNew(focus); const [m, k] = videoKeyFor(state.q); setVideoFor(m, k); };
+document.addEventListener('click', e => {
+  if (e.target.closest && e.target.closest('#videoBtn')) { const d = $('videoSection'); d.open = true; const pl = $('player'); if (pl.src !== pl.dataset.src) pl.src = pl.dataset.src; try { d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (er) {} return; }
+  const v = e.target.closest && e.target.closest('[data-video]'); if (v) { setVideoFor(v.dataset.vmode, v.dataset.video); const pl = $('player'); pl.src = pl.dataset.src; }
+});
+document.addEventListener('toggle', e => { if (e.target && e.target.id === 'videoSection') { const pl = $('player'); if (e.target.open && pl.src !== pl.dataset.src) pl.src = pl.dataset.src; } }, true);
+setVideoFor(null, 't43_intro');
 document.addEventListener('dragstart', e => { const t = e.target.closest && e.target.closest('[data-ott]'); if (t) { e.dataTransfer.setData('text/plain', t.dataset.ott); e.dataTransfer.effectAllowed = 'move'; } });
 document.addEventListener('dragover', e => { if (e.target.closest && e.target.closest('#otLab [data-otc]')) e.preventDefault(); });
 document.addEventListener('drop', e => { const c = e.target.closest && e.target.closest('#otLab [data-otc]'); if (!c) return; e.preventDefault(); const i = e.dataTransfer.getData('text/plain'); if (i) otPlace(i, c.dataset.otc); });
+/* ---------- Smart formula editor: a formula box plus a raised charge box (like a math editor) ----------
+   It sits on top of the original text input, which stays the hidden source of truth, so grading is unchanged.
+   Formula box: numbers after a letter become subscripts; _ works too (SO_4). Typing ^, + or − jumps into the charge box.
+   Charge box: type 2- or -2 (shows 2−), or tap a charge button. Backspace in an empty charge box goes back. */
+const CE_QUICK = [-1, -2, -3, 1, 2];
+function ceChg(raw) {
+  const s = String(raw || '').replace(/[−–—‒‑⁻]/g, '-').replace(/⁺/g, '+').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, c => SUPS.indexOf(c)).replace(/[^\d+-]/g, '');
+  const d = s.replace(/[+-]/g, '').replace(/^0+/, '').slice(0, 2), signs = s.match(/[+-]/g), sg = signs ? signs[signs.length - 1] : '';
+  return { d, sg, txt: d + (sg === '-' ? '−' : sg), ascii: d + sg };
+}
+function chemEditor(src) {
+  if (src._ce) return src._ce;
+  const root = document.createElement('div'); root.className = 'ce'; root.setAttribute('role', 'group'); root.setAttribute('aria-label', 'Formula editor');
+  root.innerHTML = `<div class="ce-field"><input class="ce-main" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="SO4" aria-label="Formula. Numbers after a letter become subscripts."><span class="ce-cbox"><input class="ce-chg" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="±" maxlength="4" aria-label="Charge, like 2- or 1+"><small aria-hidden="true">charge</small></span></div>
+   <div class="ce-tools"><button type="button" data-ce="sub" title="Numbers after a letter become subscripts"><i class="ce-ico" aria-hidden="true">x₂</i><span>Subscript</span></button><button type="button" data-ce="chg" title="Jump to the charge box (or type ^)"><i class="ce-ico" aria-hidden="true">x<b>±</b></i><span>Charge</span></button><span class="ce-q" aria-label="Quick charges">${CE_QUICK.map(q => `<button type="button" data-ceq="${q}" aria-label="Charge ${chargeTxt(q)}">${Math.abs(q)}${q < 0 ? '−' : '+'}</button>`).join('')}</span><button type="button" data-ce="clear" class="ce-clear">Clear</button></div>`;
+  src.parentNode.insertBefore(root, src); src.classList.add('ce-src');
+  const main = root.querySelector('.ce-main'), chg = root.querySelector('.ce-chg');
+  const ed = { root, main, chg, src };
+  const sync = () => { const a = toAscii(main.value).replace(/_/g, ''), c = ceChg(chg.value).ascii; src.value = a + (c ? '^' + c : ''); src.dispatchEvent(new Event('input', { bubbles: true })); root.classList.toggle('has-chg', !!c); };
+  const toChg = (pre) => { if (pre != null) chg.value = ceChg(chg.value + pre).txt; chg.focus(); try { chg.setSelectionRange(chg.value.length, chg.value.length); } catch (e) {} };
+  const toMainEnd = () => { main.focus(); try { main.setSelectionRange(main.value.length, main.value.length); } catch (e) {} };
+  const submit = () => src.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  main.addEventListener('input', e => {
+    if (e.isComposing) return;
+    const v = main.value, atEnd = main.selectionStart === v.length;
+    const a = toAscii(v).replace(/_/g, '');
+    if (a.includes('^')) { const i = a.indexOf('^'); main.value = subBase(a.slice(0, i)); chg.value = ceChg(a.slice(i + 1)).txt; sync(); toChg(); return; }
+    if (/[+-]/.test(a)) { /* SO42- or NO3- typed in one go: split it like smart typing does */
+      const p = parseIon(a); let c = '';
+      if (p.charge != null) c = (Math.abs(p.charge) === 1 && !/1[+-]$/.test(a) ? '' : Math.abs(p.charge)) + (p.charge < 0 ? '-' : '+');
+      main.value = subBase(p.base.replace(/[+-]/g, '')); chg.value = ceChg(c || a.replace(/^[^+-]*/, '')).txt; sync(); toChg(); return;
+    }
+    if (atEnd) { const f = subBase(a); if (f !== v) main.value = f; }
+    sync();
+  });
+  main.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); return submit(); }
+    if (e.key === '^') { e.preventDefault(); return toChg(); }
+    if (e.key === 'ArrowRight' && main.selectionStart === main.value.length) { e.preventDefault(); toChg(); }
+  });
+  chg.addEventListener('input', () => { const c = ceChg(chg.value); if (chg.value !== c.txt) chg.value = c.txt; sync(); });
+  chg.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); return submit(); }
+    if (e.key === '^') { e.preventDefault(); return; }
+    if ((e.key === 'Backspace' && !chg.value) || (e.key === 'ArrowLeft' && chg.selectionStart === 0)) { e.preventDefault(); toMainEnd(); }
+  });
+  root.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || b.disabled) return;
+    if (b.dataset.ceq) { const q = +b.dataset.ceq; chg.value = (Math.abs(q) === 1 ? '1' : Math.abs(q)) + (q < 0 ? '−' : '+'); sync(); root.querySelectorAll('[data-ceq]').forEach(x => x.classList.toggle('on', x === b)); if (!coarse()) chg.focus(); return; }
+    if (b.dataset.ce === 'sub') { root.classList.add('tip-sub'); setTimeout(() => root.classList.remove('tip-sub'), 2600); return toMainEnd(); }
+    if (b.dataset.ce === 'chg') return toChg();
+    if (b.dataset.ce === 'clear') { ed.reset(); toMainEnd(); }
+  });
+  chg.addEventListener('input', () => root.querySelectorAll('[data-ceq]').forEach(x => x.classList.toggle('on', ceChg(chg.value).ascii === (x.textContent.replace('−', '-')))));
+  ed.reset = () => { main.value = ''; chg.value = ''; root.querySelectorAll('[data-ceq]').forEach(x => x.classList.remove('on')); sync(); };
+  ed.setDisabled = d => { root.classList.toggle('off', d); root.querySelectorAll('input,button').forEach(x => { x.disabled = d; }); };
+  /* the old code focuses or disables the hidden input: pass that on to the editor */
+  src.focus = opts => { try { main.focus(opts); } catch (e) { main.focus(); } };
+  new MutationObserver(() => ed.setDisabled(src.disabled)).observe(src, { attributes: true, attributeFilter: ['disabled'] });
+  ed.setDisabled(src.disabled);
+  src._ce = ed; return ed;
+}
+const CE_NOTE = 'Type the formula (numbers become subscripts), then put the charge in the small <b>charge</b> box. Or type it all at once: <code>SO4^2-</code>, <code>SO_4^2-</code> or <code>SO42-</code>. Symbols are case-sensitive (Cl, not CL).';
+const _ceNew = newQuestion;
+newQuestion = function (focus) {
+  const box = $('answer'), ed = chemEditor(box);
+  _ceNew(focus);
+  const q = state.q, formula = !!q && q.kind === 'formula';
+  ed.reset(); ed.root.hidden = !formula; box.classList.toggle('ce-src', formula);
+  if (formula) { $('typingNote').innerHTML = CE_NOTE; if (focus && !coarse()) { try { ed.main.focus({ preventScroll: true }); } catch (e) {} } }
+};
+const _ceOT = renderOT;
+renderOT = function (focusInput) {
+  _ceOT(focusInput);
+  const inp = $('otIn'); if (!inp) return;
+  const ed = chemEditor(inp);
+  if (focusInput && (!coarse() || focusInput === 'keep')) { try { ed.main.focus({ preventScroll: true }); } catch (e) {} }
+};
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>
 <script>/* iOS: a quick second tap on a button that just turned disabled must not zoom the page (2026-11-14) */document.addEventListener("touchend",e=>{const b=e.target&&e.target.closest&&e.target.closest("button");if(b&&b.disabled&&e.cancelable)e.preventDefault()},{passive:false});</script>
