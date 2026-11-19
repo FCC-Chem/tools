@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Equilibrium Park! • ItsDrDan • CHEM 3A</title>
+<style>
+:root{--ink:#22313b;--muted:#5c6a75;--line:#e4dfd3;--card:#fffefa;--blue:#4a9fd6}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.45;min-height:100vh;
+ background:radial-gradient(circle at 8% -5%,#dff0ff 0,transparent 38%),radial-gradient(circle at 95% 5%,#ffe6df 0,transparent 34%),linear-gradient(120deg,#f3faff,#fffaf2 50%,#fff3f1);background-attachment:fixed}
+button,input,select{font:inherit;color:inherit}.hidden{display:none!important}
+.app{max-width:1280px;margin:0 auto;padding:14px 14px 40px}
+.card{background:var(--card);border:1px solid #dfe8ef;border-radius:22px;box-shadow:0 8px 22px #2a5a7a10;padding:18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 26px;border-radius:24px;border:1px solid #d9e6f1;background:linear-gradient(115deg,#fff,#f0f8ff 55%,#fff1ee);box-shadow:0 12px 30px #2a5a7a14}
+.badge{display:inline-block;background:#fff;border:1px solid #e3dccd;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.hero h1{margin:6px 0 4px;font-size:clamp(30px,4.2vw,46px);line-height:1.08;font-weight:900;letter-spacing:-.02em}
+.hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#2f8fd0,#43b6a8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{margin:0;color:var(--muted);font-size:15.5px}
+.logo{width:112px;flex:0 0 112px}.logo svg{display:block;width:100%;height:auto}
+details.howto{margin:10px 0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
+details.howto>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;min-height:48px;display:flex;justify-content:space-between;align-items:center}
+details.howto>summary::-webkit-details-marker{display:none}
+details.howto>summary:after{content:"Tap to open ▾";font-size:13px;color:#fff;background:#4a6fc4;padding:5px 12px;border-radius:999px}
+details.howto[open]>summary:after{content:"Hide ▴";background:none;color:#4a6fc4}
+details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+.mode{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:16px;background:linear-gradient(145deg,#ffffffa6,var(--mb));padding:10px 12px;display:grid;grid-template-columns:52px 1fr;column-gap:10px;align-items:center;min-height:64px;box-shadow:0 4px 12px #2634400d;transition:transform .15s,box-shadow .15s}
+.mode:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018}
+.mode.on{outline:3px solid var(--ma);outline-offset:3px}
+.mode .ic.art{background:none;padding:0}.mode .ic.art img{width:100%;height:100%;display:block}
+.mode .ic{grid-row:span 2;width:50px;height:50px;border-radius:12px;display:grid;place-items:center;background:var(--ma);color:#fff;font-size:22px}
+.mode b{font-size:17px;line-height:1.2}.mode small{font-size:12px;color:#4c5a65;font-weight:600}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;grid-template-areas:"card ref" "card jour" "card vid";gap:14px;align-items:start;margin-top:10px}
+#practice{grid-area:card;position:relative;overflow:hidden}#refPanel{grid-area:ref}#journey{grid-area:jour}#videoPanel{grid-area:vid}
+#practice:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#e0675a,#f7c968,#43b6a8,#2f8fd0,#ad8cce)}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.toprow h2{margin:0;font-size:27px;font-weight:900}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{display:inline-flex;flex-direction:column;align-items:center;min-width:76px;padding:5px 10px;border-radius:14px;line-height:1.05}
+.stat b{font-size:22px;font-weight:900}.stat small{font-size:11.5px;font-weight:800;color:#4c5a65}
+.s1{background:#e5f6ea}.s2{background:#fff1d1}.s3{background:#efe8fb}.pop b{animation:pop .45s}@keyframes pop{40%{transform:scale(1.35)}}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px;transition:transform .08s}
+.btn:active:not(:disabled){transform:translateY(2px)}.btn:disabled{opacity:.55;cursor:default}
+.dark{background:linear-gradient(180deg,#2f4650,#22343c);color:#fff;box-shadow:0 4px 0 #142128}
+.check{background:linear-gradient(180deg,#5cb2e6,#3b8ccb);color:#fff;box-shadow:0 4px 0 #2d73a8}
+.hint{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
+.show{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
+.prompt{font-size:20px;font-weight:800;margin:14px 0 8px}
+.tagchip{display:inline-block;font-size:13px;font-weight:900;background:#eef6ff;border:1px solid #c9dff2;border-radius:999px;padding:2px 9px;margin-right:4px;vertical-align:2px}
+.task{display:flex;gap:8px;align-items:center;background:#fff6e0;border:2px dashed #f0c45c;border-radius:14px;padding:8px 12px;font-weight:800;font-size:15.5px;margin:6px 0}
+.task.done{background:#e8f7ec;border:2px solid #8fcf9f}
+.qbox{background:radial-gradient(circle at 50% 0,#f7fbff,#fff 70%);border:2px solid #e1ebf3;border-radius:18px;padding:14px;margin:8px 0;font-size:18px}
+.rxn{font-size:21px;font-weight:800;text-align:center;letter-spacing:.01em}.rxn .dh{display:block;font-size:14.5px;font-weight:700;color:var(--muted);margin-top:2px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px}.frac>span{padding:0 4px}.frac>span:first-child{border-bottom:2px solid currentColor}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:56px;font-size:17px;font-weight:700;cursor:pointer}
+.opt .L{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e6f2ff;color:#3b82b4;font-size:14px;font-weight:900}
+.opt.sel{border-color:var(--blue);background:#eaf5fd}.opt.sel .L{background:#4a9fd6;color:#fff}
+.opt.right{border-color:#4fa36a;background:#e8f7ec}.opt.right .L{background:#4fa36a;color:#fff}
+.opt.wrong{border-color:#d9776f;background:#fdeeed}.opt.wrong .L{background:#d9776f;color:#fff}
+.tip{font-size:13px;color:var(--muted);margin:4px 2px}
+.btnrow{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:14px}
+.hintbox{display:none;margin-top:10px;border-radius:14px;padding:10px 14px;border-left:7px solid #efc94c;background:linear-gradient(90deg,#fff5d2,#fffbec);font-weight:600}.hintbox.on{display:block}
+.fb{margin-top:10px;border-radius:14px;line-height:1.5}
+.fb.good{border-left:7px solid #4fa36a;background:linear-gradient(90deg,#e6f6ea,#f4fbf6);padding:12px 14px}
+.fb.bad{border-left:7px solid #d9776f;background:linear-gradient(90deg,#fdecea,#fff7f6);padding:12px 14px}
+.fb ul.why{margin:8px 0 0;padding-left:20px;font-size:15px}.fb ul.why li{margin:3px 0}
+.linkbtn{border:0;background:none;padding:0;color:#2f7fbf;font-weight:800;cursor:pointer;text-decoration:underline}
+/* lab */
+.lab{border:2px solid #d6e4ef;border-radius:18px;background:#fbfdff;padding:10px;margin:8px 0}
+.lab .eqrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;font-weight:900;font-size:19px;margin:2px 0 6px}
+.lab .real{text-align:center;font-size:13.5px;font-weight:700;color:#5c4a1e;background:#fff8e6;border:1px solid #f0dfae;border-radius:10px;padding:4px 10px;margin:-2px auto 8px;max-width:640px}
+.lab .eqrow .dh{font-size:13.5px;font-weight:700;color:var(--muted)}
+.sw{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid;vertical-align:-1px;margin-right:3px}
+.ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
+.chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}
+.chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
+.slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
+.slider input{flex:1;min-width:90px;height:32px;accent-color:#3b8ccb}.slider output{min-width:58px;text-align:right}
+.stage{position:relative}
+.stage canvas{display:block;width:100%;height:auto;border-radius:12px;background:#fff;border:2px solid #dbe5ee;touch-action:pan-y}
+.tube{position:absolute;right:8px;top:8px;width:58px;text-align:center;font-size:10.5px;font-weight:800;color:#4c5a65;background:#ffffffd9;border-radius:10px;padding:3px 2px;pointer-events:none}
+.tube svg{width:30px;height:auto;display:block;margin:0 auto}
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.counts{display:flex;flex-direction:column;gap:5px;justify-content:center}
+.cnt{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px;background:#fff;border:1px solid #e3eaf0;border-radius:10px;padding:4px 8px}
+.cnt b{margin-left:auto;font-size:17px}
+.kline{font-size:12.5px;color:var(--muted);font-weight:700}
+.balance{background:#fff;border:1px solid #e3eaf0;border-radius:12px;padding:4px 6px;text-align:center}
+.balance svg{width:100%;max-width:260px;height:auto;display:block;margin:0 auto}
+.status{font-weight:900;font-size:14.5px;border-radius:10px;padding:5px 8px;margin-top:2px}
+.status.eq{background:#e6f6ea;color:#2f6e3f}.status.r{background:#e6f2ff;color:#245c86}.status.l{background:#fff0e3;color:#94531a}
+.graphwrap{margin-top:8px}.graphwrap canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid #e3eaf0;border-radius:12px}
+.cap{font-size:12.5px;color:var(--muted);font-weight:700;margin:3px 2px}
+/* side */
+.side{padding:0}.side>summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:900;font-size:17px;min-height:48px;display:flex;align-items:center;gap:8px;border-radius:22px}
+.side>summary::-webkit-details-marker{display:none}.side>summary:after{content:'▸';margin-left:auto;transition:transform .15s}.side[open]>summary:after{transform:rotate(90deg)}
+.side>.body{padding:6px 16px 14px}
+#refPanel>summary{background:linear-gradient(120deg,#f2ecff,#eaf5ff)}#videoPanel>summary{background:linear-gradient(120deg,#fff1e6,#fdeef2)}#journey>summary{background:linear-gradient(120deg,#fff8e6,#eef6ff)}
+.refcard{background:#fff;border:1px solid #e6e0d2;border-left:5px solid #82afd2;border-radius:12px;padding:7px 10px;font-size:13.5px;margin-bottom:7px}
+.refcard table{border-collapse:collapse;width:100%}.refcard td{padding:2px 4px;border-top:1px solid #eee;vertical-align:top}
+.xprow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-weight:800;font-size:14px}
+.track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#8fd8c8,#f7c968);transition:width .3s}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
+.bdg{border:2px dashed #d5dce2;border-radius:12px;padding:7px 9px;font-size:12.5px;opacity:.6;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:center}.bdg img{width:48px;height:48px;filter:grayscale(1) opacity(.55)}.bdg.got img{filter:none}.bdg.got{opacity:1;border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
+.vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin-bottom:10px}
+.vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#c0645a}
+.vwrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;pointer-events:none;transition:.3s;z-index:50}.toast.on{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards;z-index:40;pointer-events:none}@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "ref" "jour" "vid"}}
+@media(max-width:700px){.app{padding:8px}.card{padding:12px}.hero{padding:12px 14px}.subtitle{display:none}.logo{width:64px;flex-basis:64px}.options{grid-template-columns:1fr}.stats{width:100%}.stat{flex:1}
+ .btnrow{grid-template-columns:1fr 1fr}.btnrow .check{grid-column:1/-1}.toprow h2{font-size:23px}.prompt{font-size:17.5px}.lab{padding:7px}.lab .eqrow{font-size:16.5px}
+ .readout{grid-template-columns:1fr}.chip{font-size:14px;padding:6px 9px}.rxn{font-size:18px}.modes{grid-template-columns:repeat(2,minmax(0,1fr))}.mode small{display:none}.mode{grid-template-columns:42px minmax(0,1fr);min-height:54px;min-width:0;padding:8px}.mode b{overflow-wrap:anywhere}.mode .ic{width:40px;height:40px;font-size:18px}.mode b{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+</head><body>
+<div class="toast" id="toast" role="status"></div>
+<div class="app">
+<section class="hero"><div>
+ <span class="badge">⚖️ Equilibrium • ItsDrDan • CHEM 3A</span>
+ <h1><span class="a">Equilibrium</span> <span class="b">Park!</span></h1>
+ <p class="subtitle">Watch reactions run both ways, push them with a stress, and see Le Châtelier's principle happen.</p>
+</div>
+<div class="logo" aria-hidden="true"><img src="assets/logo.webp" alt="" width="104" height="104" style="width:100%;height:auto;display:block"></div>
+</section>
+<details class="howto"><summary>📘 How to use this game</summary><ul>
+ <li><b>Start with 🎢 Ride Line</b> to see equilibrium as a theme-park line, then try the 🔬 Particle Lab.</li>
+ <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, watch, then answer.</li><li>In the labs, particles bounce like billiard balls. A colored ring means that hit was a reaction; most hits just bounce.</li>
+ <li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.</li></ul></details>
+<nav class="modes" id="modes" aria-label="Choose a mode"></nav>
+<div class="main">
+<section class="card" id="practice">
+ <div class="toprow"><h2 id="modeTitle">Mode</h2><div class="stats">
+  <span class="stat s1"><b id="nCorrect">0</b><small>✅ Correct</small></span><span class="stat s2"><b id="nStreak">0</b><small>🔥 Streak</small></span><span class="stat s3"><b id="nAssist">0</b><small>👀 Assisted</small></span>
+  <button class="btn dark" id="newBtn">New Question ↻</button></div></div>
+ <div id="qArea"></div>
+ <div class="btnrow"><button class="btn check" id="checkBtn">Check Answer</button><button class="btn hint" id="hintBtn">💡 Hint</button><button class="btn show" id="showBtn">👀 Show Answer</button></div>
+ <div class="hintbox" id="hintBox"></div><div class="fb" id="fb" role="status" aria-live="polite"></div>
+</section>
+<details class="card side" id="refPanel"><summary>🧠 Reference</summary><div class="body" id="refBody"></div></details>
+<details class="card side" id="journey"><summary>🧭 Chemistry Journey <span class="badge" id="jChip" style="margin-left:auto;margin-right:6px">Level 1</span></summary><div class="body">
+ <div class="xprow"><span id="lvl">Level 1</span><div class="track"><div class="fill" id="xpFill"></div></div><span id="xpTxt">0 / 100 XP</span></div>
+ <div class="badges" id="badges"></div><button class="btn" id="resetBtn" style="margin-top:10px;font-size:14px;min-height:40px;background:#fff;border:2px solid #d5dce2">Reset progress</button></div></details>
+<details class="card side" id="videoPanel"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><div class="vidcard" id="vidCard"></div><div class="vwrap"><iframe id="player" title="Dr. Dan video" loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div></div></details>
+</div></div>
+<script>
+/*EQ-ENGINE-START*/
+/* Particle equilibrium engine (no DOM). Rates come from mass action on the particle counts:
+   forward rate = kf·(reactant counts)/V^(n−1), reverse rate = kr·(product counts)/V^(m−1).
+   The amounts (st.x) follow those rate equations smoothly, and individual particles react forward and back
+   at exactly those rates (accumulators), so the balance reads cleanly while the flashes show it is dynamic.
+   Temperature changes kf and kr through Arrhenius factors whose difference is the sign of ΔH,
+   so heating favors the endothermic direction; a catalyst multiplies BOTH by the same factor. */
+const EQ_T0=298,EQ_R=8.314;
+const SYS={
+ no2:{real:'🏙️ Brown NO₂ is the haze in city smog: it builds up on hot, sunny days.',title:'N₂O₄ ⇌ NO₂ (sealed flask)',gas:true,heat:true,dH:57,
+  eq:[[1,'N2O4','g']],eqP:[[2,'NO2','g']],
+  sp:{N2O4:{l:'N₂O₄',c:'#f3ead2',e:'#9c8456',r:9},NO2:{l:'NO₂',c:'#b5562a',e:'#6f3015',r:7}},
+  R:['N2O4'],P:['NO2','NO2'],kf:0.16,kr:0.0042,Ef:26000,Er:-18000,
+  units:{N2O4:1,NO2:0.5},total:60,                       // 60 N₂O₄-equivalents
+  tint:{sp:'NO2',rgb:[160,72,28],k:0.0085,max:0.62},tintName:'brown color',
+  look:'brown NO₂ gas; N₂O₄ is nearly colorless',
+  stress:[['addR','➕ N₂O₄',{N2O4:15}],['addP','➕ NO₂',{NO2:30}],['remP','➖ NO₂',{NO2:-0.5}]]},
+ hi:{real:'🏭 Hydrogen iodide is made for medicines and disinfectants; the violet I₂ shows how far it has reacted.',title:'H₂ + I₂ ⇌ 2 HI',gas:true,heat:true,dH:-9,
+  eq:[[1,'H2','g'],[1,'I2','g']],eqP:[[2,'HI','g']],
+  sp:{H2:{l:'H₂',c:'#ffffff',e:'#7d8a94',r:5.5},I2:{l:'I₂',c:'#6b3fa0',e:'#3e1f63',r:9},HI:{l:'HI',c:'#d8c8ec',e:'#7a62a0',r:7}},
+  R:['H2','I2'],P:['HI','HI'],kf:0.0105,kr:0.00175,Ef:22000,Er:47000,
+  units:{H2:1,I2:1,HI:1},total:null,start:{H2:40,I2:40,HI:0},
+  tint:{sp:'I2',rgb:[110,50,160],k:0.012,max:0.6},tintName:'purple color',
+  look:'violet I₂ vapor; H₂ and HI are colorless',
+  stress:[['addR','➕ H₂',{H2:20}],['addR2','➕ I₂',{I2:20}],['addP','➕ HI',{HI:30}]]},
+ fescn:{real:'🧪 A classic lab test: the blood-red color reveals Fe³⁺ (iron) or SCN⁻ in a sample.',title:'Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺ (blood-red)',gas:false,heat:true,dH:-1,
+  eq:[[1,'Fe','aq'],[1,'SCN','aq']],eqP:[[1,'FeSCN','aq']],
+  sp:{Fe:{l:'Fe³⁺',c:'#f0c64a',e:'#a7801a',r:7.5},SCN:{l:'SCN⁻',c:'#cfd7dd',e:'#6f7b84',r:6},FeSCN:{l:'FeSCN²⁺',c:'#b3122a',e:'#6b0716',r:9.5}},
+  R:['Fe','SCN'],P:['FeSCN'],kf:0.0036,kr:0.075,Ef:20000,Er:50000,
+  units:{Fe:1,SCN:1,FeSCN:1},start:{Fe:45,SCN:45,FeSCN:0},
+  tint:{sp:'FeSCN',rgb:[178,18,40],k:0.016,max:0.7},tintName:'red color',
+  look:'blood-red FeSCN²⁺; Fe³⁺ is pale yellow, SCN⁻ colorless',
+  stress:[['addR','➕ Fe³⁺',{Fe:20}],['addR2','➕ SCN⁻',{SCN:20}],['remR','➖ Fe³⁺',{Fe:-0.6}]]},
+ blood:{real:'🩸 The main buffer in your blood keeps pH near 7.4. Lungs remove CO₂; kidneys adjust HCO₃⁻.',title:'CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (blood buffer)',gas:false,heat:false,dH:null,
+  eq:[[1,'CO2','aq'],[1,'H2O','l']],eqP:[[1,'H','aq'],[1,'HCO3','aq']],
+  sp:{CO2:{l:'CO₂',c:'#8b96a0',e:'#4d5862',r:10},H:{l:'H⁺',c:'#ff8fb1',e:'#b23a62',r:4.5},HCO3:{l:'HCO₃⁻',c:'#7cc4e8',e:'#2e6f96',r:10}},
+  R:['CO2'],P:['H','HCO3'],kf:0.12,kr:0.0103,Ef:30000,Er:30000,
+  units:{CO2:1,H:1,HCO3:1},start:{CO2:40,HCO3:25,H:0},
+  tint:{sp:'H',mix:[[214,40,80],[240,200,40]],lo:5,hi:15,a:0.34},tintName:'indicator color',tube:'pH indicator',
+  look:'a pH indicator in the blood sample: pink-red when basic, yellow when acidic',
+  stress:[['remR','😮‍💨 Hyperventilate (blow off CO₂)',{CO2:-0.5}],['addR','🫁 Hold breath / COPD (+CO₂)',{CO2:20}],['addP','🏃 Lactic acid (+H⁺)',{H:12}],['addP2','💉 Bicarbonate IV (+HCO₃⁻)',{HCO3:20}]]},
+ hb:{real:'⛰️ Climbers, athletes and patients on oxygen: how much O₂ your hemoglobin carries.',title:'Hb + O₂ ⇌ HbO₂ (your blood)',gas:false,heat:false,dH:null,
+  eq:[[1,'Hb','aq'],[1,'O2','g']],eqP:[[1,'HbO2','aq']],
+  sp:{Hb:{l:'Hb',c:'#7b2f4a',e:'#45142a',r:10},O2:{l:'O₂',c:'#9fd3f2',e:'#3f86b5',r:5.5},HbO2:{l:'HbO₂',c:'#ef4a3c',e:'#9c1d14',r:11}},
+  R:['Hb','O2'],P:['HbO2'],kf:0.0042,kr:0.1,Ef:30000,Er:30000,
+  units:{Hb:1,O2:1,HbO2:1},start:{Hb:35,O2:60,HbO2:0},
+  tint:{sp:'HbO2',rgb:[220,40,40],k:0.014,max:0.62},tintName:'bright red color',
+  look:'oxygen-rich blood is bright red; low-oxygen blood is darker',
+  stress:[['remR2','⛰️ Climb high (less O₂)',{O2:-0.55}],['addR2','😷 Oxygen mask (+O₂)',{O2:30}],['addR','🩸 Body makes more Hb',{Hb:15}]]}
+};
+function eqCount(st,list){/* mass-action factor for one side, e.g. ['NO2','NO2'] → x² */
+ let f=1;list.forEach(s=>f*=Math.max(0,st.x[s]||0));return f}
+function eqK(st){/* rate constants with temperature + catalyst */
+ const S=SYS[st.sys],a=E=>Math.exp(-E/EQ_R*(1/st.T-1/EQ_T0)),c=st.cat?3:1;
+ return {kf:S.kf*a(S.Ef)*c,kr:S.kr*a(S.Er)*c}}
+function eqRates(st){const S=SYS[st.sys],k=eqK(st);
+ return {f:k.kf*eqCount(st,S.R)/Math.pow(st.V,S.R.length-1),r:k.kr*eqCount(st,S.P)/Math.pow(st.V,S.P.length-1)}}
+/* K in "particles per box" units; Q is the same ratio from the current counts */
+function eqKval(st){const k=eqK(st);return k.kf/k.kr}
+function eqQ(st,n=st.x){const S=SYS[st.sys];let num=1,den=1;S.P.forEach(s=>num*=(n[s]||0)/st.V);S.R.forEach(s=>den*=(n[s]||0)/st.V);return den>0?num/den:Infinity}
+function eqRand(st){st.seed=(st.seed*1664525+1013904223)>>>0;return st.seed/4294967296}
+function eqPoisson(st,l){if(l<=0)return 0;let L=Math.exp(-l),k=0,p=1;do{k++;p*=eqRand(st)}while(p>L&&k<50);return k-1}
+function eqNew(sys,o={}){const S=SYS[sys];
+ const st={sys,T:o.T||EQ_T0,V:o.V||1,cat:!!o.cat,t:0,n:{},parts:[],W0:o.W0||600,H:o.H||330,seed:o.seed||((Math.random()*4294967296)>>>0),
+  ema:{f:0,r:0},hist:[],marks:[],flashes:[],evF:0,evR:0,accF:0,accR:0,x:{}};
+ Object.keys(S.sp).forEach(s=>st.n[s]=0);
+ const start=o.start||S.start||{[S.R[0]]:S.total};
+ for(const s in start)for(let i=0;i<start[s];i++)eqSpawn(st,s);
+ Object.keys(S.sp).forEach(s=>st.x[s]=st.n[s]);const r=eqRates(st);st.ema={f:r.f,r:r.r};return st}
+function eqW(st){return st.W0*st.V}
+function eqSpawn(st,s,x,y,vx,vy){const S=SYS[st.sys],sp=S.sp[s],W=eqW(st),m=sp.r+2;
+ const a=eqRand(st)*Math.PI*2,v=(55+eqRand(st)*40)*(9/sp.r)**0.5;
+ const p={s,x:x??m+eqRand(st)*(W-2*m),y:y??m+eqRand(st)*(st.H-2*m),vx:vx??Math.cos(a)*v,vy:vy??Math.sin(a)*v,born:st.t};
+ st.parts.push(p);st.n[s]=(st.n[s]||0)+1;return p}
+function eqKill(st,p){const i=st.parts.indexOf(p);if(i>=0){st.parts.splice(i,1);st.n[p.s]--;p.dead=true}}
+function eqPickPartner(st,p,s){let best=null,bd=1e18;for(const q of st.parts){if(q===p||q.s!==s)continue;const d=(q.x-p.x)**2+(q.y-p.y)**2;if(d<bd){bd=d;best=q}}return best}
+const eqMass=(st,p)=>SYS[st.sys].sp[p.s].r**2;
+/* reactant particles become product particles in the same place; momentum is shared out so the motion looks natural */
+function eqTransform(st,used,to,dir){
+ const M=used.reduce((m,p)=>m+eqMass(st,p),0),cx=used.reduce((s,p)=>s+p.x,0)/used.length,cy=used.reduce((s,p)=>s+p.y,0)/used.length;
+ const vx=used.reduce((s,p)=>s+p.vx*eqMass(st,p),0)/M,vy=used.reduce((s,p)=>s+p.vy*eqMass(st,p),0)/M;
+ used.forEach(p=>eqKill(st,p));
+ if(to.length===used.length)to.forEach((s,i)=>eqClamp(st,eqSpawn(st,s,used[i].x,used[i].y,used[i].vx,used[i].vy)));
+ else if(to.length>used.length){const ang=eqRand(st)*Math.PI*2,kx=Math.cos(ang),ky=Math.sin(ang),kick=45;
+  to.forEach((s,i)=>{const g=i?1:-1;eqClamp(st,eqSpawn(st,s,cx+kx*9*g,cy+ky*9*g,vx+kx*kick*g,vy+ky*kick*g))})}
+ else to.forEach(s=>eqClamp(st,eqSpawn(st,s,cx,cy,vx,vy)));
+ st.flashes.push({x:cx,y:cy,t:st.t,dir})}
+/* fallback event (no collision needed): used when a reaction is overdue or counts must catch up */
+function eqEvent(st,from,to,dir){const pool=st.parts.filter(p=>p.s===from[0]);if(!pool.length)return false;
+ const a=pool[Math.floor(eqRand(st)*pool.length)],used=[a];
+ for(let i=1;i<from.length;i++){const b=eqPickPartner(st,used[0],from[i]);if(!b||used.includes(b))return false;used.push(b)}
+ eqTransform(st,used,to,dir);return true}
+function eqClamp(st,p){const r=SYS[st.sys].sp[p.s].r,W=eqW(st);if(p.x<r){p.x=r;p.vx=Math.abs(p.vx)}if(p.x>W-r){p.x=W-r;p.vx=-Math.abs(p.vx)}if(p.y<r){p.y=r;p.vy=Math.abs(p.vy)}if(p.y>st.H-r){p.y=st.H-r;p.vy=-Math.abs(p.vy)}}
+/* which particles of a colliding pair react, if this pair fits one side of the equation */
+function eqFits(side,a,b){if(side.length===1)return a.s===side[0]?[a]:b.s===side[0]?[b]:null;
+ return (a.s===side[0]&&b.s===side[1])?[a,b]:(b.s===side[0]&&a.s===side[1])?[b,a]:null}
+/* billiard-ball collisions (equal-energy elastic bounce, mass ∝ size²), found with a grid so phones stay smooth.
+   A reaction only happens at a collision: the rate equations decide HOW MANY collisions react (st.pendF / st.pendR);
+   every other collision just bounces. */
+function eqCollide(st,dt){const S=SYS[st.sys],C=24,cols=Math.ceil(eqW(st)/C)+1,grid=new Map();
+ st.parts.forEach(p=>{const k=Math.floor(p.x/C)+Math.floor(p.y/C)*cols;let a=grid.get(k);if(!a)grid.set(k,a=[]);a.push(p)});
+ const list=st.parts.slice();
+ for(const a of list){if(a.dead)continue;const cx=Math.floor(a.x/C),cy=Math.floor(a.y/C);
+  for(let gx=cx-1;gx<=cx+1;gx++)for(let gy=cy-1;gy<=cy+1;gy++){const cell=grid.get(gx+gy*cols);if(!cell)continue;
+   for(const b of cell){if(a.dead)break;if(b===a||b.dead||b.x<a.x||(b.x===a.x&&b.y<=a.y))continue;
+    const ra=S.sp[a.s].r,rb=S.sp[b.s].r,dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy,R=ra+rb;if(d2>=R*R||d2===0)continue;
+    const d=Math.sqrt(d2),nx=dx/d,ny=dy/d,rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+    const ma=ra*ra,mb=rb*rb,ov=(R-d)/2;a.x-=nx*ov;a.y-=ny*ov;b.x+=nx*ov;b.y+=ny*ov;
+    if(rel>=0)continue;                                      // already moving apart
+    st.coll++;
+    let r=st.pendF>=1&&eqFits(S.R,a,b);
+    if(r){st.pendF--;st.evF++;st.viaColl=(st.viaColl||0)+1;eqTransform(st,r,S.P,1);continue}
+    r=st.pendR>=1&&eqFits(S.P,a,b);
+    if(r){st.pendR--;st.evR++;st.viaColl=(st.viaColl||0)+1;eqTransform(st,r,S.R,-1);continue}
+    const j=2*rel/(ma+mb);a.vx+=j*mb*nx;a.vy+=j*mb*ny;b.vx-=j*ma*nx;b.vy-=j*ma*ny}}}}
+function eqStep(st,dt){const S=SYS[st.sys],sub=6,h=dt/sub;
+ for(let j=0;j<sub;j++){const r=eqRates(st),net=(r.f-r.r)*h;
+  S.R.forEach(s=>st.x[s]=Math.max(0,st.x[s]-net));S.P.forEach(s=>st.x[s]=Math.max(0,st.x[s]+net));st.accF+=r.f*h;st.accR+=r.r*h}
+ const nf=Math.floor(st.accF),nr=Math.floor(st.accR);st.accF-=nf;st.accR-=nr;
+ if(nf&&st.pendF<1)st.dueF=st.t;if(nr&&st.pendR<1)st.dueR=st.t;st.pendF=(st.pendF||0)+nf;st.pendR=(st.pendR||0)+nr;
+ const sp=Math.sqrt(st.T/EQ_T0);
+ for(const p of st.parts){p.x+=p.vx*dt*sp;p.y+=p.vy*dt*sp;eqClamp(st,p)}
+ st.coll=st.coll||0;const c0=st.coll;eqCollide(st,dt);
+ /* reactions that wait too long for the right collision (few particles, cold box) happen anyway, so counts stay true */
+ while(st.pendF>=1&&(st.pendF>6||st.t-(st.dueF||0)>0.8)){st.pendF--;if(eqEvent(st,S.R,S.P,1))st.evF++;else{st.pendF=0;break}st.dueF=st.t}
+ while(st.pendR>=1&&(st.pendR>6||st.t-(st.dueR||0)>0.8)){st.pendR--;if(eqEvent(st,S.P,S.R,-1))st.evR++;else{st.pendR=0;break}st.dueR=st.t}
+ for(const s of new Set(S.P)){const lag=st.n[s]-st.x[s],tol=Math.max(1.5,0.06*st.x[s]);
+  if(lag<-tol){if(eqEvent(st,S.R,S.P,1))st.evF++}else if(lag>tol){if(eqEvent(st,S.P,S.R,-1))st.evR++}}
+ const a=1-Math.exp(-dt/1.5);st.collRate=(st.collRate||0)+((st.coll-c0)/dt-(st.collRate||0))*a;
+ const r2=eqRates(st);st.ema.f=r2.f;st.ema.r=r2.r;
+ st.t+=dt;st.flashes=st.flashes.filter(f=>st.t-f.t<0.45)}
+/* stresses: add/remove particles, temperature, volume, catalyst. Each leaves a mark on the graph. */
+function eqChange(st,delta,label){for(const s in delta){let d=delta[s];
+  if(d>0){for(let i=0;i<d;i++)eqSpawn(st,s);st.x[s]+=d}
+  else{const k=d>-1?Math.round((st.n[s]||0)*-d):-d;let gone=0;for(let i=0;i<k;i++){const pool=st.parts.filter(p=>p.s===s);if(!pool.length)break;eqKill(st,pool[Math.floor(eqRand(st)*pool.length)]);gone++}st.x[s]=Math.max(0,st.x[s]-gone)}}
+ st.marks.push({t:st.t,label})}
+function eqSetT(st,T){st.T=T}
+function eqSetV(st,V){st.V=V;st.parts.forEach(p=>eqClamp(st,p))}
+function eqRun(st,sec,dt=1/30){const n=Math.round(sec/dt);for(let i=0;i<n;i++)eqStep(st,dt)}
+/* average counts over a window (to read a noisy dynamic equilibrium) */
+function eqAvg(st,sec,dt=1/30){const S=SYS[st.sys],sum={};Object.keys(S.sp).forEach(s=>sum[s]=0);const n=Math.round(sec/dt);
+ for(let i=0;i<n;i++){eqStep(st,dt);for(const s in sum)sum[s]+=st.n[s]}for(const s in sum)sum[s]/=n;return sum}
+/* the same physics for the ride line: queue ⇌ ride (A ⇌ B), first-in first-out so a guest can be followed */
+const RIDE={kb:0.1,ku:0.2,crew:2.5,long:0.5};
+function rideNew(o={}){const st={t:0,queue:[],ride:[],guests:[],crew:false,long:false,xq:0,xr:0,accF:0,accR:0,seed:o.seed||((Math.random()*4294967296)>>>0),ema:{f:0,r:0},hist:[],marks:[],evF:0,evR:0,boardLog:[],unloadLog:[]};
+ const n=o.n||60;for(let i=0;i<n;i++){const g={id:i,gold:i===7,x:40,y:40};st.guests.push(g);st.queue.push(g)}st.xq=n;return st}
+function rideK(st){const c=st.crew?RIDE.crew:1;return {kb:RIDE.kb*c,ku:RIDE.ku*c*(st.long?RIDE.long:1)}}
+function rideRates(st){const k=rideK(st);return {f:k.kb*st.xq,r:k.ku*st.xr}}
+function rideStep(st,dt){const r=rideRates(st),net=(r.f-r.r)*dt;st.xq-=net;st.xr+=net;st.accF+=r.f*dt;st.accR+=r.r*dt;
+ let nb=Math.floor(st.accF),nu=Math.floor(st.accR);st.accF-=nb;st.accR-=nu;
+ const lag=st.ride.length+nb-nu-st.xr;if(lag<-1.5)nb++;else if(lag>1.5)nu++;
+ for(let i=0;i<nb&&st.queue.length;i++){const g=st.queue.shift();g.ang=0;g.on=st.t;g.justOn=true;st.ride.push(g);st.evF++;st.boardLog.push(st.t)}
+ for(let i=0;i<nu&&st.ride.length;i++){const g=st.ride.shift();st.queue.push(g);g.back=st.t;g.justBack=true;st.evR++;st.unloadLog.push(st.t)}
+ const r2=rideRates(st);st.ema.f=r2.f;st.ema.r=r2.r;st.t+=dt;
+ const cut=st.t-10;while(st.boardLog.length&&st.boardLog[0]<cut)st.boardLog.shift();while(st.unloadLog.length&&st.unloadLog[0]<cut)st.unloadLog.shift()}
+function rideAdd(st,n,label){if(n>0){for(let i=0;i<n;i++){const g={id:st.guests.length,x:-20,y:300,arrive:st.t};st.guests.push(g);st.queue.push(g)}st.xq+=n}
+ else{const before=st.queue.length;for(let i=0;i<-n&&st.queue.length>1;i++){const idx=st.queue.length-1-Math.floor(eqRand(st)*Math.min(st.queue.length-1,25));const g=st.queue[idx];if(g.gold){continue}st.queue.splice(idx,1);g.gone=st.t;st.guests.splice(st.guests.indexOf(g),1)}st.xq=Math.max(0,st.xq-(before-st.queue.length))}
+ st.marks.push({t:st.t,label})}
+/*EQ-ENGINE-END*/
+
+</script>
+<script>
+/* ============================== SETTINGS ============================== */
+const GAME_KEY='itsdrdan-equilibrium';
+const MODES=[
+ {id:'ride',title:'Ride Line',short:'Equilibrium as a theme-park line',icon:'🎢',mb:'#fff0e3',ma:'#e8955a'},
+ {id:'lab',title:'Particle Lab',short:'Stress real reactions and watch',icon:'🔬',mb:'#e6f2ff',ma:'#5d9fd2'},
+ {id:'shift',title:'Shift It!',short:'Le Châtelier predictions',icon:'↔️',mb:'#e7f6e9',ma:'#6fae7e'},
+ {id:'ideas',title:'Big Ideas & K',short:'Dynamic equilibrium, K expressions',icon:'🧠',mb:'#f1eafb',ma:'#9a7fcf'}];
+const VIDEO_FOR={
+ basics:['qatdA_ALnx8',0,'What is equilibrium?'],rates:['qatdA_ALnx8',683,'Rates must be equal at equilibrium'],
+ kexpr:['-ie15qDdHjE',236,'The equilibrium constant, K'],krules:['-ie15qDdHjE',472,'Rules behind K'],hetero:['ZojNOgXleJA',731,'Heterogeneous equilibrium expressions'],
+ lec:['JMRz9TRVUQg',0,"Le Châtelier's principle: stress!"],lecAdd:['JMRz9TRVUQg',304,'Adding concentration = move away'],lecRem:['JMRz9TRVUQg',427,'Taking concentration = move toward'],
+ lecT:['JMRz9TRVUQg',719,'Temperature: exothermic and endothermic'],lecP:['JMRz9TRVUQg',992,'Pressure change'],lecV:['JMRz9TRVUQg',1409,'Volume changes'],lecCat:['JMRz9TRVUQg',1495,'Catalysts and enzymes'],
+ lecReal:['JMRz9TRVUQg',82,'Real-world examples'],practice:['ZojNOgXleJA',986,"Practice: predicting Le Châtelier shifts"]};
+const FALLBACK_VIDEO='qatdA_ALnx8';
+const REFERENCE=[
+ ['Equilibrium','Forward rate <b>=</b> reverse rate. Amounts stay <b>constant</b>, not equal. Both reactions keep going (dynamic).'],
+ ['Equilibrium constant',`aA + bB ⇌ cC + dD &nbsp; K = <span class="frac"><span>[C]<sup>c</sup>[D]<sup>d</sup></span><span>[A]<sup>a</sup>[B]<sup>b</sup></span></span><br>Products over reactants, coefficients become exponents. Leave out pure solids (s) and liquids (l).`],
+ ['Size of K','K &gt; 1: products favored. K &lt; 1: reactants favored. Reverse reaction: K<sub>reverse</sub> = 1/K.'],
+ ["Le Châtelier's principle",'<table><tr><td>Add a substance</td><td>shift <b>away</b> from it</td></tr><tr><td>Remove a substance</td><td>shift <b>toward</b> it</td></tr><tr><td>Heat, exothermic (ΔH &lt; 0)</td><td>heat is a product: shift <b>left</b></td></tr><tr><td>Heat, endothermic (ΔH &gt; 0)</td><td>heat is a reactant: shift <b>right</b></td></tr><tr><td>Smaller volume (more pressure)</td><td>toward <b>fewer gas</b> moles</td></tr><tr><td>Catalyst; adding (s) or (l)</td><td><b>no shift</b></td></tr></table>Only temperature changes the value of K.'],
+ ['🔗 Equilibrium in real life','🩸 Blood buffer: CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (lungs remove CO₂, kidneys adjust HCO₃⁻) · ⛰️ Hb + O₂ ⇌ HbO₂ (altitude, oxygen therapy) · 🦷 Enamel dissolves when acid removes OH⁻ · 🏭 Haber process: remove NH₃, high pressure · 🥤 Soda fizzes when CO₂ pressure drops'],
+ ['🎢 Ride-line model','Line (queue) = reactants · Ride = products · Boarding = forward rate · Back in line = reverse rate · Extra crew = catalyst']];
+/* ============================== HELPERS ============================== */
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)],shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SUPS='⁰¹²³⁴⁵⁶⁷⁸⁹';
+function sci(x,s=2){if(x===0)return '0';const e=Math.floor(Math.log10(Math.abs(x)));if(e>=-2&&e<=4){return String(Number(x.toPrecision(s)))}const [m,p]=x.toExponential(s-1).split('e');return m+' × 10'+String(Number(p)).replace(/[0-9-]/g,c=>c==='-'?'⁻':SUPS[c])}
+/* make an MC question from [text, isRight, why] choices */
+function mc(o){const ch=o.choices;const q=Object.assign({type:'mc'},o);q.options=o.keepOrder?ch.map(c=>c[0]):shuf(ch.map(c=>c[0]));q.answer=ch.find(c=>c[1])[0];q.whys={};ch.forEach(c=>q.whys[c[0]]=c[2]);q.why=o.why||ch.find(c=>c[1])[2];return q}
+/* ============================== REACTIONS (Shift It + K) ============================== */
+/* side entries: [coef, formula, phase, simKey?, flag?] ; dH in kJ (±1 = sign only) ; sim = SYS key that animates it */
+const RX=[
+ {id:'haber',L:[[1,'N₂','g'],[3,'H₂','g']],R:[[2,'NH₃','g']],dH:-92,ctx:'Haber process (makes fertilizer)'},
+ {id:'so3',L:[[2,'SO₂','g'],[1,'O₂','g']],R:[[2,'SO₃','g']],dH:-198,ctx:'Making sulfuric acid'},
+ {id:'no2',L:[[1,'N₂O₄','g','N2O4']],R:[[2,'NO₂','g','NO2']],dH:57,sim:'no2',ctx:'Brown NO₂ gas in a sealed flask'},
+ {id:'hi',L:[[1,'H₂','g','H2'],[1,'I₂','g','I2']],R:[[2,'HI','g','HI']],dH:-9,sim:'hi'},
+ {id:'pcl5',L:[[1,'PCl₅','g']],R:[[1,'PCl₃','g'],[1,'Cl₂','g']],dH:88},
+ {id:'caco3',L:[[1,'CaCO₃','s']],R:[[1,'CaO','s'],[1,'CO₂','g']],dH:178,ctx:'Heating limestone in a lime kiln'},
+ {id:'nh3ox',L:[[4,'NH₃','g'],[5,'O₂','g']],R:[[4,'NO','g'],[6,'H₂O','g']],dH:-906},
+ {id:'cs2',L:[[1,'CH₄','g'],[2,'H₂S','g']],R:[[1,'CS₂','g'],[4,'H₂','g']],dH:232},
+ {id:'co',L:[[2,'CO','g'],[1,'O₂','g']],R:[[2,'CO₂','g']],dH:-566},
+ {id:'no',L:[[1,'N₂','g'],[1,'O₂','g']],R:[[2,'NO','g']],dH:181,ctx:'Forms NO in hot car engines'},
+ {id:'meth',L:[[1,'CO','g'],[3,'H₂','g']],R:[[1,'CH₄','g'],[1,'H₂O','g']],dH:-206},
+ {id:'hb',L:[[1,'Hb','aq','Hb'],[1,'O₂','g','O2']],R:[[1,'HbO₂','aq','HbO2']],dH:null,noP:true,sim:'hb',ctx:'Oxygen transport in your blood'},
+ {id:'blood',L:[[1,'CO₂','aq','CO2'],[1,'H₂O','l',null,'x']],R:[[1,'H⁺','aq','H'],[1,'HCO₃⁻','aq','HCO3']],dH:null,noP:true,sim:'blood',ctx:'The bicarbonate buffer in your blood'},
+ {id:'fescn',L:[[1,'Fe³⁺','aq','Fe'],[1,'SCN⁻','aq','SCN']],R:[[1,'FeSCN²⁺','aq','FeSCN']],dH:-1,sim:'fescn',ctx:'Blood-red FeSCN²⁺ in a test tube'},
+ {id:'soda',L:[[1,'CO₂','g'],[1,'H₂O','l',null,'x']],R:[[1,'H₂CO₃','aq']],dH:null,ctx:'A sealed bottle of soda'},
+ {id:'nh4hs',L:[[1,'NH₄HS','s']],R:[[1,'NH₃','g'],[1,'H₂S','g']],dH:90},
+ {id:'cobalt',L:[[1,'Co(H₂O)₆²⁺','aq'],[4,'Cl⁻','aq']],R:[[1,'CoCl₄²⁻','aq'],[6,'H₂O','l',null,'x']],dH:1,ctx:'Pink Co(H₂O)₆²⁺ ⇌ blue CoCl₄²⁻'}];
+const sp=e=>`${e[0]>1?e[0]+' ':''}${e[1]}(${e[2]})`;
+const rxText=r=>r.L.map(sp).join(' + ')+' ⇌ '+r.R.map(sp).join(' + ');
+const dHText=r=>r.dH==null?'':Math.abs(r.dH)===1?(r.dH<0?'ΔH &lt; 0 (exothermic)':'ΔH &gt; 0 (endothermic)'):`ΔH = ${r.dH>0?'+':'−'}${Math.abs(r.dH)} kJ`;
+const rxHTML=(r,showH=true)=>`<div class="rxn">${rxText(r)}${showH&&r.dH!=null?`<span class="dh">${dHText(r)}</span>`:''}${r.ctx?`<span class="dh">${r.ctx}</span>`:''}</div>`;
+const gasMoles=side=>side.filter(e=>e[2]==='g').reduce((s,e)=>s+e[0],0);
+/* every stress that makes sense for a reaction */
+function stressesFor(r){const out=[];
+ [['L',r.L],['R',r.R]].forEach(([side,list])=>list.forEach(e=>{if(e[4]==='x')return;
+  if(e[2]==='g'||e[2]==='aq'){out.push({t:'add',side,e,label:`Add more ${e[1]}`});out.push({t:'rem',side,e,label:`Remove some ${e[1]}`})}
+  else if(e[2]==='s')out.push({t:'addS',side,e,label:`Add more solid ${e[1]}`})}));
+ if(r.dH!=null){out.push({t:'heat',label:'Raise the temperature'});out.push({t:'cool',label:'Lower the temperature'})}
+ if(!r.noP&&(gasMoles(r.L)+gasMoles(r.R))>0){out.push({t:'comp',label:'Decrease the volume (pressure goes up)'});out.push({t:'exp',label:'Increase the volume (pressure goes down)'})}
+ out.push({t:'cat',label:'Add a catalyst'});return out}
+/* Le Châtelier rule: 'R' toward products, 'L' toward reactants, '0' no shift */
+function shiftOf(r,s){const away=s.side==='L'?'R':'L',toward=s.side;
+ switch(s.t){case'add':return away;case'rem':return toward;case'addS':case'cat':return'0';
+  case'heat':return r.dH>0?'R':'L';case'cool':return r.dH>0?'L':'R';
+  case'comp':{const a=gasMoles(r.L),b=gasMoles(r.R);return a===b?'0':a>b?'R':'L'}
+  case'exp':{const a=gasMoles(r.L),b=gasMoles(r.R);return a===b?'0':a>b?'L':'R'}}}
+const DIRTXT={R:'Shifts right, toward products',L:'Shifts left, toward reactants','0':'No shift'};
+const sideWord=x=>x==='L'?'reactant':'product';
+/* teaching reason for the right answer */
+function reasonOf(r,s){const d=shiftOf(r,s),a=gasMoles(r.L),b=gasMoles(r.R),hs=r.dH>0?'endothermic, so heat acts like a <b>reactant</b>':'exothermic, so heat acts like a <b>product</b>';
+ switch(s.t){
+ case'add':return `${s.e[1]} is a ${sideWord(s.side)}. Adding it speeds up the reaction that <b>uses it up</b>, so the equilibrium shifts <b>away</b> from it: ${DIRTXT[d].toLowerCase()}.`;
+ case'rem':return `${s.e[1]} is a ${sideWord(s.side)}. Taking it away slows the reaction that uses it, so the system <b>makes more</b> of it: shift <b>toward</b> it, ${DIRTXT[d].toLowerCase()}.`;
+ case'addS':return `${s.e[1]} is a pure <b>solid</b>. Solids aren't in the K expression; adding more doesn't change any concentration, so there is <b>no shift</b>.`;
+ case'cat':return 'A catalyst speeds up the forward <b>and</b> reverse reactions by the same factor. Equilibrium is reached faster, but the amounts <b>don\'t change</b>: no shift.';
+ case'heat':return `The reaction is ${hs}. Adding heat is like adding that substance, so it shifts <b>away</b> from the heat: ${DIRTXT[d].toLowerCase()}.`;
+ case'cool':return `The reaction is ${hs}. Cooling removes heat, so the system shifts <b>toward</b> the heat side to make more: ${DIRTXT[d].toLowerCase()}.`;
+ case'comp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so squeezing can't be relieved: <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A smaller volume favors the side with <b>fewer gas moles</b>: ${DIRTXT[d].toLowerCase()}.`;
+ case'exp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so a bigger volume causes <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A bigger volume favors the side with <b>more gas moles</b>: ${DIRTXT[d].toLowerCase()}.`}}
+/* why a picked direction is wrong (named mistake) */
+function wrongDir(r,s,pickD){const d=shiftOf(r,s);
+ if(pickD==='0'){return {add:'Adding a substance that is in K is a stress, so something must shift.',rem:'Removing a substance that is in K is a stress, so something must shift.',heat:'ΔH is not zero, so a temperature change always shifts the equilibrium.',cool:'ΔH is not zero, so a temperature change always shifts the equilibrium.',comp:'The two sides have different numbers of gas moles, so volume matters here.',exp:'The two sides have different numbers of gas moles, so volume matters here.'}[s.t]||''}
+ if(d==='0')return {addS:'Solids are left out of K, so adding more solid changes nothing.',cat:'A catalyst speeds both directions equally, so it can\'t favor one side.',comp:'Both sides have the same number of gas moles, so volume can\'t favor either side.',exp:'Both sides have the same number of gas moles, so volume can\'t favor either side.'}[s.t]||'';
+ return {add:'That\'s backwards: the system uses up what you add, so it moves away from that side.',rem:'That\'s backwards: the system replaces what you remove, so it moves toward that side.',
+  heat:r.dH<0?'Backwards: in an exothermic reaction heat is a product, so adding heat pushes toward reactants.':'Backwards: in an endothermic reaction heat is a reactant, so adding heat pushes toward products.',
+  cool:r.dH<0?'Backwards: cooling removes heat, a product here, so it shifts toward products to make more heat.':'Backwards: cooling removes heat, a reactant here, so it shifts toward reactants.',
+  comp:'Backwards: a smaller volume favors the side with FEWER gas moles.',exp:'Backwards: a bigger volume favors the side with MORE gas moles.'}[s.t]||''}
+const VID_FOR_STRESS={add:'lecAdd',rem:'lecRem',addS:'hetero',cat:'lecCat',heat:'lecT',cool:'lecT',comp:'lecP',exp:'lecV'};
+const HINT_FOR={add:'Le Châtelier: the system tries to <b>use up</b> what you add. Which side is it on?',rem:'Le Châtelier: the system tries to <b>replace</b> what you take away.',addS:'Is a pure solid part of the K expression?',cat:'Does a catalyst speed up one direction or both?',
+ heat:'Write heat into the equation: exothermic (ΔH &lt; 0) → heat is a product; endothermic (ΔH &gt; 0) → heat is a reactant.',cool:'Write heat into the equation, then treat cooling as removing heat.',comp:'Count the moles of <b>gas</b> on each side (coefficients of (g) only).',exp:'Count the moles of <b>gas</b> on each side (coefficients of (g) only).'};
+/* sim demo for a stress, when the reaction has an animation */
+function demoFor(r,s){if(!r.sim)return null;const S=SYS[r.sim];
+ if(s.t==='add'&&s.e[3])return {act:'add',sp:s.e[3]};if(s.t==='rem'&&s.e[3])return {act:'rem',sp:s.e[3]};
+ if((s.t==='heat'||s.t==='cool')&&S.heat)return {act:s.t};if((s.t==='comp'||s.t==='exp')&&S.gas)return {act:s.t};if(s.t==='cat')return {act:'cat'};return null}
+/* ============================== K expressions ============================== */
+const term=(e,coefAsExp=true)=>coefAsExp?`[${e[1]}]${e[0]>1?`<sup>${e[0]}</sup>`:''}`:`${e[0]>1?e[0]:''}[${e[1]}]`;
+const frac=(n,d)=>d?`<span class="frac"><span>${n||'1'}</span><span>${d}</span></span>`:n;
+function kExpr(r,opt={}){const keep=e=>opt.all||(e[2]==='g'||e[2]==='aq');const P=r.R.filter(keep).map(e=>term(e,!opt.mult)),Rr=r.L.filter(keep).map(e=>term(e,!opt.mult));
+ const n=(opt.flip?Rr:P),d=(opt.flip?P:Rr);return 'K = '+(opt.sum?frac(n.join(' + '),d.join(' + ')):frac(n.join(''),d.join('')))}
+</script>
+<script>
+/* ============================== LAB VIEW (particles) ============================== */
+const LW=600,LH=330;
+const SHAPES={ /* atoms drawn for each species: [dx,dy,r,fill,edge] */
+ N2O4:[[-5,0,6.5,'#f3ead2','#9c8456'],[5,0,6.5,'#f3ead2','#9c8456']],NO2:[[0,0,7,'#b5562a','#6f3015']],
+ H2:[[-3,0,4,'#ffffff','#7d8a94'],[3,0,4,'#ffffff','#7d8a94']],I2:[[-5,0,6,'#6b3fa0','#3e1f63'],[5,0,6,'#6b3fa0','#3e1f63']],HI:[[-5,0,4,'#ffffff','#7d8a94'],[3,0,6,'#6b3fa0','#3e1f63']],
+ Fe:[[0,0,7.5,'#f0c64a','#a7801a']],SCN:[[-3.5,0,4,'#cfd7dd','#6f7b84'],[3.5,0,4,'#cfd7dd','#6f7b84']],FeSCN:[[-4,0,7.5,'#c3142e','#6b0716'],[6.5,0,4.5,'#c3142e','#6b0716']],
+ CO2:[[0,0,4.5,'#8b96a0','#4d5862'],[-7,0,4,'#e05a4f','#8e2a22'],[7,0,4,'#e05a4f','#8e2a22']],H:[[0,0,4.5,'#ff8fb1','#b23a62']],HCO3:[[0,0,6,'#7cc4e8','#2e6f96'],[-6,-5,3.5,'#e05a4f','#8e2a22'],[6,-5,3.5,'#e05a4f','#8e2a22'],[0,7,3.5,'#e05a4f','#8e2a22']],
+ Hb:[[0,0,10,'#7b2f4a','#45142a']],O2:[[-3,0,4,'#9fd3f2','#3f86b5'],[3,0,4,'#9fd3f2','#3f86b5']],HbO2:[[0,0,10,'#ef4a3c','#9c1d14'],[9,-7,3.5,'#9fd3f2','#3f86b5'],[14,-4,3.5,'#9fd3f2','#3f86b5']]};
+const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smooth:null,stat:'eq',
+ mount(host,cfg){this.cfg=cfg;const S=SYS[cfg.sys],gas=S.gas;
+  const st=eqNew(cfg.sys,{V:gas?0.7:1,start:cfg.start});eqRun(st,25);st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
+  const ctl=cfg.demo?'':`<div class="ctrls">${S.stress.map(([k,l,d])=>`<button type="button" class="chip go" data-s="${k}">${l}</button>`).join('')}
+   ${S.heat?`<label class="slider">🌡️ Temp<input type="range" id="tSl" min="0" max="100" step="1" value="25" aria-label="Temperature in degrees Celsius"><output id="tOut">25 °C</output></label>`:''}
+   ${gas?`<label class="slider">🫸 Volume<input type="range" id="vSl" min="35" max="100" step="1" value="70" aria-label="Volume of the container"><output id="vOut">70%</output></label>`:''}
+   <button type="button" class="chip" id="catBtn" aria-pressed="false">⚡ Catalyst</button>
+   <button type="button" class="chip rst" data-r="R">↺ Start: reactants only</button><button type="button" class="chip rst" data-r="P">↺ Start: products only</button></div>`;
+  const term=([c,k,ph])=>`${c>1?c+' ':''}${SHAPES[k]?`<span class="sw" style="background:${SHAPES[k][0][3]};border-color:${SHAPES[k][0][4]}"></span>`:''}${S.sp[k]?S.sp[k].l:{H2O:'H₂O'}[k]||k}(${ph})`;
+  const eqs=`${S.eq.map(term).join(' + ')} ⇌ ${S.eqP.map(term).join(' + ')}`;
+  const dh=S.dH==null?'':S.dH>0?`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= +'+S.dH+' kJ':'&gt; 0'} (endothermic)</span>`:`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= −'+Math.abs(S.dH)+' kJ':'&lt; 0'} (exothermic)</span>`;
+  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}</div>`:''}${ctl}
+   <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Particle view: ${esc(S.title)}"></canvas><div class="tube" aria-hidden="true"><svg viewBox="0 0 30 70"><path d="M5 3v52a10 10 0 0 0 20 0V3" fill="#fff" stroke="#6b7c88" stroke-width="2.5"/><path id="tubeFill" d="M7 20v35a8 8 0 0 0 16 0V20z" fill="#eee"/></svg>${S.tube||'What you\'d see'}</div></div>
+   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus">⚖️ Balanced</div></div></div>
+   <div class="graphwrap"><canvas id="grCv" width="600" height="190" role="img" aria-label="Graph of concentration over time"></canvas><div class="cap">Concentration vs. time (last 30 s). Dashed lines mark each change you make.</div></div></div>`;
+  this.el=host.firstElementChild;this.wire();this.start()},
+ wire(){const S=SYS[this.cfg.sys],st=()=>this.st;
+  this.el.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const it=S.stress.find(x=>x[0]===b.dataset.s);eqChange(st(),it[2],it[1].replace(/\s*\(.*\)\s*$/,''));this.emit('stress:'+it[0])});
+  const tS=this.el.querySelector('#tSl');if(tS)tS.oninput=()=>{const c=+tS.value;eqSetT(st(),273+c);$('tOut').textContent=c+' °C';clearTimeout(this.tMark);this.tMark=setTimeout(()=>{st().marks.push({t:st().t,label:c+' °C'})},250);if(c>=70)this.emit('T:hot');if(c<=5)this.emit('T:cold')};
+  const vS=this.el.querySelector('#vSl');if(vS)vS.oninput=()=>{const v=+vS.value;eqSetV(st(),v/100);$('vOut').textContent=v+'%';clearTimeout(this.vMark);this.vMark=setTimeout(()=>{st().marks.push({t:st().t,label:'V '+v+'%'})},250);if(v<=45)this.emit('V:small');if(v>=95)this.emit('V:big')};
+  const cb=this.el.querySelector('#catBtn');if(cb)cb.onclick=()=>{st().cat=!st().cat;cb.classList.toggle('on',st().cat);cb.setAttribute('aria-pressed',st().cat);st().marks.push({t:st().t,label:st().cat?'catalyst on':'catalyst off'});if(st().cat)this.emit('cat:on')};
+  this.el.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const old=st(),S=SYS[this.cfg.sys];let start={};
+   if(b.dataset.r==='R'){if(S.total)start={[S.R[0]]:S.total};else{start={};S.R.forEach(k=>start[k]=(S.start[k]||0)+(S.start[S.P[0]]||0))}}
+   else{if(S.total)start={[S.P[0]]:S.total*2};else{const n=Math.min(...S.R.map(k=>S.start[k]));start={[S.P[0]]:S.P.length===2?n*2:n};S.R.forEach(k=>{if(S.start[k]>n)start[k]=S.start[k]-n})}}
+   const ns=eqNew(this.cfg.sys,{V:old.V,T:old.T,cat:old.cat,start});ns.marks=[{t:0,label:b.dataset.r==='R'?'reactants only':'products only'}];this.st=ns;this.smooth=null;this.lastSample=-1;this.emit('restart:'+b.dataset.r)})},
+ emit(ev){this.onEvent&&this.onEvent(ev)},
+ apply(d){const st=this.st,S=SYS[this.cfg.sys];if(!d)return;
+  if(d.act==='add')eqChange(st,{[d.sp]:d.sp==='NO2'?30:d.sp==='O2'?30:20},'+'+S.sp[d.sp].l);
+  if(d.act==='rem')eqChange(st,{[d.sp]:-0.55},'−'+S.sp[d.sp].l);
+  if(d.act==='heat'){eqSetT(st,353);st.marks.push({t:st.t,label:'80 °C'})}if(d.act==='cool'){eqSetT(st,276);st.marks.push({t:st.t,label:'3 °C'})}
+  if(d.act==='comp'){eqSetV(st,0.4);st.marks.push({t:st.t,label:'V 40%'})}if(d.act==='exp'){eqSetV(st,1);st.marks.push({t:st.t,label:'V 100%'})}
+  if(d.act==='cat'){st.cat=true;st.marks.push({t:st.t,label:'catalyst on'})}},
+ start(){cancelAnimationFrame(this.raf);this.last=performance.now();const loop=now=>{this.raf=requestAnimationFrame(loop);if(document.hidden||!this.el||!this.el.isConnected)return;
+  const dt=Math.min(0.05,(now-this.last)/1000);this.last=now;eqStep(this.st,dt);this.sample();this.draw()};this.raf=requestAnimationFrame(loop)},
+ stop(){cancelAnimationFrame(this.raf);this.el=null},
+ sample(){const st=this.st,S=SYS[this.cfg.sys],a=1-Math.exp(-1/60/1.2);
+  if(!this.smooth){this.smooth={};for(const k in S.sp)this.smooth[k]=st.n[k]}for(const k in S.sp)this.smooth[k]+=(st.n[k]-this.smooth[k])*a*2;
+  if(st.t-this.lastSample>=0.2){this.lastSample=st.t;this.fresh=true;const c={};for(const k in S.sp)c[k]=st.x[k]/st.V;st.hist.push({t:st.t,c});while(st.hist.length&&st.hist[0].t<st.t-30)st.hist.shift()}},
+ draw(){const st=this.st,S=SYS[this.cfg.sys],cv=$('simCv');if(!cv)return;const ctx=fitCanvas(cv,LW,LH),W=eqW(st);
+  ctx.clearRect(0,0,LW,LH);const tc=st.T-273,warm=Math.max(0,Math.min(1,(tc-25)/75)),cold=Math.max(0,Math.min(1,(25-tc)/25));
+  ctx.fillStyle=`rgb(${250-cold*20},${251-warm*12-cold*4},${255-warm*30})`;ctx.fillRect(0,0,W,LH);
+  const tn=(st.x[S.tint.sp]??st.n[S.tint.sp])/st.V;let al,rgb;if(S.tint.mix){const f=Math.max(0,Math.min(1,(tn-S.tint.lo)/(S.tint.hi-S.tint.lo)));rgb=S.tint.mix[0].map((v,i)=>Math.round(v+(S.tint.mix[1][i]-v)*f));al=S.tint.a}else{rgb=S.tint.rgb;al=Math.min(S.tint.max,tn*S.tint.k)}ctx.fillStyle=`rgba(${rgb.join(',')},${al*0.45})`;ctx.fillRect(0,0,W,LH);
+  if(S.gas){ctx.fillStyle='#dfe5ea';ctx.fillRect(W,0,LW-W,LH);ctx.fillStyle='#8696a3';ctx.fillRect(W,0,10,LH);ctx.fillRect(W+10,LH/2-7,LW-W,14);ctx.fillStyle='#5e6d78';ctx.fillRect(W,0,3,LH)}
+  for(const p of st.parts){const sh=SHAPES[p.s];p.a=(p.a??(p.x*7%6.28))+(p.vx>0?0.01:-0.01);const ca=Math.cos(p.a),sa=Math.sin(p.a);
+   for(const [dx,dy,r,f,e] of sh){const x=p.x+dx*ca-dy*sa,y=p.y+dx*sa+dy*ca;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=f;ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle=e;ctx.stroke()}}
+  for(const f of st.flashes){const k=Math.max(0,Math.min(1,(st.t-f.t)/0.45));ctx.beginPath();ctx.arc(f.x,f.y,6+k*16,0,7);ctx.strokeStyle=f.dir>0?`rgba(46,160,90,${1-k})`:`rgba(230,130,40,${1-k})`;ctx.lineWidth=2.5;ctx.stroke()}
+  ctx.font='800 13px Inter,system-ui,sans-serif';ctx.fillStyle='#4c5a65';ctx.fillText(`${tc.toFixed(0)} °C${st.cat?' · catalyst on':''}`,8,LH-8);
+  $('tubeFill').setAttribute('fill',`rgba(${rgb.join(',')},${S.tint.mix?0.85:Math.max(0.05,al)})`);
+  if(!this.fresh)return;this.fresh=false;
+  setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,SHAPES[k][0][3],SHAPES[k][0][4],st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Green ring = forward, orange = reverse.`);
+  setBalance(st.ema.f,st.ema.r,'Forward','Reverse',S.eqP.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),S.eq.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),this);
+  const gc=$('grCv');if(gc)drawGraph(gc,st,Object.keys(S.sp).map(k=>({k,l:S.sp[k].l,c:SHAPES[k][0][4]==='#9c8456'?'#b49a62':SHAPES[k][0][4]})),'c')}};
+/* iOS Safari cancels a tap if new elements appear while the finger is down, so live readouts only change text, never rebuild */
+function setCounts(rows,note){const box=$('cnts');if(!box)return;const key=rows.map(r=>r[0]).join('|');
+ if(box.dataset.key!==key){box.dataset.key=key;box.innerHTML=rows.map(([l,c,e])=>`<div class="cnt"><span class="sw" style="background:${c};border-color:${e}"></span>${l}<b>0</b></div>`).join('')+`<div class="kline">${note}</div>`}
+ const bs=box.querySelectorAll('b');rows.forEach((r,i)=>{const t=String(r[3]);if(bs[i].textContent!==t)bs[i].textContent=t});const k=box.querySelector('.kline');if(k&&k.textContent!==note)k.textContent=note}
+function fitCanvas(cv,w,h){const dpr=window.devicePixelRatio||1,cw=cv.clientWidth||w,want=Math.round(cw*dpr);if(cv.width!==want){cv.width=want;cv.height=Math.round(want*h/w)}const ctx=cv.getContext('2d');ctx.setTransform(cv.width/w,0,0,cv.height/h,0,0);return ctx}
+function balanceSVG(){return `<svg viewBox="0 0 240 104" aria-hidden="true"><path d="M120 62l-14 34h28z" fill="#cfd8df" stroke="#8a9aa6" stroke-width="2"/>
+ <g id="beam" style="transition:transform .3s"><rect x="18" y="56" width="204" height="7" rx="3" fill="#2f4650"/>
+ <g><rect x="12" y="22" width="78" height="34" rx="8" fill="#e5f6ea" stroke="#4fa36a" stroke-width="2"/><text x="51" y="36" text-anchor="middle" font-size="11" font-weight="800" fill="#2f6e3f" id="bfL">Forward →</text><text x="51" y="51" text-anchor="middle" font-size="13" font-weight="900" fill="#22313b" id="bfV">0</text></g>
+ <g><rect x="150" y="22" width="78" height="34" rx="8" fill="#fff0e3" stroke="#e8955a" stroke-width="2"/><text x="189" y="36" text-anchor="middle" font-size="11" font-weight="800" fill="#94531a" id="brL">← Reverse</text><text x="189" y="51" text-anchor="middle" font-size="13" font-weight="900" fill="#22313b" id="brV">0</text></g></g></svg>`}
+/* tip the beam toward the faster rate; status uses a little hysteresis so a noisy equilibrium still reads as balanced */
+function setBalance(f,r,fl,rl,prodTxt,reacTxt,owner,unit='/s'){const d=(f-r)/Math.max(f+r,1e-6),ang=Math.max(-18,Math.min(18,d*45));
+ const b=document.getElementById('beam');if(b)b.style.transform=`rotate(${-ang}deg)`,b.style.transformOrigin='120px 60px';
+ const fv=$('bfV'),rv=$('brV');if(fv){const T=(e,t)=>{if(e.textContent!==t)e.textContent=t};T(fv,f.toFixed(1)+unit);T(rv,r.toFixed(1)+unit);T($('bfL'),fl+' →');T($('brL'),'← '+rl)}
+ const lim=owner.stat==='eq'?0.07:0.04;let s=Math.abs(d)<lim?'eq':d>0?'r':'l';owner.stat=s;const el=$('labStatus');if(!el)return;
+ const html=s==='eq'?'⚖️ Rates equal: <b>at equilibrium</b>':s==='r'?`➡️ ${fl} faster: shifting toward ${prodTxt}`:`⬅️ ${rl} faster: shifting toward ${reacTxt}`;if(el.dataset.h!==html){el.dataset.h=html;el.className='status '+s;el.innerHTML=html}}
+function drawGraph(cv,st,series,field){const w=600,h=190,ctx=fitCanvas(cv,w,h);ctx.clearRect(0,0,w,h);const H=st.hist;if(H.length<2)return;
+ const t1=st.t,t0=t1-30,x=t=>40+(t-t0)/30*(w-125),max=Math.max(10,...H.flatMap(p=>series.map(s=>p[field][s.k])))*1.15,y=v=>h-22-(v/max)*(h-34);
+ ctx.strokeStyle='#e3eaf0';ctx.lineWidth=1;for(let i=0;i<=4;i++){ctx.beginPath();ctx.moveTo(40,y(max*i/4));ctx.lineTo(w-85,y(max*i/4));ctx.stroke()}
+ ctx.fillStyle='#6b7a86';ctx.font='700 11px Inter,system-ui,sans-serif';ctx.fillText('time →',w-52,h-6);ctx.save();ctx.translate(12,h/2+30);ctx.rotate(-Math.PI/2);ctx.fillText(field==='c'?'concentration':'guests',0,0);ctx.restore();
+ for(const m of st.marks){if(m.t<t0)continue;ctx.setLineDash([4,4]);ctx.strokeStyle='#9aa8b4';ctx.beginPath();ctx.moveTo(x(m.t),10);ctx.lineTo(x(m.t),h-22);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#4c5a65';ctx.fillText(m.label,Math.min(x(m.t)+3,w-90-ctx.measureText(m.label).width),20)}
+ const L=H[H.length-1],used=[];
+ series.forEach((s,i)=>{ctx.strokeStyle=s.c;ctx.lineWidth=2.5;ctx.beginPath();H.forEach((p,j)=>{const X=x(p.t),Y=y(p[field][s.k]);j?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.stroke()});
+ /* line labels at the right end, nudged apart so equal lines (like Fe³⁺ and SCN⁻) don't print on top of each other */
+ series.map(s=>({s,y:Math.max(12,y(L[field][s.k])-6)})).sort((a,b)=>a.y-b.y).forEach(o=>{let yy=o.y;for(const u of used)if(Math.abs(yy-u)<13)yy=u+13;used.push(yy);
+  ctx.fillStyle=o.s.c;ctx.font='800 12px Inter,system-ui,sans-serif';ctx.fillText(o.s.l,w-80,Math.min(h-26,yy+10))})}
+/* ============================== PARK VIEW (ride line) ============================== */
+const PK={dock:[318,92],cx:462,cy:160,rx:112,ry:96,walkY:314};
+function slotPos(i){const per=12,row=Math.floor(i/per),k=i%per,y=52+Math.min(row,9)*25,x=row%2===0?292-k*21:292-(per-1)*21+k*21;return [x,y]}
+function ridePos(a){return [PK.cx-PK.rx*Math.cos(a),PK.cy+PK.ry*Math.sin(a)]}
+const Park={st:null,el:null,raf:0,onEvent:null,stat:'eq',lastSample:-1,
+ mount(host,cfg){this.cfg=cfg;const st=rideNew({});for(let i=0;i<20*30;i++)rideStep(st,1/30);st.t=0;st.marks=[];st.hist=[];st.boardLog=[];st.unloadLog=[];st.evF=st.evR=0;
+  st.guests.forEach(g=>{g.justOn=g.justBack=false;g.path=null});st.queue.forEach((g,i)=>{[g.x,g.y]=slotPos(i)});st.ride.forEach((g,i)=>{g.ang=(i/st.ride.length)*6.28;[g.x,g.y]=ridePos(g.ang)});this.st=st;this.lastSample=-1;
+  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">🧍 Guests in line <span style="font-size:22px">⇌</span> 🎢 Guests on the ride <span class="dh">(reactants ⇌ products)</span></div>
+   <div class="ctrls"><button type="button" class="chip go" data-p="bus">🚌 Tour bus (+20 in line)</button><button type="button" class="chip go" data-p="fire">🎆 Fireworks (15 leave line)</button>
+    <button type="button" class="chip" data-p="crew" aria-pressed="false">👷 Extra crew</button><button type="button" class="chip" data-p="long" aria-pressed="false">⏱️ Longer ride</button><button type="button" class="chip rst" data-p="reset">↺ Restart</button></div>
+   <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Theme park: a queue of guests on the left and a ride loop on the right"></canvas></div>
+   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus">⚖️ Balanced</div></div></div>
+   <div class="graphwrap"><canvas id="grCv" width="600" height="190" role="img" aria-label="Graph of guests in line and on the ride over time"></canvas><div class="cap">Guests in line and on the ride (last 30 park-minutes). Dashed lines mark each change.</div></div></div>`;
+  this.el=host.firstElementChild;
+  this.el.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const st=this.st,k=b.dataset.p;
+   if(k==='bus'){if(st.guests.length<130)rideAdd(st,20,'tour bus');this.emit('bus')}
+   if(k==='fire'){rideAdd(st,-15,'fireworks');this.emit('fire')}
+   if(k==='crew'){st.crew=!st.crew;b.classList.toggle('on',st.crew);b.setAttribute('aria-pressed',st.crew);st.marks.push({t:st.t,label:st.crew?'extra crew':'crew back to normal'});if(st.crew)this.emit('crew')}
+   if(k==='long'){st.long=!st.long;b.classList.toggle('on',st.long);b.setAttribute('aria-pressed',st.long);st.marks.push({t:st.t,label:st.long?'longer ride':'normal ride'});if(st.long)this.emit('long')}
+   if(k==='reset'){this.mount(host,cfg);this.emit('reset')}});
+  this.start()},
+ emit(ev){this.onEvent&&this.onEvent(ev)},
+ start(){cancelAnimationFrame(this.raf);let last=performance.now();const loop=now=>{this.raf=requestAnimationFrame(loop);if(document.hidden||!this.el||!this.el.isConnected)return;
+  const dt=Math.min(0.05,(now-last)/1000);last=now;const st=this.st;
+  rideStep(st,dt);
+  st.ride.forEach(g=>{if(g.justOn){g.justOn=false;g.path=[PK.dock.slice()];g.ang=0}});
+  st.queue.forEach(g=>{if(g.justBack){g.justBack=false;g.path=[[g.x,PK.walkY],[20,PK.walkY]]}});
+  const om=2*Math.PI/6*(st.crew?1.6:1)*(st.long?0.6:1);st.ride.forEach(g=>{g.ang=(g.ang||0)+om*dt});
+  this.move(dt);this.sample();this.draw()};this.raf=requestAnimationFrame(loop)},
+ stop(){cancelAnimationFrame(this.raf);this.el=null},
+ move(dt){const st=this.st,sp=330*dt;const go=(g,tx,ty)=>{const dx=tx-g.x,dy=ty-g.y,d=Math.hypot(dx,dy);if(d<=sp){g.x=tx;g.y=ty;return true}g.x+=dx/d*sp;g.y+=dy/d*sp;return false};
+  st.queue.forEach((g,i)=>{if(g.path&&g.path.length){if(go(g,...g.path[0]))g.path.shift();return}const [x,y]=slotPos(i);go(g,x,y)});
+  st.ride.forEach(g=>{if(g.path&&g.path.length){if(go(g,...g.path[0]))g.path.shift();return}const [x,y]=ridePos(g.ang);g.x=x;g.y=y})},
+ sample(){const st=this.st;if(st.t-this.lastSample>=0.2){this.lastSample=st.t;this.fresh=true;st.hist.push({t:st.t,g:{q:st.xq,r:st.xr}});while(st.hist.length&&st.hist[0].t<st.t-30)st.hist.shift()}},
+ draw(){const st=this.st,cv=$('simCv');if(!cv)return;const ctx=fitCanvas(cv,LW,LH);ctx.clearRect(0,0,LW,LH);
+  ctx.fillStyle='#f4fbf2';ctx.fillRect(0,0,LW,LH);
+  /* queue area */
+  ctx.fillStyle='#fff8ea';ctx.strokeStyle='#e9cf98';ctx.lineWidth=2;roundRect(ctx,8,34,300,262,14);ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#e7d3a8';ctx.lineWidth=1.5;for(let r=0;r<10;r++){const y=52+r*25+12.5;ctx.beginPath();ctx.moveTo(r%2?40:14,y);ctx.lineTo(r%2?302:276,y);ctx.stroke()}
+  /* ride */
+  ctx.lineWidth=16;ctx.strokeStyle='#dbe8f5';ctx.beginPath();ctx.ellipse(PK.cx,PK.cy,PK.rx,PK.ry,0,0,7);ctx.stroke();ctx.lineWidth=2;ctx.strokeStyle='#7fa7cc';ctx.setLineDash([6,6]);ctx.beginPath();ctx.ellipse(PK.cx,PK.cy,PK.rx,PK.ry,0,0,7);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#eef6ff';ctx.beginPath();ctx.ellipse(PK.cx,PK.cy,PK.rx-22,PK.ry-22,0,0,7);ctx.fill();
+  ctx.font='900 15px Inter,system-ui,sans-serif';ctx.fillStyle='#94531a';ctx.fillText('THE LINE = reactants',16,24);ctx.fillStyle='#245c86';ctx.fillText('THE RIDE = products',382,24);
+  ctx.font='800 12px Inter,system-ui,sans-serif';ctx.fillStyle='#2f6e3f';ctx.fillText('boarding →',268,26+0*0);ctx.fillStyle='#94531a';ctx.fillText('← back in line (they loved it!)',300,PK.walkY+2-12);
+  ctx.strokeStyle='#d6c39a';ctx.lineWidth=10;ctx.globalAlpha=.5;ctx.beginPath();ctx.moveTo(PK.cx,PK.walkY);ctx.lineTo(16,PK.walkY);ctx.stroke();ctx.globalAlpha=1;
+  ctx.font='800 22px system-ui';ctx.fillText('🎢',PK.cx-13,PK.cy+8);
+  const gold=st.guests.find(g=>g.gold);
+  for(const g of st.guests){if(g.gold)continue;ctx.beginPath();ctx.arc(g.x,g.y,6.5,0,7);ctx.fillStyle=st.ride.includes(g)?'#5d9fd2':'#e8955a';ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='#ffffff';ctx.stroke()}
+  if(gold){ctx.beginPath();ctx.arc(gold.x,gold.y,9,0,7);ctx.fillStyle='#f7c948';ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle='#8a6a10';ctx.stroke();ctx.font='900 11px Inter,system-ui,sans-serif';ctx.fillStyle='#5c4708';ctx.fillText('⭐ you',gold.x-16,gold.y-12)}
+  ctx.font='800 12px Inter,system-ui,sans-serif';ctx.fillStyle='#4c5a65';ctx.fillText(`${st.crew?'👷 extra crew · ':''}${st.long?'⏱️ longer ride':''}`,330,LH-28);
+  if(!this.fresh)return;this.fresh=false;
+  setCounts([['In line (reactants)','#e8955a','#fff',st.queue.length],['On the ride (products)','#5d9fd2','#fff',st.ride.length]],'⭐ Follow the gold guest: is anyone ever stuck?');
+  setBalance(st.ema.f,st.ema.r,'Boarding','Back in line','the ride','the line',this,'/min');
+  const gc=$('grCv');if(gc)drawGraph(gc,st,[{k:'q',l:'in line',c:'#d9772f'},{k:'r',l:'on ride',c:'#2f7fbf'}],'g')}};
+function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+</script>
+<script>
+/* ============================== QUESTIONS ============================== */
+/* Ride Line: every question works with the park; most need a button press first (task). */
+const RIDE_Q=[
+ ()=>({video:'rates',task:{need:'watch',sec:5,say:'Watch the park for 5 seconds.'},prompt:'Once the counts stop drifting, how do <b>Boarding</b> and <b>Back in line</b> (per minute) compare?',hint:'Look at the balance beam and the two numbers on it. Is the beam tipped or level?',choices:[
+  ['About equal: same pace both ways',true,'Right! The forward rate (boarding) equals the reverse rate (back in line). That is the definition of equilibrium.'],
+  ['Boarding is much faster than unloading',false,'If boarding stayed faster, the ride would keep filling up and the counts would keep changing.'],
+  ['Back in line is much faster than boarding',false,'If that stayed true, the line would keep growing. Steady counts mean the two rates match.'],
+  ['Both are zero: everyone stopped moving',false,'Watch the dots: guests keep boarding and coming back. Equilibrium is dynamic, not stopped.']]}),
+ ()=>({video:'basics',task:{need:'watch',sec:6,say:'Follow the gold ⭐ guest for a few seconds.'},prompt:'The line and ride counts are steady. What does the gold ⭐ guest do?',hint:'Equilibrium is <b>dynamic</b>. Do individual guests stop, or do they keep going?',choices:[
+  ['Keeps cycling between line and ride',true,'Yes! Each guest (molecule) keeps reacting forward and back. Only the totals stay steady: a dynamic equilibrium.'],
+  ['Stops in line once the counts are steady',false,'Nobody gets stuck. Steady counts come from equal traffic both ways, not from guests standing still.'],
+  ['Stays on the ride forever once it boards',false,'Riders keep getting off and rejoining the line, just as product molecules keep turning back into reactants.'],
+  ['Leaves the park after one ride',false,'In this model nobody leaves: it is a closed system, like a sealed flask.']]}),
+ ()=>({video:'basics',task:{need:'watch',sec:4,say:'Watch the two counts for a few seconds.'},prompt:'At equilibrium, are the number of guests <b>in line</b> and <b>on the ride</b> equal?',hint:'Compare the two counts. Equilibrium means equal <b>rates</b>; does it also mean equal amounts?',choices:[
+  ['No: each is steady, but they can differ',true,'Right. Equilibrium means the amounts stop changing, not that they are equal. Here about twice as many guests wait as ride.'],
+  ['Yes, equilibrium always means equal amounts',false,'The counts settle at different numbers. Equal RATES, not equal amounts, define equilibrium.'],
+  ['Yes, because boarding and unloading rates are equal',false,'Equal rates keep the amounts steady, but the steady amounts can be very different.'],
+  ['No, the ride always holds more guests',false,'Look at the counts: right now more guests are in line. Which side holds more depends on K, not on a rule.']]}),
+ ()=>({video:'lecAdd',task:{need:'bus',say:'Tap 🚌 Tour bus.'},prompt:'Right after the tour bus drops 20 guests into the line, which rate is bigger?',hint:'More guests in line means more guests reach the boarding gate each minute.',choices:[
+  ['Boarding, so the park shifts toward the ride',true,'Yes! Adding "reactant" (guests in line) speeds up the forward rate until the ride fills enough to balance it. That is Le Châtelier: shift away from what you added.'],
+  ['Back in line, so the park shifts toward the line',false,'The ride didn\'t change yet; the line did. A longer line speeds up boarding, not unloading.'],
+  ['Neither: they stay equal the whole time',false,'Watch the beam right after the bus: it tips. A stress makes the rates unequal for a while.'],
+  ['Both rates drop to zero for a while',false,'Guests keep moving. More of them in line means MORE boarding, not less.']]}),
+ ()=>({video:'lecAdd',task:{need:'bus',say:'Tap 🚌 Tour bus, then wait until the beam is level again.'},prompt:'After the tour bus, once the beam is level again, how many guests are on the ride compared with before?',hint:'Check the "On the ride" count and the blue line on the graph.',choices:[
+  ['More than before',true,'Right. The shift toward the ride (products) leaves more guests on the ride at the new equilibrium, and the line is longer too.'],
+  ['The same as before',false,'Look at the blue line on the graph: it stepped up after the bus. The new equilibrium has more riders.'],
+  ['Fewer than before',false,'Adding guests to the line pushes guests onto the ride, not off it.'],
+  ['Zero: the ride shuts down',false,'The ride keeps running. More guests waiting means more riders.']]}),
+ ()=>({video:'lecRem',task:{need:'fire',say:'Tap 🎆 Fireworks (15 guests leave the line).'},prompt:'Fireworks pull 15 guests out of the line. Which way does the park shift?',hint:'Fewer guests in line means fewer board each minute. Which rate is bigger now?',choices:[
+  ['Toward the line: back-in-line wins for a while',true,'Yes! Removing "reactant" slows the forward rate, so the reverse rate wins for a while and refills the line. Shift toward what was removed.'],
+  ['Toward the ride: more guests board each minute',false,'With fewer in line, boarding slows down. The ride empties a bit instead.'],
+  ['No shift: the two rates stay equal',false,'Watch the beam right after the fireworks: it tips toward "back in line".'],
+  ['Everyone leaves the ride at once',false,'Riders come off at the usual pace; the ride just ends up a bit emptier.']]}),
+ ()=>({video:'lecCat',task:{need:'crew',say:'Turn on 👷 Extra crew (faster loading AND unloading).'},prompt:'With extra crew at both doors, what happens to the steady counts in line and on the ride?',hint:'The crew speeds up boarding and unloading by the same factor. Does that favor either side?',choices:[
+  ['About the same; both rates are faster',true,'Right! That is what a catalyst does: it speeds the forward and reverse reactions equally, so equilibrium comes faster but the amounts don\'t change.'],
+  ['The ride fills up and the line empties',false,'Unloading sped up by the same amount, so riders also come off faster. No side is favored.'],
+  ['The line gets much longer than before',false,'Boarding sped up just as much as unloading. The counts barely move.'],
+  ['Both rates slow down to a crawl',false,'Look at the numbers on the beam: both went UP.']]}),
+ ()=>({video:'lecT',task:{need:'long',say:'Turn on ⏱️ Longer ride and wait until the beam is level.'},prompt:'The ride now lasts longer. Once things settle, what changed?',hint:'Compare the "On the ride" count and the graph before and after.',choices:[
+  ['More guests ride: the steady ratio changed',true,'Yes. Changing how the ride works changes the equilibrium ratio, the way changing temperature changes K. Adding or removing guests never changes K.'],
+  ['Nothing: the counts match the old ones',false,'Check the graph: the blue line rose and stayed higher. The balance point moved.'],
+  ['The ride empties out and the line grows',false,'Longer rides keep guests on the ride longer, so MORE of them are riding at any moment.'],
+  ['The rates never become equal again',false,'After a few seconds the beam is level again: a new equilibrium with equal rates.']]}),
+ ()=>({video:'basics',prompt:'In the ride-line model, the guests waiting in the <b>line</b> stand for…',hint:'The arrow goes line ⇌ ride. Which side of a reaction arrow comes first?',choices:[
+  ['Reactants',true,'Right: line = reactants, ride = products, boarding = forward reaction, coming back = reverse reaction.'],
+  ['Products',false,'Products are on the right of the arrow; that is the ride.'],
+  ['The catalyst',false,'A catalyst speeds both directions; in the park that is the extra crew.'],
+  ['The equilibrium constant',false,'K is the steady ratio (ride ÷ line), not a group of guests.']]}),
+ ()=>({video:'basics',prompt:'Why doesn\'t the park ever reach "everyone on the ride" or "everyone in line"?',hint:'What happens to the boarding rate when the line gets short?',choices:[
+  ['Each side\'s exit rate grows as it fills',true,'Exactly. A longer line boards faster; a fuller ride unloads faster. The counts settle where the two rates are equal.'],
+  ['The ride has a seat limit that stops it',false,'In the model there\'s room for everyone; the balance comes from the rates, not from seats.'],
+  ['Guests get bored and leave the park',false,'Nobody leaves; it is a closed system.'],
+  ['The reverse rate is always zero here',false,'Guests keep coming back to the line all the time: that\'s the reverse reaction.']]})];
+/* Particle Lab: tasks on real reactions */
+const LAB_Q=[
+ {sys:'no2',f:()=>({video:'lecT',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more.'},prompt:'You heated the flask. What happens to the <b>brown color</b>? (Brown = NO₂; the reaction is endothermic.)',hint:'ΔH &gt; 0 means heat is a reactant: N₂O₄ + heat ⇌ 2 NO₂. Adding heat pushes which way?',choices:[
+  ['It gets darker: more brown NO₂ forms',true,'Right! The reaction is endothermic, so heat acts like a reactant. Adding heat shifts it right, making more brown NO₂ (watch the tube get darker).'],
+  ['It gets lighter: more N₂O₄ forms',false,'That is what cooling does. Heating favors the endothermic (forward) direction.'],
+  ['No change: temperature never shifts equilibrium',false,'Temperature always shifts an equilibrium when ΔH isn\'t zero, and it even changes K.'],
+  ['The gas turns purple',false,'Only NO₂ is colored here, and it is brown.']]})},
+ {sys:'no2',f:()=>({video:'lecT',task:{need:'T:cold',say:'Slide 🌡️ Temp down to 5 °C or less (ice bath).'},prompt:'In the ice bath, what happens to the flask?',hint:'Cooling removes heat. Heat is a reactant here (ΔH &gt; 0).',choices:[
+  ['It gets lighter: more N₂O₄ forms',true,'Yes! Removing heat (a reactant) shifts the reaction left, joining NO₂ pairs into N₂O₄. The brown fades.'],
+  ['It gets darker: more NO₂ forms',false,'Darker brown happens on heating. Cooling favors the exothermic (reverse) direction.'],
+  ['No change: cooling never shifts it',false,'Watch the counts: N₂O₄ goes up, NO₂ goes down.'],
+  ['All the gas condenses to a liquid',false,'The model stays a gas; the change is in which molecule is favored.']]})},
+ {sys:'no2',f:()=>({video:'lecP',task:{need:'V:small',say:'Slide 🫸 Volume down to 45% or less (push the piston in).'},prompt:'You pushed the piston in. Once it settles, which way did it shift?',hint:'Count gas particles: 1 N₂O₄ on the left, 2 NO₂ on the right. Squeezing favors fewer.',choices:[
+  ['Toward N₂O₄: fewer gas particles',true,'Right! A smaller volume (higher pressure) favors the side with fewer gas moles. Two NO₂ join into one N₂O₄.'],
+  ['Toward NO₂: more gas particles',false,'More particles in a smaller box would raise the pressure even more. The system does the opposite.'],
+  ['No shift',false,'The sides have different numbers of gas moles (1 vs 2), so volume matters here.'],
+  ['All of it turns into NO₂',false,'Watch the counts: N₂O₄ goes up after squeezing.']]})},
+ {sys:'no2',f:()=>({video:'lecV',task:{need:'V:big',say:'Slide 🫸 Volume up to 95% or more.'},prompt:'You gave the gas more room. Which way did it shift?',hint:'More room favors the side with more gas particles.',choices:[
+  ['Toward NO₂: more gas particles',true,'Yes. Lower pressure favors the side with more gas moles, so more N₂O₄ splits into 2 NO₂.'],
+  ['Toward N₂O₄: fewer gas particles',false,'That is what squeezing does. Expanding is the opposite.'],
+  ['No shift',false,'1 vs 2 gas moles: volume changes do shift this reaction.'],
+  ['The reaction stops',false,'Both reactions keep running; the balance point just moves.']]})},
+ {sys:'no2',f:()=>({video:'lecAdd',task:{need:'stress:addP',say:'Tap ➕ NO₂.'},prompt:'Right after you add NO₂, which rate jumps up?',hint:'Which reaction uses NO₂ as its starting material?',choices:[
+  ['The reverse rate (2 NO₂ → N₂O₄)',true,'Right! More NO₂ means more NO₂ collisions, so the reverse reaction speeds up and uses some of it: a shift to the left.'],
+  ['The forward rate (N₂O₄ → 2 NO₂)',false,'The forward reaction depends on N₂O₄, which you didn\'t add.'],
+  ['Neither: adding product changes nothing',false,'Watch the balance beam: it tips right after you add NO₂.'],
+  ['Both jump by the same amount',false,'That is what a catalyst does. Adding NO₂ only speeds the reaction that uses NO₂.']]})},
+ {sys:'no2',f:()=>({video:'lecCat',task:{need:'cat:on',say:'Turn on ⚡ Catalyst.'},prompt:'With the catalyst on, what happens to the amounts of N₂O₄ and NO₂?',hint:'Look at the numbers on the balance beam: did one go up, or both?',choices:[
+  ['About the same; both rates speed up',true,'Right! A catalyst speeds the forward and reverse reactions equally. More reactions per second, same balance.'],
+  ['More NO₂ forms: the forward rate wins',false,'The catalyst speeds both directions, so no side wins.'],
+  ['More N₂O₄ forms: the reverse rate wins',false,'The catalyst speeds both directions, so no side wins.'],
+  ['Both reactions slow down and stop',false,'More rings flash, not fewer: both reactions are faster.']]})},
+ {sys:'no2',f:()=>({video:'basics',task:{need:'restart:P',say:'Tap ↺ Start: products only, then watch.'},prompt:'Starting with only NO₂, what happens?',hint:'Compare the counts after ~10 s with what you saw starting from N₂O₄.',choices:[
+  ['It reaches the same balance from the other side',true,'Yes! Like his SO₃ example: starting from reactants or from products, the system reaches the same equilibrium (at the same temperature).'],
+  ['Nothing happens: NO₂ is a product, so it can\'t react',false,'Reactions are reversible: NO₂ pairs join into N₂O₄ right away.'],
+  ['All of the NO₂ turns into N₂O₄ for good',false,'Some of it does, then the reverse reaction catches up and the counts level off.'],
+  ['The counts never stop changing at all',false,'Within about 10 seconds the beam is level and the counts hold steady.']]})},
+ {sys:'hi',f:()=>({video:'lecP',task:{need:'V:small',say:'Slide 🫸 Volume down to 45% or less.'},prompt:'H₂ + I₂ ⇌ 2 HI. You squeezed the box. Which way does it shift?',hint:'Count gas moles: 1 + 1 on the left, 2 on the right.',choices:[
+  ['No shift: 2 gas moles on each side',true,'Right! Both sides have 2 moles of gas, so squeezing can\'t be relieved by shifting. The beam stays level.'],
+  ['Toward HI: fewer particles there',false,'Count again: 2 HI is the same number of gas moles as H₂ + I₂.'],
+  ['Toward H₂ and I₂: fewer particles there',false,'Two particles on the left, two on the right: no side has fewer.'],
+  ['The reaction stops in the small box',false,'Reactions keep running; the rates just stay equal.']]})},
+ {sys:'hi',f:()=>({video:'lecAdd',task:{need:'stress:addR',say:'Tap ➕ H₂.'},prompt:'You added H₂. What happens to the violet I₂ color?',hint:'Added H₂ reacts with I₂. Which way does the system shift?',choices:[
+  ['It fades: I₂ is used up',true,'Yes! Adding H₂ shifts the reaction right; the extra H₂ uses up some I₂, so the violet color fades.'],
+  ['It gets darker: more I₂ forms',false,'More I₂ would need a shift to the left. Adding a reactant shifts right.'],
+  ['No change in the color',false,'Watch the I₂ count: it drops.'],
+  ['It turns brown like NO₂',false,'Nothing brown here: only I₂ is colored.']]})},
+ {sys:'fescn',f:()=>({video:'lecAdd',task:{need:'stress:addR',say:'Tap ➕ Fe³⁺.'},prompt:'You added Fe³⁺. What happens to the red color?',hint:'Fe³⁺ is a reactant. The system uses up what you add.',choices:[
+  ['Deeper red: more FeSCN²⁺ forms',true,'Right! Adding a reactant shifts right, making more blood-red FeSCN²⁺. This is the classic test-tube demo.'],
+  ['Lighter: FeSCN²⁺ breaks apart',false,'Lighter red would mean a shift left. Adding a reactant shifts right.'],
+  ['It turns yellow like Fe³⁺',false,'Fe³⁺ is pale yellow, but it gets used up making red FeSCN²⁺.'],
+  ['No change in the color',false,'Watch the tube: it reddens.']]})},
+ {sys:'fescn',f:()=>({video:'lecRem',task:{need:'stress:remR',say:'Tap ➖ Fe³⁺.'},prompt:'You removed some Fe³⁺. What happens to the red color?',hint:'The system replaces what you remove.',choices:[
+  ['Lighter: FeSCN²⁺ breaks apart',true,'Yes! Removing a reactant shifts left; FeSCN²⁺ falls apart to replace Fe³⁺, so the red fades.'],
+  ['Deeper red: more FeSCN²⁺ forms',false,'Deeper red needs a shift to the right. Removing a reactant shifts left.'],
+  ['No change in the color',false,'Watch the FeSCN²⁺ count: it drops.'],
+  ['It turns blue',false,'No blue species here.']]})},
+ {sys:'fescn',f:()=>({video:'lecT',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more.'},prompt:'This reaction is exothermic. You heated it. What happens to the red color?',hint:'Exothermic: heat is a product. Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺ + heat.',choices:[
+  ['It gets lighter',true,'Right! Heat is a product of an exothermic reaction, so adding heat shifts left and FeSCN²⁺ breaks apart.'],
+  ['It gets deeper red',false,'That is what cooling does here.'],
+  ['No change',false,'Temperature shifts every equilibrium with ΔH ≠ 0.'],
+  ['It boils away',false,'The model only follows the equilibrium shift: the red fades.']]})},
+ {sys:'fescn',f:()=>({video:'lecAdd',task:{need:'stress:addR2',say:'Tap ➕ SCN⁻.'},prompt:'You added SCN⁻. Once it settles, how much Fe³⁺ is there compared with before?',hint:'Added SCN⁻ grabs Fe³⁺ to make FeSCN²⁺.',choices:[
+  ['Less Fe³⁺',true,'Yes. The shift to the right uses up Fe³⁺ along with the added SCN⁻.'],
+  ['More Fe³⁺',false,'Only a shift left would make more Fe³⁺. Adding SCN⁻ shifts right.'],
+  ['The same amount',false,'Check the Fe³⁺ count: it dropped.'],
+  ['All of it disappears',false,'Some Fe³⁺ is always left at equilibrium.']]})},
+ {sys:'hb',f:()=>({video:'lecReal',task:{need:'stress:remR2',say:'Tap ⛰️ Climb high (less O₂).'},prompt:'At high altitude there is less O₂. What happens to HbO₂ (oxygen-carrying hemoglobin)?',hint:'O₂ is a reactant. Removing it shifts which way?',choices:[
+  ['It decreases (shift left)',true,'Right! Less O₂ shifts Hb + O₂ ⇌ HbO₂ to the left. Less HbO₂ means less oxygen delivered: altitude sickness, tiredness.'],
+  ['It increases (shift right)',false,'A shift right needs MORE O₂ or more Hb. Less O₂ shifts left.'],
+  ['No change: HbO₂ stays the same',false,'Watch the HbO₂ count fall after the climb.'],
+  ['Free Hb disappears',false,'Hb actually goes UP as HbO₂ releases its oxygen.']]})},
+ {sys:'hb',f:()=>({video:'lecReal',task:{need:'stress:addR',say:'Tap 🩸 Body makes more Hb.'},prompt:'After weeks at altitude, the body makes more hemoglobin. What happens to HbO₂?',hint:'Hb is a reactant. Adding it shifts which way?',choices:[
+  ['It increases (shift right)',true,'Yes! Adding Hb (a reactant) shifts right, rebuilding HbO₂. This is how climbers and people living at altitude adapt.'],
+  ['It decreases (shift left)',false,'Adding a reactant shifts toward products, so HbO₂ goes up.'],
+  ['No change: HbO₂ stays the same',false,'Watch the HbO₂ count rise.'],
+  ['Free O₂ increases instead',false,'More Hb uses up O₂, so free O₂ drops.']]})},
+ {sys:'hb',f:()=>({video:'lecAdd',task:{need:'stress:addR2',say:'Tap 😷 Oxygen mask (+O₂).'},prompt:'A patient gets supplemental oxygen. What happens to HbO₂?',hint:'O₂ is a reactant. The system uses up what you add.',choices:[
+  ['It increases',true,'Right! More O₂ shifts Hb + O₂ ⇌ HbO₂ to the right, loading more hemoglobin with oxygen.'],
+  ['It decreases',false,'Adding a reactant shifts right, toward HbO₂.'],
+  ['No change',false,'Watch the counts: HbO₂ goes up and free Hb goes down.'],
+  ['Hb increases',false,'Hb gets used up making HbO₂.']]})}];
+LAB_Q.push(
+ {sys:'blood',f:()=>({video:'lecRem',task:{need:'stress:remR',say:'Tap 😮‍💨 Hyperventilate (blow off CO₂).'},prompt:'During a panic attack a patient breathes fast and blows off CO₂. What happens to H⁺ in the blood?',hint:'CO₂ is a reactant. Removing it shifts which way? Watch the H⁺ count and the indicator tube.',choices:[
+  ['H⁺ drops, so pH rises (alkalosis)',true,'Right! Removing CO₂ shifts the buffer left: H⁺ + HCO₃⁻ recombine to replace the CO₂. Less H⁺ means higher pH: respiratory alkalosis (dizziness, tingling fingers).'],
+  ['H⁺ rises, so blood pH falls (acidosis)',false,'That happens when CO₂ builds UP. Blowing CO₂ off shifts the other way.'],
+  ['No change: breathing only affects O₂',false,'Breathing also removes CO₂, which is part of this equilibrium. Watch the H⁺ count drop.'],
+  ['HCO₃⁻ climbs much higher than before',false,'HCO₃⁻ is used up with H⁺ to replace the lost CO₂, so it goes down a little.']]})},
+ {sys:'blood',f:()=>({video:'lecAdd',task:{need:'stress:addR',say:'Tap 🫁 Hold breath / COPD (+CO₂).'},prompt:'A patient with COPD cannot exhale CO₂ well, so CO₂ builds up. What happens to the blood?',hint:'CO₂ is a reactant. Adding it shifts which way?',choices:[
+  ['More H⁺ forms, so pH falls (acidosis)',true,'Yes! Extra CO₂ shifts the buffer right, making H⁺ and HCO₃⁻. The pH drops: respiratory acidosis.'],
+  ['Less H⁺ forms, so pH rises (alkalosis)',false,'Less H⁺ comes from losing CO₂, as in hyperventilation. Here CO₂ is added.'],
+  ['No shift: H₂O is in excess anyway',false,'Water is the solvent and isn\'t in K, but CO₂ is, so adding it shifts the reaction.'],
+  ['The CO₂ all turns into O₂',false,'CO₂ reacts with water to make H⁺ and HCO₃⁻, not O₂.']]})},
+ {sys:'blood',f:()=>({video:'lecAdd',task:{need:'stress:addP',say:'Tap 🏃 Lactic acid (+H⁺).'},prompt:'Hard exercise dumps acid (H⁺) into the blood. What happens to CO₂, and why do you breathe harder?',hint:'H⁺ is a product. Adding it shifts the buffer toward which side?',choices:[
+  ['CO₂ rises, so you breathe harder to exhale it',true,'Right! Extra H⁺ shifts the buffer left, turning H⁺ + HCO₃⁻ into CO₂. Breathing faster removes that CO₂, which pulls the equilibrium back and protects your pH.'],
+  ['CO₂ falls, so you can breathe more slowly and calmly',false,'Adding H⁺ (a product) shifts toward reactants, so CO₂ goes UP.'],
+  ['Nothing changes because H⁺ is a product',false,'Products count too: adding any substance in K shifts the equilibrium.'],
+  ['HCO₃⁻ rises to match the new H⁺',false,'HCO₃⁻ is used up as it grabs the extra H⁺, so it goes down.']]})},
+ {sys:'blood',f:()=>({video:'lecAdd',task:{need:'stress:addP2',say:'Tap 💉 Bicarbonate IV (+HCO₃⁻).'},prompt:'A patient in acidosis gets IV sodium bicarbonate. What happens to H⁺?',hint:'HCO₃⁻ is a product. Adding it shifts the buffer which way, and what does that use up?',choices:[
+  ['H⁺ goes down: it combines with HCO₃⁻',true,'Yes! Added HCO₃⁻ shifts the buffer left, using up H⁺ to make CO₂ (which the lungs exhale). Less H⁺ means pH rises back toward 7.4.'],
+  ['H⁺ goes up: more of both products are made',false,'Adding a product shifts toward reactants, so the other product (H⁺) is used up.'],
+  ['No change in H⁺ at all',false,'Watch the H⁺ count: it falls after the bicarbonate goes in.'],
+  ['CO₂ goes down to zero',false,'CO₂ actually rises a little as H⁺ and HCO₃⁻ recombine.']]})},
+ {sys:'no2',f:()=>({video:'basics',task:{need:'watch',sec:5,say:'Watch the 💥 Collisions and reacting numbers under the counts for 5 seconds.'},prompt:'Particles bounce off each other like billiard balls. How do the collisions per second compare with the reactions per second?',hint:'Read the 💥 line under the counts. Is "reacting" close to "Collisions", or much smaller?',choices:[
+  ['Many more collisions: most hits just bounce',true,'Right! Collision theory: particles must collide to react, but most collisions bounce off. Only hits with enough energy (and the right angle) react.'],
+  ['About equal: every collision is a reaction',false,'Compare the two numbers: there are several times more collisions than reactions.'],
+  ['More reactions than collisions',false,'A reaction needs a collision first, so there can\'t be more reactions than collisions here.'],
+  ['No collisions: particles pass through each other',false,'Watch two particles meet: they bounce apart. Some of those bounces are reactions (the colored rings).']]})},
+ {sys:'fescn',f:()=>({video:'basics',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more and watch the 💥 line.'},prompt:'After heating, what happens to the number of collisions per second?',hint:'Hotter particles move faster. Faster particles meet each other more often.',choices:[
+  ['It goes up: faster particles collide more often',true,'Yes! Higher temperature means faster particles, more collisions and harder hits, so both reactions speed up. (Which way the balance moves still depends on ΔH.)'],
+  ['It goes down: hot particles spread out',false,'The box size didn\'t change. Faster particles hit each other more often, not less.'],
+  ['It stays the same: temperature only changes color',false,'Watch the 💥 number: it climbs as you heat.'],
+  ['It drops to zero once equilibrium returns',false,'Particles keep colliding at equilibrium; that is what keeps both reactions going.']]})});
+const LAB_SYS=[['no2','NO₂ gas'],['hi','H₂ + I₂'],['fescn','Blood-red Fe³⁺'],['hb','Hemoglobin'],['blood','Blood buffer']];
+/* Big Ideas: concept items */
+const IDEAS=[
+ {v:'basics',p:'In a reaction at equilibrium, what is true about the forward and reverse reactions?',h:'Is equilibrium "stopped" or "balanced"?',c:[
+  ['Both keep running at the same rate',true,'Equilibrium is dynamic: products form as fast as they break back into reactants.'],
+  ['Both reactions have stopped completely',false,'Nothing stops. The amounts look constant because the two rates match.'],
+  ['The forward reaction is always faster',false,'If forward stayed faster, products would keep piling up; that is not equilibrium.'],
+  ['Only the reverse reaction runs',false,'Both directions run at equilibrium.']]},
+ {v:'basics',p:'At equilibrium, the concentrations of reactants and products are…',h:'Look at the flat part of a concentration-vs-time graph.',c:[
+  ['Constant, but usually not equal',true,'They stop changing, but they can be very different from each other.'],
+  ['Always equal to each other',false,'Equal RATES, not equal concentrations, define equilibrium.'],
+  ['Both zero once it is done',false,'Reactants and products are both present at equilibrium.'],
+  ['Still rising and falling steadily',false,'Before equilibrium they change; at equilibrium they hold steady.']]},
+ {v:'rates',p:'Before equilibrium is reached, the rates of the forward and reverse reactions are…',h:'If they were equal, would the concentrations still be changing?',c:[
+  ['Not equal',true,'Before equilibrium one direction is faster, so concentrations keep changing.'],
+  ['Equal',false,'Equal rates is what equilibrium IS. Before it, they differ.'],
+  ['Both rates are zero',false,'The reaction is running, so at least the forward rate is not zero.'],
+  ['Increasing together at the same rate',false,'Typically the forward rate falls while the reverse rate rises until they meet.']]},
+ {v:'rates',p:'As a reaction (starting with only reactants) moves toward equilibrium, what happens to the rates?',h:'Fewer reactants left → fewer forward collisions. More products → more reverse collisions.',c:[
+  ['Forward drops, reverse rises, until equal',true,'Right, that is how the two rates meet at equilibrium.'],
+  ['Forward rises, reverse drops, until equal',false,'Reactants are being used up, so the forward rate drops.'],
+  ['Both stay constant from the start',false,'The rates change until equilibrium; then they stay equal.'],
+  ['Both drop to zero together',false,'At equilibrium both rates are equal and not zero.']]},
+ {v:'basics',p:'Why must an equilibrium system be closed (sealed)?',h:'What would happen if a gas product could float away?',c:[
+  ['So no reactant or product can escape',true,'If a product escapes, the reverse reaction loses its starting material and the reaction keeps running forward.'],
+  ['To keep the temperature at exactly zero',false,'Temperature can be anything; the point is that matter can\'t leave.'],
+  ['So that the reaction stops completely',false,'Sealing doesn\'t stop the reaction; it keeps everything inside so both directions keep going.'],
+  ['To make the value of K larger',false,'Sealing the container doesn\'t change K.']]},
+ {v:'basics',p:'Flask A starts with only SO₂ and O₂. Flask B starts with only SO₃ (same atoms, same temperature). What happens?',h:'Reactions are reversible. Can SO₃ react?',c:[
+  ['Both end up at the same equilibrium mixture',true,'Equilibrium can be reached from either side; at the same temperature both flasks settle on the same mixture.'],
+  ['Only flask A reacts; SO₃ can\'t react',false,'SO₃ breaks down into SO₂ and O₂: the reverse reaction.'],
+  ['Flask B keeps only SO₃ forever',false,'Some SO₃ always decomposes until the rates match.'],
+  ['They reach different values of K',false,'Same reaction, same temperature: same K.']]},
+ {v:'lec',p:"Le Châtelier's principle says that when a stress is put on a system at equilibrium…",h:'Think "the system pushes back".',c:[
+  ['It shifts to partly undo the stress',true,'Add something → it gets used up; remove something → more is made; heat → the heat-absorbing direction wins.'],
+  ['It stops reacting until the stress ends',false,'It keeps reacting, with one direction faster until a new balance is reached.'],
+  ['It fully undoes the stress every time',false,'The stress is only partly relieved; the new equilibrium is different from the old one.'],
+  ['K always changes to a new value',false,'Only temperature changes K. Concentration and volume changes just shift the position.']]},
+ {v:'lecCat',p:'What does a catalyst do to a reaction at equilibrium?',h:'Does it speed up one direction, or both?',c:[
+  ['Speeds both ways equally; no shift',true,'A catalyst helps reach equilibrium faster, but it doesn\'t move it.'],
+  ['Speeds only the forward way; shifts right',false,'It speeds the reverse reaction just as much as the forward one.'],
+  ['Speeds only the reverse way; shifts left',false,'A catalyst doesn\'t favor either side.'],
+  ['Increases K',false,'A catalyst doesn\'t change K.']]},
+ {v:'lecT',p:'Which change can change the <b>value</b> of K?',h:'Only one stress changes K itself. The others shift the position but K stays the same.',c:[
+  ['Changing the temperature',true,'K depends on temperature. Concentration, volume and catalysts leave K alone.'],
+  ['Adding more reactant',false,'The system shifts, but the ratio returns to the same K.'],
+  ['Squeezing the container',false,'The system shifts, but K is the same at the same temperature.'],
+  ['Adding a catalyst',false,'A catalyst never changes K.']]},
+ {v:'lecReal',p:'At high altitude there is less O₂. Over weeks the body makes more hemoglobin. Why does that help? (Hb + O₂ ⇌ HbO₂)',h:'Hb is a reactant. What does adding a reactant do?',c:[
+  ['More Hb shifts it back toward HbO₂',true,'Adding a reactant shifts right, so more oxygen gets carried even though O₂ is low.'],
+  ['More Hb makes more O₂ in the blood',false,'Hb carries O₂; it doesn\'t make it.'],
+  ['Hb acts as a catalyst for breathing',false,'Hb is a reactant in this equilibrium, not a catalyst.'],
+  ['It changes K for oxygen binding',false,'Only temperature changes K; this is a concentration shift.']]},
+ {v:'basics',p:'At a ski resort, the number riding up the lift and the number skiing down stay constant all afternoon. Why is this like equilibrium?',h:'Are people still moving?',c:[
+  ['People move both ways at the same rate',true,'Just like molecules: constant totals, constant motion.'],
+  ['Everyone has stopped moving for the day',false,'People keep riding and skiing; only the totals are steady.'],
+  ['The lift and the slope hold equal numbers',false,'The two groups don\'t have to be equal; they just stay constant.'],
+  ['Nobody goes up the lift anymore',false,'People keep going up as fast as others come down.']]},
+ {v:'hetero',p:'Why are pure solids and liquids left out of the K expression?',h:'Can the "concentration" of a pure solid change?',c:[
+  ['Their concentration never changes',true,'A pure solid or liquid always has the same concentration, so it is left out (treated as 1).'],
+  ['They don\'t take part in the reaction',false,'They do react; their concentration just stays constant.'],
+  ['They always appear as products',false,'Solids and liquids can be on either side.'],
+  ['They have a concentration of zero',false,'If it were zero, you could not divide by it. It is constant, so it is left out.']]}];
+/* ============================== GENERATORS ============================== */
+let lastPick={};
+function pickNew(key,list){let i,tries=0;do{i=Math.floor(Math.random()*list.length)}while(list.length>1&&i===lastPick[key]&&tries++<10);lastPick[key]=i;return list[i]}
+const GEN={
+ ride(){return Object.assign(mc(pickNew('ride',RIDE_Q)()),{lab:{kind:'park'}})},
+ lab(){const want=state.labSys;const pool=LAB_Q.filter(x=>!want||x.sys===want);const it=pickNew('lab'+(want||''),pool);return Object.assign(mc(it.f()),{lab:{kind:'eq',sys:it.sys}})},
+ shift(){if(Math.random()<0.32)return appQ();let r=pick(RX);const roll=Math.random();
+  if(roll<0.25&&!r.sim){const sims=RX.filter(x=>x.sim);if(Math.random()<0.5)r=pick(sims)}
+  const ss=stressesFor(r);
+  if(roll<0.5)return shiftDir(r,pick(ss));
+  if(roll<0.72)return shiftSpecies(r,ss);
+  if(roll<0.84&&r.dH!=null)return shiftK(r,ss);
+  return shiftWhich(r,ss)},
+ ideas(){const roll=Math.random();
+  if(roll<0.36){const it=pickNew('ideas',IDEAS);return mc({video:it.v,prompt:it.p,hint:it.h,choices:it.c})}
+  if(roll<0.62)return kExprQ();if(roll<0.76)return kMagQ();if(roll<0.86)return kRevQ();return graphQ()}};
+/* Real-world scenarios (medical, biological, engineering, everyday chemistry): about 1 in 3 Shift It! questions */
+const APPS=[
+ {v:'lecRem',tag:'🏥 Medicine',p:'A patient breathes into a paper bag during a panic attack, re-breathing some CO₂. How does that help their blood?',x:'CO₂(aq) + H₂O(l) ⇌ H⁺(aq) + HCO₃⁻(aq)',h:'Fast breathing removed CO₂. Re-breathing adds some back. Which way does adding CO₂ shift?',c:[
+  ['Adding CO₂ back shifts right and restores H⁺',true,'Hyperventilating blew off CO₂, so H⁺ fell (alkalosis). Re-breathing CO₂ shifts the buffer right, making H⁺ again and bringing pH back down toward normal.'],
+  ['Adding CO₂ shifts left and removes even more H⁺',false,'CO₂ is a reactant, so adding it shifts right (toward H⁺), not left.'],
+  ['The bag adds O₂, which lowers the blood pH',false,'The point of the bag is CO₂, which is part of this equilibrium. O₂ is not.'],
+  ['It has no effect on the blood equilibrium',false,'CO₂ is in K, so changing CO₂ always shifts this equilibrium.']]},
+ {v:'lecRem',tag:'🏥 Medicine',p:'In kidney compensation, the kidneys excrete H⁺ into the urine. Which way does the blood buffer shift?',x:'CO₂(aq) + H₂O(l) ⇌ H⁺(aq) + HCO₃⁻(aq)',h:'Removing a product shifts toward it.',c:[
+  ['Right: more CO₂ reacts, making HCO₃⁻',true,'Removing H⁺ (a product) shifts the buffer right. The system replaces H⁺ and builds up HCO₃⁻, which helps correct acidosis.'],
+  ['Left: H⁺ and HCO₃⁻ turn back into CO₂',false,'That is what ADDING H⁺ does. Removing H⁺ shifts toward the products.'],
+  ['No shift: urine is outside the blood',false,'H⁺ leaves the blood, so the blood equilibrium feels that change.'],
+  ['It stops the buffer reaction for good',false,'Both directions keep running; the balance point just moves.']]},
+ {v:'lecReal',tag:'🏥 Medicine',p:'Carbon monoxide poisoning: CO grabs hemoglobin. Why is the treatment 100% oxygen (or a hyperbaric chamber)?',x:'HbO₂(aq) + CO(g) ⇌ HbCO(aq) + O₂(g)',h:'O₂ is a product here. Adding a lot of it shifts which way?',c:[
+  ['Lots of O₂ shifts it left, freeing Hb from CO',true,'O₂ is a product. Flooding the blood with O₂ shifts the equilibrium left, pushing CO off hemoglobin so Hb carries O₂ again.'],
+  ['Lots of O₂ shifts it right, toward more HbCO in blood',false,'Adding a product shifts toward reactants (left), away from HbCO.'],
+  ['O₂ acts as a catalyst for CO removal',false,'O₂ is a product in this equilibrium, not a catalyst.'],
+  ['It changes K so CO can no longer bind',false,'Only temperature changes K. This is a concentration shift.']]},
+ {v:'lecReal',tag:'🧬 Biology',p:'Working muscles make H⁺. How does that help them get oxygen? (the Bohr effect)',x:'HbO₂(aq) + H⁺(aq) ⇌ HbH⁺(aq) + O₂(aq)',h:'H⁺ is a reactant. Adding it shifts toward which side? Where is O₂?',c:[
+  ['Extra H⁺ shifts right and releases O₂',true,'Adding H⁺ shifts the equilibrium right, so hemoglobin lets go of O₂ exactly where muscles are working hardest.'],
+  ['Extra H⁺ shifts left and holds O₂ tighter',false,'Adding a reactant shifts right, toward releasing O₂.'],
+  ['H⁺ has no effect on oxygen at all',false,'H⁺ is in this equilibrium, so it does shift how much O₂ is released.'],
+  ['The muscles make O₂ out of the H⁺',false,'Muscles use O₂; the extra H⁺ just makes hemoglobin release it.']]},
+ {v:'lecRem',tag:'🦷 Dental',p:'Bacteria on teeth turn sugar into acid. The acid (H⁺) reacts with OH⁻, removing it. What happens to tooth enamel?',x:'Ca₅(PO₄)₃OH(s) ⇌ 5 Ca²⁺(aq) + 3 PO₄³⁻(aq) + OH⁻(aq)',h:'Removing a product shifts toward it. Which side is the solid enamel on?',c:[
+  ['It dissolves: removing OH⁻ shifts right',true,'Acid removes OH⁻, a product, so the equilibrium shifts right and more solid enamel dissolves: a cavity begins. Fluoride and saliva help push it back.'],
+  ['It grows thicker: removing OH⁻ shifts left',false,'Removing a product shifts toward the products (right), which dissolves enamel.'],
+  ['No change: enamel is a solid, not in K',false,'The solid isn\'t in K, but OH⁻ is. Removing OH⁻ shifts the equilibrium.'],
+  ['The acid turns the enamel to fluoride',false,'Fluoride comes from toothpaste or water; acid just dissolves enamel.']]},
+ {v:'lecT',tag:'🏥 Medicine',p:'Gout: sodium urate crystals form in joints. Dissolving them is endothermic. Why do crystals form in cool joints like the big toe?',x:'NaC₅H₃N₄O₃(s) + heat ⇌ Na⁺(aq) + C₅H₃N₄O₃⁻(aq)',h:'Heat is a reactant (endothermic). Cooling removes heat, so which way does it shift?',c:[
+  ['Cooling shifts left, so solid crystals form',true,'Dissolving urate absorbs heat. In a cool joint, removing heat shifts the equilibrium left, so solid urate crystals come out of solution.'],
+  ['Cooling shifts right, so the crystals dissolve',false,'Removing heat (a reactant here) shifts toward reactants, the solid crystals.'],
+  ['Temperature does not affect dissolving',false,'ΔH is not zero, so temperature shifts this equilibrium.'],
+  ['The toe has more urate catalysts',false,'Catalysts don\'t shift equilibria; temperature does here.']]},
+ {v:'lecP',tag:'🏭 Engineering',p:'Haber process: engineers cool the gas mixture so NH₃ condenses to a liquid and is removed. Why does that help?',x:'N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)   ΔH = −92 kJ',h:'Removing a product shifts toward it.',c:[
+  ['Removing NH₃ shifts right, making more NH₃',true,'Taking NH₃ out keeps the reverse reaction slow, so the equilibrium keeps shifting right and more N₂ and H₂ get converted.'],
+  ['Removing NH₃ shifts left, back to N₂ and H₂',false,'Removing a product shifts toward products, not back to reactants.'],
+  ['It raises K for the reaction permanently',false,'Removing a product shifts the position; K only changes with temperature.'],
+  ['It has no effect on the equilibrium',false,'NH₃ is in K, so removing it is a stress that shifts the reaction.']]},
+ {v:'lecT',tag:'🏭 Engineering',p:'The Haber reaction is exothermic, so cold favors NH₃. Why do plants still run it hot (about 450 °C) with a catalyst?',x:'N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)   ΔH = −92 kJ',h:'Equilibrium tells you how much; rate tells you how fast.',c:[
+  ['Cold is too slow; heat gives a useful rate',true,'At low temperature the yield is high but the reaction is far too slow. A warm compromise with a catalyst gives a decent yield fast; high pressure helps the yield.'],
+  ['Heat shifts it right toward more NH₃',false,'The reaction is exothermic, so heat shifts it LEFT. They accept that for speed.'],
+  ['The catalyst raises the equilibrium yield',false,'A catalyst speeds both directions equally; it doesn\'t change the yield.'],
+  ['Hot gas has fewer moles, so it favors more NH₃',false,'Temperature doesn\'t change the number of gas moles; pressure is what favors fewer moles.']]},
+ {v:'lecP',tag:'🥤 Everyday',p:'Why does a soda fizz when you open it?',x:'CO₂(g) ⇌ CO₂(aq)',h:'Opening the bottle lets CO₂ gas escape. Which side lost something?',c:[
+  ['CO₂ gas escapes, so dissolved CO₂ bubbles out',true,'Opening the bottle removes CO₂(g). The equilibrium shifts left to replace it, and dissolved CO₂ comes out as bubbles.'],
+  ['Opening it adds CO₂, so more dissolves',false,'CO₂ gas leaves when you open it; nothing is added.'],
+  ['Outside air pushes the CO₂ deeper into the soda',false,'Lower CO₂ pressure above the liquid makes CO₂ leave the liquid, not dissolve.'],
+  ['The soda warms up to its boiling point',false,'The fizz comes from the equilibrium shift, not from boiling.']]},
+ {v:'lecRem',tag:'🌋 Earth science',p:'In caves, dripping water loses CO₂ to the cave air. Why do stalactites (CaCO₃) slowly grow?',x:'Ca²⁺(aq) + 2 HCO₃⁻(aq) ⇌ CaCO₃(s) + CO₂(g) + H₂O(l)',h:'CO₂ is a product. Removing it shifts which way?',c:[
+  ['Losing CO₂ shifts right, depositing CaCO₃',true,'CO₂ escaping into the air removes a product, so the equilibrium shifts right and solid CaCO₃ builds up drop by drop.'],
+  ['Losing CO₂ shifts left, dissolving the CaCO₃',false,'Removing a product shifts toward products, so solid forms.'],
+  ['Nothing: CaCO₃ is a solid, not in K',false,'CaCO₃ isn\'t in K, but CO₂ is, and its loss shifts the reaction.'],
+  ['The water evaporates and that is all',false,'The key step is CO₂ escaping, which shifts the equilibrium.']]},
+ {v:'lecAdd',tag:'🌊 Environment',p:'The ocean absorbs extra CO₂ from the air. What happens to its acidity?',x:'CO₂(aq) + H₂O(l) ⇌ H⁺(aq) + HCO₃⁻(aq)',h:'More CO₂ (a reactant) shifts which way? What does that make?',c:[
+  ['More H⁺ forms, so the ocean gets more acidic',true,'Adding CO₂ shifts right, making more H⁺. That lowers ocean pH and makes it harder for shellfish and coral to build shells.'],
+  ['Less H⁺ forms, so the ocean water gets more basic',false,'Adding a reactant shifts toward products, so H⁺ goes up.'],
+  ['No change: the ocean is too big to shift',false,'Any amount of added CO₂ shifts the equilibrium; it is happening now.'],
+  ['The CO₂ turns into O₂ in the water',false,'CO₂ reacts with water to make H⁺ and HCO₃⁻, not O₂.']]},
+ {v:'lecAdd',tag:'🏭 Engineering',p:'Making sulfuric acid, plants feed in extra air (O₂). Why?',x:'2 SO₂(g) + O₂(g) ⇌ 2 SO₃(g)   ΔH = −198 kJ',h:'Adding a reactant shifts which way?',c:[
+  ['Extra O₂ shifts right, making more SO₃',true,'Adding a reactant shifts the equilibrium right, converting more of the costly SO₂ into SO₃.'],
+  ['Extra O₂ shifts left, back to SO₂',false,'Adding a reactant shifts toward products, not reactants.'],
+  ['The air cools the reactor, so K drops lower',false,'The point is adding O₂, a reactant, to shift the position.'],
+  ['O₂ is a catalyst for this reaction',false,'O₂ is a reactant here; the catalyst is a separate solid (V₂O₅).']]}];
+function appQ(){const it=pickNew('apps',APPS);return mc({video:it.v,prompt:`<span class="tagchip">${it.tag}</span> ${it.p}`,html:`<div class="rxn">${it.x}</div>`,hint:it.h,choices:it.c})}
+function shiftDir(r,s){const d=shiftOf(r,s),demo=demoFor(r,s);
+ const choices=['R','L','0'].map(x=>[DIRTXT[x],x===d,x===d?reasonOf(r,s):wrongDir(r,s,x)]);
+ const q=mc({video:VID_FOR_STRESS[s.t],prompt:`${s.label.replace(/^./,c=>c.toUpperCase())}. Which way does the equilibrium shift?`,html:rxHTML(r,s.t==='heat'||s.t==='cool'||Math.random()<0.4),hint:HINT_FOR[s.t],choices,keepOrder:true});
+ if(demo&&Math.random()<0.6)q.lab={kind:'eq',sys:r.sim,demo};return q}
+function shiftSpecies(r,ss){const opts=ss.filter(s=>s.t!=='addS');const s=pick(opts),d=shiftOf(r,s);
+ const others=[...r.L.map(e=>['L',e]),...r.R.map(e=>['R',e])].filter(([side,e])=>(e[2]==='g'||e[2]==='aq')&&e!==s.e);if(!others.length)return shiftDir(r,s);
+ const [side,e]=pick(others);const ans=d==='0'?'same':(d===side?'up':'down');
+ const T={up:`The amount of ${e[1]} increases`,down:`The amount of ${e[1]} decreases`,same:`The amount of ${e[1]} stays the same`};
+  const exp=d==='0'?`Since there is no shift, the amount of ${e[1]} doesn't change.`:`A shift ${d==='R'?'right makes products and uses up reactants':'left makes reactants and uses up products'}; ${e[1]} is a ${sideWord(side)}, so it ${ans==='up'?'<b>increases</b>':'<b>decreases</b>'}.`;
+ const choices=['up','down','same'].map(k=>[T[k],k===ans,k===ans?reasonOf(r,s)+' '+exp:(k==='same'?(d==='0'?'':'This stress does shift the reaction, so other amounts change too.'):d==='0'?'There is no shift here, so the amount doesn\'t change.':`The shift is ${d==='R'?'toward products':'toward reactants'} and ${e[1]} is a ${sideWord(side)}, so it ${ans==='up'?'increases':'decreases'}.`)]);
+ const q=mc({video:VID_FOR_STRESS[s.t],prompt:`${s.label.replace(/^./,c=>c.toUpperCase())}. After the system returns to equilibrium, what happens to the amount (moles) of <b>${e[1]}</b>?`,html:rxHTML(r,true),hint:HINT_FOR[s.t]+' Then decide whether '+e[1]+' gets made or used up.',choices,keepOrder:true});
+ const demo=demoFor(r,s);if(demo&&Math.random()<0.6)q.lab={kind:'eq',sys:r.sim,demo};return q}
+function shiftK(r,ss){const useT=Math.random()<0.6;const s=useT?pick(ss.filter(x=>x.t==='heat'||x.t==='cool')):pick(ss.filter(x=>x.t!=='heat'&&x.t!=='cool'));
+ const d=shiftOf(r,s),ans=!useT?'same':d==='R'?'up':'down';
+ const T={up:'K gets larger',down:'K gets smaller',same:'K stays the same'};
+ const why=useT?`Temperature is the only change that changes K. ${reasonOf(r,s)} More ${d==='R'?'products':'reactants'} at the new equilibrium means K ${ans==='up'?'increases':'decreases'}.`:`Only temperature changes K. ${reasonOf(r,s)} The system shifts until the products/reactants ratio is back to the <b>same K</b>.`;
+ const choices=['up','down','same'].map(k=>[T[k],k===ans,k===ans?why:k==='same'?'Temperature changes K itself, not just the position.':useT?`The shift is toward ${d==='R'?'products, so K grows':'reactants, so K shrinks'}.`:'Only temperature changes K. This stress just shifts the position; the ratio returns to the same K.']);
+ return mc({video:useT?'lecT':'krules',prompt:`${s.label.replace(/^./,c=>c.toUpperCase())}. What happens to the <b>value of K</b>?`,html:rxHTML(r,true),hint:'Only one kind of change alters K itself. Is this it?'+(useT?' If so, which way does it shift?':''),choices,keepOrder:true})}
+function shiftWhich(r,ss){const good=ss.filter(s=>shiftOf(r,s)==='R'),bad=ss.filter(s=>shiftOf(r,s)!=='R');if(!good.length||bad.length<3)return shiftDir(r,pick(ss));
+ const g=pick(good),bs=shuf(bad).filter((b,i,a)=>a.findIndex(x=>x.label===b.label)===i).slice(0,3);
+ const choices=[[g.label,true,reasonOf(r,g)],...bs.map(b=>[b.label,false,reasonOf(r,b).replace(/\.$/,'')+'. Not toward products.'])];
+ return mc({video:'practice',prompt:'Which change shifts this equilibrium <b>toward products</b>?',html:rxHTML(r,true),hint:'Go through each choice: add → away, remove → toward, heat → away from the heat side, smaller volume → fewer gas moles, catalyst → nothing.',choices})}
+function kExprQ(){const r=pick(RX.filter(x=>x.id!=='cobalt'));const het=[...r.L,...r.R].some(e=>e[2]==='s'||e[2]==='l');const right=kExpr(r);
+ const cands=[[kExpr(r,{flip:true}),'Upside down: K is products over reactants.'],[kExpr(r,{mult:true}),'Coefficients become exponents, not numbers in front.'],[kExpr(r,{all:true}),'Pure solids and liquids are left out of K.'],[kExpr(r,{sum:true}),'Concentrations are multiplied, not added.']].filter(c=>c[0]!==right);
+ const seen=new Set([right]);const wrong=[];for(const c of shuf(cands)){if(!seen.has(c[0])&&wrong.length<3){seen.add(c[0]);wrong.push(c)}}
+ const q=mc({video:het?'hetero':'kexpr',prompt:'Which is the correct equilibrium expression?',html:rxHTML(r,false),hint:`Products on top, reactants on the bottom; each coefficient becomes an exponent${het?'; leave out (s) and (l)':''}.`,choices:[[right,true,`Products over reactants, with each coefficient as an exponent${het?', and the pure solid/liquid left out':''}.`],...wrong.map(w=>[w[0],false,w[1]])]});q.htmlOpts=true;return q}
+function kMagQ(){const it=pick([[1.7e-56,'3 O₂(g) ⇌ 2 O₃(g)','Ozone from oxygen at 25 °C'],[4.5e8,'2 SO₂(g) + O₂(g) ⇌ 2 SO₃(g)',''],[0.036,'N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)',''],[54,'H₂(g) + I₂(g) ⇌ 2 HI(g)','at 430 °C'],[4.6e-3,'N₂O₄(g) ⇌ 2 NO₂(g)','at 25 °C'],[1.8e-5,'CH₃COOH(aq) + H₂O(l) ⇌ H₃O⁺(aq) + CH₃COO⁻(aq)','acetic acid (vinegar)'],[3.2e7,'CO(g) + 3 H₂(g) ⇌ CH₄(g) + H₂O(g)','']]);
+ const big=it[0]>1;return mc({video:'kexpr',prompt:`K = <b>${sci(it[0])}</b> for this reaction. What does that tell you?`,html:`<div class="rxn">${it[1]}${it[2]?`<span class="dh">${it[2]}</span>`:''}</div>`,hint:'K = products ÷ reactants. Is the top bigger (K &gt; 1) or the bottom (K &lt; 1)?',choices:[
+  ['Products are favored at equilibrium',big,big?`K &gt; 1, so the top of the ratio (products) is larger: products are favored.`:'K &lt; 1 means the bottom (reactants) is larger.'],
+  ['Reactants are favored at equilibrium',!big,!big?'K &lt; 1, so the bottom of the ratio (reactants) is larger: reactants are favored.':'K &gt; 1 means the top (products) is larger.'],
+  ['The reaction has stopped',false,'K describes the balance point; both reactions still run.'],
+  ['Reactants and products are present in equal amounts',false,'Equal amounts would give K close to 1, and even then not exactly equal.']]})}
+function kRevQ(){const it=pick([['N₂O₄(g) ⇌ 2 NO₂(g)','2 NO₂(g) ⇌ N₂O₄(g)',4.6e-3],['H₂(g) + I₂(g) ⇌ 2 HI(g)','2 HI(g) ⇌ H₂(g) + I₂(g)',54],['PCl₅(g) ⇌ PCl₃(g) + Cl₂(g)','PCl₃(g) + Cl₂(g) ⇌ PCl₅(g)',0.042],['2 SO₂(g) + O₂(g) ⇌ 2 SO₃(g)','2 SO₃(g) ⇌ 2 SO₂(g) + O₂(g)',2.5e2],['N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)','2 NH₃(g) ⇌ N₂(g) + 3 H₂(g)',0.036]]);
+ const K=it[2],cand=[[sci(1/K),true,`Reversing a reaction flips the expression upside down, so K<sub>reverse</sub> = 1/K = 1/${sci(K)} = ${sci(1/K)}.`],[sci(K),false,'Reversing the reaction flips products and reactants, so K must flip too.'],['−'+sci(K),false,'K is never negative; reversing gives the reciprocal, not the negative.'],[sci(K*K),false,'Squaring is for doubling the coefficients. Reversing gives 1/K.']];
+ return mc({video:'krules',prompt:`K = ${sci(K)} for the forward reaction. What is K for the <b>reverse</b> reaction?`,html:`<div class="rxn">${it[0]}<span class="dh">reverse: ${it[1]}</span></div>`,hint:'Reversing the reaction puts the old reactants on top.',choices:cand})}
+function graphQ(){const te=pick([20,30,40]),ticks=[0,10,20,30,40,50,60];const a0=rnd(7,9)/10,b1=rnd(3,6)/10,a1=a0-b1*0.8;
+ const c=(t,s,e)=>t>=te?e:s+(e-s)*(1-(1-t/te)**2);
+ const W=420,H=200,x=t=>40+t/60*(W-60),y=v=>H-30-v*(H-50);let pa='',pb='';for(let t=0;t<=60;t+=1){pa+=(t?'L':'M')+x(t).toFixed(1)+' '+y(c(t,a0,a1)).toFixed(1);pb+=(t?'L':'M')+x(t).toFixed(1)+' '+y(c(t,0,b1)).toFixed(1)}
+ const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:460px;display:block;margin:0 auto" role="img" aria-label="Concentration of A falls and B rises, then both level off"><line x1="40" y1="${H-30}" x2="${W-15}" y2="${H-30}" stroke="#6b7a86"/><line x1="40" y1="12" x2="40" y2="${H-30}" stroke="#6b7a86"/>
+  ${ticks.map(t=>`<line x1="${x(t)}" y1="${H-30}" x2="${x(t)}" y2="${H-25}" stroke="#6b7a86"/><text x="${x(t)}" y="${H-12}" font-size="11" text-anchor="middle" fill="#4c5a65">${t}</text>`).join('')}<text x="${W-20}" y="${H-34}" font-size="11" text-anchor="end" fill="#4c5a65">time (s)</text><text x="46" y="20" font-size="11" fill="#4c5a65">concentration</text>
+  <path d="${pa}" fill="none" stroke="#b5562a" stroke-width="3"/><path d="${pb}" fill="none" stroke="#2f7fbf" stroke-width="3"/><text x="${x(60)-4}" y="${y(a1)-6}" font-size="12" font-weight="800" text-anchor="end" fill="#b5562a">[A]</text><text x="${x(60)-4}" y="${y(b1)-6}" font-size="12" font-weight="800" text-anchor="end" fill="#2f7fbf">[B]</text></svg>`;
+ if(Math.random()<0.5){const opts=[...new Set([te,te-10,te+20>60?te+10:te+20,0])].slice(0,4);
+  return mc({video:'basics',prompt:'A ⇌ B. At what time does the system <b>first</b> reach equilibrium?',html:svg,hint:'Equilibrium starts when both lines go flat (stop changing).',choices:opts.map(t=>[t+' s',t===te,t===te?`Both concentrations stop changing at ${te} s. From then on the forward and reverse rates are equal.`:t<te?`At ${t} s the lines are still changing, so the rates aren't equal yet.`:`The system is at equilibrium at ${t} s, but it got there earlier, at ${te} s.`]),keepOrder:true})}
+ return mc({video:'basics',prompt:`A ⇌ B. Which statement is true at <b>${te+10} s</b>?`,html:svg,hint:'Are the lines flat? Are they at the same height?',choices:[
+  ['[A] and [B] are constant but not equal',true,'Both lines are flat (equilibrium), at different heights: constant, not equal.'],
+  ['[A] and [B] are equal',false,'The lines are at different heights.'],
+  ['The reactions have stopped',false,'Flat lines mean equal rates, not zero rates: dynamic equilibrium.'],
+  ['[B] is still increasing',false,`[B] stopped rising at ${te} s.`]]})}
+</script>
+<script>
+/* ============================== ENGINE (practice card) ============================== */
+let ui={};try{ui=JSON.parse(localStorage.getItem(GAME_KEY+'-ui')||'{}')}catch(e){}
+const saveUI=()=>{try{localStorage.setItem(GAME_KEY+'-ui',JSON.stringify(ui))}catch(e){}};
+const state={mode:MODES.some(m=>m.id===ui.mode)?ui.mode:MODES[0].id,labSys:null,q:null,sel:null,done:false,correct:0,streak:0,assist:0,taskOk:true,taskAt:0,logged:false};
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const c=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#b9a3e6'];for(let i=0;i<50;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.background=c[i%5];p.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3600)}}
+const JK=GAME_KEY+'-journey',jBlank=()=>({xp:0,correct:0,best:0,modes:{},badges:{}});let J=jBlank();try{J=Object.assign(jBlank(),JSON.parse(localStorage.getItem(JK)||'{}'))}catch(e){}
+const BADGES=[['first','🌱 First Answer','Answer a question',j=>j.correct>=1],['ten','🔟 Ten Correct','10 on your own',j=>j.correct>=10],['fifty','🏅 Fifty Correct','50 on your own',j=>j.correct>=50],
+ ['s5','🔥 Hot Streak','5 in a row',j=>j.best>=5],['s10','⚡ On Fire','10 in a row',j=>j.best>=10],
+ ['ride','🎢 Ride Operator','5 in Ride Line',j=>(j.modes.ride||0)>=5],['lab','🔬 Lab Scientist','5 in Particle Lab',j=>(j.modes.lab||0)>=5],['shift','↔️ Le Châtelier Pro','10 in Shift It!',j=>(j.modes.shift||0)>=10],['ideas','🧠 Big Thinker','10 in Big Ideas',j=>(j.modes.ideas||0)>=10],
+ ['all','🧭 Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
+function renderJ(){const l=Math.floor(J.xp/100)+1,i=J.xp%100;$('jChip').textContent=`Level ${l} • ${J.xp} XP`;$('lvl').textContent='Level '+l;$('xpFill').style.width=i+'%';$('xpTxt').textContent=i+' / 100 XP';
+ $('badges').innerHTML=BADGES.map(([id,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><img src="assets/ach-${id}.webp" alt="" loading="lazy"><span><b>${t}</b>${d}</span></div>`).join('')}
+function award(assisted){const before=Math.floor(J.xp/100);if(assisted)J.xp+=2;else{J.xp+=10+Math.min(state.streak,5)*2;J.correct++;J.best=Math.max(J.best,state.streak);J.modes[state.mode]=(J.modes[state.mode]||0)+1}
+ BADGES.forEach(([id,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast('Badge earned: '+t)}});if(Math.floor(J.xp/100)>before)toast('Level up!');try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ()}
+function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
+function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=h}
+function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'equilibrium',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.video||'',correct:!!ok})}catch(e){}}
+function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic art"><img src="assets/mode-${m.id}.webp" alt="" onerror="this.parentNode.classList.remove('art');this.parentNode.textContent='${m.icon}'"></span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+ $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();next()})}
+/* the lab element persists between questions of the same kind/system so students can keep experimenting */
+const labHost=document.createElement('div');let mounted=null;
+function ensureLab(spec){/* fresh equilibrium for every question, so each task starts from the same baseline */
+ Lab.stop();Park.stop();mounted=spec.kind;if(spec.kind==='park'){Park.mount(labHost,{})}else Lab.mount(labHost,{sys:spec.sys,demo:!!spec.demo})
+ const L=spec.kind==='park'?Park:Lab;L.start();L.onEvent=ev=>taskEvent(ev);return L}
+function taskEvent(ev){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(ev===t.need){state.taskAt=performance.now();state.taskPend=true;tickTask()}}
+function tickTask(){const t=state.q.task,el=$('taskBox');if(!el)return;const wait=t.need==='watch'?t.sec*1000:2500,left=Math.max(0,wait-(performance.now()-state.taskAt));
+ if(left<=0){state.taskOk=true;el.className='task done';el.innerHTML='✅ Done! Now answer below.';['checkBtn'].forEach(id=>$(id).disabled=false);return}
+ const tt=`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
+function next(){clearTimeout(tickTask.t);const q=GEN[state.mode]();state.q=q;state.sel=null;state.done=false;state.logged=false;state.taskPend=false;$('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title;
+ $('hintBox').className='hintbox';fb('','');
+ const sysPick=state.mode==='lab'?`<div class="ctrls" role="group" aria-label="Choose a reaction">${LAB_SYS.map(([k,l])=>`<button type="button" class="chip ${q.lab&&q.lab.sys===k?'on':''}" aria-pressed="${q.lab&&q.lab.sys===k}" data-sys="${k}">${l}</button>`).join('')}</div>`:'';
+ let h=sysPick+`<p class="prompt">${q.prompt}</p>`;
+ if(q.task)h+=`<div class="task" id="taskBox">👉 ${q.task.say}</div>`;
+ if(q.html&&!(q.lab&&q.lab.demo))h+=`<div class="qbox">${q.html}</div>`;
+ if(q.lab)h+=`<div id="labHere"></div>${q.lab.demo?'<p class="tip">🔬 This lab is at equilibrium. Answer first; then we\'ll make the change so you can watch it.</p>':''}`;
+ h+=`<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`;
+ $('qArea').innerHTML=h;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+ if(q.lab){$('labHere').appendChild(labHost);const L=ensureLab(q.lab)}else{Lab.stop();Park.stop();mounted=null}
+ state.taskOk=!q.task;if(q.task){$('checkBtn').disabled=true;if(q.task.need==='watch'){state.taskAt=performance.now();tickTask()}}
+ $('qArea').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{state.labSys=b.dataset.sys;next()});
+ $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})});
+ video();stats()}
+function whyList(q){const others=q.options.filter(o=>o!==q.answer&&q.whys[o]);return others.length?`<ul class="why">${others.map(o=>`<li>❌ <b>${o}</b>: ${q.whys[o]}</li>`).join('')}</ul>`:''}
+function finish(revealed){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
+ $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
+ let demo='';if(q.lab&&q.lab.demo){Lab.apply(q.lab.demo);demo=`<br>🔬 <b>Watch the lab above:</b> we just made that change. See the balance beam tip, then level off.`}
+ if(revealed){state.assist++;state.streak=0;log(false);fb('good',`👀 <b>${q.answer}</b><br>${q.why}${demo}${whyList(q)}<br><small>Assisted: no point this time. <button class="linkbtn" onclick="openVideo()">🎥 Review with Dr. Dan</button></small>`);award(true)}
+ else{state.correct++;state.streak++;log(true);confetti();fb('good','✅ Correct! '+q.why+demo+whyList(q));award(false)}stats();
+ const a=document.activeElement;if(!a||a===document.body||a.disabled)$('newBtn').focus({preventScroll:true})}
+function check(){if(state.done)return;const q=state.q;if(!state.taskOk)return fb('bad','👉 Do the lab step in the gold box first, then answer.');
+ if(!state.sel)return fb('bad','Choose an answer first.');
+ if(state.sel!==q.answer){state.streak=0;log(false);stats();const i=q.options.indexOf(state.sel);$('qArea').querySelector(`.opt[data-i="${i}"]`)?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}`)}
+ finish(false)}
+function hint(){if(state.done)return;$('hintBox').innerHTML='💡 '+state.q.hint+(VIDEO_FOR[state.q.video]?` <button class="linkbtn" onclick="openVideo()">🎥 Watch Dr. Dan explain it</button>`:'');$('hintBox').className='hintbox on'}
+const mmss=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+function video(){const v=VIDEO_FOR[state.q?.video];const src=v?`https://www.youtube.com/embed/${v[0]}?start=${v[1]}&rel=0`:`https://www.youtube.com/embed/${FALLBACK_VIDEO}?rel=0`;
+ $('vidCard').innerHTML=v?`<small>🎯 Matched to this question</small><b>${esc(v[2])}</b><div class="tip">Starts at ${mmss(v[1])}</div>`:'<small>📺 Equilibrium basics</small>';
+ $('player').dataset.want=src;if($('videoPanel').open&&$('player').src!==src)$('player').src=src}
+function openVideo(){$('videoPanel').open=true;$('player').src=$('player').dataset.want;$('videoPanel').scrollIntoView({behavior:'smooth',block:'center'})}
+$('videoPanel').addEventListener('toggle',()=>{if($('videoPanel').open&&!$('player').src)$('player').src=$('player').dataset.want});
+$('refBody').innerHTML=REFERENCE.map(([t,d])=>`<div class="refcard"><b>${t}</b><div>${d}</div></div>`).join('');
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){if(!state.taskOk){state.taskOk=true}finish(true)}};$('newBtn').onclick=next;
+{let armed=0;$('resetBtn').onclick=()=>{if(!armed){$('resetBtn').textContent='Tap again to confirm';armed=setTimeout(()=>{armed=0;$('resetBtn').textContent='Reset progress'},4000);return}clearTimeout(armed);armed=0;J=jBlank();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}$('resetBtn').textContent='Reset progress';renderJ()}}
+if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPanel').open=true}
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
+ const bs=[...$('qArea').querySelectorAll('.opt')];if(/^[1-9]$/.test(e.key)&&bs[e.key-1]&&!bs[e.key-1].disabled){bs[e.key-1].click();return}
+ if(e.key==='Enter'&&!/^(BUTTON|SUMMARY|A)$/.test(t)){e.preventDefault();state.done?next():check()}});
+/* disabled buttons: stop iOS double-tap zoom */
+document.addEventListener('touchend',e=>{const b=e.target.closest&&e.target.closest('button');if(b&&b.disabled)e.preventDefault()},{passive:false});
+/* Self-audit: run audit() in the console. */
+function audit(n=300){const bad=[],note=m=>{if(bad.length<40)bad.push(m)};
+ for(const m of MODES){for(let i=0;i<n;i++){let q;try{q=GEN[m.id]()}catch(e){note(m.id+': throws '+e.message);break}
+  if(!q.prompt||!q.hint||!q.why)note(m.id+': missing prompt/hint/why '+q.prompt);if(q.video&&!VIDEO_FOR[q.video])note(m.id+': unknown video '+q.video);
+  if(!q.options.includes(q.answer))note(m.id+': answer not in options');if(new Set(q.options).size!==q.options.length)note(m.id+': duplicate options '+q.options.join(' | '));
+  if(q.options.filter(o=>o!==q.answer).some(o=>!q.whys[o]))note(m.id+': missing wrong reason: '+q.prompt.slice(0,60)+' / '+q.options.filter(o=>!q.whys[o]).join(' | '));
+  if(q.lab&&q.lab.kind==='eq'&&!SYS[q.lab.sys])note(m.id+': bad sim '+q.lab.sys)}}
+ return bad.length?bad:'OK · '+MODES.length+' modes × '+n}
+/* Deep links (v1.1): ?mode=ride|lab|shift|ideas opens that mode; &sys=no2|hi|fescn|hb picks the Particle Lab reaction.
+   Used by the CHEM 3A textbook's Explore It boxes. A link sets the mode for this visit only (the saved choice is not changed). */
+(()=>{const P=new URLSearchParams(location.search),m=P.get('mode'),y=P.get('sys');
+ if(MODES.some(x=>x.id===m))state.mode=m;
+ if(LAB_SYS.some(([k])=>k===y)){state.labSys=y;if(!m)state.mode='lab'}
+ if(m||y)addEventListener('load',()=>setTimeout(()=>{const e=$('modes');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150))})();
+buildModes();renderJ();next();
+</script>
+</body></html>
