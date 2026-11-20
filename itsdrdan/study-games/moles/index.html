@@ -1127,7 +1127,11 @@ byId('reference').onclick=()=>byId('referenceDialog').showModal();byId('closeRef
 (function init(){let c=null;try{c=new URLSearchParams(location.search).get('course');}catch(e){}c=(c||'').toUpperCase().replace('CHEM','').trim();if(!['3A','1A'].includes(c)){try{const last=JSON.parse(localStorage.getItem(STORE)||'{}').last;c=['3A','1A'].includes(last)?last:'3A';}catch(e){c='3A';}}
  state.course=c;state.view=c==='3A'?'learn':'practice';
  byId('viewTabs').querySelectorAll('button').forEach(b=>{b.classList.toggle('active',b.dataset.view===state.view);b.setAttribute('aria-selected',String(b.dataset.view===state.view))});byId('learnView').hidden=state.view!=='learn';byId('practiceView').hidden=state.view!=='practice';
- setCourse(c);renderMoleMachine();})();
+ setCourse(c);renderMoleMachine();
+ /* deep link for the demo library: ?open=molemachine opens the Mole Machine panel and scrolls to it */
+ let dopen='';try{dopen=(new URLSearchParams(location.search).get('open')||'').toLowerCase();}catch(e){}
+ if(dopen==='molemachine'){const d=byId('mmSection'),go=()=>d.scrollIntoView({block:'start',behavior:'auto'});d.open=true;go();if(document.readyState!=='complete')addEventListener('load',go,{once:true});}
+})();
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>

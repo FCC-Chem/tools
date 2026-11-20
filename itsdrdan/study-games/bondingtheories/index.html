@@ -1810,14 +1810,28 @@ const OPTS = { expanded: false };   // set by the UI: include sp3d/sp3d2 molecul
 /* Hybrid Mixer: tap s, p and d cards into the mixer; it shows what they make */
 function mixName(c) { if (c.s !== 1) return null; return 'sp' + (c.p > 1 ? c.p : '') + (c.d ? 'd' + (c.d > 1 ? c.d : '') : ''); }
 function genMixer() {
-  const m = drawBag(OPTS.expanded ? 'mixerX' : 'mixer', MOLS.filter(x => OPTS.expanded || !info(x).expanded)), I = info(m);
+  /* Dr. Dan 2026-11-19: the Mixer features expanded octets too (its tray always has two d cards), about 1 in 3 questions, even when the sp³d/sp³d² topic is off */
+  const xOnly = !OPTS.expanded && chance(1 / 3);
+  const m = xOnly ? drawBag('mixerXonly', MOLS.filter(x => info(x).expanded)) : drawBag(OPTS.expanded ? 'mixerX' : 'mixer', MOLS.filter(x => OPTS.expanded || !info(x).expanded)), I = info(m);
   const want = { s: 1, p: Math.min(I.groups - 1, 3), d: Math.max(0, I.groups - 4) };
   const p1 = { kind: 'mixer', ask: `Make the hybrid orbitals for the central ${m.c}. Tap orbital cards into the mixer (tap again to take one out).`, mol: m, want, groups: I.groups,
     answer: `1 s + ${want.p} p${want.d ? ` + ${want.d} d` : ''} → ${I.groups} ${hybH(I.hyb)} hybrids${I.groups <= 4 ? `, ${3 - want.p} p left over` : ''}`,
     hint: `Count electron groups on ${m.c} (bonded atoms + lone pairs). You need one hybrid per group, and every hybrid set starts with exactly one s.`,
     solution: `${I.nb} bonded atom${I.nb > 1 ? 's' : ''} + ${I.lpC} lone pair${I.lpC === 1 ? '' : 's'} = ${I.groups} groups → mix ${I.groups} orbitals → ${I.groups} ${hybH(I.hyb)} hybrids.` };
   const p2 = choicePart(`Which way do ${I.groups} ${hybH(I.hyb)} hybrids point (electron-group geometry)?`, shapeOptions(m, 'eg'), { hint: 'Hybrids spread out as far apart as possible.', solution: `${I.eg}, ideal angle ${IDEAL[I.groups]}.` });
-  return { topic: 'mixer', tag: F(m.f) + (I.expanded ? ' · expanded octet' : ''), stem: lewisStem(m), tip: 'n orbitals in = n hybrids out. Always one s, then p orbitals, then d only for 5 or 6 groups.', parts: [p1, p2], mol: m };
+  /* Dr. Dan 2026-11-19: step 3, the real (VSEPR) molecular shape. VBT puts lone pairs in hybrids exactly like bonds;
+     VSEPR adds that lone pairs repel more and are not atoms, so the shape can differ from where the hybrids point. */
+  const lp = I.lpC, lps = `${lp} lone pair${lp === 1 ? '' : 's'}`;
+  const where = I.groups === 5 && lp ? ' In a trigonal bipyramid the lone pairs take the roomier equatorial spots (120° apart).' : I.groups === 6 && lp === 2 ? ' The two lone pairs sit opposite each other, as far apart as they can get.' : '';
+  const why = lp ? `VBT treats the ${lps} like bonds: each fills a ${hybH(I.hyb)} hybrid. But a lone pair is held by only one nucleus, so it spreads out and repels more than a bond, squeezing the bond angles below ${IDEAL[I.groups]}.${where} The shape names only where the <b>atoms</b> are: <b>${I.shape.toLowerCase()}</b>.` : `${m.c} has no lone pairs, so every hybrid holds a bond and the shape matches the hybrids: <b>${I.shape.toLowerCase()}</b>.`;
+  const right3 = I.shape, trap3 = I.eg, pool3 = I.expanded ? ['Trigonal bipyramidal', 'Seesaw', 'T-shaped', 'Linear', 'Octahedral', 'Square pyramidal', 'Square planar'] : ['Linear', 'Trigonal planar', 'Bent', 'Tetrahedral', 'Trigonal pyramidal'];
+  const set3 = [right3]; if (trap3 !== right3) set3.push(trap3); shuffle(pool3).forEach(s => { if (set3.length < 4 && !set3.includes(s)) set3.push(s); });
+  const p3 = choicePart(`Valence bond theory treats lone pairs and bonds the same: each one fills a hybrid. VSEPR adds that lone pairs push harder than bonds. Counting only the atoms, what is the <b>real molecular shape</b> of ${F(m.f)}?`,
+    shuffle(set3).map(s => s === right3 ? opt(s, true, why)
+      : s === trap3 ? opt(s, false, `That is where all ${I.groups} hybrids point (the electron-group geometry). ${m.c} has ${lps}: they take up hybrids but are not atoms, so they are left out of the shape name.`, 'shape-vs-eg')
+        : opt(s, false, `${s} doesn’t fit ${I.groups} groups with ${lps} on ${m.c}.`, 'shape-wrong')),
+    { keep: true, hint: lp ? `Start from the ${I.eg.toLowerCase()} arrangement, then put ${lp === 1 ? 'the lone pair' : 'the lone pairs'} in ${lp === 1 ? 'one spot' : lp + ' spots'} and name the shape the ${I.nb} atoms make.` : `Are there any lone pairs on ${m.c}? If not, the atoms sit where the hybrids point.`, solution: `${I.groups} groups, ${lps} → <b>${I.shape}</b>. ${why}` });
+  return { topic: 'mixer', tag: F(m.f) + (I.expanded ? ' · expanded octet' : ''), stem: lewisStem(m), tip: 'n orbitals in = n hybrids out. Always one s, then p orbitals, then d only for 5 or 6 groups.', parts: [p1, p2, p3], mol: m };
 }
 function checkMixer(p, c) {
   const n = c.s + c.p + c.d, m = p.mol, I = info(m);
@@ -3100,6 +3114,9 @@ function init() {
   bind(); setCourse(c); paintIcons();
   let m = ''; try { m = (new URLSearchParams(location.search).get('mode') || '').toLowerCase(); } catch (e) {}
   if (['daily', 'skill', 'challenge', 'faceoff'].includes(m)) startRound(m); else if (m === 'learn' || m === 'practice') setMode(m);
+  /* deep link for the Demo Library: ?topic=mixer (or a comma list, e.g. ?topic=builder,ranker) opens Practice on just those topics */
+  else { let tp = []; try { tp = (new URLSearchParams(location.search).get('topic') || '').split(',').map(s => s.trim()).filter(t => TOPICS[t]); } catch (e) {}
+    if (tp.length) { state.sel = new Set(tp); state.mode = 'practice'; state.ch = null; save(); renderChooser(); newQuestion(true); scrollToPlay(); } }
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 </script>

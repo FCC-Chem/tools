@@ -1544,6 +1544,9 @@ function init() {
   if (!['3A', '1A'].includes(c)) { try { c = JSON.parse(localStorage.getItem(STORE) || '{}').last; } catch (e) {} }
   if (!['3A', '1A'].includes(c)) c = '1A';
   bind(); setCourse(c); paintIcons();
+  /* deep link for the demo library: ?open=builder opens the Free Builder panel and scrolls to it */
+  let dopen = ''; try { dopen = (new URLSearchParams(location.search).get('open') || '').toLowerCase(); } catch (e) {}
+  if (dopen === 'builder') { const d = $('builderSection'), go = () => d.scrollIntoView({ block: 'start', behavior: 'auto' }); d.open = true; go(); if (document.readyState !== 'complete') addEventListener('load', go, { once: true }); }
   if (!window.ddIcon) addEventListener('load', () => { paintIcons(); renderChooser(); });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

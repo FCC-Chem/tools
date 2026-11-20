@@ -1064,7 +1064,10 @@ function renderStudyProgress(){const p=courseProgress(),level=Math.floor(p.xp/10
 
 try{$('studyProgressDetails').open=localStorage.getItem('lewis-journey-open')==='true';}catch{}
 $('studyProgressDetails').addEventListener('toggle',()=>{try{localStorage.setItem('lewis-journey-open',String($('studyProgressDetails').open));}catch{}});
-const requestedCourse=new URLSearchParams(location.search).get('course');if(['1A','3B'].includes(requestedCourse?.toUpperCase())){course=requestedCourse.toUpperCase();document.querySelectorAll('[data-course]').forEach(b=>b.classList.toggle('active',b.dataset.course===course));}renderModes();nextQuestion();
+const requestedCourse=new URLSearchParams(location.search).get('course');if(['1A','3B'].includes(requestedCourse?.toUpperCase())){course=requestedCourse.toUpperCase();document.querySelectorAll('[data-course]').forEach(b=>b.classList.toggle('active',b.dataset.course===course));}
+/* deep link: ?mode=geometry|polarity|… opens that skill, as if its button was tapped (CHEM 1A-only skills stay locked in 3A) */
+const requestedMode=(new URLSearchParams(location.search).get('mode')||'').toLowerCase(),deepMode=activeModes().some(m=>m[0]===requestedMode)&&!(course==='3A'&&['large','exceptions','resonance'].includes(requestedMode));if(deepMode)mode=requestedMode;
+renderModes();nextQuestion();if(deepMode)$('practice').scrollIntoView({block:'start',behavior:'auto'});
 </script>
 <style id="lassoStyles">
 .lasso-bar{display:none}

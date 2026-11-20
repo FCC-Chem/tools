@@ -1870,6 +1870,8 @@ $('benchCard').addEventListener('click',e=>{const t=e.target.closest('button');i
  if(t.id==='benchHint')return hint();if(t.id==='benchShow')return show();if(t.id==='benchNext')return newBench();if(t.id==='benchGreen')return $('greenBtn')?.click();});
 $('benchCard').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='benchEq'){e.preventDefault();checkEq();}});
 window.__bench=B;window.__newBench=newBench;
+/* deep link: ?mode=bench opens the Mixing Bench (works with ?course=3A or 1A); same as tapping its card, after every script has wired it */
+if((new URLSearchParams(location.search).get('mode')||'').toLowerCase()==='bench')document.addEventListener('DOMContentLoaded',()=>document.querySelector('.modes [data-bench]')?.click());
 })();
 
 /* ===== v31: illustrated icons. Art: sticker sheet by ChatGPT; slicing + wiring: Claude ===== */

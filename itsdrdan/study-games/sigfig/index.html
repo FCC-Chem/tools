@@ -1787,6 +1787,8 @@ function init() {
   if (!['3A', '1A'].includes(c)) { try { c = JSON.parse(localStorage.getItem(STORE) || '{}').last; } catch (e) {} }
   if (!['3A', '1A'].includes(c)) c = '3A';
   bind(); setCourse(c); wireArt(); paintIcons();
+  // deep link: ?topic=glass (or a comma list like glass,digital) practices just those topics, as if only those chips were on (both courses)
+  try { const t = (new URLSearchParams(location.search).get('topic') || '').toLowerCase().split(',').map(x => x.trim()).filter(x => TOPICS[x]); if (t.length) { state.sel = new Set(t); afterSelect(); scrollToPlay(); } } catch (e) {}
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 

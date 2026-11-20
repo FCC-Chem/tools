@@ -2,7 +2,7 @@
   "title": "Equilibrium Park! — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3A",
-  "description": "Chemical equilibrium and Le Châtelier's principle for CHEM 3A, built on Dr. Dan's Lectures 28–29 (start of Chapter 13). Four modes (particles bounce like billiard balls and react only at real collisions; a 💥 readout compares collisions with reactions): Ride Line (equilibrium as a theme-park line: guests in line are reactants, riders are products, boarding and coming back are the forward and reverse rates; tour bus, fireworks, extra crew and longer ride show adding, removing, a catalyst and a change in K), Particle Lab (live particle views of N₂O₄ ⇌ 2 NO₂, H₂ + I₂ ⇌ 2 HI, Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺ Hb + O₂ ⇌ HbO₂ and the blood buffer CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (hyperventilation, COPD, lactic acid, bicarbonate IV, pH-indicator tube) with add/remove buttons, temperature and volume sliders, catalyst, start from reactants or products, a rate balance beam, a 'what you'd see' color tube and a concentration-vs-time graph), Shift It! (Le Châtelier predictions on 17 reactions plus 12 real-world scenarios such as CO poisoning, tooth enamel, the Bohr effect, gout, the Haber process, cave stalactites and ocean acidification: direction, amounts, and K, with the lab animating the change after answering) and Big Ideas & K (dynamic equilibrium, writing K expressions, heterogeneous equilibria, size of K, reverse K, reading graphs). Lab questions require a step in the lab before checking. Every question explains the right answer and each wrong choice; hints link to matched ItsDrDan videos. Accessibility: WCAG 2.2 AA (axe 0 violations), speed/pause control for the labs (reduced-motion starts in slow motion), screen-reader status updates, dashed reverse rings, keyboard play.",
+  "description": "Chemical equilibrium and Le Châtelier's principle for CHEM 3A, built on Dr. Dan's Lectures 28–29 (start of Chapter 13). Six modes (particles bounce like billiard balls and react only at real collisions; a 💥 readout compares collisions with reactions): Ride Line (equilibrium as a theme-park line: guests in line are reactants, riders are products, boarding and coming back are the forward and reverse rates; tour bus, fireworks, extra crew and longer ride show adding, removing, a catalyst and a change in K), Particle Lab (live particle views of N₂O₄ ⇌ 2 NO₂, H₂ + I₂ ⇌ 2 HI, Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺ Hb + O₂ ⇌ HbO₂ and the blood buffer CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (hyperventilation, COPD, lactic acid, bicarbonate IV, pH-indicator tube) with add/remove buttons, temperature and volume sliders, catalyst, start from reactants or products, a rate balance beam, a 'what you'd see' color tube and a concentration-vs-time graph), Shift It! (Le Châtelier predictions on 17 reactions plus 12 real-world scenarios such as CO poisoning, tooth enamel, the Bohr effect, gout, the Haber process, cave stalactites and ocean acidification: direction, amounts, and K, with the lab animating the change after answering) and Big Ideas & K (dynamic equilibrium, writing K expressions, heterogeneous equilibria, size of K, reverse K, reading graphs). Lab questions require a step in the lab before checking. Every question explains the right answer and each wrong choice; hints link to matched ItsDrDan videos. Accessibility: WCAG 2.2 AA (axe 0 violations), speed/pause control for the labs (reduced-motion starts in slow motion), screen-reader status updates, dashed reverse rings, keyboard play. v4 adds Calculate K (Kc from equilibrium concentrations, a missing concentration, reverse K; typed answers with sig-fig checks, mistake-specific feedback and ×10ⁿ/− buttons for the iPhone keypad) and a 10-question Skill Check with a per-topic study plan. v5 adds acid–base equilibrium (Ka, strong vs. weak, which side is favored), a build-the-K-expression interactive (Top / Bottom / Leave out + exponents, also as step 1 of two-step Calculate K problems), a pink ⇌ blue cobalt chloride lab, a Haber process factory (yield vs. rate vs. cost), and corrected particle physics (every reaction happens at a real collision, constant temperature, particles conserved).",
   "tags": [
     "chemistry",
     "CHEM 3A",
@@ -20,8 +20,17 @@
     "blood buffer",
     "acidosis",
     "alkalosis",
-    "real-world applications"
+    "real-world applications",
+    "equilibrium calculations",
+    "Kc",
+    "skill check",
+    "study plan",
+    "acid-base equilibrium",
+    "Ka",
+    "cobalt chloride",
+    "Haber process",
+    "collision theory"
   ],
-  "version": "3",
+  "version": "5",
   "status": "working"
 }

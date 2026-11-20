@@ -1314,4 +1314,6 @@ const buddySeen={};const buddyQuest=renderQuest;renderQuest=function(){buddyQues
 modeButtons();renderQuest();render();
 
 (function(){const src=document.querySelector('.intro-mascot').src;document.querySelector('.tb-brand img').src=src;const l=document.createElement('link');l.rel='icon';l.href=src;document.head.appendChild(l);})();
+/* deep link: ?topic=<topic id> opens that topic, as if its card was tapped (CHEM 3A: identify, sensible, latent, explore, challenge; with ?course=1A: basics, energy, calorimetry, hess, formation, enthalpy, advanced) */
+(function(){let t='';try{t=(new URLSearchParams(location.search).get('topic')||'').toLowerCase()}catch{}if(!t||!availableModes().some(m=>m[0]===t))return;mode=t;fresh();$('practice').scrollIntoView({block:'start',behavior:'auto'});})();
 </script></body></html>

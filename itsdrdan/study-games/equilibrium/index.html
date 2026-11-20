@@ -44,6 +44,17 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .hint{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
 .show{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
 .prompt{font-size:20px;font-weight:800;margin:14px 0 8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.num{flex:1;min-width:180px;min-height:54px;font-size:20px;font-weight:700;border:2px solid #9fb6c8;border-radius:14px;padding:8px 14px;background:#fff}
+.chip.ins{min-width:52px;font-size:17px;background:#eef6ff;border-color:#b9d3ea}
+.num:focus{outline:3px solid #4a9fd6;outline-offset:2px}.unit{font-size:18px;font-weight:800}
+.givens{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:8px;font-size:17px;font-weight:700}
+.givens span{background:#f3f8fd;border:1px solid #d6e4ef;border-radius:10px;padding:3px 10px}
+#practice.quizmode .btnrow{grid-template-columns:1fr}#practice.quizmode #hintBtn,#practice.quizmode #showBtn{display:none}
+.qprog{display:flex;gap:4px;margin:10px 0 0}.qprog i{flex:1;height:8px;border-radius:99px;background:#e6e0d2}.qprog i.ok{background:#4fa36a}.qprog i.no{background:#d9776f}.qprog i.now{background:#4a9fd6}
+.qsum{text-align:center}.qsum .big{font-size:44px;font-weight:900;margin:6px 0}.qsum table{margin:10px auto;border-collapse:collapse;text-align:left;font-size:15.5px}.qsum td{padding:6px 10px;border-top:1px solid #eee}.qsum td:last-child{white-space:nowrap}#practice.quizdone .btnrow{display:none}
+.plan{display:grid;gap:8px;margin-top:10px;text-align:left}.plan .item{background:#fff8e6;border:1px solid #f0dfae;border-radius:12px;padding:10px 12px}.plan .btn{min-height:44px;font-size:15px;padding:8px 14px;margin:6px 8px 0 0}
+@media(max-width:1000px){.ddfb-float.eq-hide{opacity:0!important;pointer-events:none!important;transform:translateY(12px)!important}}
 .tagchip{display:inline-block;font-size:13px;font-weight:900;background:#eef6ff;border:1px solid #c9dff2;border-radius:999px;padding:2px 9px;margin-right:4px;vertical-align:2px}
 .task{display:flex;gap:8px;align-items:center;background:#fff6e0;border:2px dashed #f0c45c;border-radius:14px;padding:8px 12px;font-weight:800;font-size:15.5px;margin:6px 0}
 .task.done{background:#e8f7ec;border:2px solid #8fcf9f}
@@ -73,6 +84,20 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
 .chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
 .chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}
+.frun{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;border:1px solid #e3eaf0;border-radius:12px}.frun caption{text-align:left;font-weight:800;font-size:13px;color:#4c5a65;padding:4px 2px}.frun th,.frun td{padding:5px 6px;border-top:1px solid #eef2f5;text-align:center}.frun th{font-size:12px;color:#4c5a65}
+.kb{border:2px solid #e1ebf3;border-radius:16px;padding:10px;background:#fff;margin:8px 0}
+.kprev{font-size:22px;font-weight:800;text-align:center;min-height:68px;display:flex;align-items:center;justify-content:center;gap:6px;background:#f7fbff;border-radius:12px;margin-bottom:6px;padding:6px}
+.kprev .ph{color:#8a98a4;font-weight:700;font-size:16px}
+.kbrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:7px 6px;border-top:1px solid #eef2f5}
+.kbrow.bad{background:#fdeeed;border-radius:10px}.kbrow.ok{background:#e8f7ec;border-radius:10px}
+.kbsp{min-width:120px;font-weight:800;font-size:17px}
+.seg{display:inline-flex;border:2px solid #c9d8e4;border-radius:12px;overflow:hidden}.seg button{min-height:44px;padding:6px 11px;border:0;background:#fff;font-weight:800;font-size:15px;cursor:pointer;color:#22313b}
+.seg button+button{border-left:2px solid #c9d8e4}.seg button[aria-pressed=true]{background:#2f4650;color:#fff}
+.stepper{display:inline-flex;align-items:center;gap:4px}.stepper button{width:44px;height:44px;border-radius:12px;border:2px solid #c9d8e4;background:#fff;font-size:20px;font-weight:900;cursor:pointer;color:#22313b}
+.stepper output{min-width:92px;text-align:center;font-weight:800;font-size:15px}.stepper.off{opacity:.35}
+.kb.locked button{pointer-events:none}
+.acids{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;margin-top:8px;font-size:15.5px;font-weight:700}.acids span{background:#fff8e6;border:1px solid #f0dfae;border-radius:10px;padding:3px 10px}
+@media(max-width:700px){.kbsp{min-width:100%}.kprev{font-size:19px}}
 .chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:172px;text-align:left}@media(max-width:700px){.chip.spd{min-width:150px}}
 .chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
 .slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
@@ -115,6 +140,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head><body>
@@ -131,7 +157,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 <details class="howto"><summary>📘 How to use this game</summary><ul>
  <li><b>Start with 🎢 Ride Line</b> to see equilibrium as a theme-park line, then try the 🔬 Particle Lab.</li>
  <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, watch, then answer.</li><li>In the labs, particles bounce like billiard balls. A colored ring means that hit was a reaction; most hits just bounce.</li>
- <li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.</li></ul></details>
+ <li><b>🧮 Calculate K</b> takes typed numbers (6.02E23 works). <b>🎯 Skill Check</b> gives you a study plan.</li><li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.</li></ul></details>
 <nav class="modes" id="modes" aria-label="Choose a mode"></nav>
 <div class="main">
 <section class="card" id="practice">
@@ -190,6 +216,14 @@ const SYS={
   tint:{sp:'H',mix:[[214,40,80],[240,200,40]],lo:5,hi:15,a:0.34},tintName:'indicator color',tube:'pH indicator',
   look:'a pH indicator in the blood sample: pink-red when basic, yellow when acidic',
   stress:[['remR','😮‍💨 Hyperventilate (blow off CO₂)',{CO2:-0.5}],['addR','🫁 Hold breath / COPD (+CO₂)',{CO2:20}],['addP','🏃 Lactic acid (+H⁺)',{H:12}],['addP2','💉 Bicarbonate IV (+HCO₃⁻)',{HCO3:20}]]},
+ cobalt:{real:'🧪 The classic color demo (and humidity-indicator strips): pink when cool or watery, blue when hot or full of chloride.',title:'Co(H₂O)₆²⁺ + 4 Cl⁻ ⇌ CoCl₄²⁻ + 6 H₂O (pink ⇌ blue)',gas:false,heat:true,dH:1,V0:0.7,
+  eq:[[1,'Co','aq'],[4,'Cl','aq']],eqP:[[1,'CoCl','aq'],[6,'H2O','l']],
+  sp:{Co:{l:'Co(H₂O)₆²⁺',c:'#f2a3c4',e:'#a8457a',r:9},Cl:{l:'Cl⁻ (×4)',eqL:'Cl⁻',c:'#a8d88a',e:'#4f8a35',r:6},CoCl:{l:'CoCl₄²⁻',c:'#3f6fd6',e:'#1c3f8f',r:13}},
+  R:['Co','Cl'],P:['CoCl'],kf:0.0011,kr:0.075,Ef:52000,Er:12000,
+  units:{Co:1,Cl:4,CoCl:1},start:{Co:40,Cl:70,CoCl:0},
+  tint:{sp:'CoCl',ratio:['Co','CoCl'],mix:[[236,96,160],[44,88,220]],a:0.6},tintName:'color',tube:'Test tube',
+  note:'Model: each green bead stands for a group of 4 Cl⁻.',
+  stress:[['addR2','🧂 Add HCl (+Cl⁻)',{Cl:20}],['dil','💧 Add water',{__V:0.3}],['remR2','🥄 Add AgNO₃ (removes Cl⁻)',{Cl:-0.55}]]},
  hb:{real:'⛰️ Climbers, athletes and patients on oxygen: how much O₂ your hemoglobin carries.',title:'Hb + O₂ ⇌ HbO₂ (your blood)',gas:false,heat:false,dH:null,
   eq:[[1,'Hb','aq'],[1,'O2','g']],eqP:[[1,'HbO2','aq']],
   sp:{Hb:{l:'Hb',c:'#7b2f4a',e:'#45142a',r:10},O2:{l:'O₂',c:'#9fd3f2',e:'#3f86b5',r:5.5},HbO2:{l:'HbO₂',c:'#ef4a3c',e:'#9c1d14',r:11}},
@@ -258,12 +292,32 @@ function eqCollide(st,dt){const S=SYS[st.sys],C=24,cols=Math.ceil(eqW(st)/C)+1,g
     const d=Math.sqrt(d2),nx=dx/d,ny=dy/d,rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
     const ma=ra*ra,mb=rb*rb,ov=(R-d)/2;a.x-=nx*ov;a.y-=ny*ov;b.x+=nx*ov;b.y+=ny*ov;
     if(rel>=0)continue;                                      // already moving apart
-    st.coll++;
+    st.coll++;a.aimT=b.aimT=0;
     let r=st.pendF>=1&&eqFits(S.R,a,b);
     if(r){st.pendF--;st.evF++;st.viaColl=(st.viaColl||0)+1;eqTransform(st,r,S.P,1);continue}
     r=st.pendR>=1&&eqFits(S.P,a,b);
     if(r){st.pendR--;st.evR++;st.viaColl=(st.viaColl||0)+1;eqTransform(st,r,S.R,-1);continue}
     const j=2*rel/(ma+mb);a.vx+=j*mb*nx;a.vy+=j*mb*ny;b.vx-=j*ma*nx;b.vy-=j*ma*ny}}}}
+function eqDist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function eqSettle(st,side,key,dir){const S=SYS[st.sys],pk='pend'+key,dk='due'+key,to=dir>0?S.P:S.R;if(st[pk]<1)return;const wait=st.t-(st[dk]||0);
+ if(side.length===1){/* one-particle step: allowed without a collision once it is overdue */
+  let guard=0;while(st[pk]>=1&&(st[pk]>6||wait>0.8)&&guard++<20){if(!eqEvent(st,side,to,dir)){st[pk]=0;break}st[pk]--;st['ev'+key]++;st[dk]=st.t}return}
+ if(wait<0.4)return;
+ /* two-particle step: steer the closest available pairs toward each other (one pair per pending reaction, at most 4 at a time) */
+ const A=st.parts.filter(p=>p.s===side[0]&&!p.dead),B=st.parts.filter(p=>p.s===side[1]&&!p.dead);if(!A.length||!B.length||(side[0]===side[1]&&A.length<2)){st[pk]=0;return}
+ const steering=st.parts.filter(p=>p.aimT&&st.t-p.aimT<1.2).length/2,want=Math.min(4,Math.ceil(st[pk]))-steering;
+ for(let k=0;k<want;k++){let best=null,bd=1e9;
+  for(const a of A){if(a.dead||(a.aimT&&st.t-a.aimT<1.2))continue;for(const b of B){if(b===a||b.dead||(b.aimT&&st.t-b.aimT<1.2))continue;const d=eqDist(a,b);if(d<bd){bd=d;best=[a,b]}}}
+  if(!best)break;const [a,b]=best,dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d;
+  /* touching already: react right here (this is a real contact, not a teleport) */
+  if(d<=S.sp[a.s].r+S.sp[b.s].r+2){st[pk]--;st['ev'+key]++;st.viaColl=(st.viaColl||0)+1;eqTransform(st,[a,b],to,dir);continue}
+  const v=Math.max(70,Math.hypot(a.vx,a.vy),Math.hypot(b.vx,b.vy));a.vx=ux*v;a.vy=uy*v;b.vx=-ux*v;b.vy=-uy*v;a.aimT=b.aimT=st.t}}
+/* Thermostat: the box sits in a water bath at the chosen temperature. Reactions that merge or split particles change the
+   kinetic energy a little each time; this gently restores the average (mass × speed²) to its starting value. */
+function eqThermostat(st,dt){if(!st.parts.length)return;const S=SYS[st.sys];let e=0;for(const p of st.parts){const m=S.sp[p.s].r**2;e+=m*(p.vx*p.vx+p.vy*p.vy)}e/=st.parts.length;
+ if(!st.E0){let t=0;for(const p of st.parts){const r=S.sp[p.s].r;t+=r*r*(75*75*9/r)}st.E0=t/st.parts.length}
+ /* target uses the same species mix as now */ let tgt=0;for(const p of st.parts){const r=S.sp[p.s].r;tgt+=r*r*(75*75*9/r)}tgt/=st.parts.length;
+ if(e<=0)return;const f=Math.pow(tgt/e,Math.min(1,dt/0.6)/2);for(const p of st.parts){p.vx*=f;p.vy*=f}}
 function eqStep(st,dt){const S=SYS[st.sys],sub=6,h=dt/sub;
  for(let j=0;j<sub;j++){const r=eqRates(st),net=(r.f-r.r)*h;
   S.R.forEach(s=>st.x[s]=Math.max(0,st.x[s]-net));S.P.forEach(s=>st.x[s]=Math.max(0,st.x[s]+net));st.accF+=r.f*h;st.accR+=r.r*h}
@@ -272,16 +326,21 @@ function eqStep(st,dt){const S=SYS[st.sys],sub=6,h=dt/sub;
  const sp=Math.sqrt(st.T/EQ_T0);
  for(const p of st.parts){p.x+=p.vx*dt*sp;p.y+=p.vy*dt*sp;eqClamp(st,p)}
  st.coll=st.coll||0;const c0=st.coll;if(!st.fast)eqCollide(st,dt);   // st.fast: warm-up runs skip collisions (counts don't depend on them)
- /* reactions that wait too long for the right collision (few particles, cold box) happen anyway, so counts stay true */
- while(st.pendF>=1&&(st.pendF>6||st.t-(st.dueF||0)>0.8)){st.pendF--;if(eqEvent(st,S.R,S.P,1))st.evF++;else{st.pendF=0;break}st.dueF=st.t}
- while(st.pendR>=1&&(st.pendR>6||st.t-(st.dueR||0)>0.8)){st.pendR--;if(eqEvent(st,S.P,S.R,-1))st.evR++;else{st.pendR=0;break}st.dueR=st.t}
- for(const s of new Set(S.P)){const lag=st.n[s]-st.x[s],tol=Math.max(1.5,0.06*st.x[s]);
-  if(lag<-tol){if(eqEvent(st,S.R,S.P,1))st.evF++}else if(lag>tol){if(eqEvent(st,S.P,S.R,-1))st.evR++}}
+ /* Reactions that wait for the right collision.
+    One-particle steps (N₂O₄ → 2 NO₂) may happen on their own: the molecule was energized by earlier bumps.
+    Two-particle steps never "teleport": if the right pair hasn't met in time, the nearest pair is steered toward each other,
+    so the reaction still happens at a real collision. Only a pair already touching may react without a fresh bounce. */
+ eqSettle(st,S.R,'F',1);eqSettle(st,S.P,'R',-1);
+ /* keep particle counts close to the smooth amounts: a lag becomes one more pending reaction (handled the same way) */
+ for(const s of new Set(S.P)){const lag=st.n[s]-st.x[s],tol=Math.max(2,0.08*st.x[s]);
+  if(lag<-tol&&st.pendF<1){st.pendF=1;st.dueF=st.t}else if(lag>tol&&st.pendR<1){st.pendR=1;st.dueR=st.t}}
+ eqThermostat(st,dt);
  const a=1-Math.exp(-dt/1.5);st.collRate=(st.collRate||0)+((st.coll-c0)/dt-(st.collRate||0))*a;
  const r2=eqRates(st);st.ema.f=r2.f;st.ema.r=r2.r;
  st.t+=dt;st.flashes=st.flashes.filter(f=>st.t-f.t<0.45)}
 /* stresses: add/remove particles, temperature, volume, catalyst. Each leaves a mark on the graph. */
-function eqChange(st,delta,label){for(const s in delta){let d=delta[s];
+function eqChange(st,delta,label){for(const s in delta){let d=delta[s];if(s==='__V'){eqSetV(st,Math.min(1,st.V+d));continue}   // __V: add water (dilute)
+ 
   if(d>0){for(let i=0;i<d;i++)eqSpawn(st,s);st.x[s]+=d}
   else{const k=d>-1?Math.round((st.n[s]||0)*-d):-d;let gone=0;for(let i=0;i<k;i++){const pool=st.parts.filter(p=>p.s===s);if(!pool.length)break;eqKill(st,pool[Math.floor(eqRand(st)*pool.length)]);gone++}st.x[s]=Math.max(0,st.x[s]-gone)}}
  st.marks.push({t:st.t,label})}
@@ -317,11 +376,15 @@ const MODES=[
  {id:'ride',title:'Ride Line',short:'Equilibrium as a theme-park line',icon:'🎢',mb:'#fff0e3',ma:'#e8955a'},
  {id:'lab',title:'Particle Lab',short:'Stress real reactions and watch',icon:'🔬',mb:'#e6f2ff',ma:'#5d9fd2'},
  {id:'shift',title:'Shift It!',short:'Le Châtelier predictions',icon:'↔️',mb:'#e7f6e9',ma:'#6fae7e'},
- {id:'ideas',title:'Big Ideas & K',short:'Dynamic equilibrium, K expressions',icon:'🧠',mb:'#f1eafb',ma:'#9a7fcf'}];
+ {id:'ideas',title:'Big Ideas & K',short:'Dynamic equilibrium, K, acids & Ka',icon:'🧠',mb:'#f1eafb',ma:'#9a7fcf'},
+ {id:'calc',title:'Calculate K',short:'Find K or a missing concentration',icon:'🧮',mb:'#fff6e2',ma:'#c99a2e',noArt:true},
+ {id:'quiz',title:'Skill Check',short:'10 questions, then your study plan',icon:'🎯',mb:'#fdeef2',ma:'#d0708a',noArt:true}];
 const VIDEO_FOR={
  basics:['qatdA_ALnx8',0,'What is equilibrium?'],rates:['qatdA_ALnx8',683,'Rates must be equal at equilibrium'],
  kexpr:['-ie15qDdHjE',236,'The equilibrium constant, K'],krules:['-ie15qDdHjE',472,'Rules behind K'],hetero:['ZojNOgXleJA',731,'Heterogeneous equilibrium expressions'],
  collide:['qatdA_ALnx8',130,'Collision theory basics'],
+ acid:['tGqiUbBxqec',0,'Acid-base equilibria (Ka): strong vs. weak acids'],acidPrac:['ZojNOgXleJA',1629,'Practice: writing Ka expressions'],
+ calc:['ZojNOgXleJA',1238,'Practice: finding a concentration from K'],kcalc:['JbkiO-RLx6A',0,'Practice problems for equilibrium (Keq)'],
  lec:['JMRz9TRVUQg',0,"Le Châtelier's principle: stress!"],lecAdd:['JMRz9TRVUQg',304,'Adding concentration = move away'],lecRem:['JMRz9TRVUQg',427,'Taking concentration = move toward'],
  lecT:['JMRz9TRVUQg',719,'Temperature: exothermic and endothermic'],lecP:['JMRz9TRVUQg',992,'Pressure change'],lecV:['JMRz9TRVUQg',1409,'Volume changes'],lecCat:['JMRz9TRVUQg',1495,'Catalysts and enzymes'],
  lecReal:['JMRz9TRVUQg',82,'Real-world examples'],practice:['ZojNOgXleJA',986,"Practice: predicting Le Châtelier shifts"]};
@@ -331,6 +394,7 @@ const REFERENCE=[
  ['Equilibrium constant',`aA + bB ⇌ cC + dD &nbsp; K = <span class="frac"><span>[C]<sup>c</sup>[D]<sup>d</sup></span><span>[A]<sup>a</sup>[B]<sup>b</sup></span></span><br>Products over reactants, coefficients become exponents. Leave out pure solids (s) and liquids (l).`],
  ['Size of K','K &gt; 1: products favored. K &lt; 1: reactants favored. Reverse reaction: K<sub>reverse</sub> = 1/K.'],
  ["Le Châtelier's principle",'<table><tr><td>Add a substance</td><td>shift <b>away</b> from it</td></tr><tr><td>Remove a substance</td><td>shift <b>toward</b> it</td></tr><tr><td>Heat, exothermic (ΔH &lt; 0)</td><td>heat is a product: shift <b>left</b></td></tr><tr><td>Heat, endothermic (ΔH &gt; 0)</td><td>heat is a reactant: shift <b>right</b></td></tr><tr><td>Smaller volume (more pressure)</td><td>toward <b>fewer gas</b> moles</td></tr><tr><td>Catalyst; adding (s) or (l)</td><td><b>no shift</b></td></tr></table>Only temperature changes the value of K.'],
+ ['Acids and K<sub>a</sub>',`HA + H₂O ⇌ H₃O⁺ + A⁻ &nbsp; K<sub>a</sub> = ${'<span class="frac"><span>[H₃O⁺][A⁻]</span><span>[HA]</span></span>'}<br>Water (l) is left out. K<sub>a</sub> &gt; 1: strong acid; K<sub>a</sub> &lt; 1: weak acid. Acid–base equilibrium favors the side with the <b>weaker acid</b> (smaller K<sub>a</sub>).<br>Strong acids: HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄.`],
  ['🔗 Equilibrium in real life','🩸 Blood buffer: CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (lungs remove CO₂, kidneys adjust HCO₃⁻) · ⛰️ Hb + O₂ ⇌ HbO₂ (altitude, oxygen therapy) · 🦷 Enamel dissolves when acid removes OH⁻ · 🏭 Haber process: remove NH₃, high pressure · 🥤 Soda fizzes when CO₂ pressure drops'],
  ['🎢 Ride-line model','Line (queue) = reactants · Ride = products · Boarding = forward rate · Back in line = reverse rate · Extra crew = catalyst']];
 /* ============================== HELPERS ============================== */
@@ -358,8 +422,12 @@ const RX=[
  {id:'blood',L:[[1,'CO₂','aq','CO2'],[1,'H₂O','l',null,'x']],R:[[1,'H⁺','aq','H'],[1,'HCO₃⁻','aq','HCO3']],dH:null,noP:true,sim:'blood',ctx:'The bicarbonate buffer in your blood'},
  {id:'fescn',L:[[1,'Fe³⁺','aq','Fe'],[1,'SCN⁻','aq','SCN']],R:[[1,'FeSCN²⁺','aq','FeSCN']],dH:-1,sim:'fescn',ctx:'Blood-red FeSCN²⁺ in a test tube'},
  {id:'soda',L:[[1,'CO₂','g'],[1,'H₂O','l',null,'x']],R:[[1,'H₂CO₃','aq']],dH:null,ctx:'A sealed bottle of soda'},
+ {id:'acetic',L:[[1,'CH₃COOH','aq'],[1,'H₂O','l',null,'x']],R:[[1,'H₃O⁺','aq'],[1,'CH₃COO⁻','aq']],dH:null,noP:true,ctx:'Acetic acid (vinegar), a weak acid'},
+ {id:'hf',L:[[1,'HF','aq'],[1,'H₂O','l',null,'x']],R:[[1,'H₃O⁺','aq'],[1,'F⁻','aq']],dH:null,noP:true,ctx:'Hydrofluoric acid, a weak acid'},
+ {id:'formic',L:[[1,'HCOOH','aq'],[1,'H₂O','l',null,'x']],R:[[1,'H₃O⁺','aq'],[1,'HCOO⁻','aq']],dH:null,noP:true,ctx:'Formic acid (ant stings)'},
+ {id:'ammonia',L:[[1,'NH₃','aq'],[1,'H₂O','l',null,'x']],R:[[1,'NH₄⁺','aq'],[1,'OH⁻','aq']],dH:null,noP:true,ctx:'Ammonia, a weak base'},
  {id:'nh4hs',L:[[1,'NH₄HS','s']],R:[[1,'NH₃','g'],[1,'H₂S','g']],dH:90},
- {id:'cobalt',L:[[1,'Co(H₂O)₆²⁺','aq'],[4,'Cl⁻','aq']],R:[[1,'CoCl₄²⁻','aq'],[6,'H₂O','l',null,'x']],dH:1,ctx:'Pink Co(H₂O)₆²⁺ ⇌ blue CoCl₄²⁻'}];
+ {id:'cobalt',L:[[1,'Co(H₂O)₆²⁺','aq','Co'],[4,'Cl⁻','aq','Cl']],R:[[1,'CoCl₄²⁻','aq','CoCl'],[6,'H₂O','l',null,'x']],dH:1,sim:'cobalt',ctx:'Pink Co(H₂O)₆²⁺ ⇌ blue CoCl₄²⁻'}];
 const sp=e=>`${e[0]>1?e[0]+' ':''}${e[1]}(${e[2]})`;
 const rxText=r=>r.L.map(sp).join(' + ')+' ⇌ '+r.R.map(sp).join(' + ');
 const dHText=r=>r.dH==null?'':Math.abs(r.dH)===1?(r.dH<0?'ΔH &lt; 0 (exothermic)':'ΔH &gt; 0 (endothermic)'):`ΔH = ${r.dH>0?'+':'−'}${Math.abs(r.dH)} kJ`;
@@ -426,19 +494,20 @@ const SHAPES={ /* atoms drawn for each species: [dx,dy,r,fill,edge] */
  H2:[[-3,0,4,'#ffffff','#7d8a94'],[3,0,4,'#ffffff','#7d8a94']],I2:[[-5,0,6,'#6b3fa0','#3e1f63'],[5,0,6,'#6b3fa0','#3e1f63']],HI:[[-5,0,4,'#ffffff','#7d8a94'],[3,0,6,'#6b3fa0','#3e1f63']],
  Fe:[[0,0,7.5,'#f0c64a','#a7801a']],SCN:[[-3.5,0,4,'#cfd7dd','#6f7b84'],[3.5,0,4,'#cfd7dd','#6f7b84']],FeSCN:[[-4,0,7.5,'#c3142e','#6b0716'],[6.5,0,4.5,'#c3142e','#6b0716']],
  CO2:[[0,0,4.5,'#8b96a0','#4d5862'],[-7,0,4,'#e05a4f','#8e2a22'],[7,0,4,'#e05a4f','#8e2a22']],H:[[0,0,4.5,'#ff8fb1','#b23a62']],HCO3:[[0,0,6,'#7cc4e8','#2e6f96'],[-6,-5,3.5,'#e05a4f','#8e2a22'],[6,-5,3.5,'#e05a4f','#8e2a22'],[0,7,3.5,'#e05a4f','#8e2a22']],
+ Co:[[0,0,9,'#f2a3c4','#a8457a']],Cl:[[0,0,5,'#a8d88a','#4f8a35']],CoCl:[[0,0,9,'#3f6fd6','#1c3f8f'],[11,0,3.5,'#a8d88a','#4f8a35'],[-11,0,3.5,'#a8d88a','#4f8a35'],[0,11,3.5,'#a8d88a','#4f8a35'],[0,-11,3.5,'#a8d88a','#4f8a35']],
  Hb:[[0,0,10,'#7b2f4a','#45142a']],O2:[[-3,0,4,'#9fd3f2','#3f86b5'],[3,0,4,'#9fd3f2','#3f86b5']],HbO2:[[0,0,10,'#ef4a3c','#9c1d14'],[9,-7,3.5,'#9fd3f2','#3f86b5'],[14,-4,3.5,'#9fd3f2','#3f86b5']]};
 const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smooth:null,stat:'eq',
  mount(host,cfg){this.cfg=cfg;const S=SYS[cfg.sys],gas=S.gas;
-  const st=eqNew(cfg.sys,{V:gas?0.7:1,start:cfg.start});st.fast=true;eqRun(st,25,1/10);st.fast=false;st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
+  const st=eqNew(cfg.sys,{V:S.V0??(gas?0.7:1),start:cfg.start});st.fast=true;eqRun(st,25,1/10);st.fast=false;st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
   const ctl=cfg.demo?`<div class="ctrls">${speedChip()}</div>`:`<div class="ctrls">${speedChip()}${S.stress.map(([k,l,d])=>`<button type="button" class="chip go" data-s="${k}">${l}</button>`).join('')}
    ${S.heat?`<label class="slider">🌡️ Temp<input type="range" id="tSl" min="0" max="100" step="1" value="25" aria-label="Temperature in degrees Celsius"><output id="tOut">25 °C</output></label>`:''}
    ${gas?`<label class="slider">🫸 Volume<input type="range" id="vSl" min="35" max="100" step="1" value="70" aria-label="Volume of the container"><output id="vOut">70%</output></label>`:''}
    <button type="button" class="chip" id="catBtn" aria-pressed="false">⚡ Catalyst</button>
    <button type="button" class="chip rst" data-r="R">↺ Start: reactants only</button><button type="button" class="chip rst" data-r="P">↺ Start: products only</button></div>`;
-  const term=([c,k,ph])=>`${c>1?c+' ':''}${SHAPES[k]?`<span class="sw" style="background:${SHAPES[k][0][3]};border-color:${SHAPES[k][0][4]}"></span>`:''}${S.sp[k]?S.sp[k].l:{H2O:'H₂O'}[k]||k}(${ph})`;
+  const term=([c,k,ph])=>`${c>1?c+' ':''}${SHAPES[k]?`<span class="sw" style="background:${SHAPES[k][0][3]};border-color:${SHAPES[k][0][4]}"></span>`:''}${S.sp[k]?(S.sp[k].eqL||S.sp[k].l):{H2O:'H₂O'}[k]||k}(${ph})`;
   const eqs=`${S.eq.map(term).join(' + ')} ⇌ ${S.eqP.map(term).join(' + ')}`;
   const dh=S.dH==null?'':S.dH>0?`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= +'+S.dH+' kJ':'&gt; 0'} (endothermic)</span>`:`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= −'+Math.abs(S.dH)+' kJ':'&lt; 0'} (exothermic)</span>`;
-  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}</div>`:''}${ctl}
+  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}${S.note?`<br><small>${S.note}</small>`:''}</div>`:''}${ctl}
    <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Particle view: ${esc(S.title)}"></canvas><div class="tube" aria-hidden="true"><svg viewBox="0 0 30 70"><path d="M5 3v52a10 10 0 0 0 20 0V3" fill="#fff" stroke="#6b7c88" stroke-width="2.5"/><path id="tubeFill" d="M7 20v35a8 8 0 0 0 16 0V20z" fill="#eee"/></svg>${S.tube||'What you\'d see'}</div></div>
    <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus" role="status" aria-live="polite">⚖️ Balanced</div></div></div>
    <div class="graphwrap"><canvas id="grCv" width="600" height="190" role="img" aria-label="Graph of concentration over time"></canvas><div class="cap">Concentration vs. time (last 30 s). Dashed lines mark each change you make.</div></div></div>`;
@@ -468,7 +537,7 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
  draw(){const st=this.st,S=SYS[this.cfg.sys],cv=$('simCv');if(!cv)return;const ctx=fitCanvas(cv,LW,LH),W=eqW(st);
   ctx.clearRect(0,0,LW,LH);const tc=st.T-273,warm=Math.max(0,Math.min(1,(tc-25)/75)),cold=Math.max(0,Math.min(1,(25-tc)/25));
   ctx.fillStyle=`rgb(${250-cold*20},${251-warm*12-cold*4},${255-warm*30})`;ctx.fillRect(0,0,W,LH);
-  const tn=(st.x[S.tint.sp]??st.n[S.tint.sp])/st.V;let al,rgb;if(S.tint.mix){const f=Math.max(0,Math.min(1,(tn-S.tint.lo)/(S.tint.hi-S.tint.lo)));rgb=S.tint.mix[0].map((v,i)=>Math.round(v+(S.tint.mix[1][i]-v)*f));al=S.tint.a}else{rgb=S.tint.rgb;al=Math.min(S.tint.max,tn*S.tint.k)}ctx.fillStyle=`rgba(${rgb.join(',')},${al*0.45})`;ctx.fillRect(0,0,W,LH);
+  const tn=(st.x[S.tint.sp]??st.n[S.tint.sp])/st.V;let al,rgb;if(S.tint.mix){const f=S.tint.ratio?(st.x[S.tint.ratio[1]]/Math.max(1e-9,st.x[S.tint.ratio[0]]+st.x[S.tint.ratio[1]])):Math.max(0,Math.min(1,(tn-S.tint.lo)/(S.tint.hi-S.tint.lo)));rgb=S.tint.mix[0].map((v,i)=>Math.round(v+(S.tint.mix[1][i]-v)*f));al=S.tint.a}else{rgb=S.tint.rgb;al=Math.min(S.tint.max,tn*S.tint.k)}ctx.fillStyle=`rgba(${rgb.join(',')},${al*0.45})`;ctx.fillRect(0,0,W,LH);
   if(S.gas){ctx.fillStyle='#dfe5ea';ctx.fillRect(W,0,LW-W,LH);ctx.fillStyle='#8696a3';ctx.fillRect(W,0,10,LH);ctx.fillRect(W+10,LH/2-7,LW-W,14);ctx.fillStyle='#5e6d78';ctx.fillRect(W,0,3,LH)}
   for(const p of st.parts){const sh=SHAPES[p.s];p.a=(p.a??(p.x*7%6.28))+(p.vx>0?0.01:-0.01);const ca=Math.cos(p.a),sa=Math.sin(p.a);
    for(const [dx,dy,r,f,e] of sh){const x=p.x+dx*ca-dy*sa,y=p.y+dx*sa+dy*ca;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=f;ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle=e;ctx.stroke()}}
@@ -477,7 +546,7 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   $('tubeFill').setAttribute('fill',`rgba(${rgb.join(',')},${S.tint.mix?0.85:Math.max(0.05,al)})`);
   if(!this.fresh)return;this.fresh=false;
   setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,SHAPES[k][0][3],SHAPES[k][0][4],st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Solid green ring = forward, dashed orange = reverse.`);
-  setBalance(st.ema.f,st.ema.r,'Forward','Reverse',S.eqP.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),S.eq.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),this);
+  setBalance(st.ema.f,st.ema.r,'Forward','Reverse',S.eqP.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].eqL||S.sp[e[1]].l).join(' + '),S.eq.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].eqL||S.sp[e[1]].l).join(' + '),this);
   const gc=$('grCv');if(gc)drawGraph(gc,st,Object.keys(S.sp).map(k=>({k,l:S.sp[k].l,c:SHAPES[k][0][4]==='#9c8456'?'#b49a62':SHAPES[k][0][4]})),'c')}};
 /* iOS Safari cancels a tap if new elements appear while the finger is down, so live readouts only change text, never rebuild */
 function setCounts(rows,note){const box=$('cnts');if(!box)return;const key=rows.map(r=>r[0]).join('|');
@@ -559,6 +628,60 @@ const Park={st:null,el:null,raf:0,onEvent:null,stat:'eq',lastSample:-1,
   setCounts([['In line (reactants)','#e8955a','#fff',st.queue.length],['On the ride (products)','#5d9fd2','#fff',st.ride.length]],'⭐ Follow the gold guest: is anyone ever stuck?');
   setBalance(st.ema.f,st.ema.r,'Boarding','Back in line','the ride','the line',this,'/min');
   const gc=$('grCv');if(gc)drawGraph(gc,st,[{k:'q',l:'in line',c:'#d9772f'},{k:'r',l:'on ride',c:'#2f7fbf'}],'g')}};
+/*HABER-START*/
+/* Haber factory model. N₂ + 3 H₂ ⇌ 2 NH₃, ΔH = −92 kJ, 1:3 feed.
+   Equilibrium: Kp(T) from the van 't Hoff equation, calibrated to 36% NH₃ at 400 °C / 200 atm (textbook table: ~63% at 300 °C, ~18% at 500 °C).
+   With y = NH₃ mole fraction, Kp·P² = 256 y² / (27 (1−y)⁴), so s = y/(1−y)² = P·√(27Kp/256) and y = ((2s+1) − √(4s+1)) / (2s).
+   Rate: first-order approach to equilibrium, k = 3/h at 450 °C and 200 atm with the iron catalyst (Ea ≈ 80 kJ), ×√(P/200); no catalyst: 10⁴ times slower. */
+function habKp(Tc){const T=Tc+273.15;return 1.832e-4*Math.exp(92000/8.314*(1/T-1/673.15))}
+function habYield(Tc,P){const s=P*Math.sqrt(27*habKp(Tc)/256);return ((2*s+1)-Math.sqrt(4*s+1))/(2*s)}
+function habK(Tc,P,cat){const T=Tc+273.15;return 3*Math.exp(-80000/8.314*(1/T-1/723.15))*Math.sqrt(P/200)*(cat?1:1e-4)}
+function habAt(Tc,P,cat,hours){return habYield(Tc,P)*(1-Math.exp(-habK(Tc,P,cat)*hours))}
+/*HABER-END*/
+const Factory={el:null,onEvent:null,runs:[],raf:0,
+ mount(host){this.runs=[];this.T=450;this.P=200;this.cat=true;this.cur=null;this.prev=null;
+  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)<span class="dh">ΔH = −92 kJ (exothermic)</span></div>
+   <div class="real">🏭 The Haber process makes ammonia for fertilizer, which feeds about half the world. Your job: make the most NH₃ in one hour.</div>
+   <div class="ctrls"><label class="slider">🌡️ Temp<input type="range" id="fT" min="200" max="700" step="25" value="450" aria-label="Reactor temperature in degrees Celsius"><output id="fTo">450 °C</output></label>
+    <label class="slider">🧯 Pressure<input type="range" id="fP" min="50" max="350" step="25" value="200" aria-label="Reactor pressure in atmospheres"><output id="fPo">200 atm</output></label>
+    <button type="button" class="chip on" id="fCat" aria-pressed="true">⚡ Iron catalyst: on</button>
+    <button type="button" class="btn check" id="fRun" style="min-height:48px">▶ Run 1 hour</button></div>
+   <div class="stage"><canvas id="simCv" width="600" height="300" role="img" aria-label="Graph of percent ammonia in the reactor over one hour"></canvas></div>
+   <div class="readout"><div class="counts" id="fBars"></div><div class="balance" id="fNote" role="status" aria-live="polite" style="text-align:left;padding:8px 10px;font-weight:700;font-size:14.5px">Pick settings, then tap ▶ Run 1 hour.</div></div>
+   <div class="graphwrap"><table class="frun" id="fRuns"></table></div></div>`;
+  this.el=host.firstElementChild;const q=id=>this.el.querySelector('#'+id);
+  q('fT').oninput=e=>{this.T=+e.target.value;q('fTo').textContent=this.T+' °C';this.preview()};
+  q('fP').oninput=e=>{this.P=+e.target.value;q('fPo').textContent=this.P+' atm';this.preview()};
+  q('fCat').onclick=e=>{this.cat=!this.cat;const b=e.currentTarget;b.classList.toggle('on',this.cat);b.setAttribute('aria-pressed',this.cat);b.textContent='⚡ Iron catalyst: '+(this.cat?'on':'off');this.preview()};
+  q('fRun').onclick=()=>this.run();this.preview()},
+ start(){},stop(){cancelAnimationFrame(this.raf);this.el=null},emit(ev){this.onEvent&&this.onEvent(ev)},
+ cost(){return this.P>=300?'💰💰💰 very expensive':this.P>=200?'💰💰 costly':'💰 cheap'},
+ preview(){this.draw(this.cur?this.cur.prog:0);this.bars(null)},
+ bars(r){const y=habYield(this.T,this.P);const box=this.el&&this.el.querySelector('#fBars');if(!box)return;const made=r?r.made:null;
+  box.innerHTML=`<div class="cnt" style="display:block"><span>🎯 Equilibrium yield (if you waited forever)</span><b style="float:right">${Math.round(y*100)}%</b><div class="track" style="margin-top:4px"><div class="fill" style="width:${y*100}%;background:#7fb0d9"></div></div></div>
+   <div class="cnt" style="display:block"><span>⏱️ NH₃ made in 1 hour</span><b style="float:right">${made==null?'—':made>0&&made<0.005?'&lt;1%':Math.round(made*100)+'%'}</b><div class="track" style="margin-top:4px"><div class="fill" style="width:${made==null?0:made*100}%;background:#4fa36a"></div></div></div>
+   <div class="kline">Equipment cost at ${this.P} atm: ${this.cost()}</div>`},
+ run(){const T=this.T,P=this.P,cat=this.cat,y=habYield(T,P),made=habAt(T,P,cat,1),k=habK(T,P,cat);
+  const r={T,P,cat,y,made,k,prog:0};if(this.cur)this.prev=this.cur;this.cur=r;this.runs.unshift(r);this.runs=this.runs.slice(0,5);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,t0=performance.now(),dur=reduce?0:1200;
+  cancelAnimationFrame(this.raf);const step=now=>{if(!this.el)return;r.prog=dur?Math.min(1,(now-t0)/dur):1;this.draw(r.prog);if(r.prog<1)this.raf=requestAnimationFrame(step);else this.done(r)};this.raf=requestAnimationFrame(step)},
+ done(r){this.bars(r);const pct=x=>x>0&&x<0.005?'less than 1%':Math.round(x*100)+'%',reach=r.made/r.y;
+  const msg=!r.cat?`Without the catalyst, almost nothing happens in an hour (${pct(r.made)}). The equilibrium yield is still ${pct(r.y)}: a catalyst changes speed, not yield.`:
+   reach<0.5?`Slow! In 1 hour it only got ${pct(reach)} of the way to equilibrium. Great yield on paper (${pct(r.y)}), but too slow.`:
+   r.y<0.2?`Fast, but the equilibrium yield is low (${pct(r.y)}): heat pushes this exothermic reaction back toward N₂ and H₂.`:
+   `Good balance: ${pct(r.made)} NH₃ in one hour (equilibrium yield ${pct(r.y)}).`;
+  this.el.querySelector('#fNote').textContent=msg;
+  this.el.querySelector('#fRuns').innerHTML=`<caption>Your runs (newest first)</caption><tr><th scope="col">Temp</th><th scope="col">Pressure</th><th scope="col">Catalyst</th><th scope="col">Eq. yield</th><th scope="col">Made in 1 h</th></tr>`+this.runs.map(x=>`<tr><td>${x.T} °C</td><td>${x.P} atm</td><td>${x.cat?'on':'off'}</td><td>${pct(x.y)}</td><td><b>${pct(x.made)}</b></td></tr>`).join('');
+  this.emit('F:run');if(r.T<=275&&r.cat)this.emit('F:cold');if(r.T>=600)this.emit('F:hot');if(r.P>=300)this.emit('F:highP');if(!r.cat)this.emit('F:nocat')},
+ draw(prog){const cv=this.el&&this.el.querySelector('#simCv');if(!cv)return;const w=600,h=300,ctx=fitCanvas(cv,w,h);ctx.clearRect(0,0,w,h);
+  const X=t=>52+t/60*(w-80),Y=v=>h-34-v/0.9*(h-60);ctx.fillStyle='#fbfdff';ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle='#e3eaf0';ctx.lineWidth=1;ctx.font='700 11px Inter,system-ui,sans-serif';ctx.fillStyle='#6b7a86';
+  for(let v=0;v<=0.901;v+=0.1){ctx.beginPath();ctx.moveTo(52,Y(v));ctx.lineTo(w-28,Y(v));ctx.stroke();ctx.fillText(Math.round(v*100)+'%',14,Y(v)+4)}
+  for(let t=0;t<=60;t+=15){ctx.fillText(t+' min',X(t)-14,h-14)}ctx.fillText('% NH₃ in the reactor',56,16);
+  const curve=(r,p,col,dash)=>{ctx.strokeStyle=col;ctx.lineWidth=3;ctx.setLineDash(dash||[]);ctx.beginPath();for(let i=0;i<=60*p;i+=1){const v=r.y*(1-Math.exp(-r.k*i/60));i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))}ctx.stroke();ctx.setLineDash([])};
+  const y=habYield(this.T,this.P);ctx.setLineDash([6,5]);ctx.strokeStyle='#7fb0d9';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(52,Y(y));ctx.lineTo(w-28,Y(y));ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#2f6fa8';ctx.fillText('equilibrium yield '+Math.round(y*100)+'%',w-190,Math.max(28,Y(y)-6));
+  if(this.prev)curve(this.prev,1,'#c4ccd3',[3,4]);if(this.cur)curve(this.cur,prog,'#3f9a5c')}};
 function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 </script>
 <script>
@@ -682,6 +805,56 @@ const LAB_Q=[
   ['More Fe³⁺',false,'Only a shift left would make more Fe³⁺. Adding SCN⁻ shifts right.'],
   ['The same amount',false,'Check the Fe³⁺ count: it dropped.'],
   ['All of it disappears',false,'Some Fe³⁺ is always left at equilibrium.']]})},
+ {sys:'cobalt',f:()=>({video:'lecT',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more.'},prompt:'The cobalt reaction is endothermic. You heated the tube. What color does it turn?',hint:'Endothermic: heat is a reactant. Adding heat shifts which way? Blue CoCl₄²⁻ is the product.',choices:[
+  ['Blue: more CoCl₄²⁻',true,'Right! Heat acts like a reactant in an endothermic reaction, so heating shifts it right toward blue CoCl₄²⁻.'],
+  ['Pink: more Co(H₂O)₆²⁺ forms',false,'Pink is what cooling does here. Heat favors the endothermic (forward) direction.'],
+  ['Colorless: the cobalt is used up',false,'Cobalt is still there; it just switches between its pink and blue forms.'],
+  ['No change: temperature only changes speed',false,'ΔH is not zero, so temperature shifts this equilibrium (and changes K).']]})},
+ {sys:'cobalt',f:()=>({video:'lecT',task:{need:'T:cold',say:'Slide 🌡️ Temp down to 5 °C or less (ice bath).'},prompt:'You put the cobalt tube in an ice bath. What color does it turn?',hint:'Cooling removes heat, a reactant here (endothermic).',choices:[
+  ['Pink: more Co(H₂O)₆²⁺',true,'Yes! Cooling removes heat (a reactant), so the reaction shifts left to the pink form.'],
+  ['Blue: it shifts toward CoCl₄²⁻',false,'Blue comes from heating. Cooling favors the exothermic (reverse) direction.'],
+  ['Green: both forms mix into a new one',false,'The tube shows a mix of pink and blue, but cooling makes it clearly pinker.'],
+  ['No change: ice only slows the particles',false,'Watch the counts: CoCl₄²⁻ falls and Co(H₂O)₆²⁺ rises.']]})},
+ {sys:'cobalt',f:()=>({video:'lecAdd',task:{need:'stress:addR2',say:'Tap 🧂 Add HCl (+Cl⁻).'},prompt:'You added hydrochloric acid, which adds Cl⁻. What happens?',hint:'Cl⁻ is a reactant. The system uses up what you add.',choices:[
+  ['Bluer: more CoCl₄²⁻',true,'Right! Adding Cl⁻ (a reactant) shifts the equilibrium right, so more blue CoCl₄²⁻ forms.'],
+  ['Pinker: it shifts back toward Co(H₂O)₆²⁺',false,'Adding a reactant shifts toward products, the blue side.'],
+  ['No change: H⁺ is not in the equation',false,'The H⁺ is a spectator here, but the Cl⁻ is in the equation.'],
+  ['The cobalt dissolves into the acid',false,'Cobalt stays in solution; it only switches between its two forms.']]})},
+ {sys:'cobalt',f:()=>({video:'hetero',task:{need:'stress:dil',say:'Tap 💧 Add water.'},prompt:'You added water. The tube turns pinker. Why, if liquid water is left out of K?',hint:'Water dilutes every dissolved particle. Count dissolved particles: 1 + 4 on the left, 1 on the right.',choices:[
+  ['Dilution favors the side with more dissolved particles',true,'Yes. H₂O(l) is not in K, but adding it dilutes everything. Dilution favors the side with more dissolved particles (5 on the left vs 1 on the right), so it shifts left toward pink. Like a bigger volume for gases.'],
+  ['Water is a product, so adding more of it pushes the reaction left',false,'H₂O(l) is the solvent and is left out of K. The shift comes from dilution, not from water as a product.'],
+  ['The added water cools the tube down a little',false,'The temperature stays the same in the lab. Dilution causes this shift.'],
+  ['It is not really a shift; the blue just looks fainter',false,'Watch the counts: blue CoCl₄²⁻ actually decreases and pink Co(H₂O)₆²⁺ increases.']]})},
+ {sys:'cobalt',f:()=>({video:'lecRem',task:{need:'stress:remR2',say:'Tap 🥄 Add AgNO₃ (removes Cl⁻).'},prompt:'Ag⁺ from silver nitrate grabs Cl⁻ and forms solid AgCl. What happens to the color?',hint:'Removing a reactant shifts toward the reactants.',choices:[
+  ['Pinker: it shifts back toward Co(H₂O)₆²⁺',true,'Right! AgCl precipitates, removing Cl⁻ (a reactant), so the equilibrium shifts left to the pink form.'],
+  ['Bluer: it shifts forward toward more CoCl₄²⁻',false,'That needs more Cl⁻. Removing Cl⁻ shifts the other way.'],
+  ['No change, because silver is not in the equation',false,'Silver is not in the equation, but it removes Cl⁻, which is.'],
+  ['The tube turns a shiny silver color',false,'A white AgCl solid forms; the solution color shifts toward pink.']]})},
+ {sys:'factory',kind:'factory',f:()=>({video:'lecT',task:{need:'F:cold',say:'Set 🌡️ to 275 °C or lower (catalyst on), then tap ▶ Run 1 hour.'},prompt:'At low temperature the equilibrium yield is high. Why is so little NH₃ made in one hour?',hint:'Compare the two bars: the yield if you waited forever vs. what you got in 1 hour.',choices:[
+  ['Too slow: it never gets near equilibrium',true,'Right! Cold favors NH₃ (exothermic), but the molecules react too slowly. Equilibrium tells you how much; rate tells you how fast.'],
+  ['The equilibrium yield is actually low when it is cold',false,'Check the top bar: cold gives a HIGH equilibrium yield because the reaction is exothermic.'],
+  ['Cold shifts the reaction toward N₂ and H₂',false,'For an exothermic reaction, cooling shifts toward NH₃, not away from it.'],
+  ['The catalyst turns off below 300 °C',false,'The catalyst still works; it just can\'t make the reaction fast enough at this temperature.']]})},
+ {sys:'factory',kind:'factory',f:()=>({video:'lecT',task:{need:'F:hot',say:'Set 🌡️ to 600 °C or higher, then tap ▶ Run 1 hour.'},prompt:'At 600 °C the reaction is fast. What happened to the equilibrium yield?',hint:'ΔH = −92 kJ. Heat is a product. Adding heat shifts which way?',choices:[
+  ['It dropped: heat shifts it left',true,'Yes! Heat is a product here, so high temperature shifts the equilibrium toward N₂ and H₂. Fast, but a poor yield.'],
+  ['It rose, because hot molecules collide and react more',false,'Hot molecules react faster, but the equilibrium itself shifts left for an exothermic reaction.'],
+  ['It stayed the same: temperature only changes speed',false,'Temperature changes K. Compare the top bar with a cooler run.'],
+  ['It climbed all the way to 100% ammonia',false,'Not even close. Check the top bar.']]})},
+ {sys:'factory',kind:'factory',f:()=>({video:'lecP',task:{need:'F:highP',say:'Raise 🧯 Pressure to 300 atm or more, then tap ▶ Run 1 hour.'},prompt:'High pressure raised the equilibrium yield. Why?',hint:'Count gas moles: 1 N₂ + 3 H₂ on the left, 2 NH₃ on the right.',choices:[
+  ['It favors fewer gas moles (4 → 2)',true,'Right! Squeezing favors the side with fewer gas moles, which is NH₃ (2 vs 4).'],
+  ['High pressure speeds up the catalyst',false,'Pressure helps the rate a little, but the bigger reason is the equilibrium shift toward fewer gas moles.'],
+  ['High pressure heats the gas, which helps',false,'The temperature is your separate setting; the shift comes from gas moles.'],
+  ['Higher pressure makes the value of K larger',false,'Only temperature changes K. Pressure shifts the position.']]})},
+ {sys:'factory',kind:'factory',f:()=>({video:'lecCat',task:{need:'F:nocat',say:'Turn ⚡ Catalyst off, then tap ▶ Run 1 hour.'},prompt:'Without the iron catalyst, what changed?',hint:'Compare the top bar (equilibrium yield) and the bottom bar (made in 1 hour) with the catalyst on and off.',choices:[
+  ['Almost no NH₃ made; same equilibrium yield',true,'Exactly. A catalyst only speeds things up; it never changes how far the equilibrium goes.'],
+  ['The equilibrium yield dropped to zero',false,'The top bar didn\'t move: a catalyst doesn\'t change the equilibrium yield.'],
+  ['More NH₃ is made in the hour without it',false,'Without the catalyst the reaction barely runs in an hour.'],
+  ['Nothing at all changed in either bar',false,'Check the bottom bar: much less NH₃ was made in the hour.']]})},
+ {sys:'factory',kind:'factory',f:()=>({video:'lecReal',task:{need:'F:run',say:'Try a few settings with ▶ Run 1 hour. Aim for the biggest “made in 1 hour” bar.'},prompt:'Real ammonia plants run near 450 °C and 200 atm with an iron catalyst. Why not colder, or at even higher pressure?',hint:'Colder = higher yield but slower. Higher pressure = higher yield but costlier equipment.',choices:[
+  ['A compromise of speed, yield and cost',true,'Right! Cold gives a great yield but is too slow; very high pressure costs a lot to build and run. 450 °C, about 200 atm and a catalyst make the most NH₃ per hour for the money.'],
+  ['450 °C gives the highest equilibrium yield',false,'Lower temperatures give higher equilibrium yields; 450 °C is chosen for speed.'],
+  ['The iron catalyst only works at exactly 450 °C',false,'Catalysts work over a range; 450 °C balances rate and yield.'],
+  ['Any higher pressure would lower the ammonia yield',false,'Higher pressure raises the yield; it is limited by cost and safety.']]})},
  {sys:'hb',f:()=>({video:'lecReal',task:{need:'stress:remR2',say:'Tap ⛰️ Climb high (less O₂).'},prompt:'At high altitude there is less O₂. What happens to HbO₂ (oxygen-carrying hemoglobin)?',hint:'O₂ is a reactant. Removing it shifts which way?',choices:[
   ['It decreases (shift left)',true,'Right! Less O₂ shifts Hb + O₂ ⇌ HbO₂ to the left. Less HbO₂ means less oxygen delivered: altitude sickness, tiredness.'],
   ['It increases (shift right)',false,'A shift right needs MORE O₂ or more Hb. Less O₂ shifts left.'],
@@ -728,7 +901,7 @@ LAB_Q.push(
   ['It goes down: hot particles spread out',false,'The box size didn\'t change. Faster particles hit each other more often, not less.'],
   ['It stays the same: temperature only changes color',false,'Watch the 💥 number: it climbs as you heat.'],
   ['It drops to zero once equilibrium returns',false,'Particles keep colliding at equilibrium; that is what keeps both reactions going.']]})});
-const LAB_SYS=[['no2','NO₂ gas'],['hi','H₂ + I₂'],['fescn','Blood-red Fe³⁺'],['hb','Hemoglobin'],['blood','Blood buffer']];
+const LAB_SYS=[['no2','NO₂ gas'],['hi','H₂ + I₂'],['fescn','Blood-red Fe³⁺'],['cobalt','Pink ⇌ blue cobalt'],['hb','Hemoglobin'],['blood','Blood buffer'],['factory','🏭 Haber factory']];
 /* Big Ideas: concept items */
 const IDEAS=[
  {v:'basics',p:'In a reaction at equilibrium, what is true about the forward and reverse reactions?',h:'Is equilibrium "stopped" or "balanced"?',c:[
@@ -794,9 +967,151 @@ const IDEAS=[
 /* ============================== GENERATORS ============================== */
 let lastPick={};
 function pickNew(key,list){let i,tries=0;do{i=Math.floor(Math.random()*list.length)}while(list.length>1&&i===lastPick[key]&&tries++<10);lastPick[key]=i;return list[i]}
+/* ============================== CALCULATE K (typed numbers) ============================== */
+/* Shared number reader: games/brand/chemparse.v2.js. If it did not load, use a small local copy so the mode still works. */
+const NUM=window.ChemParse||(()=>{const SU={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+ const base=r=>String(r??'').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>SU[c]).replace(/[−–—]/g,'-').replace(/\s+/g,'');
+ const decimalComma=r=>{const t=String(r??'').replace(/\s+/g,'');return t.includes(',')&&!/^[+-]?[1-9]\d{0,2}(,\d{3})+(\.\d*)?([eE×xX*·].*)?$/.test(t)};
+ const norm=r=>base(r).replace(/,/g,'').replace(/[×xX*·]10\^?([+-]?\d+)$/,'e$1');
+ const parseValue=r=>{if(decimalComma(r))return NaN;const t=norm(r);return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN};
+ const sfCount=r=>{let t=base(r).replace(/,/g,'').replace(/(?:[×xX*·]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(/^0*\.?0*$/.test(t))return 1;return t.includes('.')?t.replace('.','').replace(/^0+/,'').length:t.replace(/0+$/,'').length};
+ const fmt=(x,s)=>{if(!isFinite(x))return '—';if(x===0)return '0';const r=Number(x.toPrecision(s)),e=Math.floor(Math.log10(Math.abs(r)));if(e>=5||e<-3||(e>=s&&String(Math.round(r)).replace(/0+$/,'').length<s)||(e>=s-1&&e>=s)){const [m,p]=r.toExponential(s-1).split('e');return m+' × 10'+String(+p).replace(/[0-9-]/g,c=>c==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[c])}let f=r.toFixed(Math.max(0,s-1-e));if(!f.includes('.')&&/0$/.test(f)&&sfCount(f)!==s)f+='.';return f};
+ return {decimalComma,parseValue,sfCount,fmt}})();
+const nf=(x,s)=>NUM.fmt(x,s);
+const CALC_IDS=['haber','so3','no2','hi','pcl5','caco3','co','no','meth','fescn','nh4hs','soda','blood','hb'];
+const inK=e=>e[2]==='g'||e[2]==='aq';
+/* a measured concentration: 2 or 3 sig figs, 0.010–9.9 M */
+function rconc(){const sf=pick([2,3,3]),e=pick([-2,-1,-1,0]);const v=Number((rnd(11,95)/10*10**e).toPrecision(sf));return {v,sf}}
+function kOf(r,c){let num=1,den=1;r.R.filter(inK).forEach(e=>num*=c[e[1]]**e[0]);r.L.filter(inK).forEach(e=>den*=c[e[1]]**e[0]);return num/den}
+function kVariant(r,c,how){let num=1,den=1;const t=(e)=>how==='noexp'?c[e[1]]:how==='mult'?c[e[1]]*e[0]:c[e[1]]**e[0];
+ r.R.filter(inK).forEach(e=>num*=t(e));r.L.filter(inK).forEach(e=>den*=t(e));if(how==='sum'){num=0;den=0;r.R.filter(inK).forEach(e=>num+=c[e[1]]**e[0]);r.L.filter(inK).forEach(e=>den+=c[e[1]]**e[0])}return num/den}
+const brk=e=>`[${e[1]}]${e[0]>1?`<sup>${e[0]}</sup>`:''}`;
+const kForm=r=>`K<sub>c</sub> = ${frac(r.R.filter(inK).map(brk).join(''),r.L.filter(inK).map(brk).join(''))}`;
+function calcQ(kind,rf){const id=pick(CALC_IDS),r=rf||RX.find(x=>x.id===id);kind=kind||(Math.random()<0.5?'kc':Math.random()<0.8?'unknown':'rev');
+ const all=[...r.L,...r.R].filter(inK),c={},sfs={};all.forEach(e=>{const g=rconc();c[e[1]]=g.v;sfs[e[1]]=g.sf});
+ const het=[...r.L,...r.R].some(e=>!inK(e));const hetNote=het?' Pure solids and liquids are left out.':'';
+ if(kind==='kc'){const K=kOf(r,c),sf=Math.min(...all.map(e=>sfs[e[1]]));if(!isFinite(K)||K===0)return calcQ('kc');
+  const giv=all.map(e=>`<span>[${e[1]}] = ${nf(c[e[1]],sfs[e[1]])} M</span>`).join('');
+  return {type:'num',topic:'calc',video:'kcalc',answer:K,sf,unit:'',prompt:`These are the <b>equilibrium</b> concentrations. Calculate K<sub>c</sub>.`,
+   html:rxHTML(r,false)+`<div class="givens">${giv}</div>`,
+   hint:`Write the expression first: ${kForm(r)}.${hetNote} Then plug in and raise each concentration to its coefficient. Round to ${sf} sig figs (the fewest in the data).`,
+   why:`${kForm(r)}${hetNote}<br>K<sub>c</sub> = ${frac(r.R.filter(inK).map(e=>`(${nf(c[e[1]],sfs[e[1]])})${e[0]>1?`<sup>${e[0]}</sup>`:''}`).join(''),r.L.filter(inK).map(e=>`(${nf(c[e[1]],sfs[e[1]])})${e[0]>1?`<sup>${e[0]}</sup>`:''}`).join(''))} = <b>${nf(K,sf)}</b>`,
+   slips:[[1/K,'That is upside down: K is <b>products over reactants</b>.'],[kVariant(r,c,'noexp'),'Each concentration must be raised to its <b>coefficient</b> as an exponent.'],[kVariant(r,c,'mult'),'Coefficients become <b>exponents</b>, not numbers you multiply by.'],[kVariant(r,c,'sum'),'Multiply the concentrations together; don\'t add them.']]}}
+ if(kind==='unknown'){const cand=all.filter(e=>e[0]<=2);if(!cand.length||all.length<2)return calcQ('kc');const u=pick(cand);
+  const K0=kOf(r,c);if(!isFinite(K0)||K0===0)return calcQ('unknown');const Ksf=pick([2,3]),K=Number(K0.toPrecision(Ksf));
+  const onP=r.R.includes(u);let rest=1;all.filter(e=>e!==u).forEach(e=>{const t=c[e[1]]**e[0];rest*=r.R.includes(e)?t:1/t});
+  /* K = rest × u^n (u on product side) or rest / u^n (reactant side) */
+  const un=onP?K/rest:rest/K,x=un**(1/u[0]),sf=Math.min(Ksf,...all.filter(e=>e!==u).map(e=>sfs[e[1]]));
+  const giv=all.filter(e=>e!==u).map(e=>`<span>[${e[1]}] = ${nf(c[e[1]],sfs[e[1]])} M</span>`).join('');
+  return {type:'num',topic:'calc',video:'calc',answer:x,sf,unit:'M',prompt:`K<sub>c</sub> = <b>${nf(K,Ksf)}</b>. Use the equilibrium concentrations to find <b>[${u[1]}]</b>.`,
+   html:rxHTML(r,false)+`<div class="givens">${giv}</div>`,
+   hint:`Write ${kForm(r)}, plug in what you know, and solve for [${u[1]}].${u[0]>1?' Its exponent is 2, so take the <b>square root</b> at the end.':''}${hetNote} Round to ${sf} sig figs.`,
+   why:`${kForm(r)}${hetNote}<br>Rearranged: [${u[1]}]${u[0]>1?'<sup>2</sup>':''} = ${onP?'K × (reactant terms) ÷ (other product terms)':'(product terms) ÷ (K × other reactant terms)'} ${u[0]>1?`= ${nf(un,sf)} → [${u[1]}] = √${nf(un,sf)} = <b>${nf(x,sf)} M</b>`:`= <b>${nf(x,sf)} M</b>`}`,
+   slips:[[un,u[0]>1?'Almost: that is [X]². Take the <b>square root</b>.':''],[onP?rest/K:K/rest,'Check the rearranging: you divided where you should multiply (or the reverse).'],[(onP?rest/K:K/rest)**(1/u[0]),'Check the rearranging: is your unknown on top (product) or bottom (reactant)?']].filter(z=>z[1])}}
+ const K=Number((rnd(11,95)/10*10**pick([-4,-3,-2,-1,1,2,3])).toPrecision(2));
+ return {type:'num',topic:'kexpr',video:'krules',answer:1/K,sf:2,unit:'',prompt:`K<sub>c</sub> = <b>${nf(K,2)}</b> for the reaction below. What is K<sub>c</sub> for the <b>reverse</b> reaction?`,html:rxHTML(r,false),
+  hint:'Reversing the reaction flips the expression upside down, so K<sub>reverse</sub> = 1 / K.',why:`K<sub>reverse</sub> = 1 / K = 1 / (${nf(K,2)}) = <b>${nf(1/K,2)}</b>`,
+  slips:[[K,'Reversing the reaction flips the fraction, so the value changes to 1/K.'],[-K,'K is never negative. Use 1/K.']]}}
+/* ============================== BUILD THE K EXPRESSION ============================== */
+/* Students place each substance (Top / Bottom / Leave out) and set its exponent; the fraction builds live. */
+function buildQ(r,o={}){const rows=[...r.L.map(e=>({e,side:'L'})),...r.R.map(e=>({e,side:'R'}))].map(({e,side})=>{const pure=e[2]==='s'||e[2]==='l';
+  return {f:e[1],ph:e[2],coef:e[0],side,want:pure?'out':side==='R'?'top':'bot'}});
+ const het=rows.some(x=>x.want==='out'),acid=/H₃O⁺|OH⁻/.test(r.R.map(e=>e[1]).join(''));
+ return {type:'build',topic:o.topic||'kexpr',video:acid?'acidPrac':het?'hetero':'kexpr',r,rows,st:rows.map(()=>({p:null,e:1})),
+  prompt:o.prompt||`Build the ${acid&&r.R.some(e=>e[1]==='H₃O⁺')?'K<sub>a</sub>':'K'} expression: for each substance tap <b>Top</b>, <b>Bottom</b> or <b>Leave out</b>, then set its exponent.`,
+  html:o.html||rxHTML(r,false),
+  hint:`Products go on <b>top</b>, reactants on the <b>bottom</b>. Each coefficient becomes an <b>exponent</b>.${het?' Pure solids (s) and liquids (l), like water, are <b>left out</b>.':''}`,
+  why:`${kExpr(r)}. Products over reactants, each coefficient as an exponent${het?', and the pure solid/liquid left out (its concentration never changes)':''}.`}}
+const termOf=(f,e)=>`[${f}]${e>1?`<sup>${e}</sup>`:''}`;
+function kbPreview(q){const top=[],bot=[];q.rows.forEach((x,i)=>{const t=q.st[i];if(t.p==='top')top.push(termOf(x.f,t.e));if(t.p==='bot')bot.push(termOf(x.f,t.e))});
+ const placed=q.st.every(t=>t.p);return `K = ${!bot.length&&placed?(top.join('')||'<span class="ph">top?</span>'):frac(top.join('')||'<span class="ph">top?</span>',bot.join('')||'<span class="ph">bottom?</span>')}`}
+function kbHTML(q){return `<div class="kb" id="kb"><div class="kprev" id="kPrev" aria-live="polite">${kbPreview(q)}</div>${q.rows.map((x,i)=>`<div class="kbrow" data-row="${i}"><span class="kbsp">${x.coef>1?x.coef+' ':''}${x.f}(${x.ph})</span>
+  <div class="seg" role="group" aria-label="Where does ${x.f} go?">${[['top','Top'],['bot','Bottom'],['out','Leave out']].map(([k,l])=>`<button type="button" data-p="${k}" aria-pressed="false">${l}</button>`).join('')}</div>
+  <div class="stepper"><button type="button" data-ex="-1" aria-label="Lower the exponent on ${x.f}">−</button><output>exponent <b>1</b></output><button type="button" data-ex="1" aria-label="Raise the exponent on ${x.f}">+</button></div></div>`).join('')}</div>`}
+function kbSync(q){const box=$('kb');if(!box)return;box.querySelectorAll('.kbrow').forEach((row,i)=>{const t=q.st[i];
+  row.querySelectorAll('[data-p]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===t.p));
+  const sp=row.querySelector('.stepper');sp.classList.toggle('off',t.p==='out');sp.querySelector('b').textContent=t.e});
+ const pv=$('kPrev'),h=kbPreview(q);if(pv.innerHTML!==h)pv.innerHTML=h}
+function kbWire(q){const box=$('kb');if(!box)return;box.querySelectorAll('.kbrow').forEach((row,i)=>{
+ row.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{if(state.done)return;q.st[i].p=b.dataset.p;row.classList.remove('bad','ok');kbSync(q)});
+ row.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{if(state.done)return;const t=q.st[i];t.e=Math.max(1,Math.min(6,t.e+ +b.dataset.ex));row.classList.remove('bad','ok');kbSync(q)})})}
+function kbErrors(q){const out=[];q.rows.forEach((x,i)=>{const t=q.st[i];
+ if(!t.p)return out.push([i,`Place <b>${x.f}</b> first: Top, Bottom or Leave out.`]);
+ if(x.want==='out'&&t.p!=='out')return out.push([i,`<b>${x.f}(${x.ph})</b> is a pure ${x.ph==='s'?'solid':'liquid'}: leave it out of K (its concentration never changes).`]);
+ if(x.want!=='out'&&t.p==='out')return out.push([i,`<b>${x.f}(${x.ph})</b> is ${x.ph==='g'?'a gas':'dissolved (aq)'}, so it belongs in K.`]);
+ if(x.want!==t.p)return out.push([i,`<b>${x.f}</b> is a ${x.side==='R'?'product: products go on <b>top</b>':'reactant: reactants go on the <b>bottom</b>'}.`]);
+ if(x.want!=='out'&&t.e!==x.coef)out.push([i,`<b>${x.f}</b> has a coefficient of ${x.coef}, so its exponent is <b>${x.coef}</b>.`])});return out}
+/* ============================== ACID–BASE EQUILIBRIUM ============================== */
+const AB_DIR=[
+ {x:'HCl(aq) + H₂O(l) ⇌ H₃O⁺(aq) + Cl⁻(aq)',L:['HCl',1.3e6],R:['H₃O⁺',1],ctx:'Hydrochloric acid (stomach acid)'},
+ {x:'CH₃COOH(aq) + H₂O(l) ⇌ H₃O⁺(aq) + CH₃COO⁻(aq)',L:['CH₃COOH',1.8e-5],R:['H₃O⁺',1],ctx:'Acetic acid (vinegar)'},
+ {x:'HCOOH(aq) + H₂O(l) ⇌ H₃O⁺(aq) + HCOO⁻(aq)',L:['HCOOH',1.8e-4],R:['H₃O⁺',1],ctx:'Formic acid'},
+ {x:'HCN(aq) + OH⁻(aq) ⇌ H₂O(l) + CN⁻(aq)',L:['HCN',4.9e-10],R:['H₂O',1e-14],ctx:'Hydrocyanic acid with hydroxide'},
+ {x:'HF(aq) + H₂O(l) ⇌ H₃O⁺(aq) + F⁻(aq)',L:['HF',6.8e-4],R:['H₃O⁺',1],ctx:'Hydrofluoric acid'},
+ {x:'CH₃COOH(aq) + OH⁻(aq) ⇌ H₂O(l) + CH₃COO⁻(aq)',L:['CH₃COOH',1.8e-5],R:['H₂O',1e-14],ctx:'Vinegar neutralized by a base'},
+ {x:'NH₄⁺(aq) + OH⁻(aq) ⇌ NH₃(aq) + H₂O(l)',L:['NH₄⁺',5.6e-10],R:['H₂O',1e-14],ctx:'Ammonium with hydroxide'},
+ {x:'NH₃(aq) + H₂O(l) ⇌ NH₄⁺(aq) + OH⁻(aq)',L:['H₂O',1e-14],R:['NH₄⁺',5.6e-10],ctx:'Ammonia, a weak base'},
+ {x:'H₂CO₃(aq) + H₂O(l) ⇌ H₃O⁺(aq) + HCO₃⁻(aq)',L:['H₂CO₃',4.3e-7],R:['H₃O⁺',1],ctx:'Carbonic acid in soda and blood'},
+ {x:'HCO₃⁻(aq) + H₃O⁺(aq) ⇌ H₂CO₃(aq) + H₂O(l)',L:['H₃O⁺',1],R:['H₂CO₃',4.3e-7],ctx:'Bicarbonate soaking up acid in your blood'}];
+const kaTxt=k=>k===1?'≈ 1 (strong)':k===1e-14?'≈ 10⁻¹⁴':'= '+sci(k);
+function acidDirQ(){const it=pick(AB_DIR),ans=it.L[1]<it.R[1]?'L':'R',weak=ans==='L'?it.L:it.R,strong=ans==='L'?it.R:it.L,sideW=ans==='L'?'left (reactants)':'right (products)';
+ const why=`Compare the two acids: <b>${weak[0]}</b> (K<sub>a</sub> ${kaTxt(weak[1])}) is weaker than <b>${strong[0]}</b> (K<sub>a</sub> ${kaTxt(strong[1])}). The stronger acid gives up its H⁺ and reacts away, so equilibrium favors the side with the weaker acid: the <b>${sideW}</b>.`;
+ const opp=`That side holds the stronger acid (${strong[0]}). The stronger acid reacts away, so its side is not favored.`;
+ return mc({topic:'acid',video:'acid',prompt:'Which side does this acid–base equilibrium favor?',html:`<div class="rxn">${it.x}<span class="dh">${it.ctx}</span></div><div class="acids"><span>Acid on the left: ${it.L[0]}, K<sub>a</sub> ${kaTxt(it.L[1])}</span><span>Acid on the right: ${it.R[0]}, K<sub>a</sub> ${kaTxt(it.R[1])}</span></div>`,
+  hint:'Find the acid on each side and compare K<sub>a</sub>. Equilibrium favors the side with the <b>weaker</b> acid (smaller K<sub>a</sub>, higher pK<sub>a</sub>).',keepOrder:true,choices:[
+  ['Products: the weaker acid is on the right',ans==='R',ans==='R'?why:opp],
+  ['Reactants: the weaker acid is on the left',ans==='L',ans==='L'?why:opp],
+  ['Neither: acid–base reactions always split 50/50',false,'Acid–base equilibria are lopsided; the side with the weaker acid wins.'],
+  ['It cannot be decided without the K for the reaction',false,'Comparing the two acids\' K<sub>a</sub> values is enough to tell the direction.']]})}
+const STRONG_A=[['HCl',1.3e6],['HBr',1e9],['HI',3e9],['HNO₃',24],['H₂SO₄',1e3],['HClO₄',1e10]];
+const WEAK_A=[['CH₃COOH',1.8e-5,'vinegar'],['HF',6.8e-4,''],['HCN',4.9e-10,''],['HCOOH',1.8e-4,'ant stings'],['H₂CO₃',4.3e-7,'soda and blood'],['HNO₂',4.5e-4,''],['H₃PO₄',7.5e-3,'cola'],['citric acid',7.4e-4,'citrus fruit']];
+function acidStrengthQ(){if(Math.random()<0.5){const strong=Math.random()<0.45,a=pick(strong?STRONG_A:WEAK_A);
+  return mc({topic:'acid',video:'acid',prompt:`${a[0]}${a[2]?` (${a[2]})`:''} has K<sub>a</sub> ${strong?'≈ ':'= '}${sci(a[1])}. What kind of acid is it?`,hint:'Strong acid: K<sub>a</sub> &gt; 1. Weak acid: K<sub>a</sub> &lt; 1.',choices:[
+   ['Strong acid: it ionizes almost completely',strong,strong?'K<sub>a</sub> &gt; 1, so the products (H₃O⁺ and the anion) are favored: a strong acid ionizes almost completely.':'K<sub>a</sub> &lt; 1 means most of the acid stays as molecules, so it is weak.'],
+   ['Weak acid: it mostly stays as molecules',!strong,!strong?'K<sub>a</sub> &lt; 1, so the reactants are favored: most of the acid stays as HA molecules. That is a weak acid.':'K<sub>a</sub> &gt; 1 means it ionizes almost completely, so it is strong.'],
+   ['A base, because K<sub>a</sub> is small',false,'K<sub>a</sub> describes an acid. A small K<sub>a</sub> means a weak acid, not a base.'],
+   ['Neutral: neither an acid nor a base',false,'Anything with a K<sub>a</sub> donates H⁺, so it is an acid.']]})}
+ const s1=pick(STRONG_A),ws=shuf(WEAK_A).slice(0,3);
+ return mc({topic:'acid',video:'acid',prompt:'Which one is a <b>strong</b> acid?',hint:'Memorize the six strong acids: HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄. Everything else is weak.',choices:[[s1[0],true,`${s1[0]} is on the strong-acid list (HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄): it ionizes almost completely.`],...ws.map(w=>[w[0],false,`${w[0]} is a weak acid (K<sub>a</sub> = ${sci(w[1])}, less than 1)${w[2]?`, found in ${w[2]}`:''}.`])]})}
+function acidCompareQ(){const [a,b]=shuf(WEAK_A).slice(0,2),A=a[1]>b[1]?a:b;
+ return mc({topic:'acid',video:'acid',prompt:`Which is the <b>stronger</b> acid: ${a[0]} (K<sub>a</sub> = ${sci(a[1])}) or ${b[0]} (K<sub>a</sub> = ${sci(b[1])})?`,hint:'Larger K<sub>a</sub> = more products (H₃O⁺) at equilibrium = stronger acid.',choices:[
+  [a[0],A===a,A===a?`${a[0]} has the larger K<sub>a</sub>, so more of it ionizes: it is the stronger acid.`:`${a[0]} has the smaller K<sub>a</sub>, so less of it ionizes.`],
+  [b[0],A===b,A===b?`${b[0]} has the larger K<sub>a</sub>, so more of it ionizes: it is the stronger acid.`:`${b[0]} has the smaller K<sub>a</sub>, so less of it ionizes.`],
+  ['They are equally strong',false,'Different K<sub>a</sub> values mean different strengths.'],
+  ['You need the pH to tell',false,'K<sub>a</sub> alone tells you the strength: larger K<sub>a</sub>, stronger acid.']]})}
+const ACID_IDEAS=[
+ {p:'Why is water left out of the K<sub>a</sub> expression for HA + H₂O ⇌ H₃O⁺ + A⁻?',h:'What phase is the water?',c:[
+  ['It is the liquid solvent (constant)',true,'Pure liquids (and the solvent) are left out of K because their concentration stays essentially constant.'],
+  ['Water does not take part in the reaction',false,'Water does react: it accepts the H⁺. It is left out because it is the liquid solvent.'],
+  ['Water is always counted as a product',false,'Here water is a reactant; either way, a pure liquid is left out.'],
+  ['Water has a concentration of zero in the solution',false,'Water\'s concentration is large and constant, not zero.']]},
+ {p:'A weak acid has K<sub>a</sub> = 1.8 × 10⁻⁵. At equilibrium, what is mostly in the solution?',h:'K<sub>a</sub> &lt; 1 means which side is favored?',c:[
+  ['Mostly HA molecules',true,'K<sub>a</sub> &lt; 1 favors the reactants: most of the acid stays as HA, with only a little H₃O⁺ and A⁻.'],
+  ['Mostly H₃O⁺ and A⁻ ions',false,'That describes a strong acid (K<sub>a</sub> &gt; 1).'],
+  ['Equal amounts of HA and ions',false,'K<sub>a</sub> this small strongly favors the reactants.'],
+  ['Only water and nothing else',false,'The acid is still there, mostly as HA molecules.']]},
+ {p:'Adding sodium acetate (extra CH₃COO⁻) to vinegar: which way does CH₃COOH + H₂O ⇌ H₃O⁺ + CH₃COO⁻ shift?',h:'CH₃COO⁻ is a product. The system uses up what you add.',c:[
+  ['Left: fewer H₃O⁺, less acidic',true,'Adding a product shifts left (the common-ion effect), using up H₃O⁺. This is how buffers resist pH changes.'],
+  ['Right: more H₃O⁺ forms',false,'Adding a product shifts toward the reactants, not the products.'],
+  ['No shift, because sodium is only a spectator ion',false,'Sodium is a spectator, but acetate is in the equation.'],
+  ['The weak acid turns into a strong acid',false,'K<sub>a</sub> doesn\'t change; only the position shifts.']]}];
+function acidQ(){const r=Math.random();
+ if(r<0.3)return acidDirQ();if(r<0.55)return acidStrengthQ();if(r<0.68)return acidCompareQ();
+ if(r<0.85){const aid=pick(['acetic','hf','formic','ammonia']),rx=RX.find(x=>x.id===aid);return buildQ(rx,{topic:'acid'})}
+ const it=pickNew('acidIdeas',ACID_IDEAS);return mc({topic:'acid',video:'acid',prompt:it.p,hint:it.h,choices:it.c})}
+/* ============================== SKILL CHECK ============================== */
+const TOPICS={dyn:['Dynamic equilibrium and rates','ideas','basics'],kexpr:['Writing K expressions','ideas','kexpr'],kmag:['What the size of K means','ideas','kexpr'],
+ conc:['Le Châtelier: adding or removing a substance','shift','lecAdd'],temp:['Le Châtelier: temperature','shift','lecT'],press:['Le Châtelier: volume, pressure and catalysts','shift','lecP'],
+ apply:['Equilibrium in real life (medicine, industry)','shift','lecReal'],acid:['Acid–base equilibrium (Kₐ, strong vs. weak)','ideas','acid'],calc:['Calculating K and concentrations','calc','calc']};
+const QUIZ_PLAN=['dyn','kexpr','kmag','acid','conc','temp','press','apply','calc','calc'];
+function topicQ(t){const sOf=types=>{for(let k=0;k<40;k++){const r=pick(RX),ss=stressesFor(r).filter(x=>types.includes(x.t));if(ss.length){const q=shiftDir(r,pick(ss));q.lab=null;return q}}};
+ let q;switch(t){case'dyn':{const it=pick(IDEAS.slice(0,7));q=Math.random()<0.75?mc({video:it.v,prompt:it.p,hint:it.h,choices:it.c}):graphQ();break}
+  case'kexpr':q=Math.random()<0.5?buildQ(pick(RX)):kExprQ();break;case'acid':q=acidQ();break;case'kmag':q=kMagQ();break;case'conc':q=sOf(['add','rem']);break;case'temp':q=sOf(['heat','cool']);break;
+  case'press':q=sOf(['comp','exp','cat','addS']);break;case'apply':q=appQ();break;default:q=calcQ(Math.random()<0.55?'kc':'unknown')}
+ q.topic=t;return q}
 const GEN={
  ride(){return Object.assign(mc(pickNew('ride',RIDE_Q)()),{lab:{kind:'park'}})},
- lab(){const want=state.labSys;const pool=LAB_Q.filter(x=>!want||x.sys===want);const it=pickNew('lab'+(want||''),pool);return Object.assign(mc(it.f()),{lab:{kind:'eq',sys:it.sys}})},
+ lab(){const want=state.labSys;const pool=LAB_Q.filter(x=>!want||x.sys===want);const it=pickNew('lab'+(want||''),pool);return Object.assign(mc(it.f()),{lab:{kind:it.kind||'eq',sys:it.sys}})},
  shift(){if(Math.random()<0.32)return appQ();let r=pick(RX);const roll=Math.random();
   if(roll<0.25&&!r.sim){const sims=RX.filter(x=>x.sim);if(Math.random()<0.5)r=pick(sims)}
   const ss=stressesFor(r);
@@ -804,9 +1119,13 @@ const GEN={
   if(roll<0.72)return shiftSpecies(r,ss);
   if(roll<0.84&&r.dH!=null)return shiftK(r,ss);
   return shiftWhich(r,ss)},
+ calc(){if(Math.random()<0.35){const id=pick(CALC_IDS),r=RX.find(x=>x.id===id),c=calcQ('kc',r);
+   const b=buildQ(r,{topic:'calc',prompt:'<b>Step 1 of 2:</b> build the K<sub>c</sub> expression. Then you\'ll plug in the numbers.',html:c.html});b.then=c;return b}
+  return calcQ()},
+ quiz(){const Q=state.quiz;return topicQ(Q&&!Q.over?Q.plan[Q.i]:pick(QUIZ_PLAN))},
  ideas(){const roll=Math.random();
-  if(roll<0.36){const it=pickNew('ideas',IDEAS);return mc({video:it.v,prompt:it.p,hint:it.h,choices:it.c})}
-  if(roll<0.62)return kExprQ();if(roll<0.76)return kMagQ();if(roll<0.86)return kRevQ();return graphQ()}};
+  if(roll<0.28){const it=pickNew('ideas',IDEAS);return mc({video:it.v,prompt:it.p,hint:it.h,choices:it.c})}
+  if(roll<0.40)return kExprQ();if(roll<0.56)return buildQ(pick(RX));if(roll<0.66)return kMagQ();if(roll<0.72)return kRevQ();if(roll<0.9)return acidQ();return graphQ()}};
 /* Real-world scenarios (medical, biological, engineering, everyday chemistry): about 1 in 3 Shift It! questions */
 const APPS=[
  {v:'lecRem',tag:'🏥 Medicine',p:'A patient breathes into a paper bag during a panic attack, re-breathing some CO₂. How does that help their blood?',x:'CO₂(aq) + H₂O(l) ⇌ H⁺(aq) + HCO₃⁻(aq)',h:'Fast breathing removed CO₂. Re-breathing adds some back. Which way does adding CO₂ shift?',c:[
@@ -930,48 +1249,103 @@ const JK=GAME_KEY+'-journey',jBlank=()=>({xp:0,correct:0,best:0,modes:{},badges:
 const BADGES=[['first','🌱 First Answer','Answer a question',j=>j.correct>=1],['ten','🔟 Ten Correct','10 on your own',j=>j.correct>=10],['fifty','🏅 Fifty Correct','50 on your own',j=>j.correct>=50],
  ['s5','🔥 Hot Streak','5 in a row',j=>j.best>=5],['s10','⚡ On Fire','10 in a row',j=>j.best>=10],
  ['ride','🎢 Ride Operator','5 in Ride Line',j=>(j.modes.ride||0)>=5],['lab','🔬 Lab Scientist','5 in Particle Lab',j=>(j.modes.lab||0)>=5],['shift','↔️ Le Châtelier Pro','10 in Shift It!',j=>(j.modes.shift||0)>=10],['ideas','🧠 Big Thinker','10 in Big Ideas',j=>(j.modes.ideas||0)>=10],
+ ['calc','🧮 K Calculator','5 in Calculate K',j=>(j.modes.calc||0)>=5],['quiz','🎯 Skill Check Star','8+ on a Skill Check',j=>(j.bestQuiz||0)>=8],
  ['all','🧭 Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
 function renderJ(){const l=Math.floor(J.xp/100)+1,i=J.xp%100;$('jChip').textContent=`Level ${l} • ${J.xp} XP`;$('lvl').textContent='Level '+l;$('xpFill').style.width=i+'%';$('xpTxt').textContent=i+' / 100 XP';
- $('badges').innerHTML=BADGES.map(([id,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><img src="assets/ach-${id}.webp" alt="" loading="lazy"><span><b>${t}</b>${d}</span></div>`).join('')}
+ $('badges').innerHTML=BADGES.map(([id,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><img src="assets/ach-${id}.webp" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${t.split(' ')[0]}',style:'font-size:30px;text-align:center'}))"><span><b>${t}</b>${d}</span></div>`).join('')}
 function award(assisted){const before=Math.floor(J.xp/100);if(assisted)J.xp+=2;else{J.xp+=10+Math.min(state.streak,5)*2;J.correct++;J.best=Math.max(J.best,state.streak);J.modes[state.mode]=(J.modes[state.mode]||0)+1}
  BADGES.forEach(([id,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast('Badge earned: '+t)}});if(Math.floor(J.xp/100)>before)toast('Level up!');try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ()}
 function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
 function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=h}
-function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'equilibrium',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.video||'',correct:!!ok})}catch(e){}}
-function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic art"><img src="assets/mode-${m.id}.webp" alt="" onerror="this.parentNode.classList.remove('art');this.parentNode.textContent='${m.icon}'"></span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'equilibrium',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.topic||state.q.video||'',correct:!!ok})}catch(e){}}
+function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}">${m.noArt?`<span class="ic">${m.icon}</span>`:`<span class="ic art"><img src="assets/mode-${m.id}.webp" alt="" onerror="this.parentNode.classList.remove('art');this.parentNode.textContent='${m.icon}'"></span>`}<b>${m.title}</b><small>${m.short}</small></button>`).join('');
  $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();next()})}
 /* the lab element persists between questions of the same kind/system so students can keep experimenting */
 const labHost=document.createElement('div');let mounted=null;
 function ensureLab(spec){/* fresh equilibrium for every question, so each task starts from the same baseline */
- Lab.stop();Park.stop();mounted=spec.kind;if(spec.kind==='park'){Park.mount(labHost,{})}else Lab.mount(labHost,{sys:spec.sys,demo:!!spec.demo})
- const L=spec.kind==='park'?Park:Lab;L.start();L.onEvent=ev=>taskEvent(ev);return L}
+ Lab.stop();Park.stop();Factory.stop();mounted=spec.kind;if(spec.kind==='park'){Park.mount(labHost,{})}else if(spec.kind==='factory'){Factory.mount(labHost)}else Lab.mount(labHost,{sys:spec.sys,demo:!!spec.demo})
+ const L=spec.kind==='park'?Park:spec.kind==='factory'?Factory:Lab;L.start();L.onEvent=ev=>taskEvent(ev);return L}
 function taskEvent(ev){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(ev===t.need){state.taskAt=performance.now();tickTask.last=0;state.taskPend=true;tickTask()}}
 function tickTask(){const t=state.q.task,el=$('taskBox');if(!el)return;{const now=performance.now(),last=tickTask.last||now;tickTask.last=now;if(SPEED.f()===0)state.taskAt+=now-last;else if(SPEED.f()<1)state.taskAt+=(now-last)*(1-SPEED.f())*0.5}const wait=t.need==='watch'?t.sec*1000:2500,left=Math.max(0,wait-(performance.now()-state.taskAt));
  if(left<=0){state.taskOk=true;el.className='task done';el.innerHTML='✅ Done! Now answer below.';['checkBtn'].forEach(id=>$(id).disabled=false);return}
  const tt=SPEED.f()===0?'⏸ Paused: tap ⏸ Paused to play again':`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
-function next(){clearTimeout(tickTask.t);const q=GEN[state.mode]();state.q=q;state.sel=null;state.done=false;state.logged=false;state.taskPend=false;$('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title;
+function startQuiz(){state.quiz={plan:shuf(QUIZ_PLAN.slice(0,2)).concat(shuf(QUIZ_PLAN.slice(2,8)),QUIZ_PLAN.slice(8)),i:0,res:[],over:false}}
+function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length;Q.over=true;J.bestQuiz=Math.max(J.bestQuiz||0,n);try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}
+ BADGES.forEach(([id,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast('Badge earned: '+t)}});renderJ();
+ const miss={};Q.res.forEach(r=>{if(!r.ok)miss[r.topic]=(miss[r.topic]||0)+1});
+ const rows=Object.keys(TOPICS).filter(t=>Q.res.some(r=>r.topic===t)).map(t=>{const R=Q.res.filter(r=>r.topic===t),k=R.filter(r=>r.ok).length;return `<tr><td>${k===R.length?'✅':'❌'}</td><td>${TOPICS[t][0]}</td><td>${k} / ${R.length}</td></tr>`}).join('');
+ const plan=Object.keys(miss).map(t=>`<div class="item"><b>📌 ${TOPICS[t][0]}</b><br><button type="button" class="btn hint" data-go="${t}">Practice this</button><button type="button" class="btn show" data-vid="${t}">🎥 Watch Dr. Dan</button></div>`).join('');
+ const msg=n>=9?'🌟 Excellent! You are ready.':n>=7?'👍 Solid. Review the topics below.':n>=5?'📚 Getting there. Practice the topics below, then try again.':'🧭 Start with the topics below; the 🎢 Ride Line and 🔬 Particle Lab help a lot.';
+ $('qArea').innerHTML=`<div class="qsum"><p class="prompt">Skill Check complete</p><div class="big">${n} / ${Q.res.length}</div><p>${msg}</p><table>${rows}</table>
+  <h3 style="margin:14px 0 4px">Your study plan</h3>${plan?`<div class="plan">${plan}</div>`:'<p>Nothing to review: every topic was right. Try another Skill Check to be sure!</p>'}
+  <button type="button" class="btn check" id="againBtn" style="margin-top:14px">🎯 Start a new Skill Check</button></div>`;
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);fb('','');$('newBtn').textContent='New Skill Check ↻';$('practice').classList.add('quizdone');$('modeTitle').textContent='Skill Check results';
+ $('qArea').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{state.mode=TOPICS[b.dataset.go][1];ui.mode=state.mode;saveUI();buildModes();next();$('practice').scrollIntoView({behavior:'smooth'})});
+ $('qArea').querySelectorAll('[data-vid]').forEach(b=>b.onclick=()=>{state.q={video:TOPICS[b.dataset.vid][2]};video();openVideo()});
+ $('againBtn').onclick=()=>{startQuiz();next()};$('againBtn').focus({preventScroll:true})}
+function next(){clearTimeout(tickTask.t);
+ $('practice').classList.toggle('quizmode',state.mode==='quiz');$('practice').classList.remove('quizdone');$('newBtn').textContent='New Question ↻';
+ if(state.mode==='quiz'){if(!state.quiz||state.quiz.over)startQuiz();else if(state.done&&state.q&&state.q.qi===state.quiz.i)state.quiz.i++;
+  if(state.quiz.i>=state.quiz.plan.length){Lab.stop();Park.stop();Factory.stop();state.q={};state.done=true;return quizSummary()}$('newBtn').textContent='Next question →'}
+ const q=GEN[state.mode]();if(state.mode==='quiz'){q.qi=state.quiz.i}state.q=q;state.sel=null;state.done=false;state.logged=false;state.taskPend=false;$('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title+(state.mode==='quiz'?` · ${state.quiz.i+1} of ${state.quiz.plan.length}`:'');
  $('hintBox').className='hintbox';fb('','');
  const sysPick=state.mode==='lab'?`<div class="ctrls" role="group" aria-label="Choose a reaction">${LAB_SYS.map(([k,l])=>`<button type="button" class="chip ${q.lab&&q.lab.sys===k?'on':''}" aria-pressed="${q.lab&&q.lab.sys===k}" data-sys="${k}">${l}</button>`).join('')}</div>`:'';
- let h=sysPick+`<p class="prompt">${q.prompt}</p>`;
+ let h=sysPick+(state.mode==='quiz'?`<div class="qprog" aria-hidden="true">${state.quiz.plan.map((t,i)=>`<i class="${i<state.quiz.res.length?(state.quiz.res[i].ok?'ok':'no'):i===state.quiz.i?'now':''}"></i>`).join('')}</div><p class="tip">One try per question. No hints until the end.</p>`:'')+`<p class="prompt">${q.prompt}</p>`;
  if(q.task)h+=`<div class="task" id="taskBox" role="status" aria-live="polite">👉 ${q.task.say}</div>`;
  if(q.html&&!(q.lab&&q.lab.demo))h+=`<div class="qbox">${q.html}</div>`;
  if(q.lab)h+=`<div id="labHere"></div>${q.lab.demo?'<p class="tip">🔬 This lab is at equilibrium. Answer first; then we\'ll make the change so you can watch it.</p>':''}`;
- h+=`<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`;
+ if(q.type==='build')h+=kbHTML(q);
+ else if(q.type==='num')h+=numHTML(q);
+ else h+=`<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`;
  $('qArea').innerHTML=h;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
- if(q.lab){$('labHere').appendChild(labHost);const L=ensureLab(q.lab)}else{Lab.stop();Park.stop();mounted=null}
+ if(q.lab){$('labHere').appendChild(labHost);const L=ensureLab(q.lab)}else{Lab.stop();Park.stop();Factory.stop();mounted=null}
  state.taskOk=!q.task;if(q.task){$('checkBtn').disabled=true;if(q.task.need==='watch'){state.taskAt=performance.now();tickTask.last=0;tickTask()}}
+ wireIns();
+ if(q.type==='build'){kbWire(q);kbSync(q)}
  $('qArea').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{state.labSys=b.dataset.sys;next()});
  $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})});
  video();stats()}
+function numHTML(q){return `<div class="numrow"><label for="numIn" class="sr-only" style="position:absolute;left:-9999px">Your answer</label><input id="numIn" class="num" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer">${q.unit?`<span class="unit">${q.unit}</span>`:''}<button type="button" class="chip ins" data-ins="E" aria-label="×10ⁿ: insert E for times ten to the power">×10ⁿ</button><button type="button" class="chip ins" data-ins="-" aria-label="− minus sign">−</button></div><p class="tip">Round to <b>${q.sf} significant figures</b>. Scientific notation: tap <b>×10ⁿ</b> (or type E), like <span style="white-space:nowrap">2.6E-4</span> for 2.6 × 10⁻⁴.</p>`}
+/* ×10ⁿ and − buttons: the iPhone number keypad has no E or minus key. Keep the keypad open (no focus change) and add to the end (iOS reports a stale cursor). */
+function wireIns(){$('qArea').querySelectorAll('[data-ins]').forEach(b=>{if(b.dataset.w)return;b.dataset.w=1;const keep=e=>e.preventDefault();b.addEventListener('pointerdown',keep);b.addEventListener('mousedown',keep);
+  b.onclick=()=>{const n=$('numIn');if(!n||n.readOnly)return;n.value+=b.dataset.ins;n.focus();const L=n.value.length;try{n.setSelectionRange(L,L)}catch(e){}}})}
 function whyList(q){const others=q.options.filter(o=>o!==q.answer&&q.whys[o]);return others.length?`<ul class="why">${others.map(o=>`<li>❌ <b>${o}</b>: ${q.whys[o]}</li>`).join('')}</ul>`:''}
-function finish(revealed){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;
+function finish(revealed,quizWrong){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;if($('numIn'))$('numIn').readOnly=true;
+ if(state.mode==='quiz'&&state.quiz&&state.q.qi===state.quiz.i&&state.quiz.res.length===state.quiz.i)state.quiz.res.push({topic:q.topic,ok:!revealed&&!quizWrong});
+ if(state.mode==='quiz'){const last=state.quiz.i+1>=state.quiz.plan.length;$('newBtn').textContent=last?'See my results →':'Next question →'}
+ if(q.type==='build'){$('kb')?.classList.add('locked');if(revealed||quizWrong){q.rows.forEach((x,i)=>{q.st[i]={p:x.want,e:x.want==='out'?1:x.coef}});kbSync(q);$('kb').querySelectorAll('.kbrow').forEach(r=>r.classList.add('ok'))}
+  /* two-step: a correct build continues to the plug-in step (no point yet) */
+  if(q.then&&!revealed&&!quizWrong){const n=q.then;n.qi=q.qi;n.topic=n.topic||q.topic;state.q=n;state.done=false;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+   const div=document.createElement('div');div.innerHTML=`<p class="prompt"><b>Step 2 of 2:</b> ${n.prompt.replace('These are the <b>equilibrium</b> concentrations. ','')}</p>`+numHTML(n);$('qArea').appendChild(div);wireIns();
+   fb('good','✅ Expression right! '+q.why+'<br>Now plug in the concentrations ↓');$('hintBox').className='hintbox';$('numIn').focus({preventScroll:true});video();return}}
+ const ansTxt=q.type==='num'?`${nf(q.answer,q.sf)}${q.unit?' '+q.unit:''}`:q.type==='build'?kExpr(q.r):q.answer;
+ if(quizWrong){$('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options[+b.dataset.i]===q.answer)b.classList.add('right')});state.streak=0;log(false);stats();
+  fb('bad',`❌ Not this time. The answer is <b>${ansTxt}</b>.<br>${q.why}${q.type==='mc'?whyList(q):''}`);return}
  $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
  let demo='';if(q.lab&&q.lab.demo){Lab.apply(q.lab.demo);demo=`<br>🔬 <b>Watch the lab above:</b> we just made that change. See the balance beam tip, then level off.`}
- if(revealed){state.assist++;state.streak=0;log(false);fb('good',`👀 <b>${q.answer}</b><br>${q.why}${demo}${whyList(q)}<br><small>Assisted: no point this time. <button class="linkbtn" onclick="openVideo()">🎥 Review with Dr. Dan</button></small>`);award(true)}
- else{state.correct++;state.streak++;log(true);confetti();fb('good','✅ Correct! '+q.why+demo+whyList(q));award(false)}stats();
+ if(revealed){state.assist++;state.streak=0;log(false);fb('good',`👀 <b>${ansTxt}</b><br>${q.why}${demo}${q.type==='mc'?whyList(q):''}<br><small>Assisted: no point this time. <button class="linkbtn" onclick="openVideo()">🎥 Review with Dr. Dan</button></small>`);award(true)}
+ else{state.correct++;state.streak++;log(true);confetti();fb('good','✅ Correct! '+q.why+demo+(q.type==='mc'?whyList(q):''));award(false)}stats();
  const a=document.activeElement;if(!a||a===document.body||a.disabled)$('newBtn').focus({preventScroll:true})}
+function checkNum(q){const raw=$('numIn').value.trim();if(!raw)return fb('bad','Type your answer first.');
+ if(NUM.decimalComma(raw))return fb('bad','Use a period for decimals (type 1.5, not 1,5). Commas only for thousands, like 1,200.');
+ const v=NUM.parseValue(raw);if(!isFinite(v))return fb('bad','Type one number, like 54.1 or 2.9E-32.');
+ const close=(a,b)=>Math.abs(a-b)<=Math.abs(b)*0.012+1e-300,target=Number(q.answer.toPrecision(q.sf));
+ if(close(v,q.answer)||close(v,target)){if(NUM.sfCount(raw)!==q.sf)return fb('bad',`✏️ Your math is right! Now round to <b>${q.sf} significant figure${q.sf>1?'s':''}</b>. (Trailing zeros only count with a decimal point; use E notation if needed, like 1.20E3.)`);return finish(false)}
+ const slip=(q.slips||[]).find(([x])=>isFinite(x)&&close(v,x)&&!close(x,q.answer));
+ if(state.mode==='quiz')return finish(false,true);
+ state.streak=0;log(false);stats();return fb('bad',`🔎 Not quite. ${slip?slip[1]+' ':''}<br>💡 ${q.hint}`)}
+function checkBuild(q){const errs=kbErrors(q);
+ if(errs.length&&errs.every(([,m])=>/first:/.test(m))&&q.st.every(t=>!t.p))return fb('bad','Tap <b>Top</b>, <b>Bottom</b> or <b>Leave out</b> for each substance first.');
+ if(errs.some(([,m])=>/first:/.test(m)))return fb('bad',errs.find(([,m])=>/first:/.test(m))[1]);
+ const rows=$('kb').querySelectorAll('.kbrow');rows.forEach((r,i)=>{r.classList.toggle('bad',errs.some(([j])=>j===i));r.classList.toggle('ok',!errs.some(([j])=>j===i))});
+ if(!errs.length)return finish(false);
+ if(state.mode==='quiz')return finish(false,true);
+ state.streak=0;log(false);stats();return fb('bad',`🔎 Almost. Fix the rows in red:<ul class="why">${errs.slice(0,3).map(([,m])=>`<li>${m}</li>`).join('')}</ul>💡 ${q.hint}`)}
 function check(){if(state.done)return;const q=state.q;if(!state.taskOk)return fb('bad','👉 Do the lab step in the gold box first, then answer.');
+ if(q.type==='num')return checkNum(q);
+ if(q.type==='build')return checkBuild(q);
  if(!state.sel)return fb('bad','Choose an answer first.');
+ if(state.sel!==q.answer&&state.mode==='quiz'){const i=q.options.indexOf(state.sel);$('qArea').querySelector(`.opt[data-i="${i}"]`)?.classList.add('wrong');return finish(false,true)}
  if(state.sel!==q.answer){state.streak=0;log(false);stats();const i=q.options.indexOf(state.sel);$('qArea').querySelector(`.opt[data-i="${i}"]`)?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}`)}
  finish(false)}
 function hint(){if(state.done)return;$('hintBox').innerHTML='💡 '+state.q.hint+(VIDEO_FOR[state.q.video]?` <button class="linkbtn" onclick="openVideo()">🎥 Watch Dr. Dan explain it</button>`:'');$('hintBox').className='hintbox on'}
@@ -982,10 +1356,10 @@ function video(){const v=VIDEO_FOR[state.q?.video];const src=v?`https://www.yout
 function openVideo(){$('videoPanel').open=true;$('player').src=$('player').dataset.want;$('videoPanel').scrollIntoView({behavior:'smooth',block:'center'})}
 $('videoPanel').addEventListener('toggle',()=>{if($('videoPanel').open&&!$('player').src)$('player').src=$('player').dataset.want});
 $('refBody').innerHTML=REFERENCE.map(([t,d])=>`<div class="refcard"><b>${t}</b><div>${d}</div></div>`).join('');
-$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){if(!state.taskOk){state.taskOk=true}finish(true)}};$('newBtn').onclick=next;
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){if(!state.taskOk){state.taskOk=true}finish(true)}};$('newBtn').onclick=()=>{if(state.mode==='quiz'&&state.quiz&&!state.quiz.over&&!state.done)return fb('bad','Answer this question first. (Each question gets one try.)');next()};
 {let armed=0;$('resetBtn').onclick=()=>{if(!armed){$('resetBtn').textContent='Tap again to confirm';armed=setTimeout(()=>{armed=0;$('resetBtn').textContent='Reset progress'},4000);return}clearTimeout(armed);armed=0;J=jBlank();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}$('resetBtn').textContent='Reset progress';renderJ()}}
 if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPanel').open=true}
-document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(e.target.id==='numIn'&&e.key==='Enter'){e.preventDefault();state.done?$('newBtn').click():check();return}if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
  const bs=[...$('qArea').querySelectorAll('.opt')];if(/^[1-9]$/.test(e.key)&&bs[e.key-1]&&!bs[e.key-1].disabled){bs[e.key-1].click();return}
  if(e.key==='Enter'&&!/^(BUTTON|SUMMARY|A)$/.test(t)){e.preventDefault();state.done?next():check()}});
 /* disabled buttons: stop iOS double-tap zoom */
@@ -994,6 +1368,8 @@ document.addEventListener('touchend',e=>{const b=e.target.closest&&e.target.clos
 function audit(n=300){const bad=[],note=m=>{if(bad.length<40)bad.push(m)};
  for(const m of MODES){for(let i=0;i<n;i++){let q;try{q=GEN[m.id]()}catch(e){note(m.id+': throws '+e.message);break}
   if(!q.prompt||!q.hint||!q.why)note(m.id+': missing prompt/hint/why '+q.prompt);if(q.video&&!VIDEO_FOR[q.video])note(m.id+': unknown video '+q.video);
+  if(q.type==='build'){if(!q.rows.length||!q.rows.some(x=>x.want==='top'))note(m.id+': build without products');continue}
+  if(q.type==='num'){const sh=nf(q.answer,q.sf);if(!isFinite(q.answer)||q.answer<=0)note(m.id+': bad num answer '+q.answer);else if(NUM.sfCount(sh)!==q.sf||Math.abs(NUM.parseValue(sh)-Number(q.answer.toPrecision(q.sf)))>q.answer*1e-9)note(m.id+': shown answer '+sh+' fails '+q.answer+'/'+q.sf);continue}
   if(!q.options.includes(q.answer))note(m.id+': answer not in options');if(new Set(q.options).size!==q.options.length)note(m.id+': duplicate options '+q.options.join(' | '));
   if(q.options.filter(o=>o!==q.answer).some(o=>!q.whys[o]))note(m.id+': missing wrong reason: '+q.prompt.slice(0,60)+' / '+q.options.filter(o=>!q.whys[o]).join(' | '));
   if(q.lab&&q.lab.kind==='eq'&&!SYS[q.lab.sys])note(m.id+': bad sim '+q.lab.sys)}}
@@ -1004,6 +1380,9 @@ function audit(n=300){const bad=[],note=m=>{if(bad.length<40)bad.push(m)};
  if(MODES.some(x=>x.id===m))state.mode=m;
  if(LAB_SYS.some(([k])=>k===y)){state.labSys=y;if(!m)state.mode='lab'}
  if(m||y)addEventListener('load',()=>setTimeout(()=>{const e=$('modes');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150))})();
+/* The shared Feedback pill (brand/feedback.js) is fixed bottom-right; on phones it covered Show Answer. Hide it while the answer buttons are on screen. */
+(()=>{const row=document.querySelector('.btnrow');if(!row||!('IntersectionObserver' in window))return;let vis=false;const apply=()=>{const f=document.querySelector('.ddfb-float');if(f)f.classList.toggle('eq-hide',vis)};
+ new IntersectionObserver(es=>{vis=es[0].isIntersecting;apply()}).observe(row);new MutationObserver(apply).observe(document.body,{childList:true})})();
 buildModes();renderJ();next();
 </script>
 </body></html>

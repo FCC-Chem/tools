@@ -1234,7 +1234,12 @@ function labApply(q){const a=q.lab.apply;Object.assign(q,{kind:a.kind,answer:a.a
  renderGuide();(a.kind==='choice'?byId('choiceBox'):byId('answerRow')).scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});if(a.kind!=='choice')byId('answer').focus({preventScroll:true});}
 byId('labQ').onclick=e=>{const p=e.target.closest('[data-lp]');if(p)return labPredict(p.dataset.lp);const x=e.target.closest('[data-le]');if(x&&!x.disabled)return labExplain(x.dataset.le);};
 
-(function init(){let c='';try{c=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim()}catch(e){}renderStatus();renderBadges();byId('viewTabs').querySelector('[data-view="learn"]').classList.add('active');setCourse(['3A','1A'].includes(c)?c:DEFAULT_COURSE);})();
+(function init(){let c='';try{c=(new URLSearchParams(location.search).get('course')||'').toUpperCase().replace('CHEM','').trim()}catch(e){}renderStatus();renderBadges();byId('viewTabs').querySelector('[data-view="learn"]').classList.add('active');setCourse(['3A','1A'].includes(c)?c:DEFAULT_COURSE);
+ /* deep links for the demo library: ?quest=lab opens a Practice Quest (any quest id, e.g. lab); ?open=lab opens the free-play Piston Lab panel */
+ let dq='',dopen='';try{const u=new URLSearchParams(location.search);dq=(u.get('quest')||'').toLowerCase();dopen=(u.get('open')||'').toLowerCase();}catch(e){}
+ if(dq&&(dq==='check'||courseQuests().some(q=>q[0]===dq))){S.quest=dq;S.quiz=null;setView('practice');ensurePlay();}
+ else if(dopen==='lab'){const d=byId('labSection'),go=()=>d.scrollIntoView({block:'start',behavior:'auto'});d.open=true;go();if(document.readyState!=='complete')addEventListener('load',go,{once:true});}
+})();
 
 </script>
 <script id="canvasAutoResize">/* Canvas auto-resize now comes from brand/embed.js */if(window.parent!==window)document.body.classList.add('canvas-embedded');</script>

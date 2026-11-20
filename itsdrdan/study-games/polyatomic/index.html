@@ -1482,6 +1482,8 @@ function init() {
   if (!['3A', '1A'].includes(c)) { try { c = JSON.parse(localStorage.getItem(STORE) || '{}').last; } catch (e) {} }
   if (!['3A', '1A'].includes(c)) c = '1A';
   bind(); renderPeriodicTable(); setCourse(c); paintIcons();
+  // deep link: ?mode=family|table|n2f|f2n|charge opens that mode card (both courses); ?mode=family&builder=1 makes every question an Ion Builder
+  try { const p = new URLSearchParams(location.search), m = (p.get('mode') || '').toLowerCase(); if (MODES[m]) { if (m === 'family' && p.get('builder') === '1') ibForce = true; pickMode(m); } } catch (e) {}
   // icons.js loads with defer; paint again once it is ready
   window.addEventListener('load', () => { paintIcons(); renderChooser(); });
 }
@@ -1546,10 +1548,10 @@ function qBuilder() {
   q.hint = 'Professor Tip: per-…-ate = one more O than -ate. -ite = one fewer O. hypo-…-ite = two fewer O. Each H⁺ adds +1 to the charge.';
   return q;
 }
-let ibCount = 0;
+let ibCount = 0, ibForce = false; // ibForce: ?mode=family&builder=1 demo link
 const _ibMake = makeQuestion;
 makeQuestion = function () {
-  if (!state.quiz && !state.review && state.mode === 'family' && (ibCount++ === 0 || Math.random() < 1 / 3)) { state.deckInfo = null; return qBuilder(); }
+  if (!state.quiz && !state.review && state.mode === 'family' && (ibCount++ === 0 || ibForce || Math.random() < 1 / 3)) { state.deckInfo = null; return qBuilder(); }
   return _ibMake();
 };
 const _ibNew = newQuestion;

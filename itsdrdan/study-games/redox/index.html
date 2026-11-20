@@ -609,7 +609,8 @@ function cbShow(){const q=state.q,s=q.bench;state.revealed=true;state.revealedSt
  feedback('info',ico('eye')+' Anode: '+s.an[0]+' (lower E°). '+s.explain.right+' Answer: '+s.apply.steps.join(' ')+`<br><small>This question is now assisted and earns no point. Press Check to continue.</small>`);}
 
 /* about 1 in 4 Galvanic Cells questions is a Cell Bench lab (the first one always is); never in Skill Check Prep */
-let cbCount=0;const cellWantBench=()=>{cbCount++;return cbCount===1||Math.random()<.25};
+/* ?bench=1 (with ?course=1B&mode=cells) makes every Galvanic Cells question a Cell Bench, for demo links */
+let cbCount=0,cbForce=false;const cellWantBench=()=>{cbCount++;return (cbForce&&state.mode==='cells'&&!state.mix)||cbCount===1||Math.random()<.25};
 function genCell(){if(!state.quiz&&cellWantBench())return genCellBench();const kind=cellKind(),[an,ca]=cellPick(kind==='nernst'),n=cellLcm(an[1],ca[1]),E=r2(ca[2]-an[2]),A=an[0],C=ca[0],Ai=cIon(an),Ci=cIon(ca);
  const intro=`A standard galvanic cell (25 °C, all solutions 1.00 M) uses an electrode of ${A} in ${Ai}(aq) and an electrode of ${C} in ${Ci}(aq).`;
  const base={kind,html:'',fields:[],why:'',hint:'',summary:'',meta:{A,C,Ai,Ci,Ean:an[2],Eca:ca[2],n,E,man:n/an[1],mca:n/ca[1]}};
@@ -1006,7 +1007,9 @@ function init(){/* top bar and play header keep the original Leo-with-sign pictu
  let c=null;try{c=normCourse(new URLSearchParams(location.search).get('course'))}catch(e){}
  if(!c){try{c=normCourse(localStorage.getItem(COURSE_KEY))}catch(e){}}
  if(!c)c='1A';
- bind();paintIcons();setCourse(c);renderJourney();if(window.parent!==window)document.body.classList.add('canvas-embedded')}
+ bind();paintIcons();setCourse(c);renderJourney();if(window.parent!==window)document.body.classList.add('canvas-embedded')
+ /* deep link: ?mode=<id> opens that mode card if this course has it (cells is CHEM 1B only); &bench=1 keeps Galvanic Cells on the Cell Bench */
+ try{const p=new URLSearchParams(location.search),m=(p.get('mode')||'').toLowerCase();if(m&&courseModes().some(x=>x.id===m)){if(m==='cells'&&p.get('bench')==='1')cbForce=true;chooseMode(m)}}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
 $('questionArea').addEventListener('click',cbClick);
