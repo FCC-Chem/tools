@@ -73,6 +73,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
 .chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
 .chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}
+.chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:172px;text-align:left}@media(max-width:700px){.chip.spd{min-width:150px}}
 .chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
 .slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
 .slider input{flex:1;min-width:90px;height:32px;accent-color:#3b8ccb}.slider output{min-width:58px;text-align:right}
@@ -101,7 +102,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .xprow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-weight:800;font-size:14px}
 .track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#8fd8c8,#f7c968);transition:width .3s}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
-.bdg{border:2px dashed #d5dce2;border-radius:12px;padding:7px 9px;font-size:12.5px;opacity:.6;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:center}.bdg img{width:48px;height:48px;filter:grayscale(1) opacity(.55)}.bdg.got img{filter:none}.bdg.got{opacity:1;border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
+.bdg{border:2px dashed #c3ccd4;border-radius:12px;padding:7px 9px;font-size:12.5px;color:#4c5a65;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:center}.bdg img{width:48px;height:48px;filter:grayscale(1) opacity(.45)}.bdg:not(.got) b:after{content:' (not yet)';font-weight:700;font-size:11px;color:#5c6a75}.bdg.got img{filter:none}.bdg.got{opacity:1;border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
 .vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin-bottom:10px}
 .vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#c0645a}
 .vwrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -119,13 +120,14 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 </head><body>
 <div class="toast" id="toast" role="status"></div>
 <div class="app">
-<section class="hero"><div>
+<header class="hero"><div>
  <span class="badge">⚖️ Equilibrium • ItsDrDan • CHEM 3A</span>
  <h1><span class="a">Equilibrium</span> <span class="b">Park!</span></h1>
  <p class="subtitle">Watch reactions run both ways, push them with a stress, and see Le Châtelier's principle happen.</p>
 </div>
 <div class="logo" aria-hidden="true"><img src="assets/logo.webp" alt="" width="104" height="104" style="width:100%;height:auto;display:block"></div>
-</section>
+</header>
+<main id="main">
 <details class="howto"><summary>📘 How to use this game</summary><ul>
  <li><b>Start with 🎢 Ride Line</b> to see equilibrium as a theme-park line, then try the 🔬 Particle Lab.</li>
  <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, watch, then answer.</li><li>In the labs, particles bounce like billiard balls. A colored ring means that hit was a reaction; most hits just bounce.</li>
@@ -145,7 +147,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
  <div class="xprow"><span id="lvl">Level 1</span><div class="track"><div class="fill" id="xpFill"></div></div><span id="xpTxt">0 / 100 XP</span></div>
  <div class="badges" id="badges"></div><button class="btn" id="resetBtn" style="margin-top:10px;font-size:14px;min-height:40px;background:#fff;border:2px solid #d5dce2">Reset progress</button></div></details>
 <details class="card side" id="videoPanel"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><div class="vidcard" id="vidCard"></div><div class="vwrap"><iframe id="player" title="Dr. Dan video" loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div></div></details>
-</div></div>
+</main></div>
 <script>
 /*EQ-ENGINE-START*/
 /* Particle equilibrium engine (no DOM). Rates come from mass action on the particle counts:
@@ -269,7 +271,7 @@ function eqStep(st,dt){const S=SYS[st.sys],sub=6,h=dt/sub;
  if(nf&&st.pendF<1)st.dueF=st.t;if(nr&&st.pendR<1)st.dueR=st.t;st.pendF=(st.pendF||0)+nf;st.pendR=(st.pendR||0)+nr;
  const sp=Math.sqrt(st.T/EQ_T0);
  for(const p of st.parts){p.x+=p.vx*dt*sp;p.y+=p.vy*dt*sp;eqClamp(st,p)}
- st.coll=st.coll||0;const c0=st.coll;eqCollide(st,dt);
+ st.coll=st.coll||0;const c0=st.coll;if(!st.fast)eqCollide(st,dt);   // st.fast: warm-up runs skip collisions (counts don't depend on them)
  /* reactions that wait too long for the right collision (few particles, cold box) happen anyway, so counts stay true */
  while(st.pendF>=1&&(st.pendF>6||st.t-(st.dueF||0)>0.8)){st.pendF--;if(eqEvent(st,S.R,S.P,1))st.evF++;else{st.pendF=0;break}st.dueF=st.t}
  while(st.pendR>=1&&(st.pendR>6||st.t-(st.dueR||0)>0.8)){st.pendR--;if(eqEvent(st,S.P,S.R,-1))st.evR++;else{st.pendR=0;break}st.dueR=st.t}
@@ -319,6 +321,7 @@ const MODES=[
 const VIDEO_FOR={
  basics:['qatdA_ALnx8',0,'What is equilibrium?'],rates:['qatdA_ALnx8',683,'Rates must be equal at equilibrium'],
  kexpr:['-ie15qDdHjE',236,'The equilibrium constant, K'],krules:['-ie15qDdHjE',472,'Rules behind K'],hetero:['ZojNOgXleJA',731,'Heterogeneous equilibrium expressions'],
+ collide:['qatdA_ALnx8',130,'Collision theory basics'],
  lec:['JMRz9TRVUQg',0,"Le Châtelier's principle: stress!"],lecAdd:['JMRz9TRVUQg',304,'Adding concentration = move away'],lecRem:['JMRz9TRVUQg',427,'Taking concentration = move toward'],
  lecT:['JMRz9TRVUQg',719,'Temperature: exothermic and endothermic'],lecP:['JMRz9TRVUQg',992,'Pressure change'],lecV:['JMRz9TRVUQg',1409,'Volume changes'],lecCat:['JMRz9TRVUQg',1495,'Catalysts and enzymes'],
  lecReal:['JMRz9TRVUQg',82,'Real-world examples'],practice:['ZojNOgXleJA',986,"Practice: predicting Le Châtelier shifts"]};
@@ -413,6 +416,11 @@ function kExpr(r,opt={}){const keep=e=>opt.all||(e[2]==='g'||e[2]==='aq');const 
 <script>
 /* ============================== LAB VIEW (particles) ============================== */
 const LW=600,LH=330;
+/* Speed control: Normal → Slow motion → Paused (WCAG 2.2.2 pause for moving content). Reduced-motion users start in slow motion. */
+const SPEEDS=[[1,'▶ Normal speed'],[0.3,'🐢 Slow motion'],[0,'⏸ Paused']];
+const SPEED={i:typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:0,f(){return SPEEDS[this.i][0]}};
+const speedChip=()=>`<button type="button" class="chip spd" data-speed aria-label="Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.">${SPEEDS[SPEED.i][1]}</button>`;
+function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=(SPEED.i+1)%SPEEDS.length;el.querySelectorAll('[data-speed]').forEach(x=>{x.textContent=SPEEDS[SPEED.i][1];x.setAttribute('aria-label',`Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.`)})})}
 const SHAPES={ /* atoms drawn for each species: [dx,dy,r,fill,edge] */
  N2O4:[[-5,0,6.5,'#f3ead2','#9c8456'],[5,0,6.5,'#f3ead2','#9c8456']],NO2:[[0,0,7,'#b5562a','#6f3015']],
  H2:[[-3,0,4,'#ffffff','#7d8a94'],[3,0,4,'#ffffff','#7d8a94']],I2:[[-5,0,6,'#6b3fa0','#3e1f63'],[5,0,6,'#6b3fa0','#3e1f63']],HI:[[-5,0,4,'#ffffff','#7d8a94'],[3,0,6,'#6b3fa0','#3e1f63']],
@@ -421,8 +429,8 @@ const SHAPES={ /* atoms drawn for each species: [dx,dy,r,fill,edge] */
  Hb:[[0,0,10,'#7b2f4a','#45142a']],O2:[[-3,0,4,'#9fd3f2','#3f86b5'],[3,0,4,'#9fd3f2','#3f86b5']],HbO2:[[0,0,10,'#ef4a3c','#9c1d14'],[9,-7,3.5,'#9fd3f2','#3f86b5'],[14,-4,3.5,'#9fd3f2','#3f86b5']]};
 const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smooth:null,stat:'eq',
  mount(host,cfg){this.cfg=cfg;const S=SYS[cfg.sys],gas=S.gas;
-  const st=eqNew(cfg.sys,{V:gas?0.7:1,start:cfg.start});eqRun(st,25);st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
-  const ctl=cfg.demo?'':`<div class="ctrls">${S.stress.map(([k,l,d])=>`<button type="button" class="chip go" data-s="${k}">${l}</button>`).join('')}
+  const st=eqNew(cfg.sys,{V:gas?0.7:1,start:cfg.start});st.fast=true;eqRun(st,25,1/10);st.fast=false;st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
+  const ctl=cfg.demo?`<div class="ctrls">${speedChip()}</div>`:`<div class="ctrls">${speedChip()}${S.stress.map(([k,l,d])=>`<button type="button" class="chip go" data-s="${k}">${l}</button>`).join('')}
    ${S.heat?`<label class="slider">🌡️ Temp<input type="range" id="tSl" min="0" max="100" step="1" value="25" aria-label="Temperature in degrees Celsius"><output id="tOut">25 °C</output></label>`:''}
    ${gas?`<label class="slider">🫸 Volume<input type="range" id="vSl" min="35" max="100" step="1" value="70" aria-label="Volume of the container"><output id="vOut">70%</output></label>`:''}
    <button type="button" class="chip" id="catBtn" aria-pressed="false">⚡ Catalyst</button>
@@ -432,9 +440,9 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   const dh=S.dH==null?'':S.dH>0?`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= +'+S.dH+' kJ':'&gt; 0'} (endothermic)</span>`:`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= −'+Math.abs(S.dH)+' kJ':'&lt; 0'} (exothermic)</span>`;
   host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}</div>`:''}${ctl}
    <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Particle view: ${esc(S.title)}"></canvas><div class="tube" aria-hidden="true"><svg viewBox="0 0 30 70"><path d="M5 3v52a10 10 0 0 0 20 0V3" fill="#fff" stroke="#6b7c88" stroke-width="2.5"/><path id="tubeFill" d="M7 20v35a8 8 0 0 0 16 0V20z" fill="#eee"/></svg>${S.tube||'What you\'d see'}</div></div>
-   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus">⚖️ Balanced</div></div></div>
+   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus" role="status" aria-live="polite">⚖️ Balanced</div></div></div>
    <div class="graphwrap"><canvas id="grCv" width="600" height="190" role="img" aria-label="Graph of concentration over time"></canvas><div class="cap">Concentration vs. time (last 30 s). Dashed lines mark each change you make.</div></div></div>`;
-  this.el=host.firstElementChild;this.wire();this.start()},
+  this.el=host.firstElementChild;this.wire();wireSpeed(this.el);this.start()},
  wire(){const S=SYS[this.cfg.sys],st=()=>this.st;
   this.el.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const it=S.stress.find(x=>x[0]===b.dataset.s);eqChange(st(),it[2],it[1].replace(/\s*\(.*\)\s*$/,''));this.emit('stress:'+it[0])});
   const tS=this.el.querySelector('#tSl');if(tS)tS.oninput=()=>{const c=+tS.value;eqSetT(st(),273+c);$('tOut').textContent=c+' °C';clearTimeout(this.tMark);this.tMark=setTimeout(()=>{st().marks.push({t:st().t,label:c+' °C'})},250);if(c>=70)this.emit('T:hot');if(c<=5)this.emit('T:cold')};
@@ -452,7 +460,7 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   if(d.act==='comp'){eqSetV(st,0.4);st.marks.push({t:st.t,label:'V 40%'})}if(d.act==='exp'){eqSetV(st,1);st.marks.push({t:st.t,label:'V 100%'})}
   if(d.act==='cat'){st.cat=true;st.marks.push({t:st.t,label:'catalyst on'})}},
  start(){cancelAnimationFrame(this.raf);this.last=performance.now();const loop=now=>{this.raf=requestAnimationFrame(loop);if(document.hidden||!this.el||!this.el.isConnected)return;
-  const dt=Math.min(0.05,(now-this.last)/1000);this.last=now;eqStep(this.st,dt);this.sample();this.draw()};this.raf=requestAnimationFrame(loop)},
+  const dt=Math.min(0.05,(now-this.last)/1000)*SPEED.f();this.last=now;if(dt>0)eqStep(this.st,dt);this.sample();this.draw()};this.raf=requestAnimationFrame(loop)},
  stop(){cancelAnimationFrame(this.raf);this.el=null},
  sample(){const st=this.st,S=SYS[this.cfg.sys],a=1-Math.exp(-1/60/1.2);
   if(!this.smooth){this.smooth={};for(const k in S.sp)this.smooth[k]=st.n[k]}for(const k in S.sp)this.smooth[k]+=(st.n[k]-this.smooth[k])*a*2;
@@ -464,11 +472,11 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   if(S.gas){ctx.fillStyle='#dfe5ea';ctx.fillRect(W,0,LW-W,LH);ctx.fillStyle='#8696a3';ctx.fillRect(W,0,10,LH);ctx.fillRect(W+10,LH/2-7,LW-W,14);ctx.fillStyle='#5e6d78';ctx.fillRect(W,0,3,LH)}
   for(const p of st.parts){const sh=SHAPES[p.s];p.a=(p.a??(p.x*7%6.28))+(p.vx>0?0.01:-0.01);const ca=Math.cos(p.a),sa=Math.sin(p.a);
    for(const [dx,dy,r,f,e] of sh){const x=p.x+dx*ca-dy*sa,y=p.y+dx*sa+dy*ca;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=f;ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle=e;ctx.stroke()}}
-  for(const f of st.flashes){const k=Math.max(0,Math.min(1,(st.t-f.t)/0.45));ctx.beginPath();ctx.arc(f.x,f.y,6+k*16,0,7);ctx.strokeStyle=f.dir>0?`rgba(46,160,90,${1-k})`:`rgba(230,130,40,${1-k})`;ctx.lineWidth=2.5;ctx.stroke()}
+  for(const f of st.flashes){const k=Math.max(0,Math.min(1,(st.t-f.t)/0.45));ctx.beginPath();ctx.arc(f.x,f.y,6+k*16,0,7);ctx.strokeStyle=f.dir>0?`rgba(46,160,90,${1-k})`:`rgba(230,130,40,${1-k})`;ctx.lineWidth=2.5;ctx.setLineDash(f.dir>0?[]:[5,4]);ctx.stroke();ctx.setLineDash([])}
   ctx.font='800 13px Inter,system-ui,sans-serif';ctx.fillStyle='#4c5a65';ctx.fillText(`${tc.toFixed(0)} °C${st.cat?' · catalyst on':''}`,8,LH-8);
   $('tubeFill').setAttribute('fill',`rgba(${rgb.join(',')},${S.tint.mix?0.85:Math.max(0.05,al)})`);
   if(!this.fresh)return;this.fresh=false;
-  setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,SHAPES[k][0][3],SHAPES[k][0][4],st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Green ring = forward, orange = reverse.`);
+  setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,SHAPES[k][0][3],SHAPES[k][0][4],st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Solid green ring = forward, dashed orange = reverse.`);
   setBalance(st.ema.f,st.ema.r,'Forward','Reverse',S.eqP.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),S.eq.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].l).join(' + '),this);
   const gc=$('grCv');if(gc)drawGraph(gc,st,Object.keys(S.sp).map(k=>({k,l:S.sp[k].l,c:SHAPES[k][0][4]==='#9c8456'?'#b49a62':SHAPES[k][0][4]})),'c')}};
 /* iOS Safari cancels a tap if new elements appear while the finger is down, so live readouts only change text, never rebuild */
@@ -482,7 +490,8 @@ function balanceSVG(){return `<svg viewBox="0 0 240 104" aria-hidden="true"><pat
  <g><rect x="150" y="22" width="78" height="34" rx="8" fill="#fff0e3" stroke="#e8955a" stroke-width="2"/><text x="189" y="36" text-anchor="middle" font-size="11" font-weight="800" fill="#94531a" id="brL">← Reverse</text><text x="189" y="51" text-anchor="middle" font-size="13" font-weight="900" fill="#22313b" id="brV">0</text></g></g></svg>`}
 /* tip the beam toward the faster rate; status uses a little hysteresis so a noisy equilibrium still reads as balanced */
 function setBalance(f,r,fl,rl,prodTxt,reacTxt,owner,unit='/s'){const d=(f-r)/Math.max(f+r,1e-6),ang=Math.max(-18,Math.min(18,d*45));
- const b=document.getElementById('beam');if(b)b.style.transform=`rotate(${-ang}deg)`,b.style.transformOrigin='120px 60px';
+ /* only move the beam when its angle changes by a whole degree: restarting its CSS transition 5×/s makes iOS Safari hold taps */
+ const b=document.getElementById('beam'),deg=Math.round(-ang);if(b&&b.dataset.deg!==String(deg)){b.dataset.deg=deg;b.style.transformOrigin='120px 60px';b.style.transform=`rotate(${deg}deg)`}
  const fv=$('bfV'),rv=$('brV');if(fv){const T=(e,t)=>{if(e.textContent!==t)e.textContent=t};T(fv,f.toFixed(1)+unit);T(rv,r.toFixed(1)+unit);T($('bfL'),fl+' →');T($('brL'),'← '+rl)}
  const lim=owner.stat==='eq'?0.07:0.04;let s=Math.abs(d)<lim?'eq':d>0?'r':'l';owner.stat=s;const el=$('labStatus');if(!el)return;
  const html=s==='eq'?'⚖️ Rates equal: <b>at equilibrium</b>':s==='r'?`➡️ ${fl} faster: shifting toward ${prodTxt}`:`⬅️ ${rl} faster: shifting toward ${reacTxt}`;if(el.dataset.h!==html){el.dataset.h=html;el.className='status '+s;el.innerHTML=html}}
@@ -504,12 +513,12 @@ const Park={st:null,el:null,raf:0,onEvent:null,stat:'eq',lastSample:-1,
  mount(host,cfg){this.cfg=cfg;const st=rideNew({});for(let i=0;i<20*30;i++)rideStep(st,1/30);st.t=0;st.marks=[];st.hist=[];st.boardLog=[];st.unloadLog=[];st.evF=st.evR=0;
   st.guests.forEach(g=>{g.justOn=g.justBack=false;g.path=null});st.queue.forEach((g,i)=>{[g.x,g.y]=slotPos(i)});st.ride.forEach((g,i)=>{g.ang=(i/st.ride.length)*6.28;[g.x,g.y]=ridePos(g.ang)});this.st=st;this.lastSample=-1;
   host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">🧍 Guests in line <span style="font-size:22px">⇌</span> 🎢 Guests on the ride <span class="dh">(reactants ⇌ products)</span></div>
-   <div class="ctrls"><button type="button" class="chip go" data-p="bus">🚌 Tour bus (+20 in line)</button><button type="button" class="chip go" data-p="fire">🎆 Fireworks (15 leave line)</button>
+   <div class="ctrls">${speedChip()}<button type="button" class="chip go" data-p="bus">🚌 Tour bus (+20 in line)</button><button type="button" class="chip go" data-p="fire">🎆 Fireworks (15 leave line)</button>
     <button type="button" class="chip" data-p="crew" aria-pressed="false">👷 Extra crew</button><button type="button" class="chip" data-p="long" aria-pressed="false">⏱️ Longer ride</button><button type="button" class="chip rst" data-p="reset">↺ Restart</button></div>
    <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Theme park: a queue of guests on the left and a ride loop on the right"></canvas></div>
-   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus">⚖️ Balanced</div></div></div>
+   <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus" role="status" aria-live="polite">⚖️ Balanced</div></div></div>
    <div class="graphwrap"><canvas id="grCv" width="600" height="190" role="img" aria-label="Graph of guests in line and on the ride over time"></canvas><div class="cap">Guests in line and on the ride (last 30 park-minutes). Dashed lines mark each change.</div></div></div>`;
-  this.el=host.firstElementChild;
+  this.el=host.firstElementChild;wireSpeed(this.el);
   this.el.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const st=this.st,k=b.dataset.p;
    if(k==='bus'){if(st.guests.length<130)rideAdd(st,20,'tour bus');this.emit('bus')}
    if(k==='fire'){rideAdd(st,-15,'fireworks');this.emit('fire')}
@@ -519,10 +528,10 @@ const Park={st:null,el:null,raf:0,onEvent:null,stat:'eq',lastSample:-1,
   this.start()},
  emit(ev){this.onEvent&&this.onEvent(ev)},
  start(){cancelAnimationFrame(this.raf);let last=performance.now();const loop=now=>{this.raf=requestAnimationFrame(loop);if(document.hidden||!this.el||!this.el.isConnected)return;
-  const dt=Math.min(0.05,(now-last)/1000);last=now;const st=this.st;
+  const dt=Math.min(0.05,(now-last)/1000)*SPEED.f();last=now;const st=this.st;if(dt<=0){this.draw();return}
   rideStep(st,dt);
   st.ride.forEach(g=>{if(g.justOn){g.justOn=false;g.path=[PK.dock.slice()];g.ang=0}});
-  st.queue.forEach(g=>{if(g.justBack){g.justBack=false;g.path=[[g.x,PK.walkY],[20,PK.walkY]]}});
+  st.queue.forEach(g=>{if(g.justBack){g.justBack=false;const sx=PK.cx+PK.rx+20;g.path=g.y<PK.cy?[[sx,g.y],[sx,PK.walkY],[20,PK.walkY]]:[[g.x,PK.cy+PK.ry+14],[g.x,PK.walkY],[20,PK.walkY]]}});
   const om=2*Math.PI/6*(st.crew?1.6:1)*(st.long?0.6:1);st.ride.forEach(g=>{g.ang=(g.ang||0)+om*dt});
   this.move(dt);this.sample();this.draw()};this.raf=requestAnimationFrame(loop)},
  stop(){cancelAnimationFrame(this.raf);this.el=null},
@@ -709,12 +718,12 @@ LAB_Q.push(
   ['H⁺ goes up: more of both products are made',false,'Adding a product shifts toward reactants, so the other product (H⁺) is used up.'],
   ['No change in H⁺ at all',false,'Watch the H⁺ count: it falls after the bicarbonate goes in.'],
   ['CO₂ goes down to zero',false,'CO₂ actually rises a little as H⁺ and HCO₃⁻ recombine.']]})},
- {sys:'no2',f:()=>({video:'basics',task:{need:'watch',sec:5,say:'Watch the 💥 Collisions and reacting numbers under the counts for 5 seconds.'},prompt:'Particles bounce off each other like billiard balls. How do the collisions per second compare with the reactions per second?',hint:'Read the 💥 line under the counts. Is "reacting" close to "Collisions", or much smaller?',choices:[
+ {sys:'no2',f:()=>({video:'collide',task:{need:'watch',sec:5,say:'Watch the 💥 Collisions and reacting numbers under the counts for 5 seconds.'},prompt:'Particles bounce off each other like billiard balls. How do the collisions per second compare with the reactions per second?',hint:'Read the 💥 line under the counts. Is "reacting" close to "Collisions", or much smaller?',choices:[
   ['Many more collisions: most hits just bounce',true,'Right! Collision theory: particles must collide to react, but most collisions bounce off. Only hits with enough energy (and the right angle) react.'],
   ['About equal: every collision is a reaction',false,'Compare the two numbers: there are several times more collisions than reactions.'],
   ['More reactions than collisions',false,'A reaction needs a collision first, so there can\'t be more reactions than collisions here.'],
   ['No collisions: particles pass through each other',false,'Watch two particles meet: they bounce apart. Some of those bounces are reactions (the colored rings).']]})},
- {sys:'fescn',f:()=>({video:'basics',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more and watch the 💥 line.'},prompt:'After heating, what happens to the number of collisions per second?',hint:'Hotter particles move faster. Faster particles meet each other more often.',choices:[
+ {sys:'fescn',f:()=>({video:'collide',task:{need:'T:hot',say:'Slide 🌡️ Temp up to 70 °C or more and watch the 💥 line.'},prompt:'After heating, what happens to the number of collisions per second?',hint:'Hotter particles move faster. Faster particles meet each other more often.',choices:[
   ['It goes up: faster particles collide more often',true,'Yes! Higher temperature means faster particles, more collisions and harder hits, so both reactions speed up. (Which way the balance moves still depends on ΔH.)'],
   ['It goes down: hot particles spread out',false,'The box size didn\'t change. Faster particles hit each other more often, not less.'],
   ['It stays the same: temperature only changes color',false,'Watch the 💥 number: it climbs as you heat.'],
@@ -936,21 +945,21 @@ const labHost=document.createElement('div');let mounted=null;
 function ensureLab(spec){/* fresh equilibrium for every question, so each task starts from the same baseline */
  Lab.stop();Park.stop();mounted=spec.kind;if(spec.kind==='park'){Park.mount(labHost,{})}else Lab.mount(labHost,{sys:spec.sys,demo:!!spec.demo})
  const L=spec.kind==='park'?Park:Lab;L.start();L.onEvent=ev=>taskEvent(ev);return L}
-function taskEvent(ev){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(ev===t.need){state.taskAt=performance.now();state.taskPend=true;tickTask()}}
-function tickTask(){const t=state.q.task,el=$('taskBox');if(!el)return;const wait=t.need==='watch'?t.sec*1000:2500,left=Math.max(0,wait-(performance.now()-state.taskAt));
+function taskEvent(ev){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(ev===t.need){state.taskAt=performance.now();tickTask.last=0;state.taskPend=true;tickTask()}}
+function tickTask(){const t=state.q.task,el=$('taskBox');if(!el)return;{const now=performance.now(),last=tickTask.last||now;tickTask.last=now;if(SPEED.f()===0)state.taskAt+=now-last;else if(SPEED.f()<1)state.taskAt+=(now-last)*(1-SPEED.f())*0.5}const wait=t.need==='watch'?t.sec*1000:2500,left=Math.max(0,wait-(performance.now()-state.taskAt));
  if(left<=0){state.taskOk=true;el.className='task done';el.innerHTML='✅ Done! Now answer below.';['checkBtn'].forEach(id=>$(id).disabled=false);return}
- const tt=`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
+ const tt=SPEED.f()===0?'⏸ Paused: tap ⏸ Paused to play again':`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
 function next(){clearTimeout(tickTask.t);const q=GEN[state.mode]();state.q=q;state.sel=null;state.done=false;state.logged=false;state.taskPend=false;$('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title;
  $('hintBox').className='hintbox';fb('','');
  const sysPick=state.mode==='lab'?`<div class="ctrls" role="group" aria-label="Choose a reaction">${LAB_SYS.map(([k,l])=>`<button type="button" class="chip ${q.lab&&q.lab.sys===k?'on':''}" aria-pressed="${q.lab&&q.lab.sys===k}" data-sys="${k}">${l}</button>`).join('')}</div>`:'';
  let h=sysPick+`<p class="prompt">${q.prompt}</p>`;
- if(q.task)h+=`<div class="task" id="taskBox">👉 ${q.task.say}</div>`;
+ if(q.task)h+=`<div class="task" id="taskBox" role="status" aria-live="polite">👉 ${q.task.say}</div>`;
  if(q.html&&!(q.lab&&q.lab.demo))h+=`<div class="qbox">${q.html}</div>`;
  if(q.lab)h+=`<div id="labHere"></div>${q.lab.demo?'<p class="tip">🔬 This lab is at equilibrium. Answer first; then we\'ll make the change so you can watch it.</p>':''}`;
  h+=`<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`;
  $('qArea').innerHTML=h;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
  if(q.lab){$('labHere').appendChild(labHost);const L=ensureLab(q.lab)}else{Lab.stop();Park.stop();mounted=null}
- state.taskOk=!q.task;if(q.task){$('checkBtn').disabled=true;if(q.task.need==='watch'){state.taskAt=performance.now();tickTask()}}
+ state.taskOk=!q.task;if(q.task){$('checkBtn').disabled=true;if(q.task.need==='watch'){state.taskAt=performance.now();tickTask.last=0;tickTask()}}
  $('qArea').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{state.labSys=b.dataset.sys;next()});
  $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})});
  video();stats()}
