@@ -103,6 +103,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
 .chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}
 .chip.dk{background:#fff8e6;border-color:#f0cf86}
+.chip:has(.pic){display:inline-flex;align-items:center;gap:5px;padding-left:6px}.chip .pic{width:26px;height:26px;flex:none;pointer-events:none}
 .chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:172px;text-align:left}@media(max-width:700px){.chip.spd{min-width:150px}}
 .chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
 .slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
@@ -326,7 +327,7 @@ const Decay=(()=>{
   g.font='bold 12px system-ui,sans-serif';[['#e0675a','proton'],['#9aa9b6','neutron']].forEach(([c,t],i)=>{g.beginPath();g.arc(16,LH-34+i*18,6,0,7);g.fillStyle=c;g.fill();g.fillStyle='#22313b';g.fillText(t,27,LH-30+i*18)})}
  const loop=makeLoop(step);const api={s,onEvent:null,load,fire};function emit(e){api.onEvent&&api.onEvent(e)}
  api.mount=(h,o)=>{h.innerHTML=`<div class="lab"><div class="ctrls" role="group" aria-label="Decay buttons">
-  <button type="button" class="chip dk" data-f="alpha">α Alpha</button><button type="button" class="chip dk" data-f="beta">β⁻ Beta</button><button type="button" class="chip dk" data-f="positron">β⁺ Positron</button><button type="button" class="chip dk" data-f="ec">EC Electron capture</button><button type="button" class="chip dk" data-f="gamma">γ Gamma</button>
+  <button type="button" class="chip dk" data-f="alpha"><img class="pic" src="assets/p-alpha.webp" alt="" width="26" height="26"><span>α Alpha</span></button><button type="button" class="chip dk" data-f="beta"><img class="pic" src="assets/p-beta.webp" alt="" width="26" height="26"><span>β⁻ Beta</span></button><button type="button" class="chip dk" data-f="positron">β⁺ Positron</button><button type="button" class="chip dk" data-f="ec">EC Electron capture</button><button type="button" class="chip dk" data-f="gamma"><img class="pic" src="assets/p-gamma.webp" alt="" width="26" height="26"><span>γ Gamma</span></button>
   <button type="button" class="chip rst" data-reset>↺ Start over</button>${speedChip()}</div>
   <div class="stage"><canvas width="600" height="320" role="img"></canvas><div class="dmsg" aria-live="polite"></div></div>
   <div class="readout"><div class="counts"><div class="cnt"><span class="sw" style="background:#e0675a;border-color:#a8443a"></span>Protons (Z)<b data-k="p"></b></div><div class="cnt"><span class="sw" style="background:#9aa9b6;border-color:#6b7a86"></span>Neutrons (A − Z)<b data-k="n"></b></div><div class="cnt">Neutron-to-proton ratio<b data-k="np"></b></div></div>
@@ -388,7 +389,7 @@ const Shield=(()=>{
   g.fillStyle='#245c86';g.font='bold 11px system-ui,sans-serif';g.fillText('counter',x-12,LH/2-40)}
  const loop=makeLoop(step);const api={s,onEvent:null,set};function emit(e){api.onEvent&&api.onEvent(e)}
  api.mount=(h,o)=>{h.innerHTML=`<div class="lab">
-  <div class="ctrls" role="group" aria-label="Radiation"><span class="lbl">Radiation:</span>${['alpha','beta','gamma','neutron'].map(k=>`<button type="button" class="chip" data-rad="${k}">${RADLBL[k]}</button>`).join('')}</div>
+  <div class="ctrls" role="group" aria-label="Radiation"><span class="lbl">Radiation:</span>${['alpha','beta','gamma','neutron'].map(k=>`<button type="button" class="chip" data-rad="${k}"><img class="pic" src="assets/p-${k}.webp" alt="" width="26" height="26"><span>${RADLBL[k]}</span></button>`).join('')}</div>
   <div class="ctrls" role="group" aria-label="Shield"><span class="lbl">Shield:</span>${SHIELDS.map(([k,t])=>`<button type="button" class="chip" data-sh="${k}">${t}</button>`).join('')}</div>
   <div class="ctrls"><label class="slider">📏 Counter distance <input type="range" min="2" max="40" step="1" data-dist aria-label="Distance from source to counter in centimeters"><output data-dout></output></label>${speedChip()}<button type="button" class="chip" data-snd aria-pressed="${Click.on}">${Click.on?'🔊 Clicks on':'🔇 Clicks off'}</button></div>
   <div class="stage"><canvas width="600" height="320" role="img"></canvas></div>

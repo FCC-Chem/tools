@@ -1087,6 +1087,9 @@ document.addEventListener('touchend',e=>{const b=e.target.closest&&e.target.clos
 /* Deep links: ?mode=id|ph|calc|pairs|titrate|buffer|quiz opens that mode for this visit only (for textbook Explore It boxes). */
 /* ?prelab=12a: the pH Lab shows only EXP 12a pre-lab items (red cabbage, mass → pH, excess reactant) */
 var PRELAB=new URLSearchParams(location.search).get('prelab')==='12a';if(PRELAB)state.mode='ph';
+/* a ?mode= deep link (textbook Explore It boxes) opens on that mode's lab question first, then plays normally */
+const FEATURE={id:()=>beakerQ(),ph:()=>pick([phColorQ,pOHLabQ,ratioLabQ,pinkLabQ,cabbageColorQ])(),pairs:()=>labelQ(),titrate:()=>titLabQ(),buffer:()=>bufCompareQ()};
+(()=>{const m=new URLSearchParams(location.search).get('mode');if(FEATURE[m]&&!PRELAB){const orig=GEN[m];GEN[m]=()=>{GEN[m]=orig;return FEATURE[m]()}}})();
 (()=>{const m=new URLSearchParams(location.search).get('mode');if(PRELAB||MODES.some(x=>x.id===m)){state.mode=PRELAB?'ph':m;addEventListener('load',()=>setTimeout(()=>{const e=$('modes');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150))}})();
 /* The shared Feedback pill is fixed bottom-right; on phones it covered Show Answer. Hide it while the answer buttons are on screen. */
 (()=>{const row=document.querySelector('.btnrow');if(!row||!('IntersectionObserver' in window))return;let vis=false;const apply=()=>{const f=document.querySelector('.ddfb-float');if(f)f.classList.toggle('eq-hide',vis)};
