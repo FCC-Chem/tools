@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nuclear Glow Up! • ItsDrDan • CHEM 3A</title>
+<style>
+:root{--ink:#22313b;--muted:#5c6a75;--line:#e4dfd3;--card:#fffefa;--blue:#4a9fd6}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.45;min-height:100vh;
+ background:radial-gradient(circle at 8% -5%,#fff3d6 0,transparent 38%),radial-gradient(circle at 95% 5%,#e3f7ea 0,transparent 34%),linear-gradient(120deg,#f6fbff,#fffaf2 50%,#f4fff6);background-attachment:fixed}
+button,input,select{font:inherit;color:inherit}.hidden{display:none!important}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.app{max-width:1280px;margin:0 auto;padding:14px 14px 40px}
+.card{background:var(--card);border:1px solid #dfe8ef;border-radius:22px;box-shadow:0 8px 22px #2a5a7a10;padding:18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 26px;border-radius:24px;border:1px solid #d9e6f1;background:linear-gradient(115deg,#fff,#fff8e8 55%,#eefbf1);box-shadow:0 12px 30px #2a5a7a14}
+.badge{display:inline-block;background:#fff;border:1px solid #e3dccd;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.hero h1{margin:6px 0 4px;font-size:clamp(30px,4.2vw,46px);line-height:1.08;font-weight:900;letter-spacing:-.02em}
+.hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#d99a1e,#43b6a8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{margin:0;color:var(--muted);font-size:15.5px}
+.logo{width:112px;flex:0 0 112px}.logo svg{display:block;width:100%;height:auto}
+details.howto{margin:10px 0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
+details.howto>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;min-height:48px;display:flex;justify-content:space-between;align-items:center}
+details.howto>summary::-webkit-details-marker{display:none}
+details.howto>summary:after{content:"Tap to open ▾";font-size:13px;color:#fff;background:#4a6fc4;padding:5px 12px;border-radius:999px}
+details.howto[open]>summary:after{content:"Hide ▴";background:none;color:#4a6fc4}
+details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}
+.mode{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:16px;background:linear-gradient(145deg,#ffffffa6,var(--mb));padding:10px 12px;display:grid;grid-template-columns:52px 1fr;column-gap:10px;align-items:center;min-height:64px;box-shadow:0 4px 12px #2634400d;transition:transform .15s,box-shadow .15s}
+.mode:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018}
+.mode.on{outline:3px solid var(--ma);outline-offset:3px}
+.mode .ic{grid-row:span 2;width:50px;height:50px;border-radius:12px;display:grid;place-items:center;background:var(--ma);color:#fff;font-size:22px}
+.mode b{font-size:16.5px;line-height:1.2}.mode small{font-size:12px;color:#4c5a65;font-weight:600}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;grid-template-areas:"card ref" "card jour" "card vid";gap:14px;align-items:start;margin-top:10px}
+#practice{grid-area:card;position:relative;overflow:hidden}#refPanel{grid-area:ref}#journey{grid-area:jour}#videoPanel{grid-area:vid}
+#practice:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#e0675a,#f7c968,#43b6a8,#2f8fd0,#ad8cce)}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.toprow h2{margin:0;font-size:27px;font-weight:900}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{display:inline-flex;flex-direction:column;align-items:center;min-width:76px;padding:5px 10px;border-radius:14px;line-height:1.05}
+.stat b{font-size:22px;font-weight:900}.stat small{font-size:11.5px;font-weight:800;color:#4c5a65}
+.s1{background:#e5f6ea}.s2{background:#fff1d1}.s3{background:#efe8fb}.pop b{animation:pop .45s}@keyframes pop{40%{transform:scale(1.35)}}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px;transition:transform .08s}
+.btn:active:not(:disabled){transform:translateY(2px)}.btn:disabled{opacity:.55;cursor:default}
+.dark{background:linear-gradient(180deg,#2f4650,#22343c);color:#fff;box-shadow:0 4px 0 #142128}
+.check{background:linear-gradient(180deg,#5cb2e6,#3b8ccb);color:#fff;box-shadow:0 4px 0 #2d73a8}
+.hint{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
+.show{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
+.prompt{font-size:20px;font-weight:800;margin:14px 0 8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.num{flex:1;min-width:180px;min-height:54px;font-size:20px;font-weight:700;border:2px solid #9fb6c8;border-radius:14px;padding:8px 14px;background:#fff}
+.chip.ins{min-width:52px;font-size:17px;background:#eef6ff;border-color:#b9d3ea}
+.num:focus,.blank input:focus{outline:3px solid #4a9fd6;outline-offset:2px}.unit{font-size:18px;font-weight:800}
+.givens{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:8px;font-size:17px;font-weight:700}
+.givens span{background:#f3f8fd;border:1px solid #d6e4ef;border-radius:10px;padding:3px 10px}
+#practice.quizmode .btnrow{grid-template-columns:1fr}#practice.quizmode #hintBtn,#practice.quizmode #showBtn{display:none}
+.qprog{display:flex;gap:4px;margin:10px 0 0}.qprog i{flex:1;height:8px;border-radius:99px;background:#e6e0d2}.qprog i.ok{background:#4fa36a}.qprog i.no{background:#d9776f}.qprog i.now{background:#4a9fd6}
+.qsum{text-align:center}.qsum .big{font-size:44px;font-weight:900;margin:6px 0}.qsum table{margin:10px auto;border-collapse:collapse;text-align:left;font-size:15.5px}.qsum td{padding:6px 10px;border-top:1px solid #eee}.qsum td:last-child{white-space:nowrap}#practice.quizdone .btnrow{display:none}
+.plan{display:grid;gap:8px;margin-top:10px;text-align:left}.plan .item{background:#fff8e6;border:1px solid #f0dfae;border-radius:12px;padding:10px 12px}.plan .btn{min-height:44px;font-size:15px;padding:8px 14px;margin:6px 8px 0 0}
+@media(max-width:1000px){.ddfb-float.eq-hide{opacity:0!important;pointer-events:none!important;transform:translateY(12px)!important}}
+.task{display:flex;gap:8px;align-items:center;background:#fff6e0;border:2px dashed #f0c45c;border-radius:14px;padding:8px 12px;font-weight:800;font-size:15.5px;margin:6px 0}
+.task.done{background:#e8f7ec;border:2px solid #8fcf9f}
+.qbox{background:radial-gradient(circle at 50% 0,#f7fbff,#fff 70%);border:2px solid #e1ebf3;border-radius:18px;padding:14px;margin:8px 0;font-size:18px;text-align:center;overflow-x:auto}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:56px;font-size:17px;font-weight:700;cursor:pointer}
+.opt .L{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e6f2ff;color:#3b82b4;font-size:14px;font-weight:900}
+.opt.sel{border-color:var(--blue);background:#eaf5fd}.opt.sel .L{background:#4a9fd6;color:#fff}
+.opt.right{border-color:#4fa36a;background:#e8f7ec}.opt.right .L{background:#4fa36a;color:#fff}
+.opt.wrong{border-color:#d9776f;background:#fdeeed}.opt.wrong .L{background:#d9776f;color:#fff}
+.opt .nuc{font-size:22px}
+.tip{font-size:13px;color:var(--muted);margin:4px 2px}
+.btnrow{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:14px}
+.hintbox{display:none;margin-top:10px;border-radius:14px;padding:10px 14px;border-left:7px solid #efc94c;background:linear-gradient(90deg,#fff5d2,#fffbec);font-weight:600}.hintbox.on{display:block}
+.fb{margin-top:10px;border-radius:14px;line-height:1.5}
+.fb.good{border-left:7px solid #4fa36a;background:linear-gradient(90deg,#e6f6ea,#f4fbf6);padding:12px 14px}
+.fb.bad{border-left:7px solid #d9776f;background:linear-gradient(90deg,#fdecea,#fff7f6);padding:12px 14px}
+.fb ul.why{margin:8px 0 0;padding-left:20px;font-size:15px}.fb ul.why li{margin:3px 0}
+.linkbtn{border:0;background:none;padding:0;color:#2f7fbf;font-weight:800;cursor:pointer;text-decoration:underline}
+/* nuclide symbols and equations */
+.nuc{display:inline-flex;align-items:center;font-weight:800;white-space:nowrap;vertical-align:middle}
+.nuc .az{display:inline-flex;flex-direction:column;align-items:flex-end;font-size:.58em;line-height:1.05;margin-right:1px;font-weight:800}
+.nuc .az sup,.nuc .az sub{vertical-align:baseline;font-size:inherit;line-height:1.05}
+.coef{font-weight:800;margin-right:2px}
+.eq{display:inline-flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:4px 8px;font-size:26px}
+.pl{font-weight:700;color:#4c5a65}
+.arr{display:inline-block;width:46px;height:14px;position:relative;margin:0 4px}
+.arr:before{content:'';position:absolute;left:0;right:8px;top:6px;height:2.5px;background:currentColor}
+.arr:after{content:'';position:absolute;right:0;top:1px;border-left:11px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.blank{display:inline-flex;align-items:center;gap:3px;background:#fff8e6;border:2px dashed #e0b44a;border-radius:12px;padding:4px 6px}
+.blank .bn{display:inline-flex;flex-direction:column;gap:3px}
+.blank input{width:58px;min-height:40px;border:2px solid #9fb6c8;border-radius:9px;text-align:center;font-size:17px;font-weight:800;background:#fff;padding:2px}
+.blank input.bS{width:62px;min-height:60px;font-size:22px}
+.blank.ok{background:#e8f7ec;border:2px solid #8fcf9f}.blank.bad{background:#fdeeed;border-color:#d9776f}
+.nucrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin-top:8px}
+.eqnote{font-size:13.5px;color:var(--muted);font-weight:700;margin-top:6px}
+.smap{margin-top:10px;border:2px solid #f0dfae;border-radius:14px;background:#fffaf0}.smap>summary{cursor:pointer;list-style:none;min-height:48px;display:flex;align-items:center;padding:8px 14px;font-weight:900;font-size:16px}.smap>summary::-webkit-details-marker{display:none}.smap>summary:after{content:'▾';margin-left:auto}.smap[open]>summary:after{content:'▴'}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:8px 12px;border-top:1px solid #f0e4c4}.srow .sp{flex:1 1 100%;font-weight:700;font-size:15.5px}.srow input{width:130px;min-height:44px;font-size:17px;font-weight:700;border:2px solid #9fb6c8;border-radius:10px;padding:4px 10px}.srow .smsg{font-size:14px;font-weight:700}.srow.ok{background:#e8f7ec}.srow.ok .smsg{color:#2f6e3f}.srow.bad .smsg{color:#a8443a}.send{padding:8px 12px;border-top:1px solid #f0e4c4;font-weight:800;color:#2f6e3f}
+.ptbox{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;background:#f3f8fd;border:2px solid #c9dff2;border-radius:14px;padding:8px 12px;margin:6px 0}.ptbox label{font-weight:800;font-size:14.5px}.ptbox input{width:90px;min-height:44px;font-size:18px;font-weight:800;border:2px solid #9fb6c8;border-radius:10px;padding:4px 8px;margin-left:6px}.ptbox output{flex:1 1 220px;font-size:15px;font-weight:700}.ptbox output b{font-size:19px;color:#245c86}
+.story{background:#eefaf7;border:2px solid #9fd8cc;border-left:7px solid #3f9e8f;border-radius:14px;padding:10px 14px;margin:10px 0;font-size:16px;line-height:1.5}
+.fixnudge{margin-top:8px;background:#fff3e6;border:2px dashed #e8a35a;border-radius:12px;padding:8px 12px;font-weight:700}.fixnudge .btn,.fixlist .btn{min-height:44px;font-size:15px;padding:8px 14px;margin:6px 6px 0 0}
+.fixlist{margin-top:12px;border-top:1px solid #eee;padding-top:8px;font-size:14px}.fixlist b{display:block;font-size:15px;margin-bottom:2px}
+/* lab */
+.lab{border:2px solid #d6e4ef;border-radius:18px;background:#fbfdff;padding:10px;margin:8px 0}
+.ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
+.ctrls .lbl{font-weight:800;font-size:14px;color:#4c5a65}
+.chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}
+.chip.dk{background:#fff8e6;border-color:#f0cf86}
+.chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:172px;text-align:left}@media(max-width:700px){.chip.spd{min-width:150px}}
+.chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
+.slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
+.slider input{flex:1;min-width:90px;height:32px;accent-color:#3b8ccb}.slider output{min-width:58px;text-align:right}
+.stage{position:relative}
+.stage canvas{display:block;width:100%;height:auto;border-radius:12px;background:#fff;border:2px solid #dbe5ee;touch-action:pan-y}
+.dmsg{position:absolute;left:8px;right:8px;bottom:8px;text-align:center;font-weight:800;font-size:14px;color:#94531a;pointer-events:none}
+.dmsg:empty{display:none}.dmsg:not(:empty){background:#fff0e3;border-radius:10px;padding:4px 8px}
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.counts{display:flex;flex-direction:column;gap:5px;justify-content:center}
+.cnt{display:flex;align-items:center;gap:6px;font-weight:800;font-size:15px;background:#fff;border:1px solid #e3eaf0;border-radius:10px;padding:4px 8px}
+.cnt b{margin-left:auto;font-size:16px;text-align:right}
+.sw{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid;vertical-align:-1px}
+.status{font-weight:900;font-size:14.5px;border-radius:10px;padding:5px 8px;margin-top:2px}
+.status.r{background:#e6f2ff;color:#245c86}
+.eqline{margin-top:8px;background:#fff;border:1px solid #e3eaf0;border-radius:12px;padding:8px;text-align:center}
+.eqline .eqbig .eq{font-size:24px}.sums{display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center;font-size:13.5px;font-weight:800;color:#2f6e3f;margin-top:4px}
+.chain{font-size:14px;font-weight:700;color:#4c5a65;margin-top:4px}.chain .ch{display:inline-block;background:#eef6ff;border-radius:6px;padding:0 5px;margin:0 2px;color:#245c86}
+.geiger{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;justify-content:center;margin-top:8px;background:#22343c;color:#d8f5c8;border-radius:12px;padding:8px 12px;font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.geiger b{font-size:26px;color:#b8f59a;min-width:90px;text-align:right}.geiger small{flex-basis:100%;text-align:center;color:#cfe3d8;font-family:Inter,system-ui,sans-serif;font-size:13px}
+.cap{font-size:12.5px;color:var(--muted);font-weight:700;margin:4px 2px}
+/* side */
+.side{padding:0}.side>summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:900;font-size:17px;min-height:48px;display:flex;align-items:center;gap:8px;border-radius:22px}
+.side>summary::-webkit-details-marker{display:none}.side>summary:after{content:'▸';margin-left:auto;transition:transform .15s}.side[open]>summary:after{transform:rotate(90deg)}
+.side>.body{padding:6px 16px 14px}
+#refPanel>summary{background:linear-gradient(120deg,#f2ecff,#eaf5ff)}#videoPanel>summary{background:linear-gradient(120deg,#fff1e6,#fdeef2)}#journey>summary{background:linear-gradient(120deg,#fff8e6,#eef6ff)}
+.refcard{background:#fff;border:1px solid #e6e0d2;border-left:5px solid #82afd2;border-radius:12px;padding:7px 10px;font-size:13.5px;margin-bottom:7px}
+.refcard table{border-collapse:collapse;width:100%}.refcard td{padding:2px 4px;border-top:1px solid #eee;vertical-align:top}.refcard .nuc{font-size:17px}
+.xprow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-weight:800;font-size:14px}
+.track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#8fd8c8,#f7c968);transition:width .3s}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
+.bdg{border:2px dashed #c3ccd4;border-radius:12px;padding:7px 9px;font-size:12.5px;color:#4c5a65;background:#fff;display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:center}.bdg .e{font-size:26px;text-align:center;filter:grayscale(1) opacity(.5)}.bdg.got .e{filter:none}
+.bdg:not(.got) b:after{content:' (not yet)';font-weight:700;font-size:11px;color:#5c6a75}.bdg.got{border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
+.vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin-bottom:10px}
+.vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#b0544a}
+.vwrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;pointer-events:none;transition:.3s;z-index:50}.toast.on{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards;z-index:40;pointer-events:none}@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "ref" "jour" "vid"}}
+@media(max-width:700px){.app{padding:8px}.card{padding:12px}.hero{padding:12px 14px}.subtitle{display:none}.logo{width:64px;flex-basis:64px}.options{grid-template-columns:1fr}.stats{width:100%}.stat{flex:1}
+ .btnrow{grid-template-columns:1fr 1fr}.btnrow .check{grid-column:1/-1}.toprow h2{font-size:23px}.prompt{font-size:17.5px}.lab{padding:7px}
+ .readout{grid-template-columns:1fr}.chip{font-size:14px;padding:6px 9px}.eq{font-size:21px}.eqline .eqbig .eq{font-size:20px}.modes{grid-template-columns:repeat(2,minmax(0,1fr))}.mode small{display:none}.mode{grid-template-columns:42px minmax(0,1fr);min-height:54px;min-width:0;padding:8px}.mode b{overflow-wrap:anywhere;font-size:15px}.mode .ic{width:40px;height:40px;font-size:18px}
+ .blank input{width:50px}.blank input.bS{width:54px}.arr{width:34px}.qbox{padding:10px 6px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+</head><body>
+<div class="toast" id="toast" role="status"></div>
+<div class="app">
+<header class="hero"><div>
+ <span class="badge">☢️ Nuclear Chemistry • ItsDrDan • CHEM 3A</span>
+ <h1><span class="a">Nuclear</span> <span class="b">Glow Up!</span></h1>
+ <p class="subtitle">Unstable nuclei glow up into stable ones. Fire decays, block radiation, watch half-lives tick, and start a chain reaction.</p>
+</div>
+<div class="logo" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><radialGradient id="lg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3b0"/><stop offset=".6" stop-color="#f7c968" stop-opacity=".55"/><stop offset="1" stop-color="#f7c968" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="60" cy="60" r="56" fill="url(#lg)"/>
+ <g stroke="#2f8fd0" stroke-width="3" fill="none" opacity=".75"><ellipse cx="60" cy="60" rx="46" ry="17"/><ellipse cx="60" cy="60" rx="46" ry="17" transform="rotate(60 60 60)"/><ellipse cx="60" cy="60" rx="46" ry="17" transform="rotate(-60 60 60)"/></g>
+ <g stroke-width="1.5"><circle cx="53" cy="55" r="8" fill="#e0675a" stroke="#a8443a"/><circle cx="67" cy="55" r="8" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="60" cy="67" r="8" fill="#e0675a" stroke="#a8443a"/><circle cx="50" cy="68" r="7" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="70" cy="68" r="7" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="60" cy="47" r="7" fill="#e0675a" stroke="#a8443a"/></g>
+ <path d="M86 30 q6 -6 12 0 t12 0" stroke="#d99a1e" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="24" cy="92" r="5" fill="#2f7fbf"/><circle cx="96" cy="90" r="5.5" fill="#43b6a8"/></svg></div>
+</header>
+<main id="main">
+<details class="howto"><summary>📘 How to use this game</summary><ul>
+ <li><b>Start with ⚛️ Decay Lab</b>: tap α, β⁻, β⁺, EC or γ and watch the nucleus and its equation change.</li>
+ <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, watch, then answer.</li>
+ <li><b>⚖️ Balance It!</b> has boxes: type the top number (mass), the bottom number (atomic number) and the symbol.</li>
+ <li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point. <b>🎯 Skill Check</b> gives you a study plan.</li></ul></details>
+<nav class="modes" id="modes" aria-label="Choose a mode"></nav>
+<div class="main">
+<section class="card" id="practice">
+ <div class="toprow"><h2 id="modeTitle">Mode</h2><div class="stats">
+  <span class="stat s1"><b id="nCorrect">0</b><small>✅ Correct</small></span><span class="stat s2"><b id="nStreak">0</b><small>🔥 Streak</small></span><span class="stat s3"><b id="nAssist">0</b><small>👀 Assisted</small></span>
+  <button class="btn dark" id="newBtn">New Question ↻</button></div></div>
+ <div id="qArea"></div>
+ <div class="btnrow"><button class="btn check" id="checkBtn">Check Answer</button><button class="btn hint" id="hintBtn">💡 Hint</button><button class="btn show" id="showBtn">👀 Show Answer</button></div>
+ <div class="hintbox" id="hintBox"></div><div class="fb" id="fb" role="status" aria-live="polite"></div>
+</section>
+<details class="card side" id="refPanel"><summary>🧠 Reference</summary><div class="body" id="refBody"></div></details>
+<details class="card side" id="journey"><summary>🧭 Chemistry Journey <span class="badge" id="jChip" style="margin-left:auto;margin-right:6px">Level 1</span></summary><div class="body">
+ <div class="xprow"><span id="lvl">Level 1</span><div class="track"><div class="fill" id="xpFill"></div></div><span id="xpTxt">0 / 100 XP</span></div>
+ <div class="badges" id="badges"></div><div class="fixlist" id="fixList"></div><button class="btn" id="resetBtn" style="margin-top:10px;font-size:14px;min-height:40px;background:#fff;border:2px solid #d5dce2">Reset progress</button></div></details>
+<details class="card side" id="videoPanel"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><div class="vidcard" id="vidCard"></div><div class="vwrap"><iframe id="player" title="Dr. Dan video" loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div></div></details>
+</div></main></div>
+<script>
+/* ============================== NUCLEAR DATA ============================== */
+const SYM=('n H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og').split(' ');
+const ENAME=('neutron hydrogen helium lithium beryllium boron carbon nitrogen oxygen fluorine neon sodium magnesium aluminum silicon phosphorus sulfur chlorine argon potassium calcium scandium titanium vanadium chromium manganese iron cobalt nickel copper zinc gallium germanium arsenic selenium bromine krypton rubidium strontium yttrium zirconium niobium molybdenum technetium ruthenium rhodium palladium silver cadmium indium tin antimony tellurium iodine xenon cesium barium lanthanum cerium praseodymium neodymium promethium samarium europium gadolinium terbium dysprosium holmium erbium thulium ytterbium lutetium hafnium tantalum tungsten rhenium osmium iridium platinum gold mercury thallium lead bismuth polonium astatine radon francium radium actinium thorium protactinium uranium neptunium plutonium americium curium berkelium californium einsteinium fermium mendelevium nobelium lawrencium rutherfordium dubnium seaborgium bohrium hassium meitnerium darmstadtium roentgenium copernicium nihonium flerovium moscovium livermorium tennessine oganesson').split(' ');
+/* a nuclide or particle: {A, Z, s, m (metastable), part} */
+const N=(A,Z,m)=>({A,Z,s:SYM[Z],m:!!m});
+const PART={
+ alpha:{A:4,Z:2,s:'He',part:'alpha'},beta:{A:0,Z:-1,s:'e',part:'beta'},positron:{A:0,Z:1,s:'e',part:'positron'},
+ gamma:{A:0,Z:0,s:'γ',part:'gamma'},neutron:{A:1,Z:0,s:'n',part:'neutron'},proton:{A:1,Z:1,s:'H',part:'proton'}};
+const PNAME={alpha:'alpha particle',beta:'beta particle',positron:'positron',gamma:'gamma ray',neutron:'neutron',proton:'proton'};
+const MODE_NAME={alpha:'alpha decay',beta:'beta decay',positron:'positron emission',ec:'electron capture',gamma:'gamma emission'};
+const nname=x=>x.part?PNAME[x.part]:`${ENAME[x.Z]}-${x.A}${x.m?'m':''}`;
+const nshort=x=>x.part?PNAME[x.part]:`${x.s}-${x.A}${x.m?'m':''}`;
+/* what a decay does to a parent: product nuclide + the particle and the side it is written on */
+function decayOf(p,mode){
+ if(mode==='alpha')return {prod:N(p.A-4,p.Z-2),part:PART.alpha,side:'R'};
+ if(mode==='beta')return {prod:N(p.A,p.Z+1),part:PART.beta,side:'R'};
+ if(mode==='positron')return {prod:N(p.A,p.Z-1),part:PART.positron,side:'R'};
+ if(mode==='ec')return {prod:N(p.A,p.Z-1),part:PART.beta,side:'L'};
+ if(mode==='gamma')return {prod:N(p.A,p.Z),part:PART.gamma,side:'R'};
+ throw 'mode '+mode}
+/* real decays (parent A, Z, metastable?) */
+const DECAYS={
+ alpha:[[238,92],[234,92],[230,90],[226,88],[222,86],[218,84],[210,84],[214,84],[239,94],[244,94],[241,95],[232,90],[235,92],[237,93],[147,62],[212,84],[220,86],[224,88],[228,90]],
+ beta:[[14,6],[3,1],[32,15],[131,53],[60,27],[90,38],[137,55],[42,19],[99,43],[129,52],[210,82],[214,82],[210,83],[234,90],[234,91],[239,93],[99,42],[59,26],[24,11],[198,79],[90,39],[35,16],[45,20],[133,54],[85,36],[214,83],[228,88],[89,38],[82,35],[47,20]],
+ positron:[[11,6],[13,7],[15,8],[18,9],[22,11],[68,31],[82,37],[38,19],[64,29],[19,10],[30,15],[26,13]],
+ ec:[[125,53],[123,53],[51,24],[7,4],[67,31],[201,81],[55,26],[111,49],[57,27],[37,18],[41,20],[40,19]],
+ gamma:[[99,43,1],[137,56,1],[81,36,1],[131,54,1],[117,50,1]]};
+/* bombardment / transmutation: each term [coef, A, Z, part?] */
+const BOMB=[
+ {L:[[1,10,5],[1,4,2,'alpha']],R:[[1,13,7],[1,1,0,'neutron']],note:'Boron-10 hit by an alpha particle makes radioactive nitrogen-13 (lecture slide 23).'},
+ {L:[[1,58,28],[1,1,1,'proton']],R:[[1,55,27],[1,4,2,'alpha']],note:'Nickel-58 hit by a proton (lecture slide 24).'},
+ {L:[[1,98,43],[2,1,0,'neutron']],R:[[1,96,41],[1,4,2,'alpha']],note:'Two neutrons count as 2 × 1 = 2 on top (lecture study check).'},
+ {L:[[1,14,7],[1,4,2,'alpha']],R:[[1,17,8],[1,1,1,'proton']],note:'Rutherford’s 1919 reaction: the first element changed on purpose.'},
+ {L:[[1,9,4],[1,4,2,'alpha']],R:[[1,12,6],[1,1,0,'neutron']],note:'Chadwick used this reaction to discover the neutron (1932).'},
+ {L:[[1,27,13],[1,4,2,'alpha']],R:[[1,30,15],[1,1,0,'neutron']],note:'Irène and Frédéric Joliot-Curie made the first artificial radioisotope this way.'},
+ {L:[[1,14,7],[1,1,0,'neutron']],R:[[1,14,6],[1,1,1,'proton']],note:'Cosmic-ray neutrons make carbon-14 in the upper atmosphere; this is why living things contain C-14.'},
+ {L:[[1,98,42],[1,1,0,'neutron']],R:[[1,99,42]],note:'Hospital Tc-99m generators start from molybdenum-99 made this way.'},
+ {L:[[1,59,27],[1,1,0,'neutron']],R:[[1,60,27]],note:'Cobalt-60 for radiation therapy and sterilizing supplies is made in reactors this way.'},
+ {L:[[1,18,8],[1,1,1,'proton']],R:[[1,18,9],[1,1,0,'neutron']],note:'A hospital cyclotron makes fluorine-18 for PET scans this way.'},
+ {L:[[1,6,3],[1,1,0,'neutron']],R:[[1,3,1],[1,4,2,'alpha']],note:'Lithium-6 is used to make tritium (H-3) for fusion research.'},
+ {L:[[1,249,98],[1,12,6]],R:[[1,257,104],[4,1,0,'neutron']],note:'New, heavy elements like rutherfordium are made by firing light nuclei at heavy ones.'},
+ {L:[[1,238,92],[1,12,6]],R:[[1,246,98],[4,1,0,'neutron']],note:'Californium was made by bombarding uranium with carbon nuclei.'},
+ {L:[[1,239,94],[1,4,2,'alpha']],R:[[1,242,96],[1,1,0,'neutron']],note:'Curium-242 was first made by hitting plutonium-239 with alpha particles.'},
+ {L:[[1,23,11],[1,232,90]],R:[[1,251,99],[1,4,2,'alpha']],note:'Lecture study check: sodium-23 colliding with thorium-232.'},
+ {L:[[1,209,83],[1,58,26]],R:[[1,266,109],[1,1,0,'neutron']],note:'Meitnerium (element 109) was made this way in 1982.'}];
+/* U-235 fission splits: [fragment 1], [fragment 2], neutrons released */
+const FISSION=[[[141,56],[92,36],3],[[143,54],[90,38],3],[[137,55],[96,37],3],[[139,56],[94,36],3],[[137,52],[97,40],2],[[94,38],[139,54],3],[[131,53],[102,39],3]];
+const FUSION=[
+ {L:[[1,2,1],[1,3,1]],R:[[1,4,2],[1,1,0,'neutron']],note:'Deuterium–tritium fusion is the reaction fusion reactors try to use.'},
+ {L:[[1,2,1],[1,2,1]],R:[[1,3,2],[1,1,0,'neutron']],note:'Two deuterium nuclei can fuse to helium-3 and a neutron.'},
+ {L:[[1,3,2],[1,3,2]],R:[[1,4,2],[2,1,1,'proton']],note:'In the Sun, two helium-3 nuclei fuse to helium-4 and two protons.'},
+ {L:[[1,2,1],[1,1,1,'proton']],R:[[1,3,2],[1,0,0,'gamma']],note:'In the Sun, deuterium and a proton fuse to helium-3 and a gamma ray.'}];
+const term=([c,A,Z,p])=>({coef:c,x:p?PART[p]:N(A,Z)});
+/* rough centre of the band of stability (N ≈ Z for light nuclei, ≈1.5 Z for heavy) */
+const bandN=Z=>Z+0.0064*Z*Z;
+
+/* ============================== LAB SHELL (shared) ============================== */
+const LW=600,LH=320;
+const SPEEDS=[[1,'▶ Normal speed'],[0.3,'🐢 Slow motion'],[0,'⏸ Paused']];
+const SPEED={i:typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:0,f(){return SPEEDS[this.i][0]}};
+const speedChip=()=>`<button type="button" class="chip spd" data-speed aria-label="Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.">${SPEEDS[SPEED.i][1]}</button>`;
+function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=(SPEED.i+1)%SPEEDS.length;document.querySelectorAll('[data-speed]').forEach(x=>{x.textContent=SPEEDS[SPEED.i][1];x.setAttribute('aria-label',`Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.`)})})}
+function fitCanvas(c,w,h){const d=Math.min(2,(typeof devicePixelRatio!=='undefined'&&devicePixelRatio)||1);c.width=Math.round(w*d);c.height=Math.round(h*d);const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return x}
+function rng(seed){let s=seed>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
+const setTxt=(el,t)=>{if(el&&el.textContent!==t)el.textContent=t};
+function makeLoop(step){let raf=0,last=0;const f=t=>{const dt=Math.min(0.05,(t-(last||t))/1000)*SPEED.f();last=t;step(dt);raf=requestAnimationFrame(f)};
+ return {start(){if(!raf){last=0;raf=requestAnimationFrame(f)}},stop(){cancelAnimationFrame(raf);raf=0}}}
+function rrect(g,x,y,w,h,r){g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,r);else g.rect(x,y,w,h)}
+/* nuclide in HTML: stacked mass number over atomic number */
+function nucHTML(x,coef){const z=x.part==='positron'?'+1':String(x.Z).replace('-','−');const lab=x.part?PNAME[x.part]:SYM[x.Z]===x.s?nname(x):`${x.s}-${x.A}`;
+ return `${coef>1?`<span class="coef">${coef}</span>`:''}<span class="nuc" role="img" aria-label="${coef>1?coef+' ':''}${lab}${x.part?'':`, mass number ${x.A}, atomic number ${x.Z}`}"><span class="az" aria-hidden="true"><sup>${x.A}${x.m?'m':''}</sup><sub>${z}</sub></span><span class="sy" aria-hidden="true">${x.s}</span></span>`}
+const ARROW='<span class="arr" role="img" aria-label="yields"></span>';
+function eqHTML(L,R){return `<span class="eq">${L.map(t=>nucHTML(t.x,t.coef)).join('<span class="pl">+</span>')}${ARROW}${R.map(t=>nucHTML(t.x,t.coef)).join('<span class="pl">+</span>')}</span>`}
+
+/* ============================== ⚛️ DECAY LAB ============================== */
+const DL_SYS=[
+ ['u238','U-238',N(238,92),'Too big (92 protons): alpha decay'],['ra226','Ra-226',N(226,88),'Too big (88 protons): alpha decay'],['am241','Am-241',N(241,95),'Too big: alpha decay (smoke detectors)'],
+ ['c14','C-14',N(14,6),'Too many neutrons: beta decay'],['i131','I-131',N(131,53),'Too many neutrons: beta decay'],['co60','Co-60',N(60,27),'Too many neutrons: beta decay'],
+ ['f18','F-18',N(18,9),'Too few neutrons: positron emission'],['i125','I-125',N(125,53),'Too few neutrons: electron capture'],['tc99m','Tc-99m',N(99,43,1),'Excited (m): gives off a gamma ray']];
+const DSYM={alpha:'α',beta:'β⁻',positron:'β⁺',ec:'EC',gamma:'γ'};
+const Decay=(()=>{
+ const s={sys:'u238',cur:null,start:null,hist:[],busy:0,fx:[],t:0,flash:0,jig:0,last:null};let el={},ctx=null,nuc=[],R=0;
+ function layout(x){const A=x.A,rb=Math.max(4.4,Math.min(12,78/Math.sqrt(A)));R=rb*Math.sqrt(A)*1.02;const r=rng(A*131+x.Z*7);nuc=[];
+  for(let i=0;i<A;i++){const a=i*2.39996,d=rb*Math.sqrt(i+0.5)*1.02;nuc.push({x:Math.cos(a)*d,y:Math.sin(a)*d,p:false,rb,ph:r()*6.28})}
+  const idx=nuc.map((_,i)=>i).sort(()=>r()-0.5);for(let i=0;i<x.Z;i++)nuc[idx[i]].p=true}
+ function load(id){const d=DL_SYS.find(q=>q[0]===id)||DL_SYS[0];s.sys=d[0];s.cur=Object.assign({},d[2]);s.start=Object.assign({},d[2]);s.hist=[];s.fx=[];s.busy=0;s.last=null;layout(s.cur);s.jig=s.cur.m?1:0;paint()}
+ function fire(mode){if(s.busy>0||!s.cur)return;const p=s.cur;
+  if(mode==='gamma'&&!p.m){say('Only an excited nucleus (marked m) gives off a gamma ray by itself. Try another button.');return}
+  if((mode==='positron'||mode==='ec')&&p.Z<2){say('Hydrogen has only 1 proton: it cannot lose one.');return}
+  if(mode==='alpha'&&(p.A<8||p.Z<3)){say('This nucleus is too small for alpha decay.');return}
+  if(s.hist.length>=8){say('That is enough decays for one sample. Tap ↺ Start over.');return}
+  const d=decayOf(p,mode);s.busy=1;
+  const out=[...nuc.keys()].sort((a,b)=>Math.hypot(nuc[b].x,nuc[b].y)-Math.hypot(nuc[a].x,nuc[a].y));
+  if(mode==='alpha'){const take=out.filter(i=>nuc[i].p).slice(0,2).concat(out.filter(i=>!nuc[i].p).slice(0,2));const ang=Math.atan2(nuc[take[0]].y,nuc[take[0]].x);
+   s.fx.push({k:'alpha',x:Math.cos(ang)*R,y:Math.sin(ang)*R,vx:Math.cos(ang)*160,vy:Math.sin(ang)*160,t:0});nuc=nuc.filter((_,i)=>!take.includes(i))}
+  else if(mode==='beta'||mode==='positron'||mode==='ec'){const want=mode!=='beta';const cand=nuc.filter(q=>q.p===want);const q=cand[Math.floor(cand.length*0.3)]||cand[0];if(q){q.p=!want;q.fl=1}
+   const ang=Math.random()*6.28;if(mode==='ec')s.fx.push({k:'ec',ang,t:0});else s.fx.push({k:mode,x:q?q.x:0,y:q?q.y:0,vx:Math.cos(ang)*260,vy:Math.sin(ang)*260,t:0})}
+  else{s.fx.push({k:'gamma',ang:Math.random()*6.28,t:0});s.jig=0}
+  const eq=d.side==='L'?{L:[{x:p},{x:d.part}],R:[{x:d.prod}]}:{L:[{x:p}],R:[{x:d.prod},{x:d.part}]};
+  s.last={mode,eq,from:p};s.hist.push(mode);s.cur=d.prod;s.flash=1;paint();emit('decay:'+mode)}
+ function say(t){if(el.msg){el.msg.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>{if(el.msg)el.msg.textContent=''},3500)}}
+ function chainTxt(){let x=s.start;const parts=[nshort(x)];s.hist.forEach(m=>{x=decayOf(x,m).prod;parts.push(`<span class="ch">${DSYM[m]}</span> ${nshort(x)}`)});return 'Chain: '+parts.join(' ')}
+ function paint(){if(!el.eq)return;const c=s.cur,Nn=c.A-c.Z,band=bandN(c.Z);
+  setTxt(el.name,nname(c));setTxt(el.p,String(c.Z));setTxt(el.n,String(Nn));setTxt(el.np,c.Z?(Nn/c.Z).toFixed(2):'—');
+  setTxt(el.st,c.m?'Excited (m): extra energy in the nucleus':c.Z>83?'Too big (Z > 83): alpha decay likely':Nn>band+0.6?'Above the band: too many neutrons':Nn<band-0.6?'Below the band: too few neutrons':'Near the band of stability');
+  if(s.last){const e=s.last.eq;
+   el.eq.innerHTML=`<div class="eqbig">${eqHTML(e.L,e.R)}</div><div class="sums"><span>Top (mass numbers): ${e.L.map(q=>q.x.A).join(' + ')} = ${e.R.map(q=>q.x.A).join(' + ')} ✔</span><span>Bottom (atomic numbers): ${e.L.map(q=>q.x.Z).join(' + ').replace(/-/g,'−')} = ${e.R.map(q=>q.x.Z).join(' + ').replace(/-/g,'−')} ✔</span></div>`+(s.hist.length>1?`<div class="chain">${chainTxt()}</div>`:'')}
+  else el.eq.innerHTML=`<div class="eqbig">${nucHTML(c)}</div><p class="cap" style="text-align:center">Tap a decay button above. The nuclear equation appears here.</p>`;
+  if(el.cv)el.cv.setAttribute('aria-label',`Nucleus of ${nname(c)}: ${c.Z} protons (red) and ${Nn} neutrons (gray).`)}
+ function step(dt){s.t+=dt;if(s.busy>0)s.busy=Math.max(0,s.busy-dt/1.1);
+  s.flash=Math.max(0,s.flash-dt*1.5);s.fx.forEach(f=>{f.t+=dt;if(f.vx!==undefined){f.x+=f.vx*dt;f.y+=f.vy*dt}});s.fx=s.fx.filter(f=>f.t<2.2);
+  nuc.forEach(q=>{if(q.fl)q.fl=Math.max(0,q.fl-dt*0.8)});draw()}
+ function lbl(g,x,y,t,c){g.font='bold 13px system-ui,sans-serif';g.textAlign='center';g.fillStyle='#ffffffd0';const w=g.measureText(t).width;g.fillRect(x-w/2-3,y-11,w+6,15);g.fillStyle=c;g.fillText(t,x,y);g.textAlign='left'}
+ function draw(){if(!ctx)return;const g=ctx,cx=190,cy=LH/2+6;g.clearRect(0,0,LW,LH);g.fillStyle='#fbfdff';g.fillRect(0,0,LW,LH);
+  const gl=g.createRadialGradient(cx,cy,R*0.3,cx,cy,R+34);gl.addColorStop(0,s.jig?'#fff1b8':'#eef6ff');gl.addColorStop(1,'rgba(251,253,255,0)');g.fillStyle=gl;g.beginPath();g.arc(cx,cy,R+34,0,7);g.fill();
+  const j=(s.jig?2.2:0.6)+s.flash*2;
+  nuc.forEach(q=>{const x=cx+q.x+Math.sin(s.t*9+q.ph)*j*0.5,y=cy+q.y+Math.cos(s.t*8+q.ph)*j*0.5;g.beginPath();g.arc(x,y,q.rb,0,7);
+   g.fillStyle=q.p?'#e0675a':'#9aa9b6';g.fill();g.lineWidth=1;g.strokeStyle=q.p?'#a8443a':'#6b7a86';g.stroke();
+   if(q.fl){g.beginPath();g.arc(x,y,q.rb+5*q.fl+2,0,7);g.strokeStyle=`rgba(214,160,30,${q.fl})`;g.lineWidth=3;g.stroke()}});
+  s.fx.forEach(f=>{const a=Math.max(0,1-f.t/2.2);
+   if(f.k==='alpha'){[[-5,-5,1],[5,-5,0],[-5,5,0],[5,5,1]].forEach(([dx,dy,p])=>{g.beginPath();g.arc(cx+f.x+dx,cy+f.y+dy,6,0,7);g.fillStyle=p?'#e0675a':'#9aa9b6';g.fill();g.strokeStyle='#5b2a24';g.lineWidth=1;g.stroke()});lbl(g,cx+f.x,cy+f.y-16,'α (helium-4 nucleus)','#a8443a')}
+   if(f.k==='beta'||f.k==='positron'){g.beginPath();g.arc(cx+f.x,cy+f.y,4.5,0,7);g.fillStyle=f.k==='beta'?'#2f7fbf':'#e8955a';g.fill();lbl(g,cx+f.x,cy+f.y-12,f.k==='beta'?'β⁻ (electron)':'β⁺ (positron)',f.k==='beta'?'#245c86':'#a35a1c')}
+   if(f.k==='ec'){const k=Math.min(1,f.t/0.9),rr=(R+60)*(1-k)+4,an=f.ang+k*7;g.setLineDash([3,4]);g.strokeStyle='#9fb6c8';g.lineWidth=1;g.beginPath();g.arc(cx,cy,R+60,0,7);g.stroke();g.setLineDash([]);
+    if(k<1){g.beginPath();g.arc(cx+Math.cos(an)*rr,cy+Math.sin(an)*rr,4.5,0,7);g.fillStyle='#2f7fbf';g.fill();lbl(g,cx+Math.cos(an)*rr,cy+Math.sin(an)*rr-12,'e⁻ captured','#245c86')}}
+   if(f.k==='gamma'){const d=f.t*300,dx=Math.cos(f.ang),dy=Math.sin(f.ang);g.strokeStyle=`rgba(214,160,30,${a})`;g.lineWidth=3;g.beginPath();
+    for(let u=0;u<70;u+=2){const w=Math.sin((d+u)/4)*6,px=cx+dx*(d+u)-dy*w,py=cy+dy*(d+u)+dx*w;u?g.lineTo(px,py):g.moveTo(px,py)}g.stroke();lbl(g,cx+dx*(d+40),cy+dy*(d+40)-14,'γ ray','#8a6510')}});
+  /* band of stability */
+  const X0=400,Y0=26,W=185,H=200,zx=Z=>X0+Z/100*W,ny=n=>Y0+H-n/155*H;g.fillStyle='#fff';g.fillRect(X0-6,Y0-16,W+16,H+42);g.strokeStyle='#dbe5ee';g.lineWidth=1;g.strokeRect(X0-6,Y0-16,W+16,H+42);
+  g.fillStyle='#4c5a65';g.font='bold 11px system-ui,sans-serif';g.fillText('Band of stability',X0,Y0-4);
+  g.beginPath();for(let Z=1;Z<=84;Z++)g.lineTo(zx(Z),ny(bandN(Z)*1.07+1));for(let Z=84;Z>=1;Z--)g.lineTo(zx(Z),ny(bandN(Z)*0.94-1));g.closePath();g.fillStyle='#cfe9d6';g.fill();
+  g.strokeStyle='#c3ccd4';g.setLineDash([4,4]);g.beginPath();g.moveTo(zx(0),ny(0));g.lineTo(zx(100),ny(100));g.stroke();g.setLineDash([]);
+  g.fillStyle='#4c5a65';g.font='10px system-ui,sans-serif';g.fillText('protons (Z) →',X0+W-70,Y0+H+14);g.fillText('N = Z',zx(72),ny(64));g.save();g.translate(X0+2,Y0+H-6);g.rotate(-Math.PI/2);g.fillText('neutrons →',0,8);g.restore();
+  if(s.start){let x=s.start;const pts=[[x.Z,x.A-x.Z]];s.hist.forEach(m=>{x=decayOf(x,m).prod;pts.push([x.Z,x.A-x.Z])});g.strokeStyle='#4a9fd6';g.lineWidth=2;g.beginPath();pts.forEach(([z,n],i)=>i?g.lineTo(zx(z),ny(n)):g.moveTo(zx(z),ny(n)));g.stroke();
+   const [z,n]=pts[pts.length-1];g.beginPath();g.arc(zx(z),ny(n),5.5,0,7);g.fillStyle='#e0675a';g.fill();g.strokeStyle='#fff';g.lineWidth=2;g.stroke()}
+  g.font='bold 12px system-ui,sans-serif';[['#e0675a','proton'],['#9aa9b6','neutron']].forEach(([c,t],i)=>{g.beginPath();g.arc(16,LH-34+i*18,6,0,7);g.fillStyle=c;g.fill();g.fillStyle='#22313b';g.fillText(t,27,LH-30+i*18)})}
+ const loop=makeLoop(step);const api={s,onEvent:null,load,fire};function emit(e){api.onEvent&&api.onEvent(e)}
+ api.mount=(h,o)=>{h.innerHTML=`<div class="lab"><div class="ctrls" role="group" aria-label="Decay buttons">
+  <button type="button" class="chip dk" data-f="alpha">α Alpha</button><button type="button" class="chip dk" data-f="beta">β⁻ Beta</button><button type="button" class="chip dk" data-f="positron">β⁺ Positron</button><button type="button" class="chip dk" data-f="ec">EC Electron capture</button><button type="button" class="chip dk" data-f="gamma">γ Gamma</button>
+  <button type="button" class="chip rst" data-reset>↺ Start over</button>${speedChip()}</div>
+  <div class="stage"><canvas width="600" height="320" role="img"></canvas><div class="dmsg" aria-live="polite"></div></div>
+  <div class="readout"><div class="counts"><div class="cnt"><span class="sw" style="background:#e0675a;border-color:#a8443a"></span>Protons (Z)<b data-k="p"></b></div><div class="cnt"><span class="sw" style="background:#9aa9b6;border-color:#6b7a86"></span>Neutrons (A − Z)<b data-k="n"></b></div><div class="cnt">Neutron-to-proton ratio<b data-k="np"></b></div></div>
+  <div class="counts"><div class="cnt" style="justify-content:center"><b data-k="name" style="margin:0"></b></div><div class="status r" data-k="st"></div></div></div>
+  <div class="eqline" aria-live="polite"></div></div>`;
+  const q=k=>h.querySelector(`[data-k="${k}"]`);el={cv:h.querySelector('canvas'),eq:h.querySelector('.eqline'),msg:h.querySelector('.dmsg'),p:q('p'),n:q('n'),np:q('np'),name:q('name'),st:q('st')};ctx=fitCanvas(el.cv,LW,LH);
+  h.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>fire(b.dataset.f));h.querySelector('[data-reset]').onclick=()=>{load(s.sys);emit('reset')};wireSpeed(h);load(o.sys||s.sys)};
+ api.start=()=>loop.start();api.stop=()=>loop.stop();
+ return api})();
+
+/* ============================== 🛡️ SHIELD LAB ============================== */
+const SHIELDS=[['none','No shield'],['paper','Paper'],['al','Aluminum'],['lead','Lead'],['water','Concrete / water']];
+const TRANS={alpha:{none:1,paper:0,al:0,lead:0,water:0},beta:{none:1,paper:0.9,al:0,lead:0,water:0},gamma:{none:1,paper:1,al:0.92,lead:0.12,water:0.3},neutron:{none:1,paper:1,al:0.95,lead:0.85,water:0.06}};
+const SRC0={alpha:4000,beta:3000,gamma:2000,neutron:1500},BG=30,ALPHA_RANGE=5;/* alpha range: cm of air */
+const IONSTEP={alpha:4,beta:20,gamma:90,neutron:140};
+/* expected counts per minute at the counter (inverse square from 10 cm) */
+function cpm(rad,shield,d){if(rad==='alpha'&&d>ALPHA_RANGE)return BG;return Math.round(BG+SRC0[rad]*TRANS[rad][shield]*(10/d)**2)}
+/* Geiger clicks (off by default): short noise bursts at the counter's rate, capped so very high counts become a buzz */
+const Click=(()=>{let ctx=null,buf=null;const api={on:false,
+ ensure(){if(!ctx){const AC=typeof window!=='undefined'&&(window.AudioContext||window.webkitAudioContext);if(!AC)return false;ctx=new AC();const L=Math.floor(ctx.sampleRate*0.004);buf=ctx.createBuffer(1,L,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<L;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/L,3)}if(ctx.state==='suspended')ctx.resume();return true},
+ play(k,span){if(!ctx||!api.on)return;for(let i=0;i<k;i++){const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=buf;g.gain.value=0.45;s.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+Math.random()*span)}}};return api})();
+const RADLBL={alpha:'α Alpha',beta:'β Beta',gamma:'γ Gamma',neutron:'n Neutron'};
+const Shield=(()=>{
+ const s={rad:'alpha',sh:'none',d:10,ps:[],ions:[],t:0,acc:0,shown:BG,tick:0,seen:{},dSeen:[],flash:0};let el={},ctx=null;
+ const PX=12.6,SX=34;const detX=()=>SX+s.d*PX,shX=()=>(SX+detX())/2;
+ function set(k,v){s[k]=v;s.ps=[];s.seen[s.rad+':'+s.sh]=1;sync();emit('set:'+k)}
+ function sync(){if(!el.cv)return;el.root.querySelectorAll('[data-rad]').forEach(b=>{const on=b.dataset.rad===s.rad;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  el.root.querySelectorAll('[data-sh]').forEach(b=>{const on=b.dataset.sh===s.sh;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  el.dist.value=s.d;setTxt(el.dout,s.d+' cm');s.shown=cpm(s.rad,s.sh,s.d);readout()}
+ function readout(){setTxt(el.cnt,s.shown.toLocaleString('en-US'));const exp=cpm(s.rad,s.sh,s.d);setTxt(el.note,exp<=BG+5?'≈ background only':exp<BG*4?'a little above background':'well above background');
+  el.cv.setAttribute('aria-label',`${PNAME[s.rad]}s from the source, ${SHIELDS.find(x=>x[0]===s.sh)[1].toLowerCase()} in between, counter ${s.d} cm away reads about ${exp} counts per minute.`)}
+ function step(dt){s.t+=dt;const tr=TRANS[s.rad][s.sh];
+  s.acc+=dt*(s.rad==='alpha'?16:s.rad==='beta'?20:s.rad==='gamma'?16:12);
+  while(s.acc>=1){s.acc--;const a=(Math.random()-0.5)*0.75,sp={alpha:150,beta:330,gamma:520,neutron:260}[s.rad];s.ps.push({x:SX+14,y:LH/2+(Math.random()-0.5)*14,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,k:s.rad,go:Math.random()<tr,ion:0,dead:0})}
+  const sx=shX(),dx=detX();
+  s.ps.forEach(p=>{if(p.dead){p.dead+=dt;return}const ox=p.x;p.x+=p.vx*dt;p.y+=p.vy*dt;
+   if(p.k==='alpha'&&p.x>SX+ALPHA_RANGE*PX)p.dead=0.001;
+   if(!p.dead&&s.sh!=='none'&&ox<sx-4&&p.x>=sx-4&&!p.go){p.dead=0.001;p.x=sx-4}
+   if(!p.dead&&ox<dx&&p.x>=dx&&Math.abs(p.y-LH/2)<34){p.dead=0.001;s.flash=1}
+   if(p.y<0||p.y>LH||p.x>LW)p.dead=1;
+   if(!p.dead||p.dead<0.01){p.ion+=Math.hypot(p.vx,p.vy)*dt;while(p.ion>IONSTEP[p.k]){p.ion-=IONSTEP[p.k];if(s.ions.length<700)s.ions.push({x:p.x+(Math.random()-0.5)*6,y:p.y+(Math.random()-0.5)*6,t:0,sg:Math.random()<0.5})}}});
+  s.ps=s.ps.filter(p=>p.dead<0.6);s.ions.forEach(i=>i.t+=dt);s.ions=s.ions.filter(i=>i.t<1.3);s.flash=Math.max(0,s.flash-dt*4);
+  if(Click.on&&dt>0){const lam=Math.min(cpm(s.rad,s.sh,s.d)/60,70)*dt;let k=lam<1?(Math.random()<lam?1:0):Math.max(0,Math.round(lam+(Math.random()+Math.random()+Math.random()-1.5)*Math.sqrt(lam)*1.4));if(k)Click.play(Math.min(k,8),dt)}
+  s.tick+=dt;if(s.tick>0.5){s.tick=0;const e=cpm(s.rad,s.sh,s.d);s.shown=Math.max(0,Math.round(e+(Math.random()-0.5)*2*Math.sqrt(e)));readout()}
+  draw()}
+ function draw(){if(!ctx)return;const g=ctx;g.clearRect(0,0,LW,LH);g.fillStyle='#fbfdff';g.fillRect(0,0,LW,LH);
+  g.fillStyle='#5c6a75';g.font='10px system-ui,sans-serif';for(let c=0;c<=44;c+=5){const x=SX+c*PX;if(x>LW-20)break;g.fillRect(x,LH-16,1,6);g.fillText(c+' cm',x-8,LH-2)}
+  g.fillStyle='#2f4650';rrect(g,SX-26,LH/2-26,40,52,8);g.fill();g.fillStyle='#f7c968';g.font='bold 20px system-ui,sans-serif';g.fillText('☢',SX-16,LH/2+7);
+  if(s.rad==='alpha'){const x=SX+ALPHA_RANGE*PX;g.setLineDash([3,4]);g.strokeStyle='rgba(224,103,90,.6)';g.lineWidth=1;g.beginPath();g.moveTo(x,30);g.lineTo(x,LH-22);g.stroke();g.setLineDash([]);g.fillStyle='#a8443a';g.font='bold 11px system-ui,sans-serif';g.fillText('alpha range in air (~5 cm)',x-30,24)}
+  if(s.sh!=='none'){const x=shX(),w={paper:3,al:7,lead:16,water:24}[s.sh],c={paper:'#f4efe2',al:'#c9d3dc',lead:'#6b7480',water:'#9cc7e6'}[s.sh];g.fillStyle=c;g.fillRect(x-4,40,w,LH-80);g.strokeStyle='#4c5a65';g.lineWidth=1;g.strokeRect(x-4,40,w,LH-80);g.fillStyle='#22313b';g.font='bold 12px system-ui,sans-serif';g.textAlign='center';g.fillText(SHIELDS.find(q=>q[0]===s.sh)[1],x+w/2-4,LH-26);g.textAlign='left'}
+  g.font='bold 10px system-ui,sans-serif';s.ions.forEach(i=>{g.fillStyle=`rgba(${i.sg?'200,70,60':'47,127,191'},${1-i.t/1.3})`;g.fillText(i.sg?'+':'−',i.x-3,i.y+3)});
+  s.ps.forEach(p=>{g.globalAlpha=p.dead?Math.max(0,1-p.dead/0.6):1;
+   if(p.k==='alpha'){g.fillStyle='#e0675a';g.beginPath();g.arc(p.x,p.y,5.5,0,7);g.fill()}
+   else if(p.k==='beta'){g.fillStyle='#2f7fbf';g.beginPath();g.arc(p.x,p.y,3,0,7);g.fill()}
+   else if(p.k==='neutron'){g.fillStyle='#7d8b97';g.beginPath();g.arc(p.x,p.y,4,0,7);g.fill()}
+   else{g.strokeStyle='#d6a01e';g.lineWidth=2;g.beginPath();const ang=Math.atan2(p.vy,p.vx),c=Math.cos(ang),sn=Math.sin(ang);for(let u=-16;u<=0;u+=2){const w=Math.sin((p.x+u)/3)*3,px=p.x+c*u-sn*w,py=p.y+sn*u+c*w;u>-16?g.lineTo(px,py):g.moveTo(px,py)}g.stroke()}
+   g.globalAlpha=1});
+  const x=detX();g.fillStyle=s.flash?'#f7c968':'#e6f2ff';g.strokeStyle='#245c86';g.lineWidth=2;rrect(g,x,LH/2-34,20,68,6);g.fill();g.stroke();
+  g.fillStyle='#245c86';g.font='bold 11px system-ui,sans-serif';g.fillText('counter',x-12,LH/2-40)}
+ const loop=makeLoop(step);const api={s,onEvent:null,set};function emit(e){api.onEvent&&api.onEvent(e)}
+ api.mount=(h,o)=>{h.innerHTML=`<div class="lab">
+  <div class="ctrls" role="group" aria-label="Radiation"><span class="lbl">Radiation:</span>${['alpha','beta','gamma','neutron'].map(k=>`<button type="button" class="chip" data-rad="${k}">${RADLBL[k]}</button>`).join('')}</div>
+  <div class="ctrls" role="group" aria-label="Shield"><span class="lbl">Shield:</span>${SHIELDS.map(([k,t])=>`<button type="button" class="chip" data-sh="${k}">${t}</button>`).join('')}</div>
+  <div class="ctrls"><label class="slider">📏 Counter distance <input type="range" min="2" max="40" step="1" data-dist aria-label="Distance from source to counter in centimeters"><output data-dout></output></label>${speedChip()}<button type="button" class="chip" data-snd aria-pressed="${Click.on}">${Click.on?'🔊 Clicks on':'🔇 Clicks off'}</button></div>
+  <div class="stage"><canvas width="600" height="320" role="img"></canvas></div>
+  <div class="geiger" role="status"><span>📟 Counter:</span> <b data-cnt>0</b> <span>counts/min</span> <small data-note></small></div>
+  <p class="cap">+ and − marks are ions made along each track (ionizing power). Background radiation alone gives about ${BG} counts/min.</p></div>`;
+  el={root:h,cv:h.querySelector('canvas'),dist:h.querySelector('[data-dist]'),dout:h.querySelector('[data-dout]'),cnt:h.querySelector('[data-cnt]'),note:h.querySelector('[data-note]')};ctx=fitCanvas(el.cv,LW,LH);
+  h.querySelectorAll('[data-rad]').forEach(b=>b.onclick=()=>set('rad',b.dataset.rad));h.querySelectorAll('[data-sh]').forEach(b=>b.onclick=()=>set('sh',b.dataset.sh));
+  el.dist.oninput=()=>{s.d=+el.dist.value;setTxt(el.dout,s.d+' cm');s.dSeen.push(s.d);s.shown=cpm(s.rad,s.sh,s.d);readout();emit('set:d')};
+  const snd=h.querySelector('[data-snd]');snd.onclick=()=>{if(!Click.on&&!Click.ensure()){snd.textContent='🔇 No sound on this device';return}Click.on=!Click.on;if(Click.on)Click.ensure();snd.textContent=Click.on?'🔊 Clicks on':'🔇 Clicks off';snd.setAttribute('aria-pressed',Click.on)};
+  wireSpeed(h);Object.assign(s,{rad:o.rad||'alpha',sh:o.sh||'none',d:o.d||10,ps:[],ions:[],seen:{},dSeen:[o.d||10]});s.seen[s.rad+':'+s.sh]=1;sync()};
+ api.start=()=>loop.start();api.stop=()=>loop.stop();return api})();
+
+/* ============================== ⏳ HALF-LIFE LAB ============================== */
+/* [id, label, half-life, unit, start mass (mg), radiation] (textbook Table 14.3.1) */
+const HL_SYS=[['i131','I-131',8.0,'days',64.0,'beta, gamma'],['tc99m','Tc-99m',6.0,'hours',4.00,'gamma'],['c14','C-14',5730,'years',10.0,'beta'],['co60','Co-60',5.27,'years',80.0,'beta, gamma'],['ir192','Ir-192',74,'days',96.0,'beta, gamma'],['rn222','Rn-222',3.8,'days',2.00,'alpha'],['f18','F-18',110,'minutes',20.0,'positron']];
+/* half-life as the textbook writes it (8.0 days, not 8 days) */
+const HL_SHOW={i131:'8.0',tc99m:'6.0',c14:'5730',co60:'5.27',ir192:'74',rn222:'3.8',f18:'110'};
+const fmtT=(v,u)=>`${Number(v.toPrecision(4)).toLocaleString('en-US')} ${u}`;
+let NUMF=(x,s)=>String(Number(x.toPrecision(s)));/* replaced by the page's sig-fig formatter */
+const Half=(()=>{
+ const NN=400,s={sys:'i131',t:0,alive:[],flash:[],run:false,jump:0,hist:[],jumps:0};let el={},ctx=null;
+ const sys=()=>HL_SYS.find(x=>x[0]===s.sys)||HL_SYS[0];
+ const left=()=>s.alive.reduce((a,b)=>a+b,0);
+ function load(id){s.sys=(HL_SYS.find(x=>x[0]===id)||HL_SYS[0])[0];s.t=0;s.alive=Array(NN).fill(1);s.flash=Array(NN).fill(0);s.run=false;s.jump=0;s.queue=0;s.hist=[[0,NN]];s.jumps=0;sync();syncBtns()}
+ function decayN(k){const idx=[];s.alive.forEach((v,i)=>{if(v)idx.push(i)});for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]]}idx.slice(0,k).forEach(i=>{s.alive[i]=0;s.flash[i]=1})}
+ function jump(){if(s.jump>0){if((s.queue||0)<3)s.queue=(s.queue||0)+1;return}if(s.t>=8-1e-9){say('That is 8 half-lives: tap ↺ Start over.');return}s.run=false;s.jump=1;s.jfrom=s.t;s.jtodo=Math.floor(left()/2);s.jdone=0;syncBtns()}
+ function toggle(){if(s.jump>0)return;s.run=!s.run;if(s.t>=8)s.run=false;syncBtns();if(s.run)emit('run')}
+ function say(t){if(el.msg){el.msg.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>{if(el.msg)el.msg.textContent=''},3000)}}
+ function step(dt){
+  if(s.jump>0){const k=Math.min(1,(1-s.jump)+dt/0.9);s.jump=1-k;s.t=s.jfrom+k;const want=Math.round(s.jtodo*k);if(want>s.jdone){decayN(want-s.jdone);s.jdone=want}
+   if(s.jump<=1e-9){s.jump=0;s.t=Math.round(s.t);s.jumps++;s.hist.push([s.t,left()]);syncBtns();sync();emit('jump');if(s.queue>0){s.queue--;jump()}}else sync()}
+  else if(s.run){const d=dt/2.5,p=1-Math.pow(0.5,d);s.alive.forEach((v,i)=>{if(v&&Math.random()<p){s.alive[i]=0;s.flash[i]=1}});s.t+=d;s.hist.push([s.t,left()]);if(s.t>=8){s.run=false;syncBtns()}sync()}
+  for(let i=0;i<NN;i++)if(s.flash[i]>0)s.flash[i]=Math.max(0,s.flash[i]-dt*1.6);draw()}
+ const massLeft=()=>sys()[4]*Math.pow(0.5,s.t);
+ function sync(){if(!el.root)return;const y=sys(),n=s.t,L=left();
+  setTxt(el.time,fmtT(n*y[2],y[3]));setTxt(el.nhl,Math.abs(n-Math.round(n))<1e-6?String(Math.round(n)):n.toFixed(2));
+  setTxt(el.left,`${L} of ${NN}`);setTxt(el.mass,`${NUMF(massLeft(),3)} mg of ${NUMF(y[4],3)} mg`);setTxt(el.pct,Number((Math.pow(0.5,n)*100).toPrecision(4))+'%');
+  el.cv&&el.cv.setAttribute('aria-label',`${y[1]} sample after ${fmtT(n*y[2],y[3])}: ${L} of ${NN} nuclei left.`)}
+ function syncBtns(){if(!el.root)return;setTxt(el.run,s.run?'⏸ Stop clock':'▶ Run clock');el.run.setAttribute('aria-pressed',s.run)}
+ function draw(){if(!ctx)return;const g=ctx,y=sys();g.clearRect(0,0,LW,LH);g.fillStyle='#fbfdff';g.fillRect(0,0,LW,LH);
+  const cs=14.2,x0=10,y0=20;g.font='bold 11px system-ui,sans-serif';g.fillStyle='#4c5a65';g.fillText(`${y[1]} nuclei: 🟠 not yet decayed`,x0,12);
+  for(let i=0;i<NN;i++){const r=Math.floor(i/20),c=i%20,x=x0+c*cs+7,yy=y0+r*cs+7;g.beginPath();g.arc(x,yy,5.6,0,7);g.fillStyle=s.alive[i]?'#f0a63a':'#d5dde3';g.fill();
+   if(s.flash[i]>0){g.beginPath();g.arc(x,yy,5.6+6*(1-s.flash[i]),0,7);g.strokeStyle=`rgba(224,103,90,${s.flash[i]})`;g.lineWidth=2;g.stroke()}}
+  const X0=318,Y0=26,W=264,H=250,tx=t=>X0+t/6*W,ay=a=>Y0+H-(a/NN)*H;g.fillStyle='#fff';g.fillRect(X0-8,Y0-18,W+20,H+44);g.strokeStyle='#dbe5ee';g.lineWidth=1;g.strokeRect(X0-8,Y0-18,W+20,H+44);
+  g.fillStyle='#4c5a65';g.fillText('Amount left',X0,Y0-5);g.strokeStyle='#9fb6c8';g.beginPath();g.moveTo(X0,Y0);g.lineTo(X0,Y0+H);g.lineTo(X0+W,Y0+H);g.stroke();
+  g.font='10px system-ui,sans-serif';for(let k=0;k<=6;k++){const x=tx(k);g.fillStyle='#4c5a65';g.fillText(String(k),x-3,Y0+H+12);if(k){g.setLineDash([2,4]);g.strokeStyle='#e4dfd3';g.beginPath();g.moveTo(x,Y0);g.lineTo(x,Y0+H);g.stroke();g.setLineDash([])}}
+  g.fillText(`half-lives (1 half-life = ${HL_SHOW[y[0]]} ${y[3]})`,X0+20,Y0+H+24);
+  [[1,'100%'],[0.5,'50%'],[0.25,'25%'],[0.125,'12.5%']].forEach(([f,t])=>{g.fillStyle='#8a98a4';g.fillText(t,X0+3,ay(f*NN)-2)});
+  g.strokeStyle='#c99a2e';g.setLineDash([5,4]);g.lineWidth=1.5;g.beginPath();for(let t=0;t<=6.001;t+=0.05)g.lineTo(tx(t),ay(NN*Math.pow(0.5,t)));g.stroke();g.setLineDash([]);
+  g.strokeStyle='#e0675a';g.lineWidth=2.5;g.beginPath();s.hist.filter(p=>p[0]<=6.001).forEach(([t,a],i)=>i?g.lineTo(tx(t),ay(a)):g.moveTo(tx(t),ay(a)));if(s.t<=6)g.lineTo(tx(s.t),ay(left()));g.stroke();
+  if(s.t<=6){g.beginPath();g.arc(tx(s.t),ay(left()),5,0,7);g.fillStyle='#e0675a';g.fill()}}
+ const loop=makeLoop(step);const api={s,onEvent:null,load,jump,toggle,left,massLeft,sys};function emit(e){api.onEvent&&api.onEvent(e)}
+ api.mount=(h,o)=>{h.innerHTML=`<div class="lab">
+  <div class="ctrls"><button type="button" class="chip go" data-jump>⏭ +1 half-life</button><button type="button" class="chip" data-run aria-pressed="false">▶ Run clock</button><button type="button" class="chip rst" data-reset>↺ Start over</button>${speedChip()}</div>
+  <div class="stage"><canvas width="600" height="320" role="img"></canvas><div class="dmsg" aria-live="polite"></div></div>
+  <div class="readout"><div class="counts"><div class="cnt">⏱️ Time passed<b data-k="time"></b></div><div class="cnt">Half-lives (n)<b data-k="nhl"></b></div></div>
+  <div class="counts"><div class="cnt">⚖️ Mass left<b data-k="mass"></b></div><div class="cnt">Percent left<b data-k="pct"></b></div><div class="cnt">Dots left<b data-k="left"></b></div></div></div>
+  <p class="cap">Real samples have trillions of atoms, so they halve exactly. With only 400 dots, the last few decay at random.</p></div>`;
+  const q=k=>h.querySelector(`[data-k="${k}"]`);el={root:h,cv:h.querySelector('canvas'),msg:h.querySelector('.dmsg'),time:q('time'),nhl:q('nhl'),left:q('left'),mass:q('mass'),pct:q('pct'),run:h.querySelector('[data-run]')};ctx=fitCanvas(el.cv,LW,LH);
+  h.querySelector('[data-jump]').onclick=jump;el.run.onclick=toggle;h.querySelector('[data-reset]').onclick=()=>{load(s.sys);emit('reset')};wireSpeed(h);load(o.sys||s.sys)};
+ api.start=()=>loop.start();api.stop=()=>loop.stop();return api})();
+
+/* ============================== 🔥 FISSION & FUSION LAB ============================== */
+/* physics is separate from drawing so tools/check.js can run it in Node */
+const FUEL={small:40,medium:110,large:190};
+function fisNew(fuel,rods,seed){const r=rng(seed||7),n=FUEL[fuel]||110,cx=LW/2,cy=LH/2,U=[];
+ /* same spacing for every amount, so only the size of the lump changes (critical mass) */
+ for(let i=0;U.length<n&&i<5000;i++){const a=i*2.39996,d=17*0.55*Math.sqrt(i+0.5);U.push({x:cx+Math.cos(a)*d+(r()-0.5)*3,y:cy+Math.sin(a)*d*0.82+(r()-0.5)*3,on:1})}
+ return {U,nu:[],frag:[],rods,fis:0,lost:0,abs:0,t:0,r,peak:0}}
+const RODX=[120,210,300,390,480];
+/* chance that a neutron passing a U-235 nucleus splits it (sets the critical mass) */
+let PFIS=0.15;
+function rodHit(st,x,y){const depth=st.rods*(LH-10);return st.rods>0&&RODX.some(rx=>Math.abs(x-rx)<6&&y<depth)}
+function fisFire(st){st.nu.push({x:8,y:LH/2+(st.r()-0.5)*30,vx:150,vy:(st.r()-0.5)*30})}
+function fisStep(st,dt){st.t+=dt;const add=[];
+ st.nu.forEach(n=>{n.x+=n.vx*dt;n.y+=n.vy*dt;if(n.x<-5||n.x>LW+5||n.y<-5||n.y>LH+5){n.dead=1;st.lost++;return}
+  if(rodHit(st,n.x,n.y)){n.dead=1;st.abs++;return}
+  for(const u of st.U){if(u.on&&u!==n.last&&Math.abs(u.x-n.x)<7&&Math.abs(u.y-n.y)<7){n.last=u;if(st.r()>PFIS)continue;u.on=0;n.dead=1;st.fis++;const k=st.r()<0.5?2:3;
+   for(let i=0;i<k;i++){const a=st.r()*6.283;add.push({x:u.x+Math.cos(a)*9,y:u.y+Math.sin(a)*9,vx:Math.cos(a)*150,vy:Math.sin(a)*150})}
+   const a=st.r()*6.283;st.frag.push({x:u.x,y:u.y,vx:Math.cos(a)*40,vy:Math.sin(a)*40,t:0,l:'Ba'},{x:u.x,y:u.y,vx:-Math.cos(a)*40,vy:-Math.sin(a)*40,t:0,l:'Kr'});break}}});
+ st.nu=st.nu.filter(n=>!n.dead).concat(add);if(st.nu.length>160)st.nu.length=160;st.peak=Math.max(st.peak,st.nu.length);
+ st.frag.forEach(f=>{f.t+=dt;f.x+=f.vx*dt;f.y+=f.vy*dt});st.frag=st.frag.filter(f=>f.t<1.4)}
+/* fusion: D and T in a hot box; they fuse only when they hit fast enough to beat the repulsion of two positive nuclei */
+const FUSE_T=8;
+function fusNew(T,seed){const r=rng(seed||3),P=[];for(let i=0;i<16;i++)P.push({x:40+r()*520,y:30+r()*260,k:i%2?'T':'D',vx:0,vy:0});const st={P,T,fus:0,r,fx:[],t:0,bounce:0};fusSetT(st,T);return st}
+function fusSetT(st,T){st.T=T;const v=40+T*9;st.P.forEach(p=>{const a=st.r()*6.283,m=v*(0.7+st.r()*0.6);p.vx=Math.cos(a)*m;p.vy=Math.sin(a)*m})}
+function fusStep(st,dt){st.t+=dt;const P=st.P;P.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.x<12||p.x>LW-12){p.vx*=-1;p.x=Math.max(12,Math.min(LW-12,p.x))}if(p.y<26||p.y>LH-12){p.vy*=-1;p.y=Math.max(26,Math.min(LH-12,p.y))}});
+ for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j];if(a.dead||b.dead)continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);if(d<20&&d>0){
+  const nx=dx/d,ny=dy/d,rv=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;if(rv<=0)continue;
+  if(st.T>=FUSE_T&&!a.he&&!b.he&&a.k!==b.k&&rv>90){a.he=1;a.k='He';b.dead=1;st.fus++;st.fx.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,t:0});a.vx=(a.vx+b.vx)/2;a.vy=(a.vy+b.vy)/2;
+   st.fx.push({k:'n',x:a.x,y:a.y,vx:-ny*420,vy:nx*420,t:0});continue}
+  a.vx-=rv*nx;a.vy-=rv*ny;b.vx+=rv*nx;b.vy+=rv*ny;st.bounce++;if(st.fx.length<40)st.fx.push({k:'b',x:(a.x+b.x)/2,y:(a.y+b.y)/2,t:0})}}
+ st.P=P.filter(p=>!p.dead);
+ /* keep fuel coming so the box never runs out */
+ if(st.P.filter(p=>!p.he).length<8){for(let i=0;i<4;i++){const a=st.r()*6.283,m=(40+st.T*9)*(0.7+st.r()*0.6);st.P.push({x:20,y:40+st.r()*240,k:i%2?'T':'D',vx:Math.abs(Math.cos(a)*m),vy:Math.sin(a)*m})}st.P=st.P.filter(p=>!p.he).concat(st.P.filter(p=>p.he).slice(-6))}
+ st.fx.forEach(f=>{f.t+=dt;if(f.vx!==undefined){f.x+=f.vx*dt;f.y+=f.vy*dt}});st.fx=st.fx.filter(f=>f.t<(f.k==='n'?1.5:f.k==='b'?0.5:1))}
+const Power=(()=>{
+ const s={view:'fis',fuel:'large',rods:0,T:3,st:null,fu:null,fired:0};let el={},ctx=null;
+ const tempTxt=T=>`${Math.round(T*T*1.1+0.5)} million K`;
+ function reset(){s.st=fisNew(s.fuel,s.rods,Math.floor(Math.random()*1e6));s.fu=fusNew(s.T,Math.floor(Math.random()*1e6));s.fired=0;sync()}
+ function fire(){if(s.view!=='fis')return;fisFire(s.st);s.fired++;read();emit('fire')}
+ function sync(){if(!el.root)return;el.root.querySelectorAll('[data-view]').forEach(b=>{const on=b.dataset.view===s.view;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  ['fisC','fis2'].forEach(k=>el[k].classList.toggle('hidden',s.view!=='fis'));['fusC','fus2'].forEach(k=>el[k].classList.toggle('hidden',s.view!=='fus'));
+  el.root.querySelectorAll('[data-fuel]').forEach(b=>{const on=b.dataset.fuel===s.fuel;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  el.rods.value=Math.round(s.rods*100);setTxt(el.rout,Math.round(s.rods*100)+'% in');el.temp.value=s.T;setTxt(el.tout,tempTxt(s.T));read()}
+ function read(){if(!el.root)return;if(s.view==='fis'){const st=s.st,left=st.U.filter(u=>u.on).length;setTxt(el.r1,String(st.fis));setTxt(el.r2,String(st.nu.length));setTxt(el.r3,`${left} of ${st.U.length}`);
+   setTxt(el.status,s.fired===0?'Tap 🎯 Fire a neutron':st.nu.length>12?'🔥 Chain reaction growing':st.nu.length>0?'Neutrons flying…':st.fis>=st.U.length*0.35?'Chain reaction ran through the fuel':'Chain died out: neutrons escaped or were absorbed');
+   el.cv.setAttribute('aria-label',`Fission: ${st.fis} fissions, ${st.nu.length} neutrons flying, ${left} U-235 nuclei left, control rods ${Math.round(s.rods*100)}% in.`)}
+  else{setTxt(el.f1,String(s.fu.fus));setTxt(el.f2,String(s.fu.bounce));setTxt(el.status,s.T>=FUSE_T?'Hot enough: fast nuclei can fuse':'Too cool: nuclei repel and bounce apart');
+   el.cv.setAttribute('aria-label',`Fusion at ${tempTxt(s.T)}: ${s.fu.fus} fusions, ${s.fu.bounce} bounces.`)}}
+ let rt=0;function step(dt){if(s.view==='fis')fisStep(s.st,dt);else fusStep(s.fu,dt);rt+=dt;if(rt>0.2){rt=0;read()}draw()}
+ function draw(){if(!ctx)return;const g=ctx;g.clearRect(0,0,LW,LH);g.fillStyle=s.view==='fis'?'#fbfdff':'#1f2a44';g.fillRect(0,0,LW,LH);
+  if(s.view==='fis'){const st=s.st;
+   st.U.forEach(u=>{if(!u.on)return;g.beginPath();g.arc(u.x,u.y,6,0,7);g.fillStyle='#6fae7e';g.fill();g.strokeStyle='#3f7a4f';g.lineWidth=1;g.stroke()});
+   st.frag.forEach(f=>{g.globalAlpha=1-f.t/1.4;g.beginPath();g.arc(f.x,f.y,8+f.t*30,0,7);g.strokeStyle='#f7c968';g.lineWidth=3;g.stroke();g.beginPath();g.arc(f.x,f.y,4.5,0,7);g.fillStyle=f.l==='Ba'?'#9a7fcf':'#e8955a';g.fill();g.fillStyle='#22313b';g.font='bold 10px system-ui,sans-serif';g.fillText(f.l,f.x+6,f.y-5);g.globalAlpha=1});
+   g.fillStyle='#2f4650';st.nu.forEach(n=>{g.beginPath();g.arc(n.x,n.y,3,0,7);g.fill()});
+   if(st.rods>0){const d=st.rods*(LH-10);RODX.forEach(x=>{g.fillStyle='#4c5a65';g.fillRect(x-5,0,10,d);g.fillStyle='#22313b';g.fillRect(x-5,d-4,10,4)})}
+   g.font='bold 12px system-ui,sans-serif';g.fillStyle='#3f7a4f';g.fillText('● U-235',10,16);g.fillStyle='#2f4650';g.fillText('• neutron',74,16);g.fillStyle='#9a7fcf';g.fillText('Ba',146,16);g.fillStyle='#e8955a';g.fillText('Kr fragments',166,16)}
+  else{const st=s.fu;st.P.forEach(p=>{const c=p.k==='D'?'#8fd8c8':p.k==='T'?'#70b7e8':'#f7c968';g.beginPath();g.arc(p.x,p.y,p.k==='He'?11:9,0,7);g.fillStyle=c;g.fill();g.fillStyle='#1f2a44';g.font='bold 10px system-ui,sans-serif';g.textAlign='center';g.fillText(p.k==='D'?'²H':p.k==='T'?'³H':'⁴He',p.x,p.y+4);g.textAlign='left'});
+   st.fx.forEach(f=>{if(f.k==='n'){g.fillStyle='#fff';g.beginPath();g.arc(f.x,f.y,3.5,0,7);g.fill();g.font='bold 10px system-ui,sans-serif';g.fillText('n',f.x+5,f.y-4)}else if(f.k==='b'){g.fillStyle=`rgba(255,190,180,${1-f.t/0.5})`;g.font='bold 12px system-ui,sans-serif';g.fillText('+ +',f.x-8,f.y-10)}else{g.beginPath();g.arc(f.x,f.y,10+f.t*60,0,7);g.strokeStyle=`rgba(247,201,104,${1-f.t})`;g.lineWidth=4;g.stroke()}});
+   g.fillStyle='#e6f2ff';g.font='bold 12px system-ui,sans-serif';g.fillText('²H deuterium · ³H tritium · ⁴He helium · ◯ energy · n neutron',10,16)}}
+ const loop=makeLoop(step);const api={s,onEvent:null,fire,reset};function emit(e){api.onEvent&&api.onEvent(e)}
+ api.mount=(h,o)=>{h.innerHTML=`<div class="lab">
+  <div class="ctrls" role="group" aria-label="Choose a reaction"><button type="button" class="chip" data-view="fis">⚛️ Fission chain</button><button type="button" class="chip" data-view="fus">🌞 Fusion</button>${speedChip()}</div>
+  <div data-fisc><div class="ctrls"><button type="button" class="chip go" data-fire>🎯 Fire a neutron</button><span class="lbl">Fuel:</span>${['small','medium','large'].map(k=>`<button type="button" class="chip" data-fuel="${k}">${k[0].toUpperCase()+k.slice(1)}</button>`).join('')}<button type="button" class="chip rst" data-reset>↺ Reload</button></div>
+   <div class="ctrls"><label class="slider">▮ Control rods <input type="range" min="0" max="100" step="10" data-rods aria-label="Control rods, percent inserted"><output data-rout></output></label></div></div>
+  <div data-fusc><div class="ctrls"><label class="slider">🌡️ Temp. <input type="range" min="1" max="10" step="1" data-temp aria-label="Temperature"><output data-tout style="min-width:96px;white-space:nowrap"></output></label></div></div>
+  <div class="stage"><canvas width="600" height="320" role="img"></canvas></div>
+  <div class="readout"><div class="counts" data-fisc2><div class="cnt">💥 Fissions<b data-r1></b></div><div class="cnt">• Neutrons flying<b data-r2></b></div><div class="cnt">U-235 left<b data-r3></b></div></div>
+  <div class="counts" data-fusc2><div class="cnt">✸ Fusions<b data-f1></b></div><div class="cnt">↩︎ Bounces (repelled)<b data-f2></b></div></div><div class="counts"><div class="status r" data-status role="status"></div></div></div></div>`;
+  const q=k=>h.querySelector(k);el={root:h,cv:q('canvas'),fisC:q('[data-fisc]'),fusC:q('[data-fusc]'),fis2:q('[data-fisc2]'),fus2:q('[data-fusc2]'),rods:q('[data-rods]'),rout:q('[data-rout]'),temp:q('[data-temp]'),tout:q('[data-tout]'),
+   r1:q('[data-r1]'),r2:q('[data-r2]'),r3:q('[data-r3]'),f1:q('[data-f1]'),f2:q('[data-f2]'),status:q('[data-status]')};ctx=fitCanvas(el.cv,LW,LH);
+  h.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{s.view=b.dataset.view;sync();emit('view:'+s.view)});
+  q('[data-fire]').onclick=fire;h.querySelectorAll('[data-fuel]').forEach(b=>b.onclick=()=>{s.fuel=b.dataset.fuel;reset();emit('fuel')});q('[data-reset]').onclick=()=>{reset();emit('reset')};
+  el.rods.oninput=()=>{s.rods=+el.rods.value/100;s.st.rods=s.rods;setTxt(el.rout,el.rods.value+'% in');emit('rods')};
+  el.temp.oninput=()=>{s.T=+el.temp.value;fusSetT(s.fu,s.T);setTxt(el.tout,tempTxt(s.T));read();emit('temp')};
+  wireSpeed(h);Object.assign(s,{view:o.view||'fis',fuel:o.fuel||'large',rods:o.rods||0,T:o.T||3});reset()};
+ api.start=()=>loop.start();api.stop=()=>loop.stop();return api})();
+
+</script>
+<script>
+/* ============================== SETTINGS ============================== */
+var state=(typeof state!=='undefined'&&state)||{labSys:null};
+const GAME_KEY='itsdrdan-nuclear';
+const MODES=[
+ {id:'decay',title:'Decay Lab',short:'Fire α, β, γ and watch the nucleus',icon:'⚛️',mb:'#fdeeed',ma:'#e0675a'},
+ {id:'balance',title:'Balance It!',short:'Complete nuclear equations',icon:'⚖️',mb:'#e6f2ff',ma:'#5d9fd2'},
+ {id:'shield',title:'Shield Lab',short:'Block radiation, read the counter',icon:'🛡️',mb:'#eef3f6',ma:'#6b8796'},
+ {id:'half',title:'Half-Life Lab',short:'Watch samples decay; do the math',icon:'⏳',mb:'#fff6e2',ma:'#c99a2e'},
+ {id:'power',title:'Fission & Fusion',short:'Chain reactions and the Sun',icon:'🔥',mb:'#e7f6e9',ma:'#5e9e6e'},
+ {id:'ideas',title:'Radiation & You',short:'Isotopes, health, medicine',icon:'🏥',mb:'#f1eafb',ma:'#9a7fcf'},
+ {id:'case',title:'Patient Cases',short:'Mateo and other patients, step by step',icon:'🩺',mb:'#e6f7f4',ma:'#3f9e8f'},
+ {id:'quiz',title:'Skill Check',short:'10 questions, then your study plan',icon:'🎯',mb:'#fdeef2',ma:'#d0708a'}];
+const VIDEO_FOR={
+ intro:['WDBiyaeivFY',84,'What is radioactivity?'],types:['WDBiyaeivFY',184,'Types of radiation'],balance:['WDBiyaeivFY',345,'How to balance nuclear equations'],
+ alpha:['WDBiyaeivFY',553,'Alpha decay of americium-241'],beta:['WDBiyaeivFY',655,'Beta decay of potassium-42'],ec:['WDBiyaeivFY',742,'Electron capture'],
+ gamma:['WDBiyaeivFY',795,'Gamma radiation explained'],positron:['WDBiyaeivFY',855,'Positron emission example'],
+ band:['g--JowvBqM8',332,'Band of stability: neutron-to-proton ratio'],chemnuc:['g--JowvBqM8',450,'Chemical vs. nuclear reactions'],
+ pen:['g--JowvBqM8',1007,'Penetrating vs. ionizing ability'],radium:['g--JowvBqM8',1212,'Radiation safety: the Radium Girls'],detect:['g--JowvBqM8',1383,'Detecting radiation'],
+ background:['g--JowvBqM8',1523,'Background radiation'],carbon:['g--JowvBqM8',1657,'Carbon dating and nuclear power'],medical:['g--JowvBqM8',1809,'Medical uses: radiation therapy and CT scans'],
+ multi:['bZHo3kHvGi0',440,'Multiple decay processes at once'],bomb:['bZHo3kHvGi0',655,'Bombardment example'],bomb2:['bZHo3kHvGi0',778,'Bombardment that makes several products'],
+ curies:['bZHo3kHvGi0',1222,'Using curies (Ci): count the half-lives'],fission:['bZHo3kHvGi0',1431,'Nuclear fission and chain reactions'],fusion:['bZHo3kHvGi0',1649,'Nuclear fusion: power of the Sun'],fvf:['bZHo3kHvGi0',1774,'Fission vs. fusion'],
+ alphaW:['bZHo3kHvGi0',268,'Practice: write an alpha decay equation'],betaP:['bZHo3kHvGi0',200,'Practice: beta decay'],posP:['bZHo3kHvGi0',60,'Practice: positrons'],
+ half:['tjAebD_t8PA',0,'What is half-life?'],halfTime:['tjAebD_t8PA',201,'How long does it take to decay?'],halfLeft:['tjAebD_t8PA',340,'How much sample is left?'],
+ halfPct:['tjAebD_t8PA',454,'Using only percents'],halfFind:['tjAebD_t8PA',554,'Find the half-life']};
+const FALLBACK_VIDEO='WDBiyaeivFY';
+const MODE_VID={alpha:'alpha',beta:'beta',positron:'positron',ec:'ec',gamma:'gamma'};
+const REFERENCE=[
+ ['Radiation in equations',`<table><tr><td>Alpha α</td><td>${nucHTML(PART.alpha)}</td><td>helium nucleus</td></tr><tr><td>Beta β⁻</td><td>${nucHTML(PART.beta)}</td><td>electron from the nucleus</td></tr><tr><td>Positron β⁺</td><td>${nucHTML(PART.positron)}</td><td>positive electron</td></tr><tr><td>Gamma γ</td><td>${nucHTML(PART.gamma)}</td><td>pure energy</td></tr><tr><td>Neutron</td><td>${nucHTML(PART.neutron)}</td><td></td></tr><tr><td>Proton</td><td>${nucHTML(PART.proton)}</td><td></td></tr></table>`],
+ ['Balancing rule','Top numbers (mass numbers, A) add up the same on both sides. Bottom numbers (atomic numbers, Z) add up the same. The bottom number tells you the element. A coefficient multiplies both numbers (3 neutrons = 3 on top).'],
+ ['What each decay does','<table><tr><td>Alpha</td><td>A − 4, Z − 2</td></tr><tr><td>Beta</td><td>A same, Z + 1 (n → p)</td></tr><tr><td>Positron</td><td>A same, Z − 1 (p → n)</td></tr><tr><td>Electron capture</td><td>A same, Z − 1; e⁻ on the <b>left</b></td></tr><tr><td>Gamma</td><td>no change (Tc-99m → Tc-99)</td></tr></table>Too many neutrons → beta. Too few → positron or EC. Too big (Z &gt; 83) → alpha.'],
+ ['Penetrating vs. ionizing','Penetrating: γ &gt; β &gt; α. Ionizing: α &gt; β &gt; γ.<br>Stop α with paper or skin; β with aluminum, a lab coat and gloves; γ with lead or thick concrete (reduced, not stopped); neutrons with water or concrete.<br>Protect yourself: <b>time, distance, shielding</b>. Twice as far → ¼ the dose.'],
+ ['Half-life','n = time ÷ half-life. Amount left = start × (½)ⁿ.<br>100% → 50% → 25% → 12.5% → 6.25% → 3.125%. Count the arrows. Work backward by doubling.<br>Carbon-14: 5730 years.'],
+ ['Units','Activity: becquerel (1 Bq = 1 decay/s), curie (1 Ci = 3.7 × 10¹⁰ decays/s). Absorbed dose: gray (Gy), rad. Biological dose: sievert (Sv), rem; mSv in medicine.'],
+ ['🏥 In the hospital','Tc-99m (6.0 h, γ): most scans · I-131 (β, γ): thyroid treatment · I-123: thyroid imaging · F-18 FDG (β⁺): PET · Ir-192: brachytherapy seeds · Co-60 (γ): therapy, sterilizing supplies · MRI uses magnets, not ionizing radiation'],
+ ['Fission and fusion','<b>Fission</b>: a neutron splits a heavy nucleus (U-235) into two smaller ones + 2–3 neutrons → chain reaction. Control rods absorb neutrons. <b>Fusion</b>: light nuclei join (the Sun). Both turn a little mass into energy, E = mc².']];
+/* ============================== HELPERS ============================== */
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)],shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+/* MC question from [text, isRight, why] choices */
+function mc(o){const ch=o.choices;const q=Object.assign({type:'mc'},o);q.options=o.keepOrder?ch.map(c=>c[0]):shuf(ch.map(c=>c[0]));q.answer=ch.find(c=>c[1])[0];q.whys={};ch.forEach(c=>q.whys[c[0]]=c[2]);q.why=o.why||ch.find(c=>c[1])[2];return q}
+let lastPick={};
+function pickNew(key,list){let i,tries=0;do{i=Math.floor(Math.random()*list.length)}while(list.length>1&&i===lastPick[key]&&tries++<10);lastPick[key]=i;return list[i]}
+/* Shared number reader: games/brand/chemparse.v2.js. If it did not load, use a small local copy so the game still works. */
+const NUM=(typeof window!=='undefined'&&window.ChemParse)||(()=>{const SU={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+ const base=r=>String(r??'').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>SU[c]).replace(/[−–—]/g,'-').replace(/\s+/g,'');
+ const decimalComma=r=>{const t=String(r??'').replace(/\s+/g,'');return t.includes(',')&&!/^[+-]?[1-9]\d{0,2}(,\d{3})+(\.\d*)?([eE×xX*·].*)?$/.test(t)};
+ const norm=r=>base(r).replace(/,/g,'').replace(/[×xX*·]10\^?([+-]?\d+)$/,'e$1');
+ const parseValue=r=>{if(decimalComma(r))return NaN;const t=norm(r);return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN};
+ const sfCount=r=>{let t=base(r).replace(/,/g,'').replace(/(?:[×xX*·]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(/^0*\.?0*$/.test(t))return 1;return t.includes('.')?t.replace('.','').replace(/^0+/,'').length:t.replace(/0+$/,'').length};
+ const fmt=(x,s)=>{if(!isFinite(x))return '—';if(x===0)return '0';const r=Number(x.toPrecision(s)),e=Math.floor(Math.log10(Math.abs(r)));if(e>=5||e<-3||(e>=s&&String(Math.round(r)).replace(/0+$/,'').length<s)){const [m,p]=r.toExponential(s-1).split('e');return m+' × 10'+String(+p).replace(/[0-9-]/g,c=>c==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[c])}let f=r.toFixed(Math.max(0,s-1-e));if(!f.includes('.')&&/0$/.test(f)&&sfCount(f)!==s)f+='.';return f};
+ return {decimalComma,parseValue,sfCount,fmt}})();
+const nf=(x,s)=>NUM.fmt(x,s);NUMF=nf;
+const plain=v=>Number(v.toPrecision(6)).toLocaleString('en-US');
+const nucS=x=>nucHTML(x);
+/* the five decay types, with why-right and why-wrong text */
+const TYPES=['alpha','beta','positron','ec','gamma'];
+const TYPE_RIGHT={alpha:'A helium-4 nucleus (⁴₂He) is given off, so this is alpha decay.',beta:'An electron (⁰₋₁e) is a product: it came out of the nucleus, so this is beta decay.',positron:'A positron (⁰₊₁e, +1 on the bottom) is a product, so this is positron emission.',ec:'The electron (⁰₋₁e) is on the left, as a reactant: the nucleus captured it. That is electron capture.',gamma:'Only a gamma ray (⁰₀γ) is given off and the numbers do not change, so this is gamma emission.'};
+const TYPE_WRONG={alpha:'Alpha decay gives off ⁴₂He. There is no helium-4 in this equation.',beta:'Beta decay puts ⁰₋₁e on the product (right) side.',positron:'Positron emission gives off ⁰₊₁e, with +1 on the bottom.',ec:'In electron capture the electron is written on the reactant (left) side.',gamma:'Gamma emission gives off only ⁰₀γ, so the element would not change.'};
+function typeQ(mode,extra){return mc(Object.assign({prompt:'What kind of nuclear reaction is this?',choices:TYPES.map(m=>[cap(MODE_NAME[m]),m===mode,m===mode?TYPE_RIGHT[m]:TYPE_WRONG[m]]),keepOrder:true,
+ hint:'Find the small particle. ⁴₂He = alpha. ⁰₋₁e on the right = beta; on the left = electron capture. ⁰₊₁e = positron. ⁰₀γ only = gamma.',video:MODE_VID[mode],topic:'dtype'},extra||{}))}
+/* full equation for a decay */
+function decayEq(p,mode){const d=decayOf(p,mode);return d.side==='L'?{L:[{x:p},{x:d.part}],R:[{x:d.prod}]}:{L:[{x:p}],R:[{x:d.prod},{x:d.part}]}}
+const pickDecay=mode=>{const [A,Z,m]=pick(DECAYS[mode]);return N(A,Z,m)};
+/* ============================== ⚛️ DECAY LAB QUESTIONS ============================== */
+const ALPHA_SYS=['u238','ra226','am241'],BETA_SYS=['c14','i131','co60'];
+const dlP=id=>Object.assign({},DL_SYS.find(d=>d[0]===id)[2]);
+const fake=(A,Z,s)=>({A,Z,s});
+const RETRY=' Wrong button? Tap ↺ Start over.';
+const DLQ=[
+ {for:ALPHA_SYS,f:sys=>{const p=dlP(sys),d=decayOf(p,'alpha').prod;return mc({prompt:`${cap(nname(p))} is too big to be stable. Make it alpha-decay. Which nucleus forms?`,lab:{kind:'decay',sys},task:{say:'Tap <b>α Alpha</b> once.'+RETRY,ok:s=>s.hist.join()==='alpha'},
+  choices:[[nucS(d),true,`Alpha takes away 2 protons and 2 neutrons: mass ${p.A} − 4 = ${d.A}, atomic number ${p.Z} − 2 = ${d.Z}. Element ${d.Z} is ${ENAME[d.Z]}.`],
+   [nucS(N(p.A-4,p.Z+2)),false,'The atomic number goes down by 2, not up: the alpha particle carries 2 protons away.'],
+   [nucS(fake(p.A-4,p.Z-2,p.s)),false,`The numbers are right, but with ${p.Z-2} protons it is no longer ${ENAME[p.Z]}. A new atomic number means a new element.`],
+   [nucS(N(p.A-2,p.Z-4)),false,'Swapped: the mass number drops by 4 and the atomic number drops by 2 (⁴₂He).']],
+  hint:'An alpha particle is ⁴₂He. Subtract 4 from the top number and 2 from the bottom number, then find the new element.',video:'alpha',topic:'balance'})}},
+ {for:ALPHA_SYS,f:sys=>{const p=dlP(sys);return mc({prompt:`Make ${nname(p)} alpha-decay, then look at the equation under the picture. What do the top numbers (mass numbers) add up to on each side?`,lab:{kind:'decay',sys},task:{say:'Tap <b>α Alpha</b> once.'+RETRY,ok:s=>s.hist.join()==='alpha'},
+  choices:[[String(p.A),true,`${p.A} = ${p.A-4} + 4. Mass numbers always add up the same on both sides, and so do the atomic numbers (${p.Z} = ${p.Z-2} + 2).`],
+   [String(p.A-4),false,`${p.A-4} is only the new nucleus. Add the alpha particle’s 4 to get the right side’s total.`],[String(p.Z),false,`${p.Z} is the atomic number (bottom), not the mass number (top).`],[String(p.A+4),false,'Nothing is added: the left side is just the parent, so the total is its mass number.']],
+  hint:'Add the top numbers on the right side: the new nucleus plus the alpha particle (4).',video:'balance',topic:'balance'})}},
+ {for:['u238'],f:sys=>{const p=dlP(sys);return mc({prompt:'Uranium-238 starts a long decay series. Tap α, then β⁻, then β⁻. Which nucleus do you end with?',lab:{kind:'decay',sys},task:{say:'Tap <b>α</b>, then <b>β⁻</b>, then <b>β⁻</b>.'+RETRY,ok:s=>s.hist.join()==='alpha,beta,beta'},
+  choices:[[nucS(N(234,92)),true,'α: ²³⁸₉₂U → ²³⁴₉₀Th. β⁻: → ²³⁴₉₁Pa. β⁻: → ²³⁴₉₂U. Two beta decays put back the 2 protons the alpha took, but the mass stays 4 lower.'],
+   [nucS(N(234,90)),false,'That is thorium-234, after the alpha step only. Each beta decay then raises the atomic number by 1.'],[nucS(N(234,91)),false,'That is protactinium-234, after α and one β⁻. One more β⁻ is needed.'],[nucS(N(230,90)),false,'Mass 230 would need two alpha decays. Beta decay never changes the mass number.']],
+  hint:'Alpha: A − 4, Z − 2. Each beta: A stays, Z + 1. Follow the chain line under the picture.',video:'multi',topic:'balance'})}},
+ {for:['c14','i131','co60','u238','ra226'],f:sys=>{const p=dlP(sys),mode=ALPHA_SYS.includes(sys)?'alpha':'beta',t=decayOf(p,mode).prod;
+  return mc({prompt:`Turn ${nname(p)} into ${nname(t)}. Try the buttons (↺ Start over undoes a try). Which decay does it?`,lab:{kind:'decay',sys},task:{say:`Make ${nshort(t)} appear in the lab.`,ok:s=>s.hist.length===1&&s.cur.A===t.A&&s.cur.Z===t.Z},
+   choices:['alpha','beta','positron','ec'].map(m=>[cap(MODE_NAME[m]),m===mode,m===mode?TYPE_RIGHT[m]+` ${nshort(p)} → ${nshort(t)}.`:`${cap(MODE_NAME[m])} would give ${nshort(decayOf(p,m).prod)}, not ${nshort(t)}.`]),keepOrder:true,
+   hint:`Compare the numbers: the mass goes from ${p.A} to ${t.A} and the atomic number from ${p.Z} to ${t.Z}.`,video:mode,topic:'dtype'})}},
+ {for:BETA_SYS,f:sys=>{const p=dlP(sys);return mc({prompt:`${cap(nname(p))} has too many neutrons. Tap β⁻ and watch the counts. What happened inside the nucleus?`,lab:{kind:'decay',sys},task:{say:'Tap <b>β⁻ Beta</b> once.'+RETRY,ok:s=>s.hist.join()==='beta'},
+  choices:[['A neutron became a proton (and an electron left)',true,`Protons ${p.Z} → ${p.Z+1}, neutrons ${p.A-p.Z} → ${p.A-p.Z-1}. The mass number stays ${p.A}.`],['A proton became a neutron (and a positron left)',false,'That is positron emission, which lowers the atomic number. Beta decay raises it.'],
+   ['The nucleus lost 2 protons and 2 neutrons',false,'That is alpha decay. In beta decay the mass number does not change.'],['Nothing changed; only energy left',false,'That is gamma emission. Look at the counts: the protons went up by 1.']],
+  hint:'Watch the proton and neutron counts before and after you tap.',video:'beta',topic:'types'})}},
+ {for:BETA_SYS,f:sys=>{const p=dlP(sys),r0=((p.A-p.Z)/p.Z).toFixed(2),r1=((p.A-p.Z-1)/(p.Z+1)).toFixed(2);return mc({prompt:`The neutron-to-proton ratio of ${nname(p)} is ${r0}: too many neutrons. Tap β⁻. What happens to the ratio?`,lab:{kind:'decay',sys},task:{say:'Tap <b>β⁻ Beta</b> and watch the ratio and the dot on the band chart.'+RETRY,ok:s=>s.hist.join()==='beta'},
+  choices:[['It goes down, toward the band of stability',true,`${r0} → ${r1}: one neutron became a proton, so there are fewer neutrons per proton. That is why neutron-rich nuclei undergo beta decay.`],['It goes up, away from the band',false,'One neutron turned into a proton, so neutrons went down and protons went up: the ratio drops.'],
+   ['It stays the same',false,'Only gamma emission leaves the numbers unchanged. Beta decay turns a neutron into a proton.'],['It becomes exactly 1.00',false,`It moves toward the band, but one beta decay only changes it to ${r1}.`]],
+  hint:'Ratio = neutrons ÷ protons. Beta decay: neutrons − 1, protons + 1.',video:'band',topic:'types'})}},
+ {for:['f18'],f:sys=>{const p=dlP(sys),d=decayOf(p,'positron').prod;return mc({prompt:'Fluorine-18 (used in PET scans) has too few neutrons. Tap β⁺. Which nucleus forms?',lab:{kind:'decay',sys},task:{say:'Tap <b>β⁺ Positron</b> once.'+RETRY,ok:s=>s.hist.join()==='positron'},
+  choices:[[nucS(d),true,'A proton became a neutron and a positron (⁰₊₁e) left: mass stays 18, atomic number 9 − 1 = 8, oxygen-18.'],[nucS(N(18,10)),false,'Neon-18 would need the atomic number to go up (that is beta decay). A positron takes +1 away.'],
+   [nucS(N(14,7)),false,'Mass 14 would need an alpha particle to leave. A positron has mass number 0.'],[nucS(fake(18,8,'F')),false,'With 8 protons it is no longer fluorine: element 8 is oxygen.']],
+  hint:'A positron is ⁰₊₁e: top stays the same, bottom goes down by 1.',video:'positron',topic:'balance'})}},
+ {for:['i125'],f:sys=>{const p=dlP(sys),d=decayOf(p,'ec').prod;return mc({prompt:'Iodine-125 (used in seed implants for prostate cancer) decays by electron capture. Tap EC. Which nucleus forms?',lab:{kind:'decay',sys},task:{say:'Tap <b>EC Electron capture</b> once.'+RETRY,ok:s=>s.hist.join()==='ec'},
+  choices:[[nucS(d),true,'The nucleus pulls in an inner electron: a proton + an electron → a neutron. Mass stays 125; atomic number 53 − 1 = 52, tellurium-125.'],[nucS(N(125,54)),false,'Xenon-125 would be beta decay (Z + 1). In electron capture the electron is a reactant, so Z goes down.'],
+   [nucS(N(124,52)),false,'An electron has mass number 0, so the mass number stays 125.'],[nucS(N(121,51)),false,'That is what alpha decay would give. Electron capture does not change the mass number.']],
+  hint:'In the equation, ⁰₋₁e is on the left: 53 + (−1) = Z of the product.',video:'ec',topic:'balance'})}},
+ {for:['tc99m'],f:sys=>mc({prompt:'Technetium-99m is excited (the m). Tap γ and watch the counts. What changed?',lab:{kind:'decay',sys},task:{say:'Tap <b>γ Gamma</b> once.'+RETRY,ok:s=>s.hist.join()==='gamma'},
+  choices:[['Only energy left; the mass and atomic numbers stayed the same',true,'⁹⁹ᵐ₄₃Tc → ⁹⁹₄₃Tc + ⁰₀γ. A gamma ray has no mass and no charge; the nucleus just drops to a lower energy.'],['The atomic number went up by 1',false,'That would be beta decay. A gamma ray has 0 on the bottom.'],
+   ['The mass number dropped by 4',false,'That would be alpha decay. A gamma ray has 0 on top.'],['It became a different element',false,'The counts did not change: 43 protons is still technetium.']],
+  hint:'Gamma rays are ⁰₀γ: zero on top and zero on the bottom.',video:'gamma',topic:'types'})}];
+/* ============================== ⚖️ BALANCE IT! ============================== */
+/* q.L / q.R: terms {x, coef, blank}; the student fills each blank's mass number, atomic number and symbol */
+function nucQ(o){const q=Object.assign({type:'nuc'},o);q.blanks=[];[...q.L,...q.R].forEach(t=>{if(t.blank)q.blanks.push(t)});return q}
+function eqWithBlanks(q){let b=0;const show=t=>t.blank?blankHTML(b++,t):nucHTML(t.x,t.coef);
+ return `<span class="eq">${q.L.map(show).join('<span class="pl">+</span>')}${ARROW}${q.R.map(show).join('<span class="pl">+</span>')}</span>`}
+function blankHTML(i,t){const c=t.coef>1?`<span class="coef">${t.coef}</span>`:'';return `${c}<span class="blank" data-b="${i}"><span class="bn"><input class="bA" inputmode="numeric" autocomplete="off" aria-label="Missing term ${i+1}: mass number (top)" placeholder="A"><input class="bZ" inputmode="numeric" autocomplete="off" aria-label="Missing term ${i+1}: atomic number (bottom)" placeholder="Z"></span><input class="bS" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Missing term ${i+1}: symbol" placeholder="?"></span>`}
+const NUC_HINT='Top numbers (mass) add up the same on both sides, and so do the bottom numbers (atomic number). Then use the bottom number to find the symbol on the periodic table.';
+function balProd(m){const mode=m||pick(['alpha','alpha','beta','beta','positron','ec','gamma']),p=pickDecay(mode),e=decayEq(p,mode);
+ const L=e.L.map(t=>({x:t.x})),R=e.R.map(t=>({x:t.x}));const tgt=[...L,...R].find(t=>t.x.A===decayOf(p,mode).prod.A&&t.x.Z===decayOf(p,mode).prod.Z&&!t.x.part&&t.x!==p);tgt.blank=1;
+ return nucQ({prompt:`Complete the nuclear equation for ${nname(p)}. Fill in the missing nucleus.`,L,R,hint:NUC_HINT+(mode==='gamma'?' A gamma ray changes nothing but the energy.':''),why:`${TYPE_RIGHT[mode]} The missing nucleus is ${nname(decayOf(p,mode).prod)}.`,why1:`Top: ${[...L].map(t=>t.x.A).join(' + ')} = ${R.map(t=>t.x.A).join(' + ')}. Bottom: ${L.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')} = ${R.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')}. The missing nucleus is ${nname(decayOf(p,mode).prod)}.`,video:MODE_VID[mode],topic:'balance',then:typeQ(mode)})}
+function balPart(m){const mode=m||pick(['alpha','beta','positron','ec','gamma']),p=pickDecay(mode),e=decayEq(p,mode);const L=e.L.map(t=>({x:t.x})),R=e.R.map(t=>({x:t.x}));[...L,...R].find(t=>t.x.part).blank=1;
+ return nucQ({prompt:`${cap(nname(p))} decays. Fill in the missing particle.`,L,R,hint:NUC_HINT+' Particles: ⁴₂He, ⁰₋₁e, ⁰₊₁e, ⁰₀γ (tap γ to type it), ¹₀n.',why:TYPE_RIGHT[mode],why1:`Top: ${L.map(t=>t.x.A).join(' + ')} = ${R.map(t=>t.x.A).join(' + ')}. Bottom: ${L.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')} = ${R.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')}.`,video:MODE_VID[mode],topic:'balance',then:typeQ(mode)})}
+function balWords(m){const mode=m||pick(['alpha','alpha','beta','beta','positron']),p=pickDecay(mode),e=decayEq(p,mode);const L=e.L.map(t=>({x:t.x})),R=e.R.map(t=>({x:t.x,blank:1}));
+ return nucQ({prompt:`Write the nuclear equation for the ${MODE_NAME[mode]} of ${nname(p)}. Fill in both products.`,L,R,hint:`${mode==='alpha'?'Alpha particle = ⁴₂He.':mode==='beta'?'Beta particle = ⁰₋₁e.':'Positron = ⁰₊₁e.'} Write the particle, then balance the top and bottom numbers to find the new nucleus.`,
+  why:`${TYPE_RIGHT[mode]} Top: ${p.A} = ${e.R.map(t=>t.x.A).join(' + ')}. Bottom: ${p.Z} = ${e.R.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')}.`,video:mode==='alpha'?'alphaW':mode==='beta'?'betaP':'posP',topic:'balance'})}
+function bombQ(){const b=pick(BOMB),L=b.L.map(term),R=b.R.map(term);const r1=R.filter(t=>t.coef===1),l1=L.filter(t=>t.coef===1);pick(Math.random()<0.7&&r1.length?r1:l1.length?l1:r1).blank=1;
+ return nucQ({prompt:'Bombardment (transmutation): a nucleus is hit by a particle and changes into a new element. Fill in the missing term.',L,R,hint:NUC_HINT+' "Bombarded with" puts the particle on the left side. A coefficient counts more than once (2 ¹₀n = 2 on top).',why:`Top: ${L.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')} = ${R.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')}. Bottom: ${L.map(t=>(t.coef>1?t.coef+'×':'')+t.x.Z).join(' + ')} = ${R.map(t=>(t.coef>1?t.coef+'×':'')+t.x.Z).join(' + ')}. ${b.note}`,video:L.length+R.length>3||b.R.some(r=>r[0]>1)?'bomb2':'bomb',topic:'bomb'})}
+function dtypeQ(){const mode=pick(TYPES),p=pickDecay(mode),e=decayEq(p,mode);return typeQ(mode,{prompt:'What kind of nuclear reaction is this?',html:eqHTML(e.L,e.R)})}
+function multiQ(){const seqs=[['alpha','beta'],['beta','alpha'],['alpha','alpha'],['alpha','beta','beta'],['alpha','alpha','beta']],seq=pick(seqs),p=pickDecay('alpha');let x=p;seq.forEach(m=>{x=decayOf(x,m).prod});
+ const name=s=>s.map(m=>({alpha:'an alpha particle',beta:'a beta particle'}[m])).join(', then ');const opts=[[nucS(x),true,`Mass: ${p.A}${seq.map(m=>m==='alpha'?' − 4':' − 0').join('')} = ${x.A}. Atomic number: ${p.Z}${seq.map(m=>m==='alpha'?' − 2':' + 1').join('')} = ${x.Z}, ${ENAME[x.Z]}.`]];
+ const seen=new Set([x.A+','+x.Z]);const add=(A,Z,why)=>{if(Z<1||seen.has(A+','+Z))return;seen.add(A+','+Z);opts.push([nucS(N(A,Z)),false,why])};
+ const na=seq.filter(m=>m==='alpha').length,nb=seq.length-na;
+ add(p.A-4*na,p.Z-2*na-nb,'Beta decay raises the atomic number by 1 (a neutron becomes a proton); it does not lower it.');add(p.A-4*na-nb,p.Z-2*na+nb,'A beta particle has mass number 0, so beta decay does not change the mass number.');
+ add(p.A-4*na,p.Z-2*na,'You left out the beta decay. Each beta adds 1 to the atomic number.');add(p.A-2*na,p.Z-4*na+nb,'Alpha lowers the mass by 4 and the atomic number by 2, not the other way around.');add(p.A-4*(na+1),p.Z-2*(na+1)+nb,'Count the alpha decays again.');
+ return mc({prompt:`${cap(nname(p))} gives off ${name(seq)}. Which nucleus is left at the end?`,choices:opts.slice(0,4),hint:'Do one step at a time. Alpha: A − 4, Z − 2. Beta: A same, Z + 1.',video:'multi',topic:'balance'})}
+/* ============================== 🛡️ SHIELD LAB QUESTIONS ============================== */
+const SLQ=[
+ ()=>mc({prompt:'Alpha particles are big and slow. Watch the counter at 2 cm, then slide it out to 10 cm or more. What happens to the count?',lab:{kind:'shield',o:{rad:'alpha',sh:'none',d:2}},task:{say:'With α and No shield, slide the counter from 2 cm out past 8 cm.',ok:s=>s.rad==='alpha'&&s.sh==='none'&&s.d>=8&&s.dSeen.some(d=>d<=4)},
+  choices:[['It drops to background: alpha travels only a few cm in air',true,'Alpha particles have the lowest penetrating power. They lose their energy after about 5 cm of air (or a sheet of paper, or the dead outer layer of skin).'],['It drops to about one quarter',false,'That is the inverse-square rule for beta and gamma. Alpha does not reach the counter at all past about 5 cm.'],
+   ['It stays about the same',false,'Look at the counter: past about 5 cm, only background radiation is left.'],['It goes up',false,'Farther from a source, the count never goes up.']],hint:'Watch the dashed “alpha range” line in the picture.',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'Choose β Beta. Try Paper, then Aluminum. Which is the thinnest shield that brings the count down to background?',lab:{kind:'shield',o:{rad:'beta',sh:'none',d:10}},task:{say:'With β Beta, tap <b>Paper</b> and then <b>Aluminum</b>.',ok:s=>s.seen['beta:paper']&&s.seen['beta:al']},
+  choices:[['Aluminum',true,'Beta particles (fast electrons) go through paper but are stopped by a few millimeters of aluminum, wood, or a lab coat and gloves.'],['Paper',false,'Paper barely slows beta particles: the counter stays high.'],['Lead',false,'Lead works, but it is more than needed. Aluminum already stops beta.'],['No shield is needed',false,'Without a shield the counter reads thousands of counts per minute.']],
+  hint:'Tap each shield and read the 📟 counter. Background is about 30 counts/min.',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'Choose γ Gamma. Try Lead. What happens to the count?',lab:{kind:'shield',o:{rad:'gamma',sh:'none',d:10}},task:{say:'With γ Gamma, tap <b>Lead</b> and read the counter.',ok:s=>s.rad==='gamma'&&s.sh==='lead'},
+  choices:[['It drops a lot but stays above background',true,'Gamma rays have the most penetrating power. Lead or thick concrete reduces them, but some still get through.'],['It drops to background, like alpha with paper',false,'Read the counter: hundreds of counts are still getting through the lead.'],['It does not change',false,'Lead is dense; it stops most gamma rays. Compare with No shield.'],['It goes up',false,'A shield never increases the count.']],
+  hint:'Compare No shield, Aluminum and Lead for gamma.',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'Choose γ Gamma with no shield. Read the counter at 10 cm, then slide it to 20 cm. The count is now about…',lab:{kind:'shield',o:{rad:'gamma',sh:'none',d:10}},task:{say:'With γ and No shield, slide the counter from 10 cm to 20 cm.',ok:s=>s.rad==='gamma'&&s.sh==='none'&&s.d===20&&s.dSeen.includes(10)},
+  choices:[['¼ as much',true,'Inverse-square rule: twice the distance spreads the radiation over 4 times the area, so you get ¼ the dose. Distance is one of the three protections (time, distance, shielding).'],['½ as much',false,'Read the counter again: about 2,000 → about 500 counts/min, a quarter, not a half.'],['The same',false,'Moving away always lowers the dose from a source.'],['Zero',false,'Gamma rays still reach the counter at 20 cm; there is no shield.']],
+  hint:'Note both counts and divide. (Background is about 30.)',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'The + and − marks show ions made along each track. Watch α, then γ. Which makes the most ions per centimeter?',lab:{kind:'shield',o:{rad:'alpha',sh:'none',d:30}},task:{say:'Watch <b>α Alpha</b>, then tap <b>γ Gamma</b> and watch.',ok:s=>s.seen['alpha:none']&&s.rad==='gamma'},
+  choices:[['Alpha',true,'Alpha particles are big (2 protons, 2 neutrons) with a +2 charge, so they knock electrons off almost every molecule they pass: highest ionizing power, lowest penetrating power.'],['Gamma',false,'Gamma rays leave very few ions; that is why they travel so far. Lowest ionizing power.'],['Both make the same',false,'Look at the tracks: alpha tracks are crowded with + and − marks.'],['Neither makes ions',false,'All of these are ionizing radiation: that is what makes them harmful to cells.']],
+  hint:'Ionizing power runs opposite to penetrating power.',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'Choose n Neutron. Try Lead and Concrete / water. Which cuts the count the most?',lab:{kind:'shield',o:{rad:'neutron',sh:'none',d:10}},task:{say:'With n Neutron, tap <b>Lead</b> and <b>Concrete / water</b>.',ok:s=>s.seen['neutron:lead']&&s.seen['neutron:water']},
+  choices:[['Concrete / water',true,'Neutrons have no charge and slip through metals. Materials rich in hydrogen (water, concrete, plastic) slow and absorb them: reactors sit in pools of water inside concrete.'],['Lead',false,'Most neutrons pass through lead. Read the counter.'],['Paper',false,'Paper does almost nothing to neutrons.'],['Aluminum',false,'Neutrons pass through aluminum too.']],
+  hint:'Compare the counter readings for each shield.',video:'pen',topic:'pen'}),
+ ()=>mc({prompt:'Choose α Alpha with the counter at 3 cm. Which is the thinnest shield that stops it?',lab:{kind:'shield',o:{rad:'alpha',sh:'none',d:3}},task:{say:'With α Alpha, tap <b>Paper</b> and read the counter.',ok:s=>s.rad==='alpha'&&s.sh==='paper'},
+  choices:[['Paper',true,'A sheet of paper, clothing, or the outer layer of dead skin stops alpha particles. They are dangerous mainly when swallowed or inhaled.'],['Aluminum',false,'Aluminum works, but paper is already enough for alpha.'],['Lead',false,'Lead is needed for gamma rays, not alpha.'],['Concrete / water',false,'Far more than needed: paper stops alpha.']],
+  hint:'Try the thinnest shield first.',video:'pen',topic:'pen'})];
+/* ============================== ⏳ HALF-LIFE ============================== */
+const hlUnit=(v,u)=>`${nf(v,3)} ${u}`;
+function hlLabLeft(){const sys=state.labSys&&HL_SYS.some(h=>h[0]===state.labSys)?state.labSys:pick(HL_SYS)[0],y=HL_SYS.find(h=>h[0]===sys),n=rnd(2,4),m0=y[4],ans=m0/2**n;
+ const opts=[[`${nf(ans,3)} mg`,true,`${fmtT(n*y[2],y[3])} ÷ ${HL_SHOW[y[0]]} ${y[3]} = ${n} half-lives. ${nf(m0,3)} mg${' → '+Array.from({length:n},(_,i)=>nf(m0/2**(i+1),3)).join(' → ')} mg.`]];const seen=new Set([nf(ans,3)]);
+ const add=(v,w)=>{const k=nf(v,3);if(seen.has(k)||opts.length>=4)return;seen.add(k);opts.push([`${k} mg`,false,w])};
+ add(m0/(2*n),`Halving ${n} times is not the same as dividing by 2 × ${n}. Halve once per half-life.`);add(m0/2**(n-1),`Count again: ${fmtT(n*y[2],y[3])} is ${n} half-lives, not ${n-1}.`);add(m0-ans,'That is how much decayed, not how much is left.');add(m0/2**(n+1),`That is ${n+1} half-lives.`);
+ return mc({prompt:`This ${y[1]} sample starts at ${nf(m0,3)} mg (half-life ${HL_SHOW[y[0]]} ${y[3]}). Let ${fmtT(n*y[2],y[3])} pass. How many mg are left?`,lab:{kind:'half',sys},task:{say:`Tap <b>⏭ +1 half-life</b> until ${fmtT(n*y[2],y[3])} have passed.`,ok:s=>s.jump===0&&!s.run&&Math.abs(s.t-n)<1e-6},
+  choices:opts,hint:'n = time ÷ half-life. Then halve the mass n times. The ⚖️ readout shows it.',video:'halfLeft',topic:'halfcalc'})}
+function hlLabTime(){const sys=state.labSys&&HL_SYS.some(h=>h[0]===state.labSys)?state.labSys:pick(HL_SYS)[0],y=HL_SYS.find(h=>h[0]===sys),n=rnd(2,4),pct=100/2**n;
+ const opts=[[fmtT(n*y[2],y[3]),true,`100% → ${Array.from({length:n},(_,i)=>Number((100/2**(i+1)).toPrecision(4))+'%').join(' → ')}: ${n} arrows = ${n} half-lives. ${n} × ${HL_SHOW[y[0]]} ${y[3]} = ${fmtT(n*y[2],y[3])}.`]];const seen=new Set([n]);
+ [[n-1,'Count the arrows again: 100% → 50% is the first half-life.'],[n+1,`That is ${n+1} half-lives (${Number((100/2**(n+1)).toPrecision(4))}% left).`],[n*2,'Each half-life halves the amount once; it does not take two.']].forEach(([k,w])=>{if(k>0&&!seen.has(k)&&opts.length<4){seen.add(k);opts.push([fmtT(k*y[2],y[3]),false,w])}});
+ return mc({prompt:`How long until only ${Number(pct.toPrecision(4))}% of this ${y[1]} sample is left?`,lab:{kind:'half',sys},task:{say:`Tap <b>⏭ +1 half-life</b> until Percent left reads ${Number(pct.toPrecision(4))}%.`,ok:s=>s.jump===0&&!s.run&&Math.abs(s.t-n)<1e-6},
+  choices:opts,hint:'Map it: 100% → 50% → 25% → 12.5% → 6.25%. Each arrow is one half-life.',video:'halfPct',topic:'halfcalc'})}
+const HLQ=[
+ ()=>mc({prompt:'Run the clock for 2 half-lives and watch the graph. What does each half-life do to the amount?',lab:{kind:'half',sys:state.labSys&&HL_SYS.some(h=>h[0]===state.labSys)?state.labSys:'i131'},task:{say:'Tap <b>⏭ +1 half-life</b> twice and watch the red line.',ok:s=>s.jump===0&&s.t>=2},
+  choices:[['It halves whatever is left at the start of that half-life',true,'100% → 50% → 25%. The amount lost each half-life gets smaller, so the graph curves (it never drops in a straight line to zero).'],['It removes the same number of mg each time',false,'The graph curves: the second half-life removes 25%, not another 50%.'],
+   ['It removes the whole sample after 2 half-lives',false,'After 2 half-lives, ¼ is still left. Look at the dots.'],['It removes one quarter each time',false,'Each half-life removes half of what is there.']],hint:'Read the Percent left after 1 and after 2 half-lives.',video:'half',topic:'halfidea'}),
+ ()=>mc({prompt:'A student says “after 2 half-lives the sample is gone.” Step 2 half-lives and check. What is left?',lab:{kind:'half',sys:state.labSys&&HL_SYS.some(h=>h[0]===state.labSys)?state.labSys:'tc99m'},task:{say:'Tap <b>⏭ +1 half-life</b> twice.',ok:s=>s.jump===0&&Math.abs(s.t-2)<1e-6},
+  choices:[['One quarter (25%) of the sample',true,'Half of a half is a quarter: 100% → 50% → 25%. A sample never quite reaches zero.'],['Nothing',false,'Half is left after 1 half-life and half of that after 2: 25% remains.'],['Half (50%)',false,'50% is after 1 half-life.'],['One eighth (12.5%)',false,'12.5% is after 3 half-lives.']],
+  hint:'Halve twice: 100% → ? → ?',video:'half',topic:'halfidea'}),
+ hlLabLeft,hlLabTime];
+/* typed half-life problems (whole numbers of half-lives) */
+const HL_ISO=[['iodine-131',8.00,'days','thyroid treatment'],['technetium-99m',6.00,'hours','a liver scan'],['strontium-90',28.8,'years','reactor waste'],['cobalt-60',5.27,'years','radiation therapy'],['phosphorus-32',14.3,'days','leukemia treatment'],['iodine-123',13.0,'hours','a thyroid scan'],['iridium-192',74.0,'days','a brachytherapy implant'],['radon-222',3.82,'days','a basement air test'],['fluorine-18',1.83,'hours','a PET scan'],['thorium-234',24.1,'days','a lab sample'],['strontium-85',64.8,'days','a bone scan']];
+const MASS=[64.0,48.0,80.0,96.0,36.0,12.0,40.0,24.0,4.00,2.40,0.800,56.0,72.0,16.0];
+const slipCode=m=>/is not dividing by 2|not the same as dividing|is not multiplying by 2/.test(m)?'div2n':/Count|count/.test(m)?'count':/decayed|is gone/.test(m)?'decayed':/is the number of half-lives|do not divide/.test(m)?'nOnly':/Work backward/.test(m)?'backward':/Divide the time by the number|is the total time/.test(m)?'halfDiv':'count';
+function numQ(o){const q=Object.assign({type:'num',sf:3},o);q.slips=(q.slips||[]).filter(([x])=>Math.abs(x-q.answer)>q.answer*0.006).map(([x,m])=>[x,m,slipCode(m)]);return q}
+const HCALC=[
+ ()=>{const [iso,t,u,use]=pick(HL_ISO),n=rnd(2,5),m0=pick(MASS),ans=m0/2**n;return numQ({map:{k:'left',a0:m0,n,t,u,unit:'mg'},prompt:`A ${nf(m0,3)}-mg sample of ${iso} is used for ${use}. Its half-life is ${hlUnit(t,u)}. How many mg are left after ${hlUnit(n*t,u)}?`,unit:'mg',answer:ans,
+  slips:[[m0/(2*n),`Halving ${n} times is not dividing by 2 × ${n}.`],[m0/2**(n-1),'Count the half-lives again: time ÷ half-life.'],[m0-ans,'That is the amount that decayed, not what is left.'],[n,'That is the number of half-lives. Now halve the mass that many times.']],
+  hint:`n = ${hlUnit(n*t,u)} ÷ ${hlUnit(t,u)}. Then amount left = ${nf(m0,3)} mg × (½)ⁿ.`,why:`n = ${hlUnit(n*t,u)} ÷ ${hlUnit(t,u)} = ${n} half-lives. ${nf(m0,3)} mg × (½)<sup>${n}</sup> = ${nf(ans,3)} mg.`,video:'halfLeft',topic:'halfcalc'})},
+ ()=>{const [iso,t,u]=pick(HL_ISO),n=rnd(2,5),m0=pick(MASS),m=m0/2**n;return numQ({map:{k:'time',a0:m0,n,t,u,unit:'mg'},prompt:`The half-life of ${iso} is ${hlUnit(t,u)}. How long does it take a ${nf(m0,3)}-mg sample to decay to ${nf(m,3)} mg?`,unit:u,answer:n*t,
+  slips:[[n,`${n} is the number of half-lives. Multiply by the half-life (${hlUnit(t,u)}).`],[(n-1)*t,'Count the halvings again, starting from the original mass.'],[(n+1)*t,'Count the halvings again.']],
+  hint:`Halve ${nf(m0,3)} mg until you reach ${nf(m,3)} mg and count the steps. Then multiply by ${hlUnit(t,u)}.`,why:`${[...Array(n+1)].map((_,i)=>nf(m0/2**i,3)).join(' → ')} mg: ${n} half-lives. ${n} × ${hlUnit(t,u)} = ${hlUnit(n*t,u)}.`,video:'halfTime',topic:'halfcalc'})},
+ ()=>{const [iso,t,u]=pick(HL_ISO),n=rnd(2,5),m=pick(MASS.filter(x=>x<=40)),m0=m*2**n;return numQ({map:{k:'init',a1:m,n,t,u,unit:'mg'},prompt:`After ${hlUnit(n*t,u)}, ${nf(m,3)} mg of ${iso} is left. Its half-life is ${hlUnit(t,u)}. How many mg were there at the start?`,unit:'mg',answer:m0,
+  slips:[[m/2**n,'Work backward: the start was bigger, so double instead of halving.'],[m*2*n,`Doubling ${n} times is not multiplying by 2 × ${n}.`],[m*2**(n-1),'Count the half-lives again.']],
+  hint:`n = ${hlUnit(n*t,u)} ÷ ${hlUnit(t,u)}. Work backward: double the mass n times.`,why:`n = ${n}. ${nf(m,3)} mg × 2<sup>${n}</sup> = ${nf(m0,3)} mg. Check: halve ${nf(m0,3)} mg ${n} times and you get ${nf(m,3)} mg.`,video:'halfLeft',topic:'halfcalc'})},
+ ()=>{const [iso,t,u]=pick(HL_ISO),n=rnd(2,4),m0=pick(MASS),m=m0/2**n;return numQ({map:{k:'half',a0:m0,n,t,u,unit:'mg'},prompt:`A ${nf(m0,3)}-mg sample of ${iso} decays to ${nf(m,3)} mg in ${hlUnit(n*t,u)}. What is its half-life?`,unit:u,answer:t,
+  slips:[[n*t/(n+1),'Count the halvings again.'],[n*t/2,'Divide the time by the number of half-lives, not by 2.'],[n*t,'That is the total time. Divide it by the number of half-lives.']],
+  hint:'Count how many times the mass halved (n). Half-life = time ÷ n.',why:`${[...Array(n+1)].map((_,i)=>nf(m0/2**i,3)).join(' → ')} mg is ${n} half-lives. ${hlUnit(n*t,u)} ÷ ${n} = ${hlUnit(t,u)}.`,video:'halfFind',topic:'halfcalc'})},
+ ()=>{const n=rnd(1,4),f=2**n,obj=pick(['a wooden bowl','a piece of charcoal from an old campfire','a scrap of linen','a bone tool','a seed from an ancient storage jar']);return numQ({map:{k:'carbon',n,f},prompt:`${cap(obj)} has 1/${f} of the carbon-14 found in living things. The half-life of carbon-14 is 5730 years. How old is it?`,unit:'years',answer:n*5730,loose:true,
+  slips:[[n,`${n} is the number of half-lives. Multiply by 5730 years.`],[5730/f,'Multiply the number of half-lives by 5730; do not divide.'],[(n-1)*5730,'Count again: 1/2 is one half-life, 1/4 is two.']],
+  hint:'1 → ½ → ¼ → ⅛ → 1/16. Count the arrows, then multiply by 5730 years.',why:`1/${f} = (½)<sup>${n}</sup>, so ${n} half-lives. ${n} × 5730 years = ${plain(n*5730)} years.`,video:'carbon',topic:'halfcalc'})},
+ ()=>{const n=rnd(2,4),A0=pick([20.0,16.0,24.0,32.0,40.0]),A=A0/2**n;return numQ({map:{k:'left',a0:A0,n,t:6,u:'hours',unit:'mCi'},prompt:`A patient receives ${nf(A0,3)} mCi of technetium-99m (half-life 6.00 hours). What is the activity after ${nf(6*n,3)} hours?`,unit:'mCi',answer:A,
+  slips:[[A0/(2*n),`Halving ${n} times is not dividing by 2 × ${n}.`],[A0-A,'That is how much activity is gone.'],[A0/2**(n-1),'Count the half-lives again.']],
+  hint:'Curies (activity) halve each half-life, just like mass.',why:`${nf(6*n,3)} h ÷ 6.00 h = ${n} half-lives. ${nf(A0,3)} mCi × (½)<sup>${n}</sup> = ${nf(A,3)} mCi.`,video:'curies',topic:'halfcalc'})}];
+/* Step Map: the lecture's half-life method one step at a time (knowns → n → halving map → answer). Each step: p prompt, a answer, int (whole number), h hint */
+function stepsOf(q){const m=q.map;if(!m)return null;const T=v=>(m.show&&m.show[v])||hlUnit(v,m.u),U=m.unit,S=[];
+ const nStep={p:`How many half-lives? n = time ÷ half-life = ${T(m.n*m.t)} ÷ ${T(m.t)} = ?`,a:m.n,int:1,h:'Divide the time by the half-life. The units cancel, and n is a whole number here.'};
+ const halve=(a0,k)=>{for(let i=1;i<=k;i++)S.push({p:`${i===1?`Start with ${nf(a0,3)} ${U}. `:''}After half-life ${i}: ${nf(a0/2**(i-1),3)} ${U} ÷ 2 = ?`,a:a0/2**i,h:'Halve the amount from the step before.'})};
+ if(m.k==='left'){S.push(nStep);halve(m.a0,m.n);return {steps:S,end:`That last arrow is the amount left. Round it to 3 significant figures and type it in the answer box.`}}
+ if(m.k==='init'){S.push(nStep);for(let i=1;i<=m.n;i++)S.push({p:`${i===1?`Work backward from ${nf(m.a1,3)} ${U}. `:''}One half-life earlier: ${nf(m.a1*2**(i-1),3)} ${U} × 2 = ?`,a:m.a1*2**i,h:'Going back in time, the amount was bigger: double it.'});return {steps:S,end:'That last step is the starting amount. Type it in the answer box (3 significant figures).'}}
+ if(m.k==='time'||m.k==='half'){halve(m.a0,m.n);S.push({p:`You reached ${nf(m.a0/2**m.n,3)} ${U}. How many halvings (half-lives) did that take? n = ?`,a:m.n,int:1,h:'Count your arrows.'});
+  return {steps:S,end:m.k==='time'?`Time = n × half-life = n × ${T(m.t)}. Type it in the answer box (3 significant figures).`:`Half-life = total time ÷ n = ${T(m.n*m.t)} ÷ n. Type it in the answer box (3 significant figures).`}}
+ if(m.k==='carbon'){S.push({p:`Map the fraction: 1 → ½ → ¼ → ⅛ → 1/16. How many half-lives until 1/${m.f} is left? n = ?`,a:m.n,int:1,h:'Each arrow halves the fraction. Count the arrows to 1/'+m.f+'.'});return {steps:S,end:'Age = n × 5730 years. Type it in the answer box.'}}
+ return null}
+/* ============================== 🔥 FISSION & FUSION ============================== */
+const PLQ=[
+ ()=>mc({prompt:'Fuel is Large and the control rods are out. Fire a neutron and watch the 💥 count. What happens?',lab:{kind:'power',o:{view:'fis',fuel:'large',rods:0}},task:{say:'Tap <b>🎯 Fire a neutron</b> (again if it misses) until 💥 passes 15.',ok:s=>s.st.fis>=15},
+  choices:[['Fissions snowball: each split releases neutrons that split more nuclei',true,'Each U-235 fission releases 2–3 neutrons. If enough of them hit more U-235, the number of fissions grows: a chain reaction.'],['One nucleus splits and then everything stops',false,'Watch the neutrons flying out of each split: they keep the reaction going.'],
+   ['All the nuclei split at the same instant',false,'They split one after another as neutrons reach them.'],['Nothing happens: neutrons bounce off uranium',false,'A U-235 nucleus that absorbs a neutron becomes unstable and splits.']],hint:'Watch where the new neutrons go after each split.',video:'fission',topic:'fission'}),
+ ()=>mc({prompt:'Slide the control rods 100% in, then fire neutrons a few times. What happens now?',lab:{kind:'power',o:{view:'fis',fuel:'large',rods:0}},task:{say:'Slide <b>Control rods</b> to 100%, then tap <b>🎯 Fire a neutron</b> 3 times.',ok:s=>s.rods>=0.9&&s.fired>=3},
+  choices:[['Little or no chain reaction: the rods absorb neutrons',true,'Control rods (cadmium or boron) soak up neutrons. Raising or lowering them controls how fast a reactor runs.'],['The chain reaction grows faster',false,'The rods take neutrons away, so fewer fissions happen.'],
+   ['The rods cool the reactor',false,'Water carries the heat away. Rods absorb neutrons.'],['The rods add more fuel',false,'Control rods are not fuel; they absorb neutrons.']],hint:'Watch what happens to a neutron that hits a gray rod.',video:'fission',topic:'fission'}),
+ ()=>mc({prompt:'Choose Small fuel (rods out) and fire a neutron 3 times. What usually happens?',lab:{kind:'power',o:{view:'fis',fuel:'small',rods:0}},task:{say:'Tap <b>🎯 Fire a neutron</b> 3 times and wait for the neutrons to stop.',ok:s=>s.fuel==='small'&&s.fired>=3&&s.st.nu.length===0},
+  choices:[['Each chain dies out: most neutrons escape a small lump',true,'Below the critical mass, too many neutrons fly out before they hit another U-235 nucleus, so the chain cannot keep going. A bomb or reactor needs at least a critical mass.'],['A huge chain reaction, bigger than with Large fuel',false,'Compare with Large fuel: the small lump fizzles.'],
+   ['The fuel melts',false,'This model only shows neutrons and nuclei: count the fissions.'],['Nothing can ever split in a small lump',false,'A few nuclei do split; the chain just cannot sustain itself.']],hint:'Count how many neutrons leave the edge without hitting anything.',video:'fission',topic:'fission'}),
+ ()=>mc({prompt:'Use 🐢 Slow motion, fire a neutron, and watch one nucleus split. How many neutrons come out of each fission?',lab:{kind:'power',o:{view:'fis',fuel:'large',rods:0}},task:{say:'Tap <b>🎯 Fire a neutron</b> and watch one split.',ok:s=>s.st.fis>=1},
+  choices:[['2 or 3',true,'U-235 fission releases 2 or 3 neutrons (for example ¹₀n + ²³⁵₉₂U → ¹⁴¹₅₆Ba + ⁹²₃₆Kr + 3 ¹₀n). More neutrons out than in is what makes a chain reaction possible.'],['Exactly 1',false,'With only 1 neutron out per neutron in, no chain could ever grow.'],['None',false,'Look closely at a split: small dark dots fly out.'],['About 10',false,'Only 2 or 3 come out of each split.']],
+  hint:'Slow motion helps. Count the dark dots leaving one split.',video:'fission',topic:'fission'}),
+ ()=>mc({prompt:'Switch to 🌞 Fusion. At a low temperature, what do the hydrogen nuclei do when they meet?',lab:{kind:'power',o:{view:'fus',T:2}},task:{say:'Watch until the ↩︎ Bounces count passes 8.',ok:s=>s.view==='fus'&&s.T<8&&s.fu.bounce>=8},
+  choices:[['They bounce apart: both are positive and repel',true,'Nuclei are positively charged, so they push each other away. Only extremely fast (very hot) nuclei get close enough to fuse; the Sun’s core is about 15 million K.'],['They fuse into helium',false,'Check the ✸ Fusions counter: it stays at 0 when it is this cool.'],
+   ['They split into smaller nuclei',false,'Splitting is fission. These tiny nuclei can only join (fuse).'],['They stick together as a molecule',false,'Bare nuclei have no electrons to share, so they cannot bond.']],hint:'Read the ✸ Fusions and ↩︎ Bounces counters.',video:'fusion',topic:'fission'}),
+ ()=>mc({prompt:'In 🌞 Fusion, slide the temperature to the top and watch. What forms when ²H and ³H fuse?',lab:{kind:'power',o:{view:'fus',T:3}},task:{say:'Slide <b>🌡️ Temperature</b> to the top and wait for a fusion.',ok:s=>s.view==='fus'&&s.T>=8&&s.fu.fus>=1},
+  choices:[[`${nucS(N(4,2))} and ${nucS(PART.neutron)}`,true,'²₁H + ³₁H → ⁴₂He + ¹₀n. Top: 2 + 3 = 4 + 1. Bottom: 1 + 1 = 2 + 0. A little mass turns into a lot of energy (E = mc²).'],[nucS(N(5,3)),false,'Lithium-5 would need 3 protons, but the two hydrogen nuclei have only 1 + 1 = 2.'],
+   [`${nucS(N(3,2))} and ${nucS(PART.neutron)}`,false,'That is what two deuterium (²H + ²H) nuclei make. Here the top numbers add to 2 + 3 = 5.'],[`${nucS(N(4,2))} and ${nucS(PART.proton)}`,false,'The bottom numbers would add to 3, but 1 + 1 = 2.']],
+  hint:'Watch what flies away after a fusion, and balance the top and bottom numbers.',video:'fusion',topic:'fission'})];
+function fisEqQ(){const [f1,f2,k]=pick(FISSION),L=[{x:PART.neutron},{x:N(235,92)}],R=[{x:N(...f1)},{x:N(...f2)},{x:PART.neutron,coef:k}];R[pick([0,1])].blank=1;
+ return nucQ({prompt:'Challenge: complete this fission of uranium-235. Fill in the missing fragment.',L,R,hint:'Left: 1 + 235 = 236 on top, 0 + 92 = 92 on the bottom. The neutrons on the right count as coefficient × 1.',why:`Top: 236 = ${f1[0]} + ${f2[0]} + ${k}. Bottom: 92 = ${f1[1]} + ${f2[1]}. One neutron in, ${k} out: that is what keeps a chain reaction going.`,video:'fission',topic:'fission'})}
+function fisCountQ(){const [f1,f2,k]=pick(FISSION);
+ return mc({prompt:'How many neutrons (x) are released in this fission?',html:eqHTML([{x:PART.neutron},{x:N(235,92)}],[{x:N(...f1)},{x:N(...f2)}]).replace(/<\/span>$/,`<span class="pl">+</span><b>x</b> ${nucHTML(PART.neutron)}</span>`),
+  choices:[1,2,3,4].map(v=>[String(v),v===k,v===k?`Top: 1 + 235 = 236 = ${f1[0]} + ${f2[0]} + ${k}. The bottom numbers already balance (${f1[1]} + ${f2[1]} = 92).`:`With ${v}, the top would total ${f1[0]+f2[0]+v}, not 236.`]),keepOrder:true,hint:'Add the top numbers on the left (1 + 235). Subtract the two fragments’ mass numbers.',video:'fission',topic:'fission'})}
+function fusEqQ(){const b=pick(FUSION),L=b.L.map(term),R=b.R.map(term);pick([...L,...R].filter(t=>t.coef===1)).blank=1;
+ return nucQ({prompt:'Fusion: light nuclei join into a heavier one. Fill in the missing term.',L,R,hint:NUC_HINT,why:`Top: ${L.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')} = ${R.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')}. Bottom: ${L.map(t=>(t.coef>1?t.coef+'×':'')+t.x.Z).join(' + ')} = ${R.map(t=>(t.coef>1?t.coef+'×':'')+t.x.Z).join(' + ')}. ${b.note}`,video:'fusion',topic:'fission'})}
+/* ============================== 🏥 IDEAS BANK (fixed questions) ============================== */
+/* {p: prompt, c: [[text, right, why], ...], v: video, t: topic} */
+const IDEAS=[
+ {t:'types',v:'types',p:'Which radiation is identical to a helium nucleus?',c:[['Alpha particle',1,'An alpha particle is 2 protons + 2 neutrons, ⁴₂He: a helium nucleus with no electrons.'],['Beta particle',0,'A beta particle is a high-energy electron, ⁰₋₁e.'],['Positron',0,'A positron is a positive electron, ⁰₊₁e.'],['Gamma ray',0,'A gamma ray is pure energy (light), ⁰₀γ, with no mass.']]},
+ {t:'types',v:'types',p:'What is a beta particle?',c:[['A fast electron made in the nucleus',1,'In beta decay a neutron turns into a proton and an electron; the electron shoots out as ⁰₋₁e.'],['A helium nucleus (2 protons, 2 neutrons)',0,'That is an alpha particle.'],['A positive electron from the nucleus',0,'That is a positron (β⁺).'],['A packet of light with no mass',0,'That is a gamma ray.']]},
+ {t:'types',v:'types',p:'Which radiation has no mass and no charge?',c:[['Gamma ray',1,'⁰₀γ: zero on top (mass) and zero on the bottom (charge). It is high-energy light.'],['Alpha particle',0,'Alpha has mass number 4 and charge +2.'],['Beta particle',0,'Beta has charge −1 (mass number 0).'],['Neutron',0,'A neutron has no charge but has mass number 1.']]},
+ {t:'types',v:'positron',p:'In positron emission, what happens inside the nucleus?',c:[['A proton becomes a neutron',1,'A proton → neutron + positron (⁰₊₁e). The atomic number goes down by 1; the mass number stays the same.'],['A neutron becomes a proton',0,'That is beta decay (Z goes up by 1).'],['The nucleus loses 2 protons and 2 neutrons',0,'That is alpha decay.'],['Only energy is released',0,'That is gamma emission.']]},
+ {t:'types',v:'ec',p:'In an equation for electron capture, where is the electron written?',c:[['On the left, as a reactant',1,'The nucleus captures an inner electron, so ⁰₋₁e is a reactant: for example ¹²⁵₅₃I + ⁰₋₁e → ¹²⁵₅₂Te.'],['On the right, as a product',0,'An electron on the right is beta decay: the electron is given off.'],['It is not written at all',0,'Without it the bottom numbers would not balance.'],['Above the arrow',0,'Particles that react are written as reactants, not above the arrow.']]},
+ {t:'types',v:'gamma',p:'What does the “m” in technetium-99m mean?',c:[['Metastable: an excited nucleus that will give off a gamma ray',1,'Tc-99m has extra energy. It releases it as a gamma ray and becomes Tc-99, with the same mass and atomic numbers.'],['It has more neutrons than technetium-99',0,'Both have mass number 99 and 43 protons, so the same number of neutrons.'],['It is measured in milligrams',0,'The m is part of the isotope’s name, not a unit.'],['It is made from molybdenum',0,'It is made from Mo-99, but the m means metastable (excited).']]},
+ {t:'types',v:'intro',p:'Why are some nuclei radioactive?',c:[['The nuclear force cannot hold the protons’ repulsion, so the nucleus is unstable',1,'Protons repel each other. When the neutron-to-proton balance is off, or the nucleus is too big, it is unstable and gives off radiation to become more stable.'],['They have too many electrons around them',0,'Radioactivity comes from the nucleus, not the electrons.'],['They are hotter than other atoms',0,'Temperature does not make a nucleus radioactive or change its decay.'],['They are ions with a charge',0,'Ion charge involves electrons, not the nucleus.']]},
+ {t:'types',v:'band',p:'Carbon-14 has 6 protons and 8 neutrons, more neutrons than stable carbon-12. Which decay is most likely?',c:[['Beta decay',1,'Too many neutrons → beta decay: a neutron becomes a proton. C-14 → N-14 (7 p, 7 n).'],['Positron emission',0,'Positron emission turns a proton into a neutron, making the excess of neutrons worse.'],['Alpha decay',0,'Alpha decay is for very heavy nuclei (more than 83 protons).'],['Gamma emission',0,'Gamma emission does not change the numbers of protons or neutrons.']]},
+ {t:'types',v:'band',p:'Fluorine-18 has 9 protons and only 9 neutrons, too few neutrons. Which decay fixes this?',c:[['Positron emission (or electron capture)',1,'Too few neutrons → a proton becomes a neutron. F-18 → O-18 + ⁰₊₁e. This is why F-18 is used in PET scans.'],['Beta decay',0,'Beta decay turns a neutron into a proton, leaving even fewer neutrons.'],['Alpha decay',0,'Alpha decay is for very heavy nuclei.'],['Gamma emission',0,'Gamma emission does not change the neutron count.']]},
+ {t:'types',v:'band',p:'Uranium-238 has 92 protons. Which decay is most common for nuclei this big?',c:[['Alpha decay',1,'Nuclei with more than 83 protons are simply too big. Alpha decay sheds 2 protons and 2 neutrons at once.'],['Beta decay',0,'Beta decay fixes too many neutrons; it does not make the nucleus smaller.'],['Positron emission',0,'Positron emission fixes too few neutrons.'],['Gamma emission',0,'Gamma emission does not change the size of the nucleus.']]},
+ {t:'types',v:'chemnuc',p:'Which is true of nuclear reactions but NOT chemical reactions?',c:[['One element can change into another',1,'Changing the number of protons changes the element: U-238 → Th-234. Chemical reactions only rearrange electrons.'],['Atoms share or transfer electrons',0,'That describes chemical reactions.'],['Heating them up speeds them up',0,'Temperature changes chemical rates, but not nuclear decay rates.'],['Isotopes of an element behave the same',0,'In nuclear reactions isotopes behave very differently (C-12 is stable; C-14 decays).']]},
+ {t:'types',v:'chemnuc',p:'A vial of iodine-131 is warmed from 25 °C to 37 °C (body temperature). What happens to its half-life?',c:[['Nothing: temperature does not change a nuclear decay rate',1,'Nuclear decay depends only on the nucleus. Heat, pressure and catalysts change chemical rates (Chapter 13), not radioactive half-lives.'],['It gets shorter',0,'That is true for chemical reaction rates, not for nuclear decay.'],['It gets longer',0,'Temperature has no effect on a half-life.'],['The iodine stops being radioactive',0,'Warming does not change the nucleus.']]},
+ {t:'types',v:'balance',p:'In a nuclear equation, what must balance?',c:[['Mass numbers (top) and atomic numbers (bottom)',1,'Add the top numbers on each side; they must match. Do the same for the bottom numbers.'],['The number of atoms of each element',0,'That is for chemical equations. In nuclear equations the elements change.'],['Only the mass numbers',0,'The atomic numbers (bottom) must balance too.'],['The charges of the ions',0,'Ion charges are ignored in nuclear equations.']]},
+ {t:'types',v:'multi',p:'Uranium-238 decays through a series of 8 alpha and 6 beta decays. What stable nucleus is at the end?',c:[[nucHTML(N(206,82)),1,'Mass: 238 − 8×4 = 206. Atomic number: 92 − 8×2 + 6×1 = 82, lead. The series ends at lead-206.'],[nucHTML(N(206,70)),0,'Beta decay adds 1 to the atomic number each time: 92 − 16 + 6, not 92 − 16 − 6.'],[nucHTML(N(200,82)),0,'Beta decay does not change the mass number: 238 − 32 = 206.'],[nucHTML(N(206,76)),0,'Each alpha removes 2 from the atomic number and each beta adds 1: 92 − 16 + 6 = 82.']]},
+ /* penetrating / shielding */
+ {t:'pen',v:'pen',p:'Rank the penetrating power, greatest to least.',c:[['γ > β > α',1,'Gamma passes through the body; beta goes a few mm into tissue; alpha is stopped by paper or skin.'],['α > β > γ',0,'That is the order of ionizing power, the reverse of penetrating power.'],['β > γ > α',0,'Gamma, with no mass or charge, penetrates farthest.'],['All three are the same',0,'They differ a lot: paper stops alpha, but gamma needs lead.']]},
+ {t:'pen',v:'pen',p:'Which radiation has the greatest ionizing power?',c:[['Alpha',1,'Alpha is big and has a +2 charge, so it rips electrons off every molecule it passes, and it loses its energy quickly.'],['Gamma',0,'Gamma has the lowest ionizing power, which is why it travels so far.'],['Beta',0,'Beta is in the middle.'],['Neutrons',0,'Neutrons ionize only indirectly, by knocking nuclei loose.']]},
+ {t:'pen',v:'pen',p:'A nurse prepares a dose of phosphorus-32, a beta emitter. What protection is enough?',c:[['A lab coat and gloves',1,'Beta particles are stopped by a few mm of material: clothing, a lab coat, gloves, aluminum, or plastic.'],['Nothing: beta cannot get into skin',0,'Beta particles can go a few millimeters into tissue.'],['A thick concrete wall',0,'Concrete is for gamma rays and neutrons; it is far more than beta needs.'],['A sheet of paper',0,'Paper stops alpha particles but not most beta particles.']]},
+ {t:'pen',v:'radium',p:'Why are alpha emitters most dangerous when swallowed or breathed in (radon gas, or the Radium Girls’ glowing paint)?',c:[['Inside the body nothing shields the cells, and alpha ionizes the most',1,'Outside the body, skin stops alpha. Inside, every alpha particle dumps all its energy into nearby cells.'],['Alpha travels farthest through the body',0,'Alpha has the lowest penetrating power.'],['Alpha particles turn into gamma rays inside the body',0,'Alpha particles stay helium nuclei; they pick up electrons and become helium atoms.'],['Swallowing makes the source decay faster',0,'Nothing in the body changes a decay rate.']]},
+ {t:'pen',v:'pen',p:'Which shielding is used for gamma rays in an X-ray or nuclear medicine room?',c:[['Lead or thick concrete',1,'Gamma rays need dense shielding. Lead aprons and lead-lined walls reduce the dose; they do not stop every ray.'],['A sheet of paper',0,'Paper stops only alpha particles.'],['A lab coat',0,'A lab coat stops beta, not gamma.'],['Nothing works on gamma',0,'Dense materials reduce gamma rays a lot.']]},
+ {t:'pen',v:'pen',p:'A radiology tech steps from 1 m to 2 m away from a gamma source. The dose rate becomes…',c:[['¼ as much',1,'Inverse-square rule: twice as far → 1/2² = ¼. Distance is one of the three protections: time, distance, shielding.'],['½ as much',0,'The dose drops with the square of the distance, so doubling the distance gives ¼.'],['The same',0,'Moving away always reduces the dose.'],['Twice as much',0,'The dose gets smaller, not larger, with distance.']]},
+ {t:'pen',v:'detect',p:'How does a Geiger counter detect radiation?',c:[['Radiation ionizes gas in a tube; the ions carry a current heard as a click',1,'Each particle that ionizes the gas makes a pulse of current. More clicks per minute = more radiation. It detects beta and gamma well.'],['It measures the heat the sample gives off',0,'It counts ionizations, not heat.'],['It weighs the particles that hit it',0,'Particles are far too small to weigh this way.'],['It sees the color of the radioactive sample',0,'Most radioactive samples look ordinary; the counter detects ions.']]},
+ /* health and medicine */
+ {t:'health',v:'detect',p:'Which unit measures activity: how many nuclei decay each second?',c:[['Becquerel (Bq)',1,'1 Bq = 1 decay per second. The curie (Ci) also measures activity: 1 Ci = 3.7 × 10¹⁰ decays per second.'],['Sievert (Sv)',0,'The sievert measures biological dose (the harm to the body).'],['Gray (Gy)',0,'The gray measures absorbed dose: energy per kilogram of tissue.'],['Rem',0,'The rem is an older unit of biological dose.']]},
+ {t:'health',v:'detect',p:'Which unit takes into account how harmful each type of radiation is to the body?',c:[['Sievert (Sv), often given in mSv',1,'The sievert is the equivalent (biological) dose: absorbed dose adjusted for the type of radiation. 1 Sv = 100 rem.'],['Gray (Gy)',0,'The gray is energy absorbed per kilogram, not adjusted for the type of radiation.'],['Becquerel (Bq)',0,'The becquerel counts decays per second (activity).'],['Curie (Ci)',0,'The curie measures activity.']]},
+ {t:'health',v:'medical',p:'Why does radiation harm rapidly dividing cells most (bone marrow, skin, hair follicles, a fetus)?',c:[['Damaged DNA is copied before the cell can repair it',1,'Cells that divide often have little time to fix DNA damage. This is also why radiation can treat cancer, whose cells divide rapidly.'],['They contain more radioactive atoms',0,'Radiation damages any cell; dividing cells just repair it less well.'],['They are larger targets',0,'Size is not the reason; DNA copying is.'],['Radiation is attracted to them',0,'Radiation goes in straight lines; it is not attracted to cells.']]},
+ {t:'health',v:'medical',p:'What is usually the first thing ionizing radiation does in a cell?',c:[['Knocks an electron off a water molecule, making H₂O⁺',1,'Cells are mostly water. H₂O⁺ breaks into very reactive free radicals that damage proteins and DNA.'],['Splits the nucleus of an oxygen atom',0,'Medical and background radiation ionize molecules; they do not split nuclei.'],['Makes the water radioactive',0,'Alpha, beta and gamma radiation do not make the water radioactive.'],['Heats the cell until it boils',0,'Doses are far too small to heat cells noticeably.']]},
+ {t:'health',v:'background',p:'What is the largest natural source of radiation for most people?',c:[['Radon gas from the ground',1,'Radon-222 is an alpha emitter that seeps into basements. Breathing it in is the largest natural source of dose and a cause of lung cancer.'],['Cell phones',0,'Phones use radio waves, which are not ionizing.'],['Microwave ovens',0,'Microwaves are not ionizing radiation.'],['Nuclear power plants nearby',0,'Their normal releases are tiny compared with natural background.']]},
+ {t:'health',v:'medical',p:'Food and surgical supplies are sterilized with gamma rays from cobalt-60. Do they become radioactive?',c:[['No: the gamma rays kill microbes and pass through',1,'Gamma rays deposit energy but do not change the nuclei of the food, so it does not become radioactive.'],['Yes, for a few days',0,'Gamma rays from Co-60 cannot make food radioactive.'],['Yes, permanently',0,'No radioactive atoms are added or made.'],['Only if the food is wet',0,'Water content does not change this.']]},
+ {t:'health',v:'medical',p:'Why is technetium-99m used in most nuclear medicine scans?',c:[['Its gamma rays leave the body, and its 6-hour half-life is short',1,'The camera outside sees the gamma rays, and the activity is nearly gone in a day or two.'],['It gives off alpha particles that are easy to photograph',0,'Alpha particles would stay inside the body and do the most damage; scans need gamma rays.'],['Its half-life is thousands of years, so it lasts',0,'A long half-life would keep the patient radioactive for years.'],['It is not radioactive',0,'It is radioactive: that is how the camera finds it.']]},
+ {t:'health',v:'medical',p:'In a PET scan, fluorine-18 (in FDG, a glucose look-alike) emits…',c:[['Positrons, which meet electrons and make two gamma rays',1,'The positron and an electron annihilate, and their mass becomes two gamma rays flying in opposite directions; the ring of detectors catches both.'],['Alpha particles',0,'F-18 has too few neutrons; it decays by positron emission.'],['Beta particles (electrons)',0,'F-18 emits positrons (⁰₊₁e), not electrons.'],['Only neutrons',0,'Neutrons are not used in PET.']]},
+ {t:'health',v:'medical',p:'Iodine-131 treats an overactive thyroid and thyroid cancer because…',c:[['The thyroid takes up iodine, so its beta particles hit thyroid cells',1,'The thyroid uses iodine to make hormones, so I-131 collects there and its beta particles destroy nearby thyroid tissue.'],['Its alpha particles travel through the whole body',0,'I-131 emits beta and gamma radiation; it works because it collects in the thyroid.'],['It is not radioactive',0,'Its radiation is what destroys the overactive tissue.'],['The thyroid pushes iodine out of the body',0,'The opposite: the thyroid concentrates iodine.']]},
+ {t:'health',v:'medical',p:'Brachytherapy places a radioactive seed (such as iridium-192 or iodine-125) inside or next to a tumor. Why?',c:[['A high dose reaches the tumor and less reaches healthy tissue',1,'Radiation drops off quickly with distance, so a seed at the tumor delivers most of its dose there.'],['The seed makes the tumor stop being radioactive',0,'Tumors are not radioactive; the seed supplies the radiation.'],['It speeds up the seed’s decay',0,'Nothing changes a half-life.'],['So the radiation spreads evenly through the body',0,'The goal is the opposite: keep the dose at the tumor.']]},
+ {t:'health',v:'medical',p:'What is the main difference between X-rays and gamma rays?',c:[['Gamma rays come from the nucleus; X-rays come from electrons',1,'Both are high-energy, ionizing light. Gamma rays come from nuclei; X-rays are made by electrons, as in an X-ray tube.'],['X-rays are particles with mass',0,'X-rays and gamma rays are both light (photons), with no mass.'],['Gamma rays are not ionizing',0,'Gamma rays are ionizing.'],['X-rays are not ionizing',0,'X-rays are ionizing; that is why the dose is kept low.']]},
+ {t:'health',v:'medical',p:'Does an MRI scan use ionizing radiation?',c:[['No: MRI uses a strong magnet and radio waves',1,'MRI gives images of soft tissue with no ionizing radiation. CT scans, X-rays and PET do use it.'],['Yes: gamma rays',0,'Gamma cameras are nuclear medicine; MRI uses magnets.'],['Yes: X-rays',0,'X-rays are used in radiographs and CT, not MRI.'],['Yes: alpha particles',0,'No medical imaging uses alpha particles.']]},
+ {t:'health',v:'background',p:'Which three things protect you from a radiation source?',c:[['Less time, more distance, more shielding',1,'ALARA (as low as reasonably achievable): limit your time near the source, stay far away, and put shielding between you and it.'],['More time, less distance, no shielding',0,'Each of these increases the dose.'],['Cold, dark and quiet',0,'Temperature and light do not change radiation.'],['Drinking water, eating, and resting',0,'These do not block radiation.']]},
+ /* isotopes */
+ {t:'iso',v:'intro',p:'Isotopes of the same element have the same number of…',c:[['Protons',1,'Same element = same atomic number (protons). Isotopes differ in neutrons, so their mass numbers differ.'],['Neutrons',0,'Isotopes have different numbers of neutrons.'],['Nucleons (mass number)',0,'The mass number differs: C-12 vs. C-14.'],['Protons and neutrons both',0,'Then they would be the same isotope.']]},
+ {t:'iso',v:'intro',p:'A radioisotope is…',c:[['An isotope that has an unstable nucleus and gives off radiation',1,'For example iodine-131 and carbon-14. The mass number is part of its name.'],['Any atom with a charge',0,'A charged atom is an ion.'],['An element that glows in the dark',0,'Most radioisotopes do not glow; the glow in old radium paint came from the paint.'],['An atom that has lost its neutrons',0,'Radioisotopes have neutrons; their mix of neutrons and protons is unstable.']]},
+ /* fission & fusion */
+ {t:'fission',v:'fvf',p:'Nuclear fission is…',c:[['Splitting a heavy nucleus into two smaller nuclei',1,'For example, U-235 absorbs a neutron and splits into Ba-141, Kr-92 and 3 neutrons, releasing a lot of energy.'],['Joining light nuclei into a heavier nucleus',0,'That is fusion.'],['Burning uranium in oxygen',0,'Burning is a chemical reaction. Fission changes nuclei.'],['A nucleus giving off a gamma ray',0,'That is gamma emission.']]},
+ {t:'fission',v:'fvf',p:'Nuclear fusion is…',c:[['Joining light nuclei into a heavier nucleus',1,'For example ²₁H + ³₁H → ⁴₂He + ¹₀n. Fusion powers the Sun.'],['Splitting a heavy nucleus',0,'That is fission.'],['Melting a solid',0,'Melting is a physical change, not a nuclear reaction.'],['Two atoms sharing electrons',0,'That is a covalent bond (chemistry).']]},
+ {t:'fission',v:'fusion',p:'What powers the Sun?',c:[['Fusion of hydrogen into helium',1,'In the Sun’s core (about 15 million K), hydrogen nuclei fuse into helium and a little mass becomes energy.'],['Fission of uranium',0,'The Sun is mostly hydrogen and helium; there is little uranium.'],['Burning hydrogen gas with oxygen',0,'There is not enough oxygen, and burning would not last billions of years.'],['Radioactive decay of carbon-14',0,'C-14 decay releases far too little energy.']]},
+ {t:'fission',v:'fission',p:'Why can fission become a chain reaction?',c:[['Each fission releases 2–3 neutrons that can split more nuclei',1,'One neutron in, 2 or 3 out: if enough hit more U-235, the number of fissions keeps growing.'],['Each fission makes more uranium-235',0,'Fission uses up U-235; it makes smaller nuclei.'],['Heat from one fission melts the next nucleus',0,'Neutrons, not heat, cause the next fission.'],['Control rods add neutrons',0,'Control rods absorb neutrons.']]},
+ {t:'fission',v:'fission',p:'What do control rods do in a nuclear reactor?',c:[['Absorb neutrons to slow or stop the chain reaction',1,'Lowering the rods absorbs more neutrons, so fewer fissions happen.'],['Speed up the neutrons',0,'They absorb neutrons; the water moderator slows them.'],['Carry heat to the turbine',0,'Water and steam carry the heat.'],['Hold the uranium fuel',0,'The fuel is in fuel rods; control rods absorb neutrons.']]},
+ {t:'fission',v:'fission',p:'Critical mass is…',c:[['The smallest amount of fuel that keeps a chain reaction going',1,'With less fuel, too many neutrons escape before they hit another nucleus.'],['The mass lost when a nucleus splits',0,'That mass becomes energy, but it is not called critical mass.'],['The heaviest nucleus that can exist',0,'Critical mass is about an amount of fuel.'],['The mass of a control rod',0,'Critical mass refers to the fuel.']]},
+ {t:'fission',v:'fvf',p:'Where does the energy of fission and fusion come from?',c:[['A small amount of mass becomes energy (E = mc²)',1,'The products weigh slightly less than the reactants. Since c² is huge, a tiny loss of mass gives an enormous amount of energy.'],['Breaking chemical bonds',0,'Chemical reactions release far less energy (kJ per mole).'],['Burning the fuel with oxygen',0,'No burning happens; nuclei change.'],['From the electrons speeding up',0,'The energy comes from the nuclei.']]},
+ {t:'fission',v:'fusion',p:'Why does fusion need temperatures of millions of degrees?',c:[['Nuclei are positive and repel; only very fast ones get close enough to fuse',1,'High temperature means high speed, which lets nuclei overcome their repulsion.'],['To melt the hydrogen first',0,'At these temperatures matter is a plasma; melting is not the issue.'],['To make the neutrons positive',0,'Neutrons have no charge at any temperature.'],['Heat makes nuclei radioactive',0,'Heat does not make nuclei radioactive.']]},
+ {t:'fission',v:'carbon',p:'Why is nuclear waste hard to store?',c:[['Fission products like Sr-90 and Cs-137 stay radioactive for many years',1,'Their half-lives are about 30 years, so they must be stored safely for centuries; some other wastes last much longer.'],['It explodes when it touches air',0,'Waste is not explosive; it is radioactive.'],['It turns back into uranium',0,'Fission products cannot turn back into uranium.'],['It is too cold to handle',0,'Fresh waste is actually hot from its radioactivity.']]},
+ /* half-life ideas */
+ {t:'halfidea',v:'half',p:'The half-life of a radioisotope is the time it takes for…',c:[['Half of the radioactive nuclei in a sample to decay',1,'After one half-life, 50% is left; after two, 25%; and so on.'],['The whole sample to decay',0,'A sample never quite reaches zero: it keeps halving.'],['The sample to lose half its temperature',0,'Half-life is about the number of radioactive nuclei.'],['Half of the sample to turn into helium',0,'Most decays do not make helium; the daughter can be any nucleus.']]},
+ {t:'halfidea',v:'carbon',p:'Why can carbon-14 date a wooden bowl but not a stone tool?',c:[['Only once-living things took in carbon-14 while alive',1,'Living things keep a steady C-14 level by eating or breathing CO₂. After death, the C-14 decays with a half-life of 5730 years.'],['Stone is too hard for carbon-14 to decay',0,'Hardness does not change decay; stone never took in living carbon.'],['Wood is radioactive and stone is not',0,'Both contain tiny amounts of radioactive atoms; the method needs living carbon.'],['Stone tools are always younger',0,'Many stone tools are very old.']]},
+ {t:'halfidea',v:'carbon',p:'Radiocarbon dating works only back to about 50,000 years. Why?',c:[['After about 9 half-lives too little carbon-14 is left to measure',1,'50,000 ÷ 5730 ≈ 9 half-lives: (½)⁹ ≈ 1/500 of the original C-14.'],['Carbon-14 did not exist before then',0,'C-14 has been made by cosmic rays for billions of years.'],['The half-life of carbon-14 changes over time',0,'Half-lives are constant.'],['Older things contain no carbon',0,'Old organic material still contains carbon; the C-14 is what runs out.']]}];
+/* generated: protons and neutrons, nuclide symbols, isotopes */
+function pnQ(){const all=Object.values(DECAYS).flat().concat([[12,6],[16,8],[56,26],[208,82],[35,17],[40,20]]);const [A,Z]=pick(all),x=N(A,Z),ask=pick(['n','p']);
+ const ans=ask==='n'?A-Z:Z;const opts=[[String(ans),true,ask==='n'?`Neutrons = mass number − atomic number = ${A} − ${Z} = ${A-Z}.`:`The protons are the bottom number, the atomic number: ${Z}.`]];const seen=new Set([ans]);
+ [[A,'That is the mass number: protons + neutrons together.'],[ask==='n'?Z:A-Z,ask==='n'?'That is the number of protons (the bottom number).':'That is the number of neutrons (A − Z).'],[A+Z,'Never add the two numbers. Neutrons = A − Z.'],[A-Z+1,'Subtract carefully: A − Z.'],[Z+2,'Read the bottom number.']].forEach(([v,w])=>{if(!seen.has(v)&&opts.length<4&&v>=0){seen.add(v);opts.push([String(v),false,w])}});
+ return mc({prompt:`How many ${ask==='n'?'neutrons':'protons'} are in ${nname(x)}?`,html:nucHTML(x),choices:opts,hint:'Top = mass number (protons + neutrons). Bottom = atomic number (protons).',video:'intro',topic:'iso'})}
+function symQ(){const [A,Z]=pick(Object.values(DECAYS).flat()),x=N(A,Z);const opts=[[nucS(x),true,`Mass number ${A} on top, atomic number ${Z} (the protons of ${ENAME[Z]}) on the bottom.`]],seen=new Set([A+'/'+Z]);
+ [[Z,A,'Swapped: the mass number (bigger) goes on top.'],[A,A-Z,`The bottom number is the protons (${Z}), not the neutrons (${A-Z}).`],[A+Z,Z,`The top number is the mass number, ${A}, from the name.`],[A,Z+1,`${ENAME[x.Z]} always has ${Z} protons; the bottom number comes from the periodic table.`],[A-Z,Z,`The top number is the mass number (${A}), not the neutrons.`]].forEach(([a,z,w])=>{if(opts.length<4&&!seen.has(a+'/'+z)){seen.add(a+'/'+z);opts.push([nucS(fake(a,z,x.s)),false,w])}});
+ return mc({prompt:`Which symbol is ${nname(x)}?`,choices:opts,hint:'The number in the name is the mass number (top). The atomic number (bottom) comes from the periodic table.',video:'intro',topic:'iso'})}
+function isoQ(){const [A,Z]=pick(Object.values(DECAYS).flat().filter(d=>!d[2]&&d[1]>2)),x=N(A,Z);return mc({prompt:`Which nucleus is an isotope of ${nname(x)}?`,choices:[[nucS(N(A+2,Z)),true,`Same atomic number (${Z}) means the same element; only the neutrons differ.`],[nucS(N(A,Z+1)),false,'Same mass number but a different atomic number: a different element.'],[nucS(N(A+2,Z+2)),false,'A different atomic number means a different element.'],[nucS(N(A-4,Z-2)),false,'That is what alpha decay would give: a different element.']],hint:'Isotopes have the same number of protons (bottom number).',video:'intro',topic:'iso'})}
+const ideaQ=it=>mc({prompt:it.p,choices:it.c.map(([a,b,w])=>[a,!!b,w]),hint:IDEA_HINT[it.t],video:it.v,topic:it.t});
+const IDEA_HINT={types:'Think about what each particle is and what it does to the nucleus (see 🧠 Reference).',pen:'Penetrating power: γ > β > α. Ionizing power is the reverse.',health:'Think about which radiation leaves the body and how long the activity lasts.',iso:'Same element = same number of protons.',fission:'Fission splits heavy nuclei; fusion joins light ones.',halfidea:'Each half-life halves what is left.'};
+/* ============================== GENERATORS PER MODE ============================== */
+const TOPICS={types:['Types of radiation and decay','ideas','types'],iso:['Isotopes and nuclide symbols','ideas','intro'],pen:['Penetrating power and shielding','shield','pen'],balance:['Completing nuclear equations','balance','balance'],dtype:['Identifying the type of decay','balance','balance'],
+ bomb:['Bombardment reactions','balance','bomb'],halfcalc:['Half-life calculations','half','halfLeft'],halfidea:['Half-life and radiocarbon ideas','half','half'],fission:['Fission and fusion','power','fission'],health:['Radiation, health and medicine','ideas','medical']};
+const QUIZ_PLAN=['types','iso','pen','balance','dtype','bomb','halfcalc','halfidea','fission','health'];
+const ideasOf=t=>IDEAS.filter(i=>i.t===t);
+function topicQ(t){
+ if(t==='balance')return pick([balProd,balWords,balPart])();
+ if(t==='dtype')return dtypeQ();if(t==='bomb')return bombQ();if(t==='halfcalc')return pick(HCALC)();
+ if(t==='iso')return pick([pnQ,symQ,isoQ,()=>ideaQ(pick(ideasOf('iso')))])();
+ return ideaQ(pickNew('t'+t,ideasOf(t)))}
+const GEN={
+ decay(){const sys=state.labSys&&DL_SYS.some(d=>d[0]===state.labSys)?state.labSys:pick(DL_SYS)[0];return pickNew('dl'+sys,DLQ.filter(d=>d.for.includes(sys))).f(sys)},
+ balance(){return pickNew('bal',[balProd,balProd,balPart,balWords,bombQ,bombQ,dtypeQ,multiQ])()},
+ shield(){if(state.firstLab){state.firstLab=false;return pickNew('sl',SLQ)()}return Math.random()<0.7?pickNew('sl',SLQ)():ideaQ(pickNew('pen',ideasOf('pen')))},
+ half(){if(state.firstLab){state.firstLab=false;return pickNew('hl',HLQ)()}return Math.random()<0.45?pickNew('hl',HLQ)():Math.random()<0.8?pickNew('hc',HCALC)():ideaQ(pickNew('hi',ideasOf('halfidea')))},
+ power(){if(state.firstLab){state.firstLab=false;return pickNew('pl',PLQ)()}const r=Math.random();return r<0.5?pickNew('pl',PLQ)():r<0.65?pick([fisEqQ,fisCountQ,fusEqQ])():ideaQ(pickNew('fi',ideasOf('fission')))},
+ ideas(){const r=Math.random();return r<0.25?pick([pnQ,symQ,isoQ])():ideaQ(pickNew('id',IDEAS.filter(i=>['types','health','iso'].includes(i.t))))},
+ case(){return pickNew('case',CASES)()},
+ quiz(){const t=state.quiz.plan[state.quiz.i];const q=topicQ(t);q.topic=t;return q}};
+/* ============================== 🩺 PATIENT CASES ============================== */
+/* A case = a story and linked parts (equation → calculation → protection → meaning). Parts chain through q.then. */
+function caseChain(story,parts){parts.forEach((p,i)=>{p.label=`Part ${i+1} of ${parts.length}:`;if(i)parts[i-1].then=p});parts[0].story=story;parts[0].prompt=`<b>${parts[0].label}</b> ${parts[0].prompt}`;parts[0].caseStart=1;return parts[0]}
+const sums1=(L,R)=>`Top: ${L.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')} = ${R.map(t=>(t.coef>1?t.coef+'×':'')+t.x.A).join(' + ')}. Bottom: ${L.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')} = ${R.map(t=>t.x.Z).join(' + ').replace(/-/g,'−')}.`;
+function caseEq(p,mode,blankWhich,prompt,video){const e=decayEq(p,mode);const L=e.L.map(t=>({x:t.x})),R=e.R.map(t=>({x:t.x}));
+ (blankWhich==='both'?R:[...L,...R].filter(t=>blankWhich==='part'?t.x.part:(!t.x.part&&t.x!==p))).forEach(t=>t.blank=1);
+ return nucQ({prompt,L,R,hint:NUC_HINT,why:`${TYPE_RIGHT[mode]} ${sums1(L,R)}`,why1:sums1(L,R),video,topic:'balance'})}
+function caseCalc({who,A0,unit,th,thShow,n,u,video}){const t=n*th,ans=A0/2**n,show={};show[th]=thShow;show[t]=`${t.toLocaleString('en-US')} ${u}`;
+ return numQ({map:{k:'left',a0:A0,n,t:th,u,unit,show},prompt:`${who} What activity is left after ${t.toLocaleString('en-US')} ${u}? (Half-life ${thShow}.)`,unit,answer:ans,
+  slips:[[A0/(2*n),`Halving ${n} times is not dividing by 2 × ${n}.`],[A0/2**(n-1),'Count the half-lives again: time ÷ half-life.'],[A0-ans,'That is how much activity is gone, not what is left.'],[n,'That is the number of half-lives. Now halve the activity that many times.']],
+  hint:`n = ${t.toLocaleString('en-US')} ${u} ÷ ${thShow}. Then halve ${nf(A0,3)} ${unit} n times. (🧭 Step Map walks you through it.)`,
+  why:`n = ${t.toLocaleString('en-US')} ${u} ÷ ${thShow} = ${n} half-lives. ${[...Array(n+1)].map((_,i)=>nf(A0/2**i,3)).join(' → ')} ${unit}. The count of half-lives is exact, so the answer keeps the 3 significant figures of ${nf(A0,3)} ${unit}.`,video,topic:'halfcalc'})}
+const caseMC=(prompt,choices,hint,video,topic)=>mc({prompt,choices,hint,video,topic});
+const CASES=[
+ ()=>{const A0=pick([4.00,6.40,8.00,12.0,20.0]),n=pick([2,3,4]),gen=Math.random()<0.5;
+  return caseChain(`<b>🩺 Mateo’s lung scan.</b> Mateo Herrera, the 34-year-old irrigation technician with asthma, is short of breath in a way that feels different from his asthma, and one calf is sore. His doctor worries about a blood clot in his lungs and orders a V/Q (ventilation/perfusion) scan. The tracer is made with technetium-99m (half-life 6.0 hours), which gives off gamma rays that a camera outside his body can see. <i>(For learning chemistry only; not medical advice.)</i>`,[
+   gen?caseEq(N(99,42),'beta','prod','The hospital’s nuclear pharmacy makes technetium-99m when molybdenum-99 undergoes beta decay. Fill in the missing nucleus.','beta')
+      :caseEq(N(99,43,1),'gamma','prod','Inside Mateo’s lungs, technetium-99m gives off the gamma rays the camera sees. Fill in the missing nucleus.','gamma'),
+   caseCalc({who:`Mateo receives ${nf(A0,3)} mCi of technetium-99m at 7:00 a.m.`,A0,unit:'mCi',th:6,thShow:'6.0 hours',n,u:'hours',video:'curies'}),
+   caseMC('A nuclear medicine technologist draws up Mateo’s dose in a syringe. Technetium-99m gives off gamma rays. Which protection makes the most sense?',[
+    ['A lead or tungsten syringe shield, used quickly, at arm’s length',true,'Gamma rays need dense shielding, and time and distance cut the dose too. Technologists handle many doses a day, so every bit of protection adds up (ALARA).'],
+    ['Gloves alone, because gloves block gamma rays from the syringe',false,'Gloves keep the dose off her skin, but gamma rays pass right through them.'],
+    ['A sheet of paper held between her and the syringe',false,'Paper stops alpha particles only. Technetium-99m gives off gamma rays.'],
+    ['Nothing: one medical dose is too small to matter at all',false,'Each dose is small, but a technologist prepares many every day. The rule is to keep every dose as low as reasonably achievable.']],'Gamma rays need dense shielding. Add time and distance.','pen','pen'),
+   caseMC('After the scan Mateo asks, “Am I radioactive now, and for how long?” Which answer is right?',[
+    ['A little: it halves every 6 hours, so after 2 days under 1% is left',true,'48 h ÷ 6.0 h = 8 half-lives, and (½)⁸ = 1/256, about 0.4%. Short half-lives are why technetium-99m is chosen for scans.'],
+    ['No: all of the gamma rays leave his body right away during the scan',false,'The tracer stays in his body and keeps decaying, half every 6 hours.'],
+    ['Yes, for exactly 6 hours, and then all of it is gone',false,'A half-life is the time for half to decay, not all of it. After 6 hours half is still there.'],
+    ['Yes, for many years, the same as uranium in rocks',false,'Technetium-99m’s half-life is only 6 hours, so it fades within a couple of days.']],'How many 6-hour half-lives fit in 2 days? Halve that many times.','half','halfidea')])},
+ ()=>{const A0=pick([8.00,10.0,12.0,15.0]),n=pick([2,3,4]);
+  return caseChain(`<b>🩺 Thyroid treatment.</b> A 52-year-old patient has an overactive thyroid (Graves’ disease). Her doctor prescribes iodine-131 (half-life 8.0 days), which gives off beta particles and gamma rays. The thyroid soaks up iodine, so the radiation lands where it is needed. <i>(For learning chemistry only; not medical advice.)</i>`,[
+   caseEq(N(131,53),'beta','both','Iodine-131 undergoes beta decay. Write both products.','betaP'),
+   caseCalc({who:`She swallows a capsule with ${nf(A0,3)} mCi of iodine-131.`,A0,unit:'mCi',th:8,thShow:'8.0 days',n,u:'days',video:'curies'}),
+   caseMC('For the first few days she is told to sleep alone and keep away from small children and anyone pregnant. Which protection rule is that?',[
+    ['Distance, and less time close by',true,'Doubling the distance cuts the dose to ¼. Less time near her means less dose for her family.'],
+    ['Shielding: everyone around her wears a lead apron',false,'Nobody is wearing lead here; the advice is about staying away.'],
+    ['Making the iodine-131 decay faster at home',false,'Nothing she does changes a half-life.'],
+    ['Stopping alpha particles with clothing',false,'Iodine-131 gives off beta particles and gamma rays, not alpha particles.']],'Time, distance, shielding: which one is “stay away”?','pen','pen'),
+   caseMC('Why does iodine-131 treat the thyroid without harming most other organs?',[
+    ['The thyroid collects iodine; beta travels only millimeters',true,'The iodine collects in the thyroid, and its beta particles damage nearby thyroid cells but do not reach far.'],
+    ['Its alpha particles travel through the whole body to every organ',false,'Iodine-131 is a beta and gamma emitter, and alpha particles travel the least.'],
+    ['Lead shields cover all her other organs during the treatment',false,'It works because of where the iodine goes, not lead.'],
+    ['Iodine-131 is only radioactive while it is inside the thyroid',false,'It is radioactive everywhere; it simply collects in the thyroid.']],'Where does the body send iodine, and how far do beta particles go?','medical','health')])},
+ ()=>{const A0=pick([10.0,12.0,16.0]),n=pick([2,3]);
+  return caseChain(`<b>🩺 PET scan.</b> A 67-year-old patient with a spot on a lung X-ray has a PET scan. The tracer is FDG, a glucose molecule carrying a fluorine-18 atom (half-life 110 minutes). Fast-growing tumor cells take up extra glucose, so they light up. <i>(For learning chemistry only; not medical advice.)</i>`,[
+   caseEq(N(18,9),'positron','part','Fluorine-18 decays by positron emission. Fill in the missing particle.','positron'),
+   caseCalc({who:`The FDG dose has ${nf(A0,3)} mCi of fluorine-18 at 8:00 a.m.`,A0,unit:'mCi',th:110,thShow:'110 minutes',n,u:'minutes',video:'curies'}),
+   caseMC('What does the PET scanner actually detect?',[
+    ['Two gamma rays made when a positron meets an electron',true,'The positron travels about a millimeter, meets an electron, and both turn into two gamma rays. The ring of detectors catches both at once.'],
+    ['The positrons themselves, after they travel out of the body',false,'Positrons stop within about a millimeter; only the gamma rays get out.'],
+    ['Alpha particles given off by the fluorine-18 in FDG',false,'Fluorine-18 has too few neutrons; it decays by positron emission.'],
+    ['Heat given off by the fast-growing tumor cells',false,'PET detects gamma rays, not heat.']],'What happens when a positron meets an electron?','medical','health'),
+   caseMC('Why is fluorine-18 made the same morning, close to the hospital?',[
+    ['Its half-life is under 2 hours, so it fades fast',true,'After 6 hours (about 3 half-lives) only about ⅛ is left, so it cannot be stored or shipped far.'],
+    ['It becomes more radioactive if it is stored overnight',false,'A sample only gets less radioactive with time.'],
+    ['It slowly turns into uranium if it is kept too long',false,'Fluorine-18 decays to stable oxygen-18.'],
+    ['Cold weather during shipping would stop its decay',false,'Temperature does not change a half-life.']],'Count how many 110-minute half-lives pass in a few hours.','half','halfidea')])},
+ ()=>{const A0=pick([8.00,10.0,12.0]),n=pick([2,3]);
+  return caseChain(`<b>🩺 Brachytherapy.</b> A patient with cervical cancer is treated with brachytherapy: a tiny iridium-192 source (half-life 74 days) is placed right beside the tumor for a few minutes, then removed. <i>(For learning chemistry only; not medical advice.)</i>`,[
+   caseEq(N(192,77),'beta','prod','Iridium-192 undergoes beta decay. Fill in the missing nucleus.','beta'),
+   caseCalc({who:`The clinic’s new iridium-192 source has an activity of ${nf(A0,3)} Ci.`,A0,unit:'Ci',th:74,thShow:'74 days',n,u:'days',video:'curies'}),
+   caseMC('While the source is in place, the staff leave the room and watch the patient on a camera. Which protection rules are they using?',[
+    ['Time and distance, plus the room’s shielded walls',true,'Leaving the room puts distance and a wall between them and the source, and they spend no time near it while it is out.'],
+    ['Only shielding: a paper gown over each staff member',false,'Paper stops alpha particles only; iridium-192 gives off beta particles and gamma rays.'],
+    ['Making the source decay faster while they are away',false,'Nothing changes a half-life.'],
+    ['None needed; iridium-192 only gives off alpha particles',false,'Iridium-192 gives off beta particles and gamma rays.']],'Time, distance, shielding: which ones does leaving the room use?','pen','pen'),
+   caseMC('Why put the source right next to the tumor instead of aiming radiation from outside the body?',[
+    ['Dose drops fast with distance, so the tumor gets the most',true,'Inverse-square: twice as far gets ¼ the dose. A source at the tumor spares healthy tissue.'],
+    ['Iridium-192 only gives off radiation inside a body',false,'It gives off radiation anywhere; placing it close is about dose.'],
+    ['Placing it close makes its half-life much shorter',false,'A half-life never changes.'],
+    ['So the radiation spreads out evenly through the whole body',false,'The goal is the opposite: keep the dose at the tumor.']],'How does dose change with distance?','medical','health')])}];
+/* ============================== 🔧 FIX MY MISTAKES ============================== */
+/* code: [label, generator for a targeted question] */
+const SLIPS={
+ betaSign:['A beta particle’s bottom number (⁰₋₁e is −1)',()=>pick([()=>balWords('beta'),()=>balPart(pick(['beta','ec'])),()=>balProd('beta')])()],
+ posSign:['A positron’s bottom number (⁰₊₁e is +1)',()=>pick([balPart,balProd])('positron')],
+ swap:['Swapping the top and bottom numbers',()=>pick([balProd,balPart,balWords])('alpha')],
+ top:['Balancing the top (mass) numbers',()=>pick([()=>balProd('alpha'),()=>balPart('alpha'),bombQ])()],
+ bottom:['Balancing the bottom (atomic) numbers',()=>pick([()=>balProd(pick(['alpha','beta','positron'])),bombQ])()],
+ oldSym:['Keeping the old element symbol',()=>balProd(pick(['alpha','beta','positron']))],
+ sym:['Finding the element from its atomic number',()=>pick([()=>balProd(pick(['alpha','beta','positron','ec'])),bombQ])()],
+ psym:['Writing particle symbols (He, e, γ, n)',()=>balPart(pick(['alpha','beta','positron','gamma']))],
+ div2n:['Dividing by 2 × n instead of halving n times',()=>pick([HCALC[0],HCALC[5]])()],
+ count:['Counting half-lives (time ÷ half-life)',()=>pick([HCALC[0],HCALC[2],HCALC[5]])()],
+ decayed:['Giving the amount that decayed instead of what is left',()=>pick([HCALC[0],HCALC[5]])()],
+ nOnly:['Stopping at n (forgetting × half-life)',()=>pick([HCALC[1],HCALC[4]])()],
+ backward:['Working backward (double, don’t halve)',()=>HCALC[2]()],
+ halfDiv:['Finding a half-life (time ÷ n)',()=>HCALC[3]()],
+ sf:['Sig figs on the final answer',()=>pick(HCALC.slice(0,4))()],
+ type:['Naming the type of decay',()=>dtypeQ()],
+ pen:['Penetrating power and shielding',()=>ideaQ(pick(ideasOf('pen')))]};
+/* chips above the question that pick a lab sample */
+const LAB_PICK={decay:DL_SYS.map(d=>[d[0],d[1]]),half:HL_SYS.map(h=>[h[0],h[1]])};
+</script>
+<script>
+/* ============================== ENGINE (practice card) ============================== */
+let ui={};try{ui=JSON.parse(localStorage.getItem(GAME_KEY+'-ui')||'{}')}catch(e){}
+const saveUI=()=>{try{localStorage.setItem(GAME_KEY+'-ui',JSON.stringify(ui))}catch(e){}};
+Object.assign(state,{mode:MODES.some(m=>m.id===ui.mode)?ui.mode:MODES[0].id,q:null,sel:null,done:false,correct:0,streak:0,assist:0,taskOk:true,logged:false});
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const c=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#b9a3e6'];for(let i=0;i<50;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.background=c[i%5];p.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3600)}}
+const JK=GAME_KEY+'-journey',jBlank=()=>({xp:0,correct:0,best:0,modes:{},badges:{}});let J=jBlank();try{J=Object.assign(jBlank(),JSON.parse(localStorage.getItem(JK)||'{}'))}catch(e){}
+const BADGES=[['first','🌱','First Answer','Answer a question',j=>j.correct>=1],['ten','🔟','Ten Correct','10 on your own',j=>j.correct>=10],['fifty','🏅','Fifty Correct','50 on your own',j=>j.correct>=50],
+ ['s5','🔥','Hot Streak','5 in a row',j=>j.best>=5],['s10','⚡','Critical Mass','10 in a row',j=>j.best>=10],
+ ['decay','⚛️','Decay Detective','5 in Decay Lab',j=>(j.modes.decay||0)>=5],['balance','⚖️','Balancer','10 in Balance It!',j=>(j.modes.balance||0)>=10],['shield','🛡️','Safety Officer','5 in Shield Lab',j=>(j.modes.shield||0)>=5],
+ ['half','⏳','Half-Life Hero','10 in Half-Life Lab',j=>(j.modes.half||0)>=10],['power','🔥','Reactor Operator','5 in Fission & Fusion',j=>(j.modes.power||0)>=5],['ideas','🏥','Rad Tech','10 in Radiation & You',j=>(j.modes.ideas||0)>=10],
+ ['case','🩺','Case Closed','3 Patient Cases',j=>(j.modes.case||0)>=3],['fix','🔧','Fixer','5 in Fix My Mistakes',j=>(j.fixed||0)>=5],
+ ['quiz','🎯','Skill Check Star','8+ on a Skill Check',j=>(j.bestQuiz||0)>=8],['all','🧭','Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
+function earn(){BADGES.forEach(([id,e,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast(`Badge earned: ${e} ${t}`)}})}
+function renderJ(){const l=Math.floor(J.xp/100)+1,i=J.xp%100;$('jChip').textContent=`Level ${l} • ${J.xp} XP`;$('lvl').textContent='Level '+l;$('xpFill').style.width=i+'%';$('xpTxt').textContent=i+' / 100 XP';
+ renderFix();
+ $('badges').innerHTML=BADGES.map(([id,e,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><span class="e" aria-hidden="true">${e}</span><span><b>${t}</b>${d}</span></div>`).join('')}
+/* ---- Fix my mistakes: count each kind of slip on this device; offer 5 targeted questions once a slip repeats ---- */
+function slip(code){if(!code||!SLIPS[code])return '';const q=state.q||{};q.slipped=q.slipped||{};if(q.slipped[code])return '';q.slipped[code]=1;J.slips=J.slips||{};J.slips[code]=(J.slips[code]||0)+1;try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderFix();
+ const n=J.slips[code];if(n<2||(state.fix&&state.fix.code===code)||state.mode==='quiz')return '';
+ return `<div class="fixnudge">🔧 That is ${n} times for: <b>${SLIPS[code][0]}</b>. <br><button type="button" class="btn hint" data-fix="${code}">Practice this (5 questions)</button></div>`}
+function renderFix(){const el=$('fixList');if(!el)return;const top=Object.entries(J.slips||{}).filter(([k,v])=>v>0&&SLIPS[k]).sort((a,b)=>b[1]-a[1]).slice(0,3);
+ el.innerHTML=`<b>🔧 Fix my mistakes</b>${top.length?top.map(([k,v])=>`<div>${SLIPS[k][0]} <span style="color:#5c6a75">(${v}×)</span><br><button type="button" class="btn hint" data-fix="${k}">Practice this</button></div>`).join(''):'<div style="color:#5c6a75">Slips you repeat (like a beta particle written as +1) show up here with a practice set.</div>'}`}
+function startFix(code){state.fix={code,left:5,n:0};if(state.mode==='quiz'){state.mode='balance';ui.mode=state.mode;saveUI();buildModes()}next();$('practice').scrollIntoView({behavior:'smooth',block:'start'})}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-fix]');if(b)startFix(b.dataset.fix)});
+function award(assisted){const before=Math.floor(J.xp/100);if(assisted)J.xp+=2;else{J.xp+=10+Math.min(state.streak,5)*2;J.correct++;J.best=Math.max(J.best,state.streak);J.modes[state.mode]=(J.modes[state.mode]||0)+1}
+ earn();if(Math.floor(J.xp/100)>before)toast('Level up!');try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ()}
+function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
+function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=h}
+function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'nuclear',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.topic||state.q.video||'',correct:!!ok})}catch(e){}}
+function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic" aria-hidden="true">${m.icon}</span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+ $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.fix=null;state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();next()})}
+/* labs */
+const LABS={decay:Decay,shield:Shield,half:Half,power:Power};const labHost=document.createElement('div');
+function stopLabs(){Object.values(LABS).forEach(L=>{L.stop();L.onEvent=null})}
+function ensureLab(spec){stopLabs();const L=LABS[spec.kind];L.mount(labHost,spec.o||{sys:spec.sys});L.start();L.onEvent=()=>taskEvent(L);if(spec.kind==='power'||spec.kind==='half')taskPoll(L);return L}
+/* a task is done when its ok(lab state) test passes; then Check Answer unlocks */
+function taskEvent(L){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(t.ok(L.s)){state.taskOk=true;const el=$('taskBox');if(el){el.className='task done';el.innerHTML='✅ Done! Now answer below.'}$('checkBtn').disabled=false}}
+function taskPoll(L){clearTimeout(taskPoll.t);if(!state.q||!state.q.task||state.taskOk)return;taskEvent(L);if(!state.taskOk)taskPoll.t=setTimeout(()=>taskPoll(L),300)}
+function startQuiz(){state.quiz={plan:QUIZ_PLAN.slice(),i:0,res:[],over:false}}
+function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length;Q.over=true;J.bestQuiz=Math.max(J.bestQuiz||0,n);try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}earn();renderJ();
+ const miss={};Q.res.forEach(r=>{if(!r.ok)miss[r.topic]=(miss[r.topic]||0)+1});
+ const rows=Object.keys(TOPICS).filter(t=>Q.res.some(r=>r.topic===t)).map(t=>{const R=Q.res.filter(r=>r.topic===t),k=R.filter(r=>r.ok).length;return `<tr><td>${k===R.length?'✅':'❌'}</td><td>${TOPICS[t][0]}</td><td>${k} / ${R.length}</td></tr>`}).join('');
+ const plan=Object.keys(miss).map(t=>`<div class="item"><b>📌 ${TOPICS[t][0]}</b><br><button type="button" class="btn hint" data-go="${t}">Practice this</button><button type="button" class="btn show" data-vid="${t}">🎥 Watch Dr. Dan</button></div>`).join('');
+ const msg=n>=9?'🌟 Excellent! You are ready.':n>=7?'👍 Solid. Review the topics below.':n>=5?'📚 Getting there. Practice the topics below, then try again.':'🧭 Start with the topics below; the ⚛️ Decay Lab and ⏳ Half-Life Lab help a lot.';
+ $('qArea').innerHTML=`<div class="qsum"><p class="prompt">Skill Check complete</p><div class="big">${n} / ${Q.res.length}</div><p>${msg}</p><table>${rows}</table>
+  <h3 style="margin:14px 0 4px">Your study plan</h3>${plan?`<div class="plan">${plan}</div>`:'<p>Nothing to review: every topic was right. Try another Skill Check to be sure!</p>'}
+  <button type="button" class="btn check" id="againBtn" style="margin-top:14px">🎯 Start a new Skill Check</button></div>`;
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);fb('','');$('newBtn').textContent='New Skill Check ↻';$('practice').classList.add('quizdone');$('modeTitle').textContent='Skill Check results';
+ $('qArea').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{state.mode=TOPICS[b.dataset.go][1];ui.mode=state.mode;saveUI();buildModes();next();$('practice').scrollIntoView({behavior:'smooth'})});
+ $('qArea').querySelectorAll('[data-vid]').forEach(b=>b.onclick=()=>{state.q={video:TOPICS[b.dataset.vid][2]};video();openVideo()});
+ $('againBtn').onclick=()=>{startQuiz();next()};$('againBtn').focus({preventScroll:true})}
+function next(){clearTimeout(taskPoll.t);
+ $('practice').classList.toggle('quizmode',state.mode==='quiz');$('practice').classList.remove('quizdone');$('newBtn').textContent='New Question ↻';
+ if(state.mode==='quiz'){if(!state.quiz||state.quiz.over)startQuiz();else if(state.done&&state.q&&state.q.qi===state.quiz.i)state.quiz.i++;
+  if(state.quiz.i>=state.quiz.plan.length){stopLabs();state.q={};state.done=true;return quizSummary()}$('newBtn').textContent='Next question →'}
+ if(state.fix&&state.mode==='quiz')state.fix=null;
+ if(state.fix){if(state.done&&state.q&&state.q.fixQ){state.fix.left--;state.fix.n++}if(state.fix.left<=0){toast('🔧 Practice set done! Check the Journey panel to see your slips go down.');state.fix=null}}
+ const q=state.fix?Object.assign(SLIPS[state.fix.code][1](),{fixQ:1}):GEN[state.mode]();if(state.mode==='quiz')q.qi=state.quiz.i;state.q=q;state.sel=null;state.done=false;state.logged=false;state.chainAssist=false;
+ $('modeTitle').textContent=state.fix?`🔧 Fix: ${state.fix.n+1} of 5`:MODES.find(m=>m.id===state.mode).title+(state.mode==='quiz'?` · ${state.quiz.i+1} of ${state.quiz.plan.length}`:'');
+ $('hintBox').className='hintbox';fb('','');
+ const P=LAB_PICK[state.mode],cur=q.lab&&q.lab.sys;
+ let h=P?`<div class="ctrls" role="group" aria-label="Choose a sample"><span class="lbl">Sample:</span>${P.map(([k,l])=>`<button type="button" class="chip ${cur===k?'on':''}" aria-pressed="${cur===k}" data-sys="${k}">${l}</button>`).join('')}</div>`:'';
+ if(state.mode==='quiz')h+=`<div class="qprog" aria-hidden="true">${state.quiz.plan.map((t,i)=>`<i class="${i<state.quiz.res.length?(state.quiz.res[i].ok?'ok':'no'):i===state.quiz.i?'now':''}"></i>`).join('')}</div><p class="tip">One try per question. No hints until the end.</p>`;
+ if(state.fix)h+=`<p class="tip">🔧 Practicing: <b>${SLIPS[state.fix.code][0]}</b> · <button type="button" class="linkbtn" id="fixStop">stop</button></p>`;
+ if(q.story)h+=`<div class="story">${q.story}</div>`;
+ h+=`<p class="prompt">${q.prompt}</p>`;
+ if(q.task)h+=`<div class="task" id="taskBox" role="status" aria-live="polite"><span aria-hidden="true">👉</span><span>${q.task.say}</span></div>`;
+ if(q.lab)h+=`<div id="labHere"></div>`;
+ if(q.html)h+=`<div class="qbox"><span class="eq">${q.html}</span></div>`;
+ h+=bodyHTML(q);
+ $('qArea').innerHTML=h;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+ state.taskOk=!q.task;if(q.task)$('checkBtn').disabled=true;
+ if($('fixStop'))$('fixStop').onclick=()=>{state.fix=null;next()};
+ if(q.lab){$('labHere').appendChild(labHost);ensureLab(q.lab)}else stopLabs();
+ wireBody(q);
+ $('qArea').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{state.labSys=b.dataset.sys;next()});
+ video();stats()}
+function bodyHTML(q){if(q.type==='num')return numHTML(q);if(q.type==='nuc')return nucBody(q);return optsHTML(q)}
+function optsHTML(q){return `<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`}
+function nucBody(q){return `<div class="nucrow"><span class="tip">Fill each yellow box: top number, bottom number, symbol.</span><button type="button" class="chip ins" data-nins="−" aria-label="Make the bottom number negative (minus sign)">−</button><button type="button" class="chip ins" data-nins="γ" aria-label="Type gamma">γ</button><button type="button" class="chip" id="ptBtn" aria-expanded="false" aria-controls="ptBox">🔍 Element finder</button></div><div class="ptbox hidden" id="ptBox"><label>Atomic number<input id="ptIn" inputmode="numeric" autocomplete="off" placeholder="90"></label><output id="ptOut" aria-live="polite">Type the bottom number to find the element.</output><button type="button" class="chip" id="ptUse" disabled>Use this symbol</button></div><div class="qbox" id="nucBox">${eqWithBlanks(q)}</div>`}
+function wireBody(q){wireIns();
+ if(q.type==='nuc'){const box=$('nucBox');box.querySelectorAll('input').forEach(i=>{i.addEventListener('focus',()=>{wireBody.last=i});i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();state.done?$('newBtn').click():check()}})});
+  $('qArea').querySelectorAll('[data-nins]').forEach(b=>{const keep=e=>e.preventDefault();b.addEventListener('pointerdown',keep);b.addEventListener('mousedown',keep);
+   b.onclick=()=>{const want=b.dataset.nins==='γ'?'bS':'bZ';let i=wireBody.last&&wireBody.last.isConnected&&wireBody.last.classList.contains(want)?wireBody.last:null;if(!i){const blk=wireBody.last&&wireBody.last.closest('.blank');i=(blk||box).querySelector('.'+want)}if(!i||i.readOnly)return;
+    if(want==='bS')i.value='γ';else i.value=i.value.startsWith('-')?i.value.slice(1):'-'+i.value.replace(/^\+/,'');i.focus()}})}
+ if(q.type==='nuc')wirePT();
+ if(q.type==='num'&&q.map)wireMap(q);
+ $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=state.q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})})}
+function numHTML(q){return `<div class="numrow"><label for="numIn" class="sr">Your answer</label><input id="numIn" class="num" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer">${q.unit?`<span class="unit">${q.unit}</span>`:''}<button type="button" class="chip ins" data-ins="E" aria-label="×10ⁿ: insert E for times ten to the power">×10ⁿ</button></div><p class="tip">${q.loose?'Give the number of years (sig figs are not graded here).':`Round to <b>${q.sf} significant figures</b>. Scientific notation: tap <b>×10ⁿ</b> (or type E), like 1.20E3.`}</p>${q.map&&state.mode!=='quiz'?'<details class="smap" id="smap"><summary>🧭 Step Map: solve it one step at a time</summary><div id="smapBody"></div></details>':''}`}
+/* Element finder: atomic number → symbol (the step students get stuck on). Shows the neighbors so an off-by-one is easy to spot. */
+const PT_NAME=Z=>Z===0?['n','neutron']:Z===-1?['e','beta particle (electron)']:Z>=1&&Z<SYM.length?[SYM[Z],ENAME[Z]]:null;
+function wirePT(){const btn=$('ptBtn'),box=$('ptBox'),inp=$('ptIn'),out=$('ptOut'),use=$('ptUse');if(!btn)return;
+ btn.onclick=()=>{const open=box.classList.toggle('hidden')===false;btn.setAttribute('aria-expanded',open);if(open){inp.focus({preventScroll:true})}};
+ inp.oninput=()=>{const z=readZ(inp.value),e=PT_NAME(z);use.disabled=!e||z<1;use.dataset.s=e?e[0]:'';
+  if(!e){out.textContent=inp.value.trim()?'Type a whole number from 1 to 118.':'Type the bottom number to find the element.';return}
+  const nb=[z-1,z+1].map(k=>PT_NAME(k)&&k>=1?`${k} ${PT_NAME(k)[0]}`:'').filter(Boolean);
+  out.innerHTML=`<b>${z} = ${e[0]}</b> (${e[1]})${nb.length?` <span style="color:#5c6a75">· neighbors: ${nb.join(', ')}</span>`:''}`};
+ use.onclick=()=>{const s=use.dataset.s;if(!s)return;const box2=$('nucBox');let t=wireBody.last&&wireBody.last.isConnected&&wireBody.last.closest('.blank')?wireBody.last.closest('.blank').querySelector('.bS'):null;
+  if(!t||t.readOnly)t=[...box2.querySelectorAll('.bS')].find(i=>!i.value&&!i.readOnly)||null;if(!t)return;t.value=s;t.classList.add('pop');box.classList.add('hidden');btn.setAttribute('aria-expanded','false')}}
+/* Step Map: revealed one step at a time; only text and new rows are added (no re-render), so iPhone taps stay reliable */
+function wireMap(q){const d=$('smap');if(!d)return;const M=stepsOf(q);if(!M)return;let i=0;const body=$('smapBody');
+ const add=()=>{if(i>=M.steps.length){const e=document.createElement('div');e.className='send';e.textContent='✅ '+M.end;body.appendChild(e);return}
+  const st=M.steps[i],r=document.createElement('div');r.className='srow';r.innerHTML=`<div class="sp">Step ${i+1}. ${st.p}</div><input inputmode="decimal" autocomplete="off" aria-label="Step ${i+1} answer"><button type="button" class="chip">✓ Check step</button><span class="smsg" role="status"></span>`;body.appendChild(r);
+  const inp=r.querySelector('input'),msg=r.querySelector('.smsg'),go=()=>{const v=NUM.parseValue(inp.value.trim());if(!isFinite(v)){msg.textContent='Type a number.';return}
+   const ok=st.int?Math.abs(v-st.a)<1e-9:Math.abs(v-st.a)<=Math.abs(st.a)*0.006+1e-12;r.classList.toggle('bad',!ok);
+   if(!ok){msg.textContent='Not yet. 💡 '+st.h;return}r.classList.add('ok');msg.textContent='✓';inp.readOnly=true;r.querySelector('button').disabled=true;i++;add()};
+  r.querySelector('button').onclick=go;inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();go()}})};
+ d.addEventListener('toggle',()=>{if(d.open&&!body.childNodes.length)add()})}
+/* ×10ⁿ button: the iPhone number keypad has no E key. Keep the keypad open and add to the end. */
+function wireIns(){$('qArea').querySelectorAll('[data-ins]').forEach(b=>{if(b.dataset.w)return;b.dataset.w=1;const keep=e=>e.preventDefault();b.addEventListener('pointerdown',keep);b.addEventListener('mousedown',keep);
+  b.onclick=()=>{const n=$('numIn');if(!n||n.readOnly)return;n.value+=b.dataset.ins;n.focus();const L=n.value.length;try{n.setSelectionRange(L,L)}catch(e){}}})}
+function whyList(q){const others=q.options.filter(o=>o!==q.answer&&q.whys[o]);return others.length?`<ul class="why">${others.map(o=>`<li>❌ <b>${o}</b>: ${q.whys[o]}</li>`).join('')}</ul>`:''}
+function ansText(q){if(q.type==='num')return `${q.loose?plain(q.answer):nf(q.answer,q.sf)}${q.unit?' '+q.unit:''}`;if(q.type==='nuc')return eqHTML(q.L.map(t=>({x:t.x,coef:t.coef})),q.R.map(t=>({x:t.x,coef:t.coef})));return q.answer}
+function finish(revealed,quizWrong){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;if($('numIn')){$('numIn').readOnly=true;$('numIn').blur()}
+ if(q.type==='nuc'){fillNuc(q,revealed||quizWrong);const f=document.activeElement;if(f&&f.closest&&f.closest('#nucBox'))f.blur()}
+ /* chains: two-step equations ("what type is it?") and Patient Case parts. No point until the last part; a revealed part marks the chain assisted. */
+ if(q.then&&!quizWrong){const n=q.then;n.qi=q.qi;n.topic=n.topic||q.topic;n.prev=q;n.fixQ=q.fixQ;if(revealed)state.chainAssist=true;
+  $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options&&q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
+  state.q=n;state.sel=null;state.done=false;state.logged=false;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+  const div=document.createElement('div');div.innerHTML=`<p class="prompt"><b>${n.label||'Step 2 of 2:'}</b> ${n.prompt}</p>`+bodyHTML(n);$('qArea').appendChild(div);wireBody(n);
+  const head=revealed?`👀 <b>${ansText(q)}</b><br>${q.why}`:(q.type==='nuc'?'✅ Equation balanced! '+(q.why1||''):'✅ Right! '+q.why);
+  fb('good',head+`<br>${n.label?'On to '+n.label.replace(':','')+' ↓':'Now name the kind of reaction ↓'}`);$('hintBox').className='hintbox';video();
+  setTimeout(()=>div.scrollIntoView({behavior:'smooth',block:'start'}),60);return}
+ if(state.chainAssist&&!revealed&&!quizWrong){revealed=true}
+ if(!revealed&&!quizWrong&&q.fixQ&&state.fix){const c=state.fix.code;if(J.slips&&J.slips[c])J.slips[c]--;J.fixed=(J.fixed||0)+1}
+ if(state.mode==='quiz'&&state.quiz&&q.qi===state.quiz.i&&state.quiz.res.length===state.quiz.i)state.quiz.res.push({topic:q.topic,ok:!revealed&&!quizWrong});
+ if(state.mode==='quiz'){const last=state.quiz.i+1>=state.quiz.plan.length;$('newBtn').textContent=last?'See my results →':'Next question →'}
+ $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options&&q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
+ const ansTxt=ansText(q),wl=q.type==='mc'?whyList(q):'';
+ if(quizWrong){state.streak=0;log(false);stats();fb('bad',`❌ Not this time. The answer is <b>${ansTxt}</b>.<br>${q.why}${wl}`);return}
+ if(revealed){state.assist++;state.streak=0;log(false);fb('good',`👀 <b>${ansTxt}</b><br>${q.why}${wl}<br><small>Assisted: no point this time. <button class="linkbtn" onclick="openVideo()">🎥 Review with Dr. Dan</button></small>`);award(true)}
+ else{state.correct++;state.streak++;log(true);confetti();fb('good','✅ Correct! '+q.why+wl);award(false)}stats();
+ const a=document.activeElement;if(!a||a===document.body||a.disabled)$('newBtn').focus({preventScroll:true})}
+function checkNum(q){const raw=$('numIn').value.trim();if(!raw)return fb('bad','Type your answer first.');
+ if(NUM.decimalComma(raw))return fb('bad','Use a period for decimals (type 1.5, not 1,5). Commas only for thousands, like 1,200.');
+ const v=NUM.parseValue(raw);if(!isFinite(v))return fb('bad','Type one number, like 8.00 or 1.20E3.');
+ const close=(a,b)=>Math.abs(a-b)<=Math.abs(b)*0.006+1e-300,target=Number(q.answer.toPrecision(q.sf));
+ if(close(v,q.answer)||(!q.loose&&close(v,target))){if(!q.loose&&NUM.sfCount(raw)!==q.sf){const nudge=slip('sf');return fb('bad',`✏️ Your math is right! Now round to <b>${q.sf} significant figures</b> (for example, 2.50 and 0.125 each have 3). Trailing zeros only count with a decimal point.${nudge}`)}return finish(false)}
+ const sl=(q.slips||[]).find(([x])=>isFinite(x)&&close(v,x)&&!close(x,q.answer));const nudge=sl?slip(sl[2]):'';
+ if(state.mode==='quiz')return finish(false,true);
+ state.streak=0;log(false);stats();return fb('bad',`🔎 Not quite. ${sl?sl[1]+' ':''}<br>💡 ${q.hint}${nudge}`)}
+/* ---- nuclear equation boxes ---- */
+const ALIAS={alpha:['he','α','alpha','a'],beta:['e','β','β-','β⁻','e-','e⁻','b','beta'],positron:['e','β','β+','β⁺','e+','e⁺','positron'],gamma:['γ','g','y','gamma'],neutron:['n'],proton:['h','p']};
+function readZ(s){s=String(s).replace(/[−–—]/g,'-').replace(/\s+/g,'');if(/^[+-]?\d+$/.test(s))return +s;let m=s.match(/^(\d+)([+-])$/);if(m)return m[2]==='-'?-m[1]:+m[1];return NaN}
+function symOK(typed,x){const t=typed.trim();if(!t)return false;if(x.part)return ALIAS[x.part].includes(t.toLowerCase());return t.toLowerCase()===x.s.toLowerCase()}
+function nucErrors(q){const blocks=[...$('nucBox').querySelectorAll('.blank')];const errs=[];const all=[...q.L,...q.R];const side=t=>q.L.includes(t)?'L':'R';
+ const val=q.blanks.map((t,i)=>{const b=blocks[i];return {t,b,A:b.querySelector('.bA').value.trim(),Z:b.querySelector('.bZ').value.trim(),S:b.querySelector('.bS').value.trim()}});
+ if(val.some(v=>v.A===''||v.Z===''||v.S===''))return [['empty','Fill in all three parts of every yellow box: the top number, the bottom number and the symbol.']];
+ const tot=(s,k)=>all.filter(t=>side(t)===s).reduce((a,t)=>{const v=val.find(v=>v.t===t);const n=v?(k==='A'?parseInt(v.A,10):readZ(v.Z)):t.x[k];return a+(t.coef||1)*n},0);
+ for(const v of val){const a=parseInt(v.A,10),z=readZ(v.Z);if(!/^\d+$/.test(v.A))errs.push([v.b,'The top number is a mass number: a whole number like 4 or 234.']);else if(!isFinite(z))errs.push([v.b,'The bottom number is an atomic number: a whole number like 90, or −1 for a beta particle (tap −).'])}
+ if(errs.length)return errs;
+ const LA=tot('L','A'),RA=tot('R','A'),LZ=tot('L','Z'),RZ=tot('R','Z');
+ for(const v of val){const a=parseInt(v.A,10),z=readZ(v.Z),x=v.t.x;
+  if(a===x.Z&&z===x.A&&a!==z){errs.push([v.b,'Swapped: the mass number (the bigger one) goes on top, the atomic number on the bottom.','swap']);continue}
+  if(a!==x.A){errs.push([v.b,`Top numbers do not balance: left side adds to ${LA}, right side to ${RA}.`,'top']);continue}
+  if(z!==x.Z){errs.push([v.b,x.part==='beta'&&z===1?'A beta particle is an electron: its bottom number is −1, not +1.':x.part==='positron'&&z===-1?'A positron has a +1 charge: its bottom number is +1.':`Bottom numbers do not balance: left side adds to ${LZ}, right side to ${RZ}.${all.some(u=>u.x.part==='beta')?' Watch the signs: a beta particle counts as −1.':''}`,x.part==='beta'&&z===1?'betaSign':x.part==='positron'&&z===-1?'posSign':all.some(u=>u.x.part==='beta')&&Math.abs(z-x.Z)===2?'betaSign':'bottom']);continue}
+  if(!symOK(v.S,x)){const t=v.S.trim();const parent=all.find(u=>!u.blank&&!u.x.part);
+   errs.push(x.part?[v.b,`With top ${x.A} and bottom ${x.Z}, this particle is ${PNAME[x.part]==='gamma ray'?'a gamma ray (γ)':PNAME[x.part]==='alpha particle'?'an alpha particle (He)':'a'+(/^[aeiou]/.test(PNAME[x.part])?'n ':' ')+PNAME[x.part]}. Check its symbol.`,'psym']:
+    parent&&t.toLowerCase()===parent.x.s.toLowerCase()?[v.b,`The atomic number changed to ${x.Z}, so it is a new element. Find element number ${x.Z} on the periodic table.`,'oldSym']:[v.b,`The numbers are right! Element number ${x.Z} is not “${esc(t)}”. Look it up on the periodic table.`,'sym'])}}
+ return errs}
+function fillNuc(q,show){const blocks=[...$('nucBox').querySelectorAll('.blank')];q.blanks.forEach((t,i)=>{const b=blocks[i];if(!b)return;if(show){b.querySelector('.bA').value=t.x.A;b.querySelector('.bZ').value=String(t.x.Z).replace('-','−');b.querySelector('.bS').value=t.x.s}
+  else{const S=b.querySelector('.bS');if(!t.x.part&&S.value.trim()!==t.x.s)S.value=t.x.s}b.classList.remove('bad');b.classList.add('ok');b.querySelectorAll('input').forEach(i=>i.readOnly=true)})}
+function checkNuc(q){const errs=nucErrors(q);if(errs.length&&errs[0][0]==='empty')return fb('bad',errs[0][1]);
+ $('nucBox').querySelectorAll('.blank').forEach(b=>{const bad=errs.some(e=>e[0]===b);b.classList.toggle('bad',bad);b.classList.toggle('ok',!bad)});
+ if(!errs.length)return finish(false);
+ const nudge=slip((errs.find(e=>e[2])||[])[2]);
+ if(state.mode==='quiz')return finish(false,true);
+ state.streak=0;log(false);stats();return fb('bad',`🔎 Almost. ${[...new Set(errs.map(e=>e[1]))].slice(0,2).join(' ')}<br>💡 ${q.hint}${nudge}`)}
+function check(){if(state.done)return;const q=state.q;if(!state.taskOk)return fb('bad','👉 Do the lab step in the gold box first, then answer.');
+ if(q.type==='num')return checkNum(q);if(q.type==='nuc')return checkNuc(q);
+ if(!state.sel)return fb('bad','Choose an answer first.');
+ const i=q.options.indexOf(state.sel),el=[...$('qArea').querySelectorAll('.opt')].filter(b=>!b.disabled)[i];
+ const mcode=state.sel!==q.answer?({dtype:'type',pen:'pen'})[q.topic]:null;const nudge=mcode?slip(mcode):'';
+ if(state.sel!==q.answer&&state.mode==='quiz'){el?.classList.add('wrong');return finish(false,true)}
+ if(state.sel!==q.answer){state.streak=0;log(false);stats();el?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}${nudge}`)}
+ finish(false)}
+function hint(){if(state.done)return;$('hintBox').innerHTML='💡 '+state.q.hint+(VIDEO_FOR[state.q.video]?` <button class="linkbtn" onclick="openVideo()">🎥 Watch Dr. Dan explain it</button>`:'');$('hintBox').className='hintbox on'}
+const mmss=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+function video(){const v=VIDEO_FOR[state.q?.video];const src=v?`https://www.youtube.com/embed/${v[0]}?start=${v[1]}&rel=0`:`https://www.youtube.com/embed/${FALLBACK_VIDEO}?rel=0`;
+ $('vidCard').innerHTML=v?`<small>🎯 Matched to this question</small><b>${esc(v[2])}</b><div class="tip">Starts at ${mmss(v[1])}</div>`:'<small>📺 Introduction to nuclear chemistry</small>';
+ $('player').dataset.want=src;if($('videoPanel').open&&$('player').src!==src)$('player').src=src}
+function openVideo(){$('videoPanel').open=true;$('player').src=$('player').dataset.want;$('videoPanel').scrollIntoView({behavior:'smooth',block:'center'})}
+$('videoPanel').addEventListener('toggle',()=>{if($('videoPanel').open&&!$('player').src)$('player').src=$('player').dataset.want});
+$('refBody').innerHTML=REFERENCE.map(([t,d])=>`<div class="refcard"><b>${t}</b><div>${d}</div></div>`).join('');
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){state.taskOk=true;finish(true)}};$('newBtn').onclick=()=>{if(state.mode==='quiz'&&state.quiz&&!state.quiz.over&&!state.done)return fb('bad','Answer this question first. (Each question gets one try.)');next()};
+{let armed=0;$('resetBtn').onclick=()=>{if(!armed){$('resetBtn').textContent='Tap again to confirm';armed=setTimeout(()=>{armed=0;$('resetBtn').textContent='Reset progress'},4000);return}clearTimeout(armed);armed=0;J=jBlank();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}$('resetBtn').textContent='Reset progress';renderJ()}}
+if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPanel').open=true}
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(e.target.id==='numIn'&&e.key==='Enter'){e.preventDefault();state.done?$('newBtn').click():check();return}if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
+ const bs=[...$('qArea').querySelectorAll('.opt:not(:disabled)')];if(/^[1-9]$/.test(e.key)&&bs[e.key-1]){bs[e.key-1].click();return}
+ if(e.key==='Enter'&&!/^(BUTTON|SUMMARY|A)$/.test(t)){e.preventDefault();state.done?next():check()}});
+document.addEventListener('touchend',e=>{const b=e.target.closest&&e.target.closest('button');if(b&&b.disabled)e.preventDefault()},{passive:false});
+/* Deep links: ?mode=decay|balance|shield|half|power|ideas|quiz opens that mode; &sys=<sample> picks a Decay or Half-Life Lab sample (e.g. ?mode=decay&sys=c14). For this visit only. */
+(()=>{const P=new URLSearchParams(location.search),m=P.get('mode'),y=P.get('sys');
+ if(MODES.some(x=>x.id===m)){state.mode=m;state.firstLab=true}
+ if(y&&(DL_SYS.some(d=>d[0]===y)||HL_SYS.some(h=>h[0]===y))){state.labSys=y;if(!m)state.mode=DL_SYS.some(d=>d[0]===y)?'decay':'half'}
+ if(m||y)addEventListener('load',()=>setTimeout(()=>{const e=$('modes');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150))})();
+/* The shared Feedback pill (brand/feedback.js) is fixed bottom-right; on phones it covered Show Answer. Hide it while the answer buttons are on screen. */
+(()=>{const row=document.querySelector('.btnrow');if(!row||!('IntersectionObserver' in window))return;let vis=false;const apply=()=>{const f=document.querySelector('.ddfb-float');if(f)f.classList.toggle('eq-hide',vis)};
+ new IntersectionObserver(es=>{vis=es[0].isIntersecting;apply()}).observe(row);new MutationObserver(apply).observe(document.body,{childList:true})})();
+buildModes();renderJ();next();
+</script>
+</body></html>

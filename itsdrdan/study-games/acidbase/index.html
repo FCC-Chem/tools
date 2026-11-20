@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proton Swap! • ItsDrDan • CHEM 3A</title>
+<meta name="description" content="Acids, bases, pH, conjugate pairs, titrations and buffers for CHEM 3A: a study game by ItsDrDan.">
+<style>
+:root{--ink:#22313b;--muted:#5c6a75;--line:#e4dfd3;--card:#fffefa;--blue:#4a9fd6}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.45;min-height:100vh;
+ background:radial-gradient(circle at 8% -5%,#ffe3ec 0,transparent 38%),radial-gradient(circle at 95% 5%,#dff0ff 0,transparent 34%),linear-gradient(120deg,#fff6f4,#fffaf2 50%,#f1f7ff);background-attachment:fixed}
+button,input,select{font:inherit;color:inherit}.hidden{display:none!important}
+button,.opt,.chip,.mode,summary{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.app{max-width:1280px;margin:0 auto;padding:14px 14px 40px}
+.card{background:var(--card);border:1px solid #dfe8ef;border-radius:22px;box-shadow:0 8px 22px #2a5a7a10;padding:18px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 26px;border-radius:24px;border:1px solid #d9e6f1;background:linear-gradient(115deg,#fff,#fff0f5 55%,#eef7ff);box-shadow:0 12px 30px #2a5a7a14}
+.badge{display:inline-block;background:#fff;border:1px solid #e3dccd;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800}
+.hero h1{margin:6px 0 4px;font-size:clamp(30px,4.2vw,46px);line-height:1.08;font-weight:900;letter-spacing:-.02em}
+.hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#d0709f,#2f8fd0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{margin:0;color:var(--muted);font-size:15.5px}
+.logo{width:190px;flex:0 0 190px}
+details.howto{margin:10px 0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
+details.howto>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;min-height:48px;display:flex;justify-content:space-between;align-items:center}
+details.howto>summary::-webkit-details-marker{display:none}
+details.howto>summary:after{content:"Tap to open ▾";font-size:13px;color:#fff;background:#4a6fc4;padding:5px 12px;border-radius:999px}
+details.howto[open]>summary:after{content:"Hide ▴";background:none;color:#4a6fc4}
+details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}
+.mode{cursor:pointer;text-align:left;border:2px solid var(--ma);border-bottom-width:5px;border-radius:16px;background:linear-gradient(145deg,#ffffffa6,var(--mb));padding:10px 12px;display:grid;grid-template-columns:52px 1fr;column-gap:10px;align-items:center;min-height:64px;box-shadow:0 4px 12px #2634400d;transition:transform .15s,box-shadow .15s}
+.mode:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018}
+.mode.on{outline:3px solid var(--ma);outline-offset:3px}
+.mode .ic.art{background:none;padding:0}.mode .ic.art img{width:100%;height:100%;display:block}
+.mode .ic{grid-row:span 2;width:50px;height:50px;border-radius:12px;display:grid;place-items:center;background:var(--ma);color:#fff;font-size:24px}
+.mode b{font-size:17px;line-height:1.2}.mode small{font-size:12px;color:#4c5a65;font-weight:600}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;grid-template-areas:"card ref" "card jour" "card vid";gap:14px;align-items:start;margin-top:10px}
+#practice{grid-area:card;position:relative;overflow:hidden}#refPanel{grid-area:ref}#journey{grid-area:jour}#videoPanel{grid-area:vid}
+#practice:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#e0675a,#f7c968,#5db85a,#2f8fd0,#9a6fc0)}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.toprow h2{margin:0;font-size:27px;font-weight:900}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{display:inline-flex;flex-direction:column;align-items:center;min-width:76px;padding:5px 10px;border-radius:14px;line-height:1.05}
+.stat b{font-size:22px;font-weight:900}.stat small{font-size:11.5px;font-weight:800;color:#4c5a65}
+.s1{background:#e5f6ea}.s2{background:#fff1d1}.s3{background:#efe8fb}.pop b{animation:pop .45s}@keyframes pop{40%{transform:scale(1.35)}}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px;transition:transform .08s}
+.btn:active:not(:disabled){transform:translateY(2px)}.btn:disabled{opacity:.55;cursor:default}
+.dark{background:linear-gradient(180deg,#2f4650,#22343c);color:#fff;box-shadow:0 4px 0 #142128}
+.check{background:linear-gradient(180deg,#5cb2e6,#3b8ccb);color:#fff;box-shadow:0 4px 0 #2d73a8}
+.hint{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
+.show{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
+.prompt{font-size:20px;font-weight:800;margin:14px 0 8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.num{flex:1;min-width:180px;min-height:54px;font-size:20px;font-weight:700;border:2px solid #9fb6c8;border-radius:14px;padding:8px 14px;background:#fff}
+.chip.ins{min-width:52px;font-size:17px;background:#eef6ff;border-color:#b9d3ea}
+.num:focus{outline:3px solid #4a9fd6;outline-offset:2px}.unit{font-size:18px;font-weight:800}
+.givens{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin-top:8px;font-size:17px;font-weight:700}
+.givens span{background:#f3f8fd;border:1px solid #d6e4ef;border-radius:10px;padding:3px 10px}
+#practice.quizmode .btnrow{grid-template-columns:1fr}#practice.quizmode #hintBtn,#practice.quizmode #showBtn{display:none}
+.qprog{display:flex;gap:4px;margin:10px 0 0}.qprog i{flex:1;height:8px;border-radius:99px;background:#e6e0d2}.qprog i.ok{background:#4fa36a}.qprog i.no{background:#d9776f}.qprog i.now{background:#4a9fd6}
+.qsum{text-align:center}.qsum .big{font-size:44px;font-weight:900;margin:6px 0}.qsum table{margin:10px auto;border-collapse:collapse;text-align:left;font-size:15.5px}.qsum td{padding:6px 10px;border-top:1px solid #eee}.qsum td:last-child{white-space:nowrap}#practice.quizdone .btnrow{display:none}
+.plan{display:grid;gap:8px;margin-top:10px;text-align:left}.plan .item{background:#fff8e6;border:1px solid #f0dfae;border-radius:12px;padding:10px 12px}.plan .btn{min-height:44px;font-size:15px;padding:8px 14px;margin:6px 8px 0 0}
+@media(max-width:1000px){.ddfb-float.eq-hide{opacity:0!important;pointer-events:none!important;transform:translateY(12px)!important}}
+.task{display:flex;gap:8px;align-items:center;background:#fff6e0;border:2px dashed #f0c45c;border-radius:14px;padding:8px 12px;font-weight:800;font-size:15.5px;margin:6px 0}
+.task.done{background:#e8f7ec;border:2px solid #8fcf9f}
+.qbox{background:radial-gradient(circle at 50% 0,#f7fbff,#fff 70%);border:2px solid #e1ebf3;border-radius:18px;padding:14px;margin:8px 0;font-size:18px}
+.rxn{font-size:21px;font-weight:800;text-align:center;letter-spacing:.01em}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:56px;font-size:17px;font-weight:700;cursor:pointer}
+.opt .L{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e6f2ff;color:#3b82b4;font-size:14px;font-weight:900}
+.opt.sel{border-color:var(--blue);background:#eaf5fd}.opt.sel .L{background:#4a9fd6;color:#fff}
+.opt.right{border-color:#4fa36a;background:#e8f7ec}.opt.right .L{background:#4fa36a;color:#fff}
+.opt.wrong{border-color:#d9776f;background:#fdeeed}.opt.wrong .L{background:#d9776f;color:#fff}
+.tip{font-size:13px;color:var(--muted);margin:4px 2px}
+.btnrow{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:14px}
+.hintbox{display:none;margin-top:10px;border-radius:14px;padding:10px 14px;border-left:7px solid #efc94c;background:linear-gradient(90deg,#fff5d2,#fffbec);font-weight:600}.hintbox.on{display:block}
+.fb{margin-top:10px;border-radius:14px;line-height:1.5}
+.fb.good{border-left:7px solid #4fa36a;background:linear-gradient(90deg,#e6f6ea,#f4fbf6);padding:12px 14px}
+.fb.bad{border-left:7px solid #d9776f;background:linear-gradient(90deg,#fdecea,#fff7f6);padding:12px 14px}
+.fb ul.why{margin:8px 0 0;padding-left:20px;font-size:15px}.fb ul.why li{margin:3px 0}
+.linkbtn{border:0;background:none;padding:0;color:#2f7fbf;font-weight:800;cursor:pointer;text-decoration:underline}
+/* labs */
+.lab{border:2px solid #d6e4ef;border-radius:18px;background:#fbfdff;padding:10px;margin:8px 0}
+.lab .eqrow{text-align:center;font-weight:800;font-size:16px;margin:2px 0 8px}
+.lab .real{text-align:center;font-size:13.5px;font-weight:700;color:#5c4a1e;background:#fff8e6;border:1px solid #f0dfae;border-radius:10px;padding:4px 10px;margin:0 auto 8px;max-width:640px}
+.ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
+.chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.chip:active{transform:translateY(2px)}.chip.on{background:#2f4650;color:#fff;border-color:#22343c}.chip:disabled{opacity:.45}
+.chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
+.chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:160px;text-align:left}
+select.chip{padding-right:8px;max-width:100%}
+.seg{display:inline-flex;border:2px solid #c9d8e4;border-radius:12px;overflow:hidden;flex-wrap:wrap}.seg button{min-height:44px;padding:6px 11px;border:0;background:#fff;font-weight:800;font-size:15px;cursor:pointer;color:#22313b}
+.seg button+button{border-left:2px solid #c9d8e4}.seg button[aria-pressed=true]{background:#2f4650;color:#fff}
+.slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:48px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:900;font-size:16px}
+.slider input{flex:1;min-width:90px;height:36px;accent-color:#d0709f}.slider output{min-width:52px;text-align:right}
+.stage{position:relative}.stage canvas{display:block;width:100%;height:auto;border-radius:12px;background:#fff;border:2px solid #dbe5ee}
+.bulb{position:absolute;right:10px;top:8px;width:46px;height:auto;pointer-events:none}
+.status{font-weight:900;font-size:14.5px;border-radius:10px;padding:6px 9px;margin-top:6px}
+.status.eq{background:#e6f6ea;color:#2f6e3f}.status.r{background:#e6f2ff;color:#245c86}.status.l{background:#fff0e3;color:#94531a}
+.kline{font-size:13px;color:var(--muted);font-weight:700}
+.cap{font-size:12.5px;color:var(--muted);font-weight:700;margin:5px 2px 0}
+.phwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
+.phsvg{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+.corners{display:grid;grid-template-columns:1fr 1fr;gap:6px}.corners .status,.corners .kline{grid-column:1/-1}
+.cn{background:#fff;border:1px solid #e3eaf0;border-radius:12px;padding:5px 9px}.cn small{display:block;font-size:11.5px;font-weight:800;color:#5c6a75}.cn b{font-size:18px}
+.titwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:10px;align-items:center}.titsvg{width:100%;max-width:240px;height:auto;display:block;margin:0 auto}
+.titread{display:grid;grid-template-columns:1fr 1fr;gap:6px}.titread .kline,.titread .bars,.titread .status{grid-column:1/-1}
+.bars{display:grid;grid-template-columns:auto 1fr 46px;gap:4px 8px;align-items:center;font-size:13px;font-weight:800}.bars i{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.bars u{display:block;height:100%;width:0;background:#e0675a;transition:width .25s}.bars i:nth-of-type(2) u{background:#3b8ccb}.bars b{text-align:right}
+.graphwrap{margin-top:8px}.graphwrap canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid #e3eaf0;border-radius:12px}
+.bufwrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bk{text-align:center;background:#fff;border:1px solid #e3eaf0;border-radius:14px;padding:6px}.bk svg{width:100%;max-width:200px;height:auto}.bkt{font-weight:900}
+.tokens{display:grid;gap:4px;margin-top:8px;font-size:14px}.tokens div{background:#fff;border:1px solid #e3eaf0;border-radius:10px;padding:4px 10px;overflow-wrap:anywhere}.tokens span{letter-spacing:2px;color:#6b4fa6}
+.mini4{display:grid;grid-template-columns:auto auto auto;gap:2px 10px;justify-content:center;align-items:center;font-size:14px;font-weight:800;color:#4c5a65;margin-top:8px}.mini4 span{text-align:center}
+.lbrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:7px 6px;border-top:1px solid #eef2f5}.lbrow.bad{background:#fdeeed;border-radius:10px}.lbrow.ok{background:#e8f7ec;border-radius:10px}
+.blsvg{display:block;width:100%;max-width:680px;height:auto;margin:0 auto}
+.afterpic{margin-top:10px;background:#fff;border:1px solid #e3eaf0;border-radius:14px;padding:6px}
+.cabrow{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}.cabtube{width:34px;height:96px;border-radius:6px 6px 18px 18px;border:3px solid #8a9aa6;border-top:0}
+.cabstd{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}.cabstd span{display:flex;flex-direction:column;align-items:center;font-size:12px;font-weight:800}.cabsw{width:22px;height:56px;border-radius:5px 5px 13px 13px;border:2px solid #8a9aa6;border-top:0;display:block}
+.tpartbox{grid-column:1/-1;background:#fbfdff;border:1px solid #e3eaf0;border-radius:12px;padding:6px 8px}.tpart{display:block;width:100%;max-width:320px;height:auto;margin:2px auto;background:#f4f9fd;border-radius:10px;overflow:hidden}.tpart text{font-family:Inter,system-ui,sans-serif;fill:#22313b}
+.lbsp{min-width:110px;font-weight:900;font-size:19px}.lb.locked button{pointer-events:none}
+/* side */
+.side{padding:0}.side>summary{cursor:pointer;list-style:none;padding:12px 16px;font-weight:900;font-size:17px;min-height:48px;display:flex;align-items:center;gap:8px;border-radius:22px}
+.side>summary::-webkit-details-marker{display:none}.side>summary:after{content:'▸';margin-left:auto;transition:transform .15s}.side[open]>summary:after{transform:rotate(90deg)}
+.side>.body{padding:6px 16px 14px}
+#refPanel>summary{background:linear-gradient(120deg,#f2ecff,#eaf5ff)}#videoPanel>summary{background:linear-gradient(120deg,#fff1e6,#fdeef2)}#journey>summary{background:linear-gradient(120deg,#fff8e6,#eef6ff)}
+.refcard{background:#fff;border:1px solid #e6e0d2;border-left:5px solid #d0709f;border-radius:12px;padding:7px 10px;font-size:13.5px;margin-bottom:7px}
+.refcard table{border-collapse:collapse;width:100%}.refcard td{padding:2px 4px;border-top:1px solid #eee;vertical-align:top}
+.xprow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-weight:800;font-size:14px}
+.track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#f7b6d6,#7fb2f0);transition:width .3s}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
+.bdg{border:2px dashed #c3ccd4;border-radius:12px;padding:7px 9px;font-size:12.5px;color:#4c5a65;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:center}.bdg .em{font-size:26px;text-align:center;filter:grayscale(1) opacity(.5)}.bdg.got .em{filter:none}.bdg img{width:48px;height:48px;display:block;filter:grayscale(1) opacity(.45)}.bdg.got img{filter:none}.bdg:not(.got) b:after{content:' (not yet)';font-weight:700;font-size:11px;color:#5c6a75}.bdg.got{border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
+.vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin-bottom:10px}
+.vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#b4534a}
+.vwrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;pointer-events:none;transition:.3s;z-index:50}.toast.on{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards;z-index:40;pointer-events:none}@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@media(max-width:1000px){.main{grid-template-columns:1fr;grid-template-areas:"card" "ref" "jour" "vid"}}
+@media(max-width:700px){.app{padding:8px}.card{padding:12px}.hero{padding:12px 14px}.subtitle{display:none}.logo{width:104px;flex-basis:104px}.options{grid-template-columns:1fr}.stats{width:100%}.stat{flex:1}
+ .btnrow{grid-template-columns:1fr 1fr}.btnrow .check{grid-column:1/-1}.toprow h2{font-size:23px}.prompt{font-size:17.5px}.lab{padding:7px}.rxn{font-size:17px}
+ .chip{font-size:14px;padding:6px 9px}.modes{grid-template-columns:repeat(2,minmax(0,1fr))}.mode small{display:none}.mode{grid-template-columns:40px minmax(0,1fr);min-height:54px;min-width:0;padding:8px}.mode b{overflow-wrap:anywhere;font-size:15px}.mode .ic{width:40px;height:40px;font-size:20px}
+ .phwrap,.titwrap{grid-template-columns:1fr}.phsvg{max-width:230px}.titsvg{max-width:170px}.seg button{padding:6px 8px;font-size:14px}.lbsp{min-width:100%}.cn b{font-size:16px}.bk svg{max-width:150px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
+<script src="https://itsdrdan.github.io/games/track.js" defer></script>
+<script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
+</head><body>
+<div class="toast" id="toast" role="status"></div>
+<div class="app">
+<header class="hero"><div>
+ <span class="badge">🧪 Acids &amp; Bases • ItsDrDan • CHEM 3A</span>
+ <h1><span class="a">Proton</span> <span class="b">Swap!</span></h1>
+ <p class="subtitle">Spot acids and bases, run the pH numbers, titrate to faint pink, and watch a buffer hold its ground.</p>
+</div>
+<div class="logo" aria-hidden="true"><img src="assets/logo.webp" alt="" width="200" height="121" style="width:100%;height:auto;display:block"></div>
+</header>
+<main id="main">
+<details class="howto"><summary>📘 How to use this game</summary><ul>
+ <li><b>Pick a mode</b> below. Start with 🔍 Acid or Base?, then try the labs.</li>
+ <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, then answer.</li>
+ <li>Typed answers: pH gets as many <b>decimal places</b> as the concentration has sig figs. Type 2.4E-5 for 2.4 × 10⁻⁵.</li>
+ <li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point. <b>🎯 Skill Check</b> ends with a study plan.</li></ul></details>
+<nav class="modes" id="modes" aria-label="Choose a mode"></nav>
+<div class="main">
+<section class="card" id="practice">
+ <div class="toprow"><h2 id="modeTitle">Mode</h2><div class="stats">
+  <span class="stat s1"><b id="nCorrect">0</b><small>✅ Correct</small></span><span class="stat s2"><b id="nStreak">0</b><small>🔥 Streak</small></span><span class="stat s3"><b id="nAssist">0</b><small>👀 Assisted</small></span>
+  <button class="btn dark" id="newBtn">New Question ↻</button></div></div>
+ <div id="qArea"></div>
+ <div class="btnrow"><button class="btn check" id="checkBtn">Check Answer</button><button class="btn hint" id="hintBtn">💡 Hint</button><button class="btn show" id="showBtn">👀 Show Answer</button></div>
+ <div class="hintbox" id="hintBox"></div><div class="fb" id="fb" role="status" aria-live="polite"></div>
+</section>
+<details class="card side" id="refPanel"><summary>🧠 Reference</summary><div class="body" id="refBody"></div></details>
+<details class="card side" id="journey"><summary>🧭 Chemistry Journey <span class="badge" id="jChip" style="margin-left:auto;margin-right:6px">Level 1</span></summary><div class="body">
+ <div class="xprow"><span id="lvl">Level 1</span><div class="track"><div class="fill" id="xpFill"></div></div><span id="xpTxt">0 / 100 XP</span></div>
+ <div class="badges" id="badges"></div><button class="btn" id="resetBtn" style="margin-top:10px;font-size:14px;min-height:40px;background:#fff;border:2px solid #d5dce2">Reset progress</button></div></details>
+<details class="card side" id="videoPanel"><summary>🎥 Learn with Dr. Dan</summary><div class="body"><div class="vidcard" id="vidCard"></div><div class="vwrap"><iframe id="player" title="Dr. Dan video" loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div></div></details>
+</div></main></div>
+<script>
+/* 1-data.js */
+/* ============================== SETTINGS ============================== */
+const GAME_KEY='itsdrdan-acidbase';
+const MODES=[
+ {id:'id',title:'Acid or Base?',short:'Spot acids, bases and strength',icon:'🔍',mb:'#fff0e3',ma:'#e8955a'},
+ {id:'ph',title:'pH Lab',short:'Slide the pH, test indicators',icon:'🌈',mb:'#fdeef6',ma:'#d0709f'},
+ {id:'calc',title:'pH Calculator',short:'pH, pOH, [H⁺] and [OH⁻]',icon:'🧮',mb:'#fff6e2',ma:'#c99a2e'},
+ {id:'pairs',title:'Proton Pairs',short:'Arrhenius and conjugate pairs',icon:'🔄',mb:'#e7f6e9',ma:'#6fae7e'},
+ {id:'titrate',title:'Titration Lab',short:'Neutralize and find molarity',icon:'⚗️',mb:'#e6f2ff',ma:'#5d9fd2'},
+ {id:'buffer',title:'Buffer Lab',short:'Watch a buffer resist pH change',icon:'🛡️',mb:'#f1eafb',ma:'#9a7fcf'},
+ {id:'quiz',title:'Skill Check',short:'10 questions, then your study plan',icon:'🎯',mb:'#fdeef2',ma:'#d0708a'}];
+/* Dr. Dan's videos (VIDEO-CATALOG.md); start times found in games/data/transcripts.json */
+const VIDEO_FOR={
+ props:['_3MEHX5yvzQ',0,'Properties of acids and bases'],
+ arr:['_3MEHX5yvzQ',415,'Arrhenius vs. Brønsted–Lowry definitions'],
+ ind:['_3MEHX5yvzQ',830,'Indicators: litmus paper'],
+ strength:['tGqiUbBxqec',185,'Strong vs. weak: how many ions form'],
+ kw:['tGqiUbBxqec',795,'Autoionization of water and Kw'],
+ ph:['M5gCzKjb0kA',240,'pH, pOH, H⁺ and OH⁻'],
+ inv:['M5gCzKjb0kA',660,'From pH back to [H⁺]'],
+ log:['AAOXGkcrUMg',225,'Log sig figs: count decimal places'],
+ conj:['T8Uxtqoi1-8',300,'Finding conjugate acid–base pairs'],
+ titr:['Ca7o0AjwhcY',310,'Titration and the equivalence point'],
+ titrRatio:['Ca7o0AjwhcY',450,'Using the mole ratio in a titration'],
+ stoich:['tbcxL9K3KBU',0,'Practice: neutralization, pH and pOH'],
+ buffer:['-UrwKIGAj08',20,'Buffers resist changes in pH'],
+ bufAdd:['-UrwKIGAj08',150,'What a buffer does with added acid'],
+ bufBlood:['-UrwKIGAj08',190,'The blood buffer'],
+ bufCap:['-UrwKIGAj08',800,'Buffer capacity']};
+const FALLBACK_VIDEO='M5gCzKjb0kA';
+
+/* ============================== HELPERS ============================== */
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)],shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SUBS='₀₁₂₃₄₅₆₇₈₉',SUPS='⁰¹²³⁴⁵⁶⁷⁸⁹';
+const sub=n=>n>1?String(n).replace(/\d/g,d=>SUBS[d]):'';
+const supN=n=>String(n).replace(/[0-9-]/g,c=>c==='-'?'⁻':SUPS[c]);
+const chg=c=>c===0?'':(Math.abs(c)>1?supN(Math.abs(c)):'')+(c>0?'⁺':'⁻');
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+/* a × 10ⁿ shown with s sig figs (always scientific; used for given concentrations) */
+function sci(x,s=2){if(x===0)return '0';const [m,p]=x.toExponential(s-1).split('e');return m+' × 10'+supN(Number(p))}
+/* multiple choice: choices = [[text, isRight, why]] */
+function mc(o){const ch=o.choices;const q=Object.assign({type:'mc'},o);q.options=o.keepOrder?ch.map(c=>c[0]):shuf(ch.map(c=>c[0]));q.answer=ch.find(c=>c[1])[0];q.whys={};ch.forEach(c=>q.whys[c[0]]=c[2]);q.why=o.why||ch.find(c=>c[1])[2];return q}
+let lastPick={};
+function pickNew(key,list){let i,tries=0;do{i=Math.floor(Math.random()*list.length)}while(list.length>1&&i===lastPick[key]&&tries++<10);lastPick[key]=i;return list[i]}
+/* shared number reading (games/brand/chemparse.v2.js), with a small local fallback */
+const NUM=(typeof window!=='undefined'&&window.ChemParse)||(()=>{const SU={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+'};
+ const base=r=>String(r==null?'':r).replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]/g,c=>SU[c]).replace(/[−–—‐]/g,'-').replace(/\s+/g,'');
+ const decimalComma=r=>{const t=String(r==null?'':r).replace(/\s+/g,'');return t.includes(',')&&!/^[+\-−–]?[1-9]\d{0,2}(,\d{3})+(\.\d*)?([eE×xX*·⋅].*)?$/.test(t)};
+ const norm=r=>base(r).replace(/,/g,'').replace(/[×xX*·⋅]10\^?([+-]?\d+)$/,'e$1');
+ const parseValue=r=>{if(decimalComma(r))return NaN;const t=norm(r);return /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(t)?Number(t):NaN};
+ const sfCount=r=>{if(decimalComma(r))return 0;let t=base(r).replace(/,/g,'').replace(/(?:[×xX*·⋅]10\^?|[eE])[+-]?\d+$/,'').replace(/^[+-]/,'');if(!/^(?:\d+\.?\d*|\.\d+)$/.test(t))return 0;t=t.replace(/^0+(?=\d)/,'');if(/^0*\.?0*$/.test(t))return Math.max(1,(t.split('.')[1]||'').length);if(t.includes('.'))return t.replace('.','').replace(/^0+/,'').length;return t.replace(/0+$/,'').length};
+ const fmt=(x,s)=>{if(x===0)return '0';const e=Math.floor(Math.log10(Math.abs(Number(x.toPrecision(s)))));if(e>=5||e<-3)return sci(x,s);const v=Number(x.toPrecision(s)),d=Math.max(0,s-1-e);let t=v.toFixed(d);if(d===0&&t.replace(/^-/,'').replace(/0+$/,'').length<s)t+='.';return t};
+ return {normalize:norm,decimalComma,parseValue,sfCount,fmt}})();
+const nf=(x,s)=>NUM.fmt(x,s);
+/* decimal places the student typed (for pH answers) */
+const dpCount=raw=>{const t=String(raw).replace(/\s+/g,'').replace(/[eE].*$/,'');const m=t.match(/\.(\d*)/);return m?m[1].length:0};
+
+/* ============================== CHEMISTRY DATA ============================== */
+/* Green-sheet strong acids and strong bases (Lecture 26 slide 9) */
+const STRONG_ACIDS=['HCl','HBr','HI','HNO₃','H₂SO₄','HClO₄'];
+const STRONG_LIST='HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄';
+/* [formula, category, family, why (what it does), name]
+   SA strong acid · WA weak acid · SB strong base · WB weak base · N neither */
+const SUBST=[
+ ['HCl','SA','binary','is on the strong-acid list: it gives away all of its H⁺ in water','hydrochloric acid (stomach acid)'],
+ ['HBr','SA','binary','is on the strong-acid list: it gives away all of its H⁺ in water','hydrobromic acid'],
+ ['HI','SA','binary','is on the strong-acid list: it gives away all of its H⁺ in water','hydroiodic acid'],
+ ['HNO₃','SA','oxy','is on the strong-acid list: it gives away all of its H⁺ in water','nitric acid'],
+ ['H₂SO₄','SA','oxy','is on the strong-acid list: it gives away its H⁺ in water','sulfuric acid (battery acid)'],
+ ['HClO₄','SA','oxy','is on the strong-acid list: it gives away all of its H⁺ in water','perchloric acid'],
+ ['HF','WA','binary','gives off H⁺, but only a little: HF is not on the strong-acid list','hydrofluoric acid'],
+ ['H₂S','WA','binary','gives off a little H⁺: H₂S is not on the strong-acid list','hydrosulfuric acid'],
+ ['CH₃COOH','WA','carb','has a –COOH (carboxylic acid) group that gives off a little H⁺','acetic acid (vinegar)'],
+ ['HCOOH','WA','carb','has a –COOH group that gives off a little H⁺','formic acid (ant stings)'],
+ ['C₆H₅COOH','WA','carb','has a –COOH group that gives off a little H⁺','benzoic acid (a food preservative)'],
+ ['CH₃CH(OH)COOH','WA','carb','has a –COOH group that gives off a little H⁺ (its –OH is an alcohol group, not hydroxide)','lactic acid (from hard exercise)'],
+ ['H₂CO₃','WA','oxy','gives off a little H⁺: it is not on the strong-acid list','carbonic acid (in soda and blood)'],
+ ['H₃PO₄','WA','oxy','gives off a little H⁺: it is not on the strong-acid list','phosphoric acid (in cola)'],
+ ['HNO₂','WA','oxy','gives off a little H⁺: it is HNO₂ (nitrous acid), not HNO₃ (nitric acid)','nitrous acid'],
+ ['HClO','WA','oxy','gives off a little H⁺: it is HClO, not HClO₄ (perchloric acid)','hypochlorous acid'],
+ ['NaOH','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','sodium hydroxide (lye, drain cleaner)'],
+ ['KOH','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','potassium hydroxide'],
+ ['LiOH','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','lithium hydroxide'],
+ ['Ca(OH)₂','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','calcium hydroxide (slaked lime)'],
+ ['Ba(OH)₂','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','barium hydroxide'],
+ ['Sr(OH)₂','SB','oh','is a soluble hydroxide: it releases all of its OH⁻ in water','strontium hydroxide'],
+ ['NH₃','WB','amine','has a lone pair on N that accepts H⁺, which makes only a little OH⁻','ammonia (window cleaner)'],
+ ['CH₃NH₂','WB','amine','has an amine group (–NH₂) whose N lone pair accepts H⁺','methylamine'],
+ ['CH₃CH₂NH₂','WB','amine','has an amine group (–NH₂) whose N lone pair accepts H⁺','ethylamine'],
+ ['(CH₃)₂NH','WB','amine','has an amine N (–NH–) whose lone pair accepts H⁺','dimethylamine (fishy smell)'],
+ ['Na₂CO₃','WB','co3','contains the carbonate ion, CO₃²⁻, which accepts H⁺','sodium carbonate (washing soda)'],
+ ['NaHCO₃','WB','co3','contains the bicarbonate ion, HCO₃⁻, which accepts H⁺','sodium bicarbonate (baking soda)'],
+ ['K₂CO₃','WB','co3','contains the carbonate ion, CO₃²⁻, which accepts H⁺','potassium carbonate'],
+ ['NaCl','N','none','is a salt of Na⁺ and Cl⁻: it releases neither H⁺ nor OH⁻','sodium chloride (table salt)'],
+ ['KNO₃','N','none','is a salt of K⁺ and NO₃⁻: it releases neither H⁺ nor OH⁻','potassium nitrate'],
+ ['CH₃OH','N','none','is an alcohol: its O–H is a covalent bond, so it does not release OH⁻ (or H⁺)','methanol'],
+ ['CH₃CH₂OH','N','none','is an alcohol: its O–H is a covalent bond, so it does not release OH⁻ (or H⁺)','ethanol'],
+ ['C₆H₁₂O₆','N','none','is a sugar: its –OH groups are alcohol groups, not hydroxide ions','glucose'],
+ ['CH₄','N','none','has H atoms, but they are bonded to carbon and are not given off as H⁺','methane'],
+ ['CH₃COOCH₃','N','none','is an ester (–COO–): it has no –COOH hydrogen to give off and no amine','methyl acetate (nail polish remover)']];
+const CAT_NAME={SA:'Strong acid',WA:'Weak acid',SB:'Strong base',WB:'Weak base',N:'Neither'};
+const isAcid=c=>c==='SA'||c==='WA',isBase=c=>c==='SB'||c==='WB';
+
+/* ions for neutralization equations: [symbol, charge, polyatomic] */
+const CATIONS={Na:['Na',1],K:['K',1],Li:['Li',1],Ca:['Ca',2],Ba:['Ba',2],Sr:['Sr',2],Mg:['Mg',2]};
+const ANIONS={Cl:['Cl',1,false],Br:['Br',1,false],I:['I',1,false],NO3:['NO₃',1,true],ClO4:['ClO₄',1,true],SO4:['SO₄',2,true]};
+const acidF=a=>'H'+sub(a[1])+a[0];
+const baseF=c=>c[1]>1?`${c[0]}(OH)${sub(c[1])}`:c[0]+'OH';
+const ionPart=(ion,n)=>n>1?(ion[2]?`(${ion[0]})${sub(n)}`:ion[0]+sub(n)):ion[0];
+function saltF(c,a){const g=gcd(c[1],a[1]);return c[0]+sub(a[1]/g)+ionPart(a,c[1]/g)}
+const cf=n=>n>1?n+' ':'';
+
+/* conjugate ladders: [body, charge] from most H to least H (each step = one H⁺) */
+const LADDERS=[
+ [['H₃PO₄',0],['H₂PO₄',-1],['HPO₄',-2],['PO₄',-3]],
+ [['H₂CO₃',0],['HCO₃',-1],['CO₃',-2]],
+ [['H₂SO₄',0],['HSO₄',-1],['SO₄',-2]],
+ [['H₃O',1],['H₂O',0],['OH',-1]],
+ [['NH₄',1],['NH₃',0],['NH₂',-1]],
+ [['H₂S',0],['HS',-1],['S',-2]],
+ [['HF',0],['F',-1]],[['HCl',0],['Cl',-1]],[['HNO₃',0],['NO₃',-1]],[['HNO₂',0],['NO₂',-1]],
+ [['CH₃COOH',0],['CH₃COO',-1]],[['HCN',0],['CN',-1]],[['CH₃NH₃',1],['CH₃NH₂',0]]];
+const sp=e=>e[0]+chg(e[1]);
+
+/* Brønsted–Lowry reactions as written, with the role of each species.
+   roles: A acid, B base, CA conjugate acid, CB conjugate base */
+const BL_RX=[
+ [['HNO₃','A'],['H₂O','B'],['H₃O⁺','CA'],['NO₃⁻','CB']],
+ [['HF','A'],['H₂O','B'],['H₃O⁺','CA'],['F⁻','CB']],
+ [['H₂SO₄','A'],['H₂O','B'],['HSO₄⁻','CB'],['H₃O⁺','CA']],
+ [['HCO₃⁻','B'],['H₂O','A'],['H₂CO₃','CA'],['OH⁻','CB']],
+ [['NH₃','B'],['H₂O','A'],['NH₄⁺','CA'],['OH⁻','CB']],
+ [['CH₃COOH','A'],['H₂O','B'],['CH₃COO⁻','CB'],['H₃O⁺','CA']],
+ [['HCl','A'],['NH₃','B'],['NH₄⁺','CA'],['Cl⁻','CB']],
+ [['CH₃NH₂','B'],['H₂O','A'],['CH₃NH₃⁺','CA'],['OH⁻','CB']],
+ [['CO₃²⁻','B'],['H₂O','A'],['HCO₃⁻','CA'],['OH⁻','CB']],
+ [['HBr','A'],['H₂O','B'],['H₃O⁺','CA'],['Br⁻','CB']],
+ [['HSO₄⁻','A'],['H₂O','B'],['SO₄²⁻','CB'],['H₃O⁺','CA']],
+ [['H₂PO₄⁻','A'],['H₂O','B'],['H₃O⁺','CA'],['HPO₄²⁻','CB']],
+ [['CH₃COOH','A'],['OH⁻','B'],['CH₃COO⁻','CB'],['H₂O','CA']],
+ [['HCN','A'],['H₂O','B'],['H₃O⁺','CA'],['CN⁻','CB']],
+ [['HCOOH','A'],['NH₃','B'],['HCOO⁻','CB'],['NH₄⁺','CA']],
+ [['HPO₄²⁻','B'],['H₂O','A'],['H₂PO₄⁻','CA'],['OH⁻','CB']]];
+const ROLE_NAME={A:'Acid',B:'Base',CA:'Conj. acid',CB:'Conj. base'};
+const ROLE_LONG={A:'acid',B:'base',CA:'conjugate acid',CB:'conjugate base'};
+
+/* household solutions (Lecture 26 slides 21–22 plus common examples) */
+const HOUSE=[['Stomach acid',1.50,'🫃'],['Lemon juice',2.30,'🍋'],['Wine',3.10,'🍷'],['Coffee',5.00,'☕'],['Pure water',7.00,'💧'],['Human blood',7.40,'🩸'],['Baking soda water',8.30,'🧁'],['Household ammonia',10.49,'🧴'],['Bleach',12.50,'🧺'],['Drain cleaner',14.00,'🚿']];
+
+/* ============================== pH MATH ============================== */
+const KW=1.0e-14;
+const pHof=h=>-Math.log10(h);
+/* indicator colors (Lecture 26 slides 42–49) */
+function litmus(pH){return pH<5?['red','#e4574e','Red']:pH>8?['blue','#4f7fd6','Blue']:['purple','#9a6fc0','Purple (in between)']}
+function phth(pH){return pH<8.2?['colorless','#f4f8fb','Colorless']:pH<=10.8?['faint','#f7b6d6','Light pink']:['pink','#e0489a','Dark pink']}
+function universal(pH){const C=[[0,'#d93b3b'],[2,'#ee6a3a'],[4,'#f4a53b'],[5.5,'#f0d43c'],[7,'#5db85a'],[8.5,'#2fa6a0'],[10,'#3b6fd0'],[12,'#5b45b0'],[14,'#7a2f9a']];
+ let i=0;while(i<C.length-2&&pH>C[i+1][0])i++;const [a,ca]=C[i],[b,cb]=C[i+1],t=Math.max(0,Math.min(1,(pH-a)/(b-a)));
+ const mix=(x,y)=>Math.round(parseInt(x,16)+(parseInt(y,16)-parseInt(x,16))*t).toString(16).padStart(2,'0');
+ return '#'+mix(ca.slice(1,3),cb.slice(1,3))+mix(ca.slice(3,5),cb.slice(3,5))+mix(ca.slice(5,7),cb.slice(5,7))}
+/* red cabbage (anthocyanin) indicator, EXP 12a: red → pink → purple → violet → blue → green → yellow */
+function cabbage(pH){const C=[[1,'#c8173a'],[3,'#e0457b'],[5.5,'#9b4a9f'],[7,'#6a55c2'],[8.5,'#3f72d0'],[10.5,'#2e9e8a'],[12,'#6fbf3f'],[14,'#e3cf33']];
+ let i=0;while(i<C.length-2&&pH>C[i+1][0])i++;const [a,ca]=C[i],[b,cb]=C[i+1],t=Math.max(0,Math.min(1,(pH-a)/(b-a)));
+ const mix=(x,y)=>Math.round(parseInt(x,16)+(parseInt(y,16)-parseInt(x,16))*t).toString(16).padStart(2,'0');
+ return '#'+mix(ca.slice(1,3),cb.slice(1,3))+mix(ca.slice(3,5),cb.slice(3,5))+mix(ca.slice(5,7),cb.slice(5,7))}
+const acidity=pH=>Math.abs(pH-7)<0.005?'neutral':pH<7?'acidic':'basic';
+/* [H⁺] from charge balance, by bisection on log[H⁺]:
+   h + pos/V − CT/V · Ka/(Ka+h) − Kw/h = 0
+   pos = net positive "spectator" charge (mmol): conjugate-base salt + strong base added − strong acid added
+   CT = total weak acid + conjugate base (mmol), V in mL (mmol/mL = M) */
+function solveH(pos,CT,Ka,V){const f=h=>h+pos/V-(CT>0?CT/V*Ka/(Ka+h):0)-KW/h;let lo=-15.5,hi=1.5;
+ for(let i=0;i<80;i++){const m=(lo+hi)/2;if(f(10**m)>0)hi=m;else lo=m}return 10**((lo+hi)/2)}
+
+</script>
+<script>
+/* 2-labs.js */
+/* ============================== LABS ==============================
+   Each lab: mount(host,cfg) builds its DOM once; live updates only change text and attributes
+   (iOS Safari drops taps when DOM is rebuilt several times a second). onEvent(name) reports what the
+   student did so a question's gold task box can check it. */
+const svgNS='http://www.w3.org/2000/svg';
+function fitCanvas(cv,w,h){const dpr=window.devicePixelRatio||1,cw=cv.clientWidth||w,want=Math.round(cw*dpr);if(cv.width!==want){cv.width=want;cv.height=Math.round(want*h/w)}const ctx=cv.getContext('2d');ctx.setTransform(cv.width/w,0,0,cv.height/h,0,0);return ctx}
+const labFire=(L,ev)=>{try{L.onEvent&&L.onEvent(ev,L)}catch(e){}};
+/* fast taps: act on touch-down so quick repeated taps on iPhone are never merged into one (click still works for mouse/keyboard) */
+function fastTap(b,fn){let t=0;b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||b.disabled)return;e.preventDefault();t=Date.now();fn()});b.addEventListener('click',()=>{if(Date.now()-t<800)return;fn()})}
+
+
+/* ---------- 1. Particle beaker: what does the substance look like in water? ---------- */
+const PART={'H₃O⁺':'#f28b82','OH⁻':'#7fb2f0','A⁻':'#f6c26b','M⁺':'#c7a6ef','HA':'#9ad3a8','B':'#9ad3a8','BH⁺':'#c7a6ef','X':'#d4d9de'};
+const BEAKER_MIX={SA:[['H₃O⁺',9],['A⁻',9]],WA:[['HA',9],['H₃O⁺',1],['A⁻',1]],SB:[['M⁺',9],['OH⁻',9]],WB:[['B',9],['BH⁺',1],['OH⁻',1]],N:[['X',11]]};
+const BULB={SA:['bright','Bright: lots of ions (strong electrolyte)'],SB:['bright','Bright: lots of ions (strong electrolyte)'],WA:['dim','Dim: only a few ions (weak electrolyte)'],WB:['dim','Dim: only a few ions (weak electrolyte)'],N:['off','Off: no ions (nonelectrolyte)']};
+const Beaker={el:null,raf:0,onEvent:null,cat:'SA',P:[],bulb:false,
+ mount(host,cfg){this.cat=cfg.cat;this.bulb=false;host.innerHTML=`<div class="lab"><div class="ctrls"><button type="button" class="chip go" data-bulb>💡 Test conductivity</button>${speedChip()}<span class="kline" id="bkTxt" role="status" aria-live="polite">Bulb not tested yet</span></div>
+  <div class="stage"><canvas id="bkCv" width="600" height="300" role="img" aria-label="${esc(this.aria())}"></canvas>
+  <svg class="bulb" viewBox="0 0 60 80" aria-hidden="true"><circle id="bkGlow" cx="30" cy="28" r="27" fill="#ffe680" opacity="0"/><path d="M30 6a20 20 0 0 0-11 36.5V52h22v-9.5A20 20 0 0 0 30 6z" id="bkGlass" fill="#f3f6f9" stroke="#8a9aa6" stroke-width="2.5"/><rect x="20" y="54" width="20" height="10" rx="3" fill="#9aa7b2"/></svg></div>
+  <p class="cap">Key: <b>H₃O⁺</b> hydronium · <b>OH⁻</b> hydroxide · <b>HA</b>, <b>B</b>, <b>X</b> = whole molecules (not split into ions) · <b>A⁻</b>, <b>M⁺</b>, <b>BH⁺</b> = other ions. Water molecules are not drawn.</p></div>`;
+  this.el=host;const W=600,H=300;this.P=[];BEAKER_MIX[this.cat].forEach(([k,n])=>{for(let i=0;i<n;i++)this.P.push({k,x:80+Math.random()*(W-160),y:70+Math.random()*(H-110),vx:(Math.random()-.5)*60,vy:(Math.random()-.5)*60})});
+  host.querySelector('[data-bulb]').onclick=()=>{this.bulb=!this.bulb;this.showBulb();labFire(this,'bulb')};wireSpeed(host)},
+ aria(){const m=BEAKER_MIX[this.cat].map(([k,n])=>n+' '+k).join(', ');return 'Beaker particle view: '+m},
+ showBulb(){const g=this.el.querySelector('#bkGlow'),gl=this.el.querySelector('#bkGlass'),[b,t]=BULB[this.cat];
+  g.setAttribute('opacity',this.bulb?(b==='bright'?0.95:b==='dim'?0.35:0):0);gl.setAttribute('fill',this.bulb&&b!=='off'?(b==='bright'?'#fff3a6':'#fbf4d4'):'#f3f6f9');
+  this.el.querySelector('#bkTxt').textContent=this.bulb?'💡 '+t:'Bulb unplugged';this.el.querySelector('[data-bulb]').textContent=this.bulb?'🔌 Unplug the bulb':'💡 Test conductivity'},
+ start(){const cv=this.el.querySelector('#bkCv');let last=performance.now();const step=now=>{const dt=Math.min(0.05,(now-last)/1000)*SPEED.f();last=now;const W=600,H=300,ctx=fitCanvas(cv,W,H);
+   ctx.clearRect(0,0,W,H);ctx.fillStyle='#eaf5fd';ctx.fillRect(48,48,W-96,H-62);ctx.strokeStyle='#8a9aa6';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(44,20);ctx.lineTo(44,H-10);ctx.lineTo(W-44,H-10);ctx.lineTo(W-44,20);ctx.stroke();
+   if(this.bulb){ctx.fillStyle='#55606a';ctx.fillRect(150,30,10,150);ctx.fillRect(W-160,30,10,150)}
+   for(const p of this.P){p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.x<74||p.x>W-74)p.vx*=-1;if(p.y<70||p.y>H-36)p.vy*=-1;p.x=Math.max(74,Math.min(W-74,p.x));p.y=Math.max(70,Math.min(H-36,p.y));
+    const mol=/^(HA|B|X)$/.test(p.k),r=mol?24:20;ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.fillStyle=PART[p.k];ctx.fill();ctx.lineWidth=mol?3:2;ctx.strokeStyle=mol?'#4b7a58':'#5c6a75';ctx.stroke();
+    ctx.fillStyle='#22313b';ctx.font='bold 15px Inter,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.k,p.x,p.y+1)}
+   this.raf=requestAnimationFrame(step)};this.raf=requestAnimationFrame(step)},
+ stop(){cancelAnimationFrame(this.raf);this.raf=0}};
+
+/* ---------- 2. pH Lab: slider, household solutions, indicators, four corners ---------- */
+/* 32 dot spots: a jittered 8 × 4 grid in a fixed shuffled order (seeded, so every visit looks the same) */
+const PHDOTS=(()=>{let r=11;const rand=()=>(r=(r*9301+49297)%233280)/233280,a=[];for(let i=0;i<32;i++)a.push([24+(i%8)*19+rand()*9,64+Math.floor(i/8)*29+rand()*12]);
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a})();
+const PHLab={el:null,onEvent:null,pH:7,ind:'uni',picked:null,seen:new Set(),
+ mount(host,cfg){this.pH=cfg.pH0!=null?cfg.pH0:7;this.ind=cfg.ind||'uni';this.picked=null;this.seen=new Set([Math.round(this.pH*10)/10]);
+  host.innerHTML=`<div class="lab"><div class="ctrls"><label class="slider"><span>pH</span><input type="range" id="phR" min="0" max="14" step="0.1" value="${this.pH}" aria-label="pH"><output id="phO">${this.pH.toFixed(2)}</output></label></div>
+  <div class="ctrls"><select id="phPick" class="chip" aria-label="Pick a solution"><option value="">🧴 Pick a solution…</option>${HOUSE.map((h,i)=>`<option value="${i}">${h[2]} ${h[0]}</option>`).join('')}</select>
+  <span class="seg" role="group" aria-label="Indicator">${[['litmus','Litmus'],['phth','Phenolphthalein'],['uni','Universal'],['cab','Red cabbage']].map(([k,t])=>`<button type="button" data-ind="${k}" aria-pressed="${k===this.ind}">${t}</button>`).join('')}</span></div>
+  <div class="phwrap"><svg viewBox="0 0 280 220" class="phsvg" role="img" aria-label="Beaker with indicator"><path d="M30 20v175a12 12 0 0 0 12 12h196a12 12 0 0 0 12-12V20" fill="none" stroke="#8a9aa6" stroke-width="5"/>
+   <rect id="phLiq" x="33" y="60" width="214" height="144" rx="8" fill="#5db85a" opacity=".75"/>
+   ${PHDOTS.map(([x,y],i)=>`<g id="phd${i}"><circle cx="${x+20}" cy="${y+20}" r="8" fill="#fff" stroke="#22313b" stroke-width="1.5"/><text x="${x+20}" y="${y+24}" font-size="10" font-weight="800" text-anchor="middle"></text></g>`).join('')}
+   <g id="phStrip"><rect x="200" y="6" width="22" height="120" rx="3" fill="#fff" stroke="#8a9aa6" stroke-width="2"/><rect id="phStripC" x="201" y="62" width="20" height="63" fill="#9a6fc0"/></g></svg>
+   <div class="corners"><div class="cn"><small>pH</small><b id="cpH"></b></div><div class="cn"><small>pOH</small><b id="cpOH"></b></div><div class="cn"><small>[H⁺] or [H₃O⁺]</small><b id="cH"></b></div><div class="cn"><small>[OH⁻]</small><b id="cOH"></b></div>
+   <div class="status" id="phStat" role="status" aria-live="polite"></div><div class="kline" id="phInd"></div></div></div>
+  <p class="cap">Dots: <b style="color:#c0392b">+</b> = H₃O⁺, <b style="color:#2f6fbf">−</b> = OH⁻ (each step of 1 pH is 10× more ions, so the dots are not to scale).</p></div>`;
+  this.el=host;const R=host.querySelector('#phR');
+  R.oninput=()=>{this.pH=Number(R.value);this.picked=null;host.querySelector('#phPick').value='';this.seen.add(Math.round(this.pH*10)/10);this.show();labFire(this,'slide')};
+  host.querySelector('#phPick').onchange=e=>{const v=e.target.value;if(v==='')return;const h=HOUSE[+v];this.picked=h[0];this.pH=h[1];R.value=h[1];this.seen.add(Math.round(h[1]*10)/10);this.show();labFire(this,'pick')};
+  host.querySelectorAll('[data-ind]').forEach(b=>b.onclick=()=>{this.ind=b.dataset.ind;host.querySelectorAll('[data-ind]').forEach(x=>x.setAttribute('aria-pressed',x===b));this.show();labFire(this,'ind')});
+  this.show()},
+ show(){const el=this.el,p=this.pH,h=10**-p,oh=KW/h;const set=(id,t)=>{const e=el.querySelector('#'+id);if(e.textContent!==t)e.textContent=t};
+  set('phO',p.toFixed(2));set('cpH',p.toFixed(2));set('cpOH',(14-p).toFixed(2));set('cH',sci(h,2)+' M');set('cOH',sci(oh,2)+' M');
+  const a=acidity(p);const st=el.querySelector('#phStat');st.className='status '+(a==='acidic'?'l':a==='basic'?'r':'eq');set('phStat',(a==='acidic'?'🍋 Acidic: [H⁺] > [OH⁻]':a==='basic'?'🧼 Basic: [OH⁻] > [H⁺]':'⚖️ Neutral: [H⁺] = [OH⁻]')+(this.picked?' · '+this.picked:''));
+  const liq=el.querySelector('#phLiq'),strip=el.querySelector('#phStrip');
+  if(this.ind==='uni'){liq.setAttribute('fill',universal(p));liq.setAttribute('opacity','.8');strip.style.display='none';set('phInd','Universal indicator: color changes all along the scale')}
+  else if(this.ind==='cab'){liq.setAttribute('fill',cabbage(p));liq.setAttribute('opacity','.85');strip.style.display='none';set('phInd','Red cabbage juice: '+cabName(p))}
+  else if(this.ind==='phth'){const c=phth(p);liq.setAttribute('fill',c[1]);liq.setAttribute('opacity',c[0]==='colorless'?'.5':'.85');strip.style.display='none';set('phInd','Phenolphthalein: '+c[2])}
+  else{const c=litmus(p);liq.setAttribute('fill','#eaf5fd');liq.setAttribute('opacity','.8');strip.style.display='';el.querySelector('#phStripC').setAttribute('fill',c[1]);set('phInd','Litmus paper: '+c[2])}
+  const nH=Math.round(Math.max(0,Math.min(16,8+(7-p)*8/7))),nO=Math.round(Math.max(0,Math.min(16,8+(p-7)*8/7)));
+  PHDOTS.forEach((_,i)=>{const g=el.querySelector('#phd'+i),t=g.querySelector('text'),c=g.querySelector('circle');const isH=i%2===0,k=Math.floor(i/2),on=isH?k<nH:k<nO;
+   g.style.display=on?'':'none';if(on){const want=isH?'+':'−';if(t.textContent!==want){t.textContent=want;c.setAttribute('fill',isH?'#f9c4bf':'#c9dcf7')}}})},
+ start(){},stop(){}};
+
+/* ---------- 3. Titration Lab: buret, flask with phenolphthalein, pH curve ---------- */
+const TitLab={el:null,onEvent:null,cfg:null,Vb:0,hist:[],endV:null,over:false,flashT:0,
+ Veq(){const c=this.cfg;return c.r*c.Ca*c.Va/(c.m*c.Cb)},
+ pHat(Vb){const c=this.cfg,nA=c.Ca*c.Va,nB=c.Cb*Vb*c.m,V=c.Va+Vb;return pHof(c.Ka?solveH(nB,nA,c.Ka,V):solveH(nB-c.r*nA,0,0,V))},
+ mount(host,cfg){this.cfg=cfg;this.Vb=0;this.endV=null;this.over=false;this.hist=[[0,this.pHat(0)]];
+  host.innerHTML=`<div class="lab"><div class="eqrow">${cfg.Va.toFixed(1)} mL ${cfg.acidF} + phenolphthalein · buret: ${cfg.Cb.toFixed(3)} M ${cfg.baseF}</div>
+  <div class="ctrls" role="group" aria-label="Add base from the buret">${[[5,'+5.00 mL'],[1,'+1.00 mL'],[0.1,'+0.10 mL'],[0.05,'💧 1 drop']].map(([v,t])=>`<button type="button" class="chip go" data-add="${v}">${t}</button>`).join('')}<button type="button" class="chip rst" data-refill>↺ Refill</button></div>
+  <div class="titwrap"><svg viewBox="0 0 260 250" class="titsvg" role="img" aria-label="Buret over a flask"><rect x="112" y="6" width="22" height="150" rx="4" fill="#fff" stroke="#8a9aa6" stroke-width="2.5"/><rect id="tbLiq" x="114" y="8" width="18" height="146" fill="#cfe6fa"/>
+   ${[0,10,20,30,40,50].map(v=>`<line x1="112" x2="104" y1="${8+v*2.92}" y2="${8+v*2.92}" stroke="#8a9aa6" stroke-width="2"/><text x="100" y="${12+v*2.92}" font-size="10" text-anchor="end" fill="#5c6a75">${v}</text>`).join('')}
+   <path d="M117 156h12l-3 14h-6z" fill="#8a9aa6"/><circle id="tbDrop" cx="123" cy="178" r="4" fill="#cfe6fa" opacity="0"/>
+   <path d="M103 186h40v14l38 40H65l38-40z" fill="none" stroke="#8a9aa6" stroke-width="3.5" stroke-linejoin="round"/><path id="tfLiq" d="M100 212h46l28 26H72z" fill="#f4f8fb" stroke="none" style="transition:fill .35s"/></svg>
+   <div class="titread"><div class="cn"><small>Buret reading</small><b id="tRead">0.00 mL</b></div><div class="cn"><small>pH meter</small><b id="tpH"></b></div>
+   <div class="kline">In the flask (mmol):</div><div class="bars"><span>Acid H⁺ left</span><i><u id="barH"></u></i><b id="nH"></b><span>OH⁻ added</span><i><u id="barO"></u></i><b id="nO"></b></div>
+   <div class="status" id="tStat" role="status" aria-live="polite">Colorless: still acidic. Start adding base.</div>
+   <div class="tpartbox"><div class="kline">🔍 Zoomed into the flask:</div><svg class="tpart" id="tPart" viewBox="0 0 240 118" role="img"></svg><div class="kline" id="tPartTxt"></div></div></div></div>
+  <div class="graphwrap"><canvas id="tCv" width="600" height="190" role="img" aria-label="pH versus mL of base added"></canvas><p class="cap">Titration curve: pH (up) vs. mL of ${cfg.baseF} added. Pink band = where phenolphthalein turns pink.</p></div></div>`;
+  this.el=host;host.querySelectorAll('[data-add]').forEach(b=>fastTap(b,()=>this.add(Number(b.dataset.add))));host.querySelector('[data-refill]').onclick=()=>this.refill();this.partInit();this.show()},
+ add(v){if(this.endV!=null||this.over)return;if(this.Vb+v>50.0001){this.say('The buret only holds 50 mL. Tap ↺ Refill.');return}
+  const prev=this.Vb;this.Vb=Math.round((this.Vb+v)*100)/100;const p=this.pHat(this.Vb);this.hist.push([this.Vb,p]);
+  const d=this.el.querySelector('#tbDrop');d.setAttribute('opacity','1');setTimeout(()=>d.setAttribute('opacity','0'),180);
+  const c=phth(p);
+  if(c[0]==='faint'){this.endV=this.Vb;this.show();this.say(`🎉 Faint pink that stays! Endpoint at ${this.Vb.toFixed(2)} mL. Write that reading down.`);this.lock(true);labFire(this,'endpoint');return}
+  if(c[0]==='pink'){this.over=true;this.show();this.say('😬 Dark pink: you passed the endpoint. Tap ↺ Refill and add drops near the end.');this.lock(true);labFire(this,'over');return}
+  this.show();const left=this.Veq()-this.Vb;
+  if(left<1.0){const f=this.el.querySelector('#tfLiq');f.style.fill='#f7b6d6';clearTimeout(this.flashT);this.flashT=setTimeout(()=>{f.style.fill=''},450);this.say('A pink swirl appears, then fades. You are close: use drops now!')}
+  else{const rx=this.cfg.Ka?'HA + OH⁻ → A⁻ + H₂O':'H⁺ + OH⁻ → H₂O';this.say(prev===0?`Colorless: the OH⁻ is being used up (${rx}).`:`Still colorless: ${rx} keeps using up the base.`)}labFire(this,'add')},
+ lock(on){this.el.querySelectorAll('[data-add]').forEach(b=>b.disabled=on)},
+ refill(){this.Vb=0;this.endV=null;this.over=false;this.hist=[[0,this.pHat(0)]];this.lock(false);this.partInit();this.show();this.say('Refilled. Colorless: still acidic. Start adding base.');labFire(this,'refill')},
+ say(t){const e=this.el.querySelector('#tStat');e.textContent=t;e.className='status '+(this.over?'l':this.endV!=null?'eq':'r')},
+ show(){const el=this.el,c=this.cfg,p=this.pHat(this.Vb);el.querySelector('#tRead').textContent=this.Vb.toFixed(2)+' mL';el.querySelector('#tpH').textContent=p.toFixed(2);
+  el.querySelector('#tbLiq').setAttribute('y',8+this.Vb*2.92);el.querySelector('#tbLiq').setAttribute('height',Math.max(0,146-this.Vb*2.92));
+  const col=phth(p);el.querySelector('#tfLiq').setAttribute('fill',col[0]==='colorless'?'#d6e8f6':col[1]);
+  const nA=c.r*c.Ca*c.Va,nB=c.Cb*this.Vb*c.m,mx=Math.max(nA,nB,1e-9)*1.05;
+  const hLeft=Math.max(0,nA-nB);el.querySelector('#barH').style.width=(hLeft/mx*100)+'%';el.querySelector('#barO').style.width=(nB/mx*100)+'%';
+  el.querySelector('#nH').textContent=hLeft.toFixed(2);el.querySelector('#nO').textContent=nB.toFixed(2);this.graph();this.partUpdate()},
+ graph(){const cv=this.el.querySelector('#tCv'),w=600,h=190,ctx=fitCanvas(cv,w,h),X0=36,Y0=170,xm=Math.min(50,Math.max(10,Math.ceil(this.Veq()*1.5/5)*5)),sx=(w-50)/xm,sy=150/14;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle='#fde3ef';ctx.fillRect(X0,Y0-10.4*sy,w-50,(10.4-8.2)*sy);ctx.strokeStyle='#c9d4dd';ctx.lineWidth=1;ctx.font='11px Inter,system-ui,sans-serif';ctx.fillStyle='#5c6a75';
+  for(let y=0;y<=14;y+=7){ctx.beginPath();ctx.moveTo(X0,Y0-y*sy);ctx.lineTo(w-14,Y0-y*sy);ctx.stroke();ctx.fillText(y,X0-20,Y0-y*sy+4)}
+  for(let x=0;x<=xm;x+=5){ctx.fillText(x,X0+x*sx-5,Y0+14)}
+  ctx.strokeStyle='#3b8ccb';ctx.lineWidth=3;ctx.beginPath();this.hist.forEach(([v,p],i)=>{const X=X0+Math.min(v,xm)*sx,Y=Y0-p*sy;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.stroke();
+  const L=this.hist[this.hist.length-1];ctx.fillStyle='#e0675a';ctx.beginPath();ctx.arc(X0+Math.min(L[0],xm)*sx,Y0-L[1]*sy,5,0,7);ctx.fill()},
+ start(){},stop(){clearTimeout(this.flashT)}};
+
+/* ---------- 4. Buffer Lab: plain water vs. a buffer, side by side ---------- */
+const BUF_SYS={
+ acetic:{name:'Acetic acid / acetate',HA:'CH₃COOH',A:'CH₃COO⁻',salt:'NaCH₃COO',Ka:1.8e-5,a:5,b:5,real:'Vinegar-based buffer, used in labs and foods'},
+ phos:{name:'Phosphate (H₂PO₄⁻ / HPO₄²⁻)',HA:'H₂PO₄⁻',A:'HPO₄²⁻',salt:'Na₂HPO₄',Ka:6.2e-8,a:5,b:5,real:'The main buffer inside your cells'},
+ nh3:{name:'Ammonia / ammonium',HA:'NH₄⁺',A:'NH₃',salt:'NH₄Cl',Ka:5.6e-10,a:5,b:5,real:'A weak base with its conjugate acid also makes a buffer'},
+ blood:{name:'Blood (H₂CO₃ / HCO₃⁻)',HA:'H₂CO₃',A:'HCO₃⁻',salt:'NaHCO₃',Ka:7.9e-7,a:2,b:40,real:'Keeps blood at pH 7.35–7.45. It holds 20× more HCO₃⁻ than H₂CO₃ because the body makes more acid than base. Below 7.35 is acidosis: in a real body the lungs (breathing out CO₂) and kidneys back the buffer up'}};
+const BUF_SYS_LIST=[['acetic','Acetic'],['phos','Phosphate'],['nh3','Ammonia'],['blood','🩸 Blood']];
+const BufLab={el:null,onEvent:null,sys:'acetic',acid:0,base:0,start0:null,broken:false,
+ S(){return BUF_SYS[this.sys]},
+ amounts(){const s=this.S(),net=this.acid-this.base;return {HA:Math.max(0,Math.min(s.a+s.b,s.a+net)),A:Math.max(0,Math.min(s.a+s.b,s.b-net))}},
+ pHw(){return pHof(solveH(this.base-this.acid,0,0,100))},
+ pHb(){const s=this.S();return pHof(solveH(s.b+this.base-this.acid,s.a+s.b,s.Ka,100))},
+ mount(host,cfg){this.sys=cfg.sys||'acetic';this.acid=0;this.base=0;this.broken=false;const s=this.S();
+  host.innerHTML=`<div class="lab">${cfg.choose?`<div class="ctrls" role="group" aria-label="Choose a buffer">${BUF_SYS_LIST.map(([k,t])=>`<button type="button" class="chip ${k===this.sys?'on':''}" aria-pressed="${k===this.sys}" data-bsys="${k}">${t}</button>`).join('')}</div>`:''}
+  <div class="ctrls" role="group" aria-label="Add to both beakers"><button type="button" class="chip go" data-badd="acid">+ HCl (acid)</button><button type="button" class="chip go" data-badd="base">+ NaOH (base)</button><button type="button" class="chip rst" data-breset>↺ Reset</button><span class="kline">Each tap adds 1 mmol to <b>both</b> beakers.</span></div>
+  <div class="real" id="bReal"></div>
+  <div class="bufwrap">${['w','b'].map(k=>`<div class="bk"><div class="bkt">${k==='w'?'💧 Plain water':'🛡️ Buffer'}</div><svg viewBox="0 0 160 150" role="img" aria-label="${k==='w'?'Water':'Buffer'} beaker"><path d="M18 10v118a10 10 0 0 0 10 10h104a10 10 0 0 0 10-10V10" fill="none" stroke="#8a9aa6" stroke-width="4"/><rect id="bl${k}" x="21" y="40" width="118" height="95" rx="6" opacity=".8"/><text id="bt${k}" x="80" y="98" text-anchor="middle" font-size="30" font-weight="900" fill="#22313b"></text></svg><div class="kline" id="bd${k}"></div></div>`).join('')}</div>
+  <div class="tokens"><div><b id="bHAn"></b><span id="bHA" aria-hidden="true"></span></div><div><b id="bAn"></b><span id="bA" aria-hidden="true"></span></div></div>
+  <div class="status r" id="bStat" role="status" aria-live="polite"></div></div>`;
+  this.el=host;host.querySelectorAll('[data-badd]').forEach(b=>fastTap(b,()=>this.add(b.dataset.badd)));host.querySelector('[data-breset]').onclick=()=>{this.reset();labFire(this,'reset')};
+  host.querySelectorAll('[data-bsys]').forEach(b=>b.onclick=()=>{this.sys=b.dataset.bsys;host.querySelectorAll('[data-bsys]').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b)});this.reset();labFire(this,'sys')});
+  this.reset()},
+ reset(){this.acid=0;this.base=0;this.broken=false;this.start0=[this.pHw(),this.pHb()];const s=this.S();this.el.querySelector('#bReal').textContent='🔗 '+s.name+': '+s.real;this.show(`Buffer = ${s.HA} (weak acid) + ${s.A} (its conjugate base). Add some acid or base.`)},
+ add(k){const before=this.amounts();if(k==='acid')this.acid++;else this.base++;const s=this.S(),after=this.amounts();let msg;
+  if(k==='acid')msg=before.A>0?`H⁺ + ${s.A} → ${s.HA}: the buffer's base part used up the added acid.`:`No ${s.A} left to grab the H⁺! The extra H⁺ stays in solution.`;
+  else msg=before.HA>0?`OH⁻ + ${s.HA} → ${s.A} + H₂O: the buffer's acid part used up the added base.`:`No ${s.HA} left to react with the OH⁻! The extra OH⁻ stays in solution.`;
+  if((after.A===0||after.HA===0)&&!this.broken){this.broken=true;msg+=' ⚠️ One buffer part is used up: the buffer capacity is reached.'}
+  this.show(msg);labFire(this,k);if(this.acid>=2)labFire(this,'acid2');if(this.base>=2)labFire(this,'base2');if(Math.abs(this.pHb()-this.start0[1])>1)labFire(this,'broken')},
+ show(msg){const el=this.el,s=this.S(),w=this.pHw(),b=this.pHb(),am=this.amounts();
+  [['w',w,this.start0[0]],['b',b,this.start0[1]]].forEach(([k,p,p0])=>{el.querySelector('#bl'+k).setAttribute('fill',universal(p));el.querySelector('#bt'+k).textContent='pH '+p.toFixed(2);const d=p-p0;el.querySelector('#bd'+k).textContent=`Started at ${p0.toFixed(2)} · change ${d>=0?'+':'−'}${Math.abs(d).toFixed(2)}`});
+  const dots=(n,c)=>c.repeat(Math.min(20,Math.round(n)));el.querySelector('#bHAn').textContent=`${s.HA}: ${am.HA} mmol `;el.querySelector('#bHA').textContent=dots(am.HA,'●');el.querySelector('#bAn').textContent=`${s.A}: ${am.A} mmol `;el.querySelector('#bA').textContent=dots(am.A,'○');
+  const st=el.querySelector('#bStat');st.textContent=msg;st.className='status '+(this.broken?'l':'eq')},
+ start(){},stop(){}};
+
+/* speed control (only the particle beaker animates) */
+const SPEEDS=[[1,'▶ Normal speed'],[0.3,'🐢 Slow motion'],[0,'⏸ Paused']];
+const SPEED={i:typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:0,f(){return SPEEDS[this.i][0]}};
+const speedChip=()=>`<button type="button" class="chip spd" data-speed aria-label="Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.">${SPEEDS[SPEED.i][1]}</button>`;
+function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=(SPEED.i+1)%SPEEDS.length;el.querySelectorAll('[data-speed]').forEach(x=>{x.textContent=SPEEDS[SPEED.i][1];x.setAttribute('aria-label',`Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.`)})})}
+
+/* titration particle view: 12 acid particles (H⁺ for strong acids, HA for weak acids); each portion of OH⁻ drops in,
+   meets one, and becomes H₂O (weak acid: HA becomes A⁻ + H₂O). Extra OH⁻ after the endpoint stays as blue dots. */
+Object.assign(TitLab,{
+ partPos(i){return [22+(i%6)*39,26+Math.floor(i/6)*36]},
+ partInit(){const sv=this.el.querySelector('#tPart'),weak=!!this.cfg.Ka,P=[];
+  for(let i=0;i<12;i++){const [x,y]=this.partPos(i);P.push(`<g class="tpA" id="tpa${i}" style="transform:translate(${x}px,${y}px)"><circle r="13" fill="${weak?'#bfe6c8':'#f9c4bf'}" stroke="${weak?'#4b7a58':'#e0675a'}" stroke-width="2"/><text y="4.5" text-anchor="middle" font-size="${weak?11:13}" font-weight="900">${weak?'HA':'H⁺'}</text></g>`)}
+  for(let i=0;i<12;i++){const x=22+(i%6)*39,y=100;P.push(`<g class="tpO" id="tpo${i}" style="display:none;transform:translate(${x}px,${y}px)"><circle r="11" fill="#c9dcf7" stroke="#2f6fbf" stroke-width="2"/><text y="4" text-anchor="middle" font-size="10" font-weight="900">OH⁻</text></g>`)}
+  sv.innerHTML=P.join('')+'<g id="tpFx"></g>';this.partN=12;this.partOH=0;this.partUpdate(true)},
+ partUpdate(quiet){const c=this.cfg,sv=this.el&&this.el.querySelector('#tPart');if(!sv||!sv.querySelector('#tpa0'))return;const nA=c.r*c.Ca*c.Va,nB=c.Cb*this.Vb*c.m,weak=!!c.Ka;
+  const left=Math.round(12*Math.max(0,nA-nB)/nA),extra=Math.min(12,Math.round(12*Math.max(0,nB-nA)/nA)),reduce=quiet||matchMedia('(prefers-reduced-motion: reduce)').matches,fx=sv.querySelector('#tpFx');
+  const used=k=>{const g=sv.querySelector('#tpa'+k);if(weak){g.querySelector('circle').setAttribute('fill','#e3e7ea');g.querySelector('circle').setAttribute('stroke','#8a9aa6');g.querySelector('text').textContent='A⁻'}else g.style.display='none'};
+  const back=k=>{const g=sv.querySelector('#tpa'+k);g.style.display='';if(weak){g.querySelector('circle').setAttribute('fill','#bfe6c8');g.querySelector('circle').setAttribute('stroke','#4b7a58');g.querySelector('text').textContent='HA'}};
+  for(let k=0;k<12;k++){if(k<left)back(k)}
+  for(let k=left;k<this.partN;k++){if(reduce){used(k);continue}const [x,y]=this.partPos(k),d=document.createElementNS(svgNS,'g');
+   d.innerHTML='<circle r="11" fill="#c9dcf7" stroke="#2f6fbf" stroke-width="2"/><text y="4" text-anchor="middle" font-size="10" font-weight="900">OH⁻</text>';d.style.transform=`translate(${x}px,4px)`;d.style.transition='transform .5s ease-in';fx.appendChild(d);
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{d.style.transform=`translate(${x}px,${y}px)`}));
+   setTimeout(()=>{used(k);d.innerHTML='<text y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#2f6fbf">H₂O</text>';d.style.transition='opacity .7s';d.style.opacity='0'},520);setTimeout(()=>d.remove(),1400)}
+  for(let k=0;k<12;k++){const g=sv.querySelector('#tpo'+k);g.style.display=k<extra?'':'none'}
+  this.partN=left;this.partOH=extra;
+  const txt=`${weak?'🟢 HA (acid molecules)':'🔴 H⁺'} left: ${left} of 12 · ${extra?`🔵 extra OH⁻: ${extra}`:'no extra OH⁻'} · 💧 H₂O made: ${Math.min(nA,nB).toFixed(2)} mmol`;
+  this.el.querySelector('#tPartTxt').textContent=txt;sv.setAttribute('aria-label','Zoomed-in flask: '+txt)}});
+const LABS={beaker:Beaker,ph:PHLab,tit:TitLab,buf:BufLab};
+
+</script>
+<script>
+/* 3-questions.js */
+/* ============================== QUESTIONS ============================== */
+const fx=(o)=>mc({prompt:o.p,html:o.x,hint:o.h,video:o.v,topic:o.t,choices:o.c,keepOrder:o.k});
+
+/* ---------- 🔍 Acid or Base? ---------- */
+function catReason(chosen,s){const [f,cat,,why,name]=s;
+ if(chosen===cat)return `${f} (${name}) ${why}.`+(cat==='WA'?` It is not on the strong-acid list (${STRONG_LIST}).`:'');
+ if(isAcid(chosen)&&isAcid(cat))return chosen==='SA'?`${f} is not one of the six strong acids (${STRONG_LIST}), so it only partly ionizes: weak.`:`${f} is one of the six strong acids: it ionizes 100%, so it is strong, not weak.`;
+ if(isBase(chosen)&&isBase(cat))return chosen==='SB'?`Strong bases are soluble hydroxides like NaOH or Ba(OH)₂. ${f} has no OH⁻ ion of its own and makes only a little OH⁻, so it is weak.`:`${f} is a soluble hydroxide: it releases all of its OH⁻ (100%), so it is strong.`;
+ if(isAcid(chosen)&&isBase(cat))return `An acid gives off H⁺, but ${f} ${why}. That makes it a base.`;
+ if(isBase(chosen)&&isAcid(cat))return `A base accepts H⁺ or releases OH⁻, but ${f} ${why}. That makes it an acid.`;
+ if(cat==='N')return `${f} ${why}, so it is neither an acid nor a base.`;
+ return `It is not neutral: ${f} ${why}.`}
+function classifyQ(s){s=s||pickNew('cls',SUBST);return mc({topic:'id',video:isAcid(s[1])?'strength':'props',keepOrder:true,
+ prompt:`Classify <b>${s[0]}</b> when it dissolves in water.`,html:`<div class="rxn">${s[0]}</div>`,
+ hint:'Green sheet first: is it one of the six strong acids? Is it a soluble hydroxide (strong base)? Look for –COOH (weak acid), an amine N or CO₃²⁻/HCO₃⁻ (weak base). An alcohol –OH does not count as hydroxide.',
+ choices:['SA','WA','SB','WB','N'].map(c=>[CAT_NAME[c],c===s[1],catReason(c,s)])})}
+const ACID_FAM={binary:'Binary acid (H + one nonmetal)',oxy:'Oxyacid (H + an oxygen polyatomic ion)',carb:'Carboxylic acid (organic, –COOH)'};
+const BASE_FAM={oh:'Ionic base with hydroxide, OH⁻',co3:'Ionic base with CO₃²⁻ or HCO₃⁻',amine:'Molecular base (N with a lone pair)'};
+function familyQ(){const s=pickNew('fam',SUBST.filter(x=>x[1]!=='N')),[f,cat,fam,why]=s,acid=isAcid(cat);
+ const rs={binary:[`${f} is H bonded to one nonmetal, with no oxygen: a binary acid.`,`A binary acid is just H plus one nonmetal, like HCl. ${f} ${fam==='carb'?'is a carbon compound with a –COOH group':'contains oxygen'}.`],
+  oxy:[`${f} is H attached to a polyatomic ion that contains oxygen: an oxyacid.`,fam==='binary'?`An oxyacid contains oxygen, like H₂SO₄. ${f} has no oxygen.`:`${f} is organic (it has a –COOH group on carbon), so it is a carboxylic acid, not an oxyacid.`],
+  carb:[`${f} is an organic molecule with a –COOH group: a carboxylic acid.`,`A carboxylic acid is organic, with a –COOH group on carbon. ${f} has no –COOH group.`],
+  oh:[`${f} contains the hydroxide ion, OH⁻.`,`${f} has no hydroxide ion (OH⁻).`],
+  co3:[`${f} ${why}.`,`${f} has no carbonate (CO₃²⁻) or bicarbonate (HCO₃⁻) ion.`],
+  amine:[`${f} is a molecule with an N lone pair (ammonia or an amine) that accepts H⁺.`,`${f} is ionic: it is not a molecule with an amine N.`]};
+ const F=acid?ACID_FAM:BASE_FAM,ch=Object.keys(F).map(k=>[F[k],k===fam,rs[k][k===fam?0:1]]);
+ ch.push([acid?'Not an acid: it is a base':'Not a base: it is an acid',false,`${f} ${why}, so it is ${acid?'an acid':'a base'}.`]);
+ return mc({topic:'id',video:'props',keepOrder:true,prompt:`<b>${f}</b> is ${acid?'an acid':'a base'}. What kind?`,html:`<div class="rxn">${f}</div>`,
+  hint:acid?'Binary acids: H + one nonmetal (HCl). Oxyacids: H + an ion with oxygen (H₂SO₄). Carboxylic acids: organic with –COOH.':'Ionic bases contain OH⁻ or CO₃²⁻/HCO₃⁻. Molecular bases are ammonia and amines (–NH₂): the N lone pair grabs H⁺.',choices:ch})}
+function strongPickQ(){if(Math.random()<0.6){const r=pick(SUBST.filter(x=>x[1]==='SA')),w=shuf(SUBST.filter(x=>x[1]==='WA')).slice(0,3);
+  return mc({topic:'strong',video:'strength',prompt:'Which one is a <b>strong acid</b>?',hint:`Memorize the six strong acids: ${STRONG_LIST}. Every other acid is weak.`,
+   choices:[[r[0],true,`${r[0]} is one of the six strong acids (${STRONG_LIST}): it ionizes 100% in water.`],...w.map(x=>[x[0],false,`${x[0]} ${x[3]}. That makes it a weak acid.`])]})}
+ const r=pick(SUBST.filter(x=>x[1]==='SB')),pool=[['NH₃','NH₃ is a weak base: its N lone pair accepts H⁺, making only a little OH⁻. It has no OH⁻ of its own.'],['NaHCO₃','NaHCO₃ (baking soda) is a weak base: HCO₃⁻ accepts H⁺ but makes only a little OH⁻.'],['CH₃OH','CH₃OH is an alcohol: its O–H is a covalent bond, so it releases no OH⁻. It is not a base.'],['Mg(OH)₂','Mg(OH)₂ (milk of magnesia) barely dissolves in water, so it cannot release much OH⁻. Strong bases are soluble hydroxides.'],['CH₃NH₂','CH₃NH₂ is an amine: a weak base that makes only a little OH⁻.'],['Na₂CO₃','Na₂CO₃ is a weak base: CO₃²⁻ accepts H⁺ but makes only a little OH⁻.']];
+ return mc({topic:'strong',video:'strength',prompt:'Which one is a <b>strong base</b>?',hint:'Strong bases are soluble hydroxides: Group 1 hydroxides (LiOH, NaOH, KOH) plus Ca(OH)₂, Sr(OH)₂ and Ba(OH)₂.',
+  choices:[[r[0],true,`${r[0]} is a soluble hydroxide: it releases all of its OH⁻ in water, so it is a strong base.`],...shuf(pool).slice(0,3).map(x=>[x[0],false,x[1]])]})}
+const PROPS=[
+ {p:'A solution tastes <b>sour</b> and turns blue litmus paper <b>red</b>. It is most likely…',h:'Sour taste and red litmus go together.',v:'props',c:[['An acid',true,'Acids taste sour and turn litmus red (Lecture 26 properties table).'],['A base',false,'Bases taste bitter and turn litmus blue.'],['A neutral salt solution',false,'A neutral solution would not change blue litmus to red.'],['Pure water',false,'Pure water is neutral (pH 7): no color change.']]},
+ {p:'An unknown solution turned <b>pink</b> when a drop of phenolphthalein was added. Is it HNO₃ or KOH?',h:'Phenolphthalein is pink in base and colorless in acid.',v:'props',c:[['KOH, because pink means basic',true,'Phenolphthalein turns pink in base. KOH is a strong base.'],['HNO₃, because pink means acidic',false,'Phenolphthalein is colorless in acid; pink means base.'],['Either one; the color tells nothing',false,'The color tells us a lot: pink only happens in base.'],['Neither; pink means neutral',false,'Phenolphthalein is colorless at neutral pH 7.']]},
+ {p:'An unknown solution turned litmus paper <b>red</b>. Is it HBr(aq) or Ba(OH)₂(aq)?',h:'Red litmus = acid; blue litmus = base.',v:'props',c:[['HBr, because red litmus means acid',true,'Acids turn litmus red. HBr is a strong acid.'],['Ba(OH)₂, because red litmus means base',false,'Bases turn litmus blue, not red.'],['Both would turn litmus red',false,'Ba(OH)₂ is a base: it turns litmus blue.'],['Neither; red litmus means neutral',false,'Neutral solutions leave litmus purple (no change).']]},
+ {p:'A cleaning solution feels <b>slippery/soapy</b> and tastes bitter. It is most likely…',h:'Which one is bitter and soapy?',v:'props',c:[['A base',true,'Bases taste bitter and feel slippery or soapy.'],['An acid',false,'Acids taste sour, not bitter.'],['A neutral salt',false,'Salt solutions are not slippery.'],['A strong acid',false,'Strong acids are sour and corrosive, not soapy.']]},
+ {p:'A strip of magnesium metal fizzes and gives off H₂ gas in a solution. The solution is…',h:'Which kind of substance "dissolves" (corrodes) metals?',v:'props',c:[['Acidic',true,'Acids corrode some metals: M + acid → salt + H₂(g), like Mg + 2 HCl → MgCl₂ + H₂.'],['Basic',false,'Bases do not react with Mg to give H₂; acids do.'],['Neutral',false,'A neutral solution would not corrode the metal.'],['Pure ethanol',false,'Ethanol is not an acid; it would not make H₂ with Mg.']]},
+ {p:'Why do solutions of acids and bases <b>conduct electricity</b>?',h:'What do acids and bases make when they dissolve?',v:'props',c:[['They make ions in water',true,'Acids and bases dissociate into ions (H⁺ and A⁻, or M⁺ and OH⁻), so their solutions are electrolytes.'],['They contain metal atoms',false,'Many acids (HCl) have no metal at all. Moving ions carry the current.'],['They are always hot',false,'Temperature is not why they conduct; ions are.'],['Their molecules stay whole',false,'Whole molecules do not carry charge. Ions do.']]},
+ {p:'When H⁺ is released into water, it immediately joins a water molecule. What forms?',h:'H₂O + H⁺ → ?',v:'props',c:[['H₃O⁺, the hydronium ion',true,'H₂O + H⁺ → H₃O⁺. That is why [H⁺] and [H₃O⁺] mean the same thing.'],['OH⁻, the hydroxide ion it releases',false,'OH⁻ forms when water loses an H⁺, not gains one.'],['H₂ gas',false,'H₂ gas forms when an acid reacts with a metal, not in plain water.'],['H₂O₂, peroxide',false,'Adding H⁺ to water does not add an O atom.']]},
+ {p:'<b>Aspirin</b> has a –COOH group (and an ester group). In water, aspirin acts as…',h:'What does –COOH do?',v:'props',c:[['An acid',true,'The –COOH (carboxylic acid) group gives off H⁺. Aspirin is acetylsalicylic acid.'],['A base',false,'A base needs OH⁻, CO₃²⁻ or an amine N to accept H⁺. Aspirin has none of those.'],['Neither',false,'The –COOH group makes it an acid.'],['A strong base',false,'Aspirin has no hydroxide ion; it is a weak acid.']]},
+ {p:'<b>Isoamyl acetate</b> (banana flavor) is an ester: it has –COO– but no –COOH and no N. In water it is…',h:'Does it have an acidic –COOH hydrogen or an amine N?',v:'props',c:[['Neither an acid nor a base',true,'An ester has no –COOH hydrogen to give off and no N lone pair to grab H⁺.'],['An acid, because it has O atoms',false,'O atoms alone do not make an acid; it needs a –COOH hydrogen.'],['A base, because it has C–H bonds',false,'C–H hydrogens are not given off and do not accept H⁺.'],['A strong acid',false,'It is not one of the six strong acids, and it is not an acid at all.']]},
+ {p:'<b>Pseudoephedrine</b> (a decongestant) has an –NH– amine group. In water it acts as…',h:'What does the lone pair on an amine N do?',v:'props',c:[['A weak base',true,'The amine N lone pair accepts H⁺ to become an ammonium ion: a weak base.'],['A weak acid',false,'An amine accepts H⁺; it does not give it off.'],['A strong base',false,'Strong bases are soluble hydroxides like NaOH. Amines are weak bases.'],['Neither',false,'The amine N makes it a base.']]},
+ {p:'<b>Ibuprofen</b> has a –COOH group on its ring. In water it acts as…',h:'Look for –COOH.',v:'props',c:[['A weak acid',true,'The –COOH group gives off a little H⁺: a weak (carboxylic) acid.'],['A strong acid',false,'Only six acids are strong (HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄). Ibuprofen is weak.'],['A weak base',false,'It has no amine N or carbonate to accept H⁺.'],['Neither',false,'The –COOH group makes it an acid.']]},
+ {p:'A <b>strong</b> acid makes a <b>strong electrolyte</b> solution. Why?',h:'Strong = how much it dissociates.',v:'strength',c:[['It dissociates completely into ions',true,'Strong acids break apart 100% into H⁺ and A⁻: many ions, bright bulb.'],['It is always very concentrated',false,'Strength is about % dissociation, not concentration. Even dilute HCl is strong.'],['It has many H atoms in it',false,'CH₄ has 4 H atoms and is not an acid. Strength is about dissociation.'],['Its molecules stay whole in water',false,'That describes a weak acid (few ions).']]}];
+const SEE={SA:'only ions (lots of H₃O⁺ and A⁻, no whole HA) and a bright bulb',WA:'mostly whole HA molecules with only a few H₃O⁺ ions, and a dim bulb',SB:'only ions (lots of M⁺ and OH⁻) and a bright bulb',WB:'mostly whole B molecules with a few BH⁺ and OH⁻ ions, and a dim bulb',N:'only whole molecules (no ions) and a bulb that stays off'};
+const BEAKER_OK=s=>s[1]==='WB'?s[2]==='amine':s[1]==='N'?/OH|C₆H₁₂O₆|COOCH₃/.test(s[0])&&!/^(NaCl|KNO₃)$/.test(s[0]):true;
+function beakerQ(){const cat=pick(['SA','WA','SB','WB','N']),others=shuf(['SA','WA','SB','WB','N'].filter(c=>c!==cat)).slice(0,3);
+ const of=c=>pick(SUBST.filter(s=>s[1]===c&&BEAKER_OK(s)));const r=of(cat);
+ return mc({topic:'strong',video:'strength',lab:{kind:'beaker',cfg:{cat}},task:{need:'bulb',say:'Tap <b>💡 Test conductivity</b>, then look at the particles.'},
+  prompt:'This beaker holds one substance dissolved in water. Which substance could it be?',
+  hint:'Ions = the substance split apart (strong). Mostly whole molecules with a few ions = weak. No ions at all = nonelectrolyte. H₃O⁺ means acid; OH⁻ means base.',
+  choices:[[r[0],true,`${r[0]} is a ${CAT_NAME[cat].toLowerCase()}: it gives ${SEE[cat]}. That matches this beaker.`],...others.map(c=>{const s=of(c);return [s[0],false,`${s[0]} is ${c==='N'?'not an acid or base':'a '+CAT_NAME[c].toLowerCase()}: it would give ${SEE[c]}.`]})]})}
+function idQ(){const r=Math.random();if(r<0.1)return ionConcQ();if(r<0.3)return classifyQ();if(r<0.45)return familyQ();if(r<0.6)return strongPickQ();if(r<0.8)return beakerQ();return fx(pickNew('props',PROPS))}
+
+/* ---------- 🌈 pH Lab ---------- */
+const IND_NAME={litmus:'Litmus paper',phth:'Phenolphthalein'};
+const IND_RULE={litmus:{Red:'Litmus turns red in acid (below about pH 5).',Blue:'Litmus turns blue in base (above about pH 8).','Purple (in between)':'Litmus stays purple only near neutral (about pH 5 to 8).',Colorless:'Litmus paper is never colorless: it is red, blue, or purple in between.'},
+ phth:{Colorless:'Phenolphthalein is colorless in acidic and neutral solutions (below pH 8.2).','Light pink':'Phenolphthalein turns light pink just above pH 8.2.','Dark pink':'Phenolphthalein turns dark pink in strongly basic solutions (above about pH 10.8).',Blue:'Phenolphthalein never turns blue: it goes from colorless to pink.'}};
+function phColorQ(){const ind=pick(['litmus','phth']),ok=h=>ind==='litmus'?(h[1]<4.6||h[1]>8.5):(h[1]<7.8||(h[1]>8.6&&Math.abs(h[1]-10.8)>0.6));const h=pick(HOUSE.filter(ok)),col=(ind==='litmus'?litmus:phth)(h[1])[2],R=IND_RULE[ind];
+ return mc({topic:'ind',video:'ind',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>L.picked===h[0]&&L.ind===ind,say:`Pick <b>${h[2]} ${h[0]}</b> from the list, then tap <b>${ind==='litmus'?'Litmus':'Phenolphthalein'}</b>.`},
+  prompt:`What color does ${IND_NAME[ind].toLowerCase()} show in ${h[0].toLowerCase()}?`,hint:ind==='litmus'?'Litmus: red in acid, blue in base.':'Phenolphthalein: colorless in acid, pink in base (starting at pH 8.2).',
+  choices:Object.keys(R).map(k=>[k,k===col,k===col?`${h[0]} has pH ${h[1].toFixed(2)} (${acidity(h[1])}). ${R[k]}`:`${R[k]} ${h[0]} is pH ${h[1].toFixed(2)}.`])})}
+function pOHLabQ(){const t=pick([1,2,3,4,5,6,8,9,10,11,12,13]),f=x=>x.toFixed(2);
+ return mc({topic:'phc',video:'ph',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>Math.abs(L.pH-t)<0.001,say:`Slide the pH to exactly <b>${t}.0</b>. Watch the four corners.`},
+  prompt:`At pH ${t}.00, what is the pOH?`,hint:'pH + pOH = 14.00 at 25 °C.',
+  choices:[[f(14-t),true,`pOH = 14.00 − pH = 14.00 − ${t}.00 = ${f(14-t)}.`],[f(t),false,`That is the pH. pOH = 14.00 − pH.`],['7.00',false,'pOH is 7.00 only when the solution is neutral (pH 7.00).'],[f(14+t),false,'Subtract, don\'t add: pOH = 14.00 − pH.']]})}
+function ratioLabQ(){const d=pick([1,2,2,3]),a=pick(d===3?[2,3,9,10]:[2,3,4,9,10]),b=a+d;const T=n=>Number(n).toLocaleString('en-US')+'×';
+ const ch=[[T(10**d),true,`Each pH unit is a 10× change in [H⁺]. ${d} unit${d>1?'s':''} apart → 10${d>1?supN(d):''} = ${T(10**d)} more H⁺ at the lower pH.`],[T(10**(d+1)),false,`That would be ${d+1} pH units apart. These are ${d} apart.`],
+  [d===1?'2×':T(d),false,'pH is a log scale: each 1 pH step is 10×, not 1× more.'],[d===1?'1× (the same)':T(10**(d-1)),false,d===1?'Different pH values always mean different [H⁺].':`That would be ${d-1} pH unit${d-1>1?'s':''} apart. These are ${d} apart.`]];
+ return mc({topic:'ind',video:'ph',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>L.seen.has(a)&&L.seen.has(b),say:`Slide to pH <b>${a}.0</b>, then to pH <b>${b}.0</b>. Watch the [H⁺] corner.`},
+  prompt:`How many times more H⁺ is in a solution at pH ${a} than at pH ${b}?`,hint:'Compare the exponents in the [H⁺] corner. Each pH unit is a power of 10.',choices:ch})}
+function pinkLabQ(){return mc({topic:'ind',video:'props',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>L.ind==='phth'&&[...L.seen].some(v=>v>=8.2&&v<=8.6),say:'Tap <b>Phenolphthalein</b>, then slide slowly from pH 7 up to about pH 8.5.'},
+ prompt:'At about what pH does phenolphthalein <b>first</b> turn pink?',hint:'Watch the beaker as you pass pH 8.',
+ choices:[['About 8.2',true,'Phenolphthalein is colorless below pH 8.2 and turns pink above it. That is why it works for titration endpoints.'],['Exactly 7.0',false,'At pH 7 (neutral) phenolphthalein is still colorless.'],['About 5.0',false,'pH 5 is acidic; phenolphthalein is colorless in acid.'],['About 12.0',false,'It is already pink well before pH 12.']]})}
+function bloodLabQ(){return mc({topic:'ind',video:'ph',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>L.picked==='Human blood',say:'Pick <b>🩸 Human blood</b> from the list.'},
+ prompt:'Human blood is pH 7.40. How would you describe it?',hint:'Below 7 is acidic, above 7 is basic. How far from 7 is it?',
+ choices:[['Slightly basic',true,'7.40 is just above 7.00, so [OH⁻] is a little higher than [H⁺]: slightly basic. Normal arterial blood is 7.35–7.45.'],['Exactly neutral',false,'Neutral is exactly 7.00. Blood is 7.40.'],['Slightly acidic',false,'Acidic means below 7.00. Blood is above 7.'],['Strongly basic',false,'Strongly basic is far above 7 (like bleach, 12.5). Blood is only 0.40 above.']]})}
+function waterLabQ(){return mc({topic:'phc',video:'kw',lab:{kind:'ph',cfg:{pH0:4,ind:'uni'}},task:{need:L=>L.picked==='Pure water',say:'Pick <b>💧 Pure water</b> from the list. Read the [H⁺] corner.'},
+ prompt:'What is [H⁺] in pure water at 25 °C?',hint:'In neutral water [H⁺] = [OH⁻], and [H⁺][OH⁻] = 1.0 × 10⁻¹⁴.',
+ choices:[['1.0 × 10⁻⁷ M',true,'Water autoionizes a tiny bit. [H⁺] = [OH⁻] = x and x² = 1.0 × 10⁻¹⁴, so x = 1.0 × 10⁻⁷ M.'],['1.0 × 10⁻¹⁴ M',false,'1.0 × 10⁻¹⁴ is K<sub>w</sub>, the product [H⁺][OH⁻], not [H⁺] itself.'],['7.0 M',false,'7 is the pH, not the concentration. [H⁺] = 10⁻⁷ M.'],['0 M (no ions)',false,'Water autoionizes: a few molecules act as acids and a few as bases.']]})}
+function concClassQ(){const useH=Math.random()<0.5,n=pick([2,3,4,5,6,8,9,10,11,12]),m=rnd(11,99)/10,v=m*10**-n,ans=useH?(v>1e-7?'acidic':'basic'):(v>1e-7?'basic':'acidic');
+ const oh=KW/v,ion=useH?'[H⁺]':'[OH⁻]',other=useH?'[OH⁻]':'[H⁺]';
+ return mc({topic:'ind',video:'strength',prompt:`A solution has ${ion} = ${sci(v,2)} M. Is it acidic, basic, or neutral?`,hint:'Compare to neutral water, 1.0 × 10⁻⁷ M. More H⁺ than that = acidic; more OH⁻ = basic.',keepOrder:true,
+  choices:[['Acidic',ans==='acidic',ans==='acidic'?`${ion} ${useH?'> 10⁻⁷ M, so H⁺ is above neutral':'< 10⁻⁷ M, so OH⁻ is below neutral and H⁺ is above'}: acidic. (${other} = ${sci(oh,2)} M.)`:`Acidic needs [H⁺] above 10⁻⁷ M. Here ${other} = ${sci(oh,2)} M.`],
+   ['Basic',ans==='basic',ans==='basic'?`${ion} ${useH?'< 10⁻⁷ M, so H⁺ is below neutral and OH⁻ is above':'> 10⁻⁷ M, so OH⁻ is above neutral'}: basic. (${other} = ${sci(oh,2)} M.)`:`Basic needs [OH⁻] above 10⁻⁷ M. Here ${useH?'[OH⁻]':'[OH⁻]'} = ${sci(useH?oh:v,2)} M.`],
+   ['Neutral',false,`Neutral means [H⁺] = [OH⁻] = 1.0 × 10⁻⁷ M. ${ion} is ${sci(v,2)} M.`]]})}
+const PH_IDEAS=[
+ {p:'As you add acid to water, [H⁺] goes up. What happens to [OH⁻]?',h:'[H⁺][OH⁻] = 1.0 × 10⁻¹⁴ always.',v:'strength',t:'phc',c:[['It goes down',true,'[H⁺] × [OH⁻] stays 1.0 × 10⁻¹⁴, so when one goes up the other must go down (inverse relationship).'],['It goes up too',false,'If both went up, their product would grow past 1.0 × 10⁻¹⁴. They move in opposite directions.'],['It stays the same',false,'The product must stay 1.0 × 10⁻¹⁴, so [OH⁻] must change.'],['It becomes zero',false,'[OH⁻] gets very small but never zero.']]},
+ {p:'pH 2 vs. pH 3: which is more acidic, and by how much?',h:'Lower pH = more acidic. Each pH unit = 10×.',v:'ph',t:'ind',c:[['pH 2, 10× more acidic',true,'Lower pH is more acidic, and one pH unit is a factor of 10 in [H⁺].'],['pH 3, 10× more acidic',false,'Higher pH means less H⁺. pH 2 is more acidic.'],['pH 2, 2× more acidic',false,'pH is a log scale: 1 unit is 10×, not 2×.'],['They are the same',false,'Different pH values have different [H⁺].']]},
+ {p:'pH 10 vs. pH 7: how much more basic is pH 10?',h:'Count the pH units; each one is 10×.',v:'ph',t:'ind',c:[['1000× more basic',true,'3 pH units apart: 10 × 10 × 10 = 1000× (Lecture 26 slide 23).'],['3× more basic than pH 7',false,'pH is a log scale; 3 units is 10³, not 3.'],['30× more basic',false,'Multiply by 10 for each unit: 10³ = 1000.'],['100× more basic',false,'That is 2 units. 10 − 7 = 3 units.']]},
+ {p:'[H⁺] = 1.5 × 10⁻⁷ M. How many <b>decimal places</b> should the pH have?',h:'Log rule: decimal places in the log = sig figs in the number.',v:'log',t:'phc',c:[['2 (pH = 6.82)',true,'1.5 has 2 sig figs, so the pH gets 2 decimal places: 6.82.'],['1 (pH = 6.8)',false,'Count sig figs in 1.5 × 10⁻⁷: two (1 and 5). So 2 decimal places.'],['3 (pH = 6.824)',false,'Only 2 sig figs in 1.5, so only 2 decimal places.'],['0 (pH = 7)',false,'Rounding to a whole number throws away measured digits.']]},
+ {p:'At 25 °C, pH + pOH equals…',h:'Take −log of [H⁺][OH⁻] = 1.0 × 10⁻¹⁴.',v:'ph',t:'phc',c:[['14.00',true,'−log(1.0 × 10⁻¹⁴) = 14.00, so pH + pOH = 14.00.'],['7.00',false,'7.00 is the pH of neutral water, not the sum.'],['1.0 × 10⁻¹⁴',false,'That is the product [H⁺][OH⁻] (K<sub>w</sub>), not pH + pOH.'],['0',false,'pH and pOH are both positive for normal solutions.']]},
+ {p:'Arterial blood should be pH 7.35–7.45. A patient\'s blood is pH 7.30. This is…',h:'Below the normal range is more acidic than normal.',v:'ph',t:'ind',c:[['Acidosis',true,'7.30 is below 7.35: the blood is too acidic (acidosis), even though 7.30 is above 7.'],['Alkalosis',false,'Alkalosis is above 7.45 (too basic).'],['Normal',false,'Normal is 7.35–7.45; 7.30 is below.'],['Neutral',false,'Neutral is exactly 7.00; blood is judged against its own normal range.']]},
+ {p:'Which indicator result tells you a solution is <b>basic</b>?',h:'Litmus: red/blue. Phenolphthalein: colorless/pink.',v:'props',t:'ind',c:[['Phenolphthalein turns pink',true,'Phenolphthalein is pink in base (above pH 8.2).'],['Litmus turns red',false,'Red litmus means acid.'],['Phenolphthalein stays colorless',false,'Colorless phenolphthalein means acidic or neutral.'],['Litmus stays purple',false,'Purple litmus is the in-between color near neutral.']]}];
+function phQ(){const r=Math.random();if(r<0.55)return pick([phColorQ,phColorQ,pOHLabQ,ratioLabQ,pinkLabQ,bloodLabQ,waterLabQ])();if(r<0.75)return concClassQ();return fx(pickNew('phi',PH_IDEAS))}
+
+/* ---------- 🧮 pH Calculator (typed) ---------- */
+const mant=s=>s===3?rnd(101,999)/100:rnd(11,99)/10;
+const f2=x=>x.toFixed(2);
+const CORNERS='<div class="mini4"><span>pH</span><span>⇄ 14.00 − ⇄</span><span>pOH</span><span>↕ −log / 10⁻ˣ</span><span></span><span>↕ −log / 10⁻ˣ</span><span>[H⁺]</span><span>⇄ K<sub>w</sub> ÷ ⇄</span><span>[OH⁻]</span></div>';
+function calcQ(kind){kind=kind||pick(['pHH','pHH','pOHOH','Hfrom','HfrompOH','OHfromH','pOHfrompH','pHfromOH','sa','sb','sb']);const s=pick([2,2,3]);let q;
+ const logQ=(o)=>Object.assign({type:'num',kind:'log',topic:'phc',video:'ph',html:CORNERS},o),concQ=(o)=>Object.assign({type:'num',kind:'conc',topic:'conc',video:'log',unit:'M',html:CORNERS},o);
+ if(kind==='pHH'){const h=mant(s)*10**-rnd(2,12),a=pHof(h);q=logQ({prompt:`[H⁺] = ${sci(h,s)} M. What is the pH?`,answer:a,dp:s,hint:'pH = −log[H⁺]. Then round: decimal places in pH = sig figs in [H⁺].',
+  why:`pH = −log(${sci(h,s)}) = <b>${a.toFixed(s)}</b>. ${s} sig figs in [H⁺] → ${s} decimal places in pH. ${a<7?'Acidic':'Basic'}.`,slips:[[-a,'You dropped the minus sign: pH = <b>−</b>log[H⁺].'],[14-a,'That is the pOH. pH = −log[H⁺] directly.'],[-Math.log(h),'Use log (base 10), not ln.']]})}
+ else if(kind==='pOHOH'){const o=mant(s)*10**-rnd(2,12),a=pHof(o);q=logQ({prompt:`[OH⁻] = ${sci(o,s)} M. What is the pOH?`,answer:a,dp:s,hint:'pOH = −log[OH⁻]. Decimal places = sig figs in [OH⁻].',
+  why:`pOH = −log(${sci(o,s)}) = <b>${a.toFixed(s)}</b>.`,slips:[[-a,'You dropped the minus sign: pOH = <b>−</b>log[OH⁻].'],[14-a,'That is the pH. The question asks for pOH = −log[OH⁻].'],[-Math.log(o),'Use log (base 10), not ln.']]})}
+ else if(kind==='Hfrom'){const p=rnd(100,1300)/100,a=10**-p;q=concQ({prompt:`A solution has pH = ${f2(p)}. What is [H⁺]?`,answer:a,sf:2,video:'inv',hint:'[H⁺] = 10<sup>−pH</sup>. Two decimal places in the pH → 2 sig figs in [H⁺].',
+  why:`[H⁺] = 10<sup>−${f2(p)}</sup> = <b>${nf(a,2)} M</b>. 2 decimal places in pH → 2 sig figs.`,slips:[[10**p,'Use a <b>negative</b> exponent: [H⁺] = 10<sup>−pH</sup>.'],[10**-(14-p),'That is [OH⁻]. [H⁺] = 10<sup>−pH</sup>.'],[-Math.log10(p),'Use the inverse log (10ˣ), not log.']]})}
+ else if(kind==='HfrompOH'){const po=rnd(100,1300)/100,a=10**-(14-po);q=concQ({prompt:`A solution has pOH = ${f2(po)}. What is [H₃O⁺]?`,answer:a,sf:2,video:'inv',hint:'Two steps: pH = 14.00 − pOH, then [H₃O⁺] = 10<sup>−pH</sup>.',
+  why:`pH = 14.00 − ${f2(po)} = ${f2(14-po)}; [H₃O⁺] = 10<sup>−${f2(14-po)}</sup> = <b>${nf(a,2)} M</b>. ${14-po<7?'Acidic':'Basic'}.`,slips:[[10**-po,'That is [OH⁻] (10<sup>−pOH</sup>). Find the pH first: pH = 14.00 − pOH.'],[10**(14-po),'Use a negative exponent: [H₃O⁺] = 10<sup>−pH</sup>.']]})}
+ else if(kind==='OHfromH'){const h=mant(s)*10**-rnd(2,12),a=KW/h;q=concQ({prompt:`[H⁺] = ${sci(h,s)} M. What is [OH⁻]?`,answer:a,sf:s,hint:'[H⁺][OH⁻] = 1.0 × 10⁻¹⁴, so [OH⁻] = 1.0 × 10⁻¹⁴ ÷ [H⁺].',
+  why:`[OH⁻] = 1.0 × 10⁻¹⁴ ÷ ${sci(h,s)} = <b>${nf(a,s)} M</b>.`,slips:[[KW*h,'Divide by [H⁺]; don\'t multiply.'],[h/KW,'Flip it: [OH⁻] = 1.0 × 10⁻¹⁴ ÷ [H⁺].'],[h,'That is [H⁺] again. Use K<sub>w</sub> to find [OH⁻].']]})}
+ else if(kind==='pOHfrompH'){const p=rnd(100,1300)/100;q=logQ({prompt:`A solution has pH = ${f2(p)}. What is the pOH?`,answer:14-p,dp:2,hint:'pH + pOH = 14.00.',why:`pOH = 14.00 − ${f2(p)} = <b>${f2(14-p)}</b>.`,slips:[[p,'That is the pH. Subtract it from 14.00.'],[14+p,'Subtract, don\'t add: pOH = 14.00 − pH.']]})}
+ else if(kind==='pHfromOH'){const o=mant(s)*10**-rnd(2,12),poh=pHof(o),a=14-poh;q=logQ({prompt:`[OH⁻] = ${sci(o,s)} M. What is the <b>pH</b>?`,answer:a,dp:s,hint:'Two steps: pOH = −log[OH⁻], then pH = 14.00 − pOH.',
+  why:`pOH = −log(${sci(o,s)}) = ${poh.toFixed(s)}; pH = 14.00 − ${poh.toFixed(s)} = <b>${a.toFixed(s)}</b>.`,slips:[[poh,'That is the pOH. One more step: pH = 14.00 − pOH.'],[-poh,'Keep the minus sign in −log, then subtract from 14.00.']]})}
+ else if(kind==='sa'){const ac=pick(['HCl','HBr','HI','HNO₃','HClO₄']),c=mant(s)*10**-rnd(1,4),a=pHof(c);q=logQ({topic:'phc',prompt:`What is the pH of ${sci(c,s)} M ${ac}(aq)?`,answer:a,dp:s,video:'strength',hint:`${ac} is a strong acid: it ionizes 100%, so [H⁺] = [${ac}].`,
+  why:`${ac} is strong, so [H⁺] = ${sci(c,s)} M. pH = −log(${sci(c,s)}) = <b>${a.toFixed(s)}</b>.`,slips:[[14-a,'That is the pOH. For an acid, pH = −log[H⁺].'],[-a,'You dropped the minus sign.'],[14+Math.log10(c),'An acid gives H⁺, not OH⁻: pH = −log[H⁺].']]})}
+ else{const b=pick(SUBST.filter(x=>x[1]==='SB')),n=/\(OH\)₂/.test(b[0])?2:1,c=mant(s)*10**-rnd(2,4),poh=pHof(n*c),a=14-poh;
+  q=logQ({topic:'phc',prompt:`What is the pH of ${sci(c,s)} M ${b[0]}(aq)?`,answer:a,dp:s,video:'stoich',hint:`${b[0]} is a strong base${n===2?' and each unit releases <b>2</b> OH⁻':''}. Find [OH⁻], then pOH, then pH = 14.00 − pOH.`,
+   why:`[OH⁻] = ${n===2?'2 × ':''}${sci(c,s)} = ${sci(n*c,s)} M; pOH = ${poh.toFixed(s)}; pH = 14.00 − ${poh.toFixed(s)} = <b>${a.toFixed(s)}</b>.`,
+   slips:[[poh,'That is the pOH. Finish with pH = 14.00 − pOH.'],...(n===2?[[14+Math.log10(c),`Each ${b[0]} releases 2 OH⁻, so [OH⁻] = 2 × ${sci(c,s)} M.`]]:[]),[-Math.log10(c),'A base gives OH⁻, not H⁺: start with pOH = −log[OH⁻].']]})}
+ return q}
+function bloodCalcQ(){const p=pick([7.20,7.25,7.30,7.32,7.48,7.50,7.55,7.60,7.38,7.42]),h=Number((10**-p).toPrecision(3)),pp=pHof(h),d=pp<7.35?'acidosis':pp>7.45?'alkalosis':'normal';
+ const pr=pp.toFixed(3),mir=(14-pp).toFixed(3),D={acidosis:'acidosis (too acidic)',alkalosis:'alkalosis (too basic)',normal:'normal'};const other=d==='normal'?'acidosis':'normal',other2=d==='alkalosis'?'acidosis':'alkalosis';
+ return mc({topic:'phc',video:'ph',prompt:`A patient's blood has [H₃O⁺] = ${sci(h,3)} M. What is the pH, and is it acidosis, alkalosis, or normal? (Normal arterial blood: 7.35–7.45.)`,hint:'pH = −log[H₃O⁺] (3 sig figs → 3 decimal places). Below 7.35 = acidosis; above 7.45 = alkalosis.',
+  choices:[[`pH ${pr}: ${D[d]}`,true,`pH = −log(${sci(h,3)}) = ${pr}, which is ${d==='normal'?'inside':d==='acidosis'?'below':'above'} 7.35–7.45: ${D[d]}.`],[`pH ${pr}: ${D[other]}`,false,`The pH ${pr} is right, but compare it with 7.35–7.45: it is ${D[d]}.`],[`pH ${pr}: ${D[other2]}`,false,`The pH ${pr} is right, but compare it with 7.35–7.45: it is ${D[d]}.`],[`pH ${mir}: ${D[d]}`,false,`${mir} is 14 − pH (the pOH). pH = −log[H₃O⁺] = ${pr}.`]]})}
+function calcModeQ(){return Math.random()<0.12?bloodCalcQ():calcQ()}
+
+/* ---------- 🔄 Proton Pairs ---------- */
+/* Brønsted–Lowry picture: the reaction drawn in SVG. After the answer, a curved arrow labeled H⁺ shows the proton
+   moving from the acid to the base (an H⁺ ball travels along it), role tags appear under each species, and brackets
+   join each conjugate pair (acid ↔ conjugate base in coral, base ↔ conjugate acid in blue). */
+const BL_X=[80,240,420,580],BL_COL={A:'#c0392b',CB:'#c0392b',B:'#1f6aa5',CA:'#1f6aa5'};
+function blDiagram(rx){const X=BL_X,ix=r=>rx.findIndex(x=>x[1]===r),a=ix('A'),b=ix('B'),ca=ix('CA'),cb=ix('CB');
+ const txt=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+ const arc=`M${X[a]},74 C${X[a]},22 ${X[b]},22 ${X[b]},74`;
+ /* bracket lines first, then labels on top; each label slides along its line away from the other bracket's verticals */
+ const P=[[a,cb,170,BL_COL.A,'conjugate pair 1'],[b,ca,200,BL_COL.B,'conjugate pair 2']];
+ const line=([i,j,d,c])=>`<path d="M${X[i]},144 V${d} H${X[j]} V144" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/>`;
+ const lab=([i,j,d,c,t],k)=>{const o=P[1-k],avoid=[X[o[0]],X[o[1]]],lo=Math.min(X[i],X[j])+72,hi=Math.max(X[i],X[j])-72;let best=(X[i]+X[j])/2,bd=-1;
+  for(let x=lo;x<=hi;x+=5){const dd=Math.min(...avoid.map(v=>Math.abs(v-x)));if(dd>bd+0.5||(Math.abs(dd-bd)<=0.5&&Math.abs(x-(X[i]+X[j])/2)<Math.abs(best-(X[i]+X[j])/2))){bd=dd;best=x}}
+  return `<rect x="${best-70}" y="${d-12}" width="140" height="24" rx="12" fill="#fff" stroke="${c}" stroke-width="1.5"/>`+txt(best,d+5,t,`font-size="15.5" font-weight="800" fill="${c}"`)};
+ const alt=`${rx[0][0]} + ${rx[1][0]} ⇌ ${rx[2][0]} + ${rx[3][0]}`;
+ return `<svg class="blsvg" viewBox="0 0 660 214" role="img" aria-label="${esc(alt)}"><defs><marker id="blHead" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0675a"/></marker></defs>
+ <g font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="27" fill="#22313b">${txt(X[0],108,rx[0][0])}${txt(160,108,'+')}${txt(X[1],108,rx[1][0])}${txt(330,108,'⇌')}${txt(X[2],108,rx[2][0])}${txt(500,108,'+')}${txt(X[3],108,rx[3][0])}</g>
+ <g class="blReveal" aria-hidden="true" style="opacity:0;transition:opacity .4s">
+  <path id="blArc" d="${arc}" fill="none" stroke="#e0675a" stroke-width="3.5" stroke-dasharray="7 5" marker-end="url(#blHead)"/>
+  ${txt((X[a]+X[b])/2,20,'H⁺ moves',`font-size="17" font-weight="800" fill="#c0504a"`)}
+  <g class="blBall"><circle r="13" fill="#f9c4bf" stroke="#e0675a" stroke-width="2.5"/>${txt(0,5,'H⁺',`font-size="12" font-weight="900" fill="#22313b"`)}<animateMotion dur="1.4s" begin="indefinite" fill="freeze" rotate="0"><mpath href="#blArc"/></animateMotion></g>
+  <g font-family="Inter,system-ui,sans-serif">${rx.map(([s,r],i)=>txt(X[i],138,ROLE_NAME[r],`font-size="17" font-weight="800" fill="${BL_COL[r]}"`)).join('')}
+  ${P.map(line).join('')}${P.map(lab).join('')}</g></g></svg>`}
+function labelQ(rx){rx=rx||pickNew('bl',BL_RX);const f=r=>rx.find(x=>x[1]===r)[0],A=f('A'),B=f('B'),CA=f('CA'),CB=f('CB');
+ const msg={A:`${A} gives away an H⁺ and becomes ${CB}: it is the <b>acid</b>.`,B:`${B} picks up the H⁺ and becomes ${CA}: it is the <b>base</b>.`,CA:`${CA} is ${B} with one extra H⁺ (it can give it back): the <b>conjugate acid</b>.`,CB:`${CB} is ${A} after losing one H⁺: the <b>conjugate base</b>.`};
+ return {type:'label',topic:'conj',video:'conj',rows:rx.map(([s,r])=>({f:s,want:r})),st:rx.map(()=>null),msg,
+  prompt:'Label each species in this Brønsted–Lowry reaction.',html:blDiagram(rx),
+  hint:'Find the reactant that LOSES an H⁺ (the acid); what it becomes is its conjugate base. The other reactant GAINS the H⁺ (the base) and becomes the conjugate acid.',
+  why:`Pair 1: ${A} (acid) / ${CB} (conjugate base). Pair 2: ${B} (base) / ${CA} (conjugate acid). Each pair differs by one H⁺.`}}
+function conjQ(){const L=pickNew('lad',LADDERS),wantBase=L.length===2?true:Math.random()<0.5;let i=wantBase?rnd(0,L.length-2):rnd(1,L.length-1);if(L.length===2)i=wantBase?0:1;
+ const x=L[i],dir=wantBase?1:-1,r=L[i+dir],seen=new Set([sp(r)]),wr=[];const add=(e,why)=>{const t=typeof e==='string'?e:sp(e);if(!seen.has(t)&&wr.length<3){seen.add(t);wr.push([t,false,why])}};
+ if(L[i-dir])add(L[i-dir],`That is the conjugate ${wantBase?'acid':'base'} (one H⁺ ${wantBase?'more':'less'}). The question asks for the conjugate ${wantBase?'base':'acid'}.`);
+ if(L[i+2*dir])add(L[i+2*dir],`That ${wantBase?'removes':'adds'} two H⁺. A conjugate pair differs by exactly one H⁺.`);
+ add([r[0],x[1]],wantBase?'You removed an H but kept the charge. Losing H⁺ also lowers the charge by 1.':'You added an H but kept the charge. Gaining H⁺ also raises the charge by 1.');
+ add([x[0],r[1]],'The charge changed but the H count did not. A conjugate pair differs by one whole H⁺: one H and one + charge.');
+ add([x[0],x[1]+(wantBase?1:-1)],'Charge goes the wrong way. Removing H⁺ makes it more negative; adding H⁺ makes it more positive.');
+ return mc({topic:'conj',video:'conj',prompt:`What is the <b>conjugate ${wantBase?'base':'acid'}</b> of ${sp(x)}?`,hint:wantBase?'Conjugate base = take away one H⁺: one fewer H and the charge goes down by 1.':'Conjugate acid = add one H⁺: one more H and the charge goes up by 1.',
+  choices:[[sp(r),true,`${wantBase?'Remove':'Add'} one H⁺: ${sp(x)} ${wantBase?'−':'+'} H⁺ → ${sp(r)}. One ${wantBase?'fewer':'more'} H, and the charge goes ${wantBase?'down':'up'} by 1.`],...wr]})}
+function arrEqQ(){if(Math.random()<0.5){const a=pick(['Cl','Br','I','NO3','ClO4']),A=ANIONS[a],F=acidF(A),X=A[0];
+  return mc({topic:'arr',video:'arr',prompt:`Which equation shows <b>${F}</b> acting as an <b>Arrhenius acid</b> in water?`,hint:'An Arrhenius acid produces H⁺ ions in water. The charges on the ions must add to zero.',
+   choices:[[`${F}(aq) → H⁺(aq) + ${X}⁻(aq)`,true,`An Arrhenius acid releases H⁺ in water: ${F} → H⁺ + ${X}⁻. The charges balance (+1 and −1).`],[`${F}(aq) → H⁻(aq) + ${X}⁺(aq)`,false,'The charges are backward. The acid releases H<b>⁺</b>; the leftover anion is negative.'],[`${F}(aq) → H(aq) + ${X}(aq)`,false,'Arrhenius acids make ions, not neutral atoms. Neutral pieces would not conduct electricity.'],[`${F}(aq) → OH⁻(aq) + ${X}⁺(aq)`,false,'An acid releases H⁺, not OH⁻. Releasing OH⁻ is what an Arrhenius base does.']]})}
+ const c=pick(['Na','K','Li','Ca','Ba','Sr']),C=CATIONS[c],F=baseF(C),M=C[0],n=C[1];
+ return mc({topic:'arr',video:'arr',prompt:`Which equation shows <b>${F}</b> acting as an <b>Arrhenius base</b> in water?`,hint:`An Arrhenius base releases OH⁻ ions. Hydroxide (OH⁻) stays together as one ion${n>1?'; count how many there are':''}.`,
+  choices:[[`${F}(aq) → ${M}${chg(n)}(aq) + ${cf(n)}OH⁻(aq)`,true,`An Arrhenius base releases OH⁻ in water: ${F} → ${M}${chg(n)} + ${cf(n)}OH⁻.`],
+   [`${F}(aq) → ${M}${chg(n)}(aq) + ${cf(n)}O²⁻(aq) + ${cf(n)}H⁺(aq)`,false,'Hydroxide stays together as OH⁻; it does not split into O²⁻ and H⁺. Releasing H⁺ is what an acid does.'],
+   [`${F}(aq) → ${M}${chg(-n)}(aq) + ${cf(n)}OH⁺(aq)`,false,'The charges are backward: metals form positive ions, and hydroxide is OH⁻.'],
+   n>1?[`${F}(aq) → ${M}${chg(n)}(aq) + (OH)₂²⁻(aq)`,false,`The two OH⁻ ions are separate ions: write 2 OH⁻, not (OH)₂²⁻.`]:[`${F}(aq) → ${M}O⁻(aq) + H⁺(aq)`,false,'That releases H⁺, which would make it an acid. An Arrhenius base releases OH⁻.']]})}
+const ARR_IDEAS=[
+ {p:'By the <b>Arrhenius</b> definition, an acid is a substance that…',h:'Arrhenius: think about what ion appears in water.',c:[['Produces H⁺ when dissolved in water',true,'Arrhenius acids produce H⁺ (H₃O⁺) in water; Arrhenius bases produce OH⁻.'],['Accepts H⁺ from another substance',false,'Accepting H⁺ is a Brønsted–Lowry base.'],['Produces OH⁻ when dissolved in water',false,'Producing OH⁻ makes an Arrhenius base.'],['Contains at least one O atom',false,'HCl has no O and is still an acid. The definition is about making H⁺.']]},
+ {p:'NH₃ is a base, but it is <b>not</b> an Arrhenius base. Why?',h:'Does NH₃ contain OH⁻ that it can release?',c:[['It has no OH⁻ to release; it accepts H⁺',true,'NH₃ has no hydroxide. It acts as a base by accepting H⁺ from water (Brønsted–Lowry), which makes OH⁻ indirectly.'],['It acts as a strong acid in water',false,'NH₃ is a weak base, not an acid.'],['It does not dissolve in water at all',false,'NH₃ dissolves very well in water (household ammonia).'],['It releases H⁺ ions when it dissolves',false,'Releasing H⁺ would make it an acid. NH₃ accepts H⁺.']]},
+ {p:'Methanol, CH₃OH, has an "OH" in its formula. Is it an Arrhenius base?',h:'Is the OH an ion or a covalent group?',c:[['No: its O–H is covalent, not OH⁻',true,'In alcohols the –OH is covalently bonded to carbon. It does not come off as OH⁻ ion, so CH₃OH is not a base.'],['Yes: anything with OH is a base',false,'Only ionic hydroxides (like NaOH) release OH⁻. The –OH in an alcohol stays attached.'],['Yes, but only a weak Arrhenius base',false,'CH₃OH releases no OH⁻ at all, so it is not an Arrhenius base.'],['No: it is a strong acid instead',false,'Methanol is neither an acid nor a base in water.']]},
+ {p:'Which definition calls an acid a <b>proton (H⁺) donor</b>?',h:'Which definition talks about transferring H⁺?',c:[['Brønsted–Lowry',true,'Brønsted–Lowry: acids donate H⁺ and bases accept H⁺.'],['Arrhenius',false,'Arrhenius talks about producing H⁺ or OH⁻ in water, not donating to a partner.'],['Le Châtelier (equilibrium)',false,'Le Châtelier\'s principle is about equilibrium shifts, not acids.'],['Avogadro',false,'Avogadro is about moles and gas volumes.']]},
+ {p:'Which substance is an <b>Arrhenius base</b>?',h:'Look for a metal with hydroxide, OH⁻.',c:[['KOH',true,'KOH dissolves into K⁺ and OH⁻: it produces OH⁻ in water.'],['NH₃',false,'NH₃ is a Brønsted–Lowry base: it has no OH⁻ of its own.'],['CH₃CH₂OH',false,'Ethanol\'s –OH is covalent; it releases no OH⁻.'],['HNO₃',false,'HNO₃ is an acid: it produces H⁺.']]},
+ {p:'In the reaction NH₃ + H₂O ⇌ NH₄⁺ + OH⁻, what does <b>water</b> act as?',h:'Does water give or take the H⁺ here?',c:[['An acid (it donates H⁺ to NH₃)',true,'H₂O gives an H⁺ to NH₃ and becomes OH⁻: here water is the Brønsted–Lowry acid.'],['A base (it accepts H⁺ from NH₃)',false,'NH₃ gains the H⁺ (it becomes NH₄⁺), so NH₃ is the base.'],['A spectator; it does not react',false,'Water loses an H⁺ and becomes OH⁻, so it reacts.'],['A salt',false,'Water is not a salt; here it is the acid.']]},
+ {p:'Water can act as an acid <b>or</b> a base depending on its partner. This is called…',h:'Slide 14: water is ___.',c:[['Amphoteric',true,'Amphoteric substances (like H₂O and HCO₃⁻) can donate or accept H⁺.'],['Neutralization',false,'Neutralization is acid + base → salt + water.'],['A strong electrolyte',false,'Pure water has very few ions; it is a very weak electrolyte.'],['A buffer',false,'A buffer is a weak acid with its conjugate base.']]}];
+function pairPickQ(){const L=pick(LADDERS),i=rnd(0,L.length-2),r=`${sp(L[i])} / ${sp(L[i+1])}`;
+ const bad=[['H₃O⁺ / OH⁻','These differ by two H⁺ (H₃O⁺ → H₂O → OH⁻). A conjugate pair differs by one H⁺.'],['HCl / NaOH','That is an acid and a base that react, but they are not related by one H⁺.'],['H₂SO₄ / SO₄²⁻','These differ by two H⁺. The conjugate base of H₂SO₄ is HSO₄⁻.'],['NH₄⁺ / NH₂⁻','These differ by two H⁺. The conjugate base of NH₄⁺ is NH₃.'],['HNO₃ / HNO₂','These differ by an O atom, not an H⁺.'],['H₂O / H₂O₂','Water and peroxide differ by an O atom, not an H⁺.'],['H₃PO₄ / PO₄³⁻','These differ by three H⁺.']].filter(b=>b[0]!==r);
+ return mc({topic:'conj',video:'conj',prompt:'Which is a <b>conjugate acid–base pair</b>?',hint:'A conjugate pair differs by exactly ONE H⁺ (one H atom and one unit of charge).',choices:[[r,true,`${sp(L[i])} loses one H⁺ to become ${sp(L[i+1])}: they differ by exactly one H⁺.`],...shuf(bad).slice(0,3).map(b=>[b[0],false,b[1]])]})}
+function pairsQ(){const r=Math.random();if(r<0.32)return labelQ();if(r<0.57)return conjQ();if(r<0.72)return arrEqQ();if(r<0.87){const it=pickNew('arr',ARR_IDEAS);return fx(Object.assign({v:'arr',t:'arr'},it))}if(r<0.93)return defsQ();return pairPickQ()}
+
+/* ---------- ⚗️ Titration Lab ---------- */
+const TIT_ACIDS=[['HCl',1,null],['HNO₃',1,null],['H₂SO₄',2,null],['CH₃COOH',1,1.8e-5]];
+const TIT_EQ={'HCl':'HCl + NaOH → NaCl + H₂O','HNO₃':'HNO₃ + NaOH → NaNO₃ + H₂O','H₂SO₄':'H₂SO₄ + 2 NaOH → Na₂SO₄ + 2 H₂O','CH₃COOH':'CH₃COOH + NaOH → NaCH₃COO + H₂O'};
+function titNums(r){for(let k=0;k<50;k++){const Cb=pick([0.100,0.150,0.200]),Va=pick([20.0,25.0]),want=rnd(14,38),Ca=Number((want*Cb/(r*Va)).toPrecision(3)),Veq=r*Ca*Va/Cb;if(Ca>=0.03&&Ca<=0.5&&Veq>10&&Veq<44)return {Cb,Va,Ca,Veq}}return {Cb:0.100,Va:20.0,Ca:0.150,Veq:30*(3-r)/2}}
+function titAns(q,V){const c=q.cfg;return c.Cb*V/1000/c.r/(c.Va/1000)}
+function titLabQ(){const [af,r,Ka]=pick(TIT_ACIDS),n=titNums(r),cfg={acidF:af,baseF:'NaOH',r,m:1,Ka,Ca:n.Ca,Va:n.Va,Cb:n.Cb};const Vdef=Math.round(n.Veq*100)/100;
+ const q={type:'num',kind:'conc',sf:3,unit:'M',topic:'tit',video:'titr',cfg,lab:{kind:'tit',cfg},task:{need:'endpoint',say:'Titrate: add NaOH until the flask turns <b>faint pink</b> and stays pink. Big steps first, then drops near the end.'},
+  prompt:`What is the molarity of the ${af}? Titrate first, then use your buret reading.`,
+  html:`<div class="rxn">${TIT_EQ[af]}</div><div class="givens"><span>${n.Va.toFixed(1)} mL ${af}</span><span>${n.Cb.toFixed(3)} M NaOH</span><span>NaOH used: <b class="titV">— titrate first</b></span></div>`,
+  hint:`mol NaOH = M × L. Use the mole ratio (${r===2?'1 H₂SO₄ : 2 NaOH':'1 : 1'}), then divide by the acid volume in liters (${(n.Va/1000).toFixed(4)} L).`,V:Vdef};
+ q.answer=titAns(q,Vdef);q.mkWhy=()=>{const V=q.V,mb=n.Cb*V/1000,ma=mb/r;q.why=`mol NaOH = ${n.Cb.toFixed(3)} M × ${(V/1000).toFixed(5)} L = ${nf(mb,3)} mol. ${r===2?`mol H₂SO₄ = ${nf(mb,3)} ÷ 2 = ${nf(ma,3)} mol.`:`1 : 1, so mol ${af} = ${nf(ma,3)} mol.`} M = ${nf(ma,3)} mol ÷ ${(n.Va/1000).toFixed(4)} L = <b>${nf(ma/(n.Va/1000),3)} M</b>.`;
+  q.slips=[[q.answer*r,r===2?'Use the mole ratio: 2 NaOH react with each H₂SO₄, so divide the moles of NaOH by 2.':''],[n.Cb*n.Va/V,'The volumes are switched: mol NaOH = M<sub>NaOH</sub> × V<sub>NaOH</sub>.'],[q.answer*1000,'Convert mL to L (÷ 1000) before finding moles.'],[q.answer/1000,'Use the same volume units: divide moles by the acid volume in liters.']]};
+ q.mkWhy();q.onTask=L=>{q.V=L.endV;q.answer=titAns(q,L.endV);q.mkWhy();document.querySelectorAll('.titV').forEach(e=>e.textContent=L.endV.toFixed(2)+' mL')};return q}
+const BIGB=[['NaOH',1],['KOH',1],['Ba(OH)₂',2],['Ca(OH)₂',2]];
+function titCalcQ(){const [af,r]=pick([['HCl',1],['HNO₃',1],['H₂SO₄',2],['HBr',1]]),[bf,m]=pick(BIGB.filter(b=>!(af==='H₂SO₄'&&b[1]===2))),Va=pick([10.0,20.0,25.0,50.0]),Cb=pick([0.100,0.150,0.200,0.250]),Vb=rnd(1200,4500)/100,Ca=Cb*Vb*m/(r*Va);
+ const ratio=r===m?'1 : 1':r===2?`1 ${af} : 2 ${bf}`:`2 ${af} : 1 ${bf}`,eq=r===m?`${af} + ${bf} → salt + ${cf(r)}H₂O`:r===2?`${af} + 2 ${bf} → salt + 2 H₂O`:`2 ${af} + ${bf} → salt + 2 H₂O`;
+ if(Math.random()<0.2)return massTitQ();if(Math.random()<0.65)return {type:'num',kind:'conc',sf:3,unit:'M',topic:'tit',video:'titrRatio',html:`<div class="rxn">${eq}</div>`,prompt:`In a titration, ${Vb.toFixed(2)} mL of ${Cb.toFixed(3)} M ${bf} completely neutralizes ${Va.toFixed(1)} mL of ${af}. What is the molarity of the ${af}?`,answer:Ca,
+  hint:`mol ${bf} = M × L, then use the mole ratio ${ratio}, then divide by the acid volume in liters.`,why:`mol ${bf} = ${Cb.toFixed(3)} × ${(Vb/1000).toFixed(5)} L = ${nf(Cb*Vb/1000,3)} mol → mol ${af} = ${nf(Cb*Vb/1000*m/r,3)} mol (${ratio}) → M = ÷ ${(Va/1000).toFixed(4)} L = <b>${nf(Ca,3)} M</b>.`,
+  slips:[[Cb*Vb/Va,r!==m?`Use the mole ratio ${ratio}; M₁V₁ = M₂V₂ only works for 1 : 1.`:''],[Cb*Va/Vb,'The volumes are switched.'],[Ca*1000,'Convert mL to L before finding moles.']].filter(s=>s[1])};
+ const Ca2=Number((Ca).toPrecision(3)),V=r*Ca2*Va/(m*Cb);
+ return {type:'num',kind:'conc',sf:3,unit:'mL',topic:'tit',video:'titr',html:`<div class="rxn">${eq}</div>`,prompt:`What volume of ${Cb.toFixed(3)} M ${bf} is needed to neutralize ${Va.toFixed(1)} mL of ${nf(Ca2,3)} M ${af}?`,answer:V,
+  hint:`mol ${af} = M × L, use the ratio ${ratio}, then L of base = mol ÷ M. Answer in mL.`,why:`mol ${af} = ${nf(Ca2,3)} × ${(Va/1000).toFixed(4)} L = ${nf(Ca2*Va/1000,3)} mol → mol ${bf} = ${nf(Ca2*Va/1000*r/m,3)} mol → V = ÷ ${Cb.toFixed(3)} M = ${nf(V/1000,3)} L = <b>${nf(V,3)} mL</b>.`,
+  slips:[[V/1000,'The answer is in mL: multiply liters by 1000.'],[Ca2*Va/Cb,r!==m?`Use the mole ratio ${ratio}.`:''],[Cb*Va/Ca2,'Flip it: V<sub>base</sub> = mol ÷ M<sub>base</sub>.']].filter(s=>s[1])}}
+function neutQ(){for(;;){const a=pick(['Cl','Br','NO3','ClO4','SO4']),c=pick(['Na','K','Li','Ca','Ba','Sr']),A=ANIONS[a],C=CATIONS[c],n=A[1],m=C[1],L=n*m/gcd(n,m),ca=L/n,cb=L/m,AF=acidF(A),BF=baseF(C),S=saltF(C,A);
+ const lhs=`${cf(ca)}${AF} + ${cf(cb)}${BF}`,right=`${lhs} → ${S} + ${cf(L)}H₂O`,W=[];
+ if(n!==m)W.push([`${lhs} → ${C[0]}${A[0]} + ${cf(L)}H₂O`,`Crisscross the charges: ${C[0]}${chg(m)} and ${A[0]}${chg(-n)} make ${S}, not ${C[0]}${A[0]}.`]);
+ if(L>1)W.push([`${AF} + ${BF} → ${S} + H₂O`,`Not balanced: ${L} H⁺ must meet ${L} OH⁻ to make ${L} H₂O. Count the H and O atoms.`]);
+ W.push([`${lhs} → ${S} + ${cf(L)}H₂`,'H₂ gas forms when an acid reacts with a metal, not with a hydroxide. Acid + base → salt + <b>water</b>.']);
+ W.push([`${lhs} → ${cf(L)}H₂O + ${cf(L)}${C[0]}H`,`Water forms, and the leftover ions ${C[0]}${chg(m)} and ${A[0]}${chg(-n)} make the salt ${S}. Metals do not bond to H here.`]);
+ if(W.length<4)W.push([`${lhs} → no reaction`,'Acids and bases always react: H⁺ + OH⁻ → H₂O (neutralization).']);
+ return mc({topic:'neut',video:'stoich',prompt:`Which is the balanced <b>neutralization</b> equation for ${AF} and ${BF}?`,hint:'Acid + base → salt + water. Build the salt by crisscrossing the ion charges, then balance with water.',
+  choices:[[right,true,`H⁺ + OH⁻ → H₂O, and the leftover ions ${C[0]}${chg(m)} and ${A[0]}${chg(-n)} form the salt ${S}. ${L} H⁺ + ${L} OH⁻ make ${L} H₂O.`],...W.slice(0,3).map(w=>[w[0],false,w[1]])]})}}
+function metalQ(){const [M]=pick([['Mg',2],['Zn',2],['Fe',2],['Ca',2]]),a=pick(['Cl','SO4']),A=ANIONS[a],n=A[1],k=2/n,S=saltF([M,2],A),AF=acidF(A);
+ return mc({topic:'neut',video:'props',prompt:`What forms when solid ${M} is dipped into ${AF}(aq)?`,hint:'Acids corrode metals in a single-replacement reaction: metal + acid → salt + hydrogen gas.',
+  choices:[[`${M} + ${cf(k)}${AF} → ${S} + H₂`,true,`The metal replaces the H: ${M} + ${cf(k)}${AF} → ${S} + H₂(g). The bubbles are hydrogen gas.`],[`${M} + ${cf(k)}${AF} → ${S} + H₂O`,false,'Water forms when an acid meets a base (OH⁻). A metal + acid gives H₂ gas.'],[`${M} + ${AF} → ${M}${A[0]} + H`,false,n===1?`Crisscross the charges (${M}²⁺, ${A[0]}⁻) to get ${S}, and hydrogen leaves as H₂ gas.`:'Hydrogen leaves as H₂ gas (a diatomic molecule), not as single H atoms.'],[`${M} + ${cf(k)}${AF} → no reaction`,false,'Acids corrode (dissolve) metals like Mg, Zn and Fe.']]})}
+const TIT_IDEAS=[
+ {p:'Nitric acid neutralizes sodium carbonate: 2 HNO₃ + Na₂CO₃ → ? What are the products?',h:'Acid + carbonate → salt + water + carbon dioxide gas.',c:[['2 NaNO₃ + H₂O + CO₂',true,'H⁺ turns CO₃²⁻ into H₂CO₃, which breaks into H₂O and CO₂ gas (the fizz). Na⁺ and NO₃⁻ make the salt NaNO₃.'],['Na₂NO₃ + H₂CO₃ only',false,'Na⁺ and NO₃⁻ make NaNO₃ (one each), and H₂CO₃ falls apart into H₂O + CO₂.'],['2 NaNO₃ + H₂ + CO₃',false,'H₂ gas comes from acid + metal. Carbonate gives H₂O and CO₂.'],['2 NaOH + N₂O₅ + CO₂',false,'Neutralization makes a salt; it does not make NaOH or nitrogen oxides.']]},
+ {p:'In a titration, what is the <b>titrant</b>?',h:'Which solution goes in the buret?',c:[['The known solution in the buret',true,'The titrant (like 0.100 M NaOH) is in the buret; its concentration is known.'],['The unknown acid sitting in the flask',false,'The unknown is the analyte in the flask.'],['The indicator',false,'The indicator only shows the endpoint by changing color.'],['The water used to rinse',false,'Rinse water is not part of the measurement.']]},
+ {p:'What has happened at the <b>endpoint</b> of an acid–base titration?',h:'Lecture 27 slide 14.',c:[['Moles of OH⁻ added = moles of H⁺',true,'At the endpoint the base has used up all the acid: mol OH⁻ = mol H⁺, and the indicator changes color.'],['The buret is completely empty',false,'You usually stop long before the buret is empty.'],['The volumes of acid and base are equal',false,'Moles must match, not volumes. Different molarities need different volumes.'],['The solution boils',false,'Neutralization gives off a little heat, but nothing boils.']]},
+ {p:'Why add the base <b>drop by drop</b> near the end of a titration?',h:'What happens one drop past the endpoint?',c:[['One extra drop can overshoot the color change',true,'Near the endpoint, one drop changes the pH by several units. Going slowly lets you stop at faint pink.'],['Single drops react faster than a stream',false,'Each drop reacts just as fast; going slowly is about not overshooting.'],['To keep the flask from getting too hot to hold',false,'The heat is tiny. Precision is the reason.'],['Because the indicator runs out',false,'The indicator does not get used up.']]},
+ {p:'Which net ionic equation describes every strong acid + strong base neutralization?',h:'Which ions actually change?',c:[['H⁺ + OH⁻ → H₂O',true,'The metal ion and the anion are spectators; H⁺ and OH⁻ combine to make water.'],['Na⁺ + Cl⁻ → NaCl',false,'Na⁺ and Cl⁻ stay dissolved as spectator ions.'],['H⁺ + H⁺ → H₂',false,'H₂ gas comes from an acid + metal, not acid + base.'],['OH⁻ + OH⁻ → H₂O₂',false,'Hydroxide ions do not combine to make peroxide.']]},
+ {p:'Milk of magnesia, Mg(OH)₂, relieves heartburn from stomach acid, HCl. What are the products?',h:'Acid + base → salt + water.',c:[['MgCl₂ + 2 H₂O',true,'Mg(OH)₂ + 2 HCl → MgCl₂ + 2 H₂O: neutralization makes a salt and water.'],['MgCl + H₂O',false,'Crisscross Mg²⁺ and Cl⁻: the salt is MgCl₂, and balancing gives 2 H₂O.'],['Mg + Cl₂ + H₂',false,'Neutralization does not make elements; it makes a salt and water.'],['MgO + 2 HCl',false,'HCl is used up, not made, when the antacid works.']]},
+ {p:'Why does a titration with phenolphthalein start <b>colorless</b>?',h:'Where is the acid at the start?',c:[['The flask holds acid, and it is colorless in acid',true,'The unknown acid is in the flask, and phenolphthalein is colorless in acid. It turns pink only after all the acid is used up.'],['The base has not been added to the flask yet',false,'The base is already in the buret.'],['Phenolphthalein is colorless at every pH',false,'It turns pink in base (above pH 8.2).'],['The flask holds a base, which is colorless',false,'In this setup the flask holds the acid.']]}];
+function titrateQ(){const r=Math.random();if(r<0.38)return titLabQ();if(r<0.6)return titCalcQ();if(r<0.78)return neutQ();if(r<0.86)return metalQ();return fx(Object.assign({v:'titr',t:'tit'},pickNew('tit',TIT_IDEAS)))}
+
+/* ---------- 🛡️ Buffer Lab ---------- */
+const SPECT={acetic:'Na⁺',phos:'Na⁺',nh3:'Cl⁻',blood:'Na⁺'};
+function bufCompareQ(){const sys=pick(['acetic','phos','nh3','blood']),k=sys==='blood'||Math.random()<0.6?'acid':'base',reag=k==='acid'?'HCl':'NaOH';
+ return mc({topic:'buf',video:'buffer',lab:{kind:'buf',cfg:{sys}},task:{need:k+'2',say:`Tap <b>+ ${reag}</b> two times. Watch both pH values.`},prompt:'Which beaker\'s pH changed more?',hint:'Read the "change" line under each beaker.',
+  choices:[['The plain water, by several pH units',true,`Water has nothing to use up the added ${k==='acid'?'H⁺':'OH⁻'}, so its pH swings by several units. The buffer changed by only a few tenths: it resists pH change.`],['The buffer solution, by several pH units',false,'Look again: the buffer changed only a little. That is what buffers do.'],['Both changed by the same amount of pH',false,'The water changed far more than the buffer.'],['Neither one; both pH values stayed put',false,'Both changed, but the buffer changed much less than water.']]})}
+function bufPartQ(){const sys=pick(['acetic','phos','nh3','blood']),k=sys==='blood'?'acid':pick(['acid','base']),s=BUF_SYS[sys],reag=k==='acid'?'HCl':'NaOH';const right=k==='acid'?s.A:s.HA,other=k==='acid'?s.HA:s.A;
+ return mc({topic:'buf',video:'bufAdd',lab:{kind:'buf',cfg:{sys}},task:{need:k,say:`Tap <b>+ ${reag}</b> once. Read the message and the mmol counts.`},prompt:`When you added ${reag}, which buffer part reacted with the ${k==='acid'?'H⁺':'OH⁻'}?`,hint:k==='acid'?'Added acid (H⁺) is grabbed by the base part of the buffer.':'Added base (OH⁻) is neutralized by the acid part of the buffer.',
+  choices:[[right,true,k==='acid'?`${s.A} (the conjugate base) grabs the H⁺: H⁺ + ${s.A} → ${s.HA}. Its count went down by 1.`:`${s.HA} (the weak acid) gives its H⁺ to the OH⁻: OH⁻ + ${s.HA} → ${s.A} + H₂O. Its count went down by 1.`],
+   [other,false,k==='acid'?`${s.HA} is the acid part; it went UP when acid was added. Acids don't grab H⁺.`:`${s.A} is the base part; it went UP when base was added. Bases don't react with OH⁻.`],['H₂O, the solvent',false,'Water alone cannot soak up added acid or base; that is why the plain water\'s pH swung.'],[`${SPECT[sys]}, from the salt`,false,`${SPECT[sys]} is a spectator ion from the salt; it does not react.`]]})}
+function bufCapQ(){const sys=pick(['acetic','phos','nh3','blood']),k=sys==='blood'?'base':pick(['acid','base']),s=BUF_SYS[sys],reag=k==='acid'?'HCl':'NaOH';
+ return mc({topic:'buf',video:'bufCap',lab:{kind:'buf',cfg:{sys}},task:{need:'broken',say:`Keep tapping <b>+ ${reag}</b> until the buffer's pH changes by more than 1 unit.`},prompt:'Why did the buffer finally stop resisting the pH change?',hint:'Watch the mmol counts. Which part reached 0?',
+  choices:[[`All of its ${k==='acid'?s.A:s.HA} was used up`,true,`Each ${reag} used up one ${k==='acid'?s.A:s.HA}. Once it hit 0, nothing was left to neutralize more ${k==='acid'?'acid':'base'}: the buffer capacity was reached.`],
+   [`All of its ${k==='acid'?s.HA:s.A} was used up`,false,`${k==='acid'?s.HA:s.A} actually went UP. Added ${k==='acid'?'acid turns the base part into the acid part':'base turns the acid part into the base part'}.`],['Some water evaporated from the beaker',false,'Nothing evaporated; the volume stayed the same.'],[`${reag} stopped reacting with the buffer`,false,`${reag} is strong; it kept reacting. The buffer ran out of the part that neutralizes it.`]]})}
+function bufBloodQ(){return mc({topic:'buf',video:'bufBlood',lab:{kind:'buf',cfg:{sys:'blood'}},task:{need:'acid',say:'Tap <b>+ HCl</b> once (like lactic acid from hard exercise entering the blood).'},prompt:'Which reaction did the blood buffer use to neutralize the added acid?',hint:'Which buffer part went down?',
+  choices:[['H⁺ + HCO₃⁻ → H₂CO₃',true,'Bicarbonate (the conjugate base) grabs the H⁺ and becomes carbonic acid. Your lungs then breathe out the extra as CO₂.'],['OH⁻ + H₂CO₃ → HCO₃⁻ + H₂O',false,'That is how the buffer handles added BASE, not acid.'],['H⁺ + H₂CO₃ → H₃CO₃⁺',false,'H₂CO₃ is the acid part; it does not grab more H⁺.'],['HCO₃⁻ → CO₃²⁻ + H⁺',false,'That would release more H⁺, making the blood more acidic.']]})}
+const BUF_YES=[['CH₃COOH and NaCH₃COO','acetic acid (weak) with its conjugate base, acetate'],['CH₃COOH and KCH₃COO','acetic acid (weak) with its conjugate base, acetate'],['H₂CO₃ and NaHCO₃','carbonic acid (weak) with its conjugate base, bicarbonate (the blood buffer)'],['HF and NaF','HF (weak) with its conjugate base, F⁻'],['NH₃ and NH₄Cl','a weak base, NH₃, with its conjugate acid, NH₄⁺'],['HCN and KCN','HCN (weak) with its conjugate base, CN⁻'],['HNO₂ and NaNO₂','HNO₂ (weak) with its conjugate base, NO₂⁻'],['NaH₂PO₄ and Na₂HPO₄','H₂PO₄⁻ (weak acid) with its conjugate base, HPO₄²⁻']];
+const BUF_NO=[['HCl and KCl','HCl is a strong acid; Cl⁻ is too weak a base to grab added H⁺. Buffers need a WEAK acid.'],['HNO₃ and NaNO₃','HNO₃ is a strong acid; NO₃⁻ cannot neutralize added acid.'],['H₃PO₄ and NaCl','Cl⁻ is not the conjugate base of H₃PO₄ (that is H₂PO₄⁻).'],['CH₃COOH and NaCl','Cl⁻ is not acetic acid\'s conjugate base, so nothing grabs added H⁺.'],['NaOH and NaCl','NaOH is a strong base, and there is no weak acid to neutralize added base.'],['HF and HCl','Two acids: there is no base part to neutralize added acid.'],['NaCl and KCl','Two neutral salts: no weak acid and no conjugate base.']];
+function isBufferQ(){const y=pick(BUF_YES),n=shuf(BUF_NO).slice(0,3);return mc({topic:'buf',video:'buffer',prompt:'Which combination makes a <b>buffer</b>?',hint:'A buffer = a WEAK acid + its conjugate base (or a weak base + its conjugate acid). The conjugate is usually added as a salt.',
+ choices:[[y[0],true,`Yes: ${y[1]}. The acid part neutralizes added base and the base part neutralizes added acid.`],...n.map(x=>[x[0],false,x[1]])]})}
+const BUF_IDEAS=[
+ {p:'What is a <b>buffer</b>?',h:'Lecture 26 slide 50.',c:[['A solution that resists pH change',true,'A buffer resists changes in pH when small amounts of acid or base are added.'],['A solution with a pH of exactly 7',false,'Buffers can hold any pH (acetate ~4.7, blood 7.4, ammonia ~9.3).'],['A strong acid mixed with water',false,'Strong acids make a big pH change; they are not buffers.'],['Any salt dissolved in water',false,'Most salts (like NaCl) do not resist pH change.']]},
+ {p:'In a CH₃COOH / CH₃COO⁻ buffer, which part neutralizes added <b>acid</b> (H⁺)?',h:'What grabs H⁺?',c:[['CH₃COO⁻, the conjugate base',true,'CH₃COO⁻ + H⁺ → CH₃COOH. The base part soaks up added acid.'],['CH₃COOH, the weak acid part',false,'The weak acid neutralizes added BASE, not acid.'],['Na⁺, the spectator ion from the salt',false,'Na⁺ does not react with H⁺.'],['H₂O',false,'Water alone cannot absorb much acid; that is why plain water\'s pH swings.']]},
+ {p:'In a CH₃COOH / CH₃COO⁻ buffer, which part neutralizes added <b>base</b> (OH⁻)?',h:'What can give an H⁺ to OH⁻?',c:[['CH₃COOH, the weak acid',true,'CH₃COOH + OH⁻ → CH₃COO⁻ + H₂O. The acid part neutralizes added base.'],['CH₃COO⁻, the conjugate base',false,'A base does not react with another base (OH⁻).'],['Na⁺, the spectator ion',false,'Na⁺ is a spectator.'],['Cl⁻',false,'There is no Cl⁻ in this buffer.']]},
+ {p:'Why can\'t HCl and NaCl make a buffer?',h:'Does Cl⁻ grab H⁺ back?',c:[['HCl is strong; Cl⁻ won\'t take back H⁺',true,'Buffers need a WEAK acid whose conjugate base grabs H⁺. Cl⁻ from a strong acid does not.'],['NaCl does not dissolve in the water',false,'NaCl dissolves well; the problem is that Cl⁻ is not a useful base.'],['HCl is actually a base, not an acid',false,'HCl is a strong acid.'],['HCl and NaCl react to make water',false,'HCl and NaCl do not react with each other.']]},
+ {p:'Your blood uses H₂CO₃ / HCO₃⁻. During hard exercise, muscles release lactic acid. What does the buffer do?',h:'Added acid is grabbed by the base part.',c:[['HCO₃⁻ grabs the H⁺ to make H₂CO₃',true,'Bicarbonate (the base part) neutralizes the acid, keeping blood near pH 7.4.'],['H₂CO₃ grabs the H⁺',false,'H₂CO₃ is the acid part; it neutralizes added base.'],['Blood pH drops to 2',false,'The buffer keeps blood pH from dropping much.'],['Nothing; buffers only handle bases',false,'Buffers handle both acids and bases.']]}];
+function bufferQ(){const r=Math.random();if(r<0.5)return pick([bufCompareQ,bufPartQ,bufPartQ,bufCapQ,bufBloodQ])();if(r<0.78)return isBufferQ();return fx(Object.assign({v:'buffer',t:'buf'},pickNew('bi',BUF_IDEAS)))}
+
+
+/* homework-style additions (Ch 12 worksheet topics, new numbers) */
+function ionConcQ(){const it=pick([['HCl',1,'SA'],['HNO₃',1,'SA'],['HBr',1,'SA'],['NaOH',1,'SB'],['KOH',1,'SB'],['Ca(OH)₂',2,'SB'],['Ba(OH)₂',2,'SB'],['HF',1,'WA'],['CH₃COOH',1,'WA'],['HNO₂',1,'WA']]),C=pick([0.10,0.50,1.5,2.0,3.0]),cs=C.toFixed(C<1?2:1),ion=it[2]==='SB'?'[OH⁻]':'[H₃O⁺]',f=x=>Number(x.toPrecision(2)).toFixed(C<1?2:1);
+ const one=`${cs} M`,two=`${f(2*C)} M`,less=`Less than ${cs} M`,more=`More than ${f(2*C)} M`;
+ const right=it[2]==='WA'?less:it[1]===2?two:one,per=it[2]==='SB'?'OH⁻':'H₃O⁺';
+ const why={[less]:it[2]==='WA'?`${it[0]} is a weak acid: only a small fraction ionizes, so ${ion} is much less than ${cs} M.`:`${it[0]} is strong: it ionizes 100%, so ${ion} is not less than ${cs} M.`,
+  [one]:it[2]==='WA'?`That would be true only if ${it[0]} ionized 100%. It is weak.`:it[1]===2?`Each ${it[0]} releases <b>2</b> OH⁻, so ${ion} = 2 × ${cs} = ${f(2*C)} M.`:`${it[0]} is strong and gives one ${per} per formula: ${ion} = ${cs} M.`,
+  [two]:it[1]===2?`Each ${it[0]} releases 2 OH⁻: 2 × ${cs} = ${f(2*C)} M.`:`${it[0]} gives only one ${per} per formula unit, not two.`,
+  [more]:'A substance cannot release more ions than it has: at most one per H or OH it can give off.'};
+ return mc({topic:'strong',video:'strength',keepOrder:true,prompt:`What is ${ion} in ${cs} M ${it[0]}(aq)?`,hint:'Strong acids and bases ionize 100%. Count how many H⁺ or OH⁻ each formula gives. Weak acids ionize only a little.',choices:[less,one,two,more].map(w=>[w,w===right,why[w]])})}
+const DEFS=[['HCl','AA'],['HNO₃','AA'],['HBr','AA'],['CH₃COOH','AA'],['HF','AA'],['NaOH','AB'],['KOH','AB'],['Ba(OH)₂','AB'],['NH₃','BB'],['CH₃NH₂','BB'],['MgCl₂','S'],['NaCl','S'],['KNO₃','S'],['CH₄','M'],['CH₃OH','M'],['C₆H₁₂O₆','M']];
+const DEF_TXT={AA:'Arrhenius acid and Brønsted–Lowry acid',AB:'Arrhenius base and Brønsted–Lowry base',BB:'Brønsted–Lowry base only',S:'Neither: it is a salt',M:'Neither: it is a molecular compound'};
+function defsQ(){const [f,k]=pick(DEFS);
+ const W={AA:`${f} makes H⁺ in water (Arrhenius) and donates H⁺ (Brønsted–Lowry): both acid definitions fit.`,AB:`${f} releases OH⁻ in water (Arrhenius), and that OH⁻ accepts H⁺ (Brønsted–Lowry): both base definitions fit.`,BB:`${f} has no OH⁻ to release, so it is not an Arrhenius base, but its N lone pair accepts H⁺: a Brønsted–Lowry base.`,S:`${f} is ionic, but its ions are neither H⁺ nor OH⁻ and do not trade H⁺: a salt.`,M:`${f} is covalent and does not give off or accept H⁺ in water: a molecular compound.`};
+ const isAc=k==='AA',isBs=k==='AB'||k==='BB';
+ const wrongWhy={AA:`An acid must give off H⁺, and ${f} does not.`,AB:k==='BB'?`An Arrhenius base must release OH⁻ ions; ${f} has no hydroxide ion.`:`${f} has no hydroxide ion to release, so it is not an Arrhenius base.`,BB:k==='AB'?`${f} does release OH⁻, so it is ALSO an Arrhenius base, not "Brønsted–Lowry only."`:`A Brønsted–Lowry base accepts H⁺; ${f} does not.`,
+  S:k==='M'?`${f} is covalent (no metal or ammonium ion), so it is not a salt.`:isAc?`${f} is an acid, not a neutral salt.`:isBs?`${f} is a base, not a neutral salt.`:'',M:k==='S'?`${f} is ionic (a metal with a nonmetal), so it is a salt, not a molecular compound.`:isAc?`${f} gives off H⁺, so it is an acid.`:isBs?`${f} accepts H⁺, so it is a base.`:''};
+ const others=shuf(Object.keys(DEF_TXT).filter(x=>x!==k)).slice(0,3);
+ return mc({topic:'arr',video:'arr',prompt:`Which acid–base definitions does <b>${f}</b> meet?`,hint:'Arrhenius: makes H⁺ or OH⁻ in water. Brønsted–Lowry: donates or accepts H⁺. Ionic with no H⁺/OH⁻ = salt; covalent with neither = molecular.',choices:[[DEF_TXT[k],true,W[k]],...others.map(o=>[DEF_TXT[o],false,wrongWhy[o]])]})}
+function massTitQ(){const [bf,MM]=pick([['Mg(OH)₂',58.33],['Ca(OH)₂',74.10]]),g=rnd(100,400)/100,M=pick([0.100,0.125,0.150,0.200,0.250]),mol=g/MM,V=mol*2/M*1000;
+ return {type:'num',kind:'conc',sf:3,unit:'mL',topic:'tit',video:'titrRatio',html:`<div class="rxn">2 HCl + ${bf} → ${bf==='Mg(OH)₂'?'MgCl₂':'CaCl₂'} + 2 H₂O</div><div class="givens"><span>Molar mass ${bf} = ${MM.toFixed(2)} g/mol</span></div>`,
+  prompt:`What volume of ${M.toFixed(3)} M HCl neutralizes ${g.toFixed(2)} g of ${bf} (an antacid)?`,answer:V,hint:`grams → moles (÷ ${MM.toFixed(2)} g/mol) → mol HCl (× 2) → liters (÷ ${M.toFixed(3)} M) → mL.`,
+  why:`${g.toFixed(2)} g ÷ ${MM.toFixed(2)} g/mol = ${nf(mol,3)} mol ${bf} → × 2 = ${nf(2*mol,3)} mol HCl → ÷ ${M.toFixed(3)} M = ${nf(V/1000,3)} L = <b>${nf(V,3)} mL</b>.`,
+  slips:[[V/2,'Use the mole ratio: each '+bf+' needs 2 HCl.'],[V/1000,'Convert liters to mL (× 1000).'],[g/M*1000,'Change grams to moles first, using the molar mass.']]}}
+/* ---------- 🎯 Skill Check ---------- */
+const TOPICS={id:['Identifying acids and bases','id','props'],strong:['Strong vs. weak acids and bases','id','strength'],arr:['Arrhenius definitions','pairs','props'],conj:['Conjugate acid–base pairs','pairs','conj'],
+ ind:['Indicators and the pH scale','ph','ph'],phc:['pH and pOH calculations','calc','ph'],conc:['[H⁺] and [OH⁻] calculations','calc','log'],neut:['Neutralization reactions','titrate','stoich'],tit:['Titration calculations','titrate','titr'],buf:['Buffers','buffer','buffer']};
+const QUIZ_PLAN=['id','strong','arr','conj','ind','phc','conc','neut','tit','buf'];
+function topicQ(t){let q;
+ if(t==='id')q=Math.random()<0.5?classifyQ():Math.random()<0.5?familyQ():fx(pick(PROPS));
+ else if(t==='strong')q=pick([strongPickQ,ionConcQ,()=>classifyQ(pick(SUBST.filter(s=>s[1]!=='N')))])();
+ else if(t==='arr')q=pick([arrEqQ,defsQ,()=>fx(Object.assign({v:'arr'},pick(ARR_IDEAS)))])();
+ else if(t==='conj')q=pick([conjQ,labelQ,pairPickQ])();
+ else if(t==='ind')q=Math.random()<0.5?concClassQ():fx(pick(PH_IDEAS.filter(x=>x.t==='ind')));
+ else if(t==='phc')q=calcQ(pick(['pHH','pOHOH','pOHfrompH','pHfromOH','sa','sb']));
+ else if(t==='conc')q=calcQ(pick(['Hfrom','HfrompOH','OHfromH']));
+ else if(t==='neut')q=Math.random()<0.7?neutQ():metalQ();
+ else if(t==='tit')q=titCalcQ();
+ else q=Math.random()<0.6?isBufferQ():fx(pick(BUF_IDEAS));
+ q.topic=t;return q}
+const GEN={id:idQ,ph:phQ,calc:calcModeQ,pairs:pairsQ,titrate:titrateQ,buffer:bufferQ,quiz:()=>topicQ(state.quiz.plan[state.quiz.i])};
+
+</script>
+<script>
+/* 3b-more.js */
+/* ============================== v1.3 ADDITIONS ==============================
+   🩺 patient cases (blood gases, DKA, aspirin, antacids, vomiting, diarrhea, lactic acid)
+   🧪 EXP 12a pre-lab (red cabbage indicator, mass → pH, excess reactant) and EXP 12b (citric acid in soda)
+   ➰ proton-transfer pictures reused after Arrhenius, conjugate and buffer questions */
+
+/* ---------- reusable reaction picture with an H⁺ arrow ----------
+   sp: species, ops: operators between them, arrow: [from, to] species indexes, note: arrow label */
+let RXPIC_N=0;
+function rxPic(sp,ops,arrow,note='H⁺ moves',tags){const n=sp.length,U=660/(4*n-1),id='rxArc'+(++RXPIC_N);const X=[],OX=[];let x=0;
+ for(let i=0;i<n;i++){X.push(x+1.5*U);x+=3*U;if(i<n-1){OX.push(x+U/2);x+=U}}
+ const fs=n>=4?25:27,[a,b]=arrow,t=(x,y,s,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${s}</text>`;
+ const up=Math.max(30,74-Math.abs(X[b]-X[a])*0.32),peak=0.75*up+0.25*76;
+ const alt=sp.map((s,i)=>s+(i<n-1?' '+ops[i]+' ':'')).join('');
+ return `<svg class="blsvg" viewBox="0 0 660 ${tags?150:124}" role="img" aria-label="${esc(alt)}. ${esc(note)}: from ${esc(sp[a])} to ${esc(sp[b])}."><defs><marker id="${id}h" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e0675a"/></marker></defs>
+ <g font-family="Inter,system-ui,sans-serif" font-weight="900" font-size="${fs}" fill="#22313b">${sp.map((s,i)=>t(X[i],108,s)).join('')}${ops.map((o,i)=>t(OX[i],108,o)).join('')}</g>
+ <g class="blReveal" aria-hidden="true" style="opacity:0;transition:opacity .4s"><path id="${id}" d="M${X[a]},76 C${X[a]},${up} ${X[b]},${up} ${X[b]},76" fill="none" stroke="#e0675a" stroke-width="3.5" stroke-dasharray="7 5" marker-end="url(#${id}h)"/>
+ ${t((X[a]+X[b])/2,Math.max(15,peak-11),note,`font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="800" fill="#c0504a"`)}
+ <g class="blBall"><circle r="13" fill="#f9c4bf" stroke="#e0675a" stroke-width="2.5"/>${t(0,5,'H⁺',`font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="900" fill="#22313b"`)}<animateMotion dur="1.4s" begin="indefinite" fill="freeze"><mpath href="#${id}"/></animateMotion></g>
+ ${tags?tags.map(([i,s,c])=>t(X[i],138,s,`font-family="Inter,system-ui,sans-serif" font-size="16" font-weight="800" fill="${c}"`)).join(''):''}</g></svg>`}
+
+/* ---------- 🩺 patient cases ---------- */
+const CASE_TAG='<span class="tagchip">🩺 Patient case</span> ';
+const ABG_NORMAL='Normal: pH 7.35–7.45 · PaCO₂ 35–45 mmHg · HCO₃⁻ 22–26 mEq/L';
+const ABG_TYPES={RA:['Respiratory acidosis','CO₂ is high. Extra CO₂ makes extra H₂CO₃, which releases H⁺ (CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻), so pH drops. The lungs are the problem (breathing too little).'],
+ RB:['Respiratory alkalosis','CO₂ is low. Breathing too fast blows off CO₂, the equilibrium shifts left, H⁺ is used up and pH rises. The lungs are the cause.'],
+ MA:['Metabolic acidosis','HCO₃⁻ is low. Bicarbonate (the base part of the blood buffer) has been used up by extra acid or lost from the body, so pH drops. CO₂ is normal, so breathing did not cause it.'],
+ MB:['Metabolic alkalosis','HCO₃⁻ is high. Too much base (bicarbonate) or lost stomach acid raises pH. CO₂ is normal, so breathing did not cause it.']};
+const ABG_WRONG={RA:'That needs high CO₂ (above 45 mmHg) with a low pH.',RB:'That needs low CO₂ (below 35 mmHg) with a high pH.',MA:'That needs low HCO₃⁻ (below 22 mEq/L) with a low pH.',MB:'That needs high HCO₃⁻ (above 26 mEq/L) with a high pH.'};
+const ABG_STORY={RA:['an older patient with severe COPD who is drowsy and breathing slowly','a patient who took too much of an opioid pain medicine and is barely breathing'],
+ RB:['a student having a panic attack and breathing very fast','a hiker who just arrived at high altitude and is breathing fast'],
+ MA:['a patient with uncontrolled type 1 diabetes (DKA) who just arrived in the ER','a patient with several days of severe diarrhea'],
+ MB:['a patient who has been vomiting for two days','a patient who took far too much baking-soda antacid']};
+function abgQ(){const k=pick(Object.keys(ABG_TYPES)),r=(a,b,d=0)=>Number((a+Math.random()*(b-a)).toFixed(d));
+ const pH=k==='RA'||k==='MA'?r(7.18,7.32,2):r(7.48,7.58,2),co2=k==='RA'?r(52,68):k==='RB'?r(24,31):r(37,43),hco3=k==='MA'?r(11,18):k==='MB'?r(31,38):r(23,26);
+ return mc({topic:'buf',video:'bufBlood',keepOrder:true,prompt:`${CASE_TAG}Arterial blood gas for ${pick(ABG_STORY[k])}: pH ${pH.toFixed(2)}, PaCO₂ ${co2} mmHg, HCO₃⁻ ${hco3} mEq/L. Which problem is this?`,
+  html:`<div class="givens"><span>${ABG_NORMAL}</span></div>`,hint:'Step 1: pH below 7.35 = acidosis, above 7.45 = alkalosis. Step 2: is CO₂ (lungs, acts like an acid) or HCO₃⁻ (kidneys, a base) out of range in the matching direction?',
+  choices:Object.keys(ABG_TYPES).map(x=>[ABG_TYPES[x][0],x===k,x===k?`pH ${pH.toFixed(2)} is ${pH<7.35?'below 7.35 (acidosis)':'above 7.45 (alkalosis)'}. ${ABG_TYPES[x][1]}`:`${ABG_WRONG[x]} Here pH is ${pH.toFixed(2)}, CO₂ is ${co2} and HCO₃⁻ is ${hco3}.`])})}
+const CASES=[
+ {p:'A patient in diabetic ketoacidosis (DKA) is breathing very deep and fast (Kussmaul breathing). Why does breathing harder help?',h:'CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. What happens when CO₂ is removed?',c:[['Removing CO₂ shifts the buffer left, using up H⁺',true,'Ketoacids add H⁺. Breathing out CO₂ pulls CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻ to the left, which uses up H⁺ and raises pH back toward normal.'],['Fast breathing adds extra OH⁻ ions to the blood',false,'Breathing does not add OH⁻. It removes CO₂, which removes acid.'],['Extra O₂ neutralizes the ketoacids',false,'Oxygen does not neutralize acids. Losing CO₂ is what lowers [H⁺].'],['Fast breathing raises CO₂, making the blood more basic',false,'More CO₂ would make blood MORE acidic. Fast breathing lowers CO₂.']]},
+ {p:'Aspirin is acetylsalicylic acid, a weak acid. In a large overdose, what happens to blood pH, and which IV treatment helps?',h:'Extra acid lowers pH. What base is used in hospitals?',c:[['pH drops; IV sodium bicarbonate (HCO₃⁻) helps',true,'The salicylic acid adds H⁺, lowering pH (acidosis). Bicarbonate is a base: HCO₃⁻ + H⁺ → H₂CO₃ → CO₂ + H₂O.'],['pH rises; IV hydrochloric acid brings it back down',false,'Aspirin is an acid, so it lowers pH. Strong acids are never given by IV.'],['pH drops; IV sodium hydroxide (NaOH) is the best fix',false,'NaOH is a strong, caustic base; it would damage tissue. Bicarbonate is the gentle, buffering base used.'],['pH stays the same; aspirin is neutral',false,'Aspirin has a –COOH group: it is an acid.']]},
+ {p:'Heartburn: an antacid tablet contains calcium carbonate, CaCO₃. What does it do to stomach acid (HCl)?',h:'Carbonate is a base. What gas fizzes out?',c:[['Neutralizes it: CaCl₂ + H₂O + CO₂ form',true,'CaCO₃ + 2 HCl → CaCl₂ + H₂O + CO₂. Carbonate takes up H⁺, so the stomach pH rises (and you may burp CO₂).'],['Makes the stomach more acidic',false,'Carbonate is a base: it takes H⁺ away, raising pH.'],['Turns HCl into a stronger acid',false,'Antacids neutralize acid; they do not strengthen it.'],['Nothing; CaCO₃ does not react with acid',false,'Carbonates fizz in acid, giving off CO₂.']]},
+ {p:'Why are antacids made with weak bases like Mg(OH)₂ or CaCO₃ instead of NaOH?',h:'Think about what a strong base does to tissue.',c:[['NaOH is a strong, caustic base that burns tissue',true,'NaOH releases all its OH⁻ and would damage the mouth and esophagus. Mg(OH)₂ barely dissolves and CaCO₃ is a weak base, so they neutralize gently.'],['NaOH is an acid, not a base',false,'NaOH is a strong base.'],['Weak bases always neutralize far more acid per gram',false,'The reason is safety, not capacity: strong bases are caustic.'],['NaOH does not react with stomach HCl at all',false,'NaOH + HCl → NaCl + H₂O reacts very quickly; it is just unsafe to swallow.']]},
+ {p:'After two days of vomiting, a patient loses a lot of stomach acid (HCl). Which blood problem is most likely?',h:'Losing acid leaves the body with relatively more base.',c:[['Metabolic alkalosis (pH too high)',true,'Losing H⁺ (stomach HCl) leaves extra HCO₃⁻ behind, so blood pH rises: metabolic alkalosis.'],['Metabolic acidosis (pH too low)',false,'Losing acid makes blood more basic, not more acidic.'],['Respiratory acidosis',false,'Breathing (CO₂) is not the cause here.'],['No change; the stomach is separate',false,'The H⁺ comes from the blood, so losing it changes blood pH.']]},
+ {p:'Severe diarrhea removes bicarbonate (HCO₃⁻) from the body. What happens to blood pH?',h:'HCO₃⁻ is the base part of the blood buffer.',c:[['It drops: metabolic acidosis',true,'Losing HCO₃⁻ (the base) leaves less to absorb H⁺, so pH falls.'],['It rises: metabolic alkalosis',false,'Losing a base lowers pH.'],['It rises: respiratory alkalosis',false,'The cause is lost bicarbonate, not breathing.'],['It stays exactly 7.40',false,'The buffer loses its base part, so pH drops.']]},
+ {p:'During a hard sprint, muscles release lactic acid. Which buffer reaction protects blood pH right away?',h:'Which blood buffer part grabs H⁺?',c:[['H⁺ + HCO₃⁻ → H₂CO₃ → H₂O + CO₂',true,'Bicarbonate grabs the H⁺; the H₂CO₃ breaks into water and CO₂, which you breathe out (that is why you pant).'],['H₂CO₃ + OH⁻ → HCO₃⁻ + H₂O',false,'That handles added BASE, not acid.'],['H⁺ + Cl⁻ → HCl',false,'Cl⁻ is not a base; it does not grab H⁺ back.'],['Lactic acid + O₂ → CO₂ + H₂O only',false,'That ignores the instant buffering step by HCO₃⁻.']]},
+ {p:'In chronic COPD, CO₂ stays high for weeks. How do the kidneys help (compensate)?',h:'Which buffer part would raise pH back up?',c:[['They keep more HCO₃⁻, raising pH toward normal',true,'The kidneys hold on to bicarbonate (a base), which offsets the extra acid from CO₂ (metabolic compensation).'],['They get rid of HCO₃⁻ so the blood pH drops further',false,'That would make the acidosis worse.'],['They breathe out extra CO₂',false,'Breathing is the lungs\' job; the kidneys adjust HCO₃⁻.'],['Nothing at all; the kidneys cannot change blood pH',false,'Kidneys control blood bicarbonate, so they do affect pH.']]}];
+function caseQ(){if(Math.random()<0.45)return abgQ();const it=pickNew('case',CASES);return mc({topic:'buf',video:'bufBlood',prompt:CASE_TAG+it.p,hint:it.h,choices:it.c})}
+function stomachBloodQ(){const s=pick([1.5,1.8,2.0,2.2]),b=7.4,d=b-s,f=10**d;const show=x=>Number(x.toPrecision(2)).toLocaleString('en-US');
+ return mc({topic:'phc',video:'ph',prompt:`${CASE_TAG}Stomach acid is about pH ${s.toFixed(1)} and blood is pH 7.4. About how many times more H⁺ is in stomach acid?`,hint:'Each pH unit is 10×. Find the difference, then use 10<sup>difference</sup>.',
+  choices:[[show(f)+'×',true,`7.4 − ${s.toFixed(1)} = ${d.toFixed(1)} pH units, so 10<sup>${d.toFixed(1)}</sup> ≈ ${show(f)}× more H⁺. That is why the stomach lining needs protection.`],[d.toFixed(1)+'×',false,'pH is a log scale: subtracting pH values gives the exponent, not the ratio.'],[show(f/10)+'×',false,`That is one pH unit too few (10<sup>${(d-1).toFixed(1)}</sup>).`],[show(f*10)+'×',false,`That is one pH unit too many (10<sup>${(d+1).toFixed(1)}</sup>).`]]})}
+
+/* ---------- 🧪 EXP 12a: red cabbage indicator ---------- */
+const LAB12='<span class="tagchip">🧪 EXP 12a pre-lab</span> ';
+const CAB_NAMES=[[2.5,'Red'],[4.5,'Pink'],[6.5,'Purple'],[7.5,'Violet'],[9.5,'Blue'],[11.5,'Green'],[15,'Yellow']];
+const cabName=p=>CAB_NAMES.find(([m])=>p<m)[1];
+function cabbageColorQ(){const h=pick(HOUSE.filter(x=>![2.5,4.5,6.5,7.5,9.5,11.5].some(m=>Math.abs(x[1]-m)<0.35))),right=cabName(h[1]);
+ const names=['Red','Pink','Purple','Violet','Blue','Green','Yellow'],i=names.indexOf(right),others=shuf(names.filter(n=>n!==right)).slice(0,3);
+ const why=n=>{const lo=[0,2.5,4.5,6.5,7.5,9.5,11.5][names.indexOf(n)],hi=[2.5,4.5,6.5,7.5,9.5,11.5,14][names.indexOf(n)];return `Red cabbage is ${n.toLowerCase()} around pH ${lo}–${hi}.`};
+ return mc({topic:'ind',video:'ind',lab:{kind:'ph',cfg:{pH0:7,ind:'uni'}},task:{need:L=>L.picked===h[0]&&L.ind==='cab',say:`Pick <b>${h[2]} ${h[0]}</b>, then tap <b>Red cabbage</b>.`},
+  prompt:`${LAB12}What color does red cabbage juice turn in ${h[0].toLowerCase()}?`,hint:'Red cabbage goes red → pink → purple → violet → blue → green → yellow as pH rises.',
+  choices:[[right,true,`${h[0]} is pH ${h[1].toFixed(2)}. ${why(right)}`],...others.map(n=>[n,false,`${why(n)} ${h[0]} is pH ${h[1].toFixed(2)}.`])]})}
+function cabbageMatchQ(){const p=rnd(4,24)/2,ps=[p,...shuf([2,3,4,5,6,7,8,9,10,11,12].filter(x=>Math.abs(x-p)>=1.5&&cabName(x)!==cabName(p))).slice(0,3)];const sw=x=>`<span class="cabsw" style="background:${cabbage(x)}"></span>`;
+ return mc({topic:'ind',video:'ind',prompt:`${LAB12}A test tube with red cabbage juice looks like the tube on the left. Using the standards, estimate its pH to the nearest 0.5.`,
+  html:`<div class="cabrow"><div class="cabtube" style="background:${cabbage(p)}" role="img" aria-label="Unknown tube, ${cabName(p).toLowerCase()} color"></div><div class="cabstd">${[2,3,4,5,6,7,8,9,10,11,12].map(x=>`<span>${sw(x)}<small>${x}</small></span>`).join('')}</div></div>`,hint:'Find the standard with the closest color; if it is between two, use the half step.',
+  choices:ps.map(x=>[x.toFixed(1),x===p,x===p?`The tube's ${cabName(p).toLowerCase()} color matches pH ${p.toFixed(1)} on the standards.`:`A pH ${x.toFixed(1)} tube would be ${cabName(x).toLowerCase()}, not ${cabName(p).toLowerCase()}.`])})}
+/* post-lab style: grams of strong acid or base in a solution → pH */
+const SA_MM={'HCl':36.46,'HNO₃':63.02,'HBr':80.91},SB_MM={NaOH:40.00,KOH:56.11,'Ca(OH)₂':74.10,'Sr(OH)₂':121.64,'Ba(OH)₂':171.36};
+function massPHQ(){const acid=Math.random()<0.5,f=pick(Object.keys(acid?SA_MM:SB_MM)),MM=(acid?SA_MM:SB_MM)[f],n=/\(OH\)₂/.test(f)?2:1,V=pick([0.250,0.500,0.750,1.00]),g=Number((rnd(100,600)/100).toFixed(2)),mol=g/MM,C=mol/V*n,a=acid?-Math.log10(C):14+Math.log10(C);
+ return {type:'num',kind:'log',dp:3,topic:'phc',video:'stoich',prompt:`${LAB12}What is the pH of ${g.toFixed(2)} g ${f} dissolved in ${V.toFixed(3)} L of total solution?`,html:`<div class="givens"><span>Molar mass ${f} = ${MM.toFixed(2)} g/mol</span></div>`,answer:a,
+  hint:`grams → mol (÷ ${MM.toFixed(2)}) → M (÷ ${V.toFixed(3)} L) → ${acid?'[H⁺] (strong acid, 1 : 1)':`[OH⁻] (strong base${n===2?', × 2 OH⁻':''})`} → ${acid?'pH = −log[H⁺]':'pOH, then pH = 14.00 − pOH'}. Three sig figs → 3 decimal places.`,
+  why:`${g.toFixed(2)} g ÷ ${MM.toFixed(2)} g/mol = ${nf(mol,3)} mol ÷ ${V.toFixed(3)} L = ${nf(mol/V,3)} M ${f}. ${acid?`[H⁺] = ${nf(C,3)} M → pH = <b>${a.toFixed(3)}</b>.`:`[OH⁻] = ${n===2?'2 × ':''}${nf(mol/V,3)} = ${nf(C,3)} M → pOH = ${(14-a).toFixed(3)} → pH = <b>${a.toFixed(3)}</b>.`}`,
+  slips:[[acid?14+Math.log10(C):-Math.log10(C),acid?'An acid gives H⁺: pH = −log[H⁺] directly.':'That is the pOH. Finish with pH = 14.00 − pOH.'],...(n===2?[[14+Math.log10(C/2),`Each ${f} gives 2 OH⁻: double the molarity.`]]:[]),[acid?-Math.log10(g/V):14+Math.log10(g/V),'Change grams to moles first, using the molar mass.']]}}
+/* post-lab 2c style: HCl + Sr(OH)₂ (or Ba(OH)₂) mixed; find the pH from the excess */
+function excessPHQ(){const [bf,MMb]=pick([['Sr(OH)₂',121.64],['Ba(OH)₂',171.36],['Ca(OH)₂',74.10]]);let ga,gb,nH,nOH;
+ for(let k=0;k<40;k++){ga=Number((rnd(100,300)/100).toFixed(2));gb=Number((rnd(150,600)/100).toFixed(2));nH=ga/36.46;nOH=2*gb/MMb;if(Math.abs(nH-nOH)/Math.max(nH,nOH)>0.15)break}
+ const V=pick([0.500,0.700,1.00]),ex=Math.abs(nH-nOH)/V,acidLeft=nH>nOH,a=acidLeft?-Math.log10(ex):14+Math.log10(ex);
+ return {type:'num',kind:'log',dp:3,topic:'neut',video:'stoich',prompt:`${LAB12}${ga.toFixed(2)} g HCl and ${gb.toFixed(2)} g ${bf} are mixed in ${V.toFixed(3)} L of total solution. What is the pH?`,
+  html:`<div class="rxn">2 HCl + ${bf} → ${bf.replace('(OH)₂','Cl₂')} + 2 H₂O</div><div class="givens"><span>HCl 36.46 g/mol</span><span>${bf} ${MMb.toFixed(2)} g/mol</span></div>`,answer:a,
+  hint:'Find mol H⁺ (from HCl) and mol OH⁻ (2 per base). They cancel 1 : 1; whichever is left over sets the pH. Divide the leftover by the total volume.',
+  why:`H⁺: ${ga.toFixed(2)} ÷ 36.46 = ${nf(nH,3)} mol. OH⁻: 2 × (${gb.toFixed(2)} ÷ ${MMb.toFixed(2)}) = ${nf(nOH,3)} mol. ${acidLeft?'H⁺':'OH⁻'} is in excess by ${nf(Math.abs(nH-nOH),3)} mol ÷ ${V.toFixed(3)} L = ${nf(ex,3)} M → ${acidLeft?`pH = <b>${a.toFixed(3)}</b>`:`pOH = ${(14-a).toFixed(3)}, pH = <b>${a.toFixed(3)}</b>`}.`,
+  slips:[[acidLeft?-Math.log10(nH/V):14+Math.log10(nOH/V),'Subtract first: the H⁺ and OH⁻ neutralize each other, and only the excess sets the pH.'],[14-a,'Check which one is left over: an excess of acid gives a pH below 7, an excess of base above 7.']]}}
+/* EXP 12b: citric acid (triprotic) in soda by titration with NaOH */
+function citricQ(){const Vs=pick([10.0,20.0,25.0]),Cb=pick([0.0500,0.100]),Vb=rnd(400,2200)/100,mol=Cb*Vb/1000/3,M=mol/(Vs/1000);
+ return {type:'num',kind:'conc',sf:3,unit:'M',topic:'tit',video:'titrRatio',prompt:`<span class="tagchip">🧪 EXP 12b</span> Citric acid in soda: ${Vs.toFixed(1)} mL of soda needs ${Vb.toFixed(2)} mL of ${Cb.toFixed(4)} M NaOH to reach the endpoint. What is the molarity of citric acid?`,
+  html:'<div class="rxn">H₃C₆H₅O₇ + 3 NaOH → Na₃C₆H₅O₇ + 3 H₂O</div>',answer:M,hint:'Citric acid gives 3 H⁺ each, so mol citric acid = mol NaOH ÷ 3. Then divide by the soda volume in liters.',
+  why:`mol NaOH = ${Cb.toFixed(4)} × ${(Vb/1000).toFixed(5)} L = ${nf(Cb*Vb/1000,3)} mol → ÷ 3 = ${nf(mol,3)} mol citric acid → ÷ ${(Vs/1000).toFixed(4)} L = <b>${nf(M,3)} M</b>.`,
+  slips:[[M*3,'Citric acid is triprotic: divide the moles of NaOH by 3.'],[M*1000,'Convert mL to L before dividing.'],[M*9,'Divide by 3 once (1 citric acid : 3 NaOH).']]}}
+function prelabQ(){return pick([cabbageColorQ,cabbageColorQ,cabbageMatchQ,cabbageMatchQ,massPHQ,excessPHQ])()}
+
+/* ---------- ➰ pictures added after existing question types ---------- */
+const withPic=(q,pic)=>{q.after=pic;return q};
+const _arrEqQ=arrEqQ;arrEqQ=function(){const q=_arrEqQ();const m=q.answer.match(/^(.+?)\(aq\) → H⁺\(aq\) \+ (.+?)\(aq\)$/);
+ if(m)q.after=rxPic([m[1],'H₂O','H₃O⁺',m[2]],['+','→','+'],[0,1],'H⁺ moves to water',[[0,'Arrhenius acid','#c0392b'],[2,'hydronium','#1f6aa5']])+'<p class="tip">In water the H⁺ does not float alone: it jumps onto H₂O, making H₃O⁺. That is why "makes H⁺" and "makes H₃O⁺" mean the same thing.</p>';return q};
+const _conjQ=conjQ;conjQ=function(){const q=_conjQ(),base=/conjugate base/.test(q.prompt),x=(q.prompt.match(/ of (.+)\?$/)||[])[1];if(!x)return q;
+ q.after=base?rxPic([x,'H₂O',q.answer,'H₃O⁺'],['+','⇌','+'],[0,1],'H⁺ leaves',[[0,'acid','#c0392b'],[2,'conjugate base','#c0392b']]):rxPic([x,'H₃O⁺',q.answer,'H₂O'],['+','⇌','+'],[1,0],'H⁺ joins',[[0,'base','#1f6aa5'],[2,'conjugate acid','#1f6aa5']]);return q};
+const _bufPartQ=bufPartQ;bufPartQ=function(){const q=_bufPartQ(),s=BUF_SYS[q.lab.cfg.sys],acid=/added HCl/.test(q.prompt);
+ q.after=acid?rxPic(['H₃O⁺',s.A,'H₂O',s.HA],['+','→','+'],[0,1],'added H⁺ is grabbed',[[1,'buffer base part','#1f6aa5']]):rxPic([s.HA,'OH⁻',s.A,'H₂O'],['+','→','+'],[0,1],'H⁺ neutralizes OH⁻',[[0,'buffer acid part','#c0392b']]);return q};
+const _bufBloodQ=bufBloodQ;bufBloodQ=function(){const q=_bufBloodQ();q.after=rxPic(['H₃O⁺','HCO₃⁻','H₂O','H₂CO₃'],['+','→','+'],[0,1],'H⁺ moves',[[1,'bicarbonate','#1f6aa5'],[3,'→ CO₂ + H₂O (exhaled)','#5c6a75']]);return q};
+/* blend the new items into the modes */
+GEN.ph=()=>(typeof PRELAB!=='undefined'&&PRELAB)||Math.random()<0.25?prelabQ():phQ();
+GEN.calc=()=>{const r=Math.random();return r<0.07?stomachBloodQ():r<0.17?pick([massPHQ,excessPHQ])():calcModeQ()};
+GEN.titrate=()=>Math.random()<0.08?citricQ():titrateQ();
+GEN.buffer=()=>Math.random()<0.3?caseQ():bufferQ();
+const _topicQ=topicQ;topicQ=function(t){if(t==='buf'&&Math.random()<0.3){const q=caseQ();q.topic='buf';q.lab=null;q.task=null;return q}if(t==='tit'&&Math.random()<0.15){const q=citricQ();q.topic='tit';return q}return _topicQ(t)};
+
+</script>
+<script>
+/* 4-engine.js */
+/* ============================== ENGINE (practice card) ============================== */
+const REFERENCE=[
+ ['Strong acids and bases (green sheet)',`<b>Strong acids:</b> ${STRONG_LIST}. Every other acid is weak.<br><b>Strong bases:</b> soluble hydroxides: LiOH, NaOH, KOH, Ca(OH)₂, Sr(OH)₂, Ba(OH)₂.<br>Strong = 100% ions (strong electrolyte). Weak = mostly whole molecules.`],
+ ['Spotting acids and bases','<b>Acids:</b> binary (HCl), oxyacids (H₂SO₄), carboxylic acids (–COOH).<br><b>Bases:</b> OH⁻ (NaOH), CO₃²⁻/HCO₃⁻ (baking soda), amines (–NH₂, N lone pair).<br>An alcohol –OH (CH₃OH) is <b>not</b> hydroxide.'],
+ ['Definitions','<table><tr><td></td><td><b>Acid</b></td><td><b>Base</b></td></tr><tr><td>Arrhenius</td><td>makes H⁺ in water</td><td>makes OH⁻ in water</td></tr><tr><td>Brønsted–Lowry</td><td>H⁺ donor</td><td>H⁺ acceptor</td></tr><tr><td>Taste, litmus</td><td>sour, red</td><td>bitter, blue</td></tr><tr><td>Phenolphthalein</td><td>colorless</td><td>pink</td></tr></table>'],
+ ['Conjugate pairs','HA + B ⇌ A⁻ + BH⁺<br>Acid → conjugate base (one H⁺ less). Base → conjugate acid (one H⁺ more). A pair differs by exactly one H⁺.'],
+ ['The pH four corners','pH = −log[H⁺] &nbsp;·&nbsp; [H⁺] = 10<sup>−pH</sup><br>pOH = −log[OH⁻] &nbsp;·&nbsp; [OH⁻] = 10<sup>−pOH</sup><br>pH + pOH = 14.00 &nbsp;·&nbsp; [H⁺][OH⁻] = 1.0 × 10⁻¹⁴<br>pH &lt; 7 acidic, 7 neutral, &gt; 7 basic. Decimal places in pH = sig figs in [H⁺].'],
+ ['Neutralization and titration','Acid + base → salt + water (H⁺ + OH⁻ → H₂O). Metal + acid → salt + H₂(g).<br>Titration: mol base = M × L → mole ratio → mol acid → M = mol ÷ L. Endpoint = faint pink that stays.'],
+ ['Buffers','Weak acid + its conjugate base (or weak base + conjugate acid). The base part grabs added H⁺; the acid part neutralizes added OH⁻. Blood: H₂CO₃ / HCO₃⁻, pH 7.35–7.45.']];
+let ui={};try{ui=JSON.parse(localStorage.getItem(GAME_KEY+'-ui')||'{}')}catch(e){}
+const saveUI=()=>{try{localStorage.setItem(GAME_KEY+'-ui',JSON.stringify(ui))}catch(e){}};
+const state={mode:MODES.some(m=>m.id===ui.mode)?ui.mode:MODES[0].id,q:null,sel:null,done:false,correct:0,streak:0,assist:0,taskOk:true,taskAt:0,logged:false,lab:null};
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const c=['#ff7d73','#70b7e8','#8fd8c8','#f7c968','#e9a3cc'];for(let i=0;i<50;i++){const p=document.createElement('i');p.className='confetti';p.style.left=Math.random()*100+'vw';p.style.background=c[i%5];p.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),3600)}}
+const JK=GAME_KEY+'-journey',jBlank=()=>({xp:0,correct:0,best:0,modes:{},badges:{}});let J=jBlank();try{J=Object.assign(jBlank(),JSON.parse(localStorage.getItem(JK)||'{}'))}catch(e){}
+const BADGES=[['first','🌱','First Answer','Answer a question',j=>j.correct>=1],['ten','🔟','Ten Correct','10 on your own',j=>j.correct>=10],['fifty','🏅','Fifty Correct','50 on your own',j=>j.correct>=50],
+ ['s5','🔥','Hot Streak','5 in a row',j=>j.best>=5],['s10','⚡','On Fire','10 in a row',j=>j.best>=10],
+ ['id','🔍','Acid Spotter','10 in Acid or Base?',j=>(j.modes.id||0)>=10],['ph','🌈','pH Painter','5 in pH Lab',j=>(j.modes.ph||0)>=5],['calc','🧮','Log Master','10 in pH Calculator',j=>(j.modes.calc||0)>=10],
+ ['pairs','🔄','Proton Matchmaker','10 in Proton Pairs',j=>(j.modes.pairs||0)>=10],['titrate','⚗️','Faint Pink','5 in Titration Lab',j=>(j.modes.titrate||0)>=5],['buffer','🛡️','Buffer Guard','5 in Buffer Lab',j=>(j.modes.buffer||0)>=5],
+ ['quiz','🎯','Skill Check Star','8+ on a Skill Check',j=>(j.bestQuiz||0)>=8],['all','🧭','Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
+function renderJ(){const l=Math.floor(J.xp/100)+1,i=J.xp%100;$('jChip').textContent=`Level ${l} • ${J.xp} XP`;$('lvl').textContent='Level '+l;$('xpFill').style.width=i+'%';$('xpTxt').textContent=i+' / 100 XP';
+ $('badges').innerHTML=BADGES.map(([id,em,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><img src="assets/ach-${id}.webp" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'em',textContent:'${em}'}))"><span><b>${t}</b>${d}</span></div>`).join('')}
+function checkBadges(){BADGES.forEach(([id,em,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast('Badge earned: '+em+' '+t)}})}
+function award(assisted){const before=Math.floor(J.xp/100);if(assisted)J.xp+=2;else{J.xp+=10+Math.min(state.streak,5)*2;J.correct++;J.best=Math.max(J.best,state.streak);J.modes[state.mode]=(J.modes[state.mode]||0)+1}
+ checkBadges();if(Math.floor(J.xp/100)>before)toast('Level up!');try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ()}
+function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
+function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=h}
+function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'acidbase',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.topic||state.q.video||'',correct:!!ok})}catch(e){}}
+function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic art" aria-hidden="true"><img src="assets/mode-${m.id}.webp" alt="" onerror="this.parentNode.classList.remove('art');this.parentNode.textContent='${m.icon}'"></span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+ $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();next()})}
+/* labs: a fresh lab for every question, so each task starts from the same baseline */
+const labHost=document.createElement('div');
+function stopLabs(){Object.values(LABS).forEach(L=>L.stop())}
+function mountLab(spec){stopLabs();const L=LABS[spec.kind];L.onEvent=null;L.mount(labHost,spec.cfg||{});L.start();L.onEvent=ev=>taskEvent(ev,L);state.lab=L;return L}
+function taskEvent(ev,L){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;const ok=typeof t.need==='function'?t.need(L):ev===t.need;if(!ok)return;
+ if(state.q.onTask)state.q.onTask(L);state.taskOk=true;const el=$('taskBox');if(el){el.className='task done';el.innerHTML='✅ Done! Now answer below.'}$('checkBtn').disabled=false;
+ if(state.q.type==='num'&&$('numIn')){$('numIn').disabled=false;$('numIn').placeholder='Your answer'}}
+function startQuiz(){state.quiz={plan:shuf(QUIZ_PLAN.slice(0,4)).concat(shuf(QUIZ_PLAN.slice(4,7)),shuf(QUIZ_PLAN.slice(7))),i:0,res:[],over:false}}
+function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length;Q.over=true;J.bestQuiz=Math.max(J.bestQuiz||0,n);checkBadges();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ();
+ const miss={};Q.res.forEach(r=>{if(!r.ok)miss[r.topic]=(miss[r.topic]||0)+1});
+ const rows=Object.keys(TOPICS).filter(t=>Q.res.some(r=>r.topic===t)).map(t=>{const R=Q.res.filter(r=>r.topic===t),k=R.filter(r=>r.ok).length;return `<tr><td>${k===R.length?'✅':'❌'}</td><td>${TOPICS[t][0]}</td><td>${k} / ${R.length}</td></tr>`}).join('');
+ const plan=Object.keys(miss).map(t=>`<div class="item"><b>📌 ${TOPICS[t][0]}</b><br><button type="button" class="btn hint" data-go="${t}">Practice this</button><button type="button" class="btn show" data-vid="${t}">🎥 Watch Dr. Dan</button></div>`).join('');
+ const msg=n>=9?'🌟 Excellent! You are ready.':n>=7?'👍 Solid. Review the topics below.':n>=5?'📚 Getting there. Practice the topics below, then try again.':'🧭 Start with the topics below; the labs help a lot.';
+ $('qArea').innerHTML=`<div class="qsum"><p class="prompt">Skill Check complete</p><div class="big">${n} / ${Q.res.length}</div><p>${msg}</p><table>${rows}</table>
+  <h3 style="margin:14px 0 4px">Your study plan</h3>${plan?`<div class="plan">${plan}</div>`:'<p>Nothing to review: every topic was right. Try another Skill Check to be sure!</p>'}
+  <button type="button" class="btn check" id="againBtn" style="margin-top:14px">🎯 Start a new Skill Check</button></div>`;
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);fb('','');$('newBtn').textContent='New Skill Check ↻';$('practice').classList.add('quizdone');$('modeTitle').textContent='Skill Check results';
+ $('qArea').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{state.mode=TOPICS[b.dataset.go][1];ui.mode=state.mode;saveUI();buildModes();next();$('practice').scrollIntoView({behavior:'smooth'})});
+ $('qArea').querySelectorAll('[data-vid]').forEach(b=>b.onclick=()=>{state.q={video:TOPICS[b.dataset.vid][2]};video();openVideo()});
+ $('againBtn').onclick=()=>{startQuiz();next()};$('againBtn').focus({preventScroll:true})}
+/* label builder (Brønsted–Lowry roles) */
+function lbHTML(q){return `<div class="lb" id="lb">${q.rows.map((x,i)=>`<div class="lbrow" data-row="${i}"><span class="lbsp">${x.f}</span><span class="seg" role="group" aria-label="Role of ${esc(x.f)}">${Object.keys(ROLE_NAME).map(r=>`<button type="button" data-r="${r}" aria-pressed="false">${ROLE_NAME[r]}</button>`).join('')}</span></div>`).join('')}</div>`}
+function lbSync(q){$('lb').querySelectorAll('.lbrow').forEach((row,i)=>row.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',q.st[i]===b.dataset.r)))}
+function lbWire(q){$('lb').querySelectorAll('.lbrow').forEach((row,i)=>row.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{if(state.done)return;q.st[i]=b.dataset.r;row.classList.remove('bad','ok');lbSync(q)}))}
+function lbErrors(q){return q.rows.map((x,i)=>q.st[i]===x.want?null:[i,q.st[i]?`<b>${x.f}</b> is not the ${ROLE_LONG[q.st[i]]}. ${q.msg[x.want]}`:`Choose a role for <b>${x.f}</b> first.`]).filter(Boolean)}
+/* show proton-transfer pictures: fade in, then run the H⁺ ball along its arrow (reduced motion: ball at the end) */
+function blShow(){document.querySelectorAll('.blReveal').forEach(g=>{if(g.dataset.shown)return;g.dataset.shown=1;g.style.opacity=1;const ball=g.querySelector('.blBall'),am=ball&&ball.querySelector('animateMotion'),mp=am&&am.querySelector('mpath'),arc=mp&&document.getElementById((mp.getAttribute('href')||'').slice(1));
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches||!am||!am.beginElement){if(arc&&arc.getPointAtLength){const p=arc.getPointAtLength(arc.getTotalLength());ball.setAttribute('transform',`translate(${p.x},${p.y})`)}return}
+ try{am.beginElement()}catch(e){}})}
+function showAfter(q){if(!q.after)return;$('fb').insertAdjacentHTML('beforeend',`<div class="afterpic">${q.after}</div>`);blShow()}
+function next(){stopLabs();state.lab=null;
+ $('practice').classList.toggle('quizmode',state.mode==='quiz');$('practice').classList.remove('quizdone');$('newBtn').textContent='New Question ↻';
+ if(state.mode==='quiz'){if(!state.quiz||state.quiz.over)startQuiz();else if(state.done&&state.q&&state.q.qi===state.quiz.i)state.quiz.i++;
+  if(state.quiz.i>=state.quiz.plan.length){state.q={};state.done=true;return quizSummary()}$('newBtn').textContent='Next question →'}
+ const q=GEN[state.mode]();if(state.mode==='quiz')q.qi=state.quiz.i;state.q=q;state.sel=null;state.done=false;state.logged=false;
+ $('modeTitle').textContent=MODES.find(m=>m.id===state.mode).title+(state.mode==='quiz'?` · ${state.quiz.i+1} of ${state.quiz.plan.length}`:'');
+ $('hintBox').className='hintbox';fb('','');
+ let h=(state.mode==='quiz'?`<div class="qprog" aria-hidden="true">${state.quiz.plan.map((t,i)=>`<i class="${i<state.quiz.res.length?(state.quiz.res[i].ok?'ok':'no'):i===state.quiz.i?'now':''}"></i>`).join('')}</div><p class="tip">One try per question. No hints until the end.</p>`:'');
+ if(q.task)h+=`<div class="task" id="taskBox" role="status" aria-live="polite"><span>👉 ${q.task.say}</span></div>`;
+ if(q.lab)h+='<div id="labHere"></div>';
+ h+=`<p class="prompt">${q.prompt}</p>`;
+ if(q.html)h+=`<div class="qbox">${q.html}</div>`;
+ if(q.type==='label')h+=lbHTML(q);
+ else if(q.type==='num')h+=numHTML(q);
+ else h+=`<div class="options">${q.options.map((o,i)=>`<button type="button" class="opt" aria-pressed="false" data-i="${i}"><span class="L" aria-hidden="true">${i+1}</span><span>${o}</span></button>`).join('')}</div>`;
+ $('qArea').innerHTML=h;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+ if(q.lab){$('labHere').appendChild(labHost);mountLab(q.lab)}
+ state.taskOk=!q.task;if(q.task){$('checkBtn').disabled=true;if(q.type==='num'&&$('numIn')){$('numIn').disabled=true;$('numIn').placeholder='Do the lab step first'}}
+ wireIns();if(q.type==='label'){lbWire(q);lbSync(q)}
+ $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})});
+ video();stats()}
+function numHTML(q){const log=q.kind==='log';return `<div class="numrow"><label for="numIn" class="sr-only">Your answer</label><input id="numIn" class="num" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer">${q.unit?`<span class="unit">${q.unit}</span>`:''}${log?'':'<button type="button" class="chip ins" data-ins="E" aria-label="×10ⁿ: insert E for times ten to the power">×10ⁿ</button><button type="button" class="chip ins" data-ins="-" aria-label="− minus sign">−</button>'}</div>
+ <p class="tip">${log?`Give <b>${q.dp} decimal place${q.dp>1?'s':''}</b> (log rule: decimal places = sig figs in the concentration).`:`Round to <b>${q.sf} significant figures</b>. Scientific notation: tap <b>×10ⁿ</b> (or type E), like <span style="white-space:nowrap">2.4E-5</span> for 2.4 × 10⁻⁵.`}</p>`}
+/* ×10ⁿ and − buttons: the iPhone number keypad has no E or minus key. Keep the keypad open and add to the end (iOS reports a stale cursor). */
+function wireIns(){$('qArea').querySelectorAll('[data-ins]').forEach(b=>{if(b.dataset.w)return;b.dataset.w=1;const keep=e=>e.preventDefault();b.addEventListener('pointerdown',keep);b.addEventListener('mousedown',keep);
+  b.onclick=()=>{const n=$('numIn');if(!n||n.readOnly||n.disabled)return;n.value+=b.dataset.ins;n.focus();const L=n.value.length;try{n.setSelectionRange(L,L)}catch(e){}}})}
+const ansText=q=>q.type==='num'?(q.kind==='log'?q.answer.toFixed(q.dp):nf(q.answer,q.sf)+(q.unit?' '+q.unit:'')):q.type==='label'?q.rows.map(x=>`${x.f} = ${ROLE_LONG[x.want]}`).join(', '):q.answer;
+function whyList(q){const others=q.options.filter(o=>o!==q.answer&&q.whys[o]);return others.length?`<ul class="why">${others.map(o=>`<li>❌ <b>${o}</b>: ${q.whys[o]}</li>`).join('')}</ul>`:''}
+function finish(revealed,quizWrong){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;if($('numIn'))$('numIn').readOnly=true;
+ if(state.mode==='quiz'&&state.quiz&&q.qi===state.quiz.i&&state.quiz.res.length===state.quiz.i)state.quiz.res.push({topic:q.topic,ok:!revealed&&!quizWrong});
+ if(state.mode==='quiz'){const last=state.quiz.i+1>=state.quiz.plan.length;$('newBtn').textContent=last?'See my results →':'Next question →'}
+ if(q.type==='label'){blShow();$('lb').classList.add('locked');if(revealed||quizWrong){q.rows.forEach((x,i)=>q.st[i]=x.want);lbSync(q)}$('lb').querySelectorAll('.lbrow').forEach(r=>{r.classList.remove('bad');r.classList.add('ok')})}
+ const ansTxt=ansText(q),more=q.type==='mc'?whyList(q):'';
+ $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
+ if(quizWrong){state.streak=0;log(false);stats();fb('bad',`❌ Not this time. The answer is <b>${ansTxt}</b>.<br>${q.why}${more}`);showAfter(q);return}
+ if(revealed){state.assist++;state.streak=0;log(false);fb('good',`👀 <b>${ansTxt}</b><br>${q.why}${more}<br><small>Assisted: no point this time. <button class="linkbtn" onclick="openVideo()">🎥 Review with Dr. Dan</button></small>`);award(true)}
+ else{state.correct++;state.streak++;log(true);confetti();fb('good','✅ Correct! '+q.why+more);award(false)}stats();showAfter(q);
+ const a=document.activeElement;if(!a||a===document.body||a.disabled)$('newBtn').focus({preventScroll:true})}
+function checkNum(q){const raw=$('numIn').value.trim();if(!raw)return fb('bad','Type your answer first.');
+ if(NUM.decimalComma(raw))return fb('bad','Use a period for decimals (type 1.5, not 1,5). Commas only for thousands, like 1,200.');
+ const v=NUM.parseValue(raw);if(!isFinite(v))return fb('bad','Type one number, like 4.62 or 2.4E-5.');
+ const slipOf=()=>(q.slips||[]).find(([x,m])=>m&&isFinite(x)&&(q.kind==='log'?Math.abs(v-x)<=0.02&&Math.abs(x-q.answer)>0.02:Math.abs(v-x)<=Math.abs(x)*0.012&&Math.abs(x-q.answer)>Math.abs(q.answer)*0.012));
+ if(q.kind==='log'){const d=dpCount(raw),err=Math.abs(v-q.answer);
+  if(err<=1.0001*10**-q.dp&&d===q.dp)return finish(false);
+  if(err<=0.06&&d!==q.dp)return fb('bad',`✏️ Your math is right! Now give <b>${q.dp} decimal place${q.dp>1?'s':''}</b>: the concentration has ${q.dp} sig figs, and a log keeps that many decimal places.`)}
+ else{const close=(a,b)=>Math.abs(a-b)<=Math.abs(b)*0.012,target=Number(q.answer.toPrecision(q.sf));
+  if(close(v,q.answer)||close(v,target)){if(NUM.sfCount(raw)!==q.sf)return fb('bad',`✏️ Your math is right! Now round to <b>${q.sf} significant figure${q.sf>1?'s':''}</b>. (Trailing zeros only count with a decimal point; use E notation if needed, like 1.20E3.)`);return finish(false)}}
+ if(state.mode==='quiz')return finish(false,true);
+ const slip=slipOf();state.streak=0;log(false);stats();return fb('bad',`🔎 Not quite. ${slip?slip[1]+' ':''}<br>💡 ${q.hint}`)}
+function checkLabel(q){const errs=lbErrors(q);if(errs.length&&q.st.every(t=>!t))return fb('bad','Tap a role for each species first.');
+ if(q.st.some(t=>!t))return fb('bad','Choose a role for every species first.');
+ const rows=$('lb').querySelectorAll('.lbrow');rows.forEach((r,i)=>{r.classList.toggle('bad',errs.some(([j])=>j===i));r.classList.toggle('ok',!errs.some(([j])=>j===i))});
+ if(!errs.length)return finish(false);if(state.mode==='quiz')return finish(false,true);
+ state.streak=0;log(false);stats();return fb('bad',`🔎 Almost. Fix the rows in red:<ul class="why">${errs.slice(0,2).map(([,m])=>`<li>${m}</li>`).join('')}</ul>💡 ${q.hint}`)}
+function check(){if(state.done)return;const q=state.q;if(!state.taskOk)return fb('bad','👉 Do the lab step in the gold box first, then answer.');
+ if(q.type==='num')return checkNum(q);if(q.type==='label')return checkLabel(q);
+ if(!state.sel)return fb('bad','Choose an answer first.');
+ const i=q.options.indexOf(state.sel);
+ if(state.sel!==q.answer&&state.mode==='quiz'){$('qArea').querySelector(`.opt[data-i="${i}"]`)?.classList.add('wrong');return finish(false,true)}
+ if(state.sel!==q.answer){state.streak=0;log(false);stats();$('qArea').querySelector(`.opt[data-i="${i}"]`)?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}`)}
+ finish(false)}
+function hint(){if(state.done)return;$('hintBox').innerHTML='💡 '+state.q.hint+(VIDEO_FOR[state.q.video]?` <button class="linkbtn" onclick="openVideo()">🎥 Watch Dr. Dan explain it</button>`:'');$('hintBox').className='hintbox on'}
+const mmss=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+function video(){const v=VIDEO_FOR[state.q?.video];const src=v?`https://www.youtube.com/embed/${v[0]}?start=${v[1]}&rel=0`:`https://www.youtube.com/embed/${FALLBACK_VIDEO}?rel=0`;
+ $('vidCard').innerHTML=v?`<small>🎯 Matched to this topic</small><b>${esc(v[2])}</b>${v[1]?`<div class="tip">Starts at ${mmss(v[1])}</div>`:''}`:'<small>📺 The pH scale</small>';
+ $('player').dataset.want=src;if($('videoPanel').open&&$('player').src!==src)$('player').src=src}
+function openVideo(){$('videoPanel').open=true;$('player').src=$('player').dataset.want;$('videoPanel').scrollIntoView({behavior:'smooth',block:'center'})}
+$('videoPanel').addEventListener('toggle',()=>{if($('videoPanel').open&&!$('player').src)$('player').src=$('player').dataset.want});
+$('refBody').innerHTML=REFERENCE.map(([t,d])=>`<div class="refcard"><b>${t}</b><div>${d}</div></div>`).join('');
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;
+$('showBtn').onclick=()=>{if(state.done)return;if(!state.taskOk){state.taskOk=true;const el=$('taskBox');if(el){el.className='task done';el.textContent='Skipped the lab step.'}}finish(true)};
+$('newBtn').onclick=()=>{if(state.mode==='quiz'&&state.quiz&&!state.quiz.over&&!state.done)return fb('bad','Answer this question first. (Each question gets one try.)');next()};
+{let armed=0;$('resetBtn').onclick=()=>{if(!armed){$('resetBtn').textContent='Tap again to confirm';armed=setTimeout(()=>{armed=0;$('resetBtn').textContent='Reset progress'},4000);return}clearTimeout(armed);armed=0;J=jBlank();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}$('resetBtn').textContent='Reset progress';renderJ()}}
+if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPanel').open=true}
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(e.target.id==='numIn'&&e.key==='Enter'){e.preventDefault();state.done?$('newBtn').click():check();return}if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
+ const bs=[...$('qArea').querySelectorAll('.opt')];if(/^[1-9]$/.test(e.key)&&bs[e.key-1]&&!bs[e.key-1].disabled){bs[e.key-1].click();return}
+ if(e.key==='Enter'&&!/^(BUTTON|SUMMARY|A)$/.test(t)){e.preventDefault();state.done?$('newBtn').click():check()}});
+/* disabled buttons: stop iOS double-tap zoom */
+document.addEventListener('touchend',e=>{const b=e.target.closest&&e.target.closest('button');if(b&&b.disabled)e.preventDefault()},{passive:false});
+/* Deep links: ?mode=id|ph|calc|pairs|titrate|buffer|quiz opens that mode for this visit only (for textbook Explore It boxes). */
+/* ?prelab=12a: the pH Lab shows only EXP 12a pre-lab items (red cabbage, mass → pH, excess reactant) */
+var PRELAB=new URLSearchParams(location.search).get('prelab')==='12a';if(PRELAB)state.mode='ph';
+(()=>{const m=new URLSearchParams(location.search).get('mode');if(PRELAB||MODES.some(x=>x.id===m)){state.mode=PRELAB?'ph':m;addEventListener('load',()=>setTimeout(()=>{const e=$('modes');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150))}})();
+/* The shared Feedback pill is fixed bottom-right; on phones it covered Show Answer. Hide it while the answer buttons are on screen. */
+(()=>{const row=document.querySelector('.btnrow');if(!row||!('IntersectionObserver' in window))return;let vis=false;const apply=()=>{const f=document.querySelector('.ddfb-float');if(f)f.classList.toggle('eq-hide',vis)};
+ new IntersectionObserver(es=>{vis=es[0].isIntersecting;apply()}).observe(row);new MutationObserver(apply).observe(document.body,{childList:true})})();
+buildModes();renderJ();next();
+
+</script>
+</body></html>
