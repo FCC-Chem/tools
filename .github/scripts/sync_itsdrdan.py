@@ -75,7 +75,7 @@ def read_hub(hub_dir):
         if gid.lower() in NEEDS_PERMISSION:
             print(f"== {gid} skipped (not shared to FCC-Chem without Dr. Dan's permission)")
             continue
-        if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", gid) or gid in hide or gid in ("logos",):
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", gid) or gid in hide or gid in ("logos",):
             continue
         games.append({
             "id": gid,
