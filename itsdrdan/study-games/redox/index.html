@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><script>/* Inside a frame (textbook Explore It box): scroll only this game, never the page around it. A scroll made while the frame is still off screen is redone when it comes into view. */(function(){if(window.self===window.top)return;var E=Element.prototype,used=0,pend=null;function go(el,a){var r=el.getBoundingClientRect(),h=innerHeight,b='start',m='auto';if(a===false)b='end';else if(a&&typeof a==='object'){b=a.block||'start';m=a.behavior||'auto';}var d=b==='center'?r.top-(h-r.height)/2:b==='end'?r.bottom-h:b==='nearest'?(r.top<0?r.top:(r.bottom>h?r.bottom-h:0)):r.top,t=Math.max(0,scrollY+d);try{window.scrollTo({top:t,behavior:m});}catch(e){window.scrollTo(0,t);}}E.scrollIntoView=function(a){if(!used)pend=[this,a];go(this,a);};if(E.scrollIntoViewIfNeeded)E.scrollIntoViewIfNeeded=function(){this.scrollIntoView({block:'nearest'});};var F=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(o){F.call(this,Object.assign({},o||{},{preventScroll:true}));if(!(o&&o.preventScroll))this.scrollIntoView({block:'nearest'});};['pointerdown','keydown','wheel','touchstart'].forEach(function(k){addEventListener(k,function(){used=1;pend=null;},{capture:true,passive:true});});if(window.IntersectionObserver)new IntersectionObserver(function(es,io){if(!es[0].isIntersecting)return;io.disconnect();if(pend&&!used){var p=pend;setTimeout(function(){if(!used)go(p[0],p[1]);},60);}}).observe(document.documentElement);})();</script><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LEO Goes GER! • Oxidation &amp; Reduction • ItsDrDan</title>
 <meta name="description" content="Oxidation and reduction practice for CHEM 3A, CHEM 1A and CHEM 1B: oxidation numbers, oxidized and reduced, oxidizing and reducing agents, activity series, half-reactions, balancing in acidic and basic solution, and galvanic cells.">
 <style>
@@ -288,13 +288,13 @@ const modes=[
  {id:'ox',title:'Oxidation Numbers',short:'Single atoms + full charts',courses:['3A','1A','1B'],icon:'atom'},
  {id:'roles',title:'Identify REDOX',short:'Oxidized, reduced + agents',courses:['3A','1A','1B'],icon:'loop'},
  {id:'concepts',title:'REDOX Concepts',short:'Agents, batteries, corrosion',courses:['3A','1A'],icon:'bulb'},
- {id:'activity',title:'Activity Series',short:'Will it react?',courses:['1A'],icon:'levels'},
+ {id:'activity',title:'Activity Series',short:'Will it react?',courses:['3A','1A'],icon:'levels'},
  {id:'half',title:'Half-Reactions',short:'Split, balance, combine',courses:['1A','1B'],icon:'scale'},
  {id:'acid',title:'Acidic REDOX',short:'Balance with H₂O + H⁺',courses:['1A','1B'],icon:'beaker'},
  {id:'base',title:'Basic REDOX',short:'Finish with OH⁻',courses:['1A','1B'],icon:'flask'},
  {id:'cells',title:'Galvanic Cells',short:'E°cell, ΔG°, K, Nernst',courses:['1B'],icon:'battery'}
 ];
-/* Course scope: 3A = oxidation numbers, charts, roles, concepts. 1A adds the activity series (1A only) and balancing.
+/* Course scope: 3A = oxidation numbers, charts, roles, concepts, and a light activity series (the textbook's short metal list, Section 7.8; no halogens). 1A adds the full activity series and balancing.
    1B reviews oxidation numbers/roles, balances in acid and base, and adds galvanic cells (1B only). */
 
 const oxQuestions = [
@@ -327,6 +327,11 @@ const oxQuestions = [
 
 const metalSeries = ["Li","Rb","K","Ba","Ca","Na","Mg","Al","Mn","Zn","Cr","Fe","Co","Ni","Sn","Pb","H₂","Cu","Ag","Hg","Pt","Au"];
 const halogenSeries = ["F₂","Cl₂","Br₂","I₂"];
+/* CHEM 3A uses the short series printed in the textbook (Section 7.8): metals and hydrogen only. */
+const metalSeries3A = ["Li","K","Ca","Na","Mg","Al","Zn","Fe","Ni","Sn","Pb","H₂","Cu","Ag","Au"];
+const SET3A=new Set(["Li","K","Ca","Na","Mg","Al","Zn","Fe","Ni","Sn","Pb","H","Cu","Ag","Au"]);
+const seriesFor=()=>state.course==='3A'?metalSeries3A:metalSeries;
+function activityBank(){return state.course==='3A'?activityQuestions.filter(q=>(q.rxn.match(/[A-Z][a-z]?/g)||[]).every(e=>SET3A.has(e))&&!/^(?:\d+ )?(Li|K|Ca|Na)\(s\)/.test(q.rxn)):activityQuestions} /* 3A leaves out Li, K, Ca, Na metal in water: the textbook says they react with the water itself. */
 
 const activityQuestions = [
  {rxn:"Zn(s) + Cu²⁺(aq) → ?",yes:true,prod:"Zn²⁺(aq) + Cu(s)",why:"Zn is above Cu in the activity series, so Zn is oxidized and Cu²⁺ is reduced."},
@@ -760,6 +765,8 @@ const SLIPS={
  'oh-one-side':'Add the <b>same</b> number of OH⁻ to <b>both</b> sides, or the equation is no longer balanced.',
  'activity-backward':'Read the series from the top: a free metal (or halogen) reacts only with the ions of one <b>below</b> it.',
  'below-hydrogen':'Metals below H₂ (Cu, Ag, Hg, Pt, Au) cannot push H₂ out of an acid.',
+ 'below-hydrogen-3A':'Metals below H₂ (Cu, Ag, Au) cannot push H₂ out of an acid.',
+ 'activity-backward-3A':'Read the series from the top: a free metal reacts only with the ions of a metal <b>below</b> it.',
  'halogen-backward':'Halogens: F₂ > Cl₂ > Br₂ > I₂. A halogen oxidizes only the halide ions <b>below</b> it.',
  'flipped-E-anode':'Don’t flip the anode’s sign before using <b>E°cell = E°cathode − E°anode</b>. Plug in both reduction potentials as listed; the minus sign already reverses the anode. Flipping it too counts the reversal twice.',
  'multiplied-E':'E° does not change with coefficients. <b>Never multiply E°</b>, even when you multiply a half-reaction.',
@@ -827,13 +834,13 @@ function formSlip(q,results){const M=q.meta||{},r0=id=>results.find(r=>r.f.id===
  if(q.kind==='multiply'){const a=val('cnM1'),b=val('cnM2');if(a===1&&b===1)return 'electrons-not-balanced';if(a===M.m2&&b===M.m1&&M.m1!==M.m2)return 'multiplier-swap'}
  if(q.kind==='oxnum'){const c=bad('cnAns');if(c)return null}
  return null}
-function activitySlip(q,sel){if(!sel||sel===(q.yes?'yes':'no'))return null;if(/^(F|Cl|Br|I)₂/.test(q.rxn))return 'halogen-backward';if(sel==='yes'&&/H⁺/.test(q.rxn))return 'below-hydrogen';return 'activity-backward'}
+function activitySlip(q,sel){if(!sel||sel===(q.yes?'yes':'no'))return null;if(/^(F|Cl|Br|I)₂/.test(q.rxn))return 'halogen-backward';if(sel==='yes'&&/H⁺/.test(q.rxn))return state.course==='3A'?'below-hydrogen-3A':'below-hydrogen';return state.course==='3A'?'activity-backward-3A':'activity-backward'}
 function slipHTML(slip){return slip&&SLIPS[slip]?`<span class="slip"><b>Mistake catcher:</b> ${SLIPS[slip]}</span>`:''}
 
 /* ---------- state ---------- */
 let autoExpandWork=true;try{autoExpandWork=localStorage.getItem('redox-auto-expand-work')!=='false'}catch(e){}
 let state={course:'1A',mode:'ox',mix:false,quiz:null,forceStyle:null,idx:0,indices:{ox:0,roles:0,half:0,activity:0,acid:0,base:0,concepts:0,cells:0},correct:0,streak:0,answered:0,assisted:0,selected:null,oxStyle:'mixed',revealed:false,missed:false,complete:false,stage:0,stageDone:false,history:[],q:null,stages:[]};
-function currentBank(){return state.mode==='roles'?identificationMeta:state.mode==='ox'?oxQuestions:state.mode==='half'?halfMeta:state.mode==='activity'?activityQuestions:state.mode==='acid'?acidMeta:baseMeta}
+function currentBank(){return state.mode==='roles'?identificationMeta:state.mode==='ox'?oxQuestions:state.mode==='half'?halfMeta:state.mode==='activity'?activityBank():state.mode==='acid'?acidMeta:baseMeta}
 const questionRotations=new Map();
 const courseModes=(c=state.course)=>modes.filter(m=>m.courses.includes(c));
 
@@ -879,7 +886,7 @@ function referenceHTML(){if(state.mode==='concepts')return `<h3>REDOX Concepts</
  if(state.mode==='cells')return `<h3>Galvanic Cell Toolkit</h3><div class="datasheet"><b>Given on your final’s data sheet:</b><br>E°cell = E°cathode − E°anode<br>ΔG° = −nFE° (F = 96,485 C/mol e⁻)<br>log K = nE°/0.0592 (25 °C)<br>Nernst: E = E° − (0.0592 V / n) log Q (25 °C)</div><ol class="ref-list" style="margin-top:10px"><li><b>Cathode</b> = larger E° (reduction). <b>Anode</b> = smaller E° (oxidation).</li><li>Use both reduction potentials exactly as listed. Don’t flip the anode’s sign: the minus sign in E°cathode − E°anode already does that.</li><li>Never multiply E° by coefficients.</li><li>For ΔG°, n × F × E° gives joules (1 J = 1 V·C); divide by 1000 for kJ.</li><li>Electrons flow anode → cathode; anions move toward the anode; the cathode gains mass.</li></ol><p class="footer-note">E° values: OpenStax Chemistry 2e, Appendix L, rounded to 0.01 V.</p>`;
  if(state.mode==='roles')return `<h3>REDOX Identification</h3><ol class="ref-list"><li>Assign oxidation states to each element in each species.</li><li>An increase identifies oxidation; a decrease identifies reduction.</li><li>The oxidizing agent is the reactant that is reduced.</li><li>The reducing agent is the reactant that is oxidized.</li></ol><p class="footer-note">A single substance can serve as both agents in some decomposition reactions. Average states may be needed for nonequivalent atoms.</p>`;
  if(state.mode==='ox')return `<h3>Oxidation-State Rules</h3><ul class="ref-list"><li>Pure element = 0.</li><li>Monatomic ion = ion charge.</li><li>Group 1 = +1; Group 2 = +2.</li><li>F = −1.</li><li>H is usually +1; metal hydrides: −1.</li><li>O is usually −2; peroxides: −1. In OF₂, O = +2.</li><li>Sum each state × atom count; the total equals the species charge.</li></ul><p class="footer-note">For chemically nonequivalent atoms, a formula may give only an average. Thiosulfate’s sulfur average is +2; individual S atoms are +5 and −1.</p>`;
- if(state.mode==='activity')return `<h3>Activity Series</h3><div class="series"><strong>Metals: most easily oxidized at top</strong><br>${metalSeries.join(' > ')}</div><div class="series" style="margin-top:8px"><strong>Halogens: most easily reduced at top</strong><br>${halogenSeries.join(' > ')}</div><p class="footer-note">A free metal above another metal (or H₂) can displace it in this classroom model. Acid questions use nonoxidizing acids; nitrate can behave differently.</p>`;
+ if(state.mode==='activity')return `<h3>Activity Series</h3><div class="series"><strong>Metals: most easily oxidized at top</strong><br>${seriesFor().join(' > ')}</div>${state.course==='3A'?'':`<div class="series" style="margin-top:8px"><strong>Halogens: most easily reduced at top</strong><br>${halogenSeries.join(' > ')}</div>`}<p class="footer-note">A free metal above another metal (or H₂) can displace it in this classroom model. Acid questions use nonoxidizing acids; nitrate can behave differently.</p>`;
  return `<h3>Half-Reaction Checklist</h3><p class="mnemonic"><b>LEO</b>: Loss of Electrons is Oxidation.<br><b>GER</b>: Gain of Electrons is Reduction.</p><ol class="ref-list"><li>Determine oxidation numbers and REDOX roles.</li><li>Write the oxidation and reduction half-reactions.</li><li>Balance atoms other than H and O.</li>${state.mode==='half'?'':'<li>Add H₂O to balance O, then H⁺ to balance H.</li>'}<li>Add electrons to balance charge.</li><li>Use the smallest multipliers to equalize electrons.</li><li>Combine and cancel matching species.</li>${state.mode==='base'?'<li>Neutralize H⁺ with OH⁻ on both sides; form and cancel water.</li>':''}</ol><p class="footer-note">Check atoms AND charge. A revealed step marks the whole question as assisted, so it earns no point.</p>`}
 
 /* ---------- videos ---------- */
@@ -899,7 +906,7 @@ function updateVideos(){if(!$('lessonList').children.length){$('lessonList').inn
 function annotatedSpecies(raw,q){const states=state.mode==='roles'?identificationStates(canon(raw),q):{};for(const role of [q.ox,q.red]){if(canon(raw)===canon(role.from))states[role.el]=role.before;if(canon(raw)===canon(role.to))states[role.el]=role.after}const html=speciesHTML(raw);return html.replace(/(<span class="chem">)([^<]*(?:<sub>\d+<\/sub>[^<]*)*)/,(_,open,formula)=>open+formula.replace(/[A-Z][a-z]?/g,el=>el in states?`<span class="atom-state"><span class="state-label" aria-label="oxidation state ${signed(states[el])}">${signed(states[el])}</span><span>${el}</span></span>`:el))}
 function updateOriginalDisplay(){const box=$('originalEquation');if(!box)return;const q=state.q;const annotated=['roles','acid','base'].includes(state.mode)&&(state.stage>0||state.stageDone);const render=sp=>annotated?annotatedSpecies(sp,q):speciesHTML(sp);box.innerHTML=state.mode==='roles'?['L','R'].map(side=>Object.entries(q.displayEq[side]).map(([sp,n])=>(n===1?'':n+' ')+render(sp)).join(' + ')).join(' → '):q.reactants.map(render).join(' + ')+' → '+q.products.map(render).join(' + ');$('stateLegend').classList.toggle('hidden',!annotated)}
 
-function activityChartHTML(){const names={Li:'Lithium',Rb:'Rubidium',K:'Potassium',Ba:'Barium',Ca:'Calcium',Na:'Sodium',Mg:'Magnesium',Al:'Aluminum',Mn:'Manganese',Zn:'Zinc',Cr:'Chromium',Fe:'Iron',Co:'Cobalt',Ni:'Nickel',Sn:'Tin',Pb:'Lead','H₂':'Hydrogen',Cu:'Copper',Ag:'Silver',Hg:'Mercury',Pt:'Platinum',Au:'Gold'};return `<h3 id="activityChartTitle">Activity Series Chart</h3><p class="footer-note">Metals at the top are most easily oxidized.</p><div class="activity-table-scroll"><table class="activity-reaction-table"><thead><tr><th scope="col">Metal</th><th scope="col">Oxidation Reaction</th></tr></thead><tbody>${metalSeries.map(sp=>{const h=sp==='H₂',n=h?2:metalsCharge[sp];return `<tr class="${h?'hydrogen-marker':''}"><th scope="row">${names[sp]}</th><td><span>${chem(sp)}</span><span class="activity-arrow">⇌</span><span>${h?'2 '+chem('H^+'):chem(sp+'^'+(n===1?'':n)+'+')}</span><span>+</span><span>${n===1?'':n}${chem('e^-')}</span></td></tr>`}).join('')}</tbody></table></div><p class="footer-note">A free metal above another metal can displace its ions. Metals above hydrogen can release H₂ from a nonoxidizing acid.</p><h4>Halogen Activity Series</h4><div class="series">${halogenSeries.map(chem).join(' &gt; ')}</div><p class="footer-note">A halogen higher in this series can displace a halide below it.</p>`}
+function activityChartHTML(){const names={Li:'Lithium',Rb:'Rubidium',K:'Potassium',Ba:'Barium',Ca:'Calcium',Na:'Sodium',Mg:'Magnesium',Al:'Aluminum',Mn:'Manganese',Zn:'Zinc',Cr:'Chromium',Fe:'Iron',Co:'Cobalt',Ni:'Nickel',Sn:'Tin',Pb:'Lead','H₂':'Hydrogen',Cu:'Copper',Ag:'Silver',Hg:'Mercury',Pt:'Platinum',Au:'Gold'};return `<h3 id="activityChartTitle">Activity Series Chart</h3><p class="footer-note">Metals at the top are most easily oxidized.</p><div class="activity-table-scroll"><table class="activity-reaction-table"><thead><tr><th scope="col">Metal</th><th scope="col">Oxidation Reaction</th></tr></thead><tbody>${seriesFor().map(sp=>{const h=sp==='H₂',n=h?2:metalsCharge[sp];return `<tr class="${h?'hydrogen-marker':''}"><th scope="row">${names[sp]}</th><td><span>${chem(sp)}</span><span class="activity-arrow">⇌</span><span>${h?'2 '+chem('H^+'):chem(sp+'^'+(n===1?'':n)+'+')}</span><span>+</span><span>${n===1?'':n}${chem('e^-')}</span></td></tr>`}).join('')}</tbody></table></div><p class="footer-note">A free metal above another metal can displace its ions. Metals above hydrogen can release H₂ from a nonoxidizing acid.</p>${state.course==='3A'?'':`<h4>Halogen Activity Series</h4><div class="series">${halogenSeries.map(chem).join(' &gt; ')}</div><p class="footer-note">A halogen higher in this series can displace a halide below it.</p>`}`}
 function setPrimary(label,icon){$('checkBtn').innerHTML=(icon?ico(icon):'')+'<span class="lbl">'+esc(label)+'</span>'}
 function startQuestion(){
  if(state.quiz){const p=state.quiz.plan[state.quiz.i];state.mode=p==='oxchart'?'ox':p;state.forceStyle=p==='oxchart'?'chart':p==='ox'?'single':null}
@@ -910,7 +917,7 @@ function startQuestion(){
  $('courseTag').textContent='CHEM '+state.course+(state.course==='1B'&&['ox','roles'].includes(state.mode)?' · review':'');$('mixTag').hidden=!state.mix||!!state.quiz;
  $('quizTag').hidden=!state.quiz;if(state.quiz)$('quizTag').textContent=`Skill Check Prep · ${state.quiz.i+1} of ${state.quiz.plan.length}`;
  $('nextBtn').hidden=!!state.quiz;$('advanceBtn').classList.add('hidden');
- $('activityWrap').classList.toggle('hidden',state.mode!=='activity');if(state.mode==='activity'&&!$('activityChart').innerHTML)$('activityChart').innerHTML=activityChartHTML();
+ $('activityWrap').classList.toggle('hidden',state.mode!=='activity');if(state.mode==='activity'&&$('activityChart').dataset.course!==state.course){$('activityChart').innerHTML=activityChartHTML();$('activityChart').dataset.course=state.course;}
  $('oxFilter').classList.toggle('hidden',state.mode!=='ox'||!!state.quiz);$('oxStyle').value=state.oxStyle;
  renderQuestion();updateStats();paintIcons()}
 let mixLast='';

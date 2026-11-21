@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><script>/* Inside a frame (textbook Explore It box): scroll only this game, never the page around it. A scroll made while the frame is still off screen is redone when it comes into view. */(function(){if(window.self===window.top)return;var E=Element.prototype,used=0,pend=null;function go(el,a){var r=el.getBoundingClientRect(),h=innerHeight,b='start',m='auto';if(a===false)b='end';else if(a&&typeof a==='object'){b=a.block||'start';m=a.behavior||'auto';}var d=b==='center'?r.top-(h-r.height)/2:b==='end'?r.bottom-h:b==='nearest'?(r.top<0?r.top:(r.bottom>h?r.bottom-h:0)):r.top,t=Math.max(0,scrollY+d);try{window.scrollTo({top:t,behavior:m});}catch(e){window.scrollTo(0,t);}}E.scrollIntoView=function(a){if(!used)pend=[this,a];go(this,a);};if(E.scrollIntoViewIfNeeded)E.scrollIntoViewIfNeeded=function(){this.scrollIntoView({block:'nearest'});};var F=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(o){F.call(this,Object.assign({},o||{},{preventScroll:true}));if(!(o&&o.preventScroll))this.scrollIntoView({block:'nearest'});};['pointerdown','keydown','wheel','touchstart'].forEach(function(k){addEventListener(k,function(){used=1;pend=null;},{capture:true,passive:true});});if(window.IntersectionObserver)new IntersectionObserver(function(es,io){if(!es[0].isIntersecting)return;io.disconnect();if(pend&&!used){var p=pend;setTimeout(function(){if(!used)go(p[0],p[1]);},60);}}).observe(document.documentElement);})();</script><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Proton Swap! • ItsDrDan • CHEM 3A</title>
 <meta name="description" content="Acids, bases, pH, conjugate pairs, titrations and buffers for CHEM 3A: a study game by ItsDrDan.">
 <style>
@@ -358,7 +358,9 @@ const svgNS='http://www.w3.org/2000/svg';
 function fitCanvas(cv,w,h){const dpr=window.devicePixelRatio||1,cw=cv.clientWidth||w,want=Math.round(cw*dpr);if(cv.width!==want){cv.width=want;cv.height=Math.round(want*h/w)}const ctx=cv.getContext('2d');ctx.setTransform(cv.width/w,0,0,cv.height/h,0,0);return ctx}
 const labFire=(L,ev)=>{try{L.onEvent&&L.onEvent(ev,L)}catch(e){}};
 /* fast taps: act on touch-down so quick repeated taps on iPhone are never merged into one (click still works for mouse/keyboard) */
-function fastTap(b,fn){let t=0;b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||b.disabled)return;e.preventDefault();t=Date.now();fn()});b.addEventListener('click',()=>{if(Date.now()-t<800)return;fn()})}
+// Touch fires on pointerdown (fast repeated taps); each touch then cancels exactly one follow-up click,
+// however late it arrives (in a cross-origin iframe on a busy phone the click can lag past any fixed window).
+function fastTap(b,fn){let n=0,t=0;b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||b.disabled)return;e.preventDefault();n++;t=Date.now();fn()});b.addEventListener('click',()=>{if(n>0&&Date.now()-t<8000){n--;return}n=0;fn()})}
 
 
 /* ---------- 1. Particle beaker: what does the substance look like in water? ---------- */

@@ -80,6 +80,8 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .lab .eqrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;font-weight:900;font-size:19px;margin:2px 0 6px}
 .lab .real{text-align:center;font-size:13.5px;font-weight:700;color:#5c4a1e;background:#fff8e6;border:1px solid #f0dfae;border-radius:10px;padding:4px 10px;margin:-2px auto 8px;max-width:640px}
 .lab .eqrow .dh{font-size:13.5px;font-weight:700;color:var(--muted)}
+.mi{vertical-align:middle;margin-right:4px;flex:none}
+.purenote{margin:8px 0 0;padding:8px 12px;border-radius:12px;background:#eef7ff;border:1px solid #c6dcef;font-size:14.5px;line-height:1.45}
 .sw{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid;vertical-align:-1px;margin-right:3px}
 .ctrls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
 .chip{min-height:44px;padding:6px 12px;border-radius:12px;border:2px solid #c9d8e4;border-bottom-width:4px;background:#fff;font-weight:800;font-size:15px;cursor:pointer}
@@ -108,7 +110,10 @@ details.morectl>summary::-webkit-details-marker{display:none}details.morectl[ope
 @keyframes pulseRing{0%,100%{box-shadow:0 0 0 0 #f0b40066}50%{box-shadow:0 0 0 8px #f0b40000}}
 details.lkey{margin-top:8px;background:#fff;border:1px solid #e3eaf0;border-radius:12px}details.lkey>summary{min-height:44px;display:flex;align-items:center;padding:6px 12px;font-weight:800;font-size:14.5px;cursor:pointer;color:#2f5f86}
 details.lkey ul{margin:0 12px 10px;padding-left:18px;font-size:14px;line-height:1.5}details.lkey li{margin:3px 0}
-.chip.spd{background:#eef6ff;border-color:#b9d3ea;min-width:172px;text-align:left}@media(max-width:700px){.chip.spd{min-width:150px}}
+.spdgrp{display:inline-flex;align-items:center;gap:0;border:2px solid #b9d3ea;border-radius:14px;background:#eef6ff;overflow:hidden}
+.spdl{padding:0 8px 0 10px;font-weight:800;font-size:13px;color:#3d5260}
+.spdb{min-height:44px;min-width:46px;padding:4px 9px;border:0;border-left:1px solid #c9dbea;background:transparent;font:inherit;font-weight:800;font-size:15px;color:#22313b;cursor:pointer;white-space:nowrap}
+.spdb[aria-pressed="true"]{background:#2f6fa3;color:#fff}.spdb:focus-visible{outline:3px solid #f0b400;outline-offset:-3px}
 .chip.go{background:#fff8e6;border-color:#f0cf86}.chip.rst{background:#f3f6f9;font-size:13.5px}
 .slider{display:flex;align-items:center;gap:8px;flex:1 1 230px;min-height:44px;background:#fff;border:2px solid #dbe5ee;border-radius:12px;padding:4px 10px;font-weight:800;font-size:14px}
 .slider input{flex:1;min-width:90px;height:32px;accent-color:#3b8ccb}.slider output{min-width:58px;text-align:right}
@@ -203,7 +208,7 @@ const SYS={
   units:{N2O4:1,NO2:0.5},total:60,                       // 60 N₂O₄-equivalents
   tint:{sp:'NO2',rgb:[160,72,28],k:0.0085,max:0.62},tintName:'brown color',
   look:'brown NO₂ gas; N₂O₄ is nearly colorless',
-  stress:[['addR','➕ N₂O₄',{N2O4:15}],['addP','➕ NO₂',{NO2:30}],['remP','➖ NO₂',{NO2:-0.5}]]},
+  stress:[['addR','➕ N₂O₄',{N2O4:15}],['remR','➖ N₂O₄',{N2O4:-0.5}],['addP','➕ NO₂',{NO2:30}],['remP','➖ NO₂',{NO2:-0.5}]]},
  hi:{real:'🏭 Hydrogen iodide is made for medicines and disinfectants; the violet I₂ shows how far it has reacted.',title:'H₂ + I₂ ⇌ 2 HI',gas:true,heat:true,dH:-9,
   eq:[[1,'H2','g'],[1,'I2','g']],eqP:[[2,'HI','g']],
   sp:{H2:{l:'H₂',c:'#ffffff',e:'#7d8a94',r:5.5},I2:{l:'I₂',c:'#6b3fa0',e:'#3e1f63',r:9},HI:{l:'HI',c:'#d8c8ec',e:'#7a62a0',r:7}},
@@ -211,7 +216,7 @@ const SYS={
   units:{H2:1,I2:1,HI:1},total:null,start:{H2:40,I2:40,HI:0},
   tint:{sp:'I2',rgb:[110,50,160],k:0.012,max:0.6},tintName:'purple color',
   look:'violet I₂ vapor; H₂ and HI are colorless',
-  stress:[['addR','➕ H₂',{H2:20}],['addR2','➕ I₂',{I2:20}],['addP','➕ HI',{HI:30}]]},
+  stress:[['addR','➕ H₂',{H2:20}],['remR','➖ H₂',{H2:-0.5}],['addR2','➕ I₂',{I2:20}],['remR2','➖ I₂',{I2:-0.5}],['addP','➕ HI',{HI:30}],['remP','➖ HI',{HI:-0.5}]]},
  fescn:{real:'🧪 A classic lab test: the blood-red color reveals Fe³⁺ (iron) or SCN⁻ in a sample.',title:'Fe³⁺ + SCN⁻ ⇌ FeSCN²⁺ (blood-red)',gas:false,heat:true,dH:-1,
   eq:[[1,'Fe','aq'],[1,'SCN','aq']],eqP:[[1,'FeSCN','aq']],
   sp:{Fe:{l:'Fe³⁺',c:'#f0c64a',e:'#a7801a',r:7.5},SCN:{l:'SCN⁻',c:'#cfd7dd',e:'#6f7b84',r:6},FeSCN:{l:'FeSCN²⁺',c:'#b3122a',e:'#6b0716',r:9.5}},
@@ -219,7 +224,7 @@ const SYS={
   units:{Fe:1,SCN:1,FeSCN:1},start:{Fe:45,SCN:45,FeSCN:0},
   tint:{sp:'FeSCN',rgb:[178,18,40],k:0.016,max:0.7},tintName:'red color',
   look:'blood-red FeSCN²⁺; Fe³⁺ is pale yellow, SCN⁻ colorless',
-  stress:[['addR','➕ Fe³⁺',{Fe:20}],['addR2','➕ SCN⁻',{SCN:20}],['remR','➖ Fe³⁺',{Fe:-0.6}]]},
+  stress:[['addR','➕ Fe³⁺',{Fe:20}],['remR','➖ Fe³⁺',{Fe:-0.6}],['addR2','➕ SCN⁻',{SCN:20}],['remR2','➖ SCN⁻',{SCN:-0.6}],['addP','➕ FeSCN²⁺',{FeSCN:15}],['remP','➖ FeSCN²⁺',{FeSCN:-0.5}]]},
  blood:{real:'🩸 The main buffer in your blood keeps pH near 7.4. Lungs remove CO₂; kidneys adjust HCO₃⁻.',title:'CO₂ + H₂O ⇌ H⁺ + HCO₃⁻ (blood buffer)',gas:false,heat:false,dH:null,
   eq:[[1,'CO2','aq'],[1,'H2O','l']],eqP:[[1,'H','aq'],[1,'HCO3','aq']],
   sp:{CO2:{l:'CO₂',c:'#8b96a0',e:'#4d5862',r:10},H:{l:'H⁺',c:'#ff8fb1',e:'#b23a62',r:4.5},HCO3:{l:'HCO₃⁻',c:'#7cc4e8',e:'#2e6f96',r:10}},
@@ -227,15 +232,17 @@ const SYS={
   units:{CO2:1,H:1,HCO3:1},start:{CO2:40,HCO3:25,H:0},
   tint:{sp:'H',mix:[[214,40,80],[240,200,40]],lo:5,hi:15,a:0.34},tintName:'indicator color',tube:'pH indicator',
   look:'a pH indicator in the blood sample: pink-red when basic, yellow when acidic',
-  stress:[['remR','😮‍💨 Hyperventilate (blow off CO₂)',{CO2:-0.5}],['addR','🫁 Hold breath / COPD (+CO₂)',{CO2:20}],['addP','🏃 Lactic acid (+H⁺)',{H:12}],['addP2','💉 Bicarbonate IV (+HCO₃⁻)',{HCO3:20}]]},
+  stress:[['remR','😮‍💨 Hyperventilate (blow off CO₂)',{CO2:-0.5}],['addR','🫁 Hold breath / COPD (+CO₂)',{CO2:20}],['addP','🏃 Lactic acid (+H⁺)',{H:12}],['remP','🫘 Kidneys excrete H⁺ (−H⁺)',{H:-0.6}],['addP2','💉 Bicarbonate IV (+HCO₃⁻)',{HCO3:20}],['remP2','🚽 Severe diarrhea (−HCO₃⁻)',{HCO3:-0.5}]],
+  pure:'💧 <b>H₂O(l)</b> is a pure liquid (water used as the solvent). This equilibrium involves more than one phase, so it is <b>heterogeneous</b>. The concentration of a pure liquid does not change, so it is <b>left out of K</b>: K = [H⁺][HCO₃⁻] / [CO₂]. Only gases (g) and dissolved species (aq) appear in K.'},
  cobalt:{real:'🧪 The classic color demo (and humidity-indicator strips): pink when cool or watery, blue when hot or full of chloride.',title:'Co(H₂O)₆²⁺ + 4 Cl⁻ ⇌ CoCl₄²⁻ + 6 H₂O (pink ⇌ blue)',gas:false,heat:true,dH:1,V0:0.7,
   eq:[[1,'Co','aq'],[4,'Cl','aq']],eqP:[[1,'CoCl','aq'],[6,'H2O','l']],
-  sp:{Co:{l:'Co(H₂O)₆²⁺',c:'#f2a3c4',e:'#a8457a',r:9},Cl:{l:'Cl⁻ (×4)',eqL:'Cl⁻',c:'#a8d88a',e:'#4f8a35',r:6},CoCl:{l:'CoCl₄²⁻',c:'#3f6fd6',e:'#1c3f8f',r:13}},
+  sp:{Co:{l:'Co(H₂O)₆²⁺',c:'#f2a3c4',e:'#a8457a',r:11},Cl:{l:'Cl⁻ (×4)',eqL:'Cl⁻',c:'#a8d88a',e:'#4f8a35',r:6},CoCl:{l:'CoCl₄²⁻',c:'#3f6fd6',e:'#1c3f8f',r:13}},
   R:['Co','Cl'],P:['CoCl'],kf:0.0011,kr:0.075,Ef:52000,Er:12000,
   units:{Co:1,Cl:4,CoCl:1},start:{Co:40,Cl:70,CoCl:0},
   tint:{sp:'CoCl',ratio:['Co','CoCl'],mix:[[236,96,160],[44,88,220]],a:0.6},tintName:'color',tube:'Test tube',
   note:'Model: each green bead stands for a group of 4 Cl⁻.',
-  stress:[['addR2','🧂 Add HCl (+Cl⁻)',{Cl:20}],['dil','💧 Add water',{__V:0.3}],['remR2','🥄 Add AgNO₃ (removes Cl⁻)',{Cl:-0.55}]]},
+  stress:[['addR','➕ Co(H₂O)₆²⁺ (pink)',{Co:12}],['remR','➖ Co(H₂O)₆²⁺',{Co:-0.5}],['addR2','🧂 Add HCl (+Cl⁻)',{Cl:20}],['remR2','🥄 Add AgNO₃ (removes Cl⁻)',{Cl:-0.55}],['addP','➕ CoCl₄²⁻ (blue)',{CoCl:12}],['remP','➖ CoCl₄²⁻',{CoCl:-0.5}],['dil','💧 Add water',{__V:0.3}]],
+  pure:'💧 <b>H₂O(l)</b> is a pure liquid (water used as the solvent). This equilibrium involves more than one phase, so it is <b>heterogeneous</b>. The concentration of a pure liquid does not change, so it is <b>left out of K</b>: K = [CoCl₄²⁻] / ([Co(H₂O)₆²⁺][Cl⁻]⁴). 💧 Add water still turns it pink, but only because it <b>dilutes</b> every ion (Q changes), not because water is in K.'},
  hb:{real:'⛰️ Climbers, athletes and patients on oxygen: how much O₂ your hemoglobin carries.',title:'Hb + O₂ ⇌ HbO₂ (your blood)',gas:false,heat:false,dH:null,
   eq:[[1,'Hb','aq'],[1,'O2','g']],eqP:[[1,'HbO2','aq']],
   sp:{Hb:{l:'Hb',c:'#7b2f4a',e:'#45142a',r:10},O2:{l:'O₂',c:'#9fd3f2',e:'#3f86b5',r:5.5},HbO2:{l:'HbO₂',c:'#ef4a3c',e:'#9c1d14',r:11}},
@@ -243,7 +250,7 @@ const SYS={
   units:{Hb:1,O2:1,HbO2:1},start:{Hb:35,O2:60,HbO2:0},
   tint:{sp:'HbO2',rgb:[220,40,40],k:0.014,max:0.62},tintName:'bright red color',
   look:'oxygen-rich blood is bright red; low-oxygen blood is darker',
-  stress:[['remR2','⛰️ Climb high (less O₂)',{O2:-0.55}],['addR2','😷 Oxygen mask (+O₂)',{O2:30}],['addR','🩸 Body makes more Hb',{Hb:15}]]}
+  stress:[['remR2','⛰️ Climb high (less O₂)',{O2:-0.55}],['addR2','😷 Oxygen mask (+O₂)',{O2:30}],['addR','🩸 Body makes more Hb',{Hb:15}],['remR','🩹 Anemia (less Hb)',{Hb:-0.45}],['addP','➕ HbO₂',{HbO2:12}],['remP','➖ HbO₂',{HbO2:-0.5}]]}
 };
 function eqCount(st,list){/* mass-action factor for one side, e.g. ['NO2','NO2'] → x² */
  let f=1;list.forEach(s=>f*=Math.max(0,st.x[s]||0));return f}
@@ -443,7 +450,15 @@ const RX=[
 const sp=e=>`${e[0]>1?e[0]+' ':''}${e[1]}(${e[2]})`;
 const rxText=r=>r.L.map(sp).join(' + ')+' ⇌ '+r.R.map(sp).join(' + ');
 const dHText=r=>r.dH==null?'':Math.abs(r.dH)===1?(r.dH<0?'ΔH &lt; 0 (exothermic)':'ΔH &gt; 0 (endothermic)'):`ΔH = ${r.dH>0?'+':'−'}${Math.abs(r.dH)} kJ`;
-const rxHTML=(r,showH=true)=>`<div class="rxn">${rxText(r)}${showH&&r.dH!=null?`<span class="dh">${dHText(r)}</span>`:''}${r.ctx?`<span class="dh">${r.ctx}</span>`:''}</div>`;
+/* Wording follows the CHEM 3A textbook, Section 13.3 ("Leave Out Pure Solids and Liquids"): one that involves more than one phase is
+   heterogeneous; the concentration of a pure solid or pure liquid (including water used as the solvent) does not change, so it is left out. */
+function pureNote(r){const all=[...r.L,...r.R],pure=all.filter(t=>t[2]==='l'||t[2]==='s');if(!pure.length)return'';
+ const names=[...new Set(pure.map(t=>`${t[1]}(${t[2]})`))],sol=pure.some(t=>t[2]==='s'),liq=pure.some(t=>t[2]==='l'),many=names.length>1;
+ const kind=sol&&liq?'pure solids and liquids':sol?(many?'pure solids':'a pure solid'):(many?'pure liquids':'a pure liquid');
+ const het=new Set(all.map(t=>t[2])).size>1;
+ const solvent=!sol&&pure.every(t=>/^H₂O$/.test(t[1]))&&all.some(t=>t[2]==='aq');
+ return `<p class="purenote">${sol?'🪨':'💧'} <b>${names.join(' and ')}</b> ${many?'are':'is'} ${kind}${solvent?' (water used as the solvent)':''}.${het?' This equilibrium involves more than one phase, so it is <b>heterogeneous</b>.':''} The concentration of ${sol&&liq?'a pure solid or pure liquid':sol?'a pure solid':'a pure liquid'} does not change during the reaction, so ${many?'they are':'it is'} <b>left out of K</b>.${sol?' Adding more solid causes no shift.':''} Only gases (g) and dissolved species (aq) appear in K.</p>`}
+const rxHTML=(r,showH=true,note=true)=>`<div class="rxn">${rxText(r)}${showH&&r.dH!=null?`<span class="dh">${dHText(r)}</span>`:''}${r.ctx?`<span class="dh">${r.ctx}</span>`:''}</div>${note?pureNote(r):''}`;
 const gasMoles=side=>side.filter(e=>e[2]==='g').reduce((s,e)=>s+e[0],0);
 /* every stress that makes sense for a reaction */
 function stressesFor(r){const out=[];
@@ -459,19 +474,20 @@ function shiftOf(r,s){const away=s.side==='L'?'R':'L',toward=s.side;
   case'heat':return r.dH>0?'R':'L';case'cool':return r.dH>0?'L':'R';
   case'comp':{const a=gasMoles(r.L),b=gasMoles(r.R);return a===b?'0':a>b?'R':'L'}
   case'exp':{const a=gasMoles(r.L),b=gasMoles(r.R);return a===b?'0':a>b?'L':'R'}}}
-const DIRTXT={R:'Shifts right, toward products',L:'Shifts left, toward reactants','0':'No shift'};
+const DIRTXT={R:'Shifts toward products',L:'Shifts toward reactants','0':'No change'};   /* Dr. Dan's wording (2026-11-20) */
+const DIRSHORT={R:'toward products',L:'toward reactants','0':'no change'};
 const sideWord=x=>x==='L'?'reactant':'product';
 /* teaching reason for the right answer */
 function reasonOf(r,s){const d=shiftOf(r,s),a=gasMoles(r.L),b=gasMoles(r.R),hs=r.dH>0?'endothermic, so heat acts like a <b>reactant</b>':'exothermic, so heat acts like a <b>product</b>';
  switch(s.t){
- case'add':return `${s.e[1]} is a ${sideWord(s.side)}. Adding it speeds up the reaction that <b>uses it up</b>, so the equilibrium shifts <b>away</b> from it: ${DIRTXT[d].toLowerCase()}.`;
- case'rem':return `${s.e[1]} is a ${sideWord(s.side)}. Taking it away slows the reaction that uses it, so the system <b>makes more</b> of it: shift <b>toward</b> it, ${DIRTXT[d].toLowerCase()}.`;
+ case'add':return `${s.e[1]} is a ${sideWord(s.side)}. Adding it speeds up the reaction that <b>uses it up</b>, so the equilibrium shifts <b>away</b> from it: ${DIRSHORT[d]}.`;
+ case'rem':return `${s.e[1]} is a ${sideWord(s.side)}. Taking it away slows the reaction that uses it, so the system <b>makes more</b> of it: shift <b>toward</b> it, which is ${DIRSHORT[d]}.`;
  case'addS':return `${s.e[1]} is a pure <b>solid</b>. Solids aren't in the K expression; adding more doesn't change any concentration, so there is <b>no shift</b>.`;
  case'cat':return 'A catalyst speeds up the forward <b>and</b> reverse reactions by the same factor. Equilibrium is reached faster, but the amounts <b>don\'t change</b>: no shift.';
- case'heat':return `The reaction is ${hs}. Adding heat is like adding that substance, so it shifts <b>away</b> from the heat: ${DIRTXT[d].toLowerCase()}.`;
- case'cool':return `The reaction is ${hs}. Cooling removes heat, so the system shifts <b>toward</b> the heat side to make more: ${DIRTXT[d].toLowerCase()}.`;
- case'comp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so squeezing can't be relieved: <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A smaller volume favors the side with <b>fewer gas moles</b>: ${DIRTXT[d].toLowerCase()}.`;
- case'exp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so a bigger volume causes <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A bigger volume favors the side with <b>more gas moles</b>: ${DIRTXT[d].toLowerCase()}.`}}
+ case'heat':return `The reaction is ${hs}. Adding heat is like adding that substance, so it shifts <b>away</b> from the heat: ${DIRSHORT[d]}.`;
+ case'cool':return `The reaction is ${hs}. Cooling removes heat, so the system shifts <b>toward</b> the heat side to make more: ${DIRSHORT[d]}.`;
+ case'comp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so squeezing can't be relieved: <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A smaller volume favors the side with <b>fewer gas moles</b>: ${DIRSHORT[d]}.`;
+ case'exp':return a===b?`Count gas moles: ${a} on the left and ${b} on the right. They're equal, so a bigger volume causes <b>no shift</b>.`:`Count gas moles: ${a} on the left, ${b} on the right. A bigger volume favors the side with <b>more gas moles</b>: ${DIRSHORT[d]}.`}}
 /* why a picked direction is wrong (named mistake) */
 function wrongDir(r,s,pickD){const d=shiftOf(r,s);
  if(pickD==='0'){return {add:'Adding a substance that is in K is a stress, so something must shift.',rem:'Removing a substance that is in K is a stress, so something must shift.',heat:'ΔH is not zero, so a temperature change always shifts the equilibrium.',cool:'ΔH is not zero, so a temperature change always shifts the equilibrium.',comp:'The two sides have different numbers of gas moles, so volume matters here.',exp:'The two sides have different numbers of gas moles, so volume matters here.'}[s.t]||''}
@@ -496,18 +512,40 @@ function kExpr(r,opt={}){const keep=e=>opt.all||(e[2]==='g'||e[2]==='aq');const 
 <script>
 /* ============================== LAB VIEW (particles) ============================== */
 const LW=600,LH=330;
-/* Speed control: Normal → Slow motion → Paused (WCAG 2.2.2 pause for moving content). Reduced-motion users start in slow motion. */
-const SPEEDS=[[1,'▶ Normal speed'],[0.3,'🐢 Slow motion'],[0,'⏸ Paused']];
+/* Speed control: 1× / ½× / 🐢 ¼× / ⏸ (WCAG 2.2.2 pause for moving content). Reduced-motion users start at ½×. */
+const SPEEDS=[[1,'▶ 1×','Normal speed'],[0.5,'½×','Half speed'],[0.25,'🐢 ¼×','Quarter speed'],[0,'⏸','Paused']];
 const SPEED={i:typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:0,f(){return SPEEDS[this.i][0]}};
-const speedChip=()=>`<button type="button" class="chip spd" data-speed aria-label="Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.">${SPEEDS[SPEED.i][1]}</button>`;
-function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=(SPEED.i+1)%SPEEDS.length;el.querySelectorAll('[data-speed]').forEach(x=>{x.textContent=SPEEDS[SPEED.i][1];x.setAttribute('aria-label',`Animation speed: ${SPEEDS[SPEED.i][1].slice(2)}. Tap to change.`)})})}
-const SHAPES={ /* atoms drawn for each species: [dx,dy,r,fill,edge] */
- N2O4:[[-5,0,6.5,'#f3ead2','#9c8456'],[5,0,6.5,'#f3ead2','#9c8456']],NO2:[[0,0,7,'#b5562a','#6f3015']],
- H2:[[-3,0,4,'#ffffff','#7d8a94'],[3,0,4,'#ffffff','#7d8a94']],I2:[[-5,0,6,'#6b3fa0','#3e1f63'],[5,0,6,'#6b3fa0','#3e1f63']],HI:[[-5,0,4,'#ffffff','#7d8a94'],[3,0,6,'#6b3fa0','#3e1f63']],
- Fe:[[0,0,7.5,'#f0c64a','#a7801a']],SCN:[[-3.5,0,4,'#cfd7dd','#6f7b84'],[3.5,0,4,'#cfd7dd','#6f7b84']],FeSCN:[[-4,0,7.5,'#c3142e','#6b0716'],[6.5,0,4.5,'#c3142e','#6b0716']],
- CO2:[[0,0,4.5,'#8b96a0','#4d5862'],[-7,0,4,'#e05a4f','#8e2a22'],[7,0,4,'#e05a4f','#8e2a22']],H:[[0,0,4.5,'#ff8fb1','#b23a62']],HCO3:[[0,0,6,'#7cc4e8','#2e6f96'],[-6,-5,3.5,'#e05a4f','#8e2a22'],[6,-5,3.5,'#e05a4f','#8e2a22'],[0,7,3.5,'#e05a4f','#8e2a22']],
- Co:[[0,0,9,'#f2a3c4','#a8457a']],Cl:[[0,0,5,'#a8d88a','#4f8a35']],CoCl:[[0,0,9,'#3f6fd6','#1c3f8f'],[11,0,3.5,'#a8d88a','#4f8a35'],[-11,0,3.5,'#a8d88a','#4f8a35'],[0,11,3.5,'#a8d88a','#4f8a35'],[0,-11,3.5,'#a8d88a','#4f8a35']],
- Hb:[[0,0,10,'#7b2f4a','#45142a']],O2:[[-3,0,4,'#9fd3f2','#3f86b5'],[3,0,4,'#9fd3f2','#3f86b5']],HbO2:[[0,0,10,'#ef4a3c','#9c1d14'],[9,-7,3.5,'#9fd3f2','#3f86b5'],[14,-4,3.5,'#9fd3f2','#3f86b5']]};
+const speedChip=()=>`<span class="spdgrp" role="group" aria-label="Animation speed"><span class="spdl" aria-hidden="true">Speed</span>${SPEEDS.map(([,l,a],i)=>`<button type="button" class="spdb" data-speed="${i}" aria-label="${a}" aria-pressed="${i===SPEED.i}">${l}</button>`).join('')}</span>`;
+function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=+b.dataset.speed;el.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.speed===SPEED.i)))})}
+/* Particles drawn like real molecules (space-filling model-kit colors: H white, C gray, N blue, O red, S yellow, Cl green, I purple).
+   Metal ions keep the color of their solution so you can still spot them (Fe³⁺ yellow, FeSCN²⁺ red, Co(H₂O)₆²⁺ pink, CoCl₄²⁻ blue).
+   Hemoglobin is drawn as a tiny red blood cell (Dr. Dan's request, 2026-11-20). Entry: [dx,dy,r,fill,edge,kind?]; kind 'cell' = red-cell disc. */
+const AT={H:['#ffffff','#8a96a0'],C:['#5b6168','#2a2e33'],N:['#3b6fe0','#1c3f8f'],O:['#e5483b','#8e2018'],S:['#f2d23a','#a08410'],Cl:['#5cc85c','#2b7f2b'],I:['#7b3fb0','#3e1f63']};
+const at=(el,dx,dy,r)=>[dx,dy,r,AT[el][0],AT[el][1]];
+const ring=(n,R,a0,f)=>Array.from({length:n},(_,i)=>{const a=a0+i*2*Math.PI/n;return f(Math.cos(a)*R,Math.sin(a)*R,a)});
+const SHAPES={
+ NO2:[at('O',-5.6,3,4),at('O',5.6,3,4),at('N',0,-1.2,4.5)],
+ N2O4:[at('O',-8,-4.6,3.8),at('O',-8,4.6,3.8),at('O',8,-4.6,3.8),at('O',8,4.6,3.8),at('N',-3.4,0,4.2),at('N',3.4,0,4.2)],
+ H2:[at('H',-2.6,0,3.4),at('H',2.6,0,3.4)],I2:[at('I',-4.6,0,5.8),at('I',4.6,0,5.8)],HI:[at('H',-6,0,3.4),at('I',2,0,5.8)],
+ Fe:[[0,0,7,'#f0c64a','#a7801a']],
+ SCN:[at('S',-6,0,4.3),at('N',6,0,3.9),at('C',0,0,3.5)],
+ FeSCN:[at('S',10.5,0,4.2),at('C',5.6,0,3.3),at('N',0.8,0,3.7),[-7,0,6.6,'#c3142e','#6b0716']],
+ CO2:[at('O',-7,0,4.3),at('O',7,0,4.3),at('C',0,0,4.3)],
+ H:[[0,0,3.8,'#ffc2d4','#b23a62']],
+ HCO3:[at('H',0,-11.6,2.6),at('O',0,-7,4),at('O',6.1,3.5,4),at('O',-6.1,3.5,4),at('C',0,0,4)],
+ Co:[...ring(6,9,0,(x,y,a)=>[at('H',Math.cos(a+0.28)*12.2,Math.sin(a+0.28)*12.2,1.7),at('H',Math.cos(a-0.28)*12.2,Math.sin(a-0.28)*12.2,1.7),at('O',x,y,3.2)]).flat(),[0,0,5.4,'#f2a3c4','#a8457a']],
+ Cl:ring(4,2.9,Math.PI/4,(x,y)=>at('Cl',x,y,3.1)),
+ CoCl:[...ring(4,9,Math.PI/4,(x,y)=>at('Cl',x,y,4.3)),[0,0,5.8,'#3f6fd6','#1c3f8f']],
+ Hb:[[0,0,10,'#8e2d48','#4e1426','cell']],
+ HbO2:[[0,0,10.5,'#ef4a3c','#9c1d14','cell'],at('O',7.6,-7.6,2.8),at('O',10.6,-10,2.8)],
+ O2:[at('O',-3,0,3.8),at('O',3,0,3.8)],
+ H2O:[at('H',-4.6,3.4,2.6),at('H',4.6,3.4,2.6),at('O',0,0,4.2)]};
+function drawAtom(ctx,x,y,[,,r,f,e,kind]){ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=f;ctx.fill();ctx.lineWidth=kind==='cell'?2:1.4;ctx.strokeStyle=e;ctx.stroke();
+ if(kind==='cell'){ctx.beginPath();ctx.arc(x,y,r*0.48,0,7);ctx.fillStyle='rgba(255,255,255,0.26)';ctx.fill();ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,0.14)';ctx.stroke()}
+ else{ctx.beginPath();ctx.arc(x-r*0.32,y-r*0.32,r*0.32,0,7);ctx.fillStyle='rgba(255,255,255,0.35)';ctx.fill()}}
+/* small picture of a particle for keys, counts and equations */
+function molIcon(k,px=22){const sh=SHAPES[k];if(!sh)return'';const R=Math.max(...sh.map(([dx,dy,r])=>Math.hypot(dx,dy)+r))+1.5;
+ return `<svg class="mi" width="${px}" height="${px}" viewBox="${-R} ${-R} ${2*R} ${2*R}" aria-hidden="true">${sh.map(([dx,dy,r,f,e,kind])=>`<circle cx="${dx}" cy="${dy}" r="${r}" fill="${f}" stroke="${e}" stroke-width="${kind==='cell'?2:1.3}"/>${kind==='cell'?`<circle cx="${dx}" cy="${dy}" r="${r*0.48}" fill="rgba(255,255,255,0.26)" stroke="rgba(0,0,0,0.14)"/>`:''}`).join('')}</svg>`}
 const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smooth:null,stat:'eq',
  mount(host,cfg){this.cfg=cfg;const S=SYS[cfg.sys],gas=S.gas;
   const st=eqNew(cfg.sys,{V:S.V0??(gas?0.7:1),start:cfg.start});st.fast=true;eqRun(st,25,1/10);st.fast=false;st.t=0;st.flashes=[];st.marks=[];st.hist=[];st.evF=st.evR=0;this.st=st;this.smooth=null;this.lastSample=-1;
@@ -522,14 +560,15 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   const main=f?items.filter(([k])=>hit(k)):items,rest=f?items.filter(([k])=>!hit(k)):[];
   const mark=h=>f?h.replace(' class="',' class="pulse '):h;
   const ctl=cfg.demo?`<div class="ctrls">${speedChip()}</div>`:`<div class="ctrls">${speedChip()}${main.map(([,h])=>mark(h)).join('')}</div>${rest.length?`<details class="morectl"><summary>🎛️ All controls ▾</summary><div class="ctrls">${rest.map(([,h])=>h).join('')}</div></details>`:''}`;
-  const term=([c,k,ph])=>`${c>1?c+' ':''}${SHAPES[k]?`<span class="sw" style="background:${SHAPES[k][0][3]};border-color:${SHAPES[k][0][4]}"></span>`:''}${S.sp[k]?(S.sp[k].eqL||S.sp[k].l):{H2O:'H₂O'}[k]||k}(${ph})`;
+  const term=([c,k,ph])=>`${c>1?c+' ':''}${molIcon(k)}${S.sp[k]?(S.sp[k].eqL||S.sp[k].l):{H2O:'H₂O'}[k]||k}(${ph})`;
   const eqs=`${S.eq.map(term).join(' + ')} ⇌ ${S.eqP.map(term).join(' + ')}`;
   const dh=S.dH==null?'':S.dH>0?`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= +'+S.dH+' kJ':'&gt; 0'} (endothermic)</span>`:`<span class="dh">ΔH ${Math.abs(S.dH)>1?'= −'+Math.abs(S.dH)+' kJ':'&lt; 0'} (exothermic)</span>`;
-  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}${S.note?`<br><small>${S.note}</small>`:''}</div>`:''}${ctl}
+  host.innerHTML=`<div class="lab" id="labBox"><div class="eqrow">${eqs}${dh}</div>${S.real?`<div class="real">${S.real}${S.note?`<br><small>${S.note}</small>`:''}</div>`:''}${S.pure?`<p class="purenote">${S.pure}</p>`:''}${ctl}
    <div class="stage"><canvas id="simCv" width="600" height="330" role="img" aria-label="Particle view: ${esc(S.title)}"></canvas><div class="tube" aria-hidden="true"><svg viewBox="0 0 30 70"><path d="M5 3v52a10 10 0 0 0 20 0V3" fill="#fff" stroke="#6b7c88" stroke-width="2.5"/><path id="tubeFill" d="M7 20v35a8 8 0 0 0 16 0V20z" fill="#eee"/></svg>${S.tube||'What you\'d see'}</div></div>
    <div class="readout"><div class="counts" id="cnts"></div><div class="balance">${balanceSVG()}<div class="status eq" id="labStatus" role="status" aria-live="polite">⚖️ Balanced</div></div></div>
    <details class="lkey"><summary>ⓘ What am I looking at?</summary><ul>
-    ${Object.keys(S.sp).map(k=>`<li><span class="sw" style="background:${SHAPES[k][0][3]};border-color:${SHAPES[k][0][4]}"></span><b>${S.sp[k].l}</b>${S.R.includes(k)&&!S.P.includes(k)?' (reactant)':S.P.includes(k)?' (product)':''}</li>`).join('')}
+    ${Object.keys(S.sp).map(k=>`<li>${molIcon(k,26)}<b>${S.sp[k].l}</b>${S.R.includes(k)&&!S.P.includes(k)?' (reactant)':S.P.includes(k)?' (product)':''}</li>`).join('')}
+    <li>Atoms use model-kit colors: <b>H</b> white, <b>C</b> gray, <b>N</b> blue, <b>O</b> red, <b>S</b> yellow, <b>Cl</b> green, <b>I</b> purple. Metal ions keep the color of their solution.${cfg.sys==='hb'?' Hemoglobin is shown as a tiny red blood cell: dark red without O₂, bright red with O₂ attached.':''}</li>
     <li>Particles bounce like billiard balls. A <b>solid green ring</b> means that collision was a forward reaction; a <b>dashed orange ring</b> means a reverse reaction. Most collisions just bounce.</li>
     <li>The <b>balance beam</b> compares the two rates. Level = forward rate equals reverse rate = <b>equilibrium</b>. Tipped = the reaction is shifting.</li>
     <li>The <b>${S.tube||'test tube'}</b> shows the color you would see in the lab.</li>
@@ -564,17 +603,17 @@ const Lab={st:null,el:null,cfg:null,raf:0,last:0,lastSample:0,onEvent:null,smoot
   const tn=(st.x[S.tint.sp]??st.n[S.tint.sp])/st.V;let al,rgb;if(S.tint.mix){const f=S.tint.ratio?(st.x[S.tint.ratio[1]]/Math.max(1e-9,st.x[S.tint.ratio[0]]+st.x[S.tint.ratio[1]])):Math.max(0,Math.min(1,(tn-S.tint.lo)/(S.tint.hi-S.tint.lo)));rgb=S.tint.mix[0].map((v,i)=>Math.round(v+(S.tint.mix[1][i]-v)*f));al=S.tint.a}else{rgb=S.tint.rgb;al=Math.min(S.tint.max,tn*S.tint.k)}ctx.fillStyle=`rgba(${rgb.join(',')},${al*0.45})`;ctx.fillRect(0,0,W,LH);
   if(S.gas){ctx.fillStyle='#dfe5ea';ctx.fillRect(W,0,LW-W,LH);ctx.fillStyle='#8696a3';ctx.fillRect(W,0,10,LH);ctx.fillRect(W+10,LH/2-7,LW-W,14);ctx.fillStyle='#5e6d78';ctx.fillRect(W,0,3,LH)}
   for(const p of st.parts){const sh=SHAPES[p.s];p.a=(p.a??(p.x*7%6.28))+(p.vx>0?0.01:-0.01);const ca=Math.cos(p.a),sa=Math.sin(p.a);
-   for(const [dx,dy,r,f,e] of sh){const x=p.x+dx*ca-dy*sa,y=p.y+dx*sa+dy*ca;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=f;ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle=e;ctx.stroke()}}
+   for(const a of sh)drawAtom(ctx,p.x+a[0]*ca-a[1]*sa,p.y+a[0]*sa+a[1]*ca,a)}
   for(const f of st.flashes){const k=Math.max(0,Math.min(1,(st.t-f.t)/0.45));ctx.beginPath();ctx.arc(f.x,f.y,6+k*16,0,7);ctx.strokeStyle=f.dir>0?`rgba(46,160,90,${1-k})`:`rgba(230,130,40,${1-k})`;ctx.lineWidth=2.5;ctx.setLineDash(f.dir>0?[]:[5,4]);ctx.stroke();ctx.setLineDash([])}
   ctx.font='800 13px Inter,system-ui,sans-serif';ctx.fillStyle='#4c5a65';ctx.fillText(`${tc.toFixed(0)} °C${st.cat?' · catalyst on':''}`,8,LH-8);
   $('tubeFill').setAttribute('fill',`rgba(${rgb.join(',')},${S.tint.mix?0.85:Math.max(0.05,al)})`);
   if(!this.fresh)return;this.fresh=false;
-  setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,SHAPES[k][0][3],SHAPES[k][0][4],st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Solid green ring = forward, dashed orange = reverse.`);
+  setCounts(Object.keys(S.sp).map(k=>[S.sp[k].l,k,null,st.n[k]]),`💥 Collisions: ${Math.round(st.collRate||0)}/s · reacting: ${(st.ema.f+st.ema.r).toFixed(1)}/s. Most hits just bounce! Solid green ring = forward, dashed orange = reverse.`);
   setBalance(st.ema.f,st.ema.r,'Forward','Reverse',S.eqP.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].eqL||S.sp[e[1]].l).join(' + '),S.eq.filter(e=>S.sp[e[1]]).map(e=>S.sp[e[1]].eqL||S.sp[e[1]].l).join(' + '),this);
-  const gc=$('grCv');if(gc)drawGraph(gc,st,Object.keys(S.sp).map(k=>({k,l:S.sp[k].l,c:SHAPES[k][0][4]==='#9c8456'?'#b49a62':SHAPES[k][0][4]})),'c')}};
+  const gc=$('grCv');if(gc)drawGraph(gc,st,Object.keys(S.sp).map(k=>({k,l:S.sp[k].l,c:S.sp[k].e==='#9c8456'?'#b49a62':S.sp[k].e})),'c')}};
 /* iOS Safari cancels a tap if new elements appear while the finger is down, so live readouts only change text, never rebuild */
 function setCounts(rows,note){const box=$('cnts');if(!box)return;const key=rows.map(r=>r[0]).join('|');
- if(box.dataset.key!==key){box.dataset.key=key;box.innerHTML=rows.map(([l,c,e])=>`<div class="cnt"><span class="sw" style="background:${c};border-color:${e}"></span>${l}<b>0</b></div>`).join('')+`<div class="kline">${note}</div>`}
+ if(box.dataset.key!==key){box.dataset.key=key;box.innerHTML=rows.map(([l,c,e])=>`<div class="cnt">${e===null?molIcon(c):`<span class="sw" style="background:${c};border-color:${e}"></span>`}${l}<b>0</b></div>`).join('')+`<div class="kline">${note}</div>`}
  const bs=box.querySelectorAll('b');rows.forEach((r,i)=>{const t=String(r[3]);if(bs[i].textContent!==t)bs[i].textContent=t});const k=box.querySelector('.kline');if(k&&k.textContent!==note)k.textContent=note}
 function fitCanvas(cv,w,h){const dpr=window.devicePixelRatio||1,cw=cv.clientWidth||w,want=Math.round(cw*dpr);if(cv.width!==want){cv.width=want;cv.height=Math.round(want*h/w)}const ctx=cv.getContext('2d');ctx.setTransform(cv.width/w,0,0,cv.height/h,0,0);return ctx}
 function balanceSVG(){return `<svg viewBox="0 0 240 104" aria-hidden="true"><path d="M120 62l-14 34h28z" fill="#cfd8df" stroke="#8a9aa6" stroke-width="2"/>
@@ -783,12 +822,12 @@ const LAB_Q=[
  {sys:'no2',f:()=>({video:'lecP',task:{need:'V:small',say:'Slide 🫸 Volume down to 45% or less (push the piston in).'},prompt:'You pushed the piston in. Once it settles, which way did it shift?',hint:'Count gas particles: 1 N₂O₄ on the left, 2 NO₂ on the right. Squeezing favors fewer.',choices:[
   ['Toward N₂O₄: fewer gas particles',true,'Right! A smaller volume (higher pressure) favors the side with fewer gas moles. Two NO₂ join into one N₂O₄.'],
   ['Toward NO₂: more gas particles',false,'More particles in a smaller box would raise the pressure even more. The system does the opposite.'],
-  ['No shift',false,'The sides have different numbers of gas moles (1 vs 2), so volume matters here.'],
+  ['No change',false,'The sides have different numbers of gas moles (1 vs 2), so volume matters here.'],
   ['All of it turns into NO₂',false,'Watch the counts: N₂O₄ goes up after squeezing.']]})},
  {sys:'no2',f:()=>({video:'lecV',task:{need:'V:big',say:'Slide 🫸 Volume up to 95% or more.'},prompt:'You gave the gas more room. Which way did it shift?',hint:'More room favors the side with more gas particles.',choices:[
   ['Toward NO₂: more gas particles',true,'Yes. Lower pressure favors the side with more gas moles, so more N₂O₄ splits into 2 NO₂.'],
   ['Toward N₂O₄: fewer gas particles',false,'That is what squeezing does. Expanding is the opposite.'],
-  ['No shift',false,'1 vs 2 gas moles: volume changes do shift this reaction.'],
+  ['No change',false,'1 vs 2 gas moles: volume changes do shift this reaction.'],
   ['The reaction stops',false,'Both reactions keep running; the balance point just moves.']]})},
  {sys:'no2',f:()=>({video:'lecAdd',task:{need:'stress:addP',say:'Tap ➕ NO₂.'},prompt:'Right after you add NO₂, which rate jumps up?',hint:'Which reaction uses NO₂ as its starting material?',choices:[
   ['The reverse rate (2 NO₂ → N₂O₄)',true,'Right! More NO₂ means more NO₂ collisions, so the reverse reaction speeds up and uses some of it: a shift to the left.'],
@@ -1023,7 +1062,7 @@ function calcQ(kind,rf){const id=pick(CALC_IDS),r=rf||RX.find(x=>x.id===id);kind
  if(kind==='kc'){const K=kOf(r,c),sf=Math.min(...all.map(e=>sfs[e[1]]));if(!isFinite(K)||K===0)return calcQ('kc');
   const giv=all.map(e=>`<span>[${e[1]}] = ${nf(c[e[1]],sfs[e[1]])} M</span>`).join('');
   return {type:'num',topic:'calc',video:'kcalc',answer:K,sf,unit:'',prompt:`These are the <b>equilibrium</b> concentrations. Calculate K<sub>c</sub>.`,
-   html:rxHTML(r,false)+`<div class="givens">${giv}</div>`,
+   html:rxHTML(r,false,false)+`<div class="givens">${giv}</div>`,
    hint:`Write the expression first: ${kForm(r)}.${hetNote} Then plug in and raise each concentration to its coefficient. Round to ${sf} sig figs (the fewest in the data).`,
    why:`${kForm(r)}${hetNote}<br>K<sub>c</sub> = ${frac(r.R.filter(inK).map(e=>`(${nf(c[e[1]],sfs[e[1]])})${e[0]>1?`<sup>${e[0]}</sup>`:''}`).join(''),r.L.filter(inK).map(e=>`(${nf(c[e[1]],sfs[e[1]])})${e[0]>1?`<sup>${e[0]}</sup>`:''}`).join(''))} = <b>${nf(K,sf)}</b>`,
    slips:[[1/K,'That is upside down: K is <b>products over reactants</b>.'],[kVariant(r,c,'noexp'),'Each concentration must be raised to its <b>coefficient</b> as an exponent.'],[kVariant(r,c,'mult'),'Coefficients become <b>exponents</b>, not numbers you multiply by.'],[kVariant(r,c,'sum'),'Multiply the concentrations together; don\'t add them.']]}}
@@ -1034,7 +1073,7 @@ function calcQ(kind,rf){const id=pick(CALC_IDS),r=rf||RX.find(x=>x.id===id);kind
   const un=onP?K/rest:rest/K,x=un**(1/u[0]),sf=Math.min(Ksf,...all.filter(e=>e!==u).map(e=>sfs[e[1]]));
   const giv=all.filter(e=>e!==u).map(e=>`<span>[${e[1]}] = ${nf(c[e[1]],sfs[e[1]])} M</span>`).join('');
   return {type:'num',topic:'calc',video:'calc',answer:x,sf,unit:'M',prompt:`K<sub>c</sub> = <b>${nf(K,Ksf)}</b>. Use the equilibrium concentrations to find <b>[${u[1]}]</b>.`,
-   html:rxHTML(r,false)+`<div class="givens">${giv}</div>`,
+   html:rxHTML(r,false,false)+`<div class="givens">${giv}</div>`,
    hint:`Write ${kForm(r)}, plug in what you know, and solve for [${u[1]}].${u[0]>1?' Its exponent is 2, so take the <b>square root</b> at the end.':''}${hetNote} Round to ${sf} sig figs.`,
    why:`${kForm(r)}${hetNote}<br>Rearranged: [${u[1]}]${u[0]>1?'<sup>2</sup>':''} = ${onP?'K × (reactant terms) ÷ (other product terms)':'(product terms) ÷ (K × other reactant terms)'} ${u[0]>1?`= ${nf(un,sf)} → [${u[1]}] = √${nf(un,sf)} = <b>${nf(x,sf)} M</b>`:`= <b>${nf(x,sf)} M</b>`}`,
    slips:[[un,u[0]>1?'Almost: that is [X]². Take the <b>square root</b>.':''],[onP?rest/K:K/rest,'Check the rearranging: you divided where you should multiply (or the reverse).'],[(onP?rest/K:K/rest)**(1/u[0]),'Check the rearranging: is your unknown on top (product) or bottom (reactant)?']].filter(z=>z[1])}}
@@ -1049,7 +1088,7 @@ function buildQ(r,o={}){const rows=[...r.L.map(e=>({e,side:'L'})),...r.R.map(e=>
  const het=rows.some(x=>x.want==='out'),acid=/H₃O⁺|OH⁻/.test(r.R.map(e=>e[1]).join(''));
  return {type:'build',topic:o.topic||'kexpr',video:acid?'acidPrac':het?'hetero':'kexpr',r,rows,st:rows.map(()=>({p:null,e:1})),
   prompt:o.prompt||`Build the ${acid&&r.R.some(e=>e[1]==='H₃O⁺')?'K<sub>a</sub>':'K'} expression: for each substance tap <b>Top</b>, <b>Bottom</b> or <b>Leave out</b>, then set its exponent.`,
-  html:o.html||rxHTML(r,false),
+  html:o.html||rxHTML(r,false,false),
   hint:`Products go on <b>top</b>, reactants on the <b>bottom</b>. Each coefficient becomes an <b>exponent</b>.${het?' Pure solids (s) and liquids (l), like water, are <b>left out</b>.':''}`,
   why:`${kExpr(r)}. Products over reactants, each coefficient as an exponent${het?', and the pure solid/liquid left out (its concentration never changes)':''}.`}}
 const termOf=(f,e)=>`[${f}]${e>1?`<sup>${e}</sup>`:''}`;
@@ -1147,7 +1186,7 @@ const GEN={
   const ss=stressesFor(r);
   if(roll<0.5)return shiftDir(r,pick(ss));
   if(roll<0.72)return shiftSpecies(r,ss);
-  if(roll<0.84&&r.dH!=null)return shiftK(r,ss);
+  if(roll<0.84)return shiftDir(r,pick(ss));   /* K-value questions live in Big Ideas & K; Shift It! asks which way it shifts */
   return shiftWhich(r,ss)},
  calc(){if(Math.random()<0.35){const id=pick(CALC_IDS),r=RX.find(x=>x.id===id),c=calcQ('kc',r);
    const b=buildQ(r,{topic:'calc',prompt:'<b>Step 1 of 2:</b> build the K<sub>c</sub> expression. Then you\'ll plug in the numbers.',html:c.html});b.then=c;return b}
@@ -1155,7 +1194,7 @@ const GEN={
  quiz(){const Q=state.quiz;return topicQ(Q&&!Q.over?Q.plan[Q.i]:pick(QUIZ_PLAN))},
  ideas(){const roll=Math.random();
   if(roll<0.28){const it=pickNew('ideas',IDEAS);return mc({video:it.v,prompt:it.p,hint:it.h,choices:it.c})}
-  if(roll<0.40)return kExprQ();if(roll<0.56)return buildQ(pick(RX));if(roll<0.66)return kMagQ();if(roll<0.72)return kRevQ();if(roll<0.9)return acidQ();return graphQ()}};
+  if(roll<0.40)return kExprQ();if(roll<0.56)return buildQ(pick(RX));if(roll<0.66)return kMagQ();if(roll<0.71)return kRevQ();if(roll<0.78){const rk=pick(RX.filter(x=>x.dH!=null));return shiftK(rk,stressesFor(rk))}if(roll<0.92)return acidQ();return graphQ()}};
 /* Real-world scenarios (medical, biological, engineering, everyday chemistry): about 1 in 3 Shift It! questions */
 const APPS=[
  {v:'lecRem',tag:'🏥 Medicine',p:'A patient breathes into a paper bag during a panic attack, re-breathing some CO₂. How does that help their blood?',x:'CO₂(aq) + H₂O(l) ⇌ H⁺(aq) + HCO₃⁻(aq)',h:'Fast breathing removed CO₂. Re-breathing adds some back. Which way does adding CO₂ shift?',c:[
@@ -1244,7 +1283,7 @@ function shiftWhich(r,ss){const good=ss.filter(s=>shiftOf(r,s)==='R'),bad=ss.fil
 function kExprQ(){const r=pick(RX.filter(x=>x.id!=='cobalt'));const het=[...r.L,...r.R].some(e=>e[2]==='s'||e[2]==='l');const right=kExpr(r);
  const cands=[[kExpr(r,{flip:true}),'Upside down: K is products over reactants.'],[kExpr(r,{mult:true}),'Coefficients become exponents, not numbers in front.'],[kExpr(r,{all:true}),'Pure solids and liquids are left out of K.'],[kExpr(r,{sum:true}),'Concentrations are multiplied, not added.']].filter(c=>c[0]!==right);
  const seen=new Set([right]);const wrong=[];for(const c of shuf(cands)){if(!seen.has(c[0])&&wrong.length<3){seen.add(c[0]);wrong.push(c)}}
- const q=mc({video:het?'hetero':'kexpr',prompt:'Which is the correct equilibrium expression?',html:rxHTML(r,false),hint:`Products on top, reactants on the bottom; each coefficient becomes an exponent${het?'; leave out (s) and (l)':''}.`,choices:[[right,true,`Products over reactants, with each coefficient as an exponent${het?', and the pure solid/liquid left out':''}.`],...wrong.map(w=>[w[0],false,w[1]])]});q.htmlOpts=true;return q}
+ const q=mc({video:het?'hetero':'kexpr',prompt:'Which is the correct equilibrium expression?',html:rxHTML(r,false,false),hint:`Products on top, reactants on the bottom; each coefficient becomes an exponent${het?'; leave out (s) and (l)':''}.`,choices:[[right,true,`Products over reactants, with each coefficient as an exponent${het?', and the pure solid/liquid left out':''}.`],...wrong.map(w=>[w[0],false,w[1]])]});q.htmlOpts=true;return q}
 function kMagQ(){const it=pick([[1.7e-56,'3 O₂(g) ⇌ 2 O₃(g)','Ozone from oxygen at 25 °C'],[4.5e8,'2 SO₂(g) + O₂(g) ⇌ 2 SO₃(g)',''],[0.036,'N₂(g) + 3 H₂(g) ⇌ 2 NH₃(g)',''],[54,'H₂(g) + I₂(g) ⇌ 2 HI(g)','at 430 °C'],[4.6e-3,'N₂O₄(g) ⇌ 2 NO₂(g)','at 25 °C'],[1.8e-5,'CH₃COOH(aq) + H₂O(l) ⇌ H₃O⁺(aq) + CH₃COO⁻(aq)','acetic acid (vinegar)'],[3.2e7,'CO(g) + 3 H₂(g) ⇌ CH₄(g) + H₂O(g)','']]);
  const big=it[0]>1;return mc({video:'kexpr',prompt:`K = <b>${sci(it[0])}</b> for this reaction. What does that tell you?`,html:`<div class="rxn">${it[1]}${it[2]?`<span class="dh">${it[2]}</span>`:''}</div>`,hint:'K = products ÷ reactants. Is the top bigger (K &gt; 1) or the bottom (K &lt; 1)?',choices:[
   ['Products are favored at equilibrium',big,big?`K &gt; 1, so the top of the ratio (products) is larger: products are favored.`:'K &lt; 1 means the bottom (reactants) is larger.'],
@@ -1309,7 +1348,7 @@ function ensureLab(spec){/* fresh equilibrium for every question, so each task s
 function taskEvent(ev){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(ev===t.need){state.taskAt=performance.now();tickTask.last=0;state.taskPend=true;tickTask()}}
 function tickTask(){const t=state.q.task,el=$('taskBox');if(!el)return;{const now=performance.now(),last=tickTask.last||now;tickTask.last=now;if(SPEED.f()===0)state.taskAt+=now-last;else if(SPEED.f()<1)state.taskAt+=(now-last)*(1-SPEED.f())*0.5}const wait=t.need==='watch'?t.sec*1000:2500,left=Math.max(0,wait-(performance.now()-state.taskAt));
  if(left<=0){state.taskOk=true;labHost.querySelectorAll('.pulse').forEach(x=>x.classList.remove('pulse'));el.className='task done';el.innerHTML='✅ Done! Now answer below.';['checkBtn'].forEach(id=>$(id).disabled=false);return}
- const tt=SPEED.f()===0?'⏸ Paused: tap ⏸ Paused to play again':`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
+ const tt=SPEED.f()===0?'⏸ Paused: tap ▶ 1× (or 🐢 ¼×) to play again':`⏳ Watch… ${Math.ceil(left/1000)} s`;if(el.textContent!==tt)el.textContent=tt;clearTimeout(tickTask.t);tickTask.t=setTimeout(tickTask,250)}
 function startQuiz(){state.quiz={plan:shuf(QUIZ_PLAN.slice(0,2)).concat(shuf(QUIZ_PLAN.slice(2,8)),QUIZ_PLAN.slice(8)),i:0,res:[],over:false}}
 function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length;Q.over=true;J.tried=J.tried||{};J.tried.quiz=1;J.lastQuiz={score:n,n:Q.res.length,miss:[...new Set(Q.res.filter(r=>!r.ok).map(r=>r.topic))]};J.bestQuiz=Math.max(J.bestQuiz||0,n);try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}
  BADGES.forEach(([id,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast('Badge earned: '+t)}});renderJ();

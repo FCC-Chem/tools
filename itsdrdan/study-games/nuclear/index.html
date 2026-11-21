@@ -15,7 +15,7 @@ button,input,select{font:inherit;color:inherit}.hidden{display:none!important}
 .hero h1{margin:6px 0 4px;font-size:clamp(30px,4.2vw,46px);line-height:1.08;font-weight:900;letter-spacing:-.02em}
 .hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#d99a1e,#43b6a8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .subtitle{margin:0;color:var(--muted);font-size:15.5px}
-.logo{width:112px;flex:0 0 112px}.logo svg{display:block;width:100%;height:auto}
+.logo{width:112px;flex:0 0 112px}
 details.howto{margin:10px 0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
 details.howto>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;min-height:48px;display:flex;justify-content:space-between;align-items:center}
 details.howto>summary::-webkit-details-marker{display:none}
@@ -27,6 +27,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .mode:hover{transform:translateY(-3px);box-shadow:0 10px 20px #26344018}
 .mode.on{outline:3px solid var(--ma);outline-offset:3px}
 .mode .ic{grid-row:span 2;width:50px;height:50px;border-radius:12px;display:grid;place-items:center;background:var(--ma);color:#fff;font-size:22px}
+.mode .ic.art{background:none;padding:0}.mode .ic.art img{width:100%;height:100%;display:block}
 .mode b{font-size:16.5px;line-height:1.2}.mode small{font-size:12px;color:#4c5a65;font-weight:600}
 .main{display:grid;grid-template-columns:minmax(0,1fr) 330px;grid-template-areas:"card ref" "card jour" "card vid";gap:14px;align-items:start;margin-top:10px}
 #practice{grid-area:card;position:relative;overflow:hidden}#refPanel{grid-area:ref}#journey{grid-area:jour}#videoPanel{grid-area:vid}
@@ -40,7 +41,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .btn{border:0;border-radius:14px;padding:12px 18px;font-weight:900;font-size:17px;cursor:pointer;min-height:48px;transition:transform .08s}
 .btn:active:not(:disabled){transform:translateY(2px)}.btn:disabled{opacity:.55;cursor:default}
 .dark{background:linear-gradient(180deg,#2f4650,#22343c);color:#fff;box-shadow:0 4px 0 #142128}
-.check{background:linear-gradient(180deg,#5cb2e6,#3b8ccb);color:#fff;box-shadow:0 4px 0 #2d73a8}
+.check{background:linear-gradient(180deg,#2b78b5,#1f5f94);color:#fff;box-shadow:0 4px 0 #184d78}
 .hint{background:#fff3c9;border:2px solid #efd27a;box-shadow:0 3px 0 #e0bd55}
 .show{background:#efe8fb;border:2px solid #cdbbec;box-shadow:0 3px 0 #b49ddc}
 .prompt{font-size:20px;font-weight:800;margin:14px 0 8px}
@@ -52,7 +53,12 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .givens span{background:#f3f8fd;border:1px solid #d6e4ef;border-radius:10px;padding:3px 10px}
 #practice.quizmode .btnrow{grid-template-columns:1fr}#practice.quizmode #hintBtn,#practice.quizmode #showBtn{display:none}
 .qprog{display:flex;gap:4px;margin:10px 0 0}.qprog i{flex:1;height:8px;border-radius:99px;background:#e6e0d2}.qprog i.ok{background:#4fa36a}.qprog i.no{background:#d9776f}.qprog i.now{background:#4a9fd6}
-.qsum{text-align:center}.qsum .big{font-size:44px;font-weight:900;margin:6px 0}.qsum table{margin:10px auto;border-collapse:collapse;text-align:left;font-size:15.5px}.qsum td{padding:6px 10px;border-top:1px solid #eee}.qsum td:last-child{white-space:nowrap}#practice.quizdone .btnrow{display:none}
+.qsum{text-align:center}.qsum .big{font-size:44px;font-weight:900;margin:6px 0}.qsum table{margin:10px auto;border-collapse:collapse;text-align:left;font-size:15.5px}.qsum td{padding:6px 10px;border-top:1px solid #eee}.qsum td:last-child{white-space:nowrap}#practice.quizdone .btnrow{display:none}#practice.quizpick #newBtn{display:none}
+.qpick{display:grid;gap:12px;margin:8px 0}.pickcard{display:block;text-align:left;border:2px solid #e3d7c3;border-bottom-width:5px;border-radius:16px;background:#fffdf8;padding:14px 16px;cursor:pointer;font:inherit;color:inherit;min-height:44px}
+.pickcard b{display:block;font-size:19px;margin-bottom:4px}.pickcard span{font-size:15px;color:var(--muted);line-height:1.45}.pickcard:active{transform:translateY(2px)}.pickcard[data-kind=exam]{border-color:#d9c3ea;background:#fbf8ff}
+.qprog i.did{background:#8aa3b5}#modeTitle:focus{outline:none}#modeTitle:focus-visible{outline:3px solid #2b78b5;outline-offset:3px;border-radius:6px}.fb.saved{border-left:7px solid #8aa3b5;background:#f1f5f8;padding:12px 14px}
+.review{text-align:left;margin-top:6px}.rv{border:2px solid #e6e0d2;border-radius:12px;margin:6px 0;padding:6px 10px;background:#fff}.rv.no{border-color:#f0c3be}.rv summary{cursor:pointer;font-weight:800;min-height:32px}.rvp{border-top:1px dashed #e6e0d2;margin-top:6px;padding-top:4px}.rvp p{margin:4px 0}
+.goal{background:#fff8e6;border:2px dashed #f0cf86;border-radius:12px;padding:8px 10px;margin:0 0 8px;font-size:14.5px;line-height:1.45}.goal.done{background:#e9f7ee;border:2px solid #8fcf9f}
 .plan{display:grid;gap:8px;margin-top:10px;text-align:left}.plan .item{background:#fff8e6;border:1px solid #f0dfae;border-radius:12px;padding:10px 12px}.plan .btn{min-height:44px;font-size:15px;padding:8px 14px;margin:6px 8px 0 0}
 @media(max-width:1000px){.ddfb-float.eq-hide{opacity:0!important;pointer-events:none!important;transform:translateY(12px)!important}}
 .task{display:flex;gap:8px;align-items:center;background:#fff6e0;border:2px dashed #f0c45c;border-radius:14px;padding:8px 12px;font-weight:800;font-size:15.5px;margin:6px 0}
@@ -60,10 +66,10 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .qbox{background:radial-gradient(circle at 50% 0,#f7fbff,#fff 70%);border:2px solid #e1ebf3;border-radius:18px;padding:14px;margin:8px 0;font-size:18px;text-align:center;overflow-x:auto}
 .options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .opt{display:flex;gap:10px;align-items:center;text-align:left;background:#fff;border:2px solid #dcd6c8;border-bottom-width:4px;border-radius:16px;padding:10px 14px;min-height:56px;font-size:17px;font-weight:700;cursor:pointer}
-.opt .L{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e6f2ff;color:#3b82b4;font-size:14px;font-weight:900}
-.opt.sel{border-color:var(--blue);background:#eaf5fd}.opt.sel .L{background:#4a9fd6;color:#fff}
-.opt.right{border-color:#4fa36a;background:#e8f7ec}.opt.right .L{background:#4fa36a;color:#fff}
-.opt.wrong{border-color:#d9776f;background:#fdeeed}.opt.wrong .L{background:#d9776f;color:#fff}
+.opt .L{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e6f2ff;color:#2a6a99;font-size:14px;font-weight:900}
+.opt.sel{border-color:var(--blue);background:#eaf5fd}.opt.sel .L{background:#2f78b0;color:#fff}
+.opt.right{border-color:#4fa36a;background:#e8f7ec}.opt.right .L{background:#2e7d4f;color:#fff}
+.opt.wrong{border-color:#d9776f;background:#fdeeed}.opt.wrong .L{background:#b5473f;color:#fff}
 .opt .nuc{font-size:22px}
 .tip{font-size:13px;color:var(--muted);margin:4px 2px}
 .btnrow{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-top:14px}
@@ -135,10 +141,10 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 .xprow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-weight:800;font-size:14px}
 .track{height:12px;background:#ece5d6;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#8fd8c8,#f7c968);transition:width .3s}
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:10px}
-.bdg{border:2px dashed #c3ccd4;border-radius:12px;padding:7px 9px;font-size:12.5px;color:#4c5a65;background:#fff;display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:center}.bdg .e{font-size:26px;text-align:center;filter:grayscale(1) opacity(.5)}.bdg.got .e{filter:none}
+.bdg{border:2px dashed #c3ccd4;border-radius:12px;padding:7px 9px;font-size:12.5px;color:#4c5a65;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:8px;align-items:center}.bdg img{width:48px;height:48px;display:block;filter:grayscale(1) opacity(.45)}.bdg.got img{filter:none}.bdg .e{font-size:26px;text-align:center;filter:grayscale(1) opacity(.5)}.bdg.got .e{filter:none}
 .bdg:not(.got) b:after{content:' (not yet)';font-weight:700;font-size:11px;color:#5c6a75}.bdg.got{border:2px solid #f0cf86;background:#fff8e6}.bdg b{display:block;font-size:13.5px}
 .vidcard{background:linear-gradient(120deg,#fff7ef,#fdf0f4);border:1px solid #f1d9cf;border-radius:14px;padding:9px 12px;margin-bottom:10px}
-.vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#b0544a}
+.vidcard small{display:block;font-size:11.5px;font-weight:900;text-transform:uppercase;color:#a0453c}
 .vwrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#222}.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;background:#fff8e6;border:3px solid #f0cf86;border-radius:16px;padding:12px 18px;font-weight:800;pointer-events:none;transition:.3s;z-index:50}.toast.on{opacity:1;transform:translate(-50%,0)}
 .confetti{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;animation:fall 3s linear forwards;z-index:40;pointer-events:none}@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
@@ -161,11 +167,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
  <h1><span class="a">Nuclear</span> <span class="b">Glow Up!</span></h1>
  <p class="subtitle">Unstable nuclei glow up into stable ones. Fire decays, block radiation, watch half-lives tick, and start a chain reaction.</p>
 </div>
-<div class="logo" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><radialGradient id="lg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3b0"/><stop offset=".6" stop-color="#f7c968" stop-opacity=".55"/><stop offset="1" stop-color="#f7c968" stop-opacity="0"/></radialGradient></defs>
- <circle cx="60" cy="60" r="56" fill="url(#lg)"/>
- <g stroke="#2f8fd0" stroke-width="3" fill="none" opacity=".75"><ellipse cx="60" cy="60" rx="46" ry="17"/><ellipse cx="60" cy="60" rx="46" ry="17" transform="rotate(60 60 60)"/><ellipse cx="60" cy="60" rx="46" ry="17" transform="rotate(-60 60 60)"/></g>
- <g stroke-width="1.5"><circle cx="53" cy="55" r="8" fill="#e0675a" stroke="#a8443a"/><circle cx="67" cy="55" r="8" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="60" cy="67" r="8" fill="#e0675a" stroke="#a8443a"/><circle cx="50" cy="68" r="7" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="70" cy="68" r="7" fill="#9aa9b6" stroke="#6b7a86"/><circle cx="60" cy="47" r="7" fill="#e0675a" stroke="#a8443a"/></g>
- <path d="M86 30 q6 -6 12 0 t12 0" stroke="#d99a1e" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="24" cy="92" r="5" fill="#2f7fbf"/><circle cx="96" cy="90" r="5.5" fill="#43b6a8"/></svg></div>
+<div class="logo" aria-hidden="true"><img src="assets/logo.webp" alt="" width="112" height="112" style="width:100%;height:auto;display:block"></div>
 </header>
 <main id="main">
 <details class="howto"><summary>📘 How to use this game</summary><ul>
@@ -176,7 +178,7 @@ details.howto ul{margin:0 18px 14px;padding-left:22px;line-height:1.6}
 <nav class="modes" id="modes" aria-label="Choose a mode"></nav>
 <div class="main">
 <section class="card" id="practice">
- <div class="toprow"><h2 id="modeTitle">Mode</h2><div class="stats">
+ <div class="toprow"><h2 id="modeTitle" tabindex="-1">Mode</h2><div class="stats">
   <span class="stat s1"><b id="nCorrect">0</b><small>✅ Correct</small></span><span class="stat s2"><b id="nStreak">0</b><small>🔥 Streak</small></span><span class="stat s3"><b id="nAssist">0</b><small>👀 Assisted</small></span>
   <button class="btn dark" id="newBtn">New Question ↻</button></div></div>
  <div id="qArea"></div>
@@ -271,16 +273,17 @@ const DL_SYS=[
  ['f18','F-18',N(18,9),'Too few neutrons: positron emission'],['i125','I-125',N(125,53),'Too few neutrons: electron capture'],['tc99m','Tc-99m',N(99,43,1),'Excited (m): gives off a gamma ray']];
 const DSYM={alpha:'α',beta:'β⁻',positron:'β⁺',ec:'EC',gamma:'γ'};
 const Decay=(()=>{
- const s={sys:'u238',cur:null,start:null,hist:[],busy:0,fx:[],t:0,flash:0,jig:0,last:null};let el={},ctx=null,nuc=[],R=0;
+ const s={sys:'u238',cur:null,start:null,hist:[],busy:0,fx:[],t:0,flash:0,jig:0,last:null,goal:null};let el={},ctx=null,nuc=[],R=0;
  function layout(x){const A=x.A,rb=Math.max(4.4,Math.min(12,78/Math.sqrt(A)));R=rb*Math.sqrt(A)*1.02;const r=rng(A*131+x.Z*7);nuc=[];
   for(let i=0;i<A;i++){const a=i*2.39996,d=rb*Math.sqrt(i+0.5)*1.02;nuc.push({x:Math.cos(a)*d,y:Math.sin(a)*d,p:false,rb,ph:r()*6.28})}
   const idx=nuc.map((_,i)=>i).sort(()=>r()-0.5);for(let i=0;i<x.Z;i++)nuc[idx[i]].p=true}
  function load(id){const d=DL_SYS.find(q=>q[0]===id)||DL_SYS[0];s.sys=d[0];s.cur=Object.assign({},d[2]);s.start=Object.assign({},d[2]);s.hist=[];s.fx=[];s.busy=0;s.last=null;layout(s.cur);s.jig=s.cur.m?1:0;paint()}
  function fire(mode){if(s.busy>0||!s.cur)return;const p=s.cur;
+  if(s.goal&&mode!=='alpha'&&mode!=='beta'){say('This decay series uses only α and β⁻.');return}
   if(mode==='gamma'&&!p.m){say('Only an excited nucleus (marked m) gives off a gamma ray by itself. Try another button.');return}
   if((mode==='positron'||mode==='ec')&&p.Z<2){say('Hydrogen has only 1 proton: it cannot lose one.');return}
   if(mode==='alpha'&&(p.A<8||p.Z<3)){say('This nucleus is too small for alpha decay.');return}
-  if(s.hist.length>=8){say('That is enough decays for one sample. Tap ↺ Start over.');return}
+  if(s.hist.length>=(s.goal?24:8)){say('That is enough decays for one sample. Tap ↺ Start over.');return}
   const d=decayOf(p,mode);s.busy=1;
   const out=[...nuc.keys()].sort((a,b)=>Math.hypot(nuc[b].x,nuc[b].y)-Math.hypot(nuc[a].x,nuc[a].y));
   if(mode==='alpha'){const take=out.filter(i=>nuc[i].p).slice(0,2).concat(out.filter(i=>!nuc[i].p).slice(0,2));const ang=Math.atan2(nuc[take[0]].y,nuc[take[0]].x);
@@ -288,16 +291,23 @@ const Decay=(()=>{
   else if(mode==='beta'||mode==='positron'||mode==='ec'){const want=mode!=='beta';const cand=nuc.filter(q=>q.p===want);const q=cand[Math.floor(cand.length*0.3)]||cand[0];if(q){q.p=!want;q.fl=1}
    const ang=Math.random()*6.28;if(mode==='ec')s.fx.push({k:'ec',ang,t:0});else s.fx.push({k:mode,x:q?q.x:0,y:q?q.y:0,vx:Math.cos(ang)*260,vy:Math.sin(ang)*260,t:0})}
   else{s.fx.push({k:'gamma',ang:Math.random()*6.28,t:0});s.jig=0}
-  const eq=d.side==='L'?{L:[{x:p},{x:d.part}],R:[{x:d.prod}]}:{L:[{x:p}],R:[{x:d.prod},{x:d.part}]};
+  const eq=eqOf(p,d);
   s.last={mode,eq,from:p};s.hist.push(mode);s.cur=d.prod;s.flash=1;paint();emit('decay:'+mode)}
+ function eqOf(p,d){return d.side==='L'?{L:[{x:p},{x:d.part}],R:[{x:d.prod}]}:{L:[{x:p}],R:[{x:d.prod},{x:d.part}]}}
+ /* Chain Walk: ↶ Undo replays the chain without its last step */
+ function undo(){if(!s.hist.length||s.busy>0)return;s.hist.pop();let x=s.start;s.last=null;s.hist.forEach(m=>{const d=decayOf(x,m);s.last={mode:m,eq:eqOf(x,d),from:x};x=d.prod});s.cur=x;s.fx=[];layout(x);paint();emit('undo')}
+ function goalHTML(){const c=s.cur,g=s.goal,na=s.hist.filter(m=>m==='alpha').length,nb=s.hist.filter(m=>m==='beta').length,done=c.A===g.A&&c.Z===g.Z;
+  const tip=done?`✅ Stable ${nname(g)} reached: ${na} α and ${nb} β⁻ decays.`:c.A<g.A?`The mass number (${c.A}) is below ${g.A}: one α too many. Tap ↶ Undo.`:c.A===g.A&&c.Z<g.Z?`The mass number is right. Now raise Z from ${c.Z} to ${g.Z} with β⁻ (+1 each).`:c.A===g.A&&c.Z>g.Z?`Z is ${c.Z}, above ${g.Z}: one β⁻ too many. Tap ↶ Undo.`:`Only α lowers the mass number (${c.A} → ${g.A}, −4 each). β⁻ raises Z by 1.`;
+  return `<div class="goal${done?' done':''}"><b>🎯 Goal: ${nshort(g)}</b> · now ${nshort(c)} · α used: <b>${na}</b> · β⁻ used: <b>${nb}</b><div>${tip}</div></div>`}
  function say(t){if(el.msg){el.msg.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>{if(el.msg)el.msg.textContent=''},3500)}}
  function chainTxt(){let x=s.start;const parts=[nshort(x)];s.hist.forEach(m=>{x=decayOf(x,m).prod;parts.push(`<span class="ch">${DSYM[m]}</span> ${nshort(x)}`)});return 'Chain: '+parts.join(' ')}
  function paint(){if(!el.eq)return;const c=s.cur,Nn=c.A-c.Z,band=bandN(c.Z);
   setTxt(el.name,nname(c));setTxt(el.p,String(c.Z));setTxt(el.n,String(Nn));setTxt(el.np,c.Z?(Nn/c.Z).toFixed(2):'—');
-  setTxt(el.st,c.m?'Excited (m): extra energy in the nucleus':c.Z>83?'Too big (Z > 83): alpha decay likely':Nn>band+0.6?'Above the band: too many neutrons':Nn<band-0.6?'Below the band: too few neutrons':'Near the band of stability');
+  setTxt(el.st,c.m?'Excited (m): extra energy in the nucleus':c.Z===82&&c.A>=206&&c.A<=208&&!c.m?'Stable: the end of a natural decay series':c.Z>83?'Too big (Z > 83): alpha decay likely':Nn>band+0.6?'Above the band: too many neutrons':Nn<band-0.6?'Below the band: too few neutrons':'Near the band of stability');
   if(s.last){const e=s.last.eq;
    el.eq.innerHTML=`<div class="eqbig">${eqHTML(e.L,e.R)}</div><div class="sums"><span>Top (mass numbers): ${e.L.map(q=>q.x.A).join(' + ')} = ${e.R.map(q=>q.x.A).join(' + ')} ✔</span><span>Bottom (atomic numbers): ${e.L.map(q=>q.x.Z).join(' + ').replace(/-/g,'−')} = ${e.R.map(q=>q.x.Z).join(' + ').replace(/-/g,'−')} ✔</span></div>`+(s.hist.length>1?`<div class="chain">${chainTxt()}</div>`:'')}
   else el.eq.innerHTML=`<div class="eqbig">${nucHTML(c)}</div><p class="cap" style="text-align:center">Tap a decay button above. The nuclear equation appears here.</p>`;
+  if(s.goal)el.eq.insertAdjacentHTML('afterbegin',goalHTML());
   if(el.cv)el.cv.setAttribute('aria-label',`Nucleus of ${nname(c)}: ${c.Z} protons (red) and ${Nn} neutrons (gray).`)}
  function step(dt){s.t+=dt;if(s.busy>0)s.busy=Math.max(0,s.busy-dt/1.1);
   s.flash=Math.max(0,s.flash-dt*1.5);s.fx.forEach(f=>{f.t+=dt;if(f.vx!==undefined){f.x+=f.vx*dt;f.y+=f.vy*dt}});s.fx=s.fx.filter(f=>f.t<2.2);
@@ -317,24 +327,27 @@ const Decay=(()=>{
    if(f.k==='gamma'){const d=f.t*300,dx=Math.cos(f.ang),dy=Math.sin(f.ang);g.strokeStyle=`rgba(214,160,30,${a})`;g.lineWidth=3;g.beginPath();
     for(let u=0;u<70;u+=2){const w=Math.sin((d+u)/4)*6,px=cx+dx*(d+u)-dy*w,py=cy+dy*(d+u)+dx*w;u?g.lineTo(px,py):g.moveTo(px,py)}g.stroke();lbl(g,cx+dx*(d+40),cy+dy*(d+40)-14,'γ ray','#8a6510')}});
   /* band of stability */
-  const X0=400,Y0=26,W=185,H=200,zx=Z=>X0+Z/100*W,ny=n=>Y0+H-n/155*H;g.fillStyle='#fff';g.fillRect(X0-6,Y0-16,W+16,H+42);g.strokeStyle='#dbe5ee';g.lineWidth=1;g.strokeRect(X0-6,Y0-16,W+16,H+42);
-  g.fillStyle='#4c5a65';g.font='bold 11px system-ui,sans-serif';g.fillText('Band of stability',X0,Y0-4);
+  const X0=400,Y0=26,W=185,H=200,[z0,z1,n0,n1]=s.goal?[74,96,118,150]:[0,100,0,155],zx=Z=>X0+(Z-z0)/(z1-z0)*W,ny=n=>Y0+H-(n-n0)/(n1-n0)*H,clip=()=>{g.save();g.beginPath();g.rect(X0-5,Y0,W+14,H+2);g.clip()};g.fillStyle='#fff';g.fillRect(X0-6,Y0-16,W+16,H+42);g.strokeStyle='#dbe5ee';g.lineWidth=1;g.strokeRect(X0-6,Y0-16,W+16,H+42);
+  g.fillStyle='#4c5a65';g.font='bold 11px system-ui,sans-serif';g.fillText('Band of stability'+(s.goal?' (zoomed in)':''),X0,Y0-4);clip();
   g.beginPath();for(let Z=1;Z<=84;Z++)g.lineTo(zx(Z),ny(bandN(Z)*1.07+1));for(let Z=84;Z>=1;Z--)g.lineTo(zx(Z),ny(bandN(Z)*0.94-1));g.closePath();g.fillStyle='#cfe9d6';g.fill();
-  g.strokeStyle='#c3ccd4';g.setLineDash([4,4]);g.beginPath();g.moveTo(zx(0),ny(0));g.lineTo(zx(100),ny(100));g.stroke();g.setLineDash([]);
-  g.fillStyle='#4c5a65';g.font='10px system-ui,sans-serif';g.fillText('protons (Z) →',X0+W-70,Y0+H+14);g.fillText('N = Z',zx(72),ny(64));g.save();g.translate(X0+2,Y0+H-6);g.rotate(-Math.PI/2);g.fillText('neutrons →',0,8);g.restore();
+  g.strokeStyle='#c3ccd4';g.setLineDash([4,4]);g.beginPath();g.moveTo(zx(0),ny(0));g.lineTo(zx(100),ny(100));g.stroke();g.setLineDash([]);g.restore();
+  g.fillStyle='#4c5a65';g.font='10px system-ui,sans-serif';g.fillText('protons (Z) →',X0+W-70,Y0+H+14);if(!s.goal)g.fillText('N = Z',zx(72),ny(64));g.save();g.translate(X0+2,Y0+H-6);g.rotate(-Math.PI/2);g.fillText('neutrons →',0,8);g.restore();
+  clip();if(s.goal){const gx=zx(s.goal.Z),gy=ny(s.goal.A-s.goal.Z);g.strokeStyle='#d6a01e';g.lineWidth=3;g.beginPath();g.arc(gx,gy,10,0,7);g.stroke();g.fillStyle='#8a6510';g.font='bold 11px system-ui,sans-serif';g.fillText('goal: '+nshort(s.goal),gx-28,gy+24)}
   if(s.start){let x=s.start;const pts=[[x.Z,x.A-x.Z]];s.hist.forEach(m=>{x=decayOf(x,m).prod;pts.push([x.Z,x.A-x.Z])});g.strokeStyle='#4a9fd6';g.lineWidth=2;g.beginPath();pts.forEach(([z,n],i)=>i?g.lineTo(zx(z),ny(n)):g.moveTo(zx(z),ny(n)));g.stroke();
    const [z,n]=pts[pts.length-1];g.beginPath();g.arc(zx(z),ny(n),5.5,0,7);g.fillStyle='#e0675a';g.fill();g.strokeStyle='#fff';g.lineWidth=2;g.stroke()}
+  g.restore();
   g.font='bold 12px system-ui,sans-serif';[['#e0675a','proton'],['#9aa9b6','neutron']].forEach(([c,t],i)=>{g.beginPath();g.arc(16,LH-34+i*18,6,0,7);g.fillStyle=c;g.fill();g.fillStyle='#22313b';g.fillText(t,27,LH-30+i*18)})}
  const loop=makeLoop(step);const api={s,onEvent:null,load,fire};function emit(e){api.onEvent&&api.onEvent(e)}
  api.mount=(h,o)=>{h.innerHTML=`<div class="lab"><div class="ctrls" role="group" aria-label="Decay buttons">
-  <button type="button" class="chip dk" data-f="alpha"><img class="pic" src="assets/p-alpha.webp" alt="" width="26" height="26"><span>α Alpha</span></button><button type="button" class="chip dk" data-f="beta"><img class="pic" src="assets/p-beta.webp" alt="" width="26" height="26"><span>β⁻ Beta</span></button><button type="button" class="chip dk" data-f="positron">β⁺ Positron</button><button type="button" class="chip dk" data-f="ec">EC Electron capture</button><button type="button" class="chip dk" data-f="gamma"><img class="pic" src="assets/p-gamma.webp" alt="" width="26" height="26"><span>γ Gamma</span></button>
-  <button type="button" class="chip rst" data-reset>↺ Start over</button>${speedChip()}</div>
+  <button type="button" class="chip dk" data-f="alpha"><img class="pic" src="assets/p-alpha.webp" alt="" width="26" height="26"><span>α Alpha</span></button><button type="button" class="chip dk" data-f="beta"><img class="pic" src="assets/p-beta.webp" alt="" width="26" height="26"><span>β⁻ Beta</span></button><button type="button" class="chip dk" data-f="positron"><img class="pic" src="assets/p-positron.webp" alt="" width="26" height="26"><span>β⁺ Positron</span></button><button type="button" class="chip dk" data-f="ec"><img class="pic" src="assets/p-ec.webp" alt="" width="26" height="26"><span>EC Electron capture</span></button><button type="button" class="chip dk" data-f="gamma"><img class="pic" src="assets/p-gamma.webp" alt="" width="26" height="26"><span>γ Gamma</span></button>
+  <button type="button" class="chip rst" data-undo>↶ Undo</button><button type="button" class="chip rst" data-reset>↺ Start over</button>${speedChip()}</div>
   <div class="stage"><canvas width="600" height="320" role="img"></canvas><div class="dmsg" aria-live="polite"></div></div>
   <div class="readout"><div class="counts"><div class="cnt"><span class="sw" style="background:#e0675a;border-color:#a8443a"></span>Protons (Z)<b data-k="p"></b></div><div class="cnt"><span class="sw" style="background:#9aa9b6;border-color:#6b7a86"></span>Neutrons (A − Z)<b data-k="n"></b></div><div class="cnt">Neutron-to-proton ratio<b data-k="np"></b></div></div>
   <div class="counts"><div class="cnt" style="justify-content:center"><b data-k="name" style="margin:0"></b></div><div class="status r" data-k="st"></div></div></div>
   <div class="eqline" aria-live="polite"></div></div>`;
   const q=k=>h.querySelector(`[data-k="${k}"]`);el={cv:h.querySelector('canvas'),eq:h.querySelector('.eqline'),msg:h.querySelector('.dmsg'),p:q('p'),n:q('n'),np:q('np'),name:q('name'),st:q('st')};ctx=fitCanvas(el.cv,LW,LH);
-  h.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>fire(b.dataset.f));h.querySelector('[data-reset]').onclick=()=>{load(s.sys);emit('reset')};wireSpeed(h);load(o.sys||s.sys)};
+  h.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>fire(b.dataset.f));h.querySelector('[data-reset]').onclick=()=>{load(s.sys);emit('reset')};wireSpeed(h);
+  s.goal=o.goal||null;h.querySelector('[data-undo]').onclick=undo;h.querySelectorAll('[data-undo],[data-f=positron],[data-f=ec],[data-f=gamma]').forEach(b=>b.style.display=(!!s.goal)===b.hasAttribute('data-undo')?'':'none');load(o.sys||s.sys)};
  api.start=()=>loop.start();api.stop=()=>loop.stop();
  return api})();
 
@@ -356,7 +369,9 @@ const Shield=(()=>{
  function set(k,v){s[k]=v;s.ps=[];s.seen[s.rad+':'+s.sh]=1;sync();emit('set:'+k)}
  function sync(){if(!el.cv)return;el.root.querySelectorAll('[data-rad]').forEach(b=>{const on=b.dataset.rad===s.rad;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
   el.root.querySelectorAll('[data-sh]').forEach(b=>{const on=b.dataset.sh===s.sh;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
-  el.dist.value=s.d;setTxt(el.dout,s.d+' cm');s.shown=cpm(s.rad,s.sh,s.d);readout()}
+  el.dist.value=s.d;setTxt(el.dout,s.d+' cm');el.dist.setAttribute('aria-valuetext',s.d+' centimeters');s.shown=cpm(s.rad,s.sh,s.d);readout();announce()}
+ /* screen readers hear one settled reading after a change, not the count that jitters twice a second */
+ function announce(){clearTimeout(announce.t);announce.t=setTimeout(()=>{if(!el.say)return;const e=cpm(s.rad,s.sh,s.d);el.say.textContent=`${PNAME[s.rad]}s, ${SHIELDS.find(x=>x[0]===s.sh)[1].toLowerCase()}, ${s.d} cm: about ${e.toLocaleString('en-US')} counts per minute, ${e<=BG+5?'background only':e<BG*4?'a little above background':'well above background'}.`},700)}
  function readout(){setTxt(el.cnt,s.shown.toLocaleString('en-US'));const exp=cpm(s.rad,s.sh,s.d);setTxt(el.note,exp<=BG+5?'≈ background only':exp<BG*4?'a little above background':'well above background');
   el.cv.setAttribute('aria-label',`${PNAME[s.rad]}s from the source, ${SHIELDS.find(x=>x[0]===s.sh)[1].toLowerCase()} in between, counter ${s.d} cm away reads about ${exp} counts per minute.`)}
  function step(dt){s.t+=dt;const tr=TRANS[s.rad][s.sh];
@@ -393,11 +408,11 @@ const Shield=(()=>{
   <div class="ctrls" role="group" aria-label="Shield"><span class="lbl">Shield:</span>${SHIELDS.map(([k,t])=>`<button type="button" class="chip" data-sh="${k}">${t}</button>`).join('')}</div>
   <div class="ctrls"><label class="slider">📏 Counter distance <input type="range" min="2" max="40" step="1" data-dist aria-label="Distance from source to counter in centimeters"><output data-dout></output></label>${speedChip()}<button type="button" class="chip" data-snd aria-pressed="${Click.on}">${Click.on?'🔊 Clicks on':'🔇 Clicks off'}</button></div>
   <div class="stage"><canvas width="600" height="320" role="img"></canvas></div>
-  <div class="geiger" role="status"><span>📟 Counter:</span> <b data-cnt>0</b> <span>counts/min</span> <small data-note></small></div>
+  <div class="geiger"><span>📟 Counter:</span> <b data-cnt>0</b> <span>counts/min</span> <small data-note></small><span class="sr" data-say aria-live="polite"></span></div>
   <p class="cap">+ and − marks are ions made along each track (ionizing power). Background radiation alone gives about ${BG} counts/min.</p></div>`;
-  el={root:h,cv:h.querySelector('canvas'),dist:h.querySelector('[data-dist]'),dout:h.querySelector('[data-dout]'),cnt:h.querySelector('[data-cnt]'),note:h.querySelector('[data-note]')};ctx=fitCanvas(el.cv,LW,LH);
+  el={root:h,cv:h.querySelector('canvas'),dist:h.querySelector('[data-dist]'),dout:h.querySelector('[data-dout]'),cnt:h.querySelector('[data-cnt]'),note:h.querySelector('[data-note]'),say:h.querySelector('[data-say]')};ctx=fitCanvas(el.cv,LW,LH);
   h.querySelectorAll('[data-rad]').forEach(b=>b.onclick=()=>set('rad',b.dataset.rad));h.querySelectorAll('[data-sh]').forEach(b=>b.onclick=()=>set('sh',b.dataset.sh));
-  el.dist.oninput=()=>{s.d=+el.dist.value;setTxt(el.dout,s.d+' cm');s.dSeen.push(s.d);s.shown=cpm(s.rad,s.sh,s.d);readout();emit('set:d')};
+  el.dist.oninput=()=>{s.d=+el.dist.value;setTxt(el.dout,s.d+' cm');el.dist.setAttribute('aria-valuetext',s.d+' centimeters');announce();s.dSeen.push(s.d);s.shown=cpm(s.rad,s.sh,s.d);readout();emit('set:d')};
   const snd=h.querySelector('[data-snd]');snd.onclick=()=>{if(!Click.on&&!Click.ensure()){snd.textContent='🔇 No sound on this device';return}Click.on=!Click.on;if(Click.on)Click.ensure();snd.textContent=Click.on?'🔊 Clicks on':'🔇 Clicks off';snd.setAttribute('aria-pressed',Click.on)};
   wireSpeed(h);Object.assign(s,{rad:o.rad||'alpha',sh:o.sh||'none',d:o.d||10,ps:[],ions:[],seen:{},dSeen:[o.d||10]});s.seen[s.rad+':'+s.sh]=1;sync()};
  api.start=()=>loop.start();api.stop=()=>loop.stop();return api})();
@@ -494,7 +509,7 @@ const Power=(()=>{
  function sync(){if(!el.root)return;el.root.querySelectorAll('[data-view]').forEach(b=>{const on=b.dataset.view===s.view;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
   ['fisC','fis2'].forEach(k=>el[k].classList.toggle('hidden',s.view!=='fis'));['fusC','fus2'].forEach(k=>el[k].classList.toggle('hidden',s.view!=='fus'));
   el.root.querySelectorAll('[data-fuel]').forEach(b=>{const on=b.dataset.fuel===s.fuel;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
-  el.rods.value=Math.round(s.rods*100);setTxt(el.rout,Math.round(s.rods*100)+'% in');el.temp.value=s.T;setTxt(el.tout,tempTxt(s.T));read()}
+  el.rods.value=Math.round(s.rods*100);setTxt(el.rout,Math.round(s.rods*100)+'% in');el.rods.setAttribute('aria-valuetext',Math.round(s.rods*100)+' percent in');el.temp.value=s.T;setTxt(el.tout,tempTxt(s.T));el.temp.setAttribute('aria-valuetext',tempTxt(s.T).replace(/[^\w\s.,%-]/g,'').trim());read()}
  function read(){if(!el.root)return;if(s.view==='fis'){const st=s.st,left=st.U.filter(u=>u.on).length;setTxt(el.r1,String(st.fis));setTxt(el.r2,String(st.nu.length));setTxt(el.r3,`${left} of ${st.U.length}`);
    setTxt(el.status,s.fired===0?'Tap 🎯 Fire a neutron':st.nu.length>12?'🔥 Chain reaction growing':st.nu.length>0?'Neutrons flying…':st.fis>=st.U.length*0.35?'Chain reaction ran through the fuel':'Chain died out: neutrons escaped or were absorbed');
    el.cv.setAttribute('aria-label',`Fission: ${st.fis} fissions, ${st.nu.length} neutrons flying, ${left} U-235 nuclei left, control rods ${Math.round(s.rods*100)}% in.`)}
@@ -524,8 +539,8 @@ const Power=(()=>{
    r1:q('[data-r1]'),r2:q('[data-r2]'),r3:q('[data-r3]'),f1:q('[data-f1]'),f2:q('[data-f2]'),status:q('[data-status]')};ctx=fitCanvas(el.cv,LW,LH);
   h.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{s.view=b.dataset.view;sync();emit('view:'+s.view)});
   q('[data-fire]').onclick=fire;h.querySelectorAll('[data-fuel]').forEach(b=>b.onclick=()=>{s.fuel=b.dataset.fuel;reset();emit('fuel')});q('[data-reset]').onclick=()=>{reset();emit('reset')};
-  el.rods.oninput=()=>{s.rods=+el.rods.value/100;s.st.rods=s.rods;setTxt(el.rout,el.rods.value+'% in');emit('rods')};
-  el.temp.oninput=()=>{s.T=+el.temp.value;fusSetT(s.fu,s.T);setTxt(el.tout,tempTxt(s.T));read();emit('temp')};
+  el.rods.oninput=()=>{s.rods=+el.rods.value/100;s.st.rods=s.rods;setTxt(el.rout,el.rods.value+'% in');el.rods.setAttribute('aria-valuetext',el.rods.value+' percent in');emit('rods')};
+  el.temp.oninput=()=>{s.T=+el.temp.value;fusSetT(s.fu,s.T);setTxt(el.tout,tempTxt(s.T));el.temp.setAttribute('aria-valuetext',tempTxt(s.T).replace(/[^\w\s.,%-]/g,'').trim());read();emit('temp')};
   wireSpeed(h);Object.assign(s,{view:o.view||'fis',fuel:o.fuel||'large',rods:o.rods||0,T:o.T||3});reset()};
  api.start=()=>loop.start();api.stop=()=>loop.stop();return api})();
 
@@ -540,9 +555,9 @@ const MODES=[
  {id:'shield',title:'Shield Lab',short:'Block radiation, read the counter',icon:'🛡️',mb:'#eef3f6',ma:'#6b8796'},
  {id:'half',title:'Half-Life Lab',short:'Watch samples decay; do the math',icon:'⏳',mb:'#fff6e2',ma:'#c99a2e'},
  {id:'power',title:'Fission & Fusion',short:'Chain reactions and the Sun',icon:'🔥',mb:'#e7f6e9',ma:'#5e9e6e'},
- {id:'ideas',title:'Radiation & You',short:'Isotopes, health, medicine',icon:'🏥',mb:'#f1eafb',ma:'#9a7fcf'},
+ {id:'ideas',title:'Radiation & You',short:'Isotopes, health, dose math',icon:'🏥',mb:'#f1eafb',ma:'#9a7fcf'},
  {id:'case',title:'Patient Cases',short:'Mateo and other patients, step by step',icon:'🩺',mb:'#e6f7f4',ma:'#3f9e8f'},
- {id:'quiz',title:'Skill Check',short:'10 questions, then your study plan',icon:'🎯',mb:'#fdeef2',ma:'#d0708a'}];
+ {id:'quiz',title:'Skill Check',short:'Practice run or exam rehearsal',icon:'🎯',mb:'#fdeef2',ma:'#d0708a'}];
 const VIDEO_FOR={
  intro:['WDBiyaeivFY',84,'What is radioactivity?'],types:['WDBiyaeivFY',184,'Types of radiation'],balance:['WDBiyaeivFY',345,'How to balance nuclear equations'],
  alpha:['WDBiyaeivFY',553,'Alpha decay of americium-241'],beta:['WDBiyaeivFY',655,'Beta decay of potassium-42'],ec:['WDBiyaeivFY',742,'Electron capture'],
@@ -615,6 +630,10 @@ const DLQ=[
   choices:[[nucS(N(234,92)),true,'α: ²³⁸₉₂U → ²³⁴₉₀Th. β⁻: → ²³⁴₉₁Pa. β⁻: → ²³⁴₉₂U. Two beta decays put back the 2 protons the alpha took, but the mass stays 4 lower.'],
    [nucS(N(234,90)),false,'That is thorium-234, after the alpha step only. Each beta decay then raises the atomic number by 1.'],[nucS(N(234,91)),false,'That is protactinium-234, after α and one β⁻. One more β⁻ is needed.'],[nucS(N(230,90)),false,'Mass 230 would need two alpha decays. Beta decay never changes the mass number.']],
   hint:'Alpha: A − 4, Z − 2. Each beta: A stays, Z + 1. Follow the chain line under the picture.',video:'multi',topic:'balance'})}},
+ /* Chain Walk: walk the parent down to lead-206 with α and β⁻, then count them */
+ {for:['u238','ra226'],f:sys=>{const p=dlP(sys),d=N(206,82),q=seriesParts(p,d);
+  q.prompt=`⛓️ Chain Walk: walk ${nname(p)} down to stable lead-206 using α and β⁻ in any order. How many alpha decays did it take?`;q.html='';
+  q.lab={kind:'decay',sys,o:{sys,goal:d}};q.task={say:'Reach <b>Pb-206</b>, the gold ring on the zoomed band chart. The 🎯 Goal box under the picture coaches you, and <b>↶ Undo</b> takes back a step.',ok:s=>s.cur.A===206&&s.cur.Z===82};return q}},
  {for:['c14','i131','co60','u238','ra226'],f:sys=>{const p=dlP(sys),mode=ALPHA_SYS.includes(sys)?'alpha':'beta',t=decayOf(p,mode).prod;
   return mc({prompt:`Turn ${nname(p)} into ${nname(t)}. Try the buttons (↺ Start over undoes a try). Which decay does it?`,lab:{kind:'decay',sys},task:{say:`Make ${nshort(t)} appear in the lab.`,ok:s=>s.hist.length===1&&s.cur.A===t.A&&s.cur.Z===t.Z},
    choices:['alpha','beta','positron','ec'].map(m=>[cap(MODE_NAME[m]),m===mode,m===mode?TYPE_RIGHT[m]+` ${nshort(p)} → ${nshort(t)}.`:`${cap(MODE_NAME[m])} would give ${nshort(decayOf(p,m).prod)}, not ${nshort(t)}.`]),keepOrder:true,
@@ -712,7 +731,9 @@ const HLQ=[
 const HL_ISO=[['iodine-131',8.00,'days','thyroid treatment'],['technetium-99m',6.00,'hours','a liver scan'],['strontium-90',28.8,'years','reactor waste'],['cobalt-60',5.27,'years','radiation therapy'],['phosphorus-32',14.3,'days','leukemia treatment'],['iodine-123',13.0,'hours','a thyroid scan'],['iridium-192',74.0,'days','a brachytherapy implant'],['radon-222',3.82,'days','a basement air test'],['fluorine-18',1.83,'hours','a PET scan'],['thorium-234',24.1,'days','a lab sample'],['strontium-85',64.8,'days','a bone scan']];
 const MASS=[64.0,48.0,80.0,96.0,36.0,12.0,40.0,24.0,4.00,2.40,0.800,56.0,72.0,16.0];
 const slipCode=m=>/is not dividing by 2|not the same as dividing|is not multiplying by 2/.test(m)?'div2n':/Count|count/.test(m)?'count':/decayed|is gone/.test(m)?'decayed':/is the number of half-lives|do not divide/.test(m)?'nOnly':/Work backward/.test(m)?'backward':/Divide the time by the number|is the total time/.test(m)?'halfDiv':'count';
-function numQ(o){const q=Object.assign({type:'num',sf:3},o);q.slips=(q.slips||[]).filter(([x])=>Math.abs(x-q.answer)>q.answer*0.006).map(([x,m])=>[x,m,slipCode(m)]);return q}
+/* redraw a typed problem whose answer would display with a bare trailing decimal point (like 320.) */
+const noDot=gen=>()=>{let q;for(let i=0;i<40;i++){q=gen();if(q.loose||!/\.$/.test(nf(q.answer,q.sf)))return q}return q};
+function numQ(o){const q=Object.assign({type:'num',sf:3},o);q.slips=(q.slips||[]).filter(([x])=>Math.abs(x-q.answer)>q.answer*0.006).map(([x,m,c])=>[x,m,c||slipCode(m)]);return q}
 const HCALC=[
  ()=>{const [iso,t,u,use]=pick(HL_ISO),n=rnd(2,5),m0=pick(MASS),ans=m0/2**n;return numQ({map:{k:'left',a0:m0,n,t,u,unit:'mg'},prompt:`A ${nf(m0,3)}-mg sample of ${iso} is used for ${use}. Its half-life is ${hlUnit(t,u)}. How many mg are left after ${hlUnit(n*t,u)}?`,unit:'mg',answer:ans,
   slips:[[m0/(2*n),`Halving ${n} times is not dividing by 2 × ${n}.`],[m0/2**(n-1),'Count the half-lives again: time ÷ half-life.'],[m0-ans,'That is the amount that decayed, not what is left.'],[n,'That is the number of half-lives. Now halve the mass that many times.']],
@@ -731,9 +752,63 @@ const HCALC=[
   hint:'1 → ½ → ¼ → ⅛ → 1/16. Count the arrows, then multiply by 5730 years.',why:`1/${f} = (½)<sup>${n}</sup>, so ${n} half-lives. ${n} × 5730 years = ${plain(n*5730)} years.`,video:'carbon',topic:'halfcalc'})},
  ()=>{const n=rnd(2,4),A0=pick([20.0,16.0,24.0,32.0,40.0]),A=A0/2**n;return numQ({map:{k:'left',a0:A0,n,t:6,u:'hours',unit:'mCi'},prompt:`A patient receives ${nf(A0,3)} mCi of technetium-99m (half-life 6.00 hours). What is the activity after ${nf(6*n,3)} hours?`,unit:'mCi',answer:A,
   slips:[[A0/(2*n),`Halving ${n} times is not dividing by 2 × ${n}.`],[A0-A,'That is how much activity is gone.'],[A0/2**(n-1),'Count the half-lives again.']],
-  hint:'Curies (activity) halve each half-life, just like mass.',why:`${nf(6*n,3)} h ÷ 6.00 h = ${n} half-lives. ${nf(A0,3)} mCi × (½)<sup>${n}</sup> = ${nf(A,3)} mCi.`,video:'curies',topic:'halfcalc'})}];
+  hint:'Curies (activity) halve each half-life, just like mass.',why:`${nf(6*n,3)} h ÷ 6.00 h = ${n} half-lives. ${nf(A0,3)} mCi × (½)<sup>${n}</sup> = ${nf(A,3)} mCi.`,video:'curies',topic:'halfcalc'})}].map(noDot);
+/* ============================== 📏 DOSE & UNITS (typed) ==============================
+   Textbook 14.9 values: 1 Ci = 3.7 × 10¹⁰ Bq (exact), so 1 mCi = 37 MBq and 1 μCi = 3.7 × 10⁴ Bq; 1 pCi = 0.037 Bq; 1 Gy = 100 rad; 1 Sv = 100 rem; 1 kg = 2.2046 lb.
+   Each problem carries a Step Map (map.k 'steps') whose last step is the graded answer. For learning chemistry only; not dosing advice. */
+const stepsMap=(steps,end)=>({k:'steps',steps,end});
+const DOSE_NOTE=' (For learning chemistry only; not medical advice.)';
+const DOSE=[
+ ()=>{const [iso,use]=pick([['technetium-99m','a bone scan'],['iodine-123','a thyroid scan'],['thallium-201','a heart scan'],['gallium-67','an infection scan']]),A=pick([25.0,15.0,12.0,4.00,8.00,5.00,6.00]),ans=A*37;
+  return numQ({prompt:`A dose of ${iso} for ${use} is labeled ${nf(A,3)} mCi. What is its activity in megabecquerels (MBq)?`,unit:'MBq',answer:ans,
+   map:stepsMap([{p:'How many MBq equal 1 mCi? (1 Ci = 3.7 × 10¹⁰ Bq = 1000 mCi, and 1 MBq = 10⁶ Bq)',a:37,h:'3.7 × 10¹⁰ Bq ÷ 1000 = 3.7 × 10⁷ Bq in 1 mCi. Divide by 10⁶ to get MBq.'},{p:`${nf(A,3)} mCi × 37 MBq/mCi = ?`,a:ans,h:'Multiply. mCi cancels and MBq is left.'}],'Round to 3 significant figures (37 is exact) and type it in the answer box.'),
+   slips:[[A/37,'Each mCi is 37 MBq, so the number of MBq is bigger. Multiply by 37 instead of dividing.','unitFlip'],[A*3.7,'1 mCi = 37 MBq, not 3.7. Recheck the powers of ten.','unitFactor'],[A*3.7e10,'That uses 1 Ci = 3.7 × 10¹⁰ Bq, but this dose is in millicuries and the answer is in megabecquerels: 1 mCi = 37 MBq.','unitFactor']],
+   hint:'1 mCi = 37 MBq (because 1 Ci = 3.7 × 10¹⁰ Bq). Set it up as mCi × (37 MBq / 1 mCi).',why:`${nf(A,3)} mCi × (37 MBq / 1 mCi) = ${nf(ans,3)} MBq. The 37 comes from 1 Ci = 3.7 × 10¹⁰ Bq and is exact.`,video:'curies',topic:'dose'})},
+ ()=>{const B=pick([555,370,185,740,296,444]),ans=B/37;
+  return numQ({prompt:`A fluorine-18 dose for a PET scan is labeled ${B} MBq. What is its activity in millicuries (mCi)?`,unit:'mCi',answer:ans,
+   map:stepsMap([{p:'How many MBq equal 1 mCi?',a:37,h:'1 Ci = 3.7 × 10¹⁰ Bq, so 1 mCi = 3.7 × 10⁷ Bq = 37 MBq.'},{p:`${B} MBq × (1 mCi / 37 MBq) = ?`,a:ans,h:'Divide by 37. MBq cancels and mCi is left.'}],'Round to 3 significant figures and type it in the answer box.'),
+   slips:[[B*37,'Millicuries are the bigger unit, so the number gets smaller. Divide by 37.','unitFlip'],[B/3.7,'1 mCi = 37 MBq, not 3.7.','unitFactor']],
+   hint:'1 mCi = 37 MBq. Put MBq on the bottom so it cancels: MBq × (1 mCi / 37 MBq).',why:`${B} MBq × (1 mCi / 37 MBq) = ${nf(ans,3)} mCi.`,video:'curies',topic:'dose'})},
+ ()=>{const [what,from,to,v,mul]=pick([['A dental hygienist’s dosimeter shows','mSv','mrem',pick([0.850,0.450,0.125,0.375]),100],['A radiation therapy session delivers','Gy','rad',pick([1.25,1.75,2.25]),100],['A mammogram gives an effective dose of about','mSv','mrem',pick([0.400,0.420]),100],['A patient’s skin receives','rad','Gy',pick([375,425,512]),0.01]]),ans=v*mul,up=mul>1;
+  return numQ({prompt:`${what} ${nf(v,3)} ${from}. Express it in ${to}.`,unit:to,answer:ans,
+   map:stepsMap([{p:`How many ${up?to:from} equal 1 ${up?from:to}?`,a:100,int:1,h:from.slice(-2)==='Sv'||to.slice(-2)==='Sv'||from.includes('rem')?'1 Sv = 100 rem, so 1 mSv = 100 mrem.':'1 Gy = 100 rad.'},{p:up?`${nf(v,3)} ${from} × 100 = ?`:`${nf(v,3)} ${from} ÷ 100 = ?`,a:ans,h:up?'The new unit is smaller, so the number gets bigger.':'The new unit is bigger, so the number gets smaller.'}],'Round to 3 significant figures and type it in the answer box.'),
+   slips:[[up?v/100:v*100,up?'The new unit is smaller, so the number must get bigger: multiply by 100.':'The new unit is bigger, so the number must get smaller: divide by 100.','unitFlip'],[up?v*1000:v/1000,'The factor is 100, not 1000 (1 Sv = 100 rem, 1 Gy = 100 rad).','unitFactor']],
+   hint:'1 Gy = 100 rad and 1 Sv = 100 rem (so 1 mSv = 100 mrem).',why:`${nf(v,3)} ${from} ${up?'×':'÷'} 100 = ${nf(ans,3)} ${to}.`,video:'curies',topic:'dose'})},
+ ()=>{const w=pick([[44.0,'lb'],[55.0,'lb'],[33.0,'lb'],[66.0,'lb'],[132,'lb'],[165,'lb']]),rate=pick([0.200,0.150,0.250]),kg=w[0]/2.2046,ans=kg*rate,who=w[0]<100?'A child':'An adult';
+  return numQ({prompt:`${who} who weighs ${nf(w[0],3)} lb needs a scan agent dosed at ${nf(rate,3)} mCi per kilogram of body mass. What activity should be given?${DOSE_NOTE}`,unit:'mCi',answer:ans,
+   map:stepsMap([{p:`Convert to kilograms: ${nf(w[0],3)} lb ÷ 2.2046 lb/kg = ?`,a:kg,h:'1 kg = 2.2046 lb. Pounds are smaller, so the number of kg is smaller.'},{p:`Dose = ${nf(kg,4)} kg × ${nf(rate,3)} mCi/kg = ?`,a:ans,h:'Multiply the mass in kg by the dose per kg.'}],'Round to 3 significant figures and type it in the answer box.'),
+   slips:[[w[0]*rate,'The dose is per kilogram, but the weight is in pounds. Convert pounds to kilograms first (÷ 2.2046).','lbkg'],[w[0]*2.2046*rate,'To go from pounds to kilograms, divide by 2.2046 (a kilogram is heavier than a pound).','lbkg'],[kg/rate,'Multiply the mass by the dose per kilogram; do not divide.','unitFlip']],
+   hint:'First kg = lb ÷ 2.2046. Then dose = kg × (mCi per kg).',why:`${nf(w[0],3)} lb ÷ 2.2046 lb/kg = ${nf(kg,4)} kg (keep an extra digit until the end). ${nf(kg,4)} kg × ${nf(rate,3)} mCi/kg = ${nf(ans,3)} mCi.`,video:'medical',topic:'dose'})},
+ ()=>{const [tot,mL]=pick([[40.0,8.00],[60.0,10.0],[25.0,5.00],[30.0,12.0],[50.0,20.0]]),c=tot/mL,D=pick([15.0,10.0,20.0,12.0,7.50]),ans=D/c;
+  return numQ({prompt:`A vial holds ${nf(tot,3)} mCi of technetium-99m in ${nf(mL,3)} mL of solution. How many mL should be drawn up for a ${nf(D,3)}-mCi dose?${DOSE_NOTE}`,unit:'mL',answer:ans,
+   map:stepsMap([{p:`Concentration: ${nf(tot,3)} mCi ÷ ${nf(mL,3)} mL = ? mCi per mL`,a:c,h:'Activity per volume: divide mCi by mL.'},{p:`Volume = ${nf(D,3)} mCi ÷ ${nf(c,3)} mCi/mL = ?`,a:ans,h:'Divide the dose by the concentration. mCi cancels and mL is left.'}],'Round to 3 significant figures and type it in the answer box.'),
+   slips:[[D*c,'Dose ÷ concentration, not ×: the mCi should cancel and leave mL.','unitFlip'],[tot/D,'Find the concentration (mCi per mL) first, then divide the dose by it.','unitFlip']],
+   hint:'Concentration = mCi ÷ mL. Volume = dose ÷ concentration.',why:`${nf(tot,3)} mCi ÷ ${nf(mL,3)} mL = ${nf(c,3)} mCi/mL. ${nf(D,3)} mCi ÷ ${nf(c,3)} mCi/mL = ${nf(ans,3)} mL.`,video:'medical',topic:'dose'})},
+ ()=>{const pc=pick([4.00,2.00,8.00,10.0]),ans=pc*0.037;
+  return numQ({prompt:`The EPA suggests fixing a home if radon in the air reaches ${nf(pc,3)} pCi per liter. Express this in becquerels per liter (Bq/L). (1 pCi = 0.037 Bq)`,unit:'Bq/L',answer:ans,
+   map:stepsMap([{p:'How many Bq equal 1 pCi?',a:0.037,h:'1 Ci = 3.7 × 10¹⁰ Bq and 1 pCi = 10⁻¹² Ci, so 1 pCi = 0.037 Bq.'},{p:`${nf(pc,3)} pCi/L × 0.037 Bq/pCi = ?`,a:ans,h:'Multiply. pCi cancels.'}],'Round to 3 significant figures and type it in the answer box.'),
+   slips:[[pc/0.037,'1 pCi is only 0.037 Bq, so the number of Bq is smaller: multiply by 0.037.','unitFlip'],[pc*3.7,'1 pCi = 0.037 Bq, not 3.7 Bq.','unitFactor']],
+   hint:'1 pCi = 0.037 Bq. Multiply pCi/L by 0.037 Bq/pCi.',why:`${nf(pc,3)} pCi/L × 0.037 Bq/pCi = ${nf(ans,3)} Bq/L. One decay every 7 seconds or so in each liter of air.`,video:'background',topic:'dose'})},
+ ()=>{const d=pick([0.850,1.20,2.40,4.50,0.600]),ans=d/50*100;
+  return numQ({prompt:`A nuclear medicine technologist’s dosimeter shows ${nf(d,3)} mSv for the year. The yearly limit for radiation workers is 50 mSv. What percent of the limit is that?`,unit:'%',answer:ans,
+   map:stepsMap([{p:`Fraction of the limit: ${nf(d,3)} mSv ÷ 50 mSv = ?`,a:d/50,h:'Divide the dose by the limit. The units cancel.'},{p:'Multiply by 100% = ?',a:ans,h:'A fraction times 100 is a percent.'}],'Round to 3 significant figures (the limit 50 mSv is exact) and type it in the answer box.'),
+   slips:[[50/d*100,'Put the dose on top: dose ÷ limit × 100%.','unitFlip'],[d/50,'That is the fraction. Multiply by 100 to get a percent.','unitFactor']],
+   hint:'Percent = dose ÷ limit × 100%.',why:`${nf(d,3)} ÷ 50 × 100% = ${nf(ans,3)}% of the limit. Dosimeters let workers prove they stay far below it.`,video:'detect',topic:'dose'})}].map(noDot);
+/* ============================== ⛓️ DECAY SERIES: count the α and β⁻ decays ==============================
+   Only α changes the mass number (−4 each); each α lowers Z by 2 and each β⁻ raises it by 1. */
+const SERIES=[[N(238,92),N(206,82)],[N(235,92),N(207,82)],[N(232,90),N(208,82)],[N(226,88),N(206,82)],[N(222,86),N(206,82)]];
+function seriesParts(p,d){const drop=p.A-d.A,na=drop/4,zA=p.Z-2*na,nb=d.Z-zA;
+ const q2=numQ({label:'Step 2 of 2:',prompt:`How many beta (β⁻) decays are in the series?`,unit:'β⁻ decays',answer:nb,loose:true,int:1,
+  map:stepsMap([{p:`${na} alpha decays lower the atomic number by 2 each: ${p.Z} − 2 × ${na} = ?`,a:zA,int:1,h:'Each alpha carries away 2 protons.'},{p:`The series ends at Z = ${d.Z}. Each β⁻ raises Z by 1. How many β⁻? ${d.Z} − ${zA} = ?`,a:nb,int:1,h:'Count how far Z has to climb back up.'}],'That is the number of beta decays. Type it in the answer box.'),
+  slips:[[p.Z-d.Z,`${p.Z} − ${d.Z} = ${p.Z-d.Z} is the net drop in Z. The ${na} alphas dropped it by ${2*na}, so β⁻ decays raised it back up by the difference.`,'seriesB'],[2*na,`${2*na} is how much the alphas lowered Z. The β⁻ decays only make up the gap between ${zA} and ${d.Z}.`,'seriesB']],
+  hint:`After ${na} alphas, Z = ${p.Z} − ${2*na} = ${zA}. Each β⁻ adds 1 until Z = ${d.Z}.`,why:`${na} α lower Z to ${p.Z} − ${2*na} = ${zA}. To reach ${d.Z}: ${d.Z} − ${zA} = ${nb} β⁻ decays. Check: ${p.Z} − 2(${na}) + ${nb} = ${d.Z} ✔`,video:'multi',topic:'series'});
+ return numQ({prompt:`${cap(nname(p))} decays through a series of alpha and beta (β⁻) decays to stable ${nname(d)}. How many alpha decays are in the series?`,html:`${nucHTML(p)} ${ARROW} ⋯ ${ARROW} ${nucHTML(d)}`,unit:'α decays',answer:na,loose:true,int:1,then:q2,
+  map:stepsMap([{p:`How much does the mass number drop? ${p.A} − ${d.A} = ?`,a:drop,int:1,h:'Subtract the top numbers.'},{p:`Each α removes 4 from the mass number. Number of α = ${drop} ÷ 4 = ?`,a:na,int:1,h:'Beta decay does not change the mass number, so only alphas count here.'}],'That is the number of alpha decays. Type it in the answer box.'),
+  slips:[[drop,`${drop} is how much the mass number dropped. Each alpha removes 4, so divide by 4.`,'seriesA'],[drop/2,'Each alpha removes 4 from the mass number (⁴₂He), not 2.','seriesA']],
+  hint:'Only alpha decay changes the mass number (−4 each). Beta decay leaves it the same.',why:`${p.A} − ${d.A} = ${drop}, and ${drop} ÷ 4 = ${na} alpha decays.`,video:'multi',topic:'series'})}
+function seriesQ(){const [p,d]=pick(SERIES);return seriesParts(p,d)}
 /* Step Map: the lecture's half-life method one step at a time (knowns → n → halving map → answer). Each step: p prompt, a answer, int (whole number), h hint */
-function stepsOf(q){const m=q.map;if(!m)return null;const T=v=>(m.show&&m.show[v])||hlUnit(v,m.u),U=m.unit,S=[];
+function stepsOf(q){const m=q.map;if(!m)return null;if(m.k==='steps')return {steps:m.steps,end:m.end};const T=v=>(m.show&&m.show[v])||hlUnit(v,m.u),U=m.unit,S=[];
  const nStep={p:`How many half-lives? n = time ÷ half-life = ${T(m.n*m.t)} ÷ ${T(m.t)} = ?`,a:m.n,int:1,h:'Divide the time by the half-life. The units cancel, and n is a whole number here.'};
  const halve=(a0,k)=>{for(let i=1;i<=k;i++)S.push({p:`${i===1?`Start with ${nf(a0,3)} ${U}. `:''}After half-life ${i}: ${nf(a0/2**(i-1),3)} ${U} ÷ 2 = ?`,a:a0/2**i,h:'Halve the amount from the step before.'})};
  if(m.k==='left'){S.push(nStep);halve(m.a0,m.n);return {steps:S,end:`That last arrow is the amount left. Round it to 3 significant figures and type it in the answer box.`}}
@@ -839,21 +914,23 @@ const ideaQ=it=>mc({prompt:it.p,choices:it.c.map(([a,b,w])=>[a,!!b,w]),hint:IDEA
 const IDEA_HINT={types:'Think about what each particle is and what it does to the nucleus (see 🧠 Reference).',pen:'Penetrating power: γ > β > α. Ionizing power is the reverse.',health:'Think about which radiation leaves the body and how long the activity lasts.',iso:'Same element = same number of protons.',fission:'Fission splits heavy nuclei; fusion joins light ones.',halfidea:'Each half-life halves what is left.'};
 /* ============================== GENERATORS PER MODE ============================== */
 const TOPICS={types:['Types of radiation and decay','ideas','types'],iso:['Isotopes and nuclide symbols','ideas','intro'],pen:['Penetrating power and shielding','shield','pen'],balance:['Completing nuclear equations','balance','balance'],dtype:['Identifying the type of decay','balance','balance'],
- bomb:['Bombardment reactions','balance','bomb'],halfcalc:['Half-life calculations','half','halfLeft'],halfidea:['Half-life and radiocarbon ideas','half','half'],fission:['Fission and fusion','power','fission'],health:['Radiation, health and medicine','ideas','medical']};
-const QUIZ_PLAN=['types','iso','pen','balance','dtype','bomb','halfcalc','halfidea','fission','health'];
+ bomb:['Bombardment reactions','balance','bomb'],halfcalc:['Half-life calculations','half','halfLeft'],halfidea:['Half-life and radiocarbon ideas','half','half'],fission:['Fission and fusion','power','fission'],health:['Radiation, health and medicine','ideas','medical'],
+ series:['Decay series (counting α and β⁻)','decay','multi'],dose:['Radiation units and dose math','ideas','curies']};
+const QUIZ_PLAN=['types','iso','pen','balance','dtype','bomb','halfcalc','dose','fission','health'];
+const EXAM_PLAN=['types','iso','pen','balance','balance','dtype','bomb','series','halfcalc','halfcalc','halfidea','dose','dose','fission','health'];
 const ideasOf=t=>IDEAS.filter(i=>i.t===t);
 function topicQ(t){
  if(t==='balance')return pick([balProd,balWords,balPart])();
- if(t==='dtype')return dtypeQ();if(t==='bomb')return bombQ();if(t==='halfcalc')return pick(HCALC)();
+ if(t==='dtype')return dtypeQ();if(t==='bomb')return bombQ();if(t==='halfcalc')return pick(HCALC)();if(t==='series')return seriesQ();if(t==='dose')return pick(DOSE)();
  if(t==='iso')return pick([pnQ,symQ,isoQ,()=>ideaQ(pick(ideasOf('iso')))])();
  return ideaQ(pickNew('t'+t,ideasOf(t)))}
 const GEN={
  decay(){const sys=state.labSys&&DL_SYS.some(d=>d[0]===state.labSys)?state.labSys:pick(DL_SYS)[0];return pickNew('dl'+sys,DLQ.filter(d=>d.for.includes(sys))).f(sys)},
- balance(){return pickNew('bal',[balProd,balProd,balPart,balWords,bombQ,bombQ,dtypeQ,multiQ])()},
+ balance(){return pickNew('bal',[balProd,balProd,balPart,balWords,bombQ,bombQ,dtypeQ,multiQ,seriesQ])()},
  shield(){if(state.firstLab){state.firstLab=false;return pickNew('sl',SLQ)()}return Math.random()<0.7?pickNew('sl',SLQ)():ideaQ(pickNew('pen',ideasOf('pen')))},
  half(){if(state.firstLab){state.firstLab=false;return pickNew('hl',HLQ)()}return Math.random()<0.45?pickNew('hl',HLQ)():Math.random()<0.8?pickNew('hc',HCALC)():ideaQ(pickNew('hi',ideasOf('halfidea')))},
  power(){if(state.firstLab){state.firstLab=false;return pickNew('pl',PLQ)()}const r=Math.random();return r<0.5?pickNew('pl',PLQ)():r<0.65?pick([fisEqQ,fisCountQ,fusEqQ])():ideaQ(pickNew('fi',ideasOf('fission')))},
- ideas(){const r=Math.random();return r<0.25?pick([pnQ,symQ,isoQ])():ideaQ(pickNew('id',IDEAS.filter(i=>['types','health','iso'].includes(i.t))))},
+ ideas(){const r=Math.random();return r<0.2?pick([pnQ,symQ,isoQ])():r<0.45?pickNew('dose',DOSE)():ideaQ(pickNew('id',IDEAS.filter(i=>['types','health','iso'].includes(i.t))))},
  case(){return pickNew('case',CASES)()},
  quiz(){const t=state.quiz.plan[state.quiz.i];const q=topicQ(t);q.topic=t;return q}};
 /* ============================== 🩺 PATIENT CASES ============================== */
@@ -946,7 +1023,12 @@ const SLIPS={
  halfDiv:['Finding a half-life (time ÷ n)',()=>HCALC[3]()],
  sf:['Sig figs on the final answer',()=>pick(HCALC.slice(0,4))()],
  type:['Naming the type of decay',()=>dtypeQ()],
- pen:['Penetrating power and shielding',()=>ideaQ(pick(ideasOf('pen')))]};
+ pen:['Penetrating power and shielding',()=>ideaQ(pick(ideasOf('pen')))],
+ unitFlip:['Multiplying vs. dividing by a conversion factor',()=>pick(DOSE)()],
+ unitFactor:['Unit factors (1 mCi = 37 MBq, 1 Gy = 100 rad, 1 Sv = 100 rem)',()=>pick([DOSE[0],DOSE[1],DOSE[2],DOSE[5]])()],
+ lbkg:['Converting pounds to kilograms (÷ 2.2046)',()=>DOSE[3]()],
+ seriesA:['Counting the alpha decays in a series (mass drop ÷ 4)',()=>seriesQ()],
+ seriesB:['Counting the beta decays in a series',()=>seriesQ()]};
 /* chips above the question that pick a lab sample */
 const LAB_PICK={decay:DL_SYS.map(d=>[d[0],d[1]]),half:HL_SYS.map(h=>[h[0],h[1]])};
 </script>
@@ -963,13 +1045,13 @@ const BADGES=[['first','🌱','First Answer','Answer a question',j=>j.correct>=1
  ['decay','⚛️','Decay Detective','5 in Decay Lab',j=>(j.modes.decay||0)>=5],['balance','⚖️','Balancer','10 in Balance It!',j=>(j.modes.balance||0)>=10],['shield','🛡️','Safety Officer','5 in Shield Lab',j=>(j.modes.shield||0)>=5],
  ['half','⏳','Half-Life Hero','10 in Half-Life Lab',j=>(j.modes.half||0)>=10],['power','🔥','Reactor Operator','5 in Fission & Fusion',j=>(j.modes.power||0)>=5],['ideas','🏥','Rad Tech','10 in Radiation & You',j=>(j.modes.ideas||0)>=10],
  ['case','🩺','Case Closed','3 Patient Cases',j=>(j.modes.case||0)>=3],['fix','🔧','Fixer','5 in Fix My Mistakes',j=>(j.fixed||0)>=5],
- ['quiz','🎯','Skill Check Star','8+ on a Skill Check',j=>(j.bestQuiz||0)>=8],['all','🧭','Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
+ ['quiz','🎯','Skill Check Star','80% or more on a Skill Check',j=>(j.bestQuiz||0)>=8],['all','🧭','Explorer','Every mode',j=>MODES.every(m=>j.modes[m.id])]];
 function earn(){BADGES.forEach(([id,e,t,,ok])=>{if(!J.badges[id]&&ok(J)){J.badges[id]=1;toast(`Badge earned: ${e} ${t}`)}})}
 function renderJ(){const l=Math.floor(J.xp/100)+1,i=J.xp%100;$('jChip').textContent=`Level ${l} • ${J.xp} XP`;$('lvl').textContent='Level '+l;$('xpFill').style.width=i+'%';$('xpTxt').textContent=i+' / 100 XP';
  renderFix();
- $('badges').innerHTML=BADGES.map(([id,e,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><span class="e" aria-hidden="true">${e}</span><span><b>${t}</b>${d}</span></div>`).join('')}
+ $('badges').innerHTML=BADGES.map(([id,e,t,d])=>`<div class="bdg ${J.badges[id]?'got':''}"><img src="assets/ach-${id}.webp" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'e',textContent:'${e}'}))"><span><b>${t}</b>${d}</span></div>`).join('')}
 /* ---- Fix my mistakes: count each kind of slip on this device; offer 5 targeted questions once a slip repeats ---- */
-function slip(code){if(!code||!SLIPS[code])return '';const q=state.q||{};q.slipped=q.slipped||{};if(q.slipped[code])return '';q.slipped[code]=1;J.slips=J.slips||{};J.slips[code]=(J.slips[code]||0)+1;try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderFix();
+function slip(code){if(!code||!SLIPS[code])return '';const q=state.q||{};if(!q.firstSlip)q.firstSlip=code;q.slipped=q.slipped||{};if(q.slipped[code])return '';q.slipped[code]=1;J.slips=J.slips||{};J.slips[code]=(J.slips[code]||0)+1;try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderFix();
  const n=J.slips[code];if(n<2||(state.fix&&state.fix.code===code)||state.mode==='quiz')return '';
  return `<div class="fixnudge">🔧 That is ${n} times for: <b>${SLIPS[code][0]}</b>. <br><button type="button" class="btn hint" data-fix="${code}">Practice this (5 questions)</button></div>`}
 function renderFix(){const el=$('fixList');if(!el)return;const top=Object.entries(J.slips||{}).filter(([k,v])=>v>0&&SLIPS[k]).sort((a,b)=>b[1]-a[1]).slice(0,3);
@@ -980,8 +1062,12 @@ function award(assisted){const before=Math.floor(J.xp/100);if(assisted)J.xp+=2;e
  earn();if(Math.floor(J.xp/100)>before)toast('Level up!');try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}renderJ()}
 function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
 function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=h}
-function log(ok){if(state.logged)return;state.logged=true;try{window.ddTrack&&ddTrack({game:'nuclear',course:'3A',mode:MODES.find(m=>m.id===state.mode).title,topic:state.q.topic||state.q.video||'',correct:!!ok})}catch(e){}}
-function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic" aria-hidden="true">${m.icon}</span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+/* anonymous stats (games/track.js): first-try right/wrong per topic, the first slip (prefixed nuc- so the class report can find it),
+   and for Skill Check runs a random run code and seconds, so report.html can score each Exam rehearsal. No typed answers are sent. */
+function log(ok){if(state.logged)return;state.logged=true;const q=state.q||{},Q=state.mode==='quiz'&&state.quiz?state.quiz:null;
+ try{window.ddTrack&&ddTrack({game:'nuclear',course:'3A',mode:Q?(Q.kind==='exam'?'Exam rehearsal':'Practice run'):state.fix?'Fix my mistakes':MODES.find(m=>m.id===state.mode).title,topic:q.topic||q.video||'',correct:!!ok,
+  slip:q.firstSlip?'nuc-'+q.firstSlip:'',item:'nuc-'+(q.topic||'other'),ex:Q?Q.ex:'',sec:q.t0?(Date.now()-q.t0)/1000:''})}catch(e){}}
+function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button type="button" class="mode ${m.id===state.mode?'on':''}" aria-pressed="${m.id===state.mode}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic art" aria-hidden="true"><img src="assets/mode-${m.id}.webp" alt="" onerror="this.parentNode.classList.remove('art');this.parentNode.textContent='${m.icon}'"></span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
  $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.fix=null;state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();next()})}
 /* labs */
 const LABS={decay:Decay,shield:Shield,half:Half,power:Power};const labHost=document.createElement('div');
@@ -990,31 +1076,47 @@ function ensureLab(spec){stopLabs();const L=LABS[spec.kind];L.mount(labHost,spec
 /* a task is done when its ok(lab state) test passes; then Check Answer unlocks */
 function taskEvent(L){const t=state.q&&state.q.task;if(!t||state.taskOk||state.done)return;if(t.ok(L.s)){state.taskOk=true;const el=$('taskBox');if(el){el.className='task done';el.innerHTML='✅ Done! Now answer below.'}$('checkBtn').disabled=false}}
 function taskPoll(L){clearTimeout(taskPoll.t);if(!state.q||!state.q.task||state.taskOk)return;taskEvent(L);if(!state.taskOk)taskPoll.t=setTimeout(()=>taskPoll(L),300)}
-function startQuiz(){state.quiz={plan:QUIZ_PLAN.slice(),i:0,res:[],over:false}}
-function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length;Q.over=true;J.bestQuiz=Math.max(J.bestQuiz||0,n);try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}earn();renderJ();
+/* Skill Check: the student picks a Practice run (hints, Step Map, retries; first tries score) or an Exam rehearsal (one try, no hints, clock, answers at the end) */
+const exam=()=>state.mode==='quiz'&&!!state.quiz&&state.quiz.kind==='exam';
+function startQuiz(kind){clearInterval(startQuiz.tk);state.quiz={kind,plan:(kind==='exam'?EXAM_PLAN:QUIZ_PLAN).slice(),i:0,res:[],over:false,t0:Date.now(),ex:Math.random().toString(36).slice(2,10)};
+ if(kind==='exam')startQuiz.tk=setInterval(()=>{const c=$('qclock');if(c&&state.quiz&&!state.quiz.over)c.textContent=mmss(Math.round((Date.now()-state.quiz.t0)/1000))},1000)}
+function quizPick(){stopLabs();clearInterval(startQuiz.tk);state.quiz=null;state.q={};state.done=true;
+ $('practice').classList.add('quizdone','quizpick');$('modeTitle').textContent='Skill Check: choose one';fb('','');$('hintBox').className='hintbox';
+ $('qArea').innerHTML=`<div class="qpick"><button type="button" class="pickcard" data-kind="practice"><b>🎯 Practice run</b><span>${QUIZ_PLAN.length} questions, one per topic. 💡 Hints, 🧭 Step Map and retries are on. Your score counts first tries.</span></button><button type="button" class="pickcard" data-kind="exam"><b>📝 Exam rehearsal</b><span>${EXAM_PLAN.length} questions in test format: one try each, no hints, a running clock. You see every answer and explanation at the end.</span></button></div>`;
+ $('qArea').querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{startQuiz(b.dataset.kind);next();$('practice').scrollIntoView({behavior:'smooth',block:'start'});$('modeTitle').focus({preventScroll:true})});
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);video();stats()}
+function chainParts(q){const a=[];for(let p=q;p;p=p.prev)a.unshift({prompt:p.prompt,ans:ansText(p),why:p.why,yours:p.yours||''});return a}
+function yours(q){if(q.type==='num'){const i=$('numIn');return i&&i.value.trim()?esc(i.value.trim())+(q.unit?' '+q.unit:''):''}
+ if(q.type==='nuc'){const b=$('nucBox');return b?[...b.querySelectorAll('.blank')].map(k=>`${esc(k.querySelector('.bA').value)}/${esc(k.querySelector('.bZ').value)} ${esc(k.querySelector('.bS').value)}`).join(', '):''}return state.sel||''}
+function quizSummary(){const Q=state.quiz,n=Q.res.filter(r=>r.ok).length,tot=Q.res.length,X=Q.kind==='exam',secs=Math.round((Date.now()-Q.t0)/1000);Q.over=true;clearInterval(startQuiz.tk);
+ J.bestQuiz=Math.max(J.bestQuiz||0,Math.round(n/tot*10));
+ if(X){J.xp+=10*n;J.correct+=n;J.modes.quiz=(J.modes.quiz||0)+n}/* exam points are given at the end, so no right/wrong shows during the exam */
+ try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}earn();renderJ();
  const miss={};Q.res.forEach(r=>{if(!r.ok)miss[r.topic]=(miss[r.topic]||0)+1});
  const rows=Object.keys(TOPICS).filter(t=>Q.res.some(r=>r.topic===t)).map(t=>{const R=Q.res.filter(r=>r.topic===t),k=R.filter(r=>r.ok).length;return `<tr><td>${k===R.length?'✅':'❌'}</td><td>${TOPICS[t][0]}</td><td>${k} / ${R.length}</td></tr>`}).join('');
  const plan=Object.keys(miss).map(t=>`<div class="item"><b>📌 ${TOPICS[t][0]}</b><br><button type="button" class="btn hint" data-go="${t}">Practice this</button><button type="button" class="btn show" data-vid="${t}">🎥 Watch Dr. Dan</button></div>`).join('');
- const msg=n>=9?'🌟 Excellent! You are ready.':n>=7?'👍 Solid. Review the topics below.':n>=5?'📚 Getting there. Practice the topics below, then try again.':'🧭 Start with the topics below; the ⚛️ Decay Lab and ⏳ Half-Life Lab help a lot.';
- $('qArea').innerHTML=`<div class="qsum"><p class="prompt">Skill Check complete</p><div class="big">${n} / ${Q.res.length}</div><p>${msg}</p><table>${rows}</table>
-  <h3 style="margin:14px 0 4px">Your study plan</h3>${plan?`<div class="plan">${plan}</div>`:'<p>Nothing to review: every topic was right. Try another Skill Check to be sure!</p>'}
-  <button type="button" class="btn check" id="againBtn" style="margin-top:14px">🎯 Start a new Skill Check</button></div>`;
- ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);fb('','');$('newBtn').textContent='New Skill Check ↻';$('practice').classList.add('quizdone');$('modeTitle').textContent='Skill Check results';
+ const f=n/tot,msg=f>=0.9?'🌟 Excellent! You are ready.':f>=0.7?'👍 Solid. Review the topics below.':f>=0.5?'📚 Getting there. Practice the topics below, then try again.':'🧭 Start with the topics below; the ⚛️ Decay Lab and ⏳ Half-Life Lab help a lot.';
+ const review=X?`<h3 style="margin:14px 0 4px">📋 Every answer</h3><div class="review">${Q.res.map((r,i)=>`<details class="rv ${r.ok?'ok':'no'}"${r.ok?'':' open'}><summary>${r.ok?'✅':'❌'} ${i+1}. ${TOPICS[r.topic][0]}</summary>${(r.parts||[]).map(p=>`<div class="rvp"><p>${p.prompt}</p><p><b>Answer:</b> ${p.ans}${p.yours?` · <b>You:</b> ${p.yours}`:''}</p><p class="tip">${p.why}</p></div>`).join('')}</details>`).join('')}</div>`:'';
+ $('qArea').innerHTML=`<div class="qsum"><p class="prompt">${X?'📝 Exam rehearsal':'🎯 Practice run'} complete</p><div class="big">${n} / ${tot}</div>${X?`<p>⏱ Time: ${mmss(secs)}</p>`:''}<p>${msg}</p><table>${rows}</table>
+  <h3 style="margin:14px 0 4px">Your study plan</h3>${plan?`<div class="plan">${plan}</div>`:'<p>Nothing to review: every topic was right. Try another Skill Check to be sure!</p>'}${review}
+  <button type="button" class="btn check" id="againBtn" style="margin-top:14px">${X?'📝 Another exam rehearsal':'🎯 Another practice run'}</button> <button type="button" class="btn hint" id="otherBtn" style="margin-top:10px">${X?'🎯 Try a practice run':'📝 Try an exam rehearsal'}</button></div>`;
+ ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);fb('','');$('newBtn').textContent='New Skill Check ↻';$('practice').classList.add('quizdone');$('practice').classList.remove('quizmode');$('modeTitle').textContent=(X?'Exam rehearsal':'Practice run')+' results';
  $('qArea').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{state.mode=TOPICS[b.dataset.go][1];ui.mode=state.mode;saveUI();buildModes();next();$('practice').scrollIntoView({behavior:'smooth'})});
  $('qArea').querySelectorAll('[data-vid]').forEach(b=>b.onclick=()=>{state.q={video:TOPICS[b.dataset.vid][2]};video();openVideo()});
- $('againBtn').onclick=()=>{startQuiz();next()};$('againBtn').focus({preventScroll:true})}
+ $('againBtn').onclick=()=>{startQuiz(Q.kind);next();$('modeTitle').focus()};$('otherBtn').onclick=()=>{startQuiz(X?'practice':'exam');next();$('modeTitle').focus()};$('againBtn').focus({preventScroll:true})}
 function next(){clearTimeout(taskPoll.t);
- $('practice').classList.toggle('quizmode',state.mode==='quiz');$('practice').classList.remove('quizdone');$('newBtn').textContent='New Question ↻';
- if(state.mode==='quiz'){if(!state.quiz||state.quiz.over)startQuiz();else if(state.done&&state.q&&state.q.qi===state.quiz.i)state.quiz.i++;
+ $('practice').classList.remove('quizdone','quizpick');$('newBtn').textContent='New Question ↻';
+ if(state.mode==='quiz'){if(!state.quiz||state.quiz.over){$('practice').classList.remove('quizmode');return quizPick()}else if(state.done&&state.q&&state.q.qi===state.quiz.i)state.quiz.i++;
   if(state.quiz.i>=state.quiz.plan.length){stopLabs();state.q={};state.done=true;return quizSummary()}$('newBtn').textContent='Next question →'}
+ $('practice').classList.toggle('quizmode',exam());
  if(state.fix&&state.mode==='quiz')state.fix=null;
  if(state.fix){if(state.done&&state.q&&state.q.fixQ){state.fix.left--;state.fix.n++}if(state.fix.left<=0){toast('🔧 Practice set done! Check the Journey panel to see your slips go down.');state.fix=null}}
- const q=state.fix?Object.assign(SLIPS[state.fix.code][1](),{fixQ:1}):GEN[state.mode]();if(state.mode==='quiz')q.qi=state.quiz.i;state.q=q;state.sel=null;state.done=false;state.logged=false;state.chainAssist=false;
- $('modeTitle').textContent=state.fix?`🔧 Fix: ${state.fix.n+1} of 5`:MODES.find(m=>m.id===state.mode).title+(state.mode==='quiz'?` · ${state.quiz.i+1} of ${state.quiz.plan.length}`:'');
+ const q=state.fix?Object.assign(SLIPS[state.fix.code][1](),{fixQ:1}):GEN[state.mode]();if(state.mode==='quiz')q.qi=state.quiz.i;state.q=q;q.t0=Date.now();state.sel=null;state.done=false;state.logged=false;state.chainAssist=false;state.chainMiss=false;
+ $('modeTitle').textContent=state.fix?`🔧 Fix: ${state.fix.n+1} of 5`:(state.mode==='quiz'?`${exam()?'Exam rehearsal':'Practice run'} · ${state.quiz.i+1} of ${state.quiz.plan.length}`:MODES.find(m=>m.id===state.mode).title);
  $('hintBox').className='hintbox';fb('','');
  const P=LAB_PICK[state.mode],cur=q.lab&&q.lab.sys;
  let h=P?`<div class="ctrls" role="group" aria-label="Choose a sample"><span class="lbl">Sample:</span>${P.map(([k,l])=>`<button type="button" class="chip ${cur===k?'on':''}" aria-pressed="${cur===k}" data-sys="${k}">${l}</button>`).join('')}</div>`:'';
- if(state.mode==='quiz')h+=`<div class="qprog" aria-hidden="true">${state.quiz.plan.map((t,i)=>`<i class="${i<state.quiz.res.length?(state.quiz.res[i].ok?'ok':'no'):i===state.quiz.i?'now':''}"></i>`).join('')}</div><p class="tip">One try per question. No hints until the end.</p>`;
+ if(state.mode==='quiz')h+=`<div class="qprog" aria-hidden="true">${state.quiz.plan.map((t,i)=>`<i class="${i<state.quiz.res.length?(exam()?'did':state.quiz.res[i].ok?'ok':'no'):i===state.quiz.i?'now':''}"></i>`).join('')}</div><p class="tip">${exam()?`📝 One try each, no hints. Answers come at the end. ⏱ <b id="qclock">${mmss(Math.round((Date.now()-state.quiz.t0)/1000))}</b>`:'🎯 Hints and retries are on. Only first tries count toward your score.'}</p>`;
  if(state.fix)h+=`<p class="tip">🔧 Practicing: <b>${SLIPS[state.fix.code][0]}</b> · <button type="button" class="linkbtn" id="fixStop">stop</button></p>`;
  if(q.story)h+=`<div class="story">${q.story}</div>`;
  h+=`<p class="prompt">${q.prompt}</p>`;
@@ -1040,7 +1142,7 @@ function wireBody(q){wireIns();
  if(q.type==='nuc')wirePT();
  if(q.type==='num'&&q.map)wireMap(q);
  $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=state.q.options[+b.dataset.i];$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',x===b);x.classList.remove('wrong')})})}
-function numHTML(q){return `<div class="numrow"><label for="numIn" class="sr">Your answer</label><input id="numIn" class="num" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer">${q.unit?`<span class="unit">${q.unit}</span>`:''}<button type="button" class="chip ins" data-ins="E" aria-label="×10ⁿ: insert E for times ten to the power">×10ⁿ</button></div><p class="tip">${q.loose?'Give the number of years (sig figs are not graded here).':`Round to <b>${q.sf} significant figures</b>. Scientific notation: tap <b>×10ⁿ</b> (or type E), like 1.20E3.`}</p>${q.map&&state.mode!=='quiz'?'<details class="smap" id="smap"><summary>🧭 Step Map: solve it one step at a time</summary><div id="smapBody"></div></details>':''}`}
+function numHTML(q){return `<div class="numrow"><label for="numIn" class="sr">Your answer</label><input id="numIn" class="num" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Your answer">${q.unit?`<span class="unit">${q.unit}</span>`:''}${q.int?'':`<button type="button" class="chip ins" data-ins="E" aria-label="×10ⁿ: insert E for times ten to the power">×10ⁿ</button>`}</div><p class="tip">${q.int?'Type a whole number.':q.loose?'Give the number of years (sig figs are not graded here).':`Round to <b>${q.sf} significant figures</b>. Scientific notation: tap <b>×10ⁿ</b> (or type E), like 1.20E3.`}</p>${q.map&&!exam()?'<details class="smap" id="smap"><summary>🧭 Step Map: solve it one step at a time</summary><div id="smapBody"></div></details>':''}`}
 /* Element finder: atomic number → symbol (the step students get stuck on). Shows the neighbors so an off-by-one is easy to spot. */
 const PT_NAME=Z=>Z===0?['n','neutron']:Z===-1?['e','beta particle (electron)']:Z>=1&&Z<SYM.length?[SYM[Z],ENAME[Z]]:null;
 function wirePT(){const btn=$('ptBtn'),box=$('ptBox'),inp=$('ptIn'),out=$('ptOut'),use=$('ptUse');if(!btn)return;
@@ -1065,20 +1167,22 @@ function wireIns(){$('qArea').querySelectorAll('[data-ins]').forEach(b=>{if(b.da
   b.onclick=()=>{const n=$('numIn');if(!n||n.readOnly)return;n.value+=b.dataset.ins;n.focus();const L=n.value.length;try{n.setSelectionRange(L,L)}catch(e){}}})}
 function whyList(q){const others=q.options.filter(o=>o!==q.answer&&q.whys[o]);return others.length?`<ul class="why">${others.map(o=>`<li>❌ <b>${o}</b>: ${q.whys[o]}</li>`).join('')}</ul>`:''}
 function ansText(q){if(q.type==='num')return `${q.loose?plain(q.answer):nf(q.answer,q.sf)}${q.unit?' '+q.unit:''}`;if(q.type==='nuc')return eqHTML(q.L.map(t=>({x:t.x,coef:t.coef})),q.R.map(t=>({x:t.x,coef:t.coef})));return q.answer}
-function finish(revealed,quizWrong){state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;if($('numIn')){$('numIn').readOnly=true;$('numIn').blur()}
- if(q.type==='nuc'){fillNuc(q,revealed||quizWrong);const f=document.activeElement;if(f&&f.closest&&f.closest('#nucBox'))f.blur()}
+function finish(revealed,quizWrong){const X=exam();state.done=true;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=true);const q=state.q;if(X)q.yours=yours(q);if($('numIn')){$('numIn').readOnly=true;$('numIn').blur()}
+ if(q.type==='nuc'){if(X)$('nucBox').querySelectorAll('input').forEach(i=>i.readOnly=true);else fillNuc(q,revealed||quizWrong);const f=document.activeElement;if(f&&f.closest&&f.closest('#nucBox'))f.blur()}
  /* chains: two-step equations ("what type is it?") and Patient Case parts. No point until the last part; a revealed part marks the chain assisted. */
- if(q.then&&!quizWrong){const n=q.then;n.qi=q.qi;n.topic=n.topic||q.topic;n.prev=q;n.fixQ=q.fixQ;if(revealed)state.chainAssist=true;
-  $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options&&q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
-  state.q=n;state.sel=null;state.done=false;state.logged=false;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
+ if(q.then&&(!quizWrong||X)){const n=q.then;n.qi=q.qi;n.topic=n.topic||q.topic;n.prev=q;n.fixQ=q.fixQ;if(revealed)state.chainAssist=true;if(quizWrong)state.chainMiss=true;
+  $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(!X&&q.options&&q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
+  ['numIn','smap','smapBody','nucBox','ptBtn','ptBox','ptIn','ptOut','ptUse'].forEach(id=>{const e=$(id);if(e)e.removeAttribute('id')});/* the next part brings its own */
+  state.q=n;n.t0=Date.now();state.sel=null;state.done=false;state.logged=false;['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
   const div=document.createElement('div');div.innerHTML=`<p class="prompt"><b>${n.label||'Step 2 of 2:'}</b> ${n.prompt}</p>`+bodyHTML(n);$('qArea').appendChild(div);wireBody(n);
   const head=revealed?`👀 <b>${ansText(q)}</b><br>${q.why}`:(q.type==='nuc'?'✅ Equation balanced! '+(q.why1||''):'✅ Right! '+q.why);
-  fb('good',head+`<br>${n.label?'On to '+n.label.replace(':','')+' ↓':'Now name the kind of reaction ↓'}`);$('hintBox').className='hintbox';video();
+  if(X)fb('saved',`📝 Answer saved. On to ${n.label?n.label.replace(':',''):'step 2'} ↓`);else fb('good',head+`<br>${n.label?'On to '+n.label.replace(':','')+' ↓':'Now name the kind of reaction ↓'}`);$('hintBox').className='hintbox';video();
   setTimeout(()=>div.scrollIntoView({behavior:'smooth',block:'start'}),60);return}
  if(state.chainAssist&&!revealed&&!quizWrong){revealed=true}
  if(!revealed&&!quizWrong&&q.fixQ&&state.fix){const c=state.fix.code;if(J.slips&&J.slips[c])J.slips[c]--;J.fixed=(J.fixed||0)+1}
- if(state.mode==='quiz'&&state.quiz&&q.qi===state.quiz.i&&state.quiz.res.length===state.quiz.i)state.quiz.res.push({topic:q.topic,ok:!revealed&&!quizWrong});
- if(state.mode==='quiz'){const last=state.quiz.i+1>=state.quiz.plan.length;$('newBtn').textContent=last?'See my results →':'Next question →'}
+ if(state.mode==='quiz'&&state.quiz&&q.qi===state.quiz.i&&state.quiz.res.length===state.quiz.i)state.quiz.res.push({topic:q.topic,ok:!revealed&&!quizWrong&&!state.chainMiss,parts:X?chainParts(q):null});
+ if(state.mode==='quiz'){const last=state.quiz.i+1>=state.quiz.plan.length;$('newBtn').textContent=last?'See my results →':'Next question →';
+  if(X){$('qArea').querySelectorAll('.opt').forEach(b=>b.disabled=true);log(!quizWrong&&!state.chainMiss);fb('saved',`📝 Answer saved. Tap <b>${last?'See my results →':'Next question →'}</b>`);$('newBtn').focus({preventScroll:true});return}}
  $('qArea').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(q.options&&q.options[+b.dataset.i]===q.answer)b.classList.add('right')});
  const ansTxt=ansText(q),wl=q.type==='mc'?whyList(q):'';
  if(quizWrong){state.streak=0;log(false);stats();fb('bad',`❌ Not this time. The answer is <b>${ansTxt}</b>.<br>${q.why}${wl}`);return}
@@ -1091,7 +1195,7 @@ function checkNum(q){const raw=$('numIn').value.trim();if(!raw)return fb('bad','
  const close=(a,b)=>Math.abs(a-b)<=Math.abs(b)*0.006+1e-300,target=Number(q.answer.toPrecision(q.sf));
  if(close(v,q.answer)||(!q.loose&&close(v,target))){if(!q.loose&&NUM.sfCount(raw)!==q.sf){const nudge=slip('sf');return fb('bad',`✏️ Your math is right! Now round to <b>${q.sf} significant figures</b> (for example, 2.50 and 0.125 each have 3). Trailing zeros only count with a decimal point.${nudge}`)}return finish(false)}
  const sl=(q.slips||[]).find(([x])=>isFinite(x)&&close(v,x)&&!close(x,q.answer));const nudge=sl?slip(sl[2]):'';
- if(state.mode==='quiz')return finish(false,true);
+ if(exam())return finish(false,true);if(state.mode==='quiz')state.chainMiss=true;
  state.streak=0;log(false);stats();return fb('bad',`🔎 Not quite. ${sl?sl[1]+' ':''}<br>💡 ${q.hint}${nudge}`)}
 /* ---- nuclear equation boxes ---- */
 const ALIAS={alpha:['he','α','alpha','a'],beta:['e','β','β-','β⁻','e-','e⁻','b','beta'],positron:['e','β','β+','β⁺','e+','e⁺','positron'],gamma:['γ','g','y','gamma'],neutron:['n'],proton:['h','p']};
@@ -1115,18 +1219,18 @@ function nucErrors(q){const blocks=[...$('nucBox').querySelectorAll('.blank')];c
 function fillNuc(q,show){const blocks=[...$('nucBox').querySelectorAll('.blank')];q.blanks.forEach((t,i)=>{const b=blocks[i];if(!b)return;if(show){b.querySelector('.bA').value=t.x.A;b.querySelector('.bZ').value=String(t.x.Z).replace('-','−');b.querySelector('.bS').value=t.x.s}
   else{const S=b.querySelector('.bS');if(!t.x.part&&S.value.trim()!==t.x.s)S.value=t.x.s}b.classList.remove('bad');b.classList.add('ok');b.querySelectorAll('input').forEach(i=>i.readOnly=true)})}
 function checkNuc(q){const errs=nucErrors(q);if(errs.length&&errs[0][0]==='empty')return fb('bad',errs[0][1]);
- $('nucBox').querySelectorAll('.blank').forEach(b=>{const bad=errs.some(e=>e[0]===b);b.classList.toggle('bad',bad);b.classList.toggle('ok',!bad)});
+ if(!exam())$('nucBox').querySelectorAll('.blank').forEach(b=>{const bad=errs.some(e=>e[0]===b);b.classList.toggle('bad',bad);b.classList.toggle('ok',!bad)});
  if(!errs.length)return finish(false);
  const nudge=slip((errs.find(e=>e[2])||[])[2]);
- if(state.mode==='quiz')return finish(false,true);
+ if(exam())return finish(false,true);if(state.mode==='quiz')state.chainMiss=true;
  state.streak=0;log(false);stats();return fb('bad',`🔎 Almost. ${[...new Set(errs.map(e=>e[1]))].slice(0,2).join(' ')}<br>💡 ${q.hint}${nudge}`)}
 function check(){if(state.done)return;const q=state.q;if(!state.taskOk)return fb('bad','👉 Do the lab step in the gold box first, then answer.');
  if(q.type==='num')return checkNum(q);if(q.type==='nuc')return checkNuc(q);
  if(!state.sel)return fb('bad','Choose an answer first.');
  const i=q.options.indexOf(state.sel),el=[...$('qArea').querySelectorAll('.opt')].filter(b=>!b.disabled)[i];
  const mcode=state.sel!==q.answer?({dtype:'type',pen:'pen'})[q.topic]:null;const nudge=mcode?slip(mcode):'';
- if(state.sel!==q.answer&&state.mode==='quiz'){el?.classList.add('wrong');return finish(false,true)}
- if(state.sel!==q.answer){state.streak=0;log(false);stats();el?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}${nudge}`)}
+ if(state.sel!==q.answer&&exam())return finish(false,true);
+ if(state.sel!==q.answer){if(state.mode==='quiz')state.chainMiss=true;state.streak=0;log(false);stats();el?.classList.add('wrong');const w=q.whys[state.sel];state.sel=null;return fb('bad',`🔎 Not quite. ${w?w+' ':''}<br>💡 ${q.hint}${nudge}`)}
  finish(false)}
 function hint(){if(state.done)return;$('hintBox').innerHTML='💡 '+state.q.hint+(VIDEO_FOR[state.q.video]?` <button class="linkbtn" onclick="openVideo()">🎥 Watch Dr. Dan explain it</button>`:'');$('hintBox').className='hintbox on'}
 const mmss=t=>Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
@@ -1136,7 +1240,7 @@ function video(){const v=VIDEO_FOR[state.q?.video];const src=v?`https://www.yout
 function openVideo(){$('videoPanel').open=true;$('player').src=$('player').dataset.want;$('videoPanel').scrollIntoView({behavior:'smooth',block:'center'})}
 $('videoPanel').addEventListener('toggle',()=>{if($('videoPanel').open&&!$('player').src)$('player').src=$('player').dataset.want});
 $('refBody').innerHTML=REFERENCE.map(([t,d])=>`<div class="refcard"><b>${t}</b><div>${d}</div></div>`).join('');
-$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){state.taskOk=true;finish(true)}};$('newBtn').onclick=()=>{if(state.mode==='quiz'&&state.quiz&&!state.quiz.over&&!state.done)return fb('bad','Answer this question first. (Each question gets one try.)');next()};
+$('checkBtn').onclick=check;$('hintBtn').onclick=hint;$('showBtn').onclick=()=>{if(!state.done){state.taskOk=true;finish(true)}};$('newBtn').onclick=()=>{if(state.mode==='quiz'&&state.quiz&&!state.quiz.over&&!state.done)return fb('bad',exam()?'Answer this question first. (Each question gets one try.)':'Answer this question first. Stuck? Tap 💡 Hint or 👀 Show Answer.');next()};
 {let armed=0;$('resetBtn').onclick=()=>{if(!armed){$('resetBtn').textContent='Tap again to confirm';armed=setTimeout(()=>{armed=0;$('resetBtn').textContent='Reset progress'},4000);return}clearTimeout(armed);armed=0;J=jBlank();try{localStorage.setItem(JK,JSON.stringify(J))}catch(e){}$('resetBtn').textContent='Reset progress';renderJ()}}
 if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPanel').open=true}
 document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target.tagName;if(e.target.id==='numIn'&&e.key==='Enter'){e.preventDefault();state.done?$('newBtn').click():check();return}if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.target.isContentEditable)return;
