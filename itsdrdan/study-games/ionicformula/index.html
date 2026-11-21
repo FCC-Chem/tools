@@ -1246,8 +1246,8 @@ function toothPath(edge, teeth) {      // jigsaw edge: one tooth (cation) or not
 function makeBuilder(root, cats, ans, onChange) {
   const st = { c: null, cn: 0, a: null, an: 0 };
   root.innerHTML = `<div class="bb">
-   <div class="bank-row cat-row"><span class="bank-lab">Cations (+)</span><div class="bank-list">${cats.map(c => `<button type="button" class="ion-card cation" data-side="c" data-id="${c.id}" aria-label="Add ${cationName(c)}">${ionHTML(c, true)}</button>`).join('')}</div></div>
-   <div class="bank-row an-row"><span class="bank-lab">Anions (−)</span><div class="bank-list">${ans.map(a => `<button type="button" class="ion-card anion" data-side="a" data-id="${a.id}" aria-label="Add ${a.name}">${ionHTML(a, false)}</button>`).join('')}</div></div>
+   <div class="bank-row cat-row"><span class="bank-lab">Cations (+)</span><div class="bank-list">${cats.map(c => `<button type="button" class="ion-card cation" data-side="c" data-id="${c.id}" aria-label="${ionHTML(c, true).replace(/<[^>]+>/g, '')}, add ${cationName(c)}">${ionHTML(c, true)}</button>`).join('')}</div></div>
+   <div class="bank-row an-row"><span class="bank-lab">Anions (−)</span><div class="bank-list">${ans.map(a => `<button type="button" class="ion-card anion" data-side="a" data-id="${a.id}" aria-label="${ionHTML(a, false).replace(/<[^>]+>/g, '')}, add ${a.name}">${ionHTML(a, false)}</button>`).join('')}</div></div>
    <div class="workspace"><div class="zone cation-zone"><div class="zone-label">Cations</div><div class="zone-empty">Tap a cation</div><div class="stack cation-stack"></div><div class="zone-count"></div></div><div class="zone anion-zone"><div class="zone-label">Anions</div><div class="zone-empty">Tap an anion</div><div class="stack anion-stack"></div><div class="zone-count"></div></div></div>
    <div class="balance-bar"><span class="balance-chip cation">Total +: 0</span><span class="balance-chip anion">Total −: 0</span><span class="balance-status none">Add ions to begin</span><button type="button" class="btn small bb-reset">Clear</button></div></div>`;
   const ion = side => (side === 'c' ? byId(CATIONS, st.c) : byId(ANIONS, st.a));

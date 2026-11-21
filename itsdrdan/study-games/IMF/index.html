@@ -1705,7 +1705,7 @@ function pdSvg(S, o = {}) {
   if (o.arrow) { const [a, b] = o.arrow, ax = pdX(S, a[0]), ay = pdYp(S, a[1]), bx = pdX(S, b[0]), by = pdYp(S, b[1]), d = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / d, uy = (by - ay) / d; h += `<path d="M${f1(ax)} ${f1(ay)}L${f1(bx - ux * 8)} ${f1(by - uy * 8)}" stroke="#e0577f" stroke-width="4" stroke-linecap="round"/><path d="M${f1(bx)} ${f1(by)}L${f1(bx - ux * 12 - uy * 6)} ${f1(by - uy * 12 + ux * 6)}L${f1(bx - ux * 12 + uy * 6)} ${f1(by - uy * 12 - ux * 6)}Z" fill="#e0577f"/><circle cx="${f1(ax)}" cy="${f1(ay)}" r="4" fill="#e0577f"/>`; }
   if (o.point) h += `<circle cx="${f1(pdX(S, o.point[0]))}" cy="${f1(pdYp(S, o.point[1]))}" r="7" fill="#e0577f" stroke="#fff" stroke-width="2.5"/>`;
   if (o.live) h += `<g id="pdPt" role="slider" tabindex="0" aria-label="State point. Drag it, or use the temperature and pressure sliders."><circle r="20" fill="transparent"/><circle r="8" fill="#5b4fd1" stroke="#fff" stroke-width="2.5"/></g>`;
-  return `<svg class="pdiagram${o.live ? ' live' : ''}" viewBox="0 0 380 290" role="img" aria-label="Phase diagram of ${S.name}: pressure in atm (log scale) against temperature in °C, with solid, liquid, gas and supercritical regions.">${h}</svg>`;
+  return `<svg class="pdiagram${o.live ? ' live' : ''}" viewBox="0 0 380 290" role="${o.live ? 'group' : 'img'}" aria-label="Phase diagram of ${S.name}: pressure in atm (log scale) against temperature in °C, with solid, liquid, gas and supercritical regions.">${h}</svg>`;
 }
 const pdFig = (S, o, capx) => `<div class="figure">${pdSvg(S, o)}<small class="figcap">Phase diagram of ${S.name}, ${S.f}${capx || ''}. The pressure axis is a log scale.</small></div>`;
 const PD_ARROWS = {
@@ -2822,7 +2822,7 @@ function openLab() {
   $('emptyBox').hidden = true; $('playArea').hidden = true; $('learnBox').hidden = true; $('reportBox').hidden = true; $('skipBtn').hidden = true; $('labBox').hidden = false;
   $('playTitle').textContent = 'H-Bond Lab'; setMood('thinking');
   try { lab.reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {} $('labReduce').checked = lab.reduce;
-  $('labMols').innerHTML = Object.keys(SIM_MOLS).map(k => `<button type="button" data-labmol="${k}" aria-label="${LAB_NAME[k]}">${LAB_F[k]}</button>`).join('');
+  $('labMols').innerHTML = Object.keys(SIM_MOLS).map(k => `<button type="button" data-labmol="${k}" aria-label="${LAB_F[k]}, ${LAB_NAME[k]}">${LAB_F[k]}</button>`).join('');
   labPrediction(); renderChooser(); paintIcons($('labBox')); setVideoFor('p3');
 }
 function labPrediction() {
@@ -3012,7 +3012,7 @@ function pdTubeState() {
   return [ph, 1];
 }
 function pdPaint() {
-  const S = pd.S, ph = phaseAt(S, pd.T, pd.P), g = $('pdPt'); if (g) { g.setAttribute('transform', `translate(${pdX(S, pd.T).toFixed(1)} ${pdYp(S, pd.P).toFixed(1)})`); g.setAttribute('aria-valuetext', `${fmtT(pd.T)}, ${fmtP(pd.P)}, ${PH_WORD[ph]}`); }
+  const S = pd.S, ph = phaseAt(S, pd.T, pd.P), g = $('pdPt'); if (g) { g.setAttribute('transform', `translate(${pdX(S, pd.T).toFixed(1)} ${pdYp(S, pd.P).toFixed(1)})`); g.setAttribute('aria-valuemin', S.T[0]); g.setAttribute('aria-valuemax', S.T[1]); g.setAttribute('aria-valuenow', Math.round(pd.T)); g.setAttribute('aria-valuetext', `${fmtT(pd.T)}, ${fmtP(pd.P)}, ${PH_WORD[ph]}`); }
   $('pdT').textContent = fmtT(pd.T); $('pdP').textContent = fmtP(pd.P); $('pdPhase').textContent = PH_WORD[ph];
   const rt = $('pdRT'), rp = $('pdRP'); if (document.activeElement !== rt) rt.value = pd.T; if (document.activeElement !== rp) rp.value = Math.round(Math.log10(pd.P) * 100);
   const ts = pdTubeState(); $('pdTubeFig').innerHTML = tubeSvg(ts[0], ts[1]);
@@ -3039,7 +3039,7 @@ function openPD() {
   $('emptyBox').hidden = true; $('playArea').hidden = true; $('learnBox').hidden = true; $('reportBox').hidden = true; $('skipBtn').hidden = true; $('pdBox').hidden = false;
   $('playTitle').textContent = 'Phase Diagram Explorer'; setMood('thinking');
   try { pd.reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-  OPTS.course = state.course; $('pdSubs').innerHTML = pdSubs().map(k => `<button type="button" data-pdsub="${k}" aria-label="${PD[k].name}">${PD[k].f}</button>`).join('');
+  OPTS.course = state.course; $('pdSubs').innerHTML = pdSubs().map(k => `<button type="button" data-pdsub="${k}" aria-label="${String(PD[k].f).replace(/<[^>]+>/g, '')}, ${PD[k].name}">${PD[k].f}</button>`).join('');
   pdPrediction(); renderChooser(); paintIcons($('pdBox')); setVideoFor('phase');
 }
 function pdPrediction() {

@@ -513,7 +513,7 @@ function kExpr(r,opt={}){const keep=e=>opt.all||(e[2]==='g'||e[2]==='aq');const 
 /* ============================== LAB VIEW (particles) ============================== */
 const LW=600,LH=330;
 /* Speed control: 1× / ½× / 🐢 ¼× / ⏸ (WCAG 2.2.2 pause for moving content). Reduced-motion users start at ½×. */
-const SPEEDS=[[1,'▶ 1×','Normal speed'],[0.5,'½×','Half speed'],[0.25,'🐢 ¼×','Quarter speed'],[0,'⏸','Paused']];
+const SPEEDS=[[1,'▶ 1×','1× normal speed'],[0.5,'½×','½× half speed'],[0.25,'🐢 ¼×','¼× quarter speed'],[0,'⏸','Paused']];
 const SPEED={i:typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches?1:0,f(){return SPEEDS[this.i][0]}};
 const speedChip=()=>`<span class="spdgrp" role="group" aria-label="Animation speed"><span class="spdl" aria-hidden="true">Speed</span>${SPEEDS.map(([,l,a],i)=>`<button type="button" class="spdb" data-speed="${i}" aria-label="${a}" aria-pressed="${i===SPEED.i}">${l}</button>`).join('')}</span>`;
 function wireSpeed(el){el.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>{SPEED.i=+b.dataset.speed;el.querySelectorAll('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.speed===SPEED.i)))})}
