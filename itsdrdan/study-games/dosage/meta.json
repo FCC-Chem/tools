@@ -2,8 +2,8 @@
   "title": "Dose Right! — ItsDrDan",
   "author": "Dr. Dan (ItsDrDan)",
   "course": "CHEM 3A",
-  "description": "Dosage calculation practice for CHEM 3A: build conversion-factor setups, draw up doses on syringes, work weight-based orders and safe ranges, set IV pumps and drip rates, use percent solutions and dilutions, and follow patient cases. All drug names, orders and limits are made up for math practice.",
+  "description": "Dosage calculation practice for CHEM 3A: build conversion-factor setups, draw up doses on syringes, work weight-based orders and safe ranges, set IV pumps and drip rates, use percent solutions and dilutions, and follow patient cases. Orders and limits are made up for math practice, and so are most drug names.",
   "tags": ["chemistry", "CHEM 3A", "dosage calculations", "dimensional analysis", "unit conversions", "syringe", "IV pump", "drip rate", "percent solutions", "dilution", "allied health", "nursing"],
-  "version": "1.2",
+  "version": "1.4.1",
   "status": "working"
 }
