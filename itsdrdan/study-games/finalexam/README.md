@@ -45,6 +45,8 @@ Start with your course link, then add any of these, each starting with `&`:
 | `&len=half` | Half Battle (half the questions and time) | `?course=1A&len=half` |
 | `&style=examday` | Exam Day style: directions and a bubble sheet, only the reference sheets the real exam gives, no Boss HP, pace meter or topic labels | `?course=28A&style=examday` |
 | `&mode=weak`, `&mode=quick`, `&mode=blitz` | Weak Spots, Quick 10, or Blitz | `?course=28B&mode=quick` |
+| `&mode=class` | Class Game setup (for the teacher's projector). Same as the short link https://itsdrdan.github.io/finalexam/class/ | `class/?course=3A` |
+| `&set=N.N.N` | A practice set of exactly these questions (bank numbers, up to 60), with hints and explanations. The Class Game end screen makes this link and its QR code for you. | `?course=3A&set=382.427.423` |
 
 `exam`, `len` and `style` open the Boss Battle on their own and can be combined, for example a half-length Organic Midterm in Exam Day style:
 https://itsdrdan.github.io/finalexam/?course=3B&exam=mid&len=half&style=examday
@@ -197,12 +199,26 @@ Example: https://itsdrdan.github.io/finalexam/?course=28B&mode=topic&topic=alcoh
 
 </details>
 
+## Class Game (teams on whiteboards, run from your projector)
+
+Open **https://itsdrdan.github.io/finalexam/class/?course=3A** (any course works) on the classroom computer and project it. The Class Game is not on the students' page: only this link opens it, in a teacher view with the student modes, sidebar and daily card hidden. 🖥️ Projector view makes the setup page full screen; the game screens already fill the screen. No student phones, accounts or internet connection for students.
+
+1. Pick a topic (or all topics), 10–25 questions, 60–150 seconds per question, and 2–12 teams. Rename the teams if you like.
+2. Turn on the extras you want: ⚡ Double Points (about 1 in 5 questions), 🔥 streak bonus (×1.5 after 3 right in a row), 💰 Final Wager on the last question (bet up to your score, or up to 100 for teams at 100 or less; scores never drop below 0), 👾 Class vs. Boss (every right board hits a shared Boss).
+3. Each team writes A, B, C or D on one whiteboard. When the clock runs out (or you press ✋ Boards up), they hold the boards up.
+4. Press 👀 Reveal: the right answer and its explanation show. Tap the teams that got it (or press 1–9, 0 on the keyboard), then 🏅 Award points. If nobody got it, 🦹 Steal lets one team earn half points by explaining it.
+5. The scoreboard animates after each question; ↩ Undo fixes a mis-tap. The end screen has a podium, the toughest questions to review, and a 📱 QR code students scan to practice the same questions on their phones (⛶ makes it fill the screen).
+
+CHEM 3A also has 📄 presets for the printed 30-minute mock finals (Version 1 and Version 2): all 25 questions in the booklet's order with the same A–D letters, for going over the mock in class.
+
+Keys: Space pause, Enter next step, 1–9 and 0 mark teams, F full screen. A clicker that sends Page Down or → also advances. The game in progress is saved on that computer, so a refresh or ✖ Exit keeps it (Resume on the setup screen). Class Game answers are not sent to the question statistics.
+
 ## What's in it
 
 - 5,556 original multiple-choice questions written in the style of standardized chemistry finals. Not affiliated with or endorsed by any exam publisher.
 - Works on phones over slow connections: only the selected course downloads, and courses a student has opened work offline afterward.
 - Every question has a hint and a step-by-step explanation, and every wrong answer explains why it's wrong.
-- Modes: Boss Battle (timed practice final, Practice or Exam Day style), Topic Training, Weak Spots, Quick 10, Blitz, and a Daily 5.
+- Modes: Boss Battle (timed practice final, Practice or Exam Day style), Topic Training, Weak Spots, Quick 10, Blitz, a Daily 5, and the Class Game (teams on whiteboards, run from the projector).
 - The CHEM 1A and 1B Boss Battles (70 questions, 110 minutes) weight topics by the chapter outline of the ACS Exams Institute's Official Guide for General Chemistry (first term: Toolbox and chapters 1–8; second term: chapters 9–16). The guide gives no percentages, so each chapter counts in proportion to its study and practice questions. CHEM 1B Colligative Properties is practice-only and never appears in a Boss Battle.
 - The CHEM 28A and 28B Boss Battles weight topics by the chapter outline of the ACS Exams Institute's Official Guide for Organic Chemistry (28A: first-term chapters 1–10; 28B: all chapters 1–16, like the ACS full-year exam, with first-term chapters drawn from the 28A bank), in proportion to each chapter's length. Topics follow the Fresno City College course outlines.
 - Every Boss Battle has the same number of questions per topic (set by the weights above) **and the same mix of difficulty levels**, so two students' practice finals are equally hard. Near-identical questions (same molecule or figure, same idea) never appear together in one Boss Battle.

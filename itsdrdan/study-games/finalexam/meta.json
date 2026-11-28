@@ -10,7 +10,7 @@
     "CHEM 28A": "Organic chemistry I final review (structure, stereochemistry, substitution/elimination, additions, radicals, IR/MS/NMR)",
     "CHEM 28B": "Organic chemistry II final review (alcohols, ethers, conjugation, aromatics, carbonyls, enolates, amines, biomolecules)"
   },
-  "description": "Practice for standardized multiple-choice chemistry finals in CHEM 3A (intro chem), 3B (organic and biochem), 1A (gen chem I), 1B (gen chem II), 28A and 28B (organic chemistry I and II for majors). Boss Battle timed practice exams (Practice style or Exam Day style with directions, bubble sheet and data sheet only), Topic Training with hints and step-by-step explanations, Weak Spots review of missed questions, Quick 10, and Blitz speed rounds. 5,556 original questions, with an explanation for every wrong answer, a TI-36X Pro style practice calculator, matched ItsDrDan videos, a periodic table and data sheet, XP and badges. CHEM 3B has a separate Organic Midterm and Biochem Final. Add ?course=3A, 3B, 1A, 1B, 28A or 28B to open a course; INSTRUCTORS.md lists every link option and topic key.",
+  "description": "Practice for standardized multiple-choice chemistry finals in CHEM 3A (intro chem), 3B (organic and biochem), 1A (gen chem I), 1B (gen chem II), 28A and 28B (organic chemistry I and II for majors). Boss Battle timed practice exams (Practice style or Exam Day style with directions, bubble sheet and data sheet only), Topic Training with hints and step-by-step explanations, Weak Spots review of missed questions, Quick 10, Blitz speed rounds, and a Class Game for teams on whiteboards, run from the projector. 5,556 original questions, with an explanation for every wrong answer, a TI-36X Pro style practice calculator, matched ItsDrDan videos, a periodic table and data sheet, XP and badges. CHEM 3B has a separate Organic Midterm and Biochem Final. Add ?course=3A, 3B, 1A, 1B, 28A or 28B to open a course; INSTRUCTORS.md lists every link option and topic key.",
   "tags": [
     "chemistry",
     "final exam",
@@ -27,6 +27,7 @@
     "weak spots",
     "XP and achievements",
     "Blitz",
+    "class review game",
     "practice calculator",
     "CHEM 28A",
     "CHEM 28B",
@@ -35,5 +36,5 @@
   ],
   "logo": "logo.png",
   "status": "working",
-  "version": "v65"
+  "version": "v68"
 }

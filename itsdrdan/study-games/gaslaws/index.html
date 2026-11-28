@@ -40,7 +40,7 @@ button,input{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cu
 .seg.big{padding:4px}.seg.big button{padding:10px 18px;font-size:1rem;min-height:46px}
 
 
-.howto{list-style:none;margin:6px 0 14px;padding:0;display:flex;gap:8px;flex-wrap:wrap}.howto li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 6px;font-size:.95rem;color:#38446a}.howto i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
+.howto-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:14px 0}.howto-row>.howto{margin:0}.howto{list-style:none;margin:6px 0 14px;padding:0;display:flex;gap:8px;flex-wrap:wrap}.howto li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 6px;font-size:.95rem;color:#38446a}.howto i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.85rem;flex:none}
 .mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}.mode-switch button{display:flex;align-items:center;gap:14px;text-align:left;border:2px solid var(--line2);background:#fff;border-radius:18px;padding:14px 18px;min-height:88px;box-shadow:var(--shadow);transition:border-color .15s,background .15s}.mode-switch button:hover{border-color:#aab2ea}.mode-switch b{display:block;font-size:1.25rem;letter-spacing:-.01em}.mode-switch small{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}.ms-ico{font-size:1.8rem;width:52px;height:52px;border-radius:14px;background:var(--accent-soft);display:grid;place-items:center;flex:none}
 .mode-switch button.active{border-color:var(--accent);background:linear-gradient(135deg,#f3f4ff,#fff);box-shadow:0 0 0 3px #4b57d126,var(--shadow)}.mode-switch button.active b{color:var(--accent-d)}.mode-switch button.active .ms-ico{background:var(--accent);filter:saturate(1.1)}
 .pick-head{font-size:1rem;margin:0 0 10px;color:#38446a}
@@ -317,7 +317,7 @@ main.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;
 </style><script src="https://itsdrdan.github.io/games/track.js" defer></script>
 
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
-<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
+<script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><script src="https://itsdrdan.github.io/games/brand/tour.v1.js"></script><!-- shared first-time tour (never edited; a change is a new version) --><!-- shared number reading (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/brand/icons.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 <script src="https://itsdrdan.github.io/questionbank/whys.js" defer></script>
@@ -338,7 +338,7 @@ function qbWhy(item,picked,ctx){try{return window.QBWhy?(QBWhy.reason(item,picke
 </div></header>
 <div class="wrap">
  <section class="intro hero"><div class="intro-title"><img class="intro-mascot" src="assets/mascot/puff-idle.webp" alt="Puff, the Under Pressure mascot: a smiling gas flask with a pressure gauge" width="96" height="96"><div><p class="eyebrow">🎈 Gas Laws · ItsDrDan · CHEM 3A • 1A</p><h1><span class="t1">Under</span> <span class="t2">Pressure</span></h1><p class="lede">Pressure, volume, temperature and moles, one step at a time.</p></div></div></section>
- <ol class="howto" aria-label="How to play"><li><i>1</i><span>Pick your class</span></li><li><i>2</i><span>Pick Learn or Practice</span></li><li><i>3</i><span>Follow the <b>blue bar</b></span></li></ol>
+ <div class="howto-row"><ol class="howto" aria-label="How to play"><li><i>1</i><span>Pick your class</span></li><li><i>2</i><span>Pick Learn or Practice</span></li><li><i>3</i><span>Follow the <b>blue bar</b></span></li></ol><div id="tourSlot"></div></div>
  <div class="mode-switch" id="viewTabs" role="tablist" aria-label="Study mode">
   <button type="button" role="tab" data-view="learn"><span class="ms-ico" aria-hidden="true">🧭</span><span><b>Learn Trail</b><small>New to this? Watch an example, then solve one step by step.</small></span></button>
   <button type="button" role="tab" data-view="practice"><span class="ms-ico" aria-hidden="true">🎯</span><span><b>Practice Quests</b><small>Ready? Solve mixed problems on your own and earn XP.</small></span></button>
@@ -1239,6 +1239,14 @@ byId('labQ').onclick=e=>{const p=e.target.closest('[data-lp]');if(p)return labPr
  let dq='',dopen='';try{const u=new URLSearchParams(location.search);dq=(u.get('quest')||'').toLowerCase();dopen=(u.get('open')||'').toLowerCase();}catch(e){}
  if(dq&&(dq==='check'||courseQuests().some(q=>q[0]===dq))){S.quest=dq;S.quiz=null;setView('practice');ensurePlay();}
  else if(dopen==='lab'){const d=byId('labSection'),go=()=>d.scrollIntoView({block:'start',behavior:'auto'});d.open=true;go();if(document.readyState!=='complete')addEventListener('load',go,{once:true});}
+ /* first-time tour (games/brand/tour.v1.js): once per device for a new student; never over a deep link; 🧭 Tour replays it */
+ if(window.ddTour)ddTour.init({id:'gaslaws',button:'#tourSlot',isNew:()=>!P.attempts&&!P.xp,auto:()=>!dq&&!dopen,steps:[
+  ['#course','Pick your class first: <b>CHEM 3A</b> or <b>CHEM 1A</b>. It sets which problems you get.'],
+  ['#viewTabs','<b>Learn Trail</b> teaches one idea at a time. <b>Practice Quests</b> are mixed problems on your own for XP. New? Start with Learn Trail.'],
+  ['#trail','The stops on the trail. Start at <b>1</b>. Each stop goes: watch an example, try one with help, then one on your own.'],
+  ['#coach','The <b>blue bar</b> always says what to do next. Stuck? Read it first.'],
+  ['#labSection','🎈 <b>Piston Lab</b>: free play. Slide temperature, volume, and moles and watch the particles push on the piston.'],
+  ['#reference','📘 <b>Reference</b>: the gas law equations, R values, and unit conversions.']]});
 })();
 
 </script>

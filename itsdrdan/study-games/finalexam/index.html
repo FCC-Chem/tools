@@ -458,7 +458,8 @@ const MODES=[
  {id:'topic',title:'Topic Training',short:'Pick a topic • hints on',icon:'🎯',mb:'#e6f2ff',ma:'#5b9fd3'},
  {id:'weak',title:'Weak Spots',short:'Redo what you missed',icon:'🩹',mb:'#f2ecfc',ma:'#9a7fc9'},
  {id:'quick',title:'Quick 10',short:'10 mixed questions',icon:'⚡',mb:'#e7f6e9',ma:'#5fae78'},
- {id:'blitz',title:'Blitz',short:'Beat the clock • 3 lives',icon:'💥',mb:'#fff0d9',ma:'#e8973a'}];
+ {id:'blitz',title:'Blitz',short:'Beat the clock • 3 lives',icon:'💥',mb:'#fff0d9',ma:'#e8973a'},
+ {id:'class',title:'Class Game',short:'Teams • projector • whiteboards',icon:'🎉',mb:'#fff0f5',ma:'#d96a9a'}];
 /* matched videos: [id, start s, title]; key "course:topic" or "topic" */
 const VIDEO_FOR={
  '28A:structure':['-WH0D2cWcJc',0,'Formal Charge, Lewis and Resonance Structures'],'28A:stereo':['RudBXy5lTuU',0,'Chirality, Enantiomers and Diastereomers'],'28A:addition':['Dcun-l5jM9w',0,"Addition Reactions and Markovnikov's Rule"],'28A:elim':['l3Sb_GWBano',0,"Dehydration of Alcohols and Zaitsev's Rule"],
@@ -686,10 +687,14 @@ const state={mode:MODES.some(m=>m.id===ui.mode)?ui.mode:'boss',course:COURSES[ur
 /* deep links from the textbooks: ?course=3A&mode=topic&topic=moles (or topic=measure,matter for a chapter that spans two topics) */
 (()=>{const P=new URLSearchParams(location.search),m=(P.get('mode')||'').trim(),t=(P.get('topic')||'').trim();
  if(m&&MODES.some(x=>x.id===m))state.mode=m;
+ if(m==='class')state.classOnly=1;
  if(t){const ok=t.split(',').map(x=>x.trim()).filter(x=>COURSES[state.course].topics.some(y=>y[0]===x));
   if(ok.length===1)state.topic=ok[0];else if(ok.length>1)state.topic='mix:'+ok.join(',');
   if(ok.length&&!m)state.mode='topic'}
- if(m||t)state.deepScroll=1})();  /* scrolled to the questions after the first draw (the bank file loads first) */
+ const st=(P.get('set')||'').trim();if(/^\d+(\.\d+)*$/.test(st)){state.setReq=[...new Set(st.split('.'))].slice(0,60).map(n=>state.course+'-'+n);state.mode='quick'}
+ if(state.mode==='class'&&!state.classOnly)state.mode='boss'; /* an older visit may have saved it */
+ if(state.classOnly){document.body.classList.add('classonly');const sb=document.querySelector('.hero .subtitle');if(sb)sb.textContent='🎉 Class Game for the projector: teams answer on whiteboards, you keep score.';document.title='Final Boss Class Game • ItsDrDan'}
+ if(m||t||st)state.deepScroll=1})();  /* scrolled to the questions after the first draw (the bank file loads first) */
 /* per-question record: R[id]={r,w,last} (first-try results) */
 let R=LS.get('-rec',{})||{};let holdSave=0;const saveR=()=>{if(!holdSave)LS.set('-rec',R)};
 function qver(q){let h=2166136261>>>0;const t=String(q.q)+'|'+q.c.join('|');for(const ch of t){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h.toString(36)}
@@ -749,7 +754,7 @@ function buildCourses(){$('coursePick').innerHTML=COURSE_ORDER.map(c=>`<button c
  $('coursePick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(b.dataset.c===state.course)return;const nc=b.dataset.c;b.classList.add('loading');fetchBanks([nc]).then(()=>{if(!BANK_JSON[nc]&&!BANK_DATA[nc]){b.classList.remove('loading');toast('📶 '+COURSES[nc].name+' isn’t saved on this device yet. Connect to the internet once to load it.');return}state.course=nc;ui.course=state.course;state.topic='all';ui.topic='all';saveUI();buildCourses();refs();renderIntel();start();fetchBanks(bankNeeds(nc))})});
  const c=C();renderDaily();$('examLine').innerHTML=c.exams?`🎯 ${c.name}: organic midterm + biochem final • <b>${c.n} questions • ${c.min} min</b> each • ${c.given}`:`🎯 ${c.name} final: <b>${c.n} questions • ${c.min} min</b> • ${c.given}`}
 const saveUI=()=>LS.set('-ui',ui);
-function buildModes(){$('modes').innerHTML=MODES.map(m=>`<button class="mode ${m.id===state.mode?'on':''}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic">${m.icon}</span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
+function buildModes(){$('modes').innerHTML=MODES.filter(m=>m.id!=='class').map(m=>`<button class="mode ${m.id===state.mode?'on':''}" data-m="${m.id}" style="--mb:${m.mb};--ma:${m.ma}"><span class="ic">${m.icon}</span><b>${m.title}</b><small>${m.short}</small></button>`).join('');
  $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{state.mode=b.dataset.m;ui.mode=state.mode;saveUI();buildModes();start();if(innerWidth<1000)$('practice').scrollIntoView({behavior:'smooth',block:'start'})})}
 function stats(){[['nCorrect',state.correct],['nStreak',state.streak],['nAssist',state.assist]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;const p=e.parentElement;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}})}
 /* why each wrong choice is wrong: q.x is parallel to q.c (x[0] is the right answer, left blank) */
@@ -770,12 +775,14 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-rsend]');i
 function whyList(q,mine){if(!q.x||!q.x.some(Boolean))return'';return `<details class="why"${mine!=null&&mine>0?' open':''}><summary>Why the other choices are wrong</summary><ul>`+[1,2,3].map(k=>q.x[k]?`<li${k===mine?' class="mine"':''}><b>${optHTML(q,k)||'This choice'}:</b> ${q.x[k]}${k===mine?' <i>(your pick)</i>':''}</li>`:'').join('')+'</ul></details>'}
 function fb(k,h){$('fb').className='fb '+k;$('fb').innerHTML=noWrapChem(h)}
 function practiceChrome(on){$('statRow').classList.toggle('hidden',!on);$('btnRow').classList.toggle('hidden',!on);if(!on){$('hintBox').className='hintbox';fb('','')}}
-function start(){clearInterval(boss.tick);clearInterval(blitz.tick);document.body.classList.remove('examday');$('topicRow').innerHTML='';const m=MODES.find(x=>x.id===state.mode);$('modeTitle').textContent=m.icon+' '+m.title;
+function start(){clearInterval(boss.tick);clearInterval(blitz.tick);if(typeof cg!=='undefined')clearInterval(cg.tick);document.body.classList.remove('examday');$('topicRow').innerHTML='';const m=MODES.find(x=>x.id===state.mode);$('modeTitle').textContent=m.icon+' '+m.title;
  if(state.mode==='boss'){practiceChrome(false);bossStart();return}
  if(state.mode==='blitz'){practiceChrome(false);blitzSetup();return}
+ if(state.mode==='class'){practiceChrome(false);if(typeof classSetup==='function')classSetup();else setTimeout(start,0);return}
  practiceChrome(true);$('newBtn').textContent='New Question ↻';
  if(state.mode==='topic')topicChips();
- if(state.mode==='quick'&&state.dailyReq){state.dailyReq=0;dailyRefresh();const c=state.course,done=DAILY.done[c]||0;const ids=DAILY.sets[c].slice(done);state.quick={list:ids.map(id=>BYID[id]),i:0,score:0,res:[],daily:1,n:5,off:done};$('modeTitle').textContent='🗓️ Daily 5';if(!ids.length){renderDaily();practiceChrome(false);$('qArea').innerHTML=`<div class="fb info" style="margin-top:14px">🗓️ <b>Daily 5 is done for today.</b> Come back tomorrow!</div>`;return}}
+ if(state.mode==='quick'&&state.setReq){const ids=state.setReq;state.setReq=null;state.quick={list:ids.map(id=>BYID[id]).filter(Boolean),i:0,score:0,res:[],set:ids};$('modeTitle').textContent='📱 Class practice set'}
+ else if(state.mode==='quick'&&state.dailyReq){state.dailyReq=0;dailyRefresh();const c=state.course,done=DAILY.done[c]||0;const ids=DAILY.sets[c].slice(done);state.quick={list:ids.map(id=>BYID[id]),i:0,score:0,res:[],daily:1,n:5,off:done};$('modeTitle').textContent='🗓️ Daily 5';if(!ids.length){renderDaily();practiceChrome(false);$('qArea').innerHTML=`<div class="fb info" style="margin-top:14px">🗓️ <b>Daily 5 is done for today.</b> Come back tomorrow!</div>`;return}}
  else if(state.mode==='quick'){state.quick={list:shuf(examPool(state.course)).slice(0,10),i:0,score:0,res:[]};if(C().exams){$('topicRow').innerHTML=examPick('qex');$('topicRow').querySelectorAll('.qex').forEach(b=>b.onclick=()=>{setExam(b.dataset.e);state.quick=null;start()})}}
  next()}
 /* ---------- topic chips ---------- */
@@ -1605,7 +1612,7 @@ const qHTML=q=>noWrapChem(q.q)+structBlock(q.s)+figBlock(q.f);
 const stepList=h=>{const s=String(h).trim();if(!/^1\.\s/.test(s))return null;const parts=s.split(/\s+(?=\d+\.\s)/);if(parts.length<2||parts.some((x,i)=>!x.startsWith((i+1)+'. ')))return null;return '<ol class="steps">'+parts.map(x=>'<li>'+noWrapChem(x.replace(/^\d+\.\s+/,''))+'</li>').join('')+'</ol>'};
 const optHTML=(q,k)=>(String(q.c[k]).startsWith('§')?'':stepList(q.c[k])||noWrapChem(q.c[k]))+(q.cs&&q.cs[k]?`<span class="optmol">${q.cs[k].smi?smiHTML(q.cs[k].smi,q.cs[k].st,0.75):molSVG(q.cs[k],0.8)}</span>`:'');
 function qMeta(q,extra=''){return `<div class="meta">${extra}<span class="chip">${topicIcon(q.course,q.t)} ${esc(topicName(q.course,q.t))}</span>${q.k?'<button type="button" class="chip calc">🧮 Calculator</button>':'<span class="chip">💭 Concept</span>'}<span class="chip lvl">${['','● Easy','●● Medium','●●● Hard'][q.d]||''}</span></div>`}
-function renderQ(){const q=state.q;const quick=state.mode==='quick'?(state.quick.daily?`<span class="chip" style="background:#fff0f5;border-color:#f0c4d3">🗓️ Daily 5 • ${state.quick.off+state.quick.i+1} of 5</span>`:`<span class="chip" style="background:#e5f6ea;border-color:#bfe2c8">⚡ ${state.quick.i+1} of 10 • score ${state.quick.score}</span>`):'';
+function renderQ(){const q=state.q;const quick=state.mode==='quick'?(state.quick.daily?`<span class="chip" style="background:#fff0f5;border-color:#f0c4d3">🗓️ Daily 5 • ${state.quick.off+state.quick.i+1} of 5</span>`:`<span class="chip" style="background:#e5f6ea;border-color:#bfe2c8">${state.quick.set?'📱':'⚡'} ${state.quick.i+1} of ${state.quick.list.length} • score ${state.quick.score}</span>`):'';
  $('qArea').innerHTML=qMeta(q,quick)+`<p class="prompt">${qHTML(q)}</p><div class="options">${state.order.map((k,i)=>`<button class="opt" data-k="${k}" aria-pressed="false"${optAria(q,k,'ABCD'[i])}><span class="L">${'ABCD'[i]}</span><span>${optHTML(q,k)}</span></button>`).join('')}</div>`;
  ['checkBtn','hintBtn','showBtn'].forEach(id=>$(id).disabled=false);
  $('qArea').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(state.done)return;state.sel=+b.dataset.k;$('qArea').querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-pressed',String(x===b))})})}
@@ -1638,10 +1645,10 @@ function quickEnd(){const Q=state.quick;practiceChrome(false);$('statRow').class
   $('qArea').innerHTML=`<div class="result"><div style="font-size:54px">🗓️</div><div class="big">${Q.score} / ${Q.list.length}</div><div class="sub">${dailyDone()?'Daily 5 complete! +25 XP'+st:'Daily 5 paused'}</div></div>`+
    `<div class="h3">Today's five</div>`+Q.res.map(([id,ok],i)=>{const q=BYID[id];return `<details class="rev"><summary>${ok?'✅':'❌'} ${Q.off+i+1}. ${esc(topicName(q.course,q.t))}</summary><div class="rb"><p>${qHTML(q)}</p><p class="correct">✔ ${optHTML(q,0)}</p><p>${q.w}</p>${whyHTML(q)}</div></details>`}).join('')+
    `<div class="btnrow" style="grid-template-columns:1fr 1fr"><button class="btn coral" onclick="state.quick=null;start()">⚡ Quick 10</button><button class="btn plain" onclick="goMode('weak')">🩹 Fix my misses</button></div>`;$('newBtn').onclick=()=>{$('newBtn').onclick=newBtn;state.quick=null;start()};return}
- if(Q.score===10){J.perfectQuick++;confetti(90)}J.modes.quick=1;checkBadges();
- $('qArea').innerHTML=`<div class="result"><div class="big">${Q.score} / 10</div><div class="sub">${Q.score>=9?'Boss-level! 🏆':Q.score>=7?'Strong work! 💪':Q.score>=5?'Getting there. Keep training! 🎯':'Train your weak spots and try again. 🩹'}</div></div>`+
-  `<div class="h3">Your 10</div>`+Q.res.map(([id,ok],i)=>{const q=BYID[id];return `<details class="rev"><summary>${ok?'✅':'❌'} ${i+1}. ${esc(topicName(q.course,q.t))}</summary><div class="rb"><p>${qHTML(q)}</p><p class="correct">✔ ${optHTML(q,0)}</p><p>${q.w}</p>${whyHTML(q)}</div></details>`}).join('')+
-  `<div class="btnrow" style="grid-template-columns:1fr 1fr"><button class="btn coral" onclick="state.quick=null;start()">⚡ New Quick 10</button><button class="btn plain" onclick="goMode('weak')">🩹 Fix my misses</button></div>`;
+ const N=Q.list.length,pc=N?Q.score/N:0;if(!Q.set&&Q.score===10){J.perfectQuick++;confetti(90)}else if(Q.set&&N&&Q.score===N)confetti(90);J.modes.quick=1;checkBadges();
+ $('qArea').innerHTML=`<div class="result"><div class="big">${Q.score} / ${N}</div><div class="sub">${pc>=.9?'Boss-level! 🏆':pc>=.7?'Strong work! 💪':pc>=.5?'Getting there. Keep training! 🎯':'Train your weak spots and try again. 🩹'}</div></div>`+
+  `<div class="h3">${Q.set?'Your class set':'Your 10'}</div>`+Q.res.map(([id,ok],i)=>{const q=BYID[id];return `<details class="rev"><summary>${ok?'✅':'❌'} ${i+1}. ${esc(topicName(q.course,q.t))}</summary><div class="rb"><p>${qHTML(q)}</p><p class="correct">✔ ${optHTML(q,0)}</p><p>${q.w}</p>${whyHTML(q)}</div></details>`}).join('')+
+  `<div class="btnrow" style="grid-template-columns:1fr 1fr">${Q.set?`<button class="btn coral" onclick="state.setReq=state.quick.set;state.quick=null;start()">🔁 Try this set again</button>`:`<button class="btn coral" onclick="state.quick=null;start()">⚡ New Quick 10</button>`}<button class="btn plain" onclick="goMode('weak')">🩹 Fix my misses</button></div>`;
  $('newBtn').onclick=()=>{$('newBtn').onclick=newBtn;start()}}
 function newBtn(){if(state.mode==='quick'){const Q=state.quick;if(!state.done){Q.res.push([state.q.id,false]);Q.i++;if(Q.daily)dailyFinish(false)}if(Q.i>=Q.list.length)return quickEnd()}next()}
 function goMode(m){state.mode=m;ui.mode=m;saveUI();buildModes();start();$('practice').scrollIntoView({behavior:'smooth',block:'start'})}
@@ -1940,5 +1947,271 @@ if(!matchMedia('(max-width:1000px)').matches){$('journey').open=true;$('videoPan
 /* offline play: sw.js saves the page and every course bank a student opens (https only; skipped where not allowed, e.g. some embeds) */
 if('serviceWorker' in navigator&&(location.protocol==='https:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname)))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 fetchBanks([state.course]).then(()=>{buildModes();buildCourses();refs();renderJ();start();fetchBanks(bankNeeds(state.course));if(state.deepScroll)setTimeout(()=>{const e=$('practice');if(e)scrollTo(0,e.getBoundingClientRect().top+scrollY-8)},150)});
+</script>
+<style>
+/* ---------- Class Game: teacher-run team game on the projector; teams answer on whiteboards ---------- */
+.cgset .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.cgset .chipb{border:2px solid #d8e2ea;background:#fff;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer;min-height:44px;font-size:15px}
+.cgset .chipb.on{border-color:#d96a9a;background:#fff0f5;color:#9c3d66}
+.cgset .tl{font-weight:900;margin:14px 0 0}
+.cgteams{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-top:8px}
+.cgteams label{display:flex;align-items:center;gap:8px;border:2px solid var(--tc);border-radius:14px;padding:6px 10px;background:#fff}
+.cgteams .dot{width:14px;height:14px;border-radius:50%;background:var(--tc);flex:none}
+.cgteams input{border:0;font:inherit;font-weight:800;width:100%;min-height:32px;background:transparent}
+.cgopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin-top:8px}
+.cgopts label{display:flex;gap:10px;align-items:flex-start;border:2px solid #e3e9ee;border-radius:14px;padding:10px 12px;background:#fff;cursor:pointer}
+.cgopts input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:#d96a9a}
+.cgopts small{display:block;color:#5d6d79;font-weight:600}
+#cg{position:fixed;inset:0;z-index:900;background:linear-gradient(135deg,#fff7f2,#eef6ff 55%,#f4efff);display:flex;flex-direction:column;font-size:clamp(17px,1.75vw,34px);color:#263440;overflow:hidden}
+#cg.hidden{display:none}
+body.cgOn .ddfb-float{display:none!important}
+body.classonly #daily,body.classonly .howto,body.classonly #modes,body.classonly .side,body.classonly #examLine{display:none!important}
+body.classonly .main{display:block}body.classonly #practice{max-width:1200px;margin:0 auto}body.classonly .cgset{font-size:1.12em}body.classonly .hero .subtitle .s2{display:inline}body.cgOn .confetti{z-index:950}body.cgOn .toast{z-index:960}
+#cg .top{display:flex;align-items:center;gap:.6em;padding:.45em .8em;flex-wrap:wrap}
+#cg .pill{background:#fff;border:2px solid #e2e8ee;border-radius:999px;padding:.2em .75em;font-weight:900;white-space:nowrap}
+#cg .pill.dbl{background:#fff3c4;border-color:#f2c35b;color:#8a5a00;animation:cgGlow 1.2s ease-in-out infinite alternate}
+#cg .pill.wag{background:#e7f6e9;border-color:#5fae78;color:#2d6b40}
+#cg .sp{flex:1}
+#cg .tb{border:2px solid #d8e2ea;background:#fff;border-radius:12px;font:inherit;font-size:.8em;font-weight:800;padding:.35em .7em;cursor:pointer;min-height:44px}
+#cg .tb:hover{border-color:#5b9fd3}
+#cg .clock{font-variant-numeric:tabular-nums;font-weight:900;font-size:2.1em;min-width:3.2em;text-align:right;color:#2d6b40}
+#cg .clock.warn{color:#c07a00}#cg .clock.low{color:#c0473b;animation:cgPulse 1s infinite}
+#cg .tbar{height:.55em;background:#e9eef2;margin:0 .8em;border-radius:999px;overflow:hidden}
+#cg .tfill{height:100%;background:#5fae78;border-radius:999px;transition:width .25s linear,background .3s}
+#cg .body{flex:1;overflow:auto;padding:.6em 1.2em 1em;display:flex;flex-direction:column}
+#cg .qtext{font-size:1.45em;font-weight:700;line-height:1.35;margin:.2em 0 .6em}
+#cg .qtext svg{max-height:36vh;width:auto;max-width:100%}
+#cg .qtext .fig svg{height:30vh;width:auto}#cg .feq{font-size:1.05em!important}#cg .fig{max-width:100%}
+#cg .opts{display:grid;grid-template-columns:1fr 1fr;gap:.55em}
+#cg .opt{display:flex;gap:.6em;align-items:center;background:#fff;border:3px solid #dfe7ee;border-radius:18px;padding:.5em .8em;font-size:1.2em;font-weight:700;min-height:2.6em;transition:opacity .3s,transform .3s,border-color .3s}
+#cg .opt .L{flex:none;width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900}
+#cg .opt:nth-child(1) .L{background:#e0675a}#cg .opt:nth-child(2) .L{background:#5b9fd3}#cg .opt:nth-child(3) .L{background:#e8a33a}#cg .opt:nth-child(4) .L{background:#5fae78}
+#cg .opt svg{max-height:22vh;width:auto;max-width:100%}
+#cg .opt.right{border-color:#3f9a5c;background:#e8f7ec;transform:scale(1.02)}
+#cg .opt.dim{opacity:.35}
+#cg .why{background:#fff;border-left:6px solid #5fae78;border-radius:14px;padding:.6em .9em;margin-top:.7em;font-size:.95em;line-height:1.4}
+#cg .why .whylist{font-size:.92em}
+#cg .bar{display:flex;gap:.6em;justify-content:center;flex-wrap:wrap;padding:.5em 1em .8em}
+#cg .big{border:0;border-radius:16px;font:inherit;font-weight:900;font-size:1.05em;padding:.5em 1.3em;cursor:pointer;min-height:52px;box-shadow:0 5px 0 #0000001f;color:#fff;background:#e0675a}
+#cg .big.blue{background:#5b9fd3}#cg .big.green{background:#4f9d69}#cg .big.gold{background:#e8a33a}#cg .big.plain{background:#fff;color:#263440;border:2px solid #d8e2ea}
+#cg .big:active{transform:translateY(3px);box-shadow:0 2px 0 #0000001f}
+#cg .banner{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);background:#263440;color:#fff;font-weight:900;font-size:3.4em;padding:.35em 1em;border-radius:28px;box-shadow:0 20px 60px #0005;animation:cgPop .45s cubic-bezier(.2,1.6,.4,1);pointer-events:none;white-space:nowrap;z-index:5}
+#cg .banner.dbl{background:linear-gradient(90deg,#f2c35b,#e8973a);color:#3a2400}
+#cg .banner.fade{animation:cgPop .45s cubic-bezier(.2,1.6,.4,1),cgOut .5s 1.6s forwards}
+#cg .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5em,1fr));gap:.5em;margin-top:.7em}
+#cg .tile{position:relative;border:3px solid var(--tc);background:#fff;border-radius:16px;padding:.45em .6em;font:inherit;font-weight:900;cursor:pointer;text-align:left;min-height:3em;display:flex;align-items:center;gap:.5em}
+#cg .tile .n{flex:none;width:1.5em;height:1.5em;border-radius:8px;background:var(--tc);color:#fff;display:grid;place-items:center;font-size:.8em}
+#cg .tile .chk{margin-left:auto;font-size:1.2em}
+#cg .tile.on{background:var(--tc);color:#fff}#cg .tile.on .n{background:#fff;color:var(--tc)}
+#cg .tile.steal{background:#fff0d9;border-style:dashed}
+#cg .tile.steal.on{background:#e8973a;border-color:#e8973a}
+#cg .cgnote{color:#5d6d79;font-size:.8em;text-align:center;margin-top:.4em}
+#cg .board{display:flex;flex-direction:column;gap:.4em;max-width:1100px;width:100%;margin:0 auto}
+#cg .brow{display:grid;grid-template-columns:2.2em minmax(6em,12em) 1fr 5.5em;align-items:center;gap:.6em;font-weight:900}
+#cg .brow .rk{font-size:1.1em;text-align:center}
+#cg .brow .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cg .brow .track{height:1.5em;background:#e9eef2;border-radius:999px;overflow:hidden;position:relative}
+#cg .brow .fill{display:block;height:100%;background:var(--tc);border-radius:999px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+#cg .brow .sc{text-align:right;font-variant-numeric:tabular-nums}
+#cg .brow .dl{position:absolute;right:.5em;top:50%;transform:translateY(-50%);font-size:.8em;color:#2d6b40;animation:cgPop .5s}
+#cg .brow .dl.neg{color:#c0473b}
+#cg .flame{font-size:.8em;color:#c0645a}
+#cg .bossrow{display:flex;align-items:center;gap:.8em;max-width:1100px;width:100%;margin:.6em auto 0;background:#fff;border-radius:18px;padding:.4em .8em;border:2px solid #f0d4cf}
+#cg .bossrow .fbInst{width:4.6em;flex:none}
+#cg .bossrow .fbcap{display:none}
+#cg .bhp{flex:1;height:1.1em;background:#f6e3e0;border-radius:999px;overflow:hidden}
+#cg .bhpf{height:100%;background:linear-gradient(90deg,#e0675a,#ef9f3c);border-radius:999px;transition:width 1.2s ease}
+#cg .h1{font-size:2.2em;font-weight:900;text-align:center;margin:.2em 0}
+#cg .sub{text-align:center;color:#5d6d79;font-weight:700}
+#cg .podium{display:flex;justify-content:center;align-items:flex-end;gap:.8em;margin:.8em 0}
+#cg .pod{width:9em;text-align:center;font-weight:900}
+#cg .pod .blk{border-radius:16px 16px 0 0;background:var(--tc);color:#fff;display:grid;place-items:center;font-size:1.6em;animation:cgRise .9s cubic-bezier(.2,1.2,.4,1) both}
+#cg .wagg{display:grid;grid-template-columns:repeat(auto-fill,minmax(14em,1fr));gap:.6em;max-width:1100px;margin:.6em auto;width:100%}
+#cg .wagg label{display:flex;flex-direction:column;gap:.2em;background:#fff;border:3px solid var(--tc);border-radius:16px;padding:.5em .7em;font-weight:900}
+#cg .wagg input{font:inherit;font-size:1.3em;font-weight:900;border:2px solid #d8e2ea;border-radius:10px;padding:.15em .4em;width:100%}
+#cg .wagg small{color:#5d6d79;font-weight:700;font-size:.7em}
+#cg details.rev{background:#fff;border-radius:14px;padding:.4em .8em;margin:.3em auto;max-width:1100px;width:100%}
+#cg details.rev summary{cursor:pointer;font-weight:800}
+#cg .cgqr{display:flex;gap:1em;align-items:center;max-width:1100px;width:100%;margin:.8em auto;background:#fff;border:3px solid #9a7fc9;border-radius:20px;padding:.7em 1em}
+#cg .cgqr .qrb{flex:none;width:9em;height:9em;background:#fff}#cg .cgqr .qrb svg{width:100%;height:100%;display:block}
+#cg .cgqr .u{font-size:.7em;color:#5d6d79;word-break:break-all}
+#cg .cgqr.zoom{position:fixed;inset:0;margin:0;max-width:none;border:0;border-radius:0;z-index:7;flex-direction:column;justify-content:center;text-align:center;font-size:1.3em}#cg .cgqr.zoom .qrb{width:min(70vh,80vw);height:min(70vh,80vw)}
+#cg .paused{position:absolute;inset:0;background:#263440cc;color:#fff;display:grid;place-items:center;font-size:3em;font-weight:900;z-index:6;cursor:pointer}
+@keyframes cgPop{from{transform:translate(-50%,-50%) scale(.4);opacity:0}}
+#cg .brow .dl{animation-name:cgFade}
+@keyframes cgFade{from{opacity:0}}
+@keyframes cgOut{to{opacity:0}}
+@keyframes cgPulse{50%{transform:scale(1.12)}}
+@keyframes cgGlow{to{box-shadow:0 0 18px #f2c35b}}
+@keyframes cgRise{from{transform:scaleY(0);transform-origin:bottom}}
+@media (prefers-reduced-motion:reduce){#cg *{animation:none!important;transition:none!important}}
+@media (max-width:760px){#cg .opts{grid-template-columns:1fr}#cg .brow{grid-template-columns:1.8em 1fr 4.5em}#cg .brow .track{display:none}#cg .banner{font-size:2em}}
+</style>
+<div id="cg" class="hidden" role="dialog" aria-modal="true" aria-label="Class Game"></div>
+<script>
+/* Class Game (v66): the teacher projects this; teams of 3–4 write A/B/C/D on whiteboards and hold them up when time runs out.
+   The teacher reveals the answer and taps the teams that got it right. Nothing is sent anywhere and no answer stats are recorded:
+   a whole team's board is not one student's first try. The game in progress is saved on this device, so a refresh loses nothing. */
+const CG_NAMES=['Protons','Neutrons','Electrons','Catalysts','Isotopes','Mole Patrol','Noble Gases','Free Radicals','Buffers','Covalent Crew','Alkali Metals','Titrators'];
+const CG_COLORS=['#e0675a','#5b9fd3','#e8973a','#4f9d69','#9a7fc9','#d96a9a','#2f9c9a','#c0a020','#7b8794','#b5523b','#4a6fd8','#8a6d3b'];
+/* printed 30-minute mock finals (CHEM 3A Resources/Mock ACS Final 30 min): bank numbers and the printed choice order (original choice index for A–D), so the projector letters match the booklet */
+const CG_MOCKS={'3A':[{id:'m1',name:'Mock Final Version 1',ids:[382, 427, 423, 409, 253, 173, 28, 182, 534, 53, 64, 69, 570, 592, 608, 629, 640, 82, 83, 183, 98, 108, 398, 799, 317],ord:[[1,0,2,3],[1,2,0,3],[1,0,2,3],[0,1,2,3],[2,0,1,3],[0,1,2,3],[1,0,2,3],[1,2,0,3],[0,1,2,3],[1,2,3,0],[3,1,2,0],[1,2,3,0],[1,0,2,3],[0,2,3,1],[1,2,0,3],[2,1,0,3],[1,2,3,0],[2,3,0,1],[1,0,2,3],[3,1,2,0],[1,2,0,3],[0,2,3,1],[0,1,2,3],[0,1,2,3],[1,3,2,0]]},{id:'m2',name:'Mock Final Version 2',ids:[431, 8, 450, 417, 482, 506, 515, 298, 303, 283, 585, 73, 576, 118, 621, 648, 632, 84, 655, 705, 713, 199, 144, 794, 158],ord:[[1,0,2,3],[0,2,3,1],[2,1,3,0],[1,2,3,0],[1,0,3,2],[0,1,2,3],[1,2,3,0],[0,1,2,3],[0,1,2,3],[1,2,3,0],[3,0,1,2],[1,2,3,0],[0,1,2,3],[1,2,3,0],[1,2,0,3],[3,0,1,2],[2,1,0,3],[1,0,2,3],[3,0,1,2],[3,2,0,1],[3,1,0,2],[2,3,0,1],[0,1,2,3],[1,2,0,3],[2,1,0,3]]}]};
+const cg={g:null,tick:null,muted:LS.get('-cgmute',false),setup:LS.get('-cgsetup',null)};
+function cgDefaults(){return {n:15,sec:90,teams:6,names:CG_NAMES.slice(),topic:'all',dbl:true,streak:true,wager:true,boss:true}}
+function cgSet(){if(!cg.setup||cg.setup.v!==1)cg.setup=Object.assign(cgDefaults(),{v:1});return cg.setup}
+function cgSave(){if(cg.g)LS.set('-class',cg.g);else LS.del('-class')}
+/* sounds: short WebAudio beeps, no files */
+let cgAC=null;function cgBeep(f,ms,type='sine',vol=.12,delay=0){if(cg.muted)return;try{cgAC=cgAC||new (window.AudioContext||window.webkitAudioContext)();const t=cgAC.currentTime+delay,o=cgAC.createOscillator(),g=cgAC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+ms/1000);o.connect(g).connect(cgAC.destination);o.start(t);o.stop(t+ms/1000+.02)}catch(e){}}
+const cgSfx={tick:()=>cgBeep(880,70,'square',.05),buzz:()=>{cgBeep(160,650,'sawtooth',.12);cgBeep(120,650,'sawtooth',.08,.05)},ding:()=>{cgBeep(660,160);cgBeep(990,260,'sine',.12,.14)},dbl:()=>{[523,659,784,1047].forEach((f,i)=>cgBeep(f,180,'triangle',.12,i*.11))},win:()=>{[523,659,784,1047,1319].forEach((f,i)=>cgBeep(f,260,'triangle',.12,i*.15))},hit:()=>cgBeep(220,180,'square',.08)};
+
+/* ---------- setup (in the normal page) ---------- */
+function cgTopicOpts(c){const cfg=COURSES[c],s=cgSet();let h=`<option value="all" ${s.topic==='all'?'selected':''}>🎲 All topics (mixed)</option>`;
+ if(cfg.exams)cfg.exams.forEach(e=>{h+=`<optgroup label="${e.icon} ${e.name}"><option value="grp:${e.id}" ${s.topic==='grp:'+e.id?'selected':''}>${e.icon} All ${e.name} topics</option>${cfg.topics.filter(t=>e.topics.includes(t[0])).map(([t,n,ic])=>`<option value="${t}" ${s.topic===t?'selected':''}>${ic} ${esc(n)}</option>`).join('')}</optgroup>`});
+ else h+=cfg.topics.map(([t,n,ic])=>`<option value="${t}" ${s.topic===t?'selected':''}>${ic} ${esc(n)}</option>`).join('');return h}
+function cgPool(c,topic){const all=BANK[c]||[];if(topic==='all')return all.filter(q=>!(COURSES[c].noExam||[]).includes(q.t));if(topic.startsWith('grp:')){const t=examDef(c,topic.slice(4)).topics;return all.filter(q=>t.includes(q.t))}return all.filter(q=>q.t===topic)}
+function classSetup(){clearInterval(cg.tick);const c=state.course,s=cgSet();if(!['all',...COURSES[c].topics.map(t=>t[0]),...(COURSES[c].exams||[]).map(e=>'grp:'+e.id)].includes(s.topic))s.topic='all';
+ const saved=LS.get('-class',null),pool=cgPool(c,s.topic).length;
+ $('qArea').innerHTML=`<div class="cgset"><p class="prompt" style="margin-bottom:4px">🎉 Class Game: teams vs. the Final Boss</p>
+ ${state.classOnly?`<div class="btnrow" style="grid-template-columns:1fr;margin:6px 0 4px"><button class="btn plain" id="cgFsSetup" style="min-height:48px">🖥️ Projector view: full screen</button></div>`:''}
+ <ul class="rules"><li>For the teacher: <b>project this page</b>. Students play in teams of 3–4 with one whiteboard each.</li><li>Teams write A, B, C or D and hold it up when the clock runs out. You reveal the answer and <b>tap the teams that got it</b>. The game keeps score.</li><li>Keys: <b>Space</b> pause • <b>Enter</b> next step • <b>1–9, 0</b> mark a team • <b>F</b> full screen.</li></ul>
+ ${saved&&saved.course===c&&saved.phase!=='end'?`<div class="fb info" style="margin-top:10px">💾 A game is saved here (question ${saved.i+1} of ${saved.ids.length}, ${saved.teams.length} teams). <button class="btn coral" id="cgResume" style="min-height:44px;margin-left:6px">▶ Resume it</button></div>`:''}
+ <p class="tl">Topic</p><label class="tpick"><select id="cgTopic">${cgTopicOpts(c)}</select></label><p class="tip" id="cgPoolN" style="margin:4px 0 0">${pool} questions available</p>
+ <p class="tl">How many questions?</p><div class="row">${[10,15,20,25].map(n=>`<button class="chipb cgN ${s.n===n?'on':''}" data-v="${n}">${n}</button>`).join('')}</div>
+ <p class="tl">Seconds per question</p><div class="row">${[60,90,120,150].map(n=>`<button class="chipb cgS ${s.sec===n?'on':''}" data-v="${n}">${n} s</button>`).join('')}</div>
+ <p class="tl">Teams</p><div class="row">${[2,3,4,5,6,7,8,9,10,11,12].map(n=>`<button class="chipb cgT ${s.teams===n?'on':''}" data-v="${n}" aria-label="${n} teams">${n}</button>`).join('')}</div>
+ <div class="cgteams">${Array.from({length:s.teams},(_,i)=>`<label style="--tc:${CG_COLORS[i]}"><span class="dot"></span><input class="cgName" data-i="${i}" maxlength="18" value="${attrEsc(s.names[i]||CG_NAMES[i])}" aria-label="Team ${i+1} name"></label>`).join('')}</div>
+ <p class="tl">Fun extras</p><div class="cgopts">
+  <label><input type="checkbox" id="cgDbl" ${s.dbl?'checked':''}><span>⚡ <b>Double Points</b><small>About 1 in 5 questions, announced with a flash.</small></span></label>
+  <label><input type="checkbox" id="cgStreak" ${s.streak?'checked':''}><span>🔥 <b>Streak bonus</b><small>3 right in a row: ×1.5 points until a miss.</small></span></label>
+  <label><input type="checkbox" id="cgWager" ${s.wager?'checked':''}><span>💰 <b>Final Wager</b><small>Teams bet points on the last question.</small></span></label>
+  <label><input type="checkbox" id="cgBoss" ${s.boss?'checked':''}><span>👾 <b>Class vs. Boss</b><small>Every right answer hits the Boss. Can the class knock it out?</small></span></label></div>
+ ${CG_MOCKS[c]?`<p class="tl">📄 Or go over a printed 30-minute mock final</p><p class="tip" style="margin:2px 0 0">All 25 questions in the booklet's order, with the same A–D letters. Uses the teams, seconds and extras above.</p><div class="row">${CG_MOCKS[c].map(m=>`<button class="chipb cgMock" data-m="${m.id}">📄 ${m.name}</button>`).join('')}</div>`:''}
+ <div class="btnrow" style="grid-template-columns:1fr"><button class="btn coral" id="cgGo" style="font-size:19px">🎉 Start the Class Game</button></div></div>`;
+ const re=()=>{LS.set('-cgsetup',s);classSetup()};
+ $('cgTopic').onchange=e=>{s.topic=e.target.value;re()};
+ $('qArea').querySelectorAll('.cgN').forEach(b=>b.onclick=()=>{s.n=+b.dataset.v;re()});
+ $('qArea').querySelectorAll('.cgS').forEach(b=>b.onclick=()=>{s.sec=+b.dataset.v;re()});
+ $('qArea').querySelectorAll('.cgT').forEach(b=>b.onclick=()=>{s.teams=+b.dataset.v;re()});
+ $('qArea').querySelectorAll('.cgName').forEach(inp=>inp.oninput=()=>{s.names[+inp.dataset.i]=inp.value;LS.set('-cgsetup',s)});
+ [['cgDbl','dbl'],['cgStreak','streak'],['cgWager','wager'],['cgBoss','boss']].forEach(([id,k])=>$(id).onchange=e=>{s[k]=e.target.checked;LS.set('-cgsetup',s)});
+ if($('cgFsSetup'))$('cgFsSetup').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+ $('qArea').querySelectorAll('.cgMock').forEach(b=>b.onclick=()=>cgNew(CG_MOCKS[c].find(m=>m.id===b.dataset.m)));
+ if($('cgResume'))$('cgResume').onclick=()=>{cg.g=LS.get('-class',null);cgOpen()};
+ $('cgGo').onclick=()=>{if(saved&&saved.phase!=='end'&&!cgGo.arm){cgGo.arm=1;$('cgGo').textContent='Start over? The saved game is erased. Tap again';setTimeout(()=>{cgGo.arm=0;if($('cgGo'))$('cgGo').textContent='🎉 Start the Class Game'},4000);return}cgGo.arm=0;cgNew()}}
+function cgGo(){}
+function cgNew(mock){const s=cgSet(),c=state.course;let pool=mock?[]:shuf(cgPool(c,s.topic));const seen=new Set(),ids=mock?mock.ids.map(n=>c+'-'+n).filter(id=>BYID[id]):[];
+ /* spread topics when mixed: take one per topic in turn; never two near-twins (same g tag) */
+ const byT={};pool.forEach(q=>(byT[q.t]=byT[q.t]||[]).push(q));const ts=shuf(Object.keys(byT));
+ if(!mock)for(let r=0;ids.length<s.n&&ts.some(t=>byT[t].length);r++)for(const t of ts){if(ids.length>=s.n)break;let q;while((q=byT[t].shift())&&q.g&&seen.has(q.g));if(q){if(q.g)seen.add(q.g);ids.push(q.id)}}
+ if(!ids.length){toast('No questions for that topic yet.');return}
+ const n=ids.length,last=s.wager&&n>=5?n-1:-1;const dbl=[];if(s.dbl){const cand=shuf([...Array(n).keys()].filter(i=>i>0&&i!==last));dbl.push(...cand.slice(0,Math.max(1,Math.round(n/5))))}
+ const teams=Array.from({length:s.teams},(_,i)=>({name:(s.names[i]||CG_NAMES[i]).trim()||CG_NAMES[i],color:CG_COLORS[i],score:0,streak:0,right:0}));
+ cg.g={v:1,course:c,topic:s.topic,ids,i:0,sec:s.sec,left:s.sec*1000,opts:{streak:s.streak,boss:s.boss},dbl,wagerAt:last,wagers:{},teams,ords:mock&&ids.length===mock.ids.length?mock.ord:null,mock:mock?mock.name:null,phase:'intro',marks:[],steal:[],stealMode:false,hist:[],bossMax:Math.max(4,Math.round(n*s.teams*.6)),boss:0,per:[],order:shuf([0,1,2,3]),date:Date.now()};
+ cg.g.boss=cg.g.bossMax;J.modes.class=1;saveJ();cgSave();cgOpen()}
+
+/* ---------- the projector view ---------- */
+function cgOpen(){const el=$('cg');el.classList.remove('hidden');document.body.classList.add('cgOn');document.body.style.overflow='hidden';cgDraw()}
+function cgClose(){clearInterval(cg.tick);cgSave();$('cg').classList.add('hidden');$('cg').innerHTML='';document.body.classList.remove('cgOn');document.body.style.overflow='';if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});classSetup()}
+const cgQ=()=>BYID[cg.g.ids[cg.g.i]];
+const cgIsDbl=()=>cg.g.dbl.includes(cg.g.i),cgIsWager=()=>cg.g.i===cg.g.wagerAt;
+const cgMult=t=>cg.g.opts.streak&&t.streak>=3?1.5:1;
+function cgTop(extra=''){const g=cg.g,q=cgQ();return `<div class="top">${g.mock?`<span class="pill">📄 ${esc(g.mock.replace('Mock Final ',''))}</span>`:''}<span class="pill">Q ${Math.min(g.i+1,g.ids.length)} / ${g.ids.length}</span>${q&&g.phase!=='end'?`<span class="pill">${topicIcon(q.course,q.t)} ${esc(topicName(q.course,q.t))}</span>`:''}${q&&g.phase!=='end'&&g.phase!=='board'?(cgIsWager()?'<span class="pill wag">💰 Final Wager</span>':`<span class="pill ${cgIsDbl()?'dbl':''}">${cgIsDbl()?'⚡ DOUBLE • 200 pts':'100 pts'}</span>`):''}${extra}<span class="sp"></span>
+ <button class="tb" id="cgMute" title="Sound on/off">${cg.muted?'🔇':'🔊'}</button><button class="tb" id="cgFs" title="Full screen (F)">⛶</button><button class="tb" id="cgX" title="Leave (the game is saved)">✖ Exit</button></div>`}
+function cgWireTop(){$('cgMute').onclick=()=>{cg.muted=!cg.muted;LS.set('-cgmute',cg.muted);$('cgMute').textContent=cg.muted?'🔇':'🔊'};$('cgFs').onclick=cgFull;$('cgX').onclick=()=>{if(!cgX.arm){cgX.arm=1;$('cgX').textContent='Tap again';setTimeout(()=>{cgX.arm=0;if($('cgX'))$('cgX').textContent='✖ Exit'},3000);return}cgX.arm=0;cgClose()}}
+function cgX(){}
+function cgFull(){try{document.fullscreenElement?document.exitFullscreen():$('cg').requestFullscreen()}catch(e){}}
+function cgQBody(reveal){const g=cg.g,q=cgQ();return `<div class="qtext">${qHTML(q)}</div><div class="opts">${g.order.map((k,i)=>`<div class="opt ${reveal?(k===0?'right':'dim'):''}"><span class="L">${'ABCD'[i]}</span><span>${optHTML(q,k)}</span></div>`).join('')}</div>`}
+function cgDraw(){const g=cg.g;clearInterval(cg.tick);if(!g)return;const el=$('cg');
+ if(g.phase==='intro'){ /* wager setup comes before the last question; double points flashes in */
+  if(cgIsWager()&&!g.wagerSet){g.phase='wager';return cgDraw()}
+  g.phase='q';g.left=g.sec*1000;g.order=g.ords?g.ords[g.i].slice():shuf([0,1,2,3]);g.marks=[];g.steal=[];g.stealMode=false;cgSave();
+  if(cgIsDbl()){cgDrawQ();el.insertAdjacentHTML('beforeend','<div class="banner dbl fade">⚡ DOUBLE POINTS! ⚡</div>');cgSfx.dbl();confetti(40)}else cgDrawQ();return}
+ if(g.phase==='q')return cgDrawQ();
+ if(g.phase==='up')return cgDrawUp();
+ if(g.phase==='reveal')return cgDrawReveal();
+ if(g.phase==='board')return cgDrawBoard();
+ if(g.phase==='wager')return cgDrawWager();
+ if(g.phase==='end')return cgDrawEnd()}
+function cgClock(){const g=cg.g,s=Math.max(0,Math.ceil(g.left/1000)),f=Math.max(0,g.left/(g.sec*1000));const c=$('cgClock'),b=$('cgFill');if(!c)return;
+ c.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');c.className='clock'+(s<=10?' low':s<=30?' warn':'');b.style.width=(f*100)+'%';b.style.background=s<=10?'#e0675a':s<=30?'#f2c35b':'#5fae78'}
+function cgDrawQ(){const g=cg.g;
+ $('cg').innerHTML=cgTop(`<span class="clock" id="cgClock"></span>`)+`<div class="tbar"><div class="tfill" id="cgFill"></div></div><div class="body">${cgQBody(false)}</div>
+  <div class="bar"><button class="big plain" id="cgPause">${g.paused?'▶ Resume':'⏸ Pause'}</button><button class="big plain" id="cgAdd">+30 s</button><button class="big" id="cgUp">✋ Boards up now</button></div>${g.paused?'<div class="paused" id="cgPaused">⏸ Paused<br><small style="font-size:.4em">tap or press Space</small></div>':''}`;
+ cgWireTop();cgClock();fitSvgText&&fitSvgText($('cg'));
+ $('cgPause').onclick=cgPause;$('cgAdd').onclick=()=>{g.left+=30000;cgClock();cgSave()};$('cgUp').onclick=cgBoardsUp;if($('cgPaused'))$('cgPaused').onclick=cgPause;
+ let last=Date.now(),lastS=Math.ceil(g.left/1000);
+ cg.tick=setInterval(()=>{const now=Date.now(),dt=now-last;last=now;if(g.paused||dt>3000)return;g.left-=dt;cgClock();const s=Math.ceil(g.left/1000);
+  if(s!==lastS){lastS=s;if(s<=5&&s>0)cgSfx.tick();if(s%5===0)cgSave()}if(g.left<=0)cgBoardsUp()},200)}
+function cgPause(){const g=cg.g;if(g.phase!=='q')return;g.paused=!g.paused;cgSave();cgDrawQ()}
+function cgBoardsUp(){const g=cg.g;clearInterval(cg.tick);g.left=Math.max(0,g.left);g.paused=false;g.phase='up';cgSave();cgSfx.buzz();cgDrawUp()}
+function cgDrawUp(){$('cg').innerHTML=cgTop()+`<div class="body">${cgQBody(false)}</div><div class="bar"><button class="big blue" id="cgRev">👀 Reveal the answer</button></div><div class="banner">✋ BOARDS UP!</div>`;
+ cgWireTop();fitSvgText&&fitSvgText($('cg'));$('cgRev').onclick=cgReveal}
+function cgReveal(){cg.g.phase='reveal';cgSave();cgSfx.ding();cgDrawReveal()}
+function cgPts(t){const g=cg.g;if(cgIsWager())return +(g.wagers[g.teams.indexOf(t)]||0);return Math.round((cgIsDbl()?200:100)*cgMult(t))}
+function cgDrawReveal(){const g=cg.g,q=cgQ(),wag=cgIsWager();
+ $('cg').innerHTML=cgTop()+`<div class="body">${cgQBody(true)}<div class="why">✅ <b>${optHTML(q,0)}</b><br>${q.w}</div>
+  <p class="cgnote" style="margin-top:.8em">${g.stealMode?'🦹 <b>Steal:</b> tap the team that explains the answer best. A steal earns half points.':'Tap every team whose board shows the right letter'+(wag?' (wrong boards lose their wager).':'.')}</p>
+  <div class="tiles">${g.teams.map((t,i)=>{const on=g.stealMode?g.steal.includes(i):g.marks.includes(i);const m=!wag&&!g.stealMode&&cgMult(t)>1?' 🔥':'';return `<button class="tile ${g.stealMode?'steal':''} ${on?'on':''}" data-i="${i}" style="--tc:${t.color}" aria-pressed="${on}"><span class="n">${(i+1)%10}</span>${esc(t.name)}${m}<span class="chk">${on?'✓':''}</span></button>`}).join('')}</div></div>
+  <div class="bar">${!wag?`<button class="big plain" id="cgAll">✓ Everyone</button>`:''}${!wag&&!g.marks.length?`<button class="big gold" id="cgSteal">${g.stealMode?'↩ No steal':'🦹 Nobody? Steal!'}</button>`:''}<button class="big green" id="cgAward">🏅 Award points</button></div>`;
+ cgWireTop();fitSvgText&&fitSvgText($('cg'));
+ $('cg').querySelectorAll('.tile').forEach(b=>b.onclick=()=>cgMark(+b.dataset.i));
+ if($('cgAll'))$('cgAll').onclick=()=>{g.stealMode=false;g.steal=[];g.marks=g.marks.length===g.teams.length?[]:g.teams.map((_,i)=>i);cgSave();cgDrawReveal()};
+ if($('cgSteal'))$('cgSteal').onclick=()=>{g.stealMode=!g.stealMode;g.steal=[];cgSave();cgDrawReveal()};
+ $('cgAward').onclick=cgAward}
+function cgMark(i){const g=cg.g;if(g.phase!=='reveal'||i>=g.teams.length)return;const a=g.stealMode?g.steal:g.marks;const j=a.indexOf(i);j<0?a.push(i):a.splice(j,1);cgSave();cgDrawReveal()}
+function cgAward(){const g=cg.g,wag=cgIsWager();g.hist.push(JSON.stringify({teams:g.teams,boss:g.boss,per:g.per,marks:g.marks,steal:g.steal,stealMode:g.stealMode}));
+ g.delta=g.teams.map(()=>0);let hits=0;
+ g.teams.forEach((t,i)=>{const ok=g.marks.includes(i),st=g.stealMode&&g.steal.includes(i);
+  if(ok){const p=cgPts(t);g.delta[i]=p;t.score+=p;t.right++;t.streak++;hits++}
+  else if(st){const p=Math.round((cgIsDbl()?200:100)/2);g.delta[i]=p;t.score+=p;t.streak=0}
+  else{if(wag){const p=Math.min(+(g.wagers[i]||0),Math.max(0,t.score));g.delta[i]=-p;t.score-=p}t.streak=0}});
+ g.per.push([g.ids[g.i],g.marks.length]);
+ g.hitNow=0;if(g.opts.boss){const d=hits*(cgIsDbl()?2:1);g.hitNow=Math.min(g.boss,d);g.boss=Math.max(0,g.boss-d)}
+ g.phase='board';cgSave();if(hits)cgSfx.ding();if(g.hitNow)setTimeout(cgSfx.hit,500);cgDrawBoard(true)}
+function cgBossHTML(){const g=cg.g;if(!g.opts.boss)return '';const f=g.boss/g.bossMax;return `<div class="bossrow"><div class="fbInst" id="cgBoss" data-face="${g.boss<=0?'ko':f<=.3?'low':'n'}">${fbSVG('C',(g.date>>3)%VESSELS.length)}</div><div style="flex:1"><div style="display:flex;justify-content:space-between;font-weight:900"><span>👾 The Final Boss</span><span>${g.boss<=0?'K.O.! 🏆':`HP ${g.boss} / ${g.bossMax}`}</span></div><div class="bhp"><div class="bhpf" id="cgBhp" style="width:${(Math.min(1,(g.boss+(g.hitNow||0))/g.bossMax)*100).toFixed(1)}%"></div></div><div class="cgnote" style="text-align:left">Every right board hits the Boss${g.hitNow?` • <b>−${g.hitNow} this round</b>`:''}</div></div></div>`}
+function cgBossAnim(){const g=cg.g,b=$('cgBhp'),m=$('cgBoss');if(!b)return;const hp=m&&m.querySelector('.fbHp');const f=Math.max(0,g.boss/g.bossMax);if(hp)hp.setAttribute('width',(63*f).toFixed(1));
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{b.style.width=(f*100).toFixed(1)+'%'}));if(g.hitNow&&m&&g.boss>0){m.dataset.face='hit';const d=m.querySelector('.fbDmg');if(d)d.textContent='-'+g.hitNow;m.classList.add('fb-dmg','fb-hit');setTimeout(()=>{m.classList.remove('fb-dmg','fb-hit');m.dataset.face=f<=.3?'low':'n'},900)}}
+function cgRanked(){return cg.g.teams.map((t,i)=>({t,i})).sort((a,b)=>b.t.score-a.t.score||a.i-b.i)}
+function cgDrawBoard(fresh){const g=cg.g,lastQ=g.i>=g.ids.length-1,max=Math.max(100,...g.teams.map(t=>t.score));const nxt=lastQ?'🏆 Final results':(g.i+1===g.wagerAt?'💰 Final Wager ▸':'Next question ▸');
+ const rows=cgRanked().map(({t,i},r)=>{const d=fresh&&g.delta?g.delta[i]:0;const before=t.score-d;return `<div class="brow" style="--tc:${t.color}"><span class="rk">${['🥇','🥈','🥉'][r]||r+1}</span><span class="nm">${esc(t.name)}${cgMult(t)>1?' <span class="flame">🔥×1.5</span>':''}</span><span class="track"><span class="fill" data-w="${Math.max(0,t.score)/max*100}" style="width:${Math.max(0,fresh?before:t.score)/max*100}%"></span>${d?`<span class="dl ${d<0?'neg':''}">${d>0?'+':''}${d}</span>`:''}</span><span class="sc">${t.score.toLocaleString()}</span></div>`}).join('');
+ const nR=g.per.length?g.per[g.per.length-1][1]:0;
+ $('cg').innerHTML=cgTop()+`<div class="body"><div class="h1">📊 Scoreboard</div><p class="sub">${nR} of ${g.teams.length} teams got question ${g.i+1}${g.stealMode&&g.steal.length?' • 🦹 a steal!':''}</p><div class="board">${rows}</div>${cgBossHTML()}</div>
+  <div class="bar"><button class="big plain" id="cgUndo">↩ Undo this round</button><button class="big blue" id="cgNext">${nxt}</button></div>`;
+ cgWireTop();
+ if(fresh){requestAnimationFrame(()=>requestAnimationFrame(()=>$('cg').querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%')))}
+ if(fresh)cgBossAnim();else{const b=$('cgBhp');if(b)b.style.width=(g.boss/g.bossMax*100).toFixed(1)+'%'}
+ if(fresh&&g.opts.boss&&g.boss<=0&&g.hitNow){setTimeout(()=>{$('cg').insertAdjacentHTML('beforeend','<div class="banner dbl fade">👾 BOSS K.O.!</div>');cgSfx.win();confetti(80)},700)}
+ $('cgUndo').onclick=()=>{const h=JSON.parse(g.hist.pop()||'null');if(!h)return;Object.assign(g,{teams:h.teams,boss:h.boss,per:h.per,marks:h.marks,steal:h.steal,stealMode:h.stealMode,phase:'reveal'});cgSave();cgDrawReveal()};
+ $('cgNext').onclick=()=>{g.delta=null;g.hitNow=0;if(lastQ){g.phase='end';cgSave();cgSfx.win();return cgDrawEnd()}g.i++;g.phase='intro';cgDraw()}}
+function cgDrawWager(){const g=cg.g;
+ $('cg').innerHTML=cgTop()+`<div class="body"><div class="h1">💰 Final Wager</div><p class="sub">The last question is coming. Each team writes a bet on its board: right <b>wins</b> it, wrong <b>loses</b> it.<br>Bet anything from 0 up to your score (teams at 100 or less can bet up to 100; a score never drops below 0).</p>
+  <div class="wagg">${g.teams.map((t,i)=>{const cap=Math.max(100,t.score);return `<label style="--tc:${t.color}">${esc(t.name)}<small>score ${t.score.toLocaleString()} • max bet ${cap.toLocaleString()}</small><input type="number" inputmode="numeric" min="0" max="${cap}" step="10" data-i="${i}" value="${g.wagers[i]??''}" placeholder="0"></label>`}).join('')}</div></div>
+  <div class="bar"><button class="big green" id="cgWgo">Show the final question ▸</button></div>`;
+ cgWireTop();
+ $('cg').querySelectorAll('.wagg input').forEach(inp=>inp.oninput=()=>{const i=+inp.dataset.i,cap=Math.max(100,g.teams[i].score);let v=Math.round(+inp.value||0);v=Math.max(0,Math.min(cap,v));g.wagers[i]=v;cgSave()});
+ $('cg').querySelectorAll('.wagg input').forEach(inp=>inp.onchange=()=>{inp.value=g.wagers[+inp.dataset.i]??''});
+ $('cgWgo').onclick=()=>{$('cg').querySelectorAll('.wagg input').forEach(inp=>{const i=+inp.dataset.i,cap=Math.max(100,g.teams[i].score);g.wagers[i]=Math.max(0,Math.min(cap,Math.round(+inp.value||0)))});g.wagerSet=1;g.phase='intro';cgDraw()}}
+const cgSetURL=g=>{const u=new URL(location.href.split('#')[0]);u.search='';u.searchParams.set('course',g.course);return u.toString()+'&set='+g.ids.map(id=>id.split('-')[1]).join('.')};
+function cgQR(el,url){const draw=()=>{try{const qr=qrcode(0,'M');qr.addData(url);qr.make();el.innerHTML=qr.createSvgTag({cellSize:4,margin:2,scalable:true,alt:'QR code: practice these questions'})}catch(e){el.textContent=''}};
+ if(typeof qrcode==='function')return draw();const sc=document.createElement('script');sc.src='assets/qrcode.js';sc.onload=draw;document.head.appendChild(sc)}
+function cgDrawEnd(){const g=cg.g,R=cgRanked(),top=R.slice(0,3),N=g.per.length,right=g.teams.reduce((s,t)=>s+t.right,0),pct=N?Math.round(right/(N*g.teams.length)*100):0;
+ const order=top.length===3?[top[1],top[0],top[2]]:top,H={0:'5.5em',1:'4em',2:'3em'};
+ const hard=g.per.map(([id,n])=>({q:BYID[id],n})).filter(x=>x.q).sort((a,b)=>a.n-b.n).slice(0,5).filter(x=>x.n<g.teams.length);
+ $('cg').innerHTML=cgTop()+`<div class="body"><div class="h1">🏆 ${esc(R[0].t.name)} win${R[0].t.name.endsWith('s')?'':'s'}!</div><p class="sub">Class average ${pct}% right • ${N} questions • ${g.teams.length} teams</p>
+  <div class="podium">${order.map(x=>{const r=R.indexOf(x);return `<div class="pod" style="--tc:${x.t.color}"><div>${esc(x.t.name)}</div><div style="color:#5d6d79">${x.t.score.toLocaleString()}</div><div class="blk" style="height:${H[r]}">${['🥇','🥈','🥉'][r]}</div></div>`}).join('')}</div>
+  <div class="board">${R.slice(3).map(({t},r)=>`<div class="brow" style="--tc:${t.color}"><span class="rk">${r+4}</span><span class="nm">${esc(t.name)}</span><span class="track"><span class="fill" style="width:${Math.max(0,t.score)/Math.max(100,R[0].t.score)*100}%"></span></span><span class="sc">${t.score.toLocaleString()}</span></div>`).join('')}</div>
+  ${g.opts.boss?`<p class="h1" style="font-size:1.4em">${g.boss<=0?'👾 The class knocked out the Final Boss! 🎉':`👾 The Boss survived with ${g.boss} HP. Rematch?`}</p>`:''}
+  <div class="cgqr" id="cgQrBox"><div class="qrb" id="cgQr" role="img" aria-label="QR code to practice these questions"></div><div><b>📱 Practice these ${N} questions on your phone</b><br>Scan the code: the same questions, with hints and step-by-step explanations.<div class="u">${esc(cgSetURL(g))}</div><button class="tb" id="cgQrBig" style="margin-top:.4em">⛶ Make the code bigger</button></div></div>
+  ${hard.length?`<p style="font-weight:900;text-align:center;margin:.6em 0 .2em">🔍 The toughest questions (review these)</p>`+hard.map(x=>`<details class="rev"><summary>${x.n} of ${g.teams.length} teams • ${esc(topicName(x.q.course,x.q.t))}</summary><div><p>${qHTML(x.q)}</p><p class="correct">✔ ${optHTML(x.q,0)}</p><p>${x.q.w}</p></div></details>`).join(''):''}</div>
+  <div class="bar"><button class="big" id="cgAgain">🔁 Play again (same teams)</button><button class="big plain" id="cgDone">Done</button></div>`;
+ cgWireTop();confetti(120);cgQR($('cgQr'),cgSetURL(g));$('cgQrBig').onclick=()=>{const b=$('cgQrBox');b.classList.toggle('zoom');$('cgQrBig').textContent=b.classList.contains('zoom')?'✖ Back to results':'⛶ Make the code bigger'};
+ $('cgAgain').onclick=()=>{cgNew(g.mock?(CG_MOCKS[g.course]||[]).find(m=>m.name===g.mock):undefined)};$('cgDone').onclick=()=>{cg.g=null;cgSave();cgClose()}}
+/* keyboard for the teacher's clicker or laptop */
+document.addEventListener('keydown',e=>{const g=cg.g;if(!g||$('cg').classList.contains('hidden'))return;if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+ const k=e.key;
+ if(k==='f'||k==='F'){cgFull();e.preventDefault();return}
+ if(k===' '&&g.phase==='q'){cgPause();e.preventDefault();return}
+ if(/^[0-9]$/.test(k)&&g.phase==='reveal'){cgMark(k==='0'?9:+k-1);e.preventDefault();return}
+ if(k==='Enter'||k==='ArrowRight'||k==='PageDown'){const b=g.phase==='q'?$('cgUp'):g.phase==='up'?$('cgRev'):g.phase==='reveal'?$('cgAward'):g.phase==='board'?$('cgNext'):g.phase==='wager'?$('cgWgo'):null;if(b){b.click();e.preventDefault()}}});
 </script>
 </body></html>

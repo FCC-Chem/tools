@@ -15,6 +15,7 @@ button,input,select{font:inherit;color:inherit}.hidden{display:none!important}
 .hero h1 .a{color:#e0675a}.hero h1 .b{background:linear-gradient(90deg,#2f8fd0,#43b6a8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .subtitle{margin:0;color:var(--muted);font-size:15.5px}
 .logo{width:112px;flex:0 0 112px}.logo svg{display:block;width:100%;height:auto}
+.howto-row{display:flex;gap:10px;align-items:flex-start;margin:10px 0}.howto-row>details.howto{flex:1;min-width:0;margin:0}.howto-row #tourSlot .ddtour-btn{min-height:56px;margin-top:0}
 details.howto{margin:10px 0;border:2px solid #9fb6e8;border-bottom-width:5px;border-radius:18px;background:linear-gradient(120deg,#f7f3ff,#eef7ff)}
 details.howto>summary{list-style:none;cursor:pointer;padding:12px 18px;font-weight:900;font-size:18px;min-height:48px;display:flex;justify-content:space-between;align-items:center}
 details.howto>summary::-webkit-details-marker{display:none}
@@ -156,6 +157,7 @@ details.lkey ul{margin:0 12px 10px;padding-left:18px;font-size:14px;line-height:
 </style>
 <link rel="stylesheet" href="https://itsdrdan.github.io/games/brand/itsdrdan.css">
 <script src="https://itsdrdan.github.io/games/brand/chemparse.v2.js"></script><!-- shared number reading (never edited; a change is a new version) -->
+<script src="https://itsdrdan.github.io/games/brand/tour.v1.js"></script><!-- shared first-time tour (never edited; a change is a new version) -->
 <script src="https://itsdrdan.github.io/games/track.js" defer></script>
 <script src="https://itsdrdan.github.io/games/brand/embed.js" defer></script>
 </head><body>
@@ -169,10 +171,10 @@ details.lkey ul{margin:0 12px 10px;padding-left:18px;font-size:14px;line-height:
 <div class="logo" aria-hidden="true"><img src="assets/logo.webp" alt="" width="104" height="104" style="width:100%;height:auto;display:block"></div>
 </header>
 <main id="main">
-<details class="howto"><summary>📘 How to use this game</summary><ul>
+<div class="howto-row"><details class="howto"><summary>📘 How to use this game</summary><ul>
  <li><b>Start with 🎢 Ride Line</b> to see equilibrium as a theme-park line, then try the 🔬 Particle Lab.</li>
  <li>Gold boxes say <b>👉 what to do in the lab</b>. Do it, watch, then answer.</li><li>In the labs, particles bounce like billiard balls. A colored ring means that hit was a reaction; most hits just bounce.</li>
- <li><b>🧮 Calculate K</b> takes typed numbers (6.02E23 works). <b>🎯 Skill Check</b> gives you a study plan.</li><li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.</li></ul></details>
+ <li><b>🧮 Calculate K</b> takes typed numbers (6.02E23 works). <b>🎯 Skill Check</b> gives you a study plan.</li><li><b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.</li></ul></details><div id="tourSlot"></div></div>
 <div id="startHere"></div>
 <nav class="modes" id="modes" aria-label="Choose a mode"></nav>
 <div class="main">
@@ -1472,5 +1474,13 @@ function audit(n=300){const bad=[],note=m=>{if(bad.length<40)bad.push(m)};
 (()=>{const row=document.querySelector('.btnrow');if(!row||!('IntersectionObserver' in window))return;let vis=false;const apply=()=>{const f=document.querySelector('.ddfb-float');if(f)f.classList.toggle('eq-hide',vis)};
  new IntersectionObserver(es=>{vis=es[0].isIntersecting;apply()}).observe(row);new MutationObserver(apply).observe(document.body,{childList:true})})();
 buildModes();renderJ();renderStart();next();
+/* first-time tour (games/brand/tour.v1.js): once per device for a new student; never over a deep link (textbook boxes); 🧭 Tour replays it */
+if(window.ddTour)ddTour.init({id:'equilibrium',button:'#tourSlot',isNew:()=>!J.xp&&!J.tried,auto:()=>{const P=new URLSearchParams(location.search);return !P.get('mode')&&!P.get('sys')},steps:[
+ ['#startHere .start','New here? Do these three in order. Each one gets a ✅ once you try it.'],
+ ['#modes','All the modes. Tap one to switch any time. Your progress saves on this device.'],
+ ['#taskBox','This box says <b>👉 what to do in the lab</b>. It turns green ✅ once you have done it. Then answer below.'],
+ ['#labBox .spdgrp','The live lab starts here. Use <b>Speed</b> to slow it down (🐢 ¼×) or pause it (⏸) and watch closely.'],
+ ['.btnrow','<b>Check Answer</b> when you are ready. <b>💡 Hint</b> gives a clue. <b>👀 Show Answer</b> reveals it but earns no point.'],
+ ['#videoPanel','🎥 Short videos from Dr. Dan, matched to the question you are on.']]});
 </script>
 </body></html>
